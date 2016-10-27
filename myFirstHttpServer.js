@@ -74,8 +74,48 @@ const fbMessage = (id, text) => {
 };
 
 var savedLocation;
-var savedDate;
+var savedStartDate;
 var savedDuration;
+
+function createPackList(weather) {
+  var packList = [];
+  // if the weather is sunny, add corresponding items.
+  switch(weather) {
+    case "sunny": 
+      packList.push("cap/hat");
+      packList.push("sunglass");
+      break;
+  }
+
+  return packList;
+}
+
+function createTodoList(trip) {
+  var todoList = [];
+  todoList.push("Flight tickets");
+  todoList.push("Place to stay");
+  todoList.push("Rental car");
+
+  return todoList;
+}
+
+function persistTrip(tripName) {
+  var trip = {};
+  trip['name'] = tripName;
+  trip['location'] = savedLocation;
+  trip['duration'] = savedDuration;
+  trip['startDate'] = savedStartDate;
+  // TODO: Get this information from weather API or the file persisted.
+  trip['weather'] = "sunny";
+  trip['packList'] = createPackList(trip['weather']);
+  trip['todoList'] = createTodoList(trip);
+  trip['comments'] = [
+    "Average water temperature will be around 60F, not suitable for swimming",
+  ];
+  
+  tripList['trip1'] = trip;
+  return trip;
+}
 
 function captureAvailableEntities(context, location, datetime, duration) {
   // capture location & datetime if they are present
@@ -89,10 +129,10 @@ function captureAvailableEntities(context, location, datetime, duration) {
       context.missingLocation = true;
     }
   }
-  if(!savedDate) {
+  if(!savedStartDate) {
     if(datetime) {
       // save datetime for later use
-      savedDate = datetime;
+      savedStartDate = datetime;
     }
     else {
       logger.info("Missing datetime");
@@ -113,7 +153,7 @@ function captureAvailableEntities(context, location, datetime, duration) {
     // indicate to bot that location was present
     delete context.missingLocation;
   }
-  if(savedDate) {
+  if(savedStartDate) {
     // indicate to bot that datetime was present & captured
     delete context.missingDate; 
   }
@@ -135,7 +175,7 @@ const actions = {
       // Yay, we found our recipient!
       // Let's forward our bot response to her.
       // We return a promise to let our bot know when we're done sending
-      logger.info("sending response from bot to recipient");
+      logger.info("sending response from bot to recipient. text is " + text);
       return fbMessage(recipientId, text)
       .then(() => null)
       .catch((err) => {
@@ -160,18 +200,38 @@ const actions = {
       var duration = firstEntityValue(entities, 'duration');
       var updatedContext = captureAvailableEntities(context, location, datetime, duration);
       console.log("Context received in createNewTrip Action: ",JSON.stringify(context));
-      if(!savedLocation || !savedDate || !savedDuration) {
+      if(!savedLocation || !savedStartDate || !savedDuration) {
         delete updatedContext.forecast;
         delete updatedContext.tripName;
         return resolve(updatedContext);
       }
       // both location & date time exist. Time to do some work.
-      console.log("location is " + savedLocation + ", date is " + savedDate + ", duration is " + duration);
+      console.log("location is " + savedLocation + ", date is " + savedStartDate + ", duration is " + duration);
       // we should call a weather API here
-      updatedContext.forecast = 'sunny in ' + savedLocation + ' on ' + savedDate;
-      updatedContext.tripName = savedLocation + "-" + savedDate + "-" + savedDuration;
+      var text = {
+        attachment: {
+          type: "template",
+          payload: {
+            template_type: "generic",
+            elements: [{
+              title: "Trip details",
+              subtitle: "Lake Powell",
+              item_url: "",
+              buttons: [{
+                type: "web_url",
+                url: "https://polaama.com/lake-powell",
+                title: "Lake Powell details",
+              }],
+            }]
+          }
+        }
+      };
+      // updatedContext.forecast = 'sunny in ' + savedLocation + ' on ' + savedStartDate;
+      var trip = persistTrip(updatedContext.tripName);
+      updatedContext.forecast = "Great! It's going to be " + trip['weather'] + " in " + trip['location'] + ". I have created your trip plan with pack list, todo lists etc. Check it out at https://polaama.com/trips";
+      updatedContext.tripName = savedLocation + "-" + savedStartDate + "-" + savedDuration;
       savedLocation = null;
-      savedDate = null;
+      savedStartDate = null;
       savedDuration = null;
       return resolve(updatedContext);
     });
@@ -180,6 +240,34 @@ const actions = {
     console.log("getName called");
     return new Promise(function(resolve, reject) {
       context.name = "Madhu";
+      return resolve(context);
+    });
+  },
+  greeting({context, entities}) {
+    console.log("greeting called");
+    return new Promise(function(resolve, reject) {
+      const greeting = "Hi there! How can I help you today?";
+      // if we are repeating ourselves, ask the user to help!
+      const sessionId = context.sessionId;
+      const HISTORY_LENGTH = 2;
+      logger.info("session id in context is ",sessionId);
+      const history = sessions[sessionId].botMesgHistory;
+      if(history.length == HISTORY_LENGTH && history[history.length-1] === greeting) {
+        // TODO: Get the message from a random list of strings so you don't ask the same thing..
+        context.greeting = "Can you please ask the question a different way?";
+      }
+      else {
+        context.greeting = greeting;
+        // add this message to the sessions's previous messages.
+        if(history.length == HISTORY_LENGTH) {
+          // at this point, we are only keeping 2 messages in history
+          history[0] = history[1];
+          history[1] = greeting;
+        }
+        else {
+          history.push(greeting);
+        }
+      }
       return resolve(context);
     });
   },
@@ -213,15 +301,18 @@ const findOrCreateSession = (fbid) => {
     if (sessions[k].fbid === fbid) {
       // Yep, got it!
       sessionId = k;
-      console.log("Found session for ",fbid, JSON.stringify(sessions[sessionId]));
+      logger.info("Found session for ",fbid, JSON.stringify(sessions[sessionId]));
     }
   });
   if (!sessionId) {
     // No session found for user fbid, let's create a new one
-    console.log("Creating a new session for ",fbid);
+    logger.info("Creating a new session for ",fbid);
     sessionId = new Date().toISOString();
     sessions[sessionId] = {fbid: fbid, context: {}};
+    sessions[sessionId].botMesgHistory = [];
   }
+  sessions[sessionId].context.sessionId = sessionId;
+  logger.info("This session's id is",sessionId);
   return sessionId;
 };
 
@@ -276,6 +367,9 @@ function verifyRequestSignature(req, res, buf) {
   }
 }
 
+// get weather info for later use
+
+
 var server = https.createServer(options, app);  
 // this.io = require('socket.io').listen(this.server);  
 server.listen(port, function() {
@@ -294,6 +388,31 @@ app.use(bodyParser.json({ verify: verifyRequestSignature }));
 
 app.get('/', function(req, res) {
   return res.send("Hello secure world");
+});
+
+var tripList = {};
+// var json2html = require('node-json2html');
+app.get('/trips', function(req, res) {
+  const trip = tripList['trip1'];
+  return res.send(JSON.stringify(trip,null,4));
+});
+
+app.get('/eext', function(req, res) {
+  try {
+    var text = fs.readFileSync(freeFormTextFile, 'utf8');
+    var lines = text.split(/\r?\n/);
+    var html = "<ol>";
+    // TODO: Test that lines is of the right type and that the split worked.
+    lines.forEach(function(line) {
+      html += "<li>" + line + "</li>";
+    });
+    html += "</ol>";
+    return res.send(html);
+  }
+  catch(err) {
+    logger.error("error reading file: <" + err + ">");
+    return res.send("Sorry, Could not retrieve text. Please try again later!");
+  }
 });
 
 // handling webhook
@@ -401,12 +520,49 @@ function receivedMessage(event) {
           handleHelpMessage(senderID); 
           break;
         default:
-          sendResponseFromWitBot(senderID,messageText);
+          determineResponseType(senderID,messageText);
           // sendTextMessage(senderID, messageText);
       }
     } else if (messageAttachments) {
       sendTextMessage(senderID, "Message with attachment received");
     }
+}
+
+function determineResponseType(senderID, messageText) {
+  var mesg = messageText.toLowerCase();
+  if(mesg.startsWith("save:")) {
+    storeFreeFormText(senderID, messageText);
+    return;
+  }
+  if(mesg.startsWith("retrieve")) {
+    retrieveStoredText(senderID, messageText);
+    return;
+  }
+  sendResponseFromWitBot(senderID,messageText);
+}
+
+const freeFormTextFile = "freeForm.txt";
+function retrieveStoredText(senderID, messageText) {
+  sendTextMessage(senderID, "See https://polaama.com/text");
+}
+
+/*
+ * Store whatever string the user input and return "Saved!"
+ */
+function storeFreeFormText(senderID, messageText) {
+  // retrieve text
+  var mesg = messageText.substr("save:".length) + "\n";
+  // store it locally
+  try {
+    fs.appendFileSync(freeFormTextFile, mesg);
+    logger.info("opend file to add free form text");
+    sendTextMessage(senderID, "Saved! You can retrieve this by saying \"retrieve\"");
+  }
+  catch(err) {
+    logger.error("error appending file: " + err);
+    sendTextMessage(senderID, "Sorry, Could not save text. Please try again later!");
+  }
+  return;
 }
 
 /*
@@ -425,7 +581,7 @@ function sendResponseFromWitBot(senderID, messageText) {
   ).then((context) => {
     // Our bot did everything it has to do.
     // Now it's waiting for further messages to proceed.
-    logger.info('Waiting for next user messages. current context: ',JSON.stringify(context));
+    logger.info('Waiting for next user message. current context: ', JSON.stringify(context));
 
     // Based on the session state, you might want to reset the session.
     // This depends heavily on the business logic of your bot.
@@ -439,6 +595,7 @@ function sendResponseFromWitBot(senderID, messageText) {
   })
   .catch((err) => {
     logger.error('Oops! Got an error from Wit: ', err.stack || err);
+    sendTextMessage(senderID,"Even bots need to eat. Out for lunch! Be back in a bit.");
   })
 }
 
@@ -542,7 +699,6 @@ function sendTextMessage(recipientId, messageText) {
 
   callSendAPI(messageData);
 }
-
 
 function callSendAPI(messageData) {
   request({
