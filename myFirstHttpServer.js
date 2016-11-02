@@ -73,10 +73,6 @@ const fbMessage = (id, text) => {
   });
 };
 
-var savedLocation;
-var savedStartDate;
-var savedDuration;
-
 function createPackList(weather) {
   var packList = [];
   // if the weather is sunny, add corresponding items.
@@ -99,12 +95,12 @@ function createTodoList(trip) {
   return todoList;
 }
 
-function persistTrip(tripName) {
+function persistTrip(tripName, context) {
   var trip = {};
   trip['name'] = tripName;
-  trip['location'] = savedLocation;
-  trip['duration'] = savedDuration;
-  trip['startDate'] = savedStartDate;
+  trip['destination'] = context.destination;
+  trip['duration'] = context.duration;
+  trip['startDate'] = context.datetime;
   // TODO: Get this information from weather API or the file persisted.
   trip['weather'] = "sunny";
   trip['packList'] = createPackList(trip['weather']);
@@ -117,51 +113,41 @@ function persistTrip(tripName) {
   return trip;
 }
 
-function captureAvailableEntities(context, location, datetime, duration) {
-  // capture location & datetime if they are present
-  if(!savedLocation) {
-    if(location) {
-      // save location for later use
-      savedLocation = location;
-    }
-    else {
-      logger.info("Missing location");
-      context.missingLocation = true;
-    }
+function captureAvailableEntity(context, entities, valueKey, missingKey) {
+  const value = firstEntityValue(entities, valueKey);
+  if(value) { 
+    logger.info("Found value " + value + " for " + valueKey);
+    context[valueKey] = value;
   }
-  if(!savedStartDate) {
-    if(datetime) {
-      // save datetime for later use
-      savedStartDate = datetime;
-    }
-    else {
-      logger.info("Missing datetime");
-      context.missingDate = true;
-    }
+  // even if the value was not passed in this entity, it might have been passed to this session in a previous entity and persisted in the session state.
+  if(context[valueKey]) {
+    logger.info("Deleting " + missingKey + " from context since valueKey was found with value: " + context[valueKey]);
+    delete context[missingKey];
   }
-  if(!savedDuration) {
-    if(duration) {
-      // save duration for later use
-      savedDuration = duration;
-    }
-    else {
-      logger.info("Missing Duration");
-      context.missingDuration = true;
-    }
+  else {
+    logger.info("Did not find value for " + valueKey + ". Adding " + missingKey + " to context");
+    context[missingKey] = true;
   }
-  if(savedLocation) {
-    // indicate to bot that location was present
-    delete context.missingLocation;
+}
+
+// at this point, we are only keeping 2 messages in history
+const HISTORY_LENGTH = 2;
+
+function updateHistoryAndCallResolve(resolve, message, context) {
+  const sessionId = context.sessionId;
+  var history = sessions[sessionId].botMesgHistory;
+  // add this message to the sessions's previous messages.
+  if(history.length == HISTORY_LENGTH) {
+    // an innefficient circular buffer
+    history.forEach(function(element,i,array) {
+      history[i] = history[i+1];
+    });
+    history[HISTORY_LENGTH - 1] = message;
   }
-  if(savedStartDate) {
-    // indicate to bot that datetime was present & captured
-    delete context.missingDate; 
+  else {
+    history.push(message);
   }
-  if(savedDuration) {
-    // indicate to bot that duration was present & captured
-    delete context.missingDuration;
-  }
-  return context;
+  return resolve(context);
 }
 
 const actions = {
@@ -193,21 +179,18 @@ const actions = {
     }
   },
   createNewTrip({context, entities}) {
-    console.log("Called createNewTrip action");
     return new Promise(function(resolve, reject) {
-      var location = firstEntityValue(entities, 'location');
-      var datetime = firstEntityValue(entities, 'datetime');
-      var duration = firstEntityValue(entities, 'duration');
-      var updatedContext = captureAvailableEntities(context, location, datetime, duration);
-      console.log("Context received in createNewTrip Action: ",JSON.stringify(context));
-      if(!savedLocation || !savedStartDate || !savedDuration) {
-        delete updatedContext.forecast;
-        delete updatedContext.tripName;
-        return resolve(updatedContext);
+      logger.info("createNewTrip: Called with context: " + JSON.stringify(context) + ". Entity: " + JSON.stringify(entities));
+      captureAvailableEntity(context, entities, 'destination', 'missingLocation');
+      captureAvailableEntity(context, entities, 'datetime', 'missingDatetime');
+      captureAvailableEntity(context, entities, 'duration', 'missingDuration');
+      if(context.missingLocation || context.missingDatetime || context.missingDuration) {
+        logger.info("createNewTrip: Updated context: ",JSON.stringify(context));
+        return resolve(context);
       }
       // both location & date time exist. Time to do some work.
-      console.log("location is " + savedLocation + ", date is " + savedStartDate + ", duration is " + duration);
-      // we should call a weather API here
+      // TODO: we should call a weather API here
+      /*
       var text = {
         attachment: {
           type: "template",
@@ -226,21 +209,20 @@ const actions = {
           }
         }
       };
-      // updatedContext.forecast = 'sunny in ' + savedLocation + ' on ' + savedStartDate;
-      var trip = persistTrip(updatedContext.tripName);
-      updatedContext.forecast = "Great! It's going to be " + trip['weather'] + " in " + trip['location'] + ". I have created your trip plan with pack list, todo lists etc. Check it out at https://polaama.com/trips";
-      updatedContext.tripName = savedLocation + "-" + savedStartDate + "-" + savedDuration;
-      savedLocation = null;
-      savedStartDate = null;
-      savedDuration = null;
-      return resolve(updatedContext);
+      */
+      const tripName = context.destination + "-" + context.datetime + "-" + context.duration;
+      var trip = persistTrip(tripName, context);
+      context.firstResponse = "Great! It's going to be " + trip['weather'] + " in " + trip['destination'] + ". I have created your trip plan with pack list, todo lists etc. Check it out at https://polaama.com/trips";
+      context.done = true;
+      logger.info("createNewTrip: Updated context: ",JSON.stringify(context));
+      return updateHistoryAndCallResolve(resolve, context.firstResponse, context);
     });
   },
   getName({context, entities}) {
     console.log("getName called");
     return new Promise(function(resolve, reject) {
       context.name = "Madhu";
-      return resolve(context);
+      return updateHistoryAndCallResolve(resolve, context.name, context);
     });
   },
   greeting({context, entities}) {
@@ -249,33 +231,53 @@ const actions = {
       const greeting = "Hi there! How can I help you today?";
       // if we are repeating ourselves, ask the user to help!
       const sessionId = context.sessionId;
-      const HISTORY_LENGTH = 2;
       logger.info("session id in context is ",sessionId);
       const history = sessions[sessionId].botMesgHistory;
       if(history.length == HISTORY_LENGTH && history[history.length-1] === greeting) {
         // TODO: Get the message from a random list of strings so you don't ask the same thing..
         context.greeting = "Can you please ask the question a different way?";
+        return resolve(context);
       }
-      else {
-        context.greeting = greeting;
-        // add this message to the sessions's previous messages.
-        if(history.length == HISTORY_LENGTH) {
-          // at this point, we are only keeping 2 messages in history
-          history[0] = history[1];
-          history[1] = greeting;
-        }
-        else {
-          history.push(greeting);
-        }
-      }
-      return resolve(context);
+      context.greeting = greeting;
+      return updateHistoryAndCallResolve(resolve, greeting, context);
     });
   },
   farewellMessage({context, entities}) {
     console.log("farewell Message");
     return new Promise(function(resolve, reject) {
       context.farewellMessage = "Talk to you later.";
-      return resolve(context);
+      return updateHistoryAndCallResolve(resolve, context.farewellMessage, context);
+    });
+  },
+  saveFrequentFlyerDetails({context, entities}) {
+    logger.info("saveFrequentFlyerDetails: Called with context: " + JSON.stringify(context) + ". Entity: " + JSON.stringify(entities));
+    return new Promise(function(resolve, reject) {
+      captureAvailableEntity(context, entities, 'contact', 'missingName');
+      captureAvailableEntity(context, entities, 'mileageNumber', 'missingMileageNumber');
+      captureAvailableEntity(context, entities, 'airlinesName', 'missingAirlines');
+      if(context.missingName || context.missingMileageNumber || context.missingAirlines) {
+        logger.info("saveFrequentFlyerDetails: Updated context: ",JSON.stringify(context));
+        return resolve(context);
+      }
+      // If we have everything, do some work.
+      // TODO: Need to overwrite existing mileage number.
+      var miles = {};
+      miles.name = context.contact;
+      miles.mileageNumber = context.mileageNumber;
+      miles.airlines = context.airlinesName;
+      try {
+        fs.appendFileSync("frequentFlyer.txt", JSON.stringify(miles));
+        logger.info("Saved frequent flyer details: ", miles);
+        context.message = "Saved!";
+        // indicate that the session can be deleted after the response is sent!
+        context.done = true;
+      }
+      catch(err) {
+        logger.error("Error appending to frequent flyer file: ",err);
+        context.message = "Could not save mileage details now. Please try again in a while..";
+      }
+      logger.info("saveFrequentFlyerDetails: Updated context: ",JSON.stringify(context));
+      return updateHistoryAndCallResolve(resolve, context.message, context);
     });
   }
 };
@@ -387,7 +389,7 @@ const jsonParser = bodyParser.json();
 app.use(bodyParser.json({ verify: verifyRequestSignature }));
 
 app.get('/', function(req, res) {
-  return res.send("Hello secure world");
+  return res.send("<meta name='B-verify' content='ee02308f7491f4aef923b2d1184072ccd1f6367a' /><body>Hello secure world</body>");
 });
 
 var tripList = {};
@@ -397,7 +399,7 @@ app.get('/trips', function(req, res) {
   return res.send(JSON.stringify(trip,null,4));
 });
 
-app.get('/eext', function(req, res) {
+app.get('/text', function(req, res) {
   try {
     var text = fs.readFileSync(freeFormTextFile, 'utf8');
     var lines = text.split(/\r?\n/);
@@ -447,7 +449,7 @@ app.post('/webhook', jsonParser, function(req, res) {
         } else if (messagingEvent.message) {
           receivedMessage(messagingEvent);
         } else if (messagingEvent.delivery) {
-          console.log("deliver message");
+          console.log("Message delivered");
           // receivedDeliveryConfirmation(messagingEvent);
         } else if (messagingEvent.postback) {
           console.log("deliver postback"); 
@@ -586,12 +588,14 @@ function sendResponseFromWitBot(senderID, messageText) {
     // Based on the session state, you might want to reset the session.
     // This depends heavily on the business logic of your bot.
     // Example:
-    // if (context['done']) {
-    //   delete sessions[sessionId];
-    // }
-
-    // Updating the user's current session state. Commenting this to prevent old context from confusing wit bot into sending multiple texts to the user.
-    // sessions[sessionId].context = context;
+    if (context.done) {
+      logger.info("Deleting Session " + sessionId + " and associated context since all related work is done");
+      delete sessions[sessionId];
+    }
+    else {
+      // Updating the user's current session state. 
+      sessions[sessionId].context = context;
+    }
   })
   .catch((err) => {
     logger.error('Oops! Got an error from Wit: ', err.stack || err);
