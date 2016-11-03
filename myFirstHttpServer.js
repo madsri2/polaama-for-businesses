@@ -108,9 +108,43 @@ function persistTrip(tripName, context) {
   trip['comments'] = [
     "Average water temperature will be around 60F, not suitable for swimming",
   ];
-  
-  tripList['trip1'] = trip;
-  return trip;
+
+  var storedTrips = retrieveTrips();
+  storedTrips[tripName] = trip;
+
+  try {
+    fs.writeFileSync("tripPlan.txt", JSON.stringify(storedTrips));
+    logger.info("saved trip for " + tripName);
+    return true;
+  }
+  catch(err) {
+    logger.error("error writing to tripPlan.txt: ",err);
+    return false;
+  }
+}
+
+function retrieveTrip(tripName) {
+  return retrieveTrips()[tripName];
+}
+
+function retrieveTrips() {
+  try {
+    fs.accessSync("tripPlan.txt", fs.F_OK);
+    try {
+      var a = JSON.parse(fs.readFileSync("tripPlan.txt", 'utf8')); 
+      console.log("returning " + JSON.stringify(a));
+      return a;
+    }
+    catch(err) {
+      logger.error("error reading from tripPlan.txt: ",err);
+      return null;
+    }
+  }
+  catch(err) {
+      logger.info("file does not exist. returning empty map");
+      var empty = {};
+      return empty; 
+  }
 }
 
 function captureAvailableEntity(context, entities, valueKey, missingKey) {
@@ -377,7 +411,7 @@ var server = https.createServer(options, app);
 server.listen(port, function() {
   logger.info("Listening on port " + port);
 }); 
-// logg every response
+// log every response
 app.use(({method, url}, rsp, next) => {
   rsp.on('finish', () => {
     logger.info(`${rsp.statusCode} ${method} ${url}`);
@@ -392,11 +426,33 @@ app.get('/', function(req, res) {
   return res.send("<meta name='B-verify' content='ee02308f7491f4aef923b2d1184072ccd1f6367a' /><body>Hello secure world</body>");
 });
 
-var tripList = {};
 // var json2html = require('node-json2html');
 app.get('/trips', function(req, res) {
   const trip = tripList['trip1'];
   return res.send(JSON.stringify(trip,null,4));
+});
+
+const util = require('util');
+app.get('/:dest/pack-list', function(req, res) {
+  const dest = req.params.dest;
+  logger.info("returning pack list for destination: " + dest);
+
+  const c1 = {
+    destination: "big_island",
+    duration: "5 days",
+    startDate: "11/30/16",
+  };
+  persistTrip(c1.destination, c1);
+  const c2 = {
+    destination: "israel",
+    duration: "10 days",
+    startDate: "2/10/17",
+  };
+  persistTrip(c2.destination, c2);
+
+  const trip = JSON.stringify(retrieveTrip(dest));
+  console.log("returning trip: " + trip);
+  return res.send(trip);
 });
 
 app.get('/text', function(req, res) {
