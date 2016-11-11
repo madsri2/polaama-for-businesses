@@ -13,11 +13,12 @@ describe('TripPlanner', function() {
   describe('#getPackList', function() {
     context('valid trip', function() {
       it('returns matching destination',function() {
-        var tripName = 'big_island';
-        var value = tp.getPackList(tripName).then(function(obj) {
-          return obj.destination;
+        var tripName = 'Big island';
+        var value = tp.getPackList(tripName).then(function(packList) {
+          console.log("test getPackList. obtained: " + JSON.stringify(packList));
+          return packList.length;
         });
-        return expect(value).to.eventually.eq("Big Island");
+        return expect(value).to.eventually.eq(2);
       });
     });
   });

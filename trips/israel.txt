@@ -1,0 +1,1 @@
+{"name":"israel","destination":"israel","duration":"10 days","weather":"sunny","packList":["cap/hat","sunglass"],"todoList":["Flight tickets","Place to stay","Rental car"],"comments":["Average water temperature will be around 60F, not suitable for swimming"]}

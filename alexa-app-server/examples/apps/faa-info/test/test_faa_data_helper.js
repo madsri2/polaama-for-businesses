@@ -58,6 +58,17 @@ describe('FAADataHelper', function() {
         'type': 'Ground Delay'
       }
     };
-    context
+    context('with status containing no delay', function() {
+      it('formats the status as expected', function() {
+        status.delay=false;
+        expect(subject.formatAirportStatus(status)).to.eq('There is currently no delay at Hartsfield-Jackson Atlanta International. The current weather conditions are Light Snow, 36.0 F (2.2 C) and wind Northeast at 9.2mph.');
+      });
+    });
+    context('with status containing delay', function() {
+      it('formats the status as expected', function() {
+        status.delay = true;
+        expect(subject.formatAirportStatus(status)).to.eq('There is currently a delay for Hartsfield-Jackson Atlanta International. The average delay time is 57 minutes. Delay is because of the following: AIRLINE REQUESTED DUE TO DE-ICING AT AIRPORT / DAL AND DAL SUBS ONLY. The current weather conditions are Light Snow, 36.0 F (2.2 C) and wind Northeast at 9.2mph.');
+      });
+    });
   });
 });

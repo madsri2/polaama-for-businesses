@@ -73,6 +73,11 @@ const fbMessage = (id, text) => {
   });
 };
 
+// ----------------------------------------------------------------------------
+// Polaama specific code
+
+var _ = require('lodash');
+
 function createPackList(weather) {
   var packList = [];
   // if the weather is sunny, add corresponding items.
@@ -95,9 +100,34 @@ function createTodoList(trip) {
   return todoList;
 }
 
+function encode(tripName) {
+  return tripName.toLowerCase().replace(" ","_");
+}
+
+const tripPlanFile = "trips/";
+
+function tripFile(tripName) {
+  // TODO: check parameters
+  return _.template("trips/${name}.txt")({
+    name: encode(tripName)
+  });
+}
+
+function persistUpdatedTrip(tripName, trip) {
+  const file = tripFile(tripName);
+  try {
+    fs.writeFileSync(file, JSON.stringify(trip));
+    logger.info("saved trip for ",tripName);
+    return true;
+  }
+  catch(err) {
+    logger.error("error writing to ",file,err.stack);
+    return false;
+  }
+}
+
 function persistTrip(tripName, context) {
   var trip = {};
-  trip['name'] = tripName;
   trip['destination'] = context.destination;
   trip['duration'] = context.duration;
   trip['startDate'] = context.datetime;
@@ -109,34 +139,21 @@ function persistTrip(tripName, context) {
     "Average water temperature will be around 60F, not suitable for swimming",
   ];
 
-  var storedTrips = retrieveTrips();
-  storedTrips[tripName] = trip;
-
-  try {
-    fs.writeFileSync("tripPlan.txt", JSON.stringify(storedTrips));
-    logger.info("saved trip for " + tripName);
-    return true;
-  }
-  catch(err) {
-    logger.error("error writing to tripPlan.txt: ",err);
-    return false;
-  }
+  persistUpdatedTrip(tripName, trip);
 }
 
 function retrieveTrip(tripName) {
-  return retrieveTrips()[tripName];
-}
-
-function retrieveTrips() {
   try {
-    fs.accessSync("tripPlan.txt", fs.F_OK);
+    const file = tripFile(tripName);
+    logger.info("trying to retrieve trip from file: ",file);
+    fs.accessSync(file, fs.F_OK);
     try {
-      var a = JSON.parse(fs.readFileSync("tripPlan.txt", 'utf8')); 
-      console.log("returning " + JSON.stringify(a));
-      return a;
+      const trip = JSON.parse(fs.readFileSync(file, 'utf8')); 
+      console.log("returning trip " + JSON.stringify(trip));
+      return trip;
     }
     catch(err) {
-      logger.error("error reading from tripPlan.txt: ",err);
+      logger.error("error reading from ",file, err.stack);
       return null;
     }
   }
@@ -330,7 +347,7 @@ const wit = new Wit({
 // sessionId -> {fbid: facebookUserId, context: sessionState}
 const sessions = {};
 
-const findOrCreateSession = (fbid) => {
+const findSession = (fbid) => {
   let sessionId;
   // Let's see if we already have a session for the user fbid
   Object.keys(sessions).forEach(k => {
@@ -340,7 +357,12 @@ const findOrCreateSession = (fbid) => {
       logger.info("Found session for ",fbid, JSON.stringify(sessions[sessionId]));
     }
   });
-  if (!sessionId) {
+  return sessionId;
+};
+
+const findOrCreateSession = (fbid) => {
+  let sessionId = findSession(fbid);
+  if (_.isUndefined(sessionId)) {
     // No session found for user fbid, let's create a new one
     logger.info("Creating a new session for ",fbid);
     sessionId = new Date().toISOString();
@@ -348,6 +370,8 @@ const findOrCreateSession = (fbid) => {
     sessions[sessionId].botMesgHistory = [];
   }
   sessions[sessionId].context.sessionId = sessionId;
+  // TODO: This value needs to be obtained a different way. Possibly by asking the user and or inferring it somehow.
+  sessions[sessionId].tripName = "Big Island";
   logger.info("This session's id is",sessionId);
   return sessionId;
 };
@@ -362,6 +386,7 @@ const PAGE_ACCESS_TOKEN = "EAAXu91clmx0BAONN06z8f5Nna6XnCH3oWJChlbooiZCaYbKOUccV
 const FB_APP_SECRET = "a26c4ad2358b5b61942227574532d174";
 
 // A secure webserver
+const util = require('util');
 const express = require('express');  
 const app = express();
 const https = require('https');
@@ -389,11 +414,11 @@ function verifyRequestSignature(req, res, buf) {
     // error.
     console.error("Couldn't validate the signature.");
   } else {
-    var elements = signature.split('=');
-    var method = elements[0];
-    var signatureHash = elements[1];
+    let elements = signature.split('=');
+    let method = elements[0];
+    let signatureHash = elements[1];
 
-    var expectedHash = crypto.createHmac('sha1', FB_APP_SECRET)
+    let expectedHash = crypto.createHmac('sha1', FB_APP_SECRET)
                         .update(buf)
                         .digest('hex');
 
@@ -404,7 +429,6 @@ function verifyRequestSignature(req, res, buf) {
 }
 
 // get weather info for later use
-
 
 var server = https.createServer(options, app);  
 // this.io = require('socket.io').listen(this.server);  
@@ -428,36 +452,82 @@ app.get('/', function(req, res) {
 
 // var json2html = require('node-json2html');
 app.get('/trips', function(req, res) {
-  const trip = tripList['trip1'];
-  return res.send(JSON.stringify(trip,null,4));
+  return res.send("This will eventually return a list of trips planned for this user.");
 });
 
-const util = require('util');
-app.get('/:dest/pack-list', function(req, res) {
-  const dest = req.params.dest;
-  logger.info("returning pack list for destination: " + dest);
 
-  const c1 = {
-    destination: "big_island",
-    duration: "5 days",
-    startDate: "11/30/16",
-  };
-  persistTrip(c1.destination, c1);
-  const c2 = {
-    destination: "israel",
-    duration: "10 days",
-    startDate: "2/10/17",
-  };
-  persistTrip(c2.destination, c2);
+function getInfoFromTrip(req, tripKey) {
+  const tripName = req.params.tripName;
+  const trip = retrieveTrip(tripName);
+  console.log("Found trip in getInfoFromTrip: " + JSON.stringify(trip));
+  if(_.isUndefined(trip) || _.isUndefined(trip[tripKey])) {
+    logger.info("could not find " + tripKey + " for trip " + tripName);
+    return undefined;
+  }
+  logger.info("returning " + trip[tripKey] + " with " + trip[tripKey].length + " items. ;Destination is " + trip.destination);
+  return trip[tripKey];
+}
 
-  const trip = JSON.stringify(retrieveTrip(dest));
-  console.log("returning trip: " + trip);
-  return res.send(trip);
+function formatListResponse(headers, list) {
+  if(headers['user-agent'].startsWith("Mozilla")) {
+    logger.info("request call from browser. sending back html");
+    var html = "<ol>";
+    list.forEach(function(item) {
+      html += "<li>" + item + "</li>";
+    });
+    html += "</ol>";
+    return html;
+  }
+  logger.info("request call from something other than browser. sending back json");
+  return list;
+}
+
+app.get('/:tripName/pack-list', function(req, res) {
+  const packList = getInfoFromTrip(req, "packList");
+  // logger.info("req value is " + util.inspect(req, {showHidden: true, color: true, depth: 5}));
+  if(_.isUndefined(packList)) {
+    return res.send("Could not find pack list for trip " + req.params.tripName);
+  }
+  return res.send(formatListResponse(req.headers, packList));
+});
+
+app.get('/:tripName/todo', function(req, res) {
+  const todoList = getInfoFromTrip(req, "todoList");
+  if(_.isUndefined(todoList)) {
+    return res.send("Could not find todo list for trip " + req.params.tripName);
+  }
+  return res.send(formatListResponse(req.headers, todoList));
+});
+
+app.get('/:tripName/comments', function(req, res) {
+  const comments = getInfoFromTrip(req, "comments");
+  if(_.isUndefined(comments)) {
+    return res.send("Could not find todo list for trip " + req.params.tripName);
+  }
+  return res.send(formatListResponse(req.headers, comments));
 });
 
 app.get('/text', function(req, res) {
   try {
-    var text = fs.readFileSync(freeFormTextFile, 'utf8');
+    const text = fs.readFileSync(freeFormTextFile, 'utf8');
+    const lines = text.split(/\r?\n/);
+    let html = "<ol>";
+    // TODO: Test that lines is of the right type and that the split worked.
+    lines.forEach(function(line) {
+      html += "<li>" + line + "</li>";
+    });
+    html += "</ol>";
+    return res.send(html);
+  }
+  catch(err) {
+    logger.error("error reading file: <" + err + ">");
+    return res.send("Sorry, Could not retrieve text. Please try again later!");
+  }
+});
+
+app.get('/todo', function(req, res) {
+  try {
+    var text = fs.readFileSync(todoTextFile, 'utf8');
     var lines = text.split(/\r?\n/);
     var html = "<ol>";
     // TODO: Test that lines is of the right type and that the split worked.
@@ -486,7 +556,6 @@ app.get('/webhook', function(req, res) {
   }  
 });
 
-
 app.post('/webhook', jsonParser, function(req, res) {
   logger.info("In post webhook");
   var data = req.body;
@@ -499,19 +568,26 @@ app.post('/webhook', jsonParser, function(req, res) {
       var pageID = pageEntry.id;
       var timeOfEvent = pageEntry.time;
       pageEntry.messaging.forEach(function(messagingEvent) {
-        if (messagingEvent.optin) {
-          console.log("optin message");
-          // receivedAuthentication(messagingEvent);
-        } else if (messagingEvent.message) {
-          receivedMessage(messagingEvent);
-        } else if (messagingEvent.delivery) {
-          console.log("Message delivered");
-          // receivedDeliveryConfirmation(messagingEvent);
-        } else if (messagingEvent.postback) {
-          console.log("deliver postback"); 
-          receivedPostback(messagingEvent);
-        } else {
-          logger.info("Webhook received unknown messagingEvent: ", messagingEvent);
+        try {
+          if (messagingEvent.optin) {
+            console.log("optin message");
+            // receivedAuthentication(messagingEvent);
+          } else if (messagingEvent.message) {
+            console.log("Received Messaging event");
+            receivedMessage(messagingEvent);
+          } else if (messagingEvent.delivery) {
+            console.log("Message delivered");
+            // receivedDeliveryConfirmation(messagingEvent);
+          } else if (messagingEvent.postback) {
+            console.log("Deliver postback"); 
+            receivedPostback(messagingEvent);
+          } else {
+            logger.info("Webhook received unknown messagingEvent: ", messagingEvent);
+          }
+        }
+        catch(err) {
+          logger.error("an exception was thrown: " + err.stack);
+          sendTextMessage(messagingEvent.sender.id,"Even bots need to eat! Be back in a bit..");
         }
       });
     });
@@ -556,16 +632,18 @@ function receivedPostback(event) {
  * 
  */
 function receivedMessage(event) {
-  var senderID = event.sender.id;
-  var recipientID = event.recipient.id;
-  var timeOfMessage = event.timestamp;
-  var message = event.message;
+  const senderID = event.sender.id;
+  const recipientID = event.recipient.id;
+  const timeOfMessage = event.timestamp;
+  const message = event.message;
 
   logger.info("Received event for user %d and page %d at %d. Event: ", 
     senderID, recipientID, timeOfMessage, JSON.stringify(event));
 
   const messageText = message.text;
   const messageAttachments = message.attachments;
+  // find or create the session here so it can be used elsewhere.
+  findOrCreateSession(senderID);
   if (messageText) {
       // If we receive a text message, check to see if it matches any special
       // keywords and send back the corresponding example. Otherwise, just echo
@@ -587,13 +665,34 @@ function receivedMessage(event) {
 }
 
 function determineResponseType(senderID, messageText) {
-  var mesg = messageText.toLowerCase();
-  if(mesg.startsWith("save:")) {
+  const mesg = messageText.toLowerCase();
+
+  if(mesg.startsWith("save")) {
     storeFreeFormText(senderID, messageText);
     return;
   }
-  if(mesg.startsWith("retrieve")) {
+  if(mesg.startsWith("todo")) {
+    storeTodoList(senderID, messageText);
+    return;
+  }
+  if(mesg.startsWith("pack")) {
+    storePackList(senderID, messageText);
+    return;
+  }
+  if(mesg.startsWith("get todo")) {
+    retrieveTodoList(senderID, messageText);
+    return;
+  }
+  if(mesg.startsWith("retrieve") || mesg.startsWith("comments") || mesg.startsWith("get comments")) {
     retrieveStoredText(senderID, messageText);
+    return;
+  }
+  if(mesg.startsWith("get list") || mesg.startsWith("get pack")) {
+    retrievePackList(senderID, messageText);
+    return;
+  }
+  if(mesg.startsWith("deals")) {
+    retrieveDeals(senderID, messageText);
     return;
   }
   sendResponseFromWitBot(senderID,messageText);
@@ -601,26 +700,89 @@ function determineResponseType(senderID, messageText) {
 
 const freeFormTextFile = "freeForm.txt";
 function retrieveStoredText(senderID, messageText) {
-  sendTextMessage(senderID, "See https://polaama.com/text");
+  const tn = encode(sessions[findSession(senderID)].tripName);
+  const url = _.template('https://polaama.com/${tripName}/comments')({
+    tripName: tn
+  });
+  sendTextMessage(senderID, url);
+}
+
+function retrieveTodoList(senderID, messageText) {
+  const tn = encode(sessions[findSession(senderID)].tripName);
+  const url = _.template('https://polaama.com/${tripName}/todo')({
+    tripName: tn
+  });
+  sendTextMessage(senderID, url);
+}
+
+function retrievePackList(senderID, messageText) {
+  const tn = encode(sessions[findSession(senderID)].tripName);
+  const url = _.template('https://polaama.com/${tripName}/pack-list')({
+    tripName: tn
+  });
+  sendTextMessage(senderID, url);
+}
+
+function retrieveDeals(senderId, messageText) {
+  const messageData = {
+    recipient: {
+      id: senderId
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "generic",
+          elements: [{
+            title: "Wine tasting tour deal from livingsocial",
+            subtitle: "Great deal on a wine tasting tour",
+            item_url: "https://www.livingsocial.com/deals/1618024-2017-washington-wine-passport-with-tastings",
+            image_url: "https://a1.lscdn.net/imgs/fe9f05ff-f78a-4652-b350-2e7bc0c13d7a/570_q80.jpg",
+            buttons: [{
+              type: "web_url",
+              url: "https://www.livingsocial.com/deals/1618024-2017-washington-wine-passport-with-tastings",
+              title: "Open Web URL"
+            }],
+          }]
+        }
+      }
+    }
+  };  
+  callSendAPI(messageData);
+}
+
+function storeList(senderId, messageText, regex, key, retrieveString) {
+  const tripName = sessions[findSession(senderId)].tripName;
+  const trip = retrieveTrip(tripName);
+  // retrieve text
+  const items = messageText.replace(regex,"").split(',');
+  if(!(key in trip)) {
+    trip[key] = [];
+  } 
+  trip[key] = trip[key].concat(items);
+  // store it locally
+  persistUpdatedTrip(tripName, trip);
+  logger.info("successfully stored item " + items + " in " + key);
+  sendTextMessage(senderId, "Saved! You can retrieve this by saying \"" + retrieveString + "\"");
+  return;
+}
+
+function storeTodoList(senderId, messageText) {
+  const reg = new RegExp("todo[:]*[ ]*","i"); // ignore case
+  storeList(senderId, messageText, reg, "todoList", "get todo");  
+}
+
+function storePackList(senderId, messageText) {
+  const reg = new RegExp("pack[:]*[ ]*","i"); // ignore case
+  storeList(senderId, messageText, reg, "packList", "get pack list");  
 }
 
 /*
  * Store whatever string the user input and return "Saved!"
  */
-function storeFreeFormText(senderID, messageText) {
-  // retrieve text
-  var mesg = messageText.substr("save:".length) + "\n";
-  // store it locally
-  try {
-    fs.appendFileSync(freeFormTextFile, mesg);
-    logger.info("opend file to add free form text");
-    sendTextMessage(senderID, "Saved! You can retrieve this by saying \"retrieve\"");
-  }
-  catch(err) {
-    logger.error("error appending file: " + err);
-    sendTextMessage(senderID, "Sorry, Could not save text. Please try again later!");
-  }
-  return;
+function storeFreeFormText(senderId, messageText) {
+  const reg = new RegExp("save[:]*[ ]*","i"); // ignore case
+  storeList(senderId, messageText, reg, "comments", "comments, get comments or retrieve");
 }
 
 /*
@@ -628,7 +790,7 @@ function storeFreeFormText(senderID, messageText) {
  */
 function sendResponseFromWitBot(senderID, messageText) {
   // This is needed for our bot to figure out the conversation history
-  const sessionId = findOrCreateSession(senderID);
+  const sessionId = findSession(senderID);
 
   // Let's forward the message to the Wit.ai Bot Engine
   // This will run all actions until our bot has nothing left to do
@@ -646,7 +808,7 @@ function sendResponseFromWitBot(senderID, messageText) {
     // Example:
     if (context.done) {
       logger.info("Deleting Session " + sessionId + " and associated context since all related work is done");
-      delete sessions[sessionId];
+      delete sessions[sessionId].context;
     }
     else {
       // Updating the user's current session state. 
