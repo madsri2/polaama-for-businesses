@@ -469,6 +469,10 @@ function getInfoFromTrip(req, tripKey) {
 }
 
 function formatListResponse(headers, list) {
+  if(_.isUndefined(headers) || _.isUndefined(headers['user-agent'])) {
+    logger.info("header or user-agent not defined. sending back json");
+    return list;
+  }
   if(headers['user-agent'].startsWith("Mozilla")) {
     logger.info("request call from browser. sending back html");
     var html = "<ol>";
