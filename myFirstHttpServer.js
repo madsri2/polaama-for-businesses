@@ -511,42 +511,6 @@ app.get('/:tripName/comments', function(req, res) {
   return res.send(formatListResponse(req.headers, comments));
 });
 
-app.get('/text', function(req, res) {
-  try {
-    const text = fs.readFileSync(freeFormTextFile, 'utf8');
-    const lines = text.split(/\r?\n/);
-    let html = "<ol>";
-    // TODO: Test that lines is of the right type and that the split worked.
-    lines.forEach(function(line) {
-      html += "<li>" + line + "</li>";
-    });
-    html += "</ol>";
-    return res.send(html);
-  }
-  catch(err) {
-    logger.error("error reading file: <" + err + ">");
-    return res.send("Sorry, Could not retrieve text. Please try again later!");
-  }
-});
-
-app.get('/todo', function(req, res) {
-  try {
-    var text = fs.readFileSync(todoTextFile, 'utf8');
-    var lines = text.split(/\r?\n/);
-    var html = "<ol>";
-    // TODO: Test that lines is of the right type and that the split worked.
-    lines.forEach(function(line) {
-      html += "<li>" + line + "</li>";
-    });
-    html += "</ol>";
-    return res.send(html);
-  }
-  catch(err) {
-    logger.error("error reading file: <" + err + ">");
-    return res.send("Sorry, Could not retrieve text. Please try again later!");
-  }
-});
-
 // handling webhook
 app.get('/webhook', function(req, res) {
   logger.info("called /webhook");
@@ -577,7 +541,7 @@ app.post('/webhook', jsonParser, function(req, res) {
             console.log("optin message");
             // receivedAuthentication(messagingEvent);
           } else if (messagingEvent.message) {
-            console.log("Received Messaging event");
+            logger.info("Received Messaging event");
             receivedMessage(messagingEvent);
           } else if (messagingEvent.delivery) {
             console.log("Message delivered");
@@ -668,6 +632,7 @@ function receivedMessage(event) {
     }
 }
 
+const MY_RECIPIENT_ID = 1120615267993271;
 function determineResponseType(senderID, messageText) {
   const mesg = messageText.toLowerCase();
 
@@ -699,10 +664,50 @@ function determineResponseType(senderID, messageText) {
     retrieveDeals(senderID, messageText);
     return;
   }
-  sendResponseFromWitBot(senderID,messageText);
+  if(senderID != MY_RECIPIENT_ID) { 
+    const responseFromHuman = interceptMessage(senderID,messageText);
+    sendTextMessage(senderID, responseFromHuman);
+    return;
+  }
+  // This message was sent by the human. Figure out if it was sent in response to a previous question by one of our users. If so, identify the user and send response back to the right user.
+  if(messageText === "ai" ) {
+    sendResponseFromWitBot(senderID,messageText);
+  }
+  else {
+    const ORIG_SENDER_ID = 1326674134041820;
+    sendMessageFromHuman(ORIG_SENDER_ID, messageText);
+  }
 }
 
-const freeFormTextFile = "freeForm.txt";
+function sendMessageFromHuman(originalSenderId, messageText) {
+  const messageData = {
+    recipient: {
+      id: originalSenderId
+    },
+    message: {
+      text: messageText,
+      metadata: "response from human"
+    }
+  };
+  logger.info("sending message from human to sender: " + JSON.stringify(messageData));
+  callSendAPI(messageData);
+}
+
+function interceptMessage(senderID, messageText) {
+  const messageData = {
+    recipient: {
+      id: MY_RECIPIENT_ID
+    },
+    message: {
+      text: "msg frm " + senderID + ": " + messageText,
+      metadata: senderID, // a way to capture the original sender. This will be used when sending it back to the right user.
+    }
+  };
+  logger.info("intercepting message and sending to human: " + JSON.stringify(messageData));
+  callSendAPI(messageData);
+  return "will respond shortly";
+}
+
 function retrieveStoredText(senderID, messageText) {
   const tn = encode(sessions[findSession(senderID)].tripName);
   const url = _.template('https://polaama.com/${tripName}/comments')({
@@ -913,7 +918,7 @@ function sendGenericMessage(recipientId) {
  *
  */
 function sendTextMessage(recipientId, messageText) {
-  var messageData = {
+  const messageData = {
     recipient: {
       id: recipientId
     },
