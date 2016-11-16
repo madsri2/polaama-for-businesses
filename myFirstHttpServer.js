@@ -608,6 +608,12 @@ function receivedMessage(event) {
   logger.info("Received event for user %d and page %d at %d. Event: ", 
     senderID, recipientID, timeOfMessage, JSON.stringify(event));
 
+  if(message.is_echo) {
+    // for now simply log a message and return 200;
+    logger.info("Echo message received. Doing nothing at this point");
+    return;
+  }
+
   const messageText = message.text;
   const messageAttachments = message.attachments;
   // find or create the session here so it can be used elsewhere.
@@ -625,7 +631,6 @@ function receivedMessage(event) {
           break;
         default:
           determineResponseType(senderID,messageText);
-          // sendTextMessage(senderID, messageText);
       }
     } else if (messageAttachments) {
       sendTextMessage(senderID, "Message with attachment received");
@@ -670,11 +675,11 @@ function determineResponseType(senderID, messageText) {
     return;
   }
   // This message was sent by the human. Figure out if it was sent in response to a previous question by one of our users. If so, identify the user and send response back to the right user.
+  const ORIG_SENDER_ID = 1326674134041820;
   if(messageText === "ai" ) {
-    sendResponseFromWitBot(senderID,messageText);
+    sendResponseFromWitBot(ORIG_SENDER_ID,"polaama 2");
   }
   else {
-    const ORIG_SENDER_ID = 1326674134041820;
     sendMessageFromHuman(ORIG_SENDER_ID, messageText);
   }
 }
@@ -945,9 +950,7 @@ function callSendAPI(messageData) {
       logger.info("Successfully sent generic message with id %s to recipient %s", 
         messageId, recipientId);
     } else {
-      logger.error("Unable to send message.");
-      logger.error(response);
-      logger.error(error);
+      logger.error("Unable to send message. Error is " + error);
     }
   });  
 }
