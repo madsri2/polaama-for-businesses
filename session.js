@@ -3,19 +3,21 @@ const _=require('lodash');
 const Log = require('./logger');
 const logger = (new Log()).init();
 const TripData = require('./trip-data');
-const tripData = new TripData();
 
 /*
 A session has a 1:1 relationship with a user-trip. A session represents a user. Each user and their trip will have exactly one session at any given time. Today, the scope of a session is tied to the lifetime of this webserver. TODO: Re-think this decision when sessions need to be persisted across process restarts.  
 sessionId -> {
   fbid: facebookUserId, 
   botMesgHistory: [Array of chat messages]
-  tripName: {
-    aiContext: {}, 
-    humanContext: {}
-  }
-  tripName2: {
-    ...
+  trips: {
+    tripName: {
+      aiContext: {}, 
+      humanContext: {}
+      tripData: tripData // TripData object
+    }
+    tripName2: {
+      ...
+    }
   }
   ...
 }
@@ -44,68 +46,72 @@ humanContext -> {
 }
 */
 
-// This will contain all user sessions.
-const sessions = {};
-
-function Session() {
-}
-
-// TODO: This needs to be removed. The functions below should return the actual session object instead of a session id.
-Session.prototype.getSessions = function(fbid) {
-  return sessions;
-}
-
-Session.prototype.find = function(fbid) { 
-  if(_.isUndefined(fbid)) {
-    logger.info("undefined fbid passed. pass a valid fbid");
-    return null;
-  }
-
-  let sessionId;
-  // Let's see if we already have a session for the user fbid
-  Object.keys(sessions).forEach(k => {
-    logger.info("comparing ",fbid," with session id ",sessions[k].fbid);
-    if (sessions[k].fbid === fbid) {
-      // Yep, got it!
-      sessionId = k;
-      logger.info("Found session for ",fbid, JSON.stringify(sessions[sessionId]));
-    }
-  });
-  if(_.isUndefined(sessionId)) {
-    logger.info("Did not find session for ", fbid, "dump of entire session ", JSON.stringify(sessions));
-  }
-  return sessionId;
-};
-
 const MY_RECIPIENT_ID = "1120615267993271";
 
-Session.prototype.findOrCreate = function(fbid, tripNames) {
-  let sessionId = this.find(fbid);
-  if (_.isUndefined(sessionId)) {
-    // No session found for user fbid, let's create a new one
-    logger.info("Creating a new session for ",fbid);
-    sessionId = new Date().toISOString() + "-" + fbid;
-    sessions[sessionId] = {fbid: fbid, context: {}};
-    sessions[sessionId].botMesgHistory = [];
-    sessions[sessionId].context.sessionId = sessionId;
+function Session(fbid,sessionId) {
+  this.sessionId = sessionId;
+  this.fbid = fbid;
+  this.botMesgHistory = [];
+  this.trips  = {};
+}
+
+Session.prototype.findTrip = function(tripName) {
+  return this.trips[TripData.encode(tripName)];
+}
+
+Session.prototype.deleteAiContext = function(tripName) {
+  const trip = this.findTrip(tripName);
+  trip.aiContext = {};
+}
+
+Session.prototype.updateAiContext = function(tripName, context) {
+  const trip = this.findTrip(tripName);
+  trip.aiContext = context;
+}
+
+// TODO: Implement
+Session.prototype.nooneAwaitingResponse = function() {
+  return false;
+}
+
+Session.prototype.addTrip = function(tripName) {
+  const encTripName = TripData.encode(tripName);
+  if(_.isUndefined(this.trips[encTripName])) {
+    // define a tripName json object.
+    this.trips[encTripName] = { 
+      aiContext: {
+        sessionId: this.sessionId
+      },
+      humanContext: {
+        sessionId: this.sessionId,
+        // TODO: Need a better way to get the human's fbid than using my messenger's senderId.
+        fbid: MY_RECIPIENT_ID,
+        conversations: {}
+      },
+      tripData: new TripData(tripName)
+    };
   }
-  tripNames.forEach(function(tripName) {
-    const encTripName = tripData.encode(tripName);
-    if(_.isUndefined(sessions[sessionId][encTripName])) {
-      // define a tripName json object.
-      sessions[sessionId][encTripName] = { 
-        aiContext: {},
-        humanContext: {
-          sessionId: sessionId,
-          // TODO: Need a better way to get the human's fbid than using my messenger's senderId.
-          fbid: MY_RECIPIENT_ID,
-          conversations: {}
-        }
-      };
-    }
+}
+
+Session.prototype.aiContext = function(tripName) {
+  return this.findTrip(tripName).aiContext;
+}
+
+Session.prototype.humanContext = function(tripName) {
+  return this.findTrip(tripName).humanContext;
+}
+
+Session.prototype.tripData = function(tripName) {
+  return this.findTrip(tripName).tripData;
+}
+
+Session.prototype.allTrips = function() {
+  const tripDataList = [];
+  Object.keys(this.trips).forEach(k => {
+    console.log(`pushing trip for session ${this.sessionId}`);
+    tripDataList.push(this.trips[k].tripData);
   });
-  logger.info("This session's id is",sessionId);
-  return sessionId;
-};
+  return tripDataList;
+}
 
 module.exports = Session;

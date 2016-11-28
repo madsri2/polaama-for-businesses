@@ -4,15 +4,48 @@ const request = require('request');
 const Log = require('./logger');
 const logger = (new Log()).init();
 const TripData = require('./trip-data');
-const tripData = new TripData();
-const Session = require('./session');
-const session = new Session();
-const sessions = session.getSessions();
+const Sessions = require('./sessions');
 
-// TODO: This needs to be obtained from the user session. When a session gets created, the trip-name needs to be passed along with it and the session-id will have the trip name embedded with it.
-const tripNameInContext = tripData.encode("Big Island");
+function WebhookPostHandler() {
+  this.sessions = new Sessions();
+  // TODO: This needs to be obtained from the user session. When a session gets created, the trip-name needs to be passed along with it and the session-id will have the trip name embedded with it.
+  this.tripNameInContext = "Big Island";
+}
 
-function WebhookPostHandler() {}
+function handleMessagingEvent(messagingEvent) {
+  // find or create the session here so it can be used elsewhere.
+  // TODO: The hardcoded trip name needs to be obtained a different way. Possibly by asking the user and or inferring it somehow.
+  this.session = this.sessions.findOrCreate(messagingEvent.sender.id,this.tripNameInContext);
+  try {
+    if (messagingEvent.optin) {
+      console.log("optin message");
+      // receivedAuthentication(messagingEvent);
+    } else if (messagingEvent.message) {
+      logger.info("Received Messaging event");
+      receivedMessage.call(this, messagingEvent);
+    } else if (messagingEvent.delivery) {
+      console.log("Message delivered");
+      // receivedDeliveryConfirmation(messagingEvent);
+    } else if (messagingEvent.postback) {
+      console.log("Deliver postback"); 
+      receivedPostback.call(this, messagingEvent);
+    } else {
+      logger.info("Webhook received unknown messagingEvent: ", messagingEvent);
+    }
+  }
+  catch(err) {
+    logger.error("an exception was thrown: " + err.stack);
+    sendTextMessage(messagingEvent.sender.id,"Even bots need to eat! Be back in a bit..");
+  }
+}
+
+function handlePageEntry(pageEntry) {
+    const pageID = pageEntry.id;
+    const timeOfEvent = pageEntry.time;
+    for (let i = 0, len = pageEntry.messaging.length; i < len; i++) {
+      handleMessagingEvent.call(this, pageEntry.messaging[i]);
+    }
+}
 
 WebhookPostHandler.prototype.handle = function(req, res) {
   logger.info("In postHandlerWebhook");
@@ -22,53 +55,60 @@ WebhookPostHandler.prototype.handle = function(req, res) {
   if(data.object == 'page') {
     // Iterate over each entry
     // There may be multiple if batched
-    data.entry.forEach(function(pageEntry) {
-      const pageID = pageEntry.id;
-      const timeOfEvent = pageEntry.time;
-      pageEntry.messaging.forEach(function(messagingEvent) {
-        try {
-          if (messagingEvent.optin) {
-            console.log("optin message");
-            // receivedAuthentication(messagingEvent);
-          } else if (messagingEvent.message) {
-            logger.info("Received Messaging event");
-            receivedMessage(messagingEvent);
-          } else if (messagingEvent.delivery) {
-            console.log("Message delivered");
-            // receivedDeliveryConfirmation(messagingEvent);
-          } else if (messagingEvent.postback) {
-            console.log("Deliver postback"); 
-            receivedPostback(messagingEvent);
-          } else {
-            logger.info("Webhook received unknown messagingEvent: ", messagingEvent);
-          }
-        }
-        catch(err) {
-          logger.error("an exception was thrown: " + err.stack);
-          sendTextMessage(messagingEvent.sender.id,"Even bots need to eat! Be back in a bit..");
-        }
-      });
-    });
-
-    // Assume all went well.
-    //
-    // You must send back a 200, within 20 seconds, to let us know you've 
-    // successfully received the callback. Otherwise, the request will time out.
-    res.sendStatus(200);
+    for(let i = 0, len = data.entry.length; i < len; i++) {
+      handlePageEntry.call(this, data.entry[i]);
+    }
   }
+  // Assume all went well.
+  //
+  // You must send back a 200, within 20 seconds, to let us know you've 
+  // successfully received the callback. Otherwise, the request will time out.
+  res.sendStatus(200);
+}
+
+function getComment() {
+  // update this session that we are awaiting response for comments postback
+  this.session.awaitingComment = true;
+  sendTextMessage(this.session.fbid, "Enter your free-form text");
+  return;
+}
+
+function getTodoItem() {
+  this.session.awaitingTodoItem = true;
+  sendTextMessage(this.session.fbid, "Enter a todo item");
+  return;
+}
+
+function getPacklistItem() {
+  this.session.awaitingPacklistItem = true;
+  sendTextMessage(this.session.fbid, "Enter a pack-list item");
+  return;
 }
 
 function receivedPostback(event) {
-  var senderID = event.sender.id;
-  var recipientID = event.recipient.id;
-  var timeOfPostback = event.timestamp;
+  const recipientID = event.recipient.id;
+  const timeOfPostback = event.timestamp;
 
   // The 'payload' param is a developer-defined field which is set in a postback 
   // button for Structured Messages. 
-  var payload = event.postback.payload;
+  const payload = event.postback.payload;
 
   logger.info("Received postback for user %d and page %d with payload '%s' " + 
-    "at %d", senderID, recipientID, payload, timeOfPostback);
+    "at %d", this.session.fbid, recipientID, payload, timeOfPostback);
+
+  if(payload === "comments") {
+    getComment.call(this);
+    return;
+  }
+  if(payload === "todo") {
+    getTodoItem.call(this);
+    return;
+  }
+  if(payload === "pack-item") {
+    getPacklistItem.call(this);
+    return;
+  }
+
 
   // When a postback is called, we'll send a message back to the sender to 
   // let them know it was successful
@@ -106,9 +146,6 @@ function receivedMessage(event) {
 
   const messageText = message.text;
   const messageAttachments = message.attachments;
-  // find or create the session here so it can be used elsewhere.
-  // TODO: The hardcoded trip name needs to be obtained a different way. Possibly by asking the user and or inferring it somehow.
-  session.findOrCreate(senderID,["Big Island"]);
   if (messageText) {
       // If we receive a text message, check to see if it matches any special
       // keywords and send back the corresponding example. Otherwise, just echo
@@ -117,85 +154,119 @@ function receivedMessage(event) {
         case 'generic':
           sendGenericMessage(senderID);
           break;
-        case 'Help':
-          handleHelpMessage(senderID); 
-          break;
         default:
-          determineResponseType(senderID,event);
+          determineResponseType.call(this, event);
       }
     } else if (messageAttachments) {
       sendTextMessage(senderID, "Message with attachment received");
     }
 }
 
-function determineResponseType(senderID, event) {
+function determineResponseType(event) {
+  const senderID = this.session.fbid;
   const messageText = event.message.text;
   const mesg = messageText.toLowerCase();
+  const tripData = new TripData(this.tripNameInContext);
 
-  if(mesg.startsWith("save")) {
-    storeFreeFormText(senderID, messageText);
+  if(mesg.startsWith("help")) {
+    handleHelpMessage(senderID); 
     return;
   }
-  if(mesg.startsWith("todo")) {
-    storeTodoList(senderID, messageText);
+  if(mesg.startsWith("save") || (this.session.awaitingComment != undefined && this.session.awaitingComment === true)) {
+    const returnString = tripData.storeFreeFormText(senderID, messageText);
+    sendTextMessage(senderID, returnString);
+    this.session.awaitingComment = false;
     return;
   }
-  if(mesg.startsWith("pack")) {
-    storePackList(senderID, messageText);
+  if(mesg.startsWith("todo") || (this.session.awaitingTodoItem != undefined && this.session.awaitingTodoItem === true)) {
+    const returnString = tripData.storeTodoList(senderID, messageText);
+    sendTextMessage(senderID, returnString);
+    this.session.awaitingTodoItem = false;
+    return;
+  }
+  if(mesg.startsWith("pack") || (this.session.awaitingPacklistItem != undefined && this.session.awaitingPacklistItem === true)) {
+    const returnString = tripData.storePackList(senderID, messageText);
+    sendTextMessage(senderID, returnString);
+    this.session.awaitingPacklistItem = false;
     return;
   }
   if(mesg.startsWith("get todo")) {
-    retrieveTodoList(senderID, messageText);
+    sendTextMessage(senderID, `https://polaama.com/${tripData.todoUrlPath()}`);
     return;
   }
   if(mesg.startsWith("retrieve") || mesg.startsWith("comments") || mesg.startsWith("get comments")) {
-    retrieveStoredText(senderID, messageText);
+    sendTextMessage(senderID, `https://polaama.com/${tripData.commentUrlPath()}`);
     return;
   }
   if(mesg.startsWith("get list") || mesg.startsWith("get pack")) {
-    retrievePackList(senderID, messageText);
+    sendTextMessage(senderID, `https://polaama.com/${tripData.packListPath()}`);
     return;
   }
   if(mesg.startsWith("deals")) {
     retrieveDeals(senderID, messageText);
     return;
   }
-  let humanContext = sessions[session.find(senderID)][tripNameInContext].humanContext;
+  const humanContext = this.session.findTrip(this.tripNameInContext).humanContext;
   logger.info("determineResponseType: human context: ",JSON.stringify(humanContext));
   if(senderID != humanContext.fbid) {
-    // TODO: If response was not sent to human as expected, we need to figure out what to do. One option is to wing it and send the message to bot. Another option is to simply throw an error that we are experieincing difficult. This might be a little 
+    // TODO: If response could not be sent to human as expected, we need to figure out what to do. One option is to wing it and send the message to bot. Another option is to simply throw an error that we are experieincing difficult. This might be a little 
     interceptMessage(humanContext,senderID,event);
-    logger.info("intercepted message and updated human context: ",JSON.stringify(humanContext),"; sessions dump: ",JSON.stringify(sessions));
+    logger.info("intercepted message and updated human context: ",JSON.stringify(humanContext));
     return;
   }
-  // This message was sent by the human. Figure out if it was sent in response to a previous question by one of our users. If so, identify the user and send response back to the right user.
+  handleMessageSentByHuman.call(this, messageText, senderID);
+}
+
+WebhookPostHandler.prototype.sendReminderNotification = function() {
+  // For each trip in this user's session, find the corresponding trip data information and then send the notification.
+  // get todo list
+  const sessions = this.sessions.allSessions();
+  Object.keys(sessions).forEach(id => {
+    sessions[id].allTrips().forEach(trip => {
+      const todoList = trip.getInfoFromTrip(TripData.todo);
+      logger.info("sendReminderNotification: " + todoList.length + " items todo.");
+      sendTextMessage(sessions[id].fbid, `Reminder: You still have ${todoList.length} items to do for your trip to ${trip.tripName}`);
+    });
+  });
+}
+
+// This message was sent by the human. Figure out if it was sent in response to a previous question by one of our users. If so, identify the user and send response back to the right user.
+function handleMessageSentByHuman(messageText, senderID) {
   const arr = messageText.split(' ');
   const [origSenderId,seq,done] = arr[0].split('-');
   if(_.isUndefined(origSenderId) || _.isUndefined(seq)) {
-    // TODO: We should be doing this only if any of the conversations in humanContext are awaiting a response.
+    if(this.session.nooneAwaitingResponse()) {
+      logger.info("message being sent as user, not human. Sending message from them to ai bot");
+      sendResponseFromWitBot.call(this, origSenderId, origMsg, this.tripNameInContext);
+      return;
+    }
     logger.info("determineResponseType: response from human is not in the right format. senderId and/or sequence number is missing");
     sendTextMessage(senderID,"wrong format. correct format is <original-sender-id>-<sequence number> message text");
     return;
   }
   // send the message from human to the original user. If human indicated that a bot look at it, send the user's original message to the bot.
   arr.shift(); // remove first element.
-  let mesgToSender = arr.toLocaleString();
-  logger.info("determineResponseType: obtained original sender id ",origSenderId,"; seq ",seq,"; human context: ", JSON.stringify(humanContext),"; sessions: ",JSON.stringify(sessions));
+  const mesgToSender = arr.join(' ');
+  const origSenderSession = this.sessions.find(origSenderId);
+  // TODO: Handle origSenderSession not being available
+  const humanContext = origSenderSession.humanContext(this.tripNameInContext);
+  logger.info(`determineResponseType: obtained original sender id ${origSenderId}; seq ${seq}; mesg from human: ${mesgToSender}; human context: ${JSON.stringify(humanContext)}`);
   let thread = humanContext.conversations[seq];
   thread.messagesSent.push(mesgToSender);
-  if(mesgToSender === "ai" ) {
+  if(mesgToSender === "ai") {
     const origMsg = thread.originalMessage;
-    logger.info("human says ai. Send original message ",origMsg, " to bot");
-    sendResponseFromWitBot(origSenderId,origMsg);
+    logger.info("human sent \"ai\". Sending original message ",origMsg, " to ai bot");
+    sendResponseFromWitBot.call(this, origSenderId, origMsg, this.tripNameInContext);
   }
   else {
     sendMessageFromHuman(origSenderId, mesgToSender);
   }
   if(!_.isUndefined(done) || (mesgToSender === "ai")) {
-    logger.info("determineResponseType: human has sent the last message for this conversation. Mark awaiting response as done");
-    thread.awaitingResponse = true;
+    logger.info("handleMessageSentByHuman: human has sent the last message for this conversation. Mark awaiting response as done");
+    thread.awaitingResponse = false;
   }
-  logger.info("determineResponseType: updated conversation for original user ",origSenderId, "; value is ", JSON.stringify(humanContext));
+  logger.info("handleMessageSentByHuman: updated conversation for original user ",origSenderId, "; value is ", JSON.stringify(humanContext));
+  return;
 }
 
 function sendMessageFromHuman(originalSenderId, messageText) {
@@ -243,30 +314,6 @@ function interceptMessage(hContext, senderID, event) {
   return;
 }
 
-function retrieveStoredText(senderID, messageText) {
-  const tn = tripData.encode(sessions[session.find(senderID)].tripName);
-  const url = _.template('https://polaama.com/${tripName}/comments')({
-    tripName: tn
-  });
-  sendTextMessage(senderID, url);
-}
-
-function retrieveTodoList(senderID, messageText) {
-  const tn = tripData.encode(sessions[session.find(senderID)].tripName);
-  const url = _.template('https://polaama.com/${tripName}/todo')({
-    tripName: tn
-  });
-  sendTextMessage(senderID, url);
-}
-
-function retrievePackList(senderID, messageText) {
-  const tn = tripData.encode(sessions[session.find(senderID)].tripName);
-  const url = _.template('https://polaama.com/${tripName}/pack-list')({
-    tripName: tn
-  });
-  sendTextMessage(senderID, url);
-}
-
 function retrieveDeals(senderId, messageText) {
   const messageData = {
     recipient: {
@@ -295,53 +342,18 @@ function retrieveDeals(senderId, messageText) {
   callSendAPI(messageData);
 }
 
-function storeList(senderId, messageText, regex, key, retrieveString) {
-  const tripName = sessions[session.find(senderId)].tripName;
-  const trip = retrieveTrip(tripName);
-  // retrieve text
-  const items = messageText.replace(regex,"").split(',');
-  if(!(key in trip)) {
-    trip[key] = [];
-  } 
-  trip[key] = trip[key].concat(items);
-  // store it locally
-  persistUpdatedTrip(tripName, trip);
-  logger.info("successfully stored item " + items + " in " + key);
-  sendTextMessage(senderId, "Saved! You can retrieve this by saying \"" + retrieveString + "\"");
-  return;
-}
-
-function storeTodoList(senderId, messageText) {
-  const reg = new RegExp("todo[:]*[ ]*","i"); // ignore case
-  storeList(senderId, messageText, reg, "todoList", "get todo");  
-}
-
-function storePackList(senderId, messageText) {
-  const reg = new RegExp("pack[:]*[ ]*","i"); // ignore case
-  storeList(senderId, messageText, reg, "packList", "get pack list");  
-}
-
-/*
- * Store whatever string the user input and return "Saved!"
- */
-function storeFreeFormText(senderId, messageText) {
-  const reg = new RegExp("save[:]*[ ]*","i"); // ignore case
-  storeList(senderId, messageText, reg, "comments", "comments, get comments or retrieve");
-}
-
 /*
  * Send the text to wit bot and send the response sent by wit
  */
 function sendResponseFromWitBot(senderID, messageText) {
   // This is needed for our bot to figure out the conversation history
-  const sessionId = session.find(senderID);
-
+  const aiContext = this.session.aiContext(this.tripNameInContext);
   // Let's forward the message to the Wit.ai Bot Engine
   // This will run all actions until our bot has nothing left to do
   wit.runActions(
-    sessionId, // the user's current session
+    aiContext.sessionId, // the user's current session
     messageText, // the user's message
-    sessions[sessionId].context // the user's current session state
+    aiContext // the user's current session state
   ).then((context) => {
     // Our bot did everything it has to do.
     // Now it's waiting for further messages to proceed.
@@ -351,12 +363,12 @@ function sendResponseFromWitBot(senderID, messageText) {
     // This depends heavily on the business logic of your bot.
     // Example:
     if (context.done) {
-      logger.info("Deleting Session " + sessionId + " and associated context since all related work is done");
-      delete sessions[sessionId].context;
+      logger.info("Deleting Session " + aiContext.sessionId + " and associated context since all related work is done");
+      this.session.deleteAiContext(this.tripNameInContext);
     }
     else {
       // Updating the user's current session state. 
-      sessions[sessionId].context = context;
+      this.session.updateAiContext(this.tripNameInContext, context);
     }
   })
   .catch((err) => {
@@ -377,21 +389,53 @@ function handleHelpMessage(recipientId) {
       attachment: {
         type: "template",
         payload: {
+          template_type: "generic",
+          elements: [{
+            title: "Add trip comments",
+            buttons: [{
+              type: "postback",
+              title: "Add comments",
+              payload: "comments",
+            }]
+          }, {
+            title: "Add todo items",
+            buttons: [{
+              type: "postback",
+              title: "Add todo",
+              payload: "todo",
+            }]
+          }, {
+            title: "Add to pack-list",
+            buttons: [{
+              type: "postback",
+              title: "Add item ",
+              payload: "pack-item",
+            }]
+          }]
+        }
+        /*
+        payload: {
           template_type: "button",
           text: "What do you want to do next?",
           buttons: [
             {
               type: "postback",
-              title: "Start new trip",
+              title: "Add comments about trip",
               payload: "DEVELOPER_DEFINED_PAYLOAD",
             },
             {
               type: "postback",
-              title: "List trips",
+              title: "Add to todo list",
               payload: "DEVELOPER_DEFINED_PAYLOAD",
             },
+            {
+              type: "postback",
+              title: "Add to pack list",
+              payload: "DEVELOPER_DEFINED_PAYLOAD",
+            }
           ]
         }
+        */
       }
     }
   };
@@ -478,6 +522,7 @@ function sendTextMessage(recipientId, messageText) {
 }
 
 const PAGE_ACCESS_TOKEN = "EAAXu91clmx0BAONN06z8f5Nna6XnCH3oWJChlbooiZCaYbKOUccVsfvrbY0nCZBXmZCQmZCzPEvkcJrBZAHbVEZANKe46D9AaxOhNPqwqZAGZC5ZCQCK4dpxtvgsPGmsQNzKhNv5OdNkizC9NfrzUQ9s8FwXa7GK3EAkOWpDHjZAiGZAgZDZD";
+
 function callSendAPI(messageData) {
   request({
     uri: 'https://graph.facebook.com/v2.6/me/messages',

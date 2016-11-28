@@ -3,17 +3,19 @@
 const fs = require('fs');
 const _ = require('lodash');
 const WebhookPostHandler = require('./webhook-post-handler');
-const postHandler = new WebhookPostHandler();
 const TripData = require('./trip-data');
-const tripData = new TripData();
 const Log = require('./logger');
 const logger = (new Log()).init();
+const crypto = require('crypto');
 // ----------------------------------------------------------------------------
 // Set up a webserver
 
 // For validation with facebook & verifying signature
 const VALIDATION_TOKEN = "go-for-lake-powell";
 const FB_APP_SECRET = "a26c4ad2358b5b61942227574532d174";
+
+// Polaama related handler
+const postHandler = new WebhookPostHandler();
 
 // A secure webserver
 const util = require('util');
@@ -27,7 +29,6 @@ const options = {
     cert: fs.readFileSync(sslPath + 'fullchain.pem')
 };
 
-const crypto = require('crypto');
 /*
  * Verify that the callback came from Facebook. Using the App Secret from
  * the App Dashboard, we can verify the signature that is sent with each
@@ -62,6 +63,8 @@ function verifyRequestSignature(req, res, buf) {
 const server = https.createServer(options, app);  
 server.listen(port, function() {
   logger.info("Listening on port " + port);
+  const twoDaysInMsec = 1000*60*60*24*2; // 2 days
+  setInterval(sendTodoReminders, twoDaysInMsec);
 }); 
 
 // log every response
@@ -84,7 +87,6 @@ app.get('/trips', function(req, res) {
   return res.send("This will eventually return a list of trips planned for this user.");
 });
 
-
 function formatListResponse(headers, list) {
   if(_.isUndefined(headers) || _.isUndefined(headers['user-agent'])) {
     logger.info("header or user-agent not defined. sending back json");
@@ -94,6 +96,14 @@ function formatListResponse(headers, list) {
     logger.info("request call from browser. sending back html");
     var html = "<ol>";
     list.forEach(function(item) {
+      const itemWords = item.split(' ');
+      itemWords.forEach(function(word,i) {
+        if(/^https?:\/\//.test(word)) {
+          const wordUrl = "<a href=" + word + ">" + word + "</a>";
+          itemWords[i] = wordUrl;
+        }
+      });
+      item = itemWords.join(' ');
       html += "<li>" + item + "</li>";
     });
     html += "</ol>";
@@ -104,8 +114,8 @@ function formatListResponse(headers, list) {
 }
 
 app.get('/:tripName/pack-list', function(req, res) {
-  const packList = tripData.getInfoFromTrip(req, "packList");
-  // logger.info("req value is " + util.inspect(req, {showHidden: true, color: true, depth: 5}));
+  const tripData = new TripData(req.params.tripName);
+  const packList = tripData.getInfoFromTrip("packList");
   if(_.isUndefined(packList)) {
     return res.send("Could not find pack list for trip " + req.params.tripName);
   }
@@ -113,7 +123,8 @@ app.get('/:tripName/pack-list', function(req, res) {
 });
 
 app.get('/:tripName/todo', function(req, res) {
-  const todoList = tripData.getInfoFromTrip(req, "todoList");
+  const tripData = new TripData(req.params.tripName);
+  const todoList = tripData.getInfoFromTrip("todoList");
   if(_.isUndefined(todoList)) {
     return res.send("Could not find todo list for trip " + req.params.tripName);
   }
@@ -121,7 +132,8 @@ app.get('/:tripName/todo', function(req, res) {
 });
 
 app.get('/:tripName/comments', function(req, res) {
-  const comments = tripData.getInfoFromTrip(req, "comments");
+  const tripData = new TripData(req.params.tripName);
+  const comments = tripData.getInfoFromTrip("comments");
   if(_.isUndefined(comments)) {
     return res.send("Could not find todo list for trip " + req.params.tripName);
   }
@@ -146,3 +158,8 @@ app.post('/webhook', jsonParser, function(req, res) {
   postHandler.handle(req, res);
 });
 
+// set a timer that will 
+function sendTodoReminders() {
+  console.log("sendTodoReminders: called");
+  postHandler.sendReminderNotification();
+}

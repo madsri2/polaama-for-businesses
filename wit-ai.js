@@ -1,7 +1,6 @@
 'use strict';
 const fetch = require('node-fetch');
 const TripData = require('./trip-data.js');
-const tripData = new TripData();
 
 // ----------------------------------------------------------------------------
 // Wit.ai bot specific code
@@ -60,6 +59,7 @@ WitAi.protototype.actions = {
       // both location & date time exist. Time to do some work.
       // TODO: we should call a weather API here
       const tripName = context.destination + "-" + context.datetime + "-" + context.duration;
+      const tripData = new TripData(tripName);
       const trip = tripData.persistTrip(tripName, context);
       context.firstResponse = "Great! It's going to be " + trip['weather'] + " in " + trip['destination'] + ". I have created your trip plan with pack list, todo lists etc. Check it out at https://polaama.com/trips";
       context.done = true;
