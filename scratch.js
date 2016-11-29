@@ -87,5 +87,13 @@ function storeList(senderId, messageText, regex) {
   return;
 }
 
-var reg = new RegExp("todo[:]*[ ]*","i");
-storeList("", "todo: a", reg);
+function overload(a) {
+  console.log(a);
+}
+
+function overload(a, b) {
+  console.log(`${a} - ${b}`);
+}
+
+// var reg = new RegExp("todo[:]*[ ]*","i");
+// storeList("", "todo: a", reg);

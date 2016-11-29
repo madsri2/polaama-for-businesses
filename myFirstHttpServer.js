@@ -87,57 +87,24 @@ app.get('/trips', function(req, res) {
   return res.send("This will eventually return a list of trips planned for this user.");
 });
 
-function formatListResponse(headers, list) {
-  if(_.isUndefined(headers) || _.isUndefined(headers['user-agent'])) {
-    logger.info("header or user-agent not defined. sending back json");
-    return list;
-  }
-  if(headers['user-agent'].startsWith("Mozilla")) {
-    logger.info("request call from browser. sending back html");
-    var html = "<ol>";
-    list.forEach(function(item) {
-      const itemWords = item.split(' ');
-      itemWords.forEach(function(word,i) {
-        if(/^https?:\/\//.test(word)) {
-          const wordUrl = "<a href=" + word + ">" + word + "</a>";
-          itemWords[i] = wordUrl;
-        }
-      });
-      item = itemWords.join(' ');
-      html += "<li>" + item + "</li>";
-    });
-    html += "</ol>";
-    return html;
-  }
-  logger.info("request call from something other than browser. sending back json");
-  return list;
-}
+app.get('/:tripName', function(req, res) {
+  return res.send(formatTripDetails(req.params.tripName, req.headers));
+});
 
 app.get('/:tripName/pack-list', function(req, res) {
-  const tripData = new TripData(req.params.tripName);
-  const packList = tripData.getInfoFromTrip("packList");
-  if(_.isUndefined(packList)) {
-    return res.send("Could not find pack list for trip " + req.params.tripName);
-  }
-  return res.send(formatListResponse(req.headers, packList));
+  return res.send(formatListResponse(req.params.tripName, req.headers, "packList"));
 });
 
 app.get('/:tripName/todo', function(req, res) {
-  const tripData = new TripData(req.params.tripName);
-  const todoList = tripData.getInfoFromTrip("todoList");
-  if(_.isUndefined(todoList)) {
-    return res.send("Could not find todo list for trip " + req.params.tripName);
-  }
-  return res.send(formatListResponse(req.headers, todoList));
+  return res.send(formatListResponse(req.params.tripName, req.headers, TripData.todo));
+});
+
+app.get('/:tripName/raw-comments', function(req, res) {
+  return res.send(formatListResponse(req.params.tripName, req.headers, "comments"));
 });
 
 app.get('/:tripName/comments', function(req, res) {
-  const tripData = new TripData(req.params.tripName);
-  const comments = tripData.getInfoFromTrip("comments");
-  if(_.isUndefined(comments)) {
-    return res.send("Could not find todo list for trip " + req.params.tripName);
-  }
-  return res.send(formatListResponse(req.headers, comments));
+  return res.send(formatComments(req.params.tripName));
 });
 
 // handling webhook

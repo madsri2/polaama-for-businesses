@@ -4,14 +4,15 @@ const _ = require('lodash');
 const Log = require('./logger');
 const logger = (new Log()).init();
 
-// TODO: Remove tripName from all the functions being called and use this.tripName
+TripData.todo = "todoList";
+
 function TripData(tripName) {
   this.tripName = myEncode(tripName);
 }
 
 // ======== Retrieve from trip =======
 TripData.prototype.getInfoFromTrip = function(tripKey) {
-  const trip = retrieveTrip(this.tripName);
+  const trip = retrieveTrip.call(this);
   if(_.isUndefined(trip) || _.isUndefined(trip[tripKey])) {
     logger.info("could not find " + tripKey + " for trip " + this.tripName);
     return undefined;
@@ -20,9 +21,9 @@ TripData.prototype.getInfoFromTrip = function(tripKey) {
   return trip[tripKey];
 }
 
-function retrieveTrip(tripName) {
+function retrieveTrip() {
   try {
-    const file = tripFile(tripName);
+    const file = tripFile.call(this);
     fs.accessSync(file, fs.F_OK);
     try {
       const trip = JSON.parse(fs.readFileSync(file, 'utf8')); 
@@ -53,7 +54,7 @@ TripData.prototype.packListPath = function() {
 }
 
 // ======= Store data =======
-TripData.prototype.persistTrip = function(tripName, context) {
+TripData.prototype.persistTrip = function(context) {
   logger.info("calling persistTrip");
   const trip = {};
   trip['destination'] = context.destination;
@@ -67,17 +68,17 @@ TripData.prototype.persistTrip = function(tripName, context) {
     "Average water temperature will be around 60F, not suitable for swimming",
   ];
 
-  persistUpdatedTrip(tripName, trip);
+  persistUpdatedTrip.call(this, trip);
 }
 
 TripData.prototype.storeTodoList = function(senderId, messageText) {
   const reg = new RegExp("^todo[:]*[ ]*","i"); // ignore case
-  return storeList(this.tripName, senderId, messageText, reg, "todoList", "get todo");  
+  return storeList.call(this, senderId, messageText, reg, "todoList", "get todo");  
 }
 
 TripData.prototype.storePackList = function(senderId, messageText) {
   const reg = new RegExp("^pack[:]*[ ]*","i"); // ignore case
-  return storeList(this.tripName, senderId, messageText, reg, "packList", "get pack list");  
+  return storeList.call(this, senderId, messageText, reg, "packList", "get pack list");  
 }
 
 /*
@@ -85,11 +86,11 @@ TripData.prototype.storePackList = function(senderId, messageText) {
  */
 TripData.prototype.storeFreeFormText = function(senderId, messageText) {
   const reg = new RegExp("^save:?[ ]*","i"); // ignore case
-  return storeList(this.tripName, senderId, messageText, reg, "comments", "comments, get comments or retrieve");
+  return storeList(this, senderId, messageText, reg, "comments", "comments, get comments or retrieve");
 }
 
-function storeList(tripName, senderId, messageText, regex, key, retrieveString) {
-  const trip = retrieveTrip(tripName);
+function storeList(senderId, messageText, regex, key, retrieveString) {
+  const trip = retrieveTrip.call(this);
   // retrieve text
   const items = messageText.replace(regex,"").split(',');
   if(!(key in trip)) {
@@ -97,18 +98,57 @@ function storeList(tripName, senderId, messageText, regex, key, retrieveString) 
   } 
   trip[key] = trip[key].concat(items);
   // store it locally
-  persistUpdatedTrip(tripName, trip);
+  persistUpdatedTrip.call(this, trip);
   logger.info("successfully stored item " + items + " in " + key);
   return `Saved! You can retrieve this by saying "${retrieveString}"`;
 }
 
+function getActivitiesFromComments(comments) {
+  const taggedComments = {
+    activities: [],
+    stay: [],
+    flight: [],
+    others: [],
+    car: []
+  };
+  comments.forEach(function(i) {
+    const item = i.toLowerCase();
+    // activities
+    if((item.indexOf("beach") > -1) || (item.indexOf("garden") > -1) || (item.indexOf("market") > -1)) {
+      taggedComments.activities.push(i);
+    }
+    // stay
+    else if((item.indexOf("hotel") > -1) || (item.indexOf("condo") > -1) || (item.indexOf("airbnb") > -1)) {
+      taggedComments.stay.push(i);
+    }
+    // flight
+    else if((item.indexOf("flight") > -1) || (item.indexOf("air") > -1) || (item.indexOf("alaska") > -1)) {
+      taggedComments.flight.push(i);
+    }
+    // car
+    else if((item.indexOf("car") > -1) || (item.indexOf("uber") > -1) || (item.indexOf("suv") > -1)) {
+      taggedComments.car.push(i);
+    }
+    // everything else
+    else {
+      taggedComments.others.push(i);
+    }
+  });
+  logger.info(`There were ${taggedComments.activities.length} activities, ${taggedComments.stay.length} stay details, ${taggedComments.flight.length} flight details, ${taggedComments.car.length} car details, ${taggedComments.others.length} remaining comments`);
+  return taggedComments;
+}
+
+TripData.prototype.parseComments = function() {
+  const comments = this.getInfoFromTrip("comments"); 
+  return getActivitiesFromComments(comments);
+}
+
 // ======== Encode =======
-//TODO: This needs to be a local function. It should not be used anywhere else.
+// TODO: Make this private by removing/refactoring other references
 TripData.encode = function(tripName) {
   return myEncode(tripName);
 }
 
-TripData.todo = "todoList";
 
 function myEncode(tripName) {
   return tripName.toLowerCase().replace(" ","_");
@@ -136,16 +176,16 @@ function createTodoList(trip) {
   return todoList;
 }
 
-function tripFile(tripName) {
+function tripFile() {
   // TODO: check parameters
-  return `trips/${myEncode(tripName)}.txt`;
+  return `trips/${myEncode(this.tripName)}.txt`;
 }
 
-function persistUpdatedTrip(tripName, trip) {
-  const file = tripFile(tripName);
+function persistUpdatedTrip(trip) {
+  const file = tripFile.call(this);
   try {
     fs.writeFileSync(file, JSON.stringify(trip));
-    logger.info("saved trip for ",tripName);
+    logger.info("saved trip for ",this.tripName);
     return true;
   }
   catch(err) {

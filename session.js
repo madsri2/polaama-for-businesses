@@ -5,15 +5,17 @@ const logger = (new Log()).init();
 const TripData = require('./trip-data');
 
 /*
-A session has a 1:1 relationship with a user-trip. A session represents a user. Each user and their trip will have exactly one session at any given time. Today, the scope of a session is tied to the lifetime of this webserver. TODO: Re-think this decision when sessions need to be persisted across process restarts.  
+A session has a 1:1 relationship with a user-trip. A session represents a user. Each user and their trips will have exactly one session at any given time. Today, the scope of a session is tied to the lifetime of this webserver. TODO: Re-think this decision when sessions need to be persisted across process restarts.  
 sessionId -> {
   fbid: facebookUserId, 
-  botMesgHistory: [Array of chat messages]
+  sessionId: session Id,
+  botMesgHistory: [Array of chat messages],
   trips: {
     tripName: {
       aiContext: {}, 
       humanContext: {}
-      tripData: tripData // TripData object
+      tripData: tripData, // TripData object
+      travelers: [fbid of all travelers traveling on this trip]
     }
     tripName2: {
       ...
