@@ -162,6 +162,10 @@ function receivedMessage(event) {
     }
 }
 
+function sendUrl(urlPath) {
+  return `https://polaama.com/${urlPath}`;
+}
+
 function determineResponseType(event) {
   const senderID = this.session.fbid;
   const messageText = event.message.text;
@@ -191,19 +195,27 @@ function determineResponseType(event) {
     return;
   }
   if(mesg.startsWith("get todo")) {
-    sendTextMessage(senderID, `https://polaama.com/${tripData.todoUrlPath()}`);
+    sendTextMessage(senderID, sendUrl(tripData.todoUrlPath()));
     return;
   }
   if(mesg.startsWith("retrieve") || mesg.startsWith("comments") || mesg.startsWith("get comments")) {
-    sendTextMessage(senderID, `https://polaama.com/${tripData.commentUrlPath()}`);
+    sendTextMessage(senderID, sendUrl(tripData.commentUrlPath()));
     return;
   }
   if(mesg.startsWith("get list") || mesg.startsWith("get pack")) {
-    sendTextMessage(senderID, `https://polaama.com/${tripData.packListPath()}`);
+    sendTextMessage(senderID, sendUrl(tripData.packListPath()));
     return;
   }
   if(mesg.startsWith("deals")) {
     retrieveDeals(senderID, messageText);
+    return;
+  }
+  if(mesg.startsWith("top activity list") || mesg.startsWith("top activities") || mesg.startsWith("get top activities")) {
+    sendActivityList.call(this, messageText);
+    return;
+  }
+  if(mesg.startsWith("other activity list") || mesg.startsWith("other activities") || mesg.startsWith("get other activities")) {
+    sendOtherActivities.call(this, messageText);
     return;
   }
   const humanContext = this.session.findTrip(this.tripNameInContext).humanContext;
@@ -215,6 +227,98 @@ function determineResponseType(event) {
     return;
   }
   handleMessageSentByHuman.call(this, messageText, senderID);
+}
+
+function sendOtherActivities(messageText) {
+  const messageData = {
+    recipient: {
+      id: this.session.fbid
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "generic",
+          elements: [{
+            title: "Lava flow viewing after sunset (~5.45 PM), Spectacular, but not kid friendly",
+            subtitle: "32 miles (51 min drive) south of Hilo condo. Need to bike or walk 4.2 miles",
+            buttons: [{
+              type: "web_url",
+              url: "http://www.familyvacationcritic.com/attraction/hawaii-county-kalapana-lava-visiting-site/big-island/",
+              title: "Kalapana Lava visiting"
+            }]
+          }, {
+            title: "Koi feeding on thursday and saturday, mall",
+            subtitle: "26 miles (40 min drive) north of kona reef resort",
+            buttons: [{
+              type: "web_url",
+              url: "http://queensmarketplace.net/",
+              title: "Queens marketplace"
+            }]
+          }]
+        }
+      }
+    }
+  };
+  callSendAPI(messageData);
+}
+
+function sendActivityList(messageText) {
+  const messageData = {
+    recipient: {
+      id: this.session.fbid
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "generic",
+          elements: [{
+            title: "Beautiful, sandy, family friendly beach with restrooms, can get windy",
+            buttons: [{
+              type: "web_url",
+              url: "http://www.familyvacationcritic.com/attraction/hapuna-beach-state-recreation-area/big-island/",
+              title: "Hapuna Beach"
+            }],
+            subtitle: "33 miles (49 min drive) north of Kona reef resort"
+          }, {
+            title: "Sandy, calm, small beach close to resort. Might be rough if windy",
+            subtitle: "2.8 miles (7 min drive) south of kona reef resorts",
+            buttons: [{
+              type: "web_url",
+              url: "http://tinyurl.com/jfka26v",
+              title: "Magic sand beach"
+            }]
+          }, {
+            title: "Garden, ocean views, waterfall, open 9 to 5, $15 pp, require 2-3 hours",
+            subtitle: "10.5 miles (23 min drive) north of hotel",
+            buttons: [{
+              type: "web_url",
+              url: "http://htbg.com/",
+              title: "Botanical Gardens"
+            }]
+          }, {
+            title: "Great for kids, very calm, sandy",
+            subtitle: "32.3 miles (47 min drive) north of kona reef resort",
+            buttons: [{
+              type: "web_url",
+              url: "http://tinyurl.com/gt8dyr9",
+              title: "Beach 69"
+            }]
+          }, {
+            title: "Go early, crowded, good sea-life BEWARE of sea urchins, slightly rocky",
+            subtitle: "3.9 miles (10 min drive) south of kona reef resort",
+            buttons: [{
+              type: "web_url",
+              url: "https://www.yelp.com/biz/kahaluu-beach-park-kailua-kona-2",
+              title: "Kahaluu beach park"
+            }]
+          }]
+        }
+      }
+    }
+  };
+  callSendAPI(messageData);
 }
 
 WebhookPostHandler.prototype.sendReminderNotification = function() {
@@ -240,7 +344,7 @@ function handleMessageSentByHuman(messageText, senderID) {
       sendResponseFromWitBot.call(this, origSenderId, origMsg, this.tripNameInContext);
       return;
     }
-    logger.info("determineResponseType: response from human is not in the right format. senderId and/or sequence number is missing");
+    logger.info("handleMessageSentByHuman: response from human is not in the right format. senderId and/or sequence number is missing");
     sendTextMessage(senderID,"wrong format. correct format is <original-sender-id>-<sequence number> message text");
     return;
   }
@@ -250,7 +354,7 @@ function handleMessageSentByHuman(messageText, senderID) {
   const origSenderSession = this.sessions.find(origSenderId);
   // TODO: Handle origSenderSession not being available
   const humanContext = origSenderSession.humanContext(this.tripNameInContext);
-  logger.info(`determineResponseType: obtained original sender id ${origSenderId}; seq ${seq}; mesg from human: ${mesgToSender}; human context: ${JSON.stringify(humanContext)}`);
+  logger.info(`handleMessageSentByHuman: obtained original sender id ${origSenderId}; seq ${seq}; mesg from human: ${mesgToSender}; human context: ${JSON.stringify(humanContext)}`);
   let thread = humanContext.conversations[seq];
   thread.messagesSent.push(mesgToSender);
   if(mesgToSender === "ai") {
