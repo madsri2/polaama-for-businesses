@@ -4,10 +4,12 @@ const _ = require('lodash');
 const Log = require('./logger');
 const logger = (new Log()).init();
 
+// TODO: This is leaking data model to other classes. Fix this by moving all functionality that require this variable into a function in this class.
 TripData.todo = "todoList";
 
-function TripData(tripName) {
-  this.tripName = myEncode(tripName);
+function TripData(tripNameArg) {
+  this.tripName = myEncode(tripNameArg);
+  this.rawTripName = tripNameArg;
 }
 
 // ======== Retrieve from trip =======
@@ -19,6 +21,16 @@ TripData.prototype.getInfoFromTrip = function(tripKey) {
   }
   logger.info(`Key ${tripKey} has ${trip[tripKey].length} items; Destination is ${trip.destination}`);
   return trip[tripKey];
+}
+
+TripData.prototype.getPackList = function() {
+  const trip = retrieveTrip.call(this);
+  if(_.isUndefined(trip) || _.isUndefined(trip.packList)) {
+    logger.info("Could not find packList for trip " + this.tripName);
+    return undefined;
+  }
+  logger.info(`There are ${trip.packList.toPack.length} to pack items and ${trip.packList.done.length} to pack items in pack list`);
+  return trip.packList;
 }
 
 function retrieveTrip() {

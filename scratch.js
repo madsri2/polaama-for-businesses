@@ -95,5 +95,14 @@ function overload(a, b) {
   console.log(`${a} - ${b}`);
 }
 
+function testReplace() {
+  const a = "1 2";
+  const b = a.replace("1","3")
+             .replace("2","4");
+  return b;
+}
+
+console.log(testReplace());
+
 // var reg = new RegExp("todo[:]*[ ]*","i");
 // storeList("", "todo: a", reg);

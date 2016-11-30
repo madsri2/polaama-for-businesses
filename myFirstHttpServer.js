@@ -101,7 +101,7 @@ app.get('/:tripName', function(req, res) {
 
 app.get('/:tripName/pack-list', function(req, res) {
   const f = new TripDataFormatter(req.params.tripName);
-  return res.send(f.formatListResponse(req.headers, "packList"));
+  return res.send(f.formatPackList(req.headers));
 });
 
 app.get('/:tripName/todo', function(req, res) {
