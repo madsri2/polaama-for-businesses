@@ -25,6 +25,19 @@ Sessions.prototype.findOrCreate = function(fbid, tripName) {
   return this.sessions[sessionId];
 };
 
+Sessions.prototype.findOrCreateV2 = function(fbid) {
+  logger.info("findOrCreate: fbid ",fbid);
+  let sessionId = findSessionId.call(this,fbid);
+  if (_.isUndefined(sessionId)) {
+    // No session found for user fbid, let's create a new one
+    logger.info("Creating a new session for ",fbid);
+    sessionId = new Date().toISOString() + "-" + fbid;
+    this.sessions[sessionId] = new Session(fbid, sessionId);
+  }
+  logger.info("This session's id is",sessionId);
+  return this.sessions[sessionId];
+};
+
 Sessions.prototype.find = function(fbid) { 
   const sessionId = findSessionId.call(this, fbid);
   if(_.isUndefined(sessionId)) {

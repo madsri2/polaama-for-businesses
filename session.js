@@ -117,4 +117,40 @@ Session.prototype.allTrips = function() {
   return tripDataList;
 }
 
+///// ****************** V2 Functions *********************
+Session.prototype.addTripV2 = function(tripName) {
+  const encTripName = TripData.encode(tripName);
+  this.tripNameInContext = encTripName;
+  this.rawTripNameInContext = tripName;
+  if(_.isUndefined(this.trips[encTripName])) {
+    // define a tripName json object.
+    this.trips[encTripName] = { 
+      aiContext: {
+        sessionId: this.sessionId
+      },
+      humanContext: {
+        sessionId: this.sessionId,
+        // TODO: Need a better way to get the human's fbid than using my messenger's senderId.
+        fbid: MY_RECIPIENT_ID,
+        conversations: {}
+      },
+      tripData: new TripData(tripName)
+    };
+  }
+}
+
+Session.prototype.findTripV2 = function() {
+  return this.trips[TripData.encode(this.tripNameInContext)];
+}
+
+Session.prototype.deleteAiContextV2 = function() {
+  const trip = this.findTripV2();
+  trip.aiContext = {};
+}
+
+Session.prototype.updateAiContext = function(context) {
+  const trip = this.findTripV2();
+  trip.aiContext = context;
+}
+
 module.exports = Session;

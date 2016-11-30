@@ -89,8 +89,20 @@ TripData.prototype.storeTodoList = function(senderId, messageText) {
 }
 
 TripData.prototype.storePackList = function(senderId, messageText) {
-  const reg = new RegExp("^pack[:]*[ ]*","i"); // ignore case
-  return storeList.call(this, senderId, messageText, reg, "packList", "get pack list");  
+  const regex = new RegExp("^pack[:]*[ ]*","i"); // ignore case
+  const trip = retrieveTrip.call(this);
+  // retrieve text
+  const items = messageText.replace(regex,"").split(',');
+  if(!trip.packList) {
+    trip.packList = {};
+    trip.packList.toPack = [];
+    trip.packList.done = [];
+  } 
+  trip.packList.toPack = trip.packList.toPack.concat(items);
+  // store it locally
+  persistUpdatedTrip.call(this, trip);
+  logger.info(`successfully stored item ${items} in packList's toPack list`);
+  return `Saved! You can retrieve this by saying get pack list`;
 }
 
 /*

@@ -90,12 +90,17 @@ function getTripInContext(payload) {
   if(tripName === TripData.encode("New Trip")) {
     logger.info("User wants to plan a new trip");
     sendTextMessage(this.session.fbid, "Provide a name for your new trip");
-    this.session.awaitingTripNameInContext = true;
+    this.session.awaitingNewTripNameInContext = true;
   }
   else {
-    logger.info(`Setting the trip name for this session to ${tripName}`);
-    this.session.tripNameInContext = tripName;
-    sendTextMessage(this.session.fbid, `How can I help you plan a trip to ${tripName}?`);
+    logger.info(`Setting the trip name for this session to ${tripName}. User assumes this is an existing trip.`);
+    const trip = this.session.findTrip(tripName);
+    if(_.isNull(trip) || _.isUndefined(trip)) {
+      logger.info(`Trip ${tripName} does not exist. Adding a new trip for user`);
+    }
+    this.session.addTripV2(tripName);
+    this.tripNameInContext = tripName;
+    sendTextMessage(this.session.fbid, `Choose from the following list of features so I can help plan your trip to ${tripName}.`);
     sendHelpMessage(this.session.fbid);
   }
   return;
@@ -216,7 +221,7 @@ function sendTripButtons() {
       }
     }
   };
-  sendTextMessage(this.session.fbid, "What trip are we discussing?");
+  sendTextMessage(this.session.fbid, "Hi, what trip are we discussing?");
   callSendAPI(messageData);
 }
 
@@ -231,12 +236,13 @@ function determineResponseType(event) {
     return;
   }
 
-  if(this.session.awaitingTripNameInContext) {
-    this.session.tripNameInContext = messageText;
+  if(this.session.awaitingNewTripNameInContext) {
+    this.session.addTripV2(messageText);
+    this.tripNameInContext = messageText;
     logger.info(`This session's trip name in context is ${messageText}`);
-    sendTextMessage(this.session.fbid, `How can I help you with your new trip to ${messageText}?`);
+    sendTextMessage(this.session.fbid, `Choose from the following list of features to start planning your new trip to ${messageText}?`);
     sendHelpMessage(senderID);
-    this.session.awaitingTripNameInContext = false;
+    this.session.awaitingNewTripNameInContext = false;
     return;
   } 
   
@@ -411,7 +417,7 @@ function handleMessageSentByHuman(messageText, senderID) {
   if(_.isUndefined(origSenderId) || _.isUndefined(seq)) {
     if(this.session.nooneAwaitingResponse()) {
       logger.info("message being sent as user, not human. Sending message from them to ai bot");
-      sendResponseFromWitBot.call(this, origSenderId, origMsg, this.tripNameInContext);
+      sendResponseFromWitBot.call(this, origSenderId, origMsg);
       return;
     }
     logger.info("handleMessageSentByHuman: response from human is not in the right format. senderId and/or sequence number is missing");
@@ -421,6 +427,7 @@ function handleMessageSentByHuman(messageText, senderID) {
   // send the message from human to the original user. If human indicated that a bot look at it, send the user's original message to the bot.
   arr.shift(); // remove first element.
   const mesgToSender = arr.join(' ');
+  // TODO: Figure out a way if we need to reconcile the original sender's session with the session of the human. This might be needed because the human could be handle multiple sessions at once. One way to accomplish this would be to keep a separate session for the human inside the user's session and use that. Also, think about making a session have a 1:1 mapping with trip-fbid. Might make things easier..
   const origSenderSession = this.sessions.find(origSenderId);
   // TODO: Handle origSenderSession not being available
   const humanContext = origSenderSession.humanContext(this.tripNameInContext);
@@ -430,7 +437,7 @@ function handleMessageSentByHuman(messageText, senderID) {
   if(mesgToSender === "ai") {
     const origMsg = thread.originalMessage;
     logger.info("human sent \"ai\". Sending original message ",origMsg, " to ai bot");
-    sendResponseFromWitBot.call(this, origSenderId, origMsg, this.tripNameInContext);
+    sendResponseFromWitBot.call(this, origSenderId, origMsg);
   }
   else {
     sendMessageFromHuman(origSenderId, mesgToSender);
