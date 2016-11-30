@@ -7,6 +7,7 @@ const TripData = require('./trip-data');
 const Log = require('./logger');
 const logger = (new Log()).init();
 const crypto = require('crypto');
+const TripDataFormatter = require('./trip-data-formatter.js');
 // ----------------------------------------------------------------------------
 // Set up a webserver
 
@@ -87,24 +88,35 @@ app.get('/trips', function(req, res) {
   return res.send("This will eventually return a list of trips planned for this user.");
 });
 
+app.get('/favicon.ico', function(req, res) {
+  res.type('image/x-icon');
+  res.status(301);
+  return res.end();
+});
+
 app.get('/:tripName', function(req, res) {
-  return res.send(formatTripDetails(req.params.tripName, req.headers));
+  const f = new TripDataFormatter(req.params.tripName);
+  return res.send(f.formatTripDetails(req.headers));
 });
 
 app.get('/:tripName/pack-list', function(req, res) {
-  return res.send(formatListResponse(req.params.tripName, req.headers, "packList"));
+  const f = new TripDataFormatter(req.params.tripName);
+  return res.send(f.formatListResponse(req.headers, "packList"));
 });
 
 app.get('/:tripName/todo', function(req, res) {
-  return res.send(formatListResponse(req.params.tripName, req.headers, TripData.todo));
+  const f = new TripDataFormatter(req.params.tripName);
+  return res.send(f.formatListResponse(req.headers, TripData.todo));
 });
 
 app.get('/:tripName/raw-comments', function(req, res) {
-  return res.send(formatListResponse(req.params.tripName, req.headers, "comments"));
+  const f = new TripDataFormatter(req.params.tripName);
+  return res.send(f.formatListResponse(req.headers, "comments"));
 });
 
 app.get('/:tripName/comments', function(req, res) {
-  return res.send(formatComments(req.params.tripName));
+  const f = new TripDataFormatter(req.params.tripName);
+  return res.send(f.formatComments());
 });
 
 // handling webhook

@@ -85,6 +85,22 @@ function getPacklistItem() {
   return;
 }
 
+function getTripInContext(payload) {
+  const tripName = payload.substring("trip_in_context ".length);
+  if(tripName === TripData.encode("New Trip")) {
+    logger.info("User wants to plan a new trip");
+    sendTextMessage(this.session.fbid, "Provide a name for your new trip");
+    this.session.awaitingTripNameInContext = true;
+  }
+  else {
+    logger.info(`Setting the trip name for this session to ${tripName}`);
+    this.session.tripNameInContext = tripName;
+    sendTextMessage(this.session.fbid, `How can I help you plan a trip to ${tripName}?`);
+    sendHelpMessage(this.session.fbid);
+  }
+  return;
+}
+
 function receivedPostback(event) {
   const recipientID = event.recipient.id;
   const timeOfPostback = event.timestamp;
@@ -96,6 +112,10 @@ function receivedPostback(event) {
   logger.info("Received postback for user %d and page %d with payload '%s' " + 
     "at %d", this.session.fbid, recipientID, payload, timeOfPostback);
 
+  if(payload.startsWith("trip_in_context")) {
+    getTripInContext.call(this, payload);
+    return;
+  }
   if(payload === "comments") {
     getComment.call(this);
     return;
@@ -166,14 +186,64 @@ function sendUrl(urlPath) {
   return `https://polaama.com/${urlPath}`;
 }
 
+function sendTripButtons() {
+  // TODO: Get the list of trips from the session and have the user choose from that session.
+  const messageData = {
+    recipient: {
+      id: this.session.fbid
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "generic",
+          elements: [{
+            title: "Create new trip",
+            buttons: [{
+              type: "postback",
+              title: "New Trip",
+              payload: `trip_in_context ${TripData.encode("New Trip")}`
+            }]
+          }, {
+            title: "Trip to Big Island",
+            buttons: [{
+              type: "postback",
+              title: "Big Island",
+              payload: `trip_in_context ${TripData.encode("Big Island")}`
+            }]
+          }]
+        }
+      }
+    }
+  };
+  sendTextMessage(this.session.fbid, "What trip are we discussing?");
+  callSendAPI(messageData);
+}
+
 function determineResponseType(event) {
   const senderID = this.session.fbid;
   const messageText = event.message.text;
   const mesg = messageText.toLowerCase();
+
+  if(_.isNull(this.session.tripNameInContext) || _.isUndefined(this.session.tripNameInContext)) {
+    logger.info("determineResponseType: no trip name in context. Asking user!");
+    sendTripButtons.call(this);
+    return;
+  }
+
+  if(this.session.awaitingTripNameInContext) {
+    this.session.tripNameInContext = messageText;
+    logger.info(`This session's trip name in context is ${messageText}`);
+    sendTextMessage(this.session.fbid, `How can I help you with your new trip to ${messageText}?`);
+    sendHelpMessage(senderID);
+    this.session.awaitingTripNameInContext = false;
+    return;
+  } 
+  
   const tripData = new TripData(this.tripNameInContext);
 
   if(mesg.startsWith("help")) {
-    handleHelpMessage(senderID); 
+    sendHelpMessage(senderID); 
     return;
   }
   if(mesg.startsWith("save") || (this.session.awaitingComment != undefined && this.session.awaitingComment === true)) {
@@ -484,8 +554,8 @@ function sendResponseFromWitBot(senderID, messageText) {
 /*
  * Send a few buttons in response to "Help message" from the user.
  */
-function handleHelpMessage(recipientId) {
-  var messageData = {
+function sendHelpMessage(recipientId) {
+  const messageData = {
     recipient: {
       id: recipientId
     },
@@ -517,29 +587,6 @@ function handleHelpMessage(recipientId) {
             }]
           }]
         }
-        /*
-        payload: {
-          template_type: "button",
-          text: "What do you want to do next?",
-          buttons: [
-            {
-              type: "postback",
-              title: "Add comments about trip",
-              payload: "DEVELOPER_DEFINED_PAYLOAD",
-            },
-            {
-              type: "postback",
-              title: "Add to todo list",
-              payload: "DEVELOPER_DEFINED_PAYLOAD",
-            },
-            {
-              type: "postback",
-              title: "Add to pack list",
-              payload: "DEVELOPER_DEFINED_PAYLOAD",
-            }
-          ]
-        }
-        */
       }
     }
   };

@@ -86,7 +86,7 @@ TripData.prototype.storePackList = function(senderId, messageText) {
  */
 TripData.prototype.storeFreeFormText = function(senderId, messageText) {
   const reg = new RegExp("^save:?[ ]*","i"); // ignore case
-  return storeList(this, senderId, messageText, reg, "comments", "comments, get comments or retrieve");
+  return storeList.call(this, senderId, messageText, reg, "comments", "comments, get comments or retrieve");
 }
 
 function storeList(senderId, messageText, regex, key, retrieveString) {

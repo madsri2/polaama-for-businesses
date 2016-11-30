@@ -16,6 +16,14 @@
   <div data-role="main" class="ui-content">
     <div data-role="collapsibleset">
       <div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d">
+        <h1>Todo list</h1>
+        <p>${todoList}</p>
+      </div>
+      <div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d">
+        <h1>Pack list</h1>
+        <p>${packList}</p>
+      </div>
+      <div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d">
         <h1>${header1}</h1>
         <p>${list1}</p>
       </div>

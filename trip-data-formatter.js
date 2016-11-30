@@ -35,8 +35,10 @@ TripDataFormatter.prototype.formatComments = function() {
 
 TripDataFormatter.prototype.formatTripDetails = function() {
   const comments = this.tripData.parseComments();
-  const todo = this.tripData.getInfoFromTrip(TripData.todo);
+  const todoList = this.tripData.getInfoFromTrip(TripData.todo);
   const packList = this.tripData.getInfoFromTrip("packList");
+  const html = fs.readFileSync("trip-page-template.js", 'utf8');
+  return html.replace("${mainHeader}","Trip details").replace("${header1}","Activities Details").replace("${list1}",listAsHtml(comments.activities)).replace("${header2}","Stay Details").replace("${list2}",listAsHtml(comments.stay)).replace("${header3}","Flight Details").replace("${list3}",listAsHtml(comments.flight)).replace("${header4}","Rental car Details").replace("${list4}",listAsHtml(comments.car)).replace("${header5}","Other comments").replace("${list5}",listAsHtml(comments.others)).replace("${todoList}",listAsHtml(todoList)).replace("${packList}",listAsHtml(packList));
 }
 
 function listAsHtml(list) {

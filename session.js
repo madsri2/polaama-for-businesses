@@ -7,6 +7,7 @@ const TripData = require('./trip-data');
 /*
 A session has a 1:1 relationship with a user-trip. A session represents a user. Each user and their trips will have exactly one session at any given time. Today, the scope of a session is tied to the lifetime of this webserver. TODO: Re-think this decision when sessions need to be persisted across process restarts.  
 sessionId -> {
+  tripNameInContext: trip name in context,
   fbid: facebookUserId, 
   sessionId: session Id,
   botMesgHistory: [Array of chat messages],
