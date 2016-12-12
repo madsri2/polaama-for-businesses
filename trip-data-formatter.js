@@ -6,12 +6,13 @@ const Log = require('./logger');
 const logger = (new Log()).init();
 
 function TripDataFormatter(tripName) {
-  this.tripData = new TripData(tripName);
+  // TODO: This needs to change when we add login by facebook to myFirstHttpServer.
+  this.trip = new TripData(tripName);
 }
 
 TripDataFormatter.prototype.formatListResponse = function(headers, key) {
-  const tripName = this.tripData.tripName;
-  const list = this.tripData.getInfoFromTrip(key);
+  const tripName = this.trip.data.name;
+  const list = this.trip.getInfoFromTrip(key);
   if(_.isUndefined(list)) {
     return `Could not find ${key} for trip ${tripName}`;
   }
@@ -28,9 +29,9 @@ TripDataFormatter.prototype.formatListResponse = function(headers, key) {
 }
 
 TripDataFormatter.prototype.formatComments = function() {
-  const comments = this.tripData.parseComments();
+  const comments = this.trip.parseComments();
   const html = fs.readFileSync("comments-template.js", 'utf8');
-  return html.replace("${tripName}",this.tripData.rawTripName)
+  return html.replace("${tripName}",this.trip.rawTripName)
              .replace("${activityList}",listAsHtml(comments.activities))
              .replace("${stayList}",listAsHtml(comments.stay))
              .replace("${flightList}",listAsHtml(comments.flight))
@@ -39,11 +40,11 @@ TripDataFormatter.prototype.formatComments = function() {
 }
 
 TripDataFormatter.prototype.formatTripDetails = function() {
-  const comments = this.tripData.parseComments();
-  const todoList = this.tripData.getInfoFromTrip(TripData.todo);
-  const packList = this.tripData.getPackList();
+  const comments = this.trip.parseComments();
+  const todoList = this.trip.getInfoFromTrip(TripData.todo);
+  const packList = this.trip.getPackList();
   const html = fs.readFileSync("trip-page-template.js", 'utf8');
-  return html.replace("${tripName}",this.tripData.rawTripName)
+  return html.replace("${tripName}",this.trip.rawTripName)
              .replace("${header1}","Activities Details")
              .replace("${list1}",listAsHtml(comments.activities))
              .replace("${header2}","Stay Details")
@@ -60,8 +61,8 @@ TripDataFormatter.prototype.formatTripDetails = function() {
 }
 
 TripDataFormatter.prototype.formatPackList = function(headers) {
-  const packList = this.tripData.getPackList();
-  const tripName = this.tripData.tripName;
+  const packList = this.trip.getPackList();
+  const tripName = this.trip.data.name;
   if(_.isUndefined(packList)) {
     return `Could not find packList for trip ${tripName}`;
   }
@@ -73,7 +74,7 @@ TripDataFormatter.prototype.formatPackList = function(headers) {
     logger.info("request call from browser. sending back html");
     const html = fs.readFileSync("pack-list-template.js", 'utf8');
     return html.replace("${toPackList}",listAsHtml(packList.toPack))
-               .replace("${tripName}", this.tripData.rawTripName)
+               .replace("${tripName}", this.trip.rawTripName)
                .replace("${donePackList}",listAsHtml(packList.done));
   }
   logger.info("request call from something other than browser. sending back json");
@@ -82,7 +83,7 @@ TripDataFormatter.prototype.formatPackList = function(headers) {
 
 function listAsHtml(list) {
   let html = "<ol>";
-  if(_.isNull(list) || _.isUndefined(list)) {
+  if(_.isNull(list) || _.isUndefined(list) || _.isEmpty(list)) {
     return "";
   }
   list.forEach(function(item) {

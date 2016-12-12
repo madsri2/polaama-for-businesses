@@ -65,7 +65,8 @@ const server = https.createServer(options, app);
 server.listen(port, function() {
   logger.info("Listening on port " + port);
   const twoDaysInMsec = 1000*60*60*24*2; // 2 days
-  setInterval(sendTodoReminders, twoDaysInMsec);
+  const tenSeconds = 1000*10; 
+  const intervalId = setInterval(sendTodoReminders, twoDaysInMsec);
 }); 
 
 // log every response
@@ -133,11 +134,10 @@ app.get('/webhook', function(req, res) {
 });
 
 app.post('/webhook', jsonParser, function(req, res) {
-  logger.info("In post webhook");
   postHandler.handle(req, res);
 });
 
-// set a timer that will 
+// set a timer that will send reminder notifications about todo list every 2 days
 function sendTodoReminders() {
   console.log("sendTodoReminders: called");
   postHandler.sendReminderNotification();

@@ -91,6 +91,18 @@ function overload(a) {
   console.log(a);
 }
 
+function prettyPrint(file) {
+    const fs = require('fs');
+    try {
+      const trip = JSON.parse(fs.readFileSync(file, 'utf8')); 
+      console.log(JSON.stringify(trip, null, 4));
+    }
+    catch(err) {
+      console.error("error reading from ",file, err.stack);
+      return null;
+    }
+}
+
 function overload(a, b) {
   console.log(`${a} - ${b}`);
 }
@@ -102,7 +114,7 @@ function testReplace() {
   return b;
 }
 
-console.log(testReplace());
-
+// console.log(testReplace());
 // var reg = new RegExp("todo[:]*[ ]*","i");
 // storeList("", "todo: a", reg);
+prettyPrint('trips/big_island.txt');

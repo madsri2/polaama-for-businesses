@@ -11,22 +11,8 @@ function Sessions() {
   this.sessions = {};
 }
 
-Sessions.prototype.findOrCreate = function(fbid, tripName) {
-  logger.info("findOrCreate: fbid ",fbid," tripName: ",tripName);
-  let sessionId = findSessionId.call(this,fbid);
-  if (_.isUndefined(sessionId)) {
-    // No session found for user fbid, let's create a new one
-    logger.info("Creating a new session for ",fbid);
-    sessionId = new Date().toISOString() + "-" + fbid;
-    this.sessions[sessionId] = new Session(fbid, sessionId);
-  }
-  this.sessions[sessionId].addTrip(tripName);
-  logger.info("This session's id is",sessionId);
-  return this.sessions[sessionId];
-};
-
-Sessions.prototype.findOrCreateV2 = function(fbid) {
-  logger.info("findOrCreate: fbid ",fbid);
+Sessions.prototype.findOrCreate = function(fbid) {
+  logger.info(`findOrCreate: Id to find is ${fbid}`);
   let sessionId = findSessionId.call(this,fbid);
   if (_.isUndefined(sessionId)) {
     // No session found for user fbid, let's create a new one
@@ -67,7 +53,7 @@ function findSessionId(fbid) {
     }
   });
   if(_.isUndefined(sessionId)) {
-    logger.info("Did not find session for ", fbid, "dump of entire session ", JSON.stringify(this.sessions));
+    logger.info(`Did not find session for ${fbid}. The session keys are ${Object.keys(this.sessions)}.`);
   }
   return sessionId;
 };
