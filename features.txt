@@ -4,5 +4,6 @@ DONE - Add buttons for "help" so Aparna can use it.
 DONE - Add tags for comments to separate "things to do"
 WORKING - Separate trips for each user / session. Each user should only see trips that they own or they belong to.
 Add ability to remember message from user entered before we know the trip context of a session.
+Support different start / end dates for group travel.
 Support "expenses:" comment going in the right bucket on landing page.
 Support adding memories (photoes with comments etc.)

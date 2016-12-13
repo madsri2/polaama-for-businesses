@@ -9,6 +9,7 @@ const moment = require('moment');
 
 function WebhookPostHandler() {
   this.sessions = new Sessions();
+  this.fbidHandler = new FbidHandler();
 }
 
 function handleMessagingEvent(messagingEvent) {
@@ -190,9 +191,9 @@ function sendTripButtons() {
   elements.push({
     title: "Create new trip",
     buttons: [{
-    type: "postback",
-    title: "New Trip",
-    payload: `trip_in_context ${TripData.encode("New Trip")}`
+     type: "postback",
+     title: "New Trip",
+     payload: `trip_in_context ${TripData.encode("New Trip")}`
   }]
   });
   TripData.getTrips().forEach(k => {
@@ -224,33 +225,35 @@ function sendTripButtons() {
   callSendAPI(messageData);
 }
 
-/*
-curl -X GET "https://graph.facebook.com/v2.6/1041923339269341?access_token=EAAXu91clmx0BAONN06z8f5Nna6XnCH3oWJChlbooiZCaYbKOUccVsfvrbY0nCZBXmZCQmZCzPEvkcJrBZAHbVEZANKe46D9AaxOhNPqwqZAGZC5ZCQCK4dpxtvgsPGmsQNzKhNv5OdNkizC9NfrzUQ9s8FwXa7GK3EAkOWpDHjZAiGZAgZDZD"
-*/
-// 322170138147525: 'Polaama', // GoForLakePowell page
-const userFbidMap = {
-  // list of all fbids that Polaama knows about.
-  default: {
-    1120615267993271: 'Madhuvanesh Parthasarathy',
-    1041923339269341: 'Aparna Rangarajan',
-    1326674134041820: 'Pol Aama',
-  },
-  1326674134041820: {
-    1120615267993271: 'Madhuvanesh Parthasarathy',
-  },
-  1120615267993271: {
-    1326674134041820: 'Pol Aama',
-    1041923339269341: 'Aparna Rangarajan',
-  },
-  1041923339269341: {
-    1120615267993271: 'Madhuvanesh Parthasarathy',
-  }
-};
+WebhookPostHandler.prototype.sendFriendsList = function(req, res) {
+  // for this user's fbid, get the list of friends, update the html template with that and then send it.
+  const new_trip = fs.readFileSync("new-trip-template.html", 'utf8');
+  const friends = this.fbidHandler.getFriends(this.session.fbid);
+  let cbox = "";
+  friends.forEach(id => {
+    const name = this.fbidHandler.getName(id);
+    cbox += `<input type="checkbox" name="${name}" value="${name}">First checkbox<br>`;
+  });
+  const html = new_trip.replace("${friendsList}", cbox);
+  return res.send(html);
+}
+
+WebhookPostHandler.prototype.handleTravelersForNewTrip = function(req, res) {
+  // logger.info(`body: ${JSON.stringify(req.body)}; params: ${JSON.stringify(req.params)}, query-string: ${JSON.stringify(req.query)} headers: ${JSON.stringify(req.headers)}`);
+  // logger.info("req value is " + util.inspect(req, {showHidden: true, color: true, depth: 5}));
+  const form = new formidable.IncomingForm(); 
+  form.parse(req, function (err, fields, files) {
+    logger.info("Fields from form are: " + JSON.stringify(fields));
+    res.send(`Values: ${JSON.stringify(fields)}`);
+    // store the friends who have been selected in a file.
+  });  
+}
 
 function handleFriendsList(text) {
   // get the friends list, add the trip to each of these friends' session, then send the "help buttons" to the user.
 }
 
+/*
 function sendFriendsList() {
   // TODO: get list from userFbidMap for this fbid.
   const friends = userFbidMap[this.session.fbid];
@@ -263,6 +266,7 @@ function sendFriendsList() {
   list += `${count}. Everyone\n`;
   sendTextMessage(this.session.fbid, list);
 }
+*/
 
 function handleNewTripWorkflow(payload) {
   const soloTraveler = payload.substring("new_trip_workflow ".length);
@@ -270,12 +274,15 @@ function handleNewTripWorkflow(payload) {
     sendTextMessage(this.session.fbid, `Choose from the following list of features to start planning your new trip?`);
     sendHelpMessage(this.session.fbid);
   }
+  // Group travelers are handled by the new_trip page.
+  /*
   else {
     // get the group list
     sendTextMessage(this.session.fbid, `Choose the people you are traveling with?`);
     sendFriendsList.call(this);
     this.session.awaitingFriendsList = true;
   }
+  */
 }
 
 /*
@@ -316,11 +323,13 @@ function determineResponseType(event) {
     return;
   } 
 
+  /*
   if(this.session.awaitingFriendsList) {
     handleFriendsList.call(this, messageText);
     return;
   }
-  
+  */
+
   const tripData = this.session.tripData();
 
   if(mesg.startsWith("help")) {
@@ -663,9 +672,12 @@ function determineTravelCompanions(recipientId) {
           }, {
             title: "With others",
             buttons: [{
-              type: "postback",
-              title: "No",
-              payload: "new_trip_workflow no",
+              type:"web_url",
+              url:"https://polaama.com/new_trip",
+              title:"No",
+              webview_height_ratio: "compact",
+              messenger_extensions: true,
+              fallback_url: "https://polaama.com/new_trip" 
             }]
           }]
         }

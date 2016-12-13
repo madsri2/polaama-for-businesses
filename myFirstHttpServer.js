@@ -95,6 +95,15 @@ app.get('/favicon.ico', function(req, res) {
   return res.end();
 });
 
+app.get('/new_trip', function(req, res) {
+  postHandler.sendFriendsList(req, res);
+});
+
+const formidable = require('formidable');
+app.post('/handle_new_trip_companions', function(req, res) {
+  postHandler.handleTravelersForNewTrip(req,res);
+});
+
 app.get('/:tripName', function(req, res) {
   const f = new TripDataFormatter(req.params.tripName);
   return res.send(f.formatTripDetails(req.headers));
