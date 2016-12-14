@@ -2,6 +2,7 @@
 const random = require('randomstring');
 const Log = require('./logger');
 const logger = (new Log()).init();
+const _=require('lodash');
 
 /*
 curl -X GET "https://graph.facebook.com/v2.6/1041923339269341?access_token=EAAXu91clmx0BAONN06z8f5Nna6XnCH3oWJChlbooiZCaYbKOUccVsfvrbY0nCZBXmZCQmZCzPEvkcJrBZAHbVEZANKe46D9AaxOhNPqwqZAGZC5ZCQCK4dpxtvgsPGmsQNzKhNv5OdNkizC9NfrzUQ9s8FwXa7GK3EAkOWpDHjZAiGZAgZDZD"
@@ -11,52 +12,73 @@ curl -X GET "https://graph.facebook.com/v2.6/1041923339269341?access_token=EAAXu
 function FbidHandler() {
   // list of all fbids that Polaama knows about.
   this.fbidNames = {
-    1120615267993271: 'Madhuvanesh Parthasarathy',
-    1041923339269341: 'Aparna Rangarajan',
-    1326674134041820: 'Pol Aama',
+    1120615267993271: "Madhuvanesh Parthasarathy",
+    1041923339269341: "Aparna Rangarajan",
+    1326674134041820: "Pol Aama",
   };
-  // generate new random strings for every fbid to use everywhere else.
-  Object.keys(fbidNames).forEach(id => {
-    this.fbidMap[id] = random.generate({
-      length: 4,
-      charset: 'alphanumeric'
-    });
-  });
+  this.fbidMap = {
+    "aeXf": "1120615267993271",
+    "eA12": "1041923339269341",
+    "bRt2": "1326674134041820"
+  };
   this.friends = {};
   // Now add friends for each fbid;
-  Object.keys(fbidNames).forEach(id => {
-    switch(fbidNames[id]) {
+  Object.keys(this.fbidNames).forEach(id => {
+    this.friends[id] = [];
+    switch(this.fbidNames[id]) {
       case "Pol Aama": 
-        this.friends[id].push(fbid.call(this,"Madhuvanesh Parthasarathy"));
+        this.friends[id].push(this.fbid("Madhuvanesh Parthasarathy"));
         break;
       case "Aparna Rangarajan":
-        this.friends[id].push(fbid.call(this,"Madhuvanesh Parthasarathy"));
+        this.friends[id].push(this.fbid("Madhuvanesh Parthasarathy"));
         break;
       case "Madhuvanesh Parthasarathy":
-        this.friends[id].push([
-          fbid.call(this,"Pol Aama"),
-          fbid.call(this,"Aparna Rangarajan")
-        ]);
+        this.friends[id].push(
+          this.fbid("Pol Aama")
+          // this.fbid("Aparna Rangarajan")
+        );
         break;
     }
   });
 }
 
-function fbid(name) {
-  Object.keys(this.fbidNames).forEach(id => {
-    if(name === this.fbidNames[id]) {
+FbidHandler.prototype.fbid = function(name) {
+  let id;
+  Object.keys(this.fbidNames).forEach(i => {
+    if(name === this.fbidNames[i]) {
       // found it
-      return id;
+      id = i;
     }
   });
-  logger.error(`BUG: could not find id for name: ${name}`);
-  return undefined;
+  if(_.isUndefined(id)) {
+    logger.error(`BUG: could not find id for name: <${name}>`);
+  }
+  return id;
 }
 
-FbidHandler.prototype.getFriends(fbid) {
+FbidHandler.prototype.getFriends = function(fbid) {
   return this.friends[fbid];
 }
 
-FbidHandler.prototype.getName(fbid) {
+FbidHandler.prototype.getName = function(fbid) {
   return this.fbidNames[fbid];
 }
+
+FbidHandler.prototype.decode = function(encodedId) {
+  return this.fbidMap[encodedId];
+}
+
+FbidHandler.prototype.encode = function(fbid) {
+  let id;
+  Object.keys(this.fbidMap).forEach(k => {
+    if(fbid === this.fbidMap[k]) {
+      // found
+      console.log(`returning ${k}`);
+      id = k;
+      return;
+    }
+  });
+  return id;
+}
+
+module.exports = FbidHandler;

@@ -95,13 +95,12 @@ app.get('/favicon.ico', function(req, res) {
   return res.end();
 });
 
-app.get('/new_trip', function(req, res) {
-  postHandler.sendFriendsList(req, res);
+app.get('/:id/new_trip', function(req, res) {
+  return postHandler.sendFriendsList(req.params.id, req, res);
 });
 
-const formidable = require('formidable');
-app.post('/handle_new_trip_companions', function(req, res) {
-  postHandler.handleTravelersForNewTrip(req,res);
+app.post('/:id/handle_new_trip_companions', function(req, res) {
+  return postHandler.handleTravelersForNewTrip(req.params.id, req, res);
 });
 
 app.get('/:tripName', function(req, res) {

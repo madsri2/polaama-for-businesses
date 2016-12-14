@@ -6,6 +6,9 @@ const logger = (new Log()).init();
 const TripData = require('./trip-data');
 const Sessions = require('./sessions');
 const moment = require('moment');
+const FbidHandler = require('./fbid-handler');
+const fs = require('fs');
+const formidable = require('formidable');
 
 function WebhookPostHandler() {
   this.sessions = new Sessions();
@@ -225,28 +228,77 @@ function sendTripButtons() {
   callSendAPI(messageData);
 }
 
-WebhookPostHandler.prototype.sendFriendsList = function(req, res) {
+WebhookPostHandler.prototype.sendFriendsList = function(encodedId, req, res) {
   // for this user's fbid, get the list of friends, update the html template with that and then send it.
+  let fbid;
+  if(_.isUndefined(this.session)) {
+    this.session = this.sessions.find(this.fbidHandler.decode(encodedId));
+    if(_.isUndefined(this.session) || _.isNull(this.session)) {
+      logger.error("We do not know the session for this user!");
+      fbid = this.fbidHandler.decode(encodedId);
+    }
+    else {
+      fbid = this.session.fbid;
+    }
+  }
+  else {
+    fbid = this.session.fbid;
+  }
   const new_trip = fs.readFileSync("new-trip-template.html", 'utf8');
-  const friends = this.fbidHandler.getFriends(this.session.fbid);
+  const friends = this.fbidHandler.getFriends(fbid);
   let cbox = "";
   friends.forEach(id => {
     const name = this.fbidHandler.getName(id);
-    cbox += `<input type="checkbox" name="${name}" value="${name}">First checkbox<br>`;
+    cbox += `<input type="checkbox" name="${name}" value="${name}">${name}<br>`;
   });
   const html = new_trip.replace("${friendsList}", cbox);
   return res.send(html);
 }
 
-WebhookPostHandler.prototype.handleTravelersForNewTrip = function(req, res) {
+WebhookPostHandler.prototype.handleTravelersForNewTrip = function(encodedId, req, res) {
   // logger.info(`body: ${JSON.stringify(req.body)}; params: ${JSON.stringify(req.params)}, query-string: ${JSON.stringify(req.query)} headers: ${JSON.stringify(req.headers)}`);
   // logger.info("req value is " + util.inspect(req, {showHidden: true, color: true, depth: 5}));
+  let fbid;
+  if(_.isUndefined(this.session) || _.isNull(this.session)) {
+    this.session = this.sessions.find(this.fbidHandler.decode(encodedId));
+    if(_.isUndefined(this.session) || _.isNull(this.session)) {
+      logger.error("We do not know the session for this user!");
+      fbid = this.fbidHandler.decode(encodedId);
+    }
+    else {
+      fbid = this.session.fbid;
+    }
+  }
+  else {
+    fbid = this.session.fbid;
+  }
   const form = new formidable.IncomingForm(); 
+  const localFbidHandler = this.fbidHandler;
+  const localSessions = this.sessions;
+  const localSession = this.session;
+  let noSession = false;
   form.parse(req, function (err, fields, files) {
     logger.info("Fields from form are: " + JSON.stringify(fields));
-    res.send(`Values: ${JSON.stringify(fields)}`);
-    // store the friends who have been selected in a file.
-  });  
+    // For each friend who is traveling, add this trip in their session.
+    Object.keys(fields).forEach(name => {
+      const id = localFbidHandler.fbid(name);
+      logger.info(`Obtained id ${id} for name ${name}`);
+      const s = localSessions.find(id);
+      if(_.isNull(s) || _.isUndefined(s)) {
+        logger.error(`handleNewTravelers: Could not find session for id ${id}, name ${name}`);
+        noSession = true;
+      }
+      else {
+        s.trips[localSession.tripNameInContext] = localSession.findTrip();
+      }
+    });
+    if(noSession) {
+      return res.send(`Even bots need to eat. Will be back soon.`);
+    }
+    else {
+      return res.send(`Added trip ${localSession.tripNameInContext} to your friends' sessions.`);
+    }
+  }); 
 }
 
 function handleFriendsList(text) {
@@ -302,7 +354,7 @@ function handleNewTrip(messageText) {
   this.session.addTrip(messageText);
   logger.info(`This session's trip name in context is ${messageText}`);
   sendTextMessage(this.session.fbid, `Are you traveling by yourselves?`);
-  determineTravelCompanions(this.session.fbid);
+  determineTravelCompanions.call(this);
   this.session.awaitingNewTripNameInContext = false;
   // TODO: Ask which travelers are going and add this trip to those sessions. For now, automatically add all trips to Madhu, Aparna & Polaama's sessions.
 }
@@ -652,10 +704,12 @@ function sendResponseFromWitBot(senderID, messageText) {
   })
 }
 
-function determineTravelCompanions(recipientId) {
+function determineTravelCompanions() {
+  const encodedId = this.fbidHandler.encode(this.session.fbid);
+  console.log(`found encoded id ${encodedId} for my session ${this.session.fbid}`);
   const messageData = {
     recipient: {
-      id: recipientId
+      id: this.session.fbid
     },
     message: {
       attachment: {
@@ -673,11 +727,11 @@ function determineTravelCompanions(recipientId) {
             title: "With others",
             buttons: [{
               type:"web_url",
-              url:"https://polaama.com/new_trip",
+              url:`https://polaama.com/${encodedId}/new_trip`,
               title:"No",
               webview_height_ratio: "compact",
               messenger_extensions: true,
-              fallback_url: "https://polaama.com/new_trip" 
+              fallback_url: `https://polaama.com/${encodedId}/new_trip` 
             }]
           }]
         }
