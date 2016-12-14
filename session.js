@@ -3,6 +3,7 @@ const _=require('lodash');
 const Log = require('./logger');
 const logger = (new Log()).init();
 const TripData = require('./trip-data');
+const fs = require('fs');
 
 /*
 A session has a 1:1 relationship with a user and their trips. A session represents a user. Each user and their trips will have exactly one session at any given time. Today, the scope of a session is tied to the lifetime of this webserver. At any given time, the session will have one trip context that indicates which trip a user is talking about.
@@ -71,16 +72,45 @@ humanContext -> {
 
 const MY_RECIPIENT_ID = "1120615267993271";
 
+// Static variable
+Session.sessionBaseDir = "sessions";
+
 function Session(fbid,sessionId) {
   this.sessionId = sessionId;
   this.fbid = fbid;
   this.botMesgHistory = [];
   this.trips  = {};
-  // TODO: Persist this session here.
-  retrieveSessionData.call(this);
+  this.tripNameInContext = undefined;
+  this.rawTripNameInContext = undefined;
 }
 
-// TODO: Implement
+Session.prototype.persistSession = function() {
+  const data = {
+    sessionId: this.sessionId,
+    fbid: this.fbid,
+    botMesgHistory: this.botMesgHistory,
+    tripNameInContext: this.tripNameInContext,
+    rawTripNameInContext: this.rawTripNameInContext,
+    trips: {}
+  };
+  Object.keys(this.trips).forEach(name => {
+    data.trips[name] = {
+      aiContext: this.trips[name].aiContext,
+      humanContext: this.trips[name].humanContext,
+    }
+  });
+  const file = `${Session.sessionBaseDir}/${this.fbid}.session`;
+  try {
+    fs.writeFileSync(file, JSON.stringify(data));
+    logger.info(`persisted session in file <${file}>`);
+  }
+  catch(err) {
+      logger.error(`error writing to session file: ${file}`, err.stack);
+  }
+}
+
+
+// TODO: Implement for the feature that allows user Madhu to use Polaama like another traveler (not a human).
 Session.prototype.nooneAwaitingResponse = function() {
   return false;
 }
@@ -96,7 +126,6 @@ Session.prototype.tripData = function() {
 Session.prototype.allTrips = function() {
   const tripDataList = [];
   Object.keys(this.trips).forEach(k => {
-    console.log(`pushing trip for session ${this.sessionId}`);
     tripDataList.push(this.trips[k].tripData);
   });
   return tripDataList;
@@ -104,6 +133,7 @@ Session.prototype.allTrips = function() {
 
 Session.prototype.addTrip = function(tripName) {
   const encTripName = TripData.encode(tripName);
+  // typically, when a trip is added to the session, that is also the trip in context that the user wants to discuss.
   this.tripNameInContext = encTripName;
   this.rawTripNameInContext = tripName;
   if(_.isUndefined(this.trips[encTripName])) {
@@ -122,8 +152,15 @@ Session.prototype.addTrip = function(tripName) {
       },
       tripData: new TripData(tripName, true /* persist */)
     };
-    // TODO: Persist trip information in this session.
   }
+  // Persist the new trip that was added to this session.
+  this.persistSession();
+}
+
+Session.prototype.addNewTrip = function(tripName, trip) {
+  const encTripName = TripData.encode(tripName);
+  this.trips[encTripName] = trip;
+  this.persistSession();
 }
 
 Session.prototype.findTrip = function() {
@@ -142,21 +179,5 @@ Session.prototype.updateAiContext = function(context) {
   // TODO: Persist information
 }
 
-function retrieveSessionData() {
-  try {
-    const file = `${sessionsBaseDir}/this.fbid`;
-    fs.accessSync(file, fs.F_OK);
-    try {
-      this.data = JSON.parse(fs.readFileSync(file, 'utf8'));
-    }
-    catch(err) {
-      logger.error("error reading from ", file, err.stack);
-    }
-  }
-  catch(err) {
-    logger.info(`file does not exist for session ${this.fbid}`);
-    this.data = {};
-  }
-}
 
 module.exports = Session;

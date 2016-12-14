@@ -26,5 +26,25 @@ function testAddTrip() {
   s2.addTrip("a");
   console.log(`Value: ${JSON.stringify(s2.tripData())}`);
 }
+// testAddTrip();
 
-testAddTrip();
+function testPersistAndRetrieve() {
+  const s2 = ss.findOrCreate("2");
+  s2.addTrip("a");
+
+  const s3 = Sessions.retrieveSession("2");
+  // console.log(s2);
+  // console.log(s3);
+  if(JSON.stringify(s2) === JSON.stringify(s3)) {
+    console.log("match");
+  }
+  else {
+    console.log("no match");
+  }
+}  
+// testPersistAndRetrieve();
+
+function testSessions() {
+  console.log(ss.findOrCreate("2"));
+}
+testSessions();

@@ -17,8 +17,13 @@ Logger.prototype.init = function() {
   const logger = new (winston.Logger)({
     transports: [
       new (winston.transports.Console)({ json: false, timestamp: tsFormat, level: 'info' }),
-      new winston.transports.File({ filename: `${logDir}/results.log`, json: false, 
-        colorize: true, timestamp: tsFormat, level: 'debug' })
+      new winston.transports.File({ 
+        filename: `${logDir}/results.log`, 
+        json: false, 
+        colorize: true, 
+        timestamp: tsFormat, 
+        level: 'debug' 
+      })
     ],
     exceptionHandlers: [
       new (winston.transports.Console)({ json: false, timestamp: true }),

@@ -199,6 +199,7 @@ function sendTripButtons() {
      payload: `trip_in_context ${TripData.encode("New Trip")}`
   }]
   });
+  // TODO: This needs to be only trips that relevant to this fbid's session.
   TripData.getTrips().forEach(k => {
     elements.push({
       title: k.rawName,
@@ -289,7 +290,7 @@ WebhookPostHandler.prototype.handleTravelersForNewTrip = function(encodedId, req
         noSession = true;
       }
       else {
-        s.trips[localSession.tripNameInContext] = localSession.findTrip();
+        s.addNewTrip(localSession.tripNameInContext, localSession.findTrip());
       }
     });
     if(noSession) {
@@ -356,7 +357,6 @@ function handleNewTrip(messageText) {
   sendTextMessage(this.session.fbid, `Are you traveling by yourselves?`);
   determineTravelCompanions.call(this);
   this.session.awaitingNewTripNameInContext = false;
-  // TODO: Ask which travelers are going and add this trip to those sessions. For now, automatically add all trips to Madhu, Aparna & Polaama's sessions.
 }
 
 function determineResponseType(event) {
@@ -573,7 +573,7 @@ function handleMessageSentByHuman(messageText, senderID) {
   // send the message from human to the original user. If human indicated that a bot look at it, send the user's original message to the bot.
   arr.shift(); // remove first element.
   const mesgToSender = arr.join(' ');
-  // TODO: Figure out a way if we need to reconcile the original sender's session with the session of the human. This might be needed because the human could be handle multiple sessions at once. One way to accomplish this would be to keep a separate session for the human inside the user's session and use that. Also, think about making a session have a 1:1 mapping with trip-fbid. Might make things easier..
+  // TODO: Figure out a way if we need to reconcile the original sender's session with the session of the human. This might be needed because the human could be handling multiple sessions at once. One way to accomplish this would be to keep a separate session for the human inside the user's session and use that. Also, think about making a session have a 1:1 mapping with trip-fbid. Might make things easier..
   const origSenderSession = this.sessions.find(origSenderId);
   // TODO: Handle origSenderSession not being available
   const humanContext = origSenderSession.humanContext();

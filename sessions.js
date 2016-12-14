@@ -2,7 +2,9 @@
 const _=require('lodash');
 const Log = require('./logger');
 const logger = (new Log()).init();
-const Session = require('./session.js');
+const Session = require('./session');
+const fs = require('fs');
+const TripData = require('./trip-data');
 
 const MY_RECIPIENT_ID = "1120615267993271";
 
@@ -19,6 +21,8 @@ Sessions.prototype.findOrCreate = function(fbid) {
     logger.info("Creating a new session for ",fbid);
     sessionId = new Date().toISOString() + "-" + fbid;
     this.sessions[sessionId] = new Session(fbid, sessionId);
+    // persist new session for later use
+    this.sessions[sessionId].persistSession();
   }
   logger.info("This session's id is",sessionId);
   return this.sessions[sessionId];
@@ -37,6 +41,35 @@ Sessions.prototype.allSessions = function() {
   return this.sessions;
 }
 
+// This needs to be a function of the object and not be accessed using an instance of the object.
+Sessions.retrieveSession = function(fbid) {
+  const file = `${Session.sessionBaseDir}/${fbid}.session`;
+  try {
+    fs.accessSync(file, fs.F_OK);
+    try {
+      const data = JSON.parse(fs.readFileSync(file, 'utf8'));
+      const session = new Session(data.fbid,data.sessionId);
+      session.tripNameInContext = data.tripNameInContext;
+      session.rawTripNameInContext = data.rawTripNameInContext;
+      Object.keys(data.trips).forEach(name => {
+        // we know that the name of the trip that was persisted is encoded.
+        session.trips[name] = {
+          aiContext: data.trips[name].aiContext,
+          humanContext: data.trips[name].humanContext,
+          tripData: new TripData(name)
+        };
+      });
+      return session;
+    }
+    catch(err) {
+      logger.error("error reading from ", file, err.stack);
+      return undefined;
+  catch(err) {
+    logger.info(`file <${file}> does not exist for session ${fbid}: ${err.stack}`);
+    return undefined;
+  }
+}
+
 function findSessionId(fbid) {
   if(_.isUndefined(fbid)) {
     logger.info("undefined fbid passed. pass a valid fbid");
@@ -53,7 +86,17 @@ function findSessionId(fbid) {
     }
   });
   if(_.isUndefined(sessionId)) {
-    logger.info(`Did not find session for ${fbid}. The session keys are ${Object.keys(this.sessions)}.`);
+    // try to retrieve it from the file.
+    const session = Sessions.retrieveSession(fbid);
+    if(_.isUndefined(session)) {
+      logger.info(`session for ${fbid} does not exist in sessions object and in file.`);
+      return undefined;
+    }
+    else {
+      sessionId = session.sessionId;
+      this.sessions[sessionId] = session;
+      logger.info(`found session ${session.sessionId} from file for fbid ${fbid}.`);
+    }
   }
   return sessionId;
 };

@@ -21,6 +21,7 @@ const postHandler = new WebhookPostHandler();
 // A secure webserver
 const util = require('util');
 const express = require('express');  
+const morgan = require('morgan');
 const app = express();
 const https = require('https');
 const sslPath = '/etc/letsencrypt/live/polaama.com/';
@@ -70,12 +71,20 @@ server.listen(port, function() {
 }); 
 
 // log every response
+/*
 app.use(({method, url}, rsp, next) => {
   rsp.on('finish', () => {
     logger.info(`${rsp.statusCode} ${method} ${url}`);
   });
   next();
 });
+*/
+
+// create a write stream (in append mode) 
+const accessLogStream = fs.createWriteStream('log/access.log', {flags: 'a'})
+app.use(morgan('common', 'immediate', { stream: accessLogStream }));
+
+
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 app.use(bodyParser.json({ verify: verifyRequestSignature }));
