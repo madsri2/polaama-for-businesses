@@ -2,12 +2,11 @@
 const fs = require('fs');
 const _ = require('lodash');
 const TripData = require('./trip-data');
-const Log = require('./logger');
-const logger = (new Log()).init();
+const logger = require('./my-logger');
 
-function TripDataFormatter(tripName) {
+function TripDataFormatter(tripData) {
   // TODO: This needs to change when we add login by facebook to myFirstHttpServer.
-  this.trip = new TripData(tripName);
+  this.trip = tripData;
 }
 
 TripDataFormatter.prototype.formatListResponse = function(headers, key) {

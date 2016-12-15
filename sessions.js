@@ -1,7 +1,6 @@
 'use strict';
 const _=require('lodash');
-const Log = require('./logger');
-const logger = (new Log()).init();
+const logger = require('./my-logger');
 const Session = require('./session');
 const fs = require('fs');
 const TripData = require('./trip-data');
@@ -16,7 +15,7 @@ function Sessions() {
 Sessions.prototype.findOrCreate = function(fbid) {
   logger.info(`findOrCreate: Id to find is ${fbid}`);
   let sessionId = findSessionId.call(this,fbid);
-  if (_.isUndefined(sessionId)) {
+  if (_.isNull(sessionId)) {
     // No session found for user fbid, let's create a new one
     logger.info("Creating a new session for ",fbid);
     sessionId = new Date().toISOString() + "-" + fbid;
@@ -30,7 +29,7 @@ Sessions.prototype.findOrCreate = function(fbid) {
 
 Sessions.prototype.find = function(fbid) { 
   const sessionId = findSessionId.call(this, fbid);
-  if(_.isUndefined(sessionId)) {
+  if(_.isNull(sessionId)) {
     logger.info("session does not exist for fbid",fbid);
     return null;
   }
@@ -64,6 +63,8 @@ Sessions.retrieveSession = function(fbid) {
     catch(err) {
       logger.error("error reading from ", file, err.stack);
       return undefined;
+    }
+  }
   catch(err) {
     logger.info(`file <${file}> does not exist for session ${fbid}: ${err.stack}`);
     return undefined;
@@ -90,7 +91,7 @@ function findSessionId(fbid) {
     const session = Sessions.retrieveSession(fbid);
     if(_.isUndefined(session)) {
       logger.info(`session for ${fbid} does not exist in sessions object and in file.`);
-      return undefined;
+      return null;
     }
     else {
       sessionId = session.sessionId;

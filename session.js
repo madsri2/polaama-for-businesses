@@ -1,7 +1,6 @@
 'use strict';
 const _=require('lodash');
-const Log = require('./logger');
-const logger = (new Log()).init();
+const logger = require('./my-logger');
 const TripData = require('./trip-data');
 const fs = require('fs');
 
@@ -89,8 +88,9 @@ Session.prototype.persistSession = function() {
     sessionId: this.sessionId,
     fbid: this.fbid,
     botMesgHistory: this.botMesgHistory,
-    tripNameInContext: this.tripNameInContext,
-    rawTripNameInContext: this.rawTripNameInContext,
+    // TODO: uncomment when adding timed tripNameInContext
+    // tripNameInContext: this.tripNameInContext,
+    // rawTripNameInContext: this.rawTripNameInContext,
     trips: {}
   };
   Object.keys(this.trips).forEach(name => {
@@ -131,6 +131,17 @@ Session.prototype.allTrips = function() {
   return tripDataList;
 }
 
+Session.prototype.allTripNames = function() {
+  const tripNames = [];
+  Object.keys(this.trips).forEach(k => {
+    tripNames.push({
+          name: this.trips[k].tripData.data.name,
+          rawName: this.trips[k].tripData.data.rawName
+    });
+  });
+  return tripNames;
+}
+
 Session.prototype.addTrip = function(tripName) {
   const encTripName = TripData.encode(tripName);
   // typically, when a trip is added to the session, that is also the trip in context that the user wants to discuss.
@@ -150,7 +161,7 @@ Session.prototype.addTrip = function(tripName) {
         fbid: MY_RECIPIENT_ID,
         conversations: {}
       },
-      tripData: new TripData(tripName, true /* persist */)
+      tripData: new TripData(tripName)
     };
   }
   // Persist the new trip that was added to this session.
@@ -179,5 +190,11 @@ Session.prototype.updateAiContext = function(context) {
   // TODO: Persist information
 }
 
+Session.prototype.getTrip = function(tripName) {
+  if(_.isUndefined(this.trips[TripData.encode(tripName)])) {
+    return null;
+  }
+  return this.trips[TripData.encode(tripName)].tripData;
+}
 
 module.exports = Session;

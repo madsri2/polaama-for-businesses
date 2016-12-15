@@ -12,11 +12,13 @@ curl -X GET "https://graph.facebook.com/v2.6/1041923339269341?access_token=EAAXu
 function FbidHandler() {
   // list of all fbids that Polaama knows about.
   this.fbidNames = {
-    1120615267993271: "Madhuvanesh Parthasarathy",
-    1041923339269341: "Aparna Rangarajan",
-    1326674134041820: "Pol Aama",
+    "2": "Test test",
+    "1120615267993271": "Madhuvanesh Parthasarathy",
+    "1041923339269341": "Aparna Rangarajan",
+    "1326674134041820": "Pol Aama",
   };
   this.fbidMap = {
+    "aaaa": "2",
     "aeXf": "1120615267993271",
     "eA12": "1041923339269341",
     "bRt2": "1326674134041820"
@@ -26,6 +28,7 @@ function FbidHandler() {
   Object.keys(this.fbidNames).forEach(id => {
     this.friends[id] = [];
     switch(this.fbidNames[id]) {
+      case "Test test":
       case "Pol Aama": 
         this.friends[id].push(this.fbid("Madhuvanesh Parthasarathy"));
         break;

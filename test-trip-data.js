@@ -1,6 +1,11 @@
 'use strict';
 const TripData = require('./trip-data');
-// const tripData = new TripData("Blah");
+const fs = require('fs');
+const moment = require('moment');
+const _ = require('lodash');
+const tripBaseDir = "trips";
+
+const tripData = new TripData("Blah");
 
 function testingGetInfoFromTrip() {
   console.log("testing getInfoFromTrip trip details: ",JSON.stringify(tripData.getInfoFromTrip("comments")));
@@ -33,11 +38,6 @@ function testConstructor() {
   console.log(b.rawTripName);
 }
 
-const fs = require('fs');
-const moment = require('moment');
-const _ = require('lodash');
-const tripBaseDir = "trips";
-
 function testFileList() {
   let tripList = [];
   fs.readdirSync(tripBaseDir).forEach(name => {
@@ -56,6 +56,7 @@ function testFileList() {
   return tripList;
 }
 
+function testingElements() {
   const elements = [];
   elements.push({
     title: "Create new trip",
@@ -76,9 +77,11 @@ function testFileList() {
     })
   });
   console.log(JSON.stringify(elements));
+}
+
+testingGetInfoFromTrip();
 
 // testConstructor();
-
 /*
 console.log("========");
 testingEncode();

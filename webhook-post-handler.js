@@ -1,8 +1,7 @@
 'use strict';
 const _ = require('lodash');
 const request = require('request');
-const Log = require('./logger');
-const logger = (new Log()).init();
+const logger = require('./my-logger');
 const TripData = require('./trip-data');
 const Sessions = require('./sessions');
 const moment = require('moment');
@@ -186,7 +185,9 @@ function receivedMessage(event) {
 }
 
 function sendUrl(urlPath) {
-  return `https://polaama.com/${urlPath}`;
+  const encodedId = this.fbidHandler.encode(this.session.fbid);
+  console.log(`found encoded id ${encodedId} for my session ${this.session.fbid}`);
+  return `https://polaama.com/${encodedId}/${urlPath}`;
 }
 
 function sendTripButtons() {
@@ -199,8 +200,7 @@ function sendTripButtons() {
      payload: `trip_in_context ${TripData.encode("New Trip")}`
   }]
   });
-  // TODO: This needs to be only trips that relevant to this fbid's session.
-  TripData.getTrips().forEach(k => {
+  this.session.allTripNames().forEach(k => {
     elements.push({
       title: k.rawName,
       buttons: [{
@@ -306,21 +306,6 @@ function handleFriendsList(text) {
   // get the friends list, add the trip to each of these friends' session, then send the "help buttons" to the user.
 }
 
-/*
-function sendFriendsList() {
-  // TODO: get list from userFbidMap for this fbid.
-  const friends = userFbidMap[this.session.fbid];
-  let list = "";
-  let count = 1;
-  Object.keys(friends).forEach(fbid => {
-    list += `${count}. friends[fbid]\n`;
-    count += 1;
-  });
-  list += `${count}. Everyone\n`;
-  sendTextMessage(this.session.fbid, list);
-}
-*/
-
 function handleNewTripWorkflow(payload) {
   const soloTraveler = payload.substring("new_trip_workflow ".length);
   if(soloTraveler === "yes") {
@@ -328,14 +313,6 @@ function handleNewTripWorkflow(payload) {
     sendHelpMessage(this.session.fbid);
   }
   // Group travelers are handled by the new_trip page.
-  /*
-  else {
-    // get the group list
-    sendTextMessage(this.session.fbid, `Choose the people you are traveling with?`);
-    sendFriendsList.call(this);
-    this.session.awaitingFriendsList = true;
-  }
-  */
 }
 
 /*
@@ -353,6 +330,8 @@ New trip Workflow:
 */
 function handleNewTrip(messageText) {
   this.session.addTrip(messageText);
+  // persist the new trip that was created.
+  this.session.tripData().persistUpdatedTrip();
   logger.info(`This session's trip name in context is ${messageText}`);
   sendTextMessage(this.session.fbid, `Are you traveling by yourselves?`);
   determineTravelCompanions.call(this);
@@ -407,15 +386,15 @@ function determineResponseType(event) {
     return;
   }
   if(mesg.startsWith("get todo")) {
-    sendTextMessage(senderID, sendUrl(tripData.todoUrlPath()));
+    sendTextMessage(senderID, sendUrl.call(this, tripData.todoUrlPath()));
     return;
   }
   if(mesg.startsWith("retrieve") || mesg.startsWith("comments") || mesg.startsWith("get comments")) {
-    sendTextMessage(senderID, sendUrl(tripData.commentUrlPath()));
+    sendTextMessage(senderID, sendUrl.call(this, tripData.commentUrlPath()));
     return;
   }
   if(mesg.startsWith("get list") || mesg.startsWith("get pack")) {
-    sendTextMessage(senderID, sendUrl(tripData.packListPath()));
+    sendTextMessage(senderID, sendUrl.call(this, tripData.packListPath()));
     return;
   }
   if(mesg.startsWith("deals")) {
@@ -705,8 +684,6 @@ function sendResponseFromWitBot(senderID, messageText) {
 }
 
 function determineTravelCompanions() {
-  const encodedId = this.fbidHandler.encode(this.session.fbid);
-  console.log(`found encoded id ${encodedId} for my session ${this.session.fbid}`);
   const messageData = {
     recipient: {
       id: this.session.fbid
@@ -727,11 +704,11 @@ function determineTravelCompanions() {
             title: "With others",
             buttons: [{
               type:"web_url",
-              url:`https://polaama.com/${encodedId}/new_trip`,
+              url: sendUrl.call(this, "new_trip"),
               title:"No",
               webview_height_ratio: "compact",
               messenger_extensions: true,
-              fallback_url: `https://polaama.com/${encodedId}/new_trip` 
+              fallback_url: sendUrl.call(this, "new_trip")
             }]
           }]
         }

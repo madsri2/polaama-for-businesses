@@ -2,8 +2,7 @@
 const fs = require('fs');
 const _ = require('lodash');
 const moment = require('moment');
-const Log = require('./logger');
-const logger = (new Log()).init();
+const logger = require('./my-logger');
 const tripBaseDir = "trips";
 
 // TODO: This is leaking data model to other classes. Fix this by moving all functionality that require this variable into a function in this class.
@@ -31,13 +30,9 @@ TripData.getTrips = function() {
 function TripData(tripName) {
   this.rawTripName = tripName;
   retrieveTripData.call(this);
-  // TODO: Handle case where data does not exist yet.
   if(!Object.keys(this.data).length) {
-    // persist
-    console.log(`Creating a persistent object for new trip with name ${tripName}`); 
     this.data.name = myEncode(tripName);
     this.data.rawName = tripName;
-    persistUpdatedTrip.call(this);
   }
 }
 
@@ -48,7 +43,7 @@ TripData.prototype.getInfoFromTrip = function(tripKey) {
     logger.info(`Could not find ${tripKey} for trip ${this.data.name}. Returning empty object`);
     return {};
   }
-  logger.info(`Key ${tripKey} has ${trip[tripKey].length} items; Destination is ${trip.destination}`);
+  logger.info(`trip-data.js:getInfoFromTrip Key ${tripKey} has ${trip[tripKey].length} items; Destination is ${trip.destination}`);
   return trip[tripKey];
 }
 
@@ -58,7 +53,7 @@ TripData.prototype.getPackList = function() {
     logger.info(`Could not find packList for trip ${this.data.name}. Returning empty object`);
     return {};
   }
-  logger.info(`There are ${trip.packList.toPack.length} to pack items and ${trip.packList.done.length} to pack items in pack list`);
+  logger.info(`There are ${trip.packList.toPack.length} to pack items and ${trip.packList.done.length} to pack items in pack list`, {a: "a"});
   return trip.packList;
 }
 
@@ -107,7 +102,7 @@ TripData.prototype.persistTrip = function(context) {
   this.data.comments = [
     "Average water temperature will be around 60F, not suitable for swimming",
   ];
-  persistUpdatedTrip.call(this);
+  this.persistUpdatedTrip();
 }
 
 TripData.prototype.storeTodoList = function(senderId, messageText) {
@@ -126,7 +121,7 @@ TripData.prototype.storePackList = function(senderId, messageText) {
   } 
   this.data.packList.toPack = this.data.packList.toPack.concat(items);
   // store it locally
-  persistUpdatedTrip.call(this);
+  this.persistUpdatedTrip();
   logger.info(`successfully stored item ${items} in packList's toPack list`);
   return `Saved! You can retrieve this by saying get pack list`;
 }
@@ -147,7 +142,7 @@ function storeList(senderId, messageText, regex, key, retrieveString) {
   } 
   this.data[key] = this.data[key].concat(items);
   // store it locally
-  persistUpdatedTrip.call(this);
+  this.persistUpdatedTrip();
   logger.info("successfully stored item " + items + " in " + key);
   return `Saved! You can retrieve this by saying "${retrieveString}"`;
 }
@@ -189,7 +184,23 @@ function getActivitiesFromComments(comments) {
 
 TripData.prototype.parseComments = function() {
   const comments = this.getInfoFromTrip("comments"); 
+  if(!Object.keys(comments).length) {
+    return {};
+  }
   return getActivitiesFromComments(comments);
+}
+
+TripData.prototype.persistUpdatedTrip = function() {
+  const file = tripFile.call(this);
+  try {
+    fs.writeFileSync(file, JSON.stringify(this.data));
+    logger.info("saved trip for ",this.data.name);
+    return true;
+  }
+  catch(err) {
+    logger.error("error writing to ",file,err.stack);
+    return false;
+  }
 }
 
 // ======== Encode =======
@@ -197,7 +208,6 @@ TripData.prototype.parseComments = function() {
 TripData.encode = function(name) {
   return myEncode(name);
 }
-
 
 function myEncode(name) {
   return name.toLowerCase().replace(" ","_");
@@ -227,19 +237,6 @@ function tripFile() {
   // TODO: check parameters
   // can't use this.data because it is populated with the file contents, which might not exist yet.
   return `${tripBaseDir}/${myEncode(this.rawTripName)}.txt`;
-}
-
-function persistUpdatedTrip() {
-  const file = tripFile.call(this);
-  try {
-    fs.writeFileSync(file, JSON.stringify(this.data));
-    logger.info("saved trip for ",this.data.name);
-    return true;
-  }
-  catch(err) {
-    logger.error("error writing to ",file,err.stack);
-    return false;
-  }
 }
 
 module.exports = TripData;

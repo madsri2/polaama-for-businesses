@@ -4,6 +4,7 @@ const fs = require('fs');
 // Set up logging
 const winston = require('winston');
 const logDir = '/home/ec2-user/log';
+const traceback = require('traceback');
 
 function Logger() {}
 
@@ -16,7 +17,11 @@ Logger.prototype.init = function() {
   const tsFormat = () => (new Date()).toLocaleTimeString();
   const logger = new (winston.Logger)({
     transports: [
-      new (winston.transports.Console)({ json: false, timestamp: tsFormat, level: 'info' }),
+      new (winston.transports.Console)({ 
+				json: false, 
+        timestamp: tsFormat,
+        level: 'info',
+      }),
       new winston.transports.File({ 
         filename: `${logDir}/results.log`, 
         json: false, 
@@ -30,6 +35,9 @@ Logger.prototype.init = function() {
       new winston.transports.File({ filename: `${logDir}/exceptions.log`, json: false })
     ],
     exitOnError: false
+  });
+  logger.filters.push((level, msg, meta) => {
+    return `${msg}`;
   });
   return logger;
 }

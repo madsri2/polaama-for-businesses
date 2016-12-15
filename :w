@@ -5,7 +5,8 @@ const _ = require('lodash');
 const WebhookPostHandler = require('./webhook-post-handler');
 const WebpageHandler = require('./webpage-handler');
 const TripData = require('./trip-data');
-const logger = require('./my-logger');
+const Log = require('./logger');
+const logger = (new Log()).init();
 const crypto = require('crypto');
 const TripDataFormatter = require('./trip-data-formatter.js');
 // ----------------------------------------------------------------------------
@@ -103,27 +104,27 @@ app.post('/:id/handle_new_trip_companions', function(req, res) {
 
 app.get('/:id/:tripName', function(req, res) {
   const handler = new WebpageHandler(req.params.id, req.params.tripName);
-  return handler.handleWebpage(res, handler.displayTrip);
+  return handler.displayTrip(res);
 });
 
 app.get('/:id/:tripName/pack-list', function(req, res) {
   const handler = new WebpageHandler(req.params.id, req.params.tripName);
-  return handler.handleWebpage(res, handler.displayPackList, [req.headers]);
+  return handler.displayPackList(res);
 });
 
 app.get('/:id/:tripName/todo', function(req, res) {
   const handler = new WebpageHandler(req.params.id, req.params.tripName);
-  return handler.handleWebpage(res, handler.displayTodoList, [req.headers]);
+  return handler.displayTodoList(req.headers, res);
 });
 
-app.get('/:id/:tripName/raw-comments', function(req, res) {
+app.get('/:tripName/raw-comments', function(req, res) {
   const handler = new WebpageHandler(req.params.id, req.params.tripName);
-  return handler.handleWebpage(res, handler.displayRawComments, [req.headers]);
+  return handler.displayRawComments(req.headers, res);
 });
 
-app.get('/:id/:tripName/comments', function(req, res) {
+app.get('/:tripName/comments', function(req, res) {
   const handler = new WebpageHandler(req.params.id, req.params.tripName);
-  return handler.handleWebpage(res, handler.displayComments);
+  return handler.displayRawComments(req.headers, res);
 });
 
 // handling webhook
