@@ -86,17 +86,10 @@ function getPacklistItem() {
 
 function getTripInContext(payload) {
   const tripName = payload.substring("trip_in_context ".length);
-  if(tripName === TripData.encode("New Trip")) {
-    logger.info("User wants to plan a new trip");
-    sendTextMessage(this.session.fbid, "Provide a name for your new trip");
-    this.session.awaitingNewTripNameInContext = true;
-  }
-  else {
-    logger.info(`Setting the trip name for this session's context to ${tripName}. User assumes this is an existing trip.`);
-    this.session.addTrip(tripName);
-    sendTextMessage(this.session.fbid, `Choose from the following list of features so I can help plan your trip to ${tripName}.`);
-    sendHelpMessage(this.session.fbid);
-  }
+  logger.info(`Setting the trip name for this session's context to ${tripName}. User assumes this is an existing trip.`);
+  this.session.addTrip(tripName);
+  sendTextMessage(this.session.fbid, `Choose from the following list of features so I can help plan your trip to ${tripName}.`);
+  sendHelpMessage.call(this);
   return;
 }
 
@@ -111,14 +104,38 @@ function receivedPostback(event) {
   logger.info("Received postback for user %d and page %d with payload '%s' " + 
     "at %d", this.session.fbid, recipientID, payload, timeOfPostback);
 
-  if(payload.startsWith("new_trip_workflow")) {
-    handleNewTripWorkflow.call(this, payload);
+	// new trip cta
+  if(payload === "new_trip" || payload === "pmenu_new_trip") {
+    logger.info("User wants to plan a new trip");
+    sendTextMessage(this.session.fbid, "Provide a name for your new trip");
+    this.session.awaitingNewTripNameInContext = true;
+		return;
+	}
+  if(payload.startsWith("new_trip_solo")) {
+    /*
+    sendTextMessage(this.session.fbid, `Choose from the following list of features to start planning your new trip?`);
+    sendHelpMessage.call(this);
+    */
+    getNewTripDetails.call(this);
     return;
   }
+
+	// existing trip
   if(payload.startsWith("trip_in_context")) {
     getTripInContext.call(this, payload);
     return;
   }
+	if(payload === "pmenu_existing_trip") {
+		sendTripButtons.call(this);
+		return;
+	}
+	
+	if(payload === "pmenu_help") {
+		sendHelpMessage.call(this);
+		return;
+	}
+
+	// actual features
   if(payload === "comments") {
     getComment.call(this);
     return;
@@ -132,7 +149,7 @@ function receivedPostback(event) {
     return;
   }
 
-  // When a postback is called, we'll send a message back to the sender to 
+  // When an unknown postback is called, we'll send a message back to the sender to 
   // let them know it was successful
   sendTextMessage(senderID, "Postback called");
 }
@@ -186,20 +203,12 @@ function receivedMessage(event) {
 
 function sendUrl(urlPath) {
   const encodedId = this.fbidHandler.encode(this.session.fbid);
-  console.log(`found encoded id ${encodedId} for my session ${this.session.fbid}`);
   return `https://polaama.com/${encodedId}/${urlPath}`;
 }
 
-function sendTripButtons() {
+function sendTripButtons(addNewTrip) {
+  sendTextMessage(this.session.fbid, "Hi, which trip are we discussing?");
   const elements = [];
-  elements.push({
-    title: "Create new trip",
-    buttons: [{
-     type: "postback",
-     title: "New Trip",
-     payload: `trip_in_context ${TripData.encode("New Trip")}`
-  }]
-  });
   this.session.allTripNames().forEach(k => {
     elements.push({
       title: k.rawName,
@@ -211,6 +220,16 @@ function sendTripButtons() {
     })
   });
 
+	if(addNewTrip) {
+    elements.push({
+      title: "Create new trip",
+      buttons: [{
+       type: "postback",
+       title: "New Trip",
+       payload: "new_trip"
+    	}]
+    });
+	}
   const messageData = {
     recipient: {
       id: this.session.fbid
@@ -225,94 +244,39 @@ function sendTripButtons() {
       }
     }
   };
-  sendTextMessage(this.session.fbid, "Hi, what trip are we discussing?");
   callSendAPI(messageData);
 }
 
-WebhookPostHandler.prototype.sendFriendsList = function(encodedId, req, res) {
-  // for this user's fbid, get the list of friends, update the html template with that and then send it.
-  let fbid;
-  if(_.isUndefined(this.session)) {
-    this.session = this.sessions.find(this.fbidHandler.decode(encodedId));
-    if(_.isUndefined(this.session) || _.isNull(this.session)) {
-      logger.error("We do not know the session for this user!");
-      fbid = this.fbidHandler.decode(encodedId);
+function getNewTripDetails() {
+  // send a set of "quick replies": Where, when and for how long?
+  const messageData = {
+    recipient: {
+      id: this.session.fbid
+    },
+    message: {
+      text: `Can you provide details about your trip?`,
+      quick_replies:[
+        {
+          content_type: "text",
+          title: "Destination",
+          payload: "destination"
+          // TODO: add image
+          // image_url: "https://polaama.com/img/destination.png"
+        },
+        {
+          content_type: "text",
+          title: "Start date",
+          payload: "start_date"
+        },
+        {
+          content_type: "text",
+          title: "Duration",
+          payload: "duration"
+        }
+      ]
     }
-    else {
-      fbid = this.session.fbid;
-    }
-  }
-  else {
-    fbid = this.session.fbid;
-  }
-  const new_trip = fs.readFileSync("new-trip-template.html", 'utf8');
-  const friends = this.fbidHandler.getFriends(fbid);
-  let cbox = "";
-  friends.forEach(id => {
-    const name = this.fbidHandler.getName(id);
-    cbox += `<input type="checkbox" name="${name}" value="${name}">${name}<br>`;
-  });
-  const html = new_trip.replace("${friendsList}", cbox);
-  return res.send(html);
-}
-
-WebhookPostHandler.prototype.handleTravelersForNewTrip = function(encodedId, req, res) {
-  // logger.info(`body: ${JSON.stringify(req.body)}; params: ${JSON.stringify(req.params)}, query-string: ${JSON.stringify(req.query)} headers: ${JSON.stringify(req.headers)}`);
-  // logger.info("req value is " + util.inspect(req, {showHidden: true, color: true, depth: 5}));
-  let fbid;
-  if(_.isUndefined(this.session) || _.isNull(this.session)) {
-    this.session = this.sessions.find(this.fbidHandler.decode(encodedId));
-    if(_.isUndefined(this.session) || _.isNull(this.session)) {
-      logger.error("We do not know the session for this user!");
-      fbid = this.fbidHandler.decode(encodedId);
-    }
-    else {
-      fbid = this.session.fbid;
-    }
-  }
-  else {
-    fbid = this.session.fbid;
-  }
-  const form = new formidable.IncomingForm(); 
-  const localFbidHandler = this.fbidHandler;
-  const localSessions = this.sessions;
-  const localSession = this.session;
-  let noSession = false;
-  form.parse(req, function (err, fields, files) {
-    logger.info("Fields from form are: " + JSON.stringify(fields));
-    // For each friend who is traveling, add this trip in their session.
-    Object.keys(fields).forEach(name => {
-      const id = localFbidHandler.fbid(name);
-      logger.info(`Obtained id ${id} for name ${name}`);
-      const s = localSessions.find(id);
-      if(_.isNull(s) || _.isUndefined(s)) {
-        logger.error(`handleNewTravelers: Could not find session for id ${id}, name ${name}`);
-        noSession = true;
-      }
-      else {
-        s.addNewTrip(localSession.tripNameInContext, localSession.findTrip());
-      }
-    });
-    if(noSession) {
-      return res.send(`Even bots need to eat. Will be back soon.`);
-    }
-    else {
-      return res.send(`Added trip ${localSession.tripNameInContext} to your friends' sessions.`);
-    }
-  }); 
-}
-
-function handleFriendsList(text) {
-  // get the friends list, add the trip to each of these friends' session, then send the "help buttons" to the user.
-}
-
-function handleNewTripWorkflow(payload) {
-  const soloTraveler = payload.substring("new_trip_workflow ".length);
-  if(soloTraveler === "yes") {
-    sendTextMessage(this.session.fbid, `Choose from the following list of features to start planning your new trip?`);
-    sendHelpMessage(this.session.fbid);
-  }
-  // Group travelers are handled by the new_trip page.
+  };
+  callSendAPI(messageData);
 }
 
 /*
@@ -328,10 +292,7 @@ New trip Workflow:
       Add trip to just this user's session.
       Discussions will be between user, polaama (and human in background).
 */
-function handleNewTrip(messageText) {
-  this.session.addTrip(messageText);
-  // persist the new trip that was created.
-  this.session.tripData().persistUpdatedTrip();
+function getTravelersForNewTrip(messageText) {
   logger.info(`This session's trip name in context is ${messageText}`);
   sendTextMessage(this.session.fbid, `Are you traveling by yourselves?`);
   determineTravelCompanions.call(this);
@@ -345,21 +306,17 @@ function determineResponseType(event) {
 
   if((_.isNull(this.session.tripNameInContext) || _.isUndefined(this.session.tripNameInContext)) && !this.session.awaitingNewTripNameInContext) {
     logger.info("determineResponseType: no trip name in context. Asking user!");
-    sendTripButtons.call(this);
+    sendTripButtons.call(this, true);
     return;
   }
 
   if(this.session.awaitingNewTripNameInContext) {
-    handleNewTrip.call(this, messageText);
+		this.session.addTrip(messageText);
+		// persist the new trip that was created.
+		this.session.tripData().persistUpdatedTrip();
+    getTravelersForNewTrip.call(this, messageText);
     return;
   } 
-
-  /*
-  if(this.session.awaitingFriendsList) {
-    handleFriendsList.call(this, messageText);
-    return;
-  }
-  */
 
   const tripData = this.session.tripData();
 
@@ -698,7 +655,7 @@ function determineTravelCompanions() {
             buttons: [{
               type: "postback",
               title: "Yes",
-              payload: "new_trip_workflow yes",
+              payload: "new_trip_solo",
             }]
           }, {
             title: "With others",
@@ -721,10 +678,10 @@ function determineTravelCompanions() {
 /*
  * Send a few buttons in response to "Help message" from the user.
  */
-function sendHelpMessage(recipientId) {
+function sendHelpMessage() {
   const messageData = {
     recipient: {
-      id: recipientId
+      id: this.session.fbid
     },
     message: {
       attachment: {

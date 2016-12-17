@@ -27,10 +27,20 @@ function testDisplayComments() {
   const s2 = ss.findOrCreate("2");
   s2.addTrip("b");
   const tripData = s2.tripData();
-  tripData.storeFreeFormText("2", "testing comments");
+  // Commenting this so we don't keep adding this comment over & over
+  // tripData.storeFreeFormText("2", "testing comments");
   const handler = new WebpageHandler("aaaa","b");
   const res = new Response();
   // handler.handleWebpage(res, handler.displayComments);
   handler.handleWebpage(res, handler.displayRawComments, [headers]);
 }
-testDisplayComments();
+// testDisplayComments();
+
+function testSendFriendsList() {
+  const s2 = ss.findOrCreate("2");
+  const handler = new WebpageHandler("aaaa","b");
+  const res = new Response();
+  handler.sendFriendsList(res);
+}
+// testSendFriendsList();
+

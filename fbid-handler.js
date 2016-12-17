@@ -29,6 +29,9 @@ function FbidHandler() {
     this.friends[id] = [];
     switch(this.fbidNames[id]) {
       case "Test test":
+        this.friends[id].push(this.fbid("Pol Aama"));
+        this.friends[id].push(this.fbid("Madhuvanesh Parthasarathy"));
+        break;
       case "Pol Aama": 
         this.friends[id].push(this.fbid("Madhuvanesh Parthasarathy"));
         break;
@@ -76,7 +79,6 @@ FbidHandler.prototype.encode = function(fbid) {
   Object.keys(this.fbidMap).forEach(k => {
     if(fbid === this.fbidMap[k]) {
       // found
-      console.log(`returning ${k}`);
       id = k;
       return;
     }

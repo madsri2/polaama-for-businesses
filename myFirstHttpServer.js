@@ -94,11 +94,14 @@ app.get('/favicon.ico', function(req, res) {
 });
 
 app.get('/:id/new_trip', function(req, res) {
-  return postHandler.sendFriendsList(req.params.id, req, res);
+  const handler = new WebpageHandler(req.params.id);
+  return handler.sendFriendsList(res);
 });
 
 app.post('/:id/handle_new_trip_companions', function(req, res) {
-  return postHandler.handleTravelersForNewTrip(req.params.id, req, res);
+  const handler = new WebpageHandler(req.params.id);
+  return handler.handleTravelersForNewTrip(req, res);
+	// TODO: close this page and then send the "help" message to the session in order to make forward progress.
 });
 
 app.get('/:id/:tripName', function(req, res) {

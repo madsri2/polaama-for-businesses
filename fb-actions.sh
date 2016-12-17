@@ -29,6 +29,30 @@ function send_message {
   }' "https://graph.facebook.com/v2.6/me/messages?access_token=$PAGE_ACCESS_TOKEN"
 }
 
+function set_persistent_menu {
+  curl -X POST -H "Content-Type: application/json" -d '{
+    "setting_type" : "call_to_actions",
+    "thread_state" : "existing_thread",
+    "call_to_actions":[
+      {
+        "type":"postback",
+        "title":"Help",
+        "payload":"pmenu_help"
+      },
+      {
+        "type":"postback",
+        "title":"Create New Trip", 
+        "payload":"pmenu_new_trip"
+      },
+      {
+        "type":"postback",
+        "title":"Existing trips", 
+        "payload":"pmenu_existing_trip"
+      },
+    ]
+  }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=$PAGE_ACCESS_TOKEN"    
+}
+
 while [[ $# -ge 1 ]]
 do
 key="$1"
@@ -44,6 +68,10 @@ case $key in
     ;;
   -sm|--send-message)
     send_message "$2"
+    shift # past argument
+    ;;
+  -p|--pmenu)
+    set_persistent_menu
     shift # past argument
     ;;
 esac

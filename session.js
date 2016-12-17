@@ -88,9 +88,8 @@ Session.prototype.persistSession = function() {
     sessionId: this.sessionId,
     fbid: this.fbid,
     botMesgHistory: this.botMesgHistory,
-    // TODO: uncomment when adding timed tripNameInContext
-    // tripNameInContext: this.tripNameInContext,
-    // rawTripNameInContext: this.rawTripNameInContext,
+    tripNameInContext: this.tripNameInContext,
+    rawTripNameInContext: this.rawTripNameInContext,
     trips: {}
   };
   Object.keys(this.trips).forEach(name => {
@@ -169,6 +168,10 @@ Session.prototype.addTrip = function(tripName) {
 }
 
 Session.prototype.addNewTrip = function(tripName, trip) {
+  if(_.isUndefined(tripName)) {
+    logger.warn("addNewTrip: undefined tripName. Cannot add new trip to session.");
+    return;
+  }
   const encTripName = TripData.encode(tripName);
   this.trips[encTripName] = trip;
   this.persistSession();
@@ -191,7 +194,7 @@ Session.prototype.updateAiContext = function(context) {
 }
 
 Session.prototype.getTrip = function(tripName) {
-  if(_.isUndefined(this.trips[TripData.encode(tripName)])) {
+  if(_.isUndefined(tripName) || _.isUndefined(this.trips[TripData.encode(tripName)])) {
     return null;
   }
   return this.trips[TripData.encode(tripName)].tripData;
