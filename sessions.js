@@ -13,7 +13,6 @@ function Sessions() {
 }
 
 Sessions.prototype.findOrCreate = function(fbid) {
-  logger.info(`findOrCreate: Id to find is ${fbid}`);
   let sessionId = findSessionId.call(this,fbid);
   if (_.isNull(sessionId)) {
     // No session found for user fbid, let's create a new one
@@ -23,7 +22,6 @@ Sessions.prototype.findOrCreate = function(fbid) {
     // persist new session for later use
     this.sessions[sessionId].persistSession();
   }
-  logger.info("This session's id is",sessionId);
   return this.sessions[sessionId];
 };
 

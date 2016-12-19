@@ -29,7 +29,7 @@ TripDataFormatter.prototype.formatListResponse = function(headers, key) {
 
 TripDataFormatter.prototype.formatComments = function() {
   const comments = this.trip.parseComments();
-  const html = fs.readFileSync("comments-template.js", 'utf8');
+  const html = fs.readFileSync("html-templates/comments.html", 'utf8');
   return html.replace("${tripName}",this.trip.rawTripName)
              .replace("${activityList}",listAsHtml(comments.activities))
              .replace("${stayList}",listAsHtml(comments.stay))
@@ -42,7 +42,7 @@ TripDataFormatter.prototype.formatTripDetails = function() {
   const comments = this.trip.parseComments();
   const todoList = this.trip.getInfoFromTrip(TripData.todo);
   const packList = this.trip.getPackList();
-  const html = fs.readFileSync("trip-page-template.js", 'utf8');
+  const html = fs.readFileSync("html-templates/trip-page.html", 'utf8');
   return html.replace("${tripName}",this.trip.rawTripName)
              .replace("${header1}","Activities Details")
              .replace("${list1}",listAsHtml(comments.activities))
@@ -71,13 +71,23 @@ TripDataFormatter.prototype.formatPackList = function(headers) {
   }
   if(headers['user-agent'].startsWith("Mozilla")) {
     logger.info("request call from browser. sending back html");
-    const html = fs.readFileSync("pack-list-template.js", 'utf8');
+    const html = fs.readFileSync("html-templates/pack-list.html", 'utf8');
     return html.replace("${toPackList}",listAsHtml(packList.toPack))
                .replace("${tripName}", this.trip.rawTripName)
                .replace("${donePackList}",listAsHtml(packList.done));
   }
   logger.info("request call from something other than browser. sending back json");
   return packList.toPack;
+}
+
+TripDataFormatter.prototype.formatWeatherDetails = function() {
+    const html = fs.readFileSync("html-templates/weather-details.html", 'utf8');
+    return html;
+}
+
+TripDataFormatter.prototype.formatFlightDetails = function() {
+    const html = fs.readFileSync("html-templates/flight-details.html", 'utf8');
+    return html;
 }
 
 function listAsHtml(list) {

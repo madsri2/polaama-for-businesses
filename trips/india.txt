@@ -1,1 +1,1 @@
-{"name":"india","rawName":"India","comments":["Testing 1"]}
+{"name":"india","destination":"India","duration":"20","startDate":"3/6/17","weather":"sunny","packList":{"toPack":["A hat"," Sunglasses"," Rain Jacket"," Gloves"," Winter coat"],"done":[]},"todoList":["Flight tickets","Place to stay","Rental car"],"comments":["Random information"]}

@@ -95,7 +95,7 @@ function prettyPrint(file) {
     const fs = require('fs');
     try {
       const trip = JSON.parse(fs.readFileSync(file, 'utf8')); 
-      console.log(JSON.stringify(trip, null, 4));
+      console.log(JSON.stringify(trip, null, 4)); // another option is util.inspect
     }
     catch(err) {
       console.error("error reading from ",file, err.stack);
@@ -117,4 +117,19 @@ function testReplace() {
 // console.log(testReplace());
 // var reg = new RegExp("todo[:]*[ ]*","i");
 // storeList("", "todo: a", reg);
-prettyPrint('trips/big_island.txt');
+// prettyPrint('trips/big_island.txt');
+
+function testUndefinedMemberInObject(key) {
+  const s = {
+    a: "a"
+  };
+  if(s[key]) {
+    console.log(`${key} is present in object s`);
+  }
+  else {
+    console.log(`${key} is absent in object s`);
+  }
+}
+
+testUndefinedMemberInObject("a");
+testUndefinedMemberInObject("b");

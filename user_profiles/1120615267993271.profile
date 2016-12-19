@@ -1,0 +1,1 @@
+{"fbid": "1120615267993271","kids": "yes", "flight": {"costDeviation": "300", "durationDeviation": "4 hours", "preference": ["seat comfort", "flightDuration", "cost", "inflight entertainment", "meals"], "preferredAirlines": "", "miles": ["United", "Alaskan", "Delta"]}, "hotel": {"kitchen": "yes"}}

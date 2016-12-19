@@ -129,6 +129,16 @@ app.get('/:id/:tripName/comments', function(req, res) {
   return handler.handleWebpage(res, handler.displayComments);
 });
 
+app.get('/:id/:tripName/comments/weather', function(req, res) {
+  const handler = new WebpageHandler(req.params.id, req.params.tripName);
+  return handler.handleWebpage(res, handler.displayWeatherDetails);
+});
+
+app.get('/:id/:tripName/comments/flight', function(req, res) {
+  const handler = new WebpageHandler(req.params.id, req.params.tripName);
+  return handler.handleWebpage(res, handler.displayFlightDetails);
+});
+
 // handling webhook
 app.get('/webhook', function(req, res) {
   logger.info("called /webhook");

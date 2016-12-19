@@ -56,6 +56,14 @@ WebpageHandler.prototype.displayComments = function(res) {
   return res.send(this.formatter.formatComments());
 }
 
+WebpageHandler.prototype.displayWeatherDetails = function(res) {
+  return res.send(this.formatter.formatWeatherDetails());
+}
+
+WebpageHandler.prototype.displayFlightDetails = function(res) {
+  return res.send(this.formatter.formatFlightDetails());
+}
+
 /*
 This function serves as the entry point for all other functions. Callback will be one of the functions above. The args array is to handle cases where some functions require more than 1 argument (like displayRawComments above).
 */ 
@@ -121,7 +129,8 @@ WebpageHandler.prototype.handleTravelersForNewTrip = function(req, res) {
       return res.send("Could not add this trip to some of your friend's travel list because Polaama does not know about them yet.");
     }
     else {
-      return res.send(`Added trip ${localSession.tripNameInContext} to your friends' sessions.`);
+      // return res.send(`Added trip ${localSession.tripNameInContext} to your friends' sessions.`);
+			return res.send(fs.readFileSync("html-templates/new-trip-handle-travelers.html", 'utf8'));
     }
   }); 
 }

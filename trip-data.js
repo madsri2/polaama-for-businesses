@@ -31,6 +31,7 @@ function TripData(tripName) {
   this.rawTripName = tripName;
   retrieveTripData.call(this);
   if(!Object.keys(this.data).length) {
+    // update trip with information.
     this.data.name = myEncode(tripName);
     this.data.rawName = tripName;
   }
@@ -53,7 +54,12 @@ TripData.prototype.getPackList = function() {
     logger.info(`Could not find packList for trip ${this.data.name}. Returning empty object`);
     return {};
   }
-  logger.info(`There are ${trip.packList.toPack.length} to pack items and ${trip.packList.done.length} to pack items in pack list`, {a: "a"});
+  if(trip.packList.toPack) {
+    logger.info(`There are ${trip.packList.toPack.length} to pack items in pack list`);
+  }
+  if(trip.packList.done) {
+    logger.info(`There are ${trip.packList.done.length} done items in pack list`);
+  }
   return trip.packList;
 }
 
@@ -88,20 +94,22 @@ TripData.prototype.packListPath = function() {
 }
 
 // ======= Store data =======
-TripData.prototype.persistTrip = function(context) {
-  logger.info("calling persistTrip");
+TripData.prototype.addTripDetailsAndPersist = function(tripDetails) {
   this.data = {}; 
   this.data.name = myEncode(this.rawTripName);
-  this.data.destination = context.destination;
-  this.data.duration = context.duration;
-  this.data.startDate = context.datetime;
+  this.data.destination = tripDetails.destination;
+  this.data.duration = tripDetails.duration;
+  // TODO: The date format needs to be identified and converted to the needed format.
+  if(tripDetails.datetime) {
+    this.data.startDate = tripDetails.datetime;
+  }
+  else if(tripDetails.startDate) {
+    this.data.startDate = tripDetails.startDate;
+  }
   // TODO: Get this information from weather API or the file persisted.
   this.data.weather = "sunny";
-  this.data.packList = createPackList.call(this);
-  this.data.todoList = createTodoList.call(this);
-  this.data.comments = [
-    "Average water temperature will be around 60F, not suitable for swimming",
-  ];
+  createPackList.call(this);
+  createTodoList.call(this);
   this.persistUpdatedTrip();
 }
 
@@ -110,11 +118,12 @@ TripData.prototype.storeTodoList = function(senderId, messageText) {
   return storeList.call(this, senderId, messageText, reg, "todoList", "get todo");  
 }
 
+//TODO: senderId is not being used here. So remove it and update the place where this function is called.
 TripData.prototype.storePackList = function(senderId, messageText) {
   const regex = new RegExp("^pack[:]*[ ]*","i"); // ignore case
   // retrieve text
   const items = messageText.replace(regex,"").split(',');
-  if(!this.data.packList) {
+  if(_.isUndefined(this.data.packList)) {
     this.data.packList = {};
     this.data.packList.toPack = [];
     this.data.packList.done = [];
@@ -166,7 +175,12 @@ function getActivitiesFromComments(comments) {
       taggedComments.stay.push(i);
     }
     // flight
-    else if((item.indexOf("flight") > -1) || (item.indexOf("air") > -1) || (item.indexOf("alaska") > -1)) {
+    else if((item.indexOf("flight") > -1) || 
+            (item.indexOf("air") > -1) || 
+            (item.indexOf("alaska") > -1) || 
+            (item.indexOf("united") > -1) || 
+            (item.indexOf("southwest") > -1) || 
+            (item.indexOf("delta") > -1)) {
       taggedComments.flight.push(i);
     }
     // car
@@ -214,16 +228,13 @@ function myEncode(name) {
 }
 
 function createPackList() {
-  this.data.packList = [];
   // if the weather is sunny, add corresponding items.
   switch(this.data.weather) {
     case "sunny": 
-      this.data.packList.push("cap/hat");
-      this.data.packList.push("sunglass");
+      this.storePackList("unused", "A hat, Sunglasses, Rain Jacket, Gloves, Winter coat");
       break;
   }
-
-  return packList;
+  return;
 }
 
 function createTodoList() {
