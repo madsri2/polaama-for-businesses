@@ -1,0 +1,1 @@
+{"name":"india2","rawName":"india2","destination":"India2","duration":"15","startDate":"11/2/18","weather":"sunny","packList":{"toPack":["A hat"," Sunglasses"," Rain Jacket"," Gloves"," Winter coat"],"done":[]},"todoList":["Flight tickets","Place to stay","Rental car"],"comments":["shud be added to the right trip"]}

@@ -81,13 +81,35 @@ TripDataFormatter.prototype.formatPackList = function(headers) {
 }
 
 TripDataFormatter.prototype.formatWeatherDetails = function() {
-    const html = fs.readFileSync("html-templates/weather-details.html", 'utf8');
-    return html;
+  return fs.readFileSync("html-templates/weather-details.html", 'utf8');
 }
 
 TripDataFormatter.prototype.formatFlightDetails = function() {
-    const html = fs.readFileSync("html-templates/flight-details.html", 'utf8');
-    return html;
+  return fs.readFileSync("html-templates/flight-details.html", 'utf8');
+}
+
+TripDataFormatter.prototype.formatHandleTravelersPage = function() {
+  return fs.readFileSync("html-templates/new-trip-handle-travelers.html", 'utf8');
+}
+
+TripDataFormatter.prototype.formatCities = function() {
+  if(_.isUndefined(this.trip.country)) {
+    logger.warn(`formatCities: No country information for ${this.trip.data.name}`);
+    return `No cities for country ${this.trip.data.name}`;
+  }
+  const cities = this.trip.country.cities;
+  logger.info(`Found ${cities.length} cities in ${this.trip.name}`);
+  let selection = "";
+  cities.forEach(city => {
+    selection += `<option value="${city}">${city}</option>`;
+  });
+  return fs.readFileSync("html-templates/cities.html", 'utf8')
+    .replace("${cityList}", selection)
+    .replace("${country}", this.trip.data.destination);
+}
+
+TripDataFormatter.prototype.formatCityChoicePage = function() {
+  return fs.readFileSync("html-templates/handle-city-choice.html", 'utf8');
 }
 
 function listAsHtml(list) {

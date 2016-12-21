@@ -4,6 +4,7 @@ const _ = require('lodash');
 const moment = require('moment');
 const logger = require('./my-logger');
 const tripBaseDir = "trips";
+const Country = require('./country');
 
 // TODO: This is leaking data model to other classes. Fix this by moving all functionality that require this variable into a function in this class.
 TripData.todo = "todoList";
@@ -13,7 +14,6 @@ TripData.getTrips = function() {
   let tripList = [];
   fs.readdirSync(tripBaseDir).forEach(name => {
     if(!name.startsWith(".")) {
-      console.log(name);
       const tripData = JSON.parse(fs.readFileSync(`${tripBaseDir}/${name}`,'utf8'));
       // only add those trips whose start date is after today or we don't know the start date
       if(_.isUndefined(tripData.startDate) || moment(tripData.startDate).diff(moment(),'days') >= 0) { 
@@ -31,9 +31,12 @@ function TripData(tripName) {
   this.rawTripName = tripName;
   retrieveTripData.call(this);
   if(!Object.keys(this.data).length) {
-    // update trip with information.
+    // New trip: update trip with information to be persisted later
     this.data.name = myEncode(tripName);
     this.data.rawName = tripName;
+  }
+  else {
+    this.country = new Country(myEncode(this.data.destination));
   }
 }
 
@@ -69,6 +72,7 @@ function retrieveTripData() {
     fs.accessSync(file, fs.F_OK);
     try {
       this.data = JSON.parse(fs.readFileSync(file, 'utf8')); 
+      // console.log(`raw name from file ${file} is ${this.data.rawName}`);
     }
     catch(err) {
       logger.error("error reading from ",file, err.stack);
@@ -93,11 +97,29 @@ TripData.prototype.packListPath = function() {
   return `${this.data.name}/pack-list`;
 }
 
+TripData.prototype.weatherUrlPath = function() {
+  return `${this.data.name}/comments/weather`;
+}
+
+TripData.prototype.flightUrlPath = function() {
+  return `${this.data.name}/comments/flight`;
+}
+
+TripData.prototype.stayUrlPath = function() {
+  return `${this.data.name}/comments/stay`;
+}
+
+TripData.prototype.activitiesUrlPath = function() {
+  return `${this.data.name}/comments/activities`;
+}
+
 // ======= Store data =======
 TripData.prototype.addTripDetailsAndPersist = function(tripDetails) {
   this.data = {}; 
   this.data.name = myEncode(this.rawTripName);
+  this.data.rawName = myEncode(this.rawTripName);
   this.data.destination = tripDetails.destination;
+  this.country = new Country(myEncode(tripDetails.destination));
   this.data.duration = tripDetails.duration;
   // TODO: The date format needs to be identified and converted to the needed format.
   if(tripDetails.datetime) {
@@ -110,6 +132,11 @@ TripData.prototype.addTripDetailsAndPersist = function(tripDetails) {
   this.data.weather = "sunny";
   createPackList.call(this);
   createTodoList.call(this);
+  this.persistUpdatedTrip();
+}
+
+TripData.prototype.addCities = function(cities) {
+  this.data.cities = cities;
   this.persistUpdatedTrip();
 }
 

@@ -6,7 +6,6 @@
 <body>
 
 <script>
-
 (function(d, s, id){
   var js, fjs = d.getElementsByTagName(s)[0];
   if (d.getElementById(id)) {return;}
@@ -20,17 +19,13 @@ MessengerExtensions.requestCloseBrowser(function success() {
 }, function error(err) {
 	window.alert("error closing browser");
 });
-
 </script> 
 
 <script>
     var isSupported = MessengerExtensions.isInExtension();    
 </script>
 
-<form action="handle_trip_friends" method="post" enctype="multipart/form-data">
-  ${friendsList}
-  <input type="submit" value="Done">
-</form>
+Added cities to your trip. Please close this window.
 
 </body>
 </html>

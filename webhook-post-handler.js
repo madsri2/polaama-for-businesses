@@ -95,44 +95,72 @@ function getTripInContext(payload) {
 
 // Gather trip details (weather, flight, hotel, etc.) and send it in a web_url format.
 // TODO: Not using this because this function is set as a callback for setTimeout elsewhere. Fix that.
-function displayTripDetails(fbid, awaitingQRChoice, messageText) {
+function displayTripDetails(messageText) {
   let messageData = {
     recipient: {
-      id: fbid
+      id: this.session.fbid
     }
   };
-    messageData.message = {
-      attachment: {
-        type: "template",
-        payload: {
-          template_type: "generic",
-          elements: [{
-            title: "Get Weather details",
-            buttons: [{
-              type: "web_url",
-              url: 'https://polaama.com/aeXf/israel/comments/weather',
-              title: "Weather",
-              webview_height_ratio: "compact",
-              messenger_extensions: true,
-              fallback_url: "https://polaama.com/aeXf/israel/comments/weather"
-            }]
-          }, {
-            title: "Get Flight details",
-            buttons: [{
-              type:"web_url",
-              url: 'https://polaama.com/aeXf/israel/comments/flight',
-              // url: sendUrl.call(this, "comments/flight"),
-              title:"Flight",
-              webview_height_ratio: "compact",
-              messenger_extensions: true,
-              // fallback_url: sendUrl.call(this, "comments/flight")
-              fallback_url: "https://polaama.com/aeXf/israel/comments/flight"
-            }]
+  const tripData = this.session.tripData();
+  messageData.message = {
+    attachment: {
+      type: "template",
+      payload: {
+        template_type: "generic",
+        elements: [{
+          title: "Get Weather details",
+          buttons: [{
+            type: "web_url",
+            url: sendUrl.call(this, tripData.weatherUrlPath()),
+            title: "Weather",
+            webview_height_ratio: "compact",
+            messenger_extensions: true,
+            fallback_url: sendUrl.call(this, tripData.weatherUrlPath()),
           }]
-        }
+        }, {
+          title: "Get Flight details",
+          buttons: [{
+            type:"web_url",
+            url: sendUrl.call(this, tripData.flightUrlPath()),
+            title:"Flight",
+            webview_height_ratio: "compact",
+            messenger_extensions: true,
+            fallback_url: sendUrl.call(this, tripData.flightUrlPath())
+          }]
+        }, {
+          title: "Get Stay details",
+          buttons: [{
+            type:"web_url",
+            url: sendUrl.call(this, tripData.stayUrlPath()),
+            title:"Stay",
+            webview_height_ratio: "compact",
+            messenger_extensions: true,
+            fallback_url: sendUrl.call(this, tripData.stayUrlPath())
+          }]
+        }, {
+          title: "Get Activities details",
+          buttons: [{
+            type:"web_url",
+            url: sendUrl.call(this, tripData.activitiesUrlPath()),
+            title:"Activities",
+            webview_height_ratio: "compact",
+            messenger_extensions: true,
+            fallback_url: sendUrl.call(this, tripData.activitiesUrlPath())
+          }]
+        }]
       }
-    };
+    }
+  };
   callSendAPI(messageData);
+}
+
+// Start collecting useful information for trip and update the user.
+WebhookPostHandler.prototype.startPlanningTrip = function() {
+  sendTextMessage(this.session.fbid, `Gathering weather, flight and stay related information for ${this.session.tripNameInContext}`);
+  const staCallback = sendTypingAction.bind(this);
+  setTimeout(staCallback, 1000);
+  const dtdCallback = displayTripDetails.bind(this);
+  setTimeout(dtdCallback, 2000 /* 2 seconds */);
 }
 
 function receivedPostback(event) {
@@ -150,26 +178,14 @@ function receivedPostback(event) {
   if(payload === "new_trip" || payload === "pmenu_new_trip") {
     logger.info("User wants to plan a new trip");
     sendTextMessage(this.session.fbid, "Can you provide details about your trip (comma separated list of destination, start date and duration in days)?");
-    this.session.awaitingNewTripNameInContext = true;
+		this.session.awaitingNewTripDetails = true;
 		return;
 	}
-  if(payload.startsWith("new_trip_solo")) {
-    // sendTextMessage(this.session.fbid, `Choose from the following list of features to start planning your new trip?`);
-    // sendHelpMessage.call(this);
-
-    // getNewTripDetails.call(this);
-
-    // Start collecting useful information for trip.
-    sendTextMessage(this.session.fbid, `Gathering weather, flight and stay related information for ${this.session.tripNameInContext}`);
-    setTimeout(sendTypingAction, 1000, this.session.fbid);
-    setTimeout(displayTripDetails, 2000 /* 2 seconds */, this.session.fbid);
-    this.session.awaitingTripDetailsQRChoice = true;
-    return;
-  }
 
 	// existing trip
   if(payload.startsWith("trip_in_context")) {
     getTripInContext.call(this, payload);
+		this.session.noTripContext = false;
     return;
   }
 	if(payload === "pmenu_existing_trip") {
@@ -177,6 +193,17 @@ function receivedPostback(event) {
 		return;
 	}
 	
+	// In order to add travelers to a trip, we need to know the trip in context.
+  if((_.isNull(this.session.tripNameInContext) || _.isUndefined(this.session.tripNameInContext) || this.session.tripNameInContext === "") && !this.session.noTripContext) {
+    logger.info("receivedPostback: no trip name in context. Asking user!");
+    sendTripButtons.call(this, true /* add new trip */);
+    return;
+  }
+	
+	if(payload === "pmenu_add_travelers") {
+		determineTravelCompanions.call(this);
+		return;
+	}
   // Help related actions
 	if(payload === "pmenu_help") {
 		sendHelpMessage.call(this);
@@ -255,6 +282,8 @@ function sendUrl(urlPath) {
 }
 
 function sendTripButtons(addNewTrip) {
+	// reset this sessions' context
+	this.session.noTripContext = true;
   sendTextMessage(this.session.fbid, "Hi, which trip are we discussing?");
   const elements = [];
   this.session.allTripNames().forEach(k => {
@@ -346,27 +375,28 @@ function determineResponseType(event) {
   const messageText = event.message.text;
   const mesg = messageText.toLowerCase();
 
-  if((_.isNull(this.session.tripNameInContext) || _.isUndefined(this.session.tripNameInContext)) && !this.session.awaitingNewTripNameInContext) {
+  if((_.isNull(this.session.tripNameInContext) 
+			|| _.isUndefined(this.session.tripNameInContext) 
+			|| this.session.tripNameInContext === "") 
+			&& !this.session.awaitingNewTripDetails) {
     logger.info("determineResponseType: no trip name in context. Asking user!");
     sendTripButtons.call(this, true);
     return;
   }
 
-  if(this.session.awaitingNewTripNameInContext) {
+  if(this.session.awaitingNewTripDetails) {
     const td = messageText.split(',');
-    // TODO: Validate tripDetails
-    // https://www.npmjs.com/package/node-validator
     const tripDetails = {
       destination: td[0],
       startDate:  td[1],
       duration: td[2] // TODO: Parse & validate that it's a positive integer and is less than a year: Integre validation: http://tinyurl.com/hlxtta3
     };
+    // TODO: Validate tripDetails
+    // https://www.npmjs.com/package/node-validator
     // TODO: validate date format, that it's a valid date and that it's not in the past.
     /*
     if(td[1].match(new RegExp(/\d\d\/\d\d\/\d\d)) && moment(td[1],"MM/DD/YY")) {
       logger.info("determineResponseType: start date is valid");  
-    }
-    else {
     }
     else if(moment(tripDetails.startDate,"MM/DD/YYYY")) {
     }
@@ -376,21 +406,20 @@ function determineResponseType(event) {
     }
     */
 		this.session.addTrip(tripDetails.destination);
-    // TODO: Gather weather information about destination during this time and update comments section
 		this.session.tripData().addTripDetailsAndPersist(tripDetails);
     logger.info(`This session's trip name in context is ${tripDetails.destination}`);
-    sendTextMessage(this.session.fbid, `Are you traveling by yourselves?`);
-    determineTravelCompanions.call(this);
-    this.session.awaitingNewTripNameInContext = false;
+    if(!determineCities.call(this)) {
+    	this.startPlanningTrip();
+    }
+    this.session.awaitingNewTripDetails = false;
+		// this new trip will also be the context for this session;
+		this.session.noTripContext = false;
     return;
   } 
 
   /*
-  if(!_.isUndefined(event.message.quick_reply) && this.session.awaitingTripDetailsQRChoice) {
-    // handle quick reply responses. (See getNewTripDetails(), displayTripDetails)    
-    logger.info("determineResponseType: Received quick_reply from user. Sending to displayTripDetails to handle");
-    displayTripDetails(this.session.fbid, true, messageText);
-    this.session.awaitingTripDetailsQRChoice = false;
+  if(!_.isUndefined(event.message.quick_reply)) { 
+    // handle quick reply responses. (See getNewTripDetails())    
     return;
   }
   */
@@ -717,7 +746,15 @@ function sendResponseFromWitBot(senderID, messageText) {
   })
 }
 
-function determineTravelCompanions() {
+function determineCities() {
+	const trip = this.session.tripData();
+  const country = trip.country;
+  if(_.isUndefined(country.cities)) {
+    logger.warn(`determineCities: countries not defined in trip ${trip.rawTripName}. Doing nothing`);
+    return false;
+  }
+  logger.info(`Asking user to select from the following cities: ${JSON.stringify(country)} for country ${trip.rawTripName}.`);
+  sendTextMessage(this.session.fbid,`Which cities of ${country.name} are you traveling to?`);
   const messageData = {
     recipient: {
       id: this.session.fbid
@@ -728,21 +765,44 @@ function determineTravelCompanions() {
         payload: {
           template_type: "generic",
           elements: [{
-            title: "Just me",
-            buttons: [{
-              type: "postback",
-              title: "Yes",
-              payload: "new_trip_solo",
-            }]
-          }, {
-            title: "With others",
+            title: "Select cities",
             buttons: [{
               type:"web_url",
-              url: sendUrl.call(this, "new_trip"),
-              title:"No",
+              url: sendUrl.call(this, `${trip.rawTripName}/cities`),
+              title:"Cities",
               webview_height_ratio: "compact",
               messenger_extensions: true,
-              fallback_url: sendUrl.call(this, "new_trip")
+              url: sendUrl.call(this, `${trip.rawTripName}/cities`),
+            }]
+          }]
+        }
+      }
+    }
+  };
+  callSendAPI(messageData);
+  return true;
+}
+
+function determineTravelCompanions() {
+  sendTextMessage(this.session.fbid, `Are you traveling by yourselves?`);
+  const messageData = {
+    recipient: {
+      id: this.session.fbid
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "generic",
+          elements: [{
+            title: "Who are you traveling with?",
+            buttons: [{
+              type:"web_url",
+              url: sendUrl.call(this, "friends"),
+              title:"Choose Friends",
+              webview_height_ratio: "compact",
+              messenger_extensions: true,
+              fallback_url: sendUrl.call(this, "friends")
             }]
           }]
         }
@@ -844,10 +904,11 @@ function sendGenericMessage(recipientId) {
   callSendAPI(messageData);
 }
 
-function sendTypingAction(recipientId) {
+function sendTypingAction() {
+  logger.info(`sendTypingAction: session id is ${this.session.sessionId}`);
   const messageData = {
     recipient: {
-      id: recipientId
+      id: this.session.fbid
     },
     sender_action:"typing_on"
   };

@@ -3,11 +3,18 @@ DONE - Convert all urls in the text to html (comments, todo & pack-list)
 DONE - Add buttons for "help" so Aparna can use it.
 DONE - Add tags for comments to separate "things to do"
 DONE - Separate trips for each user / session. Each user should only see trips that they own or they belong to.
-Get trip details (start date, duration, where)
+DONE - Get trip details (start date, duration, where)
+"Add travelers" menu: Handle case where trip context does not exist in session.
 Find flight & stay related information and automatically update comments. 
 Users should be able to see comments in place (instead of getting a link that they need to open).
-In the "existing trips" list, do not display trips from the past. Also, use quick replies to show existing trips (instead of buttons).
+Handle "existing trips" menu: update context based on user choice, do not display trips from the past. Use quick replies to show existing trips (instead of buttons).
 Add ability to remember message from user entered before we know the trip context of a session.
 Support different start / end dates for group travel.
 Support "expenses:" comment going in the right bucket on landing page.
 Support adding memories (photoes with comments etc.)
+
+Notes:
+Some questions I would have liked answers for when planning:
+1) How safe is Israel/Jordan?
+2) What cities in Japan are good to travel (weather wise) in February?
+3) Hainan tourism value, safety, flight details.

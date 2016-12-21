@@ -49,6 +49,11 @@ function set_persistent_menu {
         "title":"Existing trips", 
         "payload":"pmenu_existing_trip"
       },
+			{
+        "type":"postback",
+        "title":"Add travelers", 
+        "payload":"pmenu_add_travelers"
+			}
     ]
   }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=$PAGE_ACCESS_TOKEN"    
 }

@@ -1,1 +1,1 @@
-{"popularCities": ["Tel Aviv", "Jerusalem", "Nazareth", "Acre", "Ramon Crater"]}
+{"cities": ["Tel Aviv", "Jerusalem", "Nazareth", "Acre", "Ramon Crater"]}

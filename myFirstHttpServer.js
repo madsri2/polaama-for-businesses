@@ -93,12 +93,12 @@ app.get('/favicon.ico', function(req, res) {
   return res.end();
 });
 
-app.get('/:id/new_trip', function(req, res) {
+app.get('/:id/friends', function(req, res) {
   const handler = new WebpageHandler(req.params.id);
   return handler.sendFriendsList(res);
 });
 
-app.post('/:id/handle_new_trip_companions', function(req, res) {
+app.post('/:id/handle_trip_friends', function(req, res) {
   const handler = new WebpageHandler(req.params.id);
   return handler.handleTravelersForNewTrip(req, res);
 	// TODO: close this page and then send the "help" message to the session in order to make forward progress.
@@ -137,6 +137,18 @@ app.get('/:id/:tripName/comments/weather', function(req, res) {
 app.get('/:id/:tripName/comments/flight', function(req, res) {
   const handler = new WebpageHandler(req.params.id, req.params.tripName);
   return handler.handleWebpage(res, handler.displayFlightDetails);
+});
+
+app.get('/:id/:tripName/cities', function(req, res) {
+  const handler = new WebpageHandler(req.params.id, req.params.tripName);
+  return handler.handleWebpage(res, handler.displayCities);
+});
+
+app.post('/:id/:tripName/handle-city-choice', function(req, res) {
+  const handler = new WebpageHandler(req.params.id, req.params.tripName);
+  const response = handler.handleCityChoice(req, res);
+	postHandler.startPlanningTrip();
+	return response;
 });
 
 // handling webhook
