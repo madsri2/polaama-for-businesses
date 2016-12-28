@@ -118,8 +118,14 @@ Session.prototype.humanContext = function() {
   return this.findTrip().humanContext;
 }
 
+// this function can be called to invalidate a trip, forcing a refresh of this trip by calling TripData (which would contain the latest information).
+Session.prototype.invalidateTripData = function() {
+  const sessionTrip = this.findTrip();
+  sessionTrip.tripData = undefined;
+}
+
 Session.prototype.tripData = function() {
-  return this.findTrip().tripData;
+  return this.getTrip(this.tripNameInContext);
 }
 
 Session.prototype.allTrips = function() {
@@ -197,7 +203,13 @@ Session.prototype.getTrip = function(tripName) {
   if(_.isUndefined(tripName) || _.isUndefined(this.trips[TripData.encode(tripName)])) {
     return null;
   }
-  return this.trips[TripData.encode(tripName)].tripData;
+  const trip = this.trips[TripData.encode(tripName)];
+  // see if the tripData was invalidated and refresh it if it was.
+  if(_.isUndefined(trip.tripData)) {
+    trip.tripData = new TripData(tripName);
+    logger.info(`getTrip: tripData was invalidated for trip ${tripName}. Refreshing it by creating new TripData object`);
+  };
+  return trip.tripData;
 }
 
 module.exports = Session;

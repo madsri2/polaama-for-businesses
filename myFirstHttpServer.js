@@ -146,9 +146,9 @@ app.get('/:id/:tripName/cities', function(req, res) {
 
 app.post('/:id/:tripName/handle-city-choice', function(req, res) {
   const handler = new WebpageHandler(req.params.id, req.params.tripName);
-  const response = handler.handleCityChoice(req, res);
-	postHandler.startPlanningTrip();
-	return response;
+  // The global postHandler could have a different session than the one on this page. so, create a new webhook handler using the session belonging to this page to start planning a trip.
+  const myPostHandler = new WebhookPostHandler(handler.session);
+  return handler.handleCityChoice(req, res, myPostHandler);
 });
 
 // handling webhook
@@ -170,6 +170,5 @@ app.post('/webhook', jsonParser, function(req, res) {
 
 // set a timer that will send reminder notifications about todo list every 2 days
 function sendTodoReminders() {
-  console.log("sendTodoReminders: called");
   postHandler.sendReminderNotification();
 }

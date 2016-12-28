@@ -1,0 +1,1 @@
+{tags: [history, architecture], "notes": ["Gothic cathedrals", "Take vintage tram: Tram 28", "Baixa is downtown area"], "things to do": ["Alfarma","São Vicente da Fora monastery","Santa Justa lift","Mosteiro dos Jerónimos"]}

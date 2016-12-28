@@ -49,5 +49,6 @@ while(my $file = readdir DIR) {
 }
 
 # Finally, delete the trip file from "trips" directory
-print "Removing trip file trips/$trip.txt\n";
+print "Removing trip file trips/$trip.txt and trips/$trip-data.txt\n";
 `mv trips/$trip.txt trips/.$trip.txt.orig`;
+`mv trips/$trip-data.txt trips/.$trip-data.txt.orig`;

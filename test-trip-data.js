@@ -5,7 +5,7 @@ const moment = require('moment');
 const _ = require('lodash');
 const tripBaseDir = "trips";
 
-const tripData = new TripData("Blah");
+const tripData = new TripData("Israel");
 
 function testingGetInfoFromTrip() {
   console.log("testing getInfoFromTrip trip details: ",JSON.stringify(tripData.getInfoFromTrip("comments")));

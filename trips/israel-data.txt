@@ -1,1 +1,1 @@
-{weather: "Averages 55F. Generally cold in evenings especially in mountains (Jerusalem)", flight: {"cheapest": "Kayak", "Kayak": ["one stop,$1154,21 hrs, 30 hrs", "one stop,$1382,15h,18h]"; "Expedia": [""], "Priceline": [], "United": []}, cities: {tel-aviv: {weather: "",stay: ""}, jerusalem: {weather: "Cold in evenings. Possibility of rain", stay}}}
+{"cities":{"Tel Aviv":{},"Jerusalem":{"weather":["The average weather when you are traveling is a max of 81F and a min of 45F","It will be partly cloudy in Jerusalem","There's a 81 % chance of temperature over 60F"]}}}

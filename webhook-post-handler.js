@@ -6,17 +6,24 @@ const TripData = require('./trip-data');
 const Sessions = require('./sessions');
 const moment = require('moment');
 const FbidHandler = require('./fbid-handler');
-const fs = require('fs');
 const formidable = require('formidable');
+const TripInfoProvider = require('./trip-info-provider');
 
-function WebhookPostHandler() {
+function WebhookPostHandler(session) {
   this.sessions = new Sessions();
   this.fbidHandler = new FbidHandler();
+  if(!_.isUndefined(session)) {
+    logger.info(`WebhookPostHandler: A session with id ${session.sessionId} was passed. Using that in the post hook handler`);
+    this.session = session;
+  }
 }
 
 function handleMessagingEvent(messagingEvent) {
-  // find or create the session here so it can be used elsewhere.
-  this.session = this.sessions.findOrCreate(messagingEvent.sender.id);
+  // find or create the session here so it can be used elsewhere. Only do this if a session was NOT passed in the constructor.
+  if(_.isUndefined(this.session)) {
+    this.session = this.sessions.findOrCreate(messagingEvent.sender.id);
+    logger.info(`handleMessagingEvent: This chat's session id is ${this.session.sessionId}`);
+  }
   try {
     if (messagingEvent.optin) {
       console.log("optin message");
@@ -94,8 +101,8 @@ function getTripInContext(payload) {
 }
 
 // Gather trip details (weather, flight, hotel, etc.) and send it in a web_url format.
-// TODO: Not using this because this function is set as a callback for setTimeout elsewhere. Fix that.
-function displayTripDetails(messageText) {
+// This is a callback that is passed to TripInfoProvider to be called after weather (and other relevant information) is obtained. TODO: Handler cases where there is no weather data / flight data etc.
+function displayTripDetails() {
   let messageData = {
     recipient: {
       id: this.session.fbid
@@ -157,10 +164,11 @@ function displayTripDetails(messageText) {
 // Start collecting useful information for trip and update the user.
 WebhookPostHandler.prototype.startPlanningTrip = function() {
   sendTextMessage(this.session.fbid, `Gathering weather, flight and stay related information for ${this.session.tripNameInContext}`);
-  const staCallback = sendTypingAction.bind(this);
-  setTimeout(staCallback, 1000);
+  sendTypingAction.call(this);
   const dtdCallback = displayTripDetails.bind(this);
-  setTimeout(dtdCallback, 2000 /* 2 seconds */);
+  const tripInfoProvider = new TripInfoProvider(this.session.tripData());
+  tripInfoProvider.getWeatherInformation(dtdCallback);
+  // TODO: If this is a beach destinataion, use http://www.blueflag.global/beaches2 to determine the swimmability. Also use http://www.myweather2.com/swimming-and-water-temp-index.aspx to determine if water conditions are swimmable
 }
 
 function receivedPostback(event) {
@@ -405,15 +413,15 @@ function determineResponseType(event) {
     if(moment(tripDetails.startDate,"YYYY-MM-DD")) {
     }
     */
-		this.session.addTrip(tripDetails.destination);
-		this.session.tripData().addTripDetailsAndPersist(tripDetails);
+    this.session.addTrip(tripDetails.destination);
+    this.session.tripData().addTripDetailsAndPersist(tripDetails);
     logger.info(`This session's trip name in context is ${tripDetails.destination}`);
     if(!determineCities.call(this)) {
     	this.startPlanningTrip();
     }
     this.session.awaitingNewTripDetails = false;
-		// this new trip will also be the context for this session;
-		this.session.noTripContext = false;
+    // this new trip will also be the context for this session;
+    this.session.noTripContext = false;
     return;
   } 
 
@@ -584,15 +592,25 @@ WebhookPostHandler.prototype.sendReminderNotification = function() {
   Object.keys(sessions).forEach(id => {
     sessions[id].allTrips().forEach(trip => {
       const todoList = trip.data.todoList;
-      logger.info(`sendReminderNotification: ${trip.data.name} has ${todoList.length} todo items.`);
+      logger.info(`sendReminderNotification: Trip ${trip.data.name} from session ${id} has ${todoList.length} todo items.`);
+      if(!todoList.length) {
+        return;
+      }
       const now = moment();
-      const tripEnd = moment(trip.data.startDate).add(trip.data.duration,'days');
-      console.log(`value of now is ${now}. value of tripEnd is ${tripEnd}`);
+      const sdIso = new Date(trip.data.startDate).toISOString();
+      const tripEnd = moment(sdIso).add(trip.data.duration,'days');
       if(now.diff(tripEnd,'days') >= 0) {
         logger.info(`Trip ${trip.data.name} started on ${trip.data.startDate} and has a duration of ${trip.data.duration} days. No longer sending reminder because the trip is over (difference is ${now.diff(tripEnd,'days')} days).`);
+        return;
+      }
+      // only send reminder if we are within 45 days of the trip.
+      const startDate = moment(new Date(trip.data.startDate).toISOString());
+      const daysToTrip = startDate.diff(now, 'days');
+      if(daysToTrip <= 45) {
+        sendTextMessage(sessions[id].fbid, `Reminder: You still have ${todoList.length} items to do for your trip to ${trip.data.name}`);
       }
       else {
-        sendTextMessage(sessions[id].fbid, `Reminder: You still have ${todoList.length} items to do for your trip to ${trip.data.name}`);
+        logger.info(`Not sending reminder because there are ${daysToTrip} days to the trip ${trip.data.name}`);
       }
     });
   });
@@ -951,7 +969,7 @@ function callSendAPI(messageData) {
         messageId, recipientId);
     } else {
       // TODO: If there was an error in sending an intercept message to a human, then send a push notification to the original sender that we are having some technical difficulty and will respond to them shortly.
-      logger.error("Unable to send message. status code is " + response.statusCode + ". Message from FB is <" + response.body.error.message + ">; Error type: " + response.body.error.type);
+      logger.error(`Unable to send message to recipient ${recipientId}. status code is ${response.statusCode}. Message from FB is <${response.body.error.message}>; Error type: ${response.body.error.type}`);
     }
   });  
 }

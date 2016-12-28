@@ -5,9 +5,23 @@ const moment = require('moment');
 const logger = require('./my-logger');
 const tripBaseDir = "trips";
 const Country = require('./country');
+const Encoder = require('./encoder');
 
 // TODO: This is leaking data model to other classes. Fix this by moving all functionality that require this variable into a function in this class.
 TripData.todo = "todoList";
+
+function TripData(tripName) {
+  this.rawTripName = tripName;
+  retrieveTripData.call(this);
+  if(!Object.keys(this.data).length) {
+    // New trip: update trip with information to be persisted later
+    this.data.name = myEncode(tripName);
+    this.data.rawName = tripName;
+  }
+  else {
+    this.country = new Country(this.data.destination);
+  }
+}
 
 // return the list of raw names for each trip.
 TripData.getTrips = function() {
@@ -25,19 +39,6 @@ TripData.getTrips = function() {
     }
   });
   return tripList;
-}
-
-function TripData(tripName) {
-  this.rawTripName = tripName;
-  retrieveTripData.call(this);
-  if(!Object.keys(this.data).length) {
-    // New trip: update trip with information to be persisted later
-    this.data.name = myEncode(tripName);
-    this.data.rawName = tripName;
-  }
-  else {
-    this.country = new Country(myEncode(this.data.destination));
-  }
 }
 
 // ======== Retrieve from trip =======
@@ -117,9 +118,9 @@ TripData.prototype.activitiesUrlPath = function() {
 TripData.prototype.addTripDetailsAndPersist = function(tripDetails) {
   this.data = {}; 
   this.data.name = myEncode(this.rawTripName);
-  this.data.rawName = myEncode(this.rawTripName);
-  this.data.destination = tripDetails.destination;
-  this.country = new Country(myEncode(tripDetails.destination));
+  this.data.rawName = this.rawTripName;
+  this.data.destination = myEncode(tripDetails.destination);
+  this.country = new Country(tripDetails.destination);
   this.data.duration = tripDetails.duration;
   // TODO: The date format needs to be identified and converted to the needed format.
   if(tripDetails.datetime) {
@@ -251,7 +252,8 @@ TripData.encode = function(name) {
 }
 
 function myEncode(name) {
-  return name.toLowerCase().replace(" ","_");
+  return Encoder.encode(name);
+  // return name.toLowerCase().replace(" ","_");
 }
 
 function createPackList() {
@@ -261,6 +263,8 @@ function createPackList() {
       this.storePackList("unused", "A hat, Sunglasses, Rain Jacket, Gloves, Winter coat");
       break;
   }
+  this.storePackList("unused", "Travel adapter");
+  // TODO: Use http://www.myweather2.com/swimming-and-water-temp-index.aspx to determine if beach is swimmable and update accordingly
   return;
 }
 
@@ -269,12 +273,17 @@ function createTodoList() {
   this.data.todoList.push("Flight tickets");
   this.data.todoList.push("Place to stay");
   this.data.todoList.push("Rental car");
+  this.data.todoList.push("[US Citizens only] Enroll in STEP (https://step.state.gov/step/) to get travel alerts and warnings.");
 }
 
 function tripFile() {
   // TODO: check parameters
   // can't use this.data because it is populated with the file contents, which might not exist yet.
   return `${tripBaseDir}/${myEncode(this.rawTripName)}.txt`;
+}
+
+TripData.prototype.tripDataFile = function() {
+  return `${tripBaseDir}/${this.data.name}-data.txt`;
 }
 
 module.exports = TripData;

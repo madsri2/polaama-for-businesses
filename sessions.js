@@ -35,6 +35,18 @@ Sessions.prototype.find = function(fbid) {
 }
 
 Sessions.prototype.allSessions = function() {
+  if(!Object.keys(this.sessions).length) {
+    // load the sessions and then send the reminder notification.
+    fs.readdirSync(Session.sessionBaseDir).forEach(file => {
+      if(!file.startsWith(".")) {
+        // extract fbid. The file is of the format <fbid.session>
+        const fbid = file.substr(0,file.length - ".session".length);
+        const session = Sessions.retrieveSession(fbid);
+        this.sessions[session.sessionId] = session;
+      } 
+    }, this);
+  }
+  logger.info(`allSessions: There are ${Object.keys(this.sessions).length} sessions`);
   return this.sessions;
 }
 
@@ -81,14 +93,13 @@ function findSessionId(fbid) {
     if (this.sessions[k].fbid === fbid) {
       // Yep, got it!
       sessionId = k;
-      logger.info(`found session for ${fbid}. session id is ${sessionId}`);
     }
   });
   if(_.isUndefined(sessionId)) {
     // try to retrieve it from the file.
     const session = Sessions.retrieveSession(fbid);
     if(_.isUndefined(session)) {
-      logger.info(`session for ${fbid} does not exist in sessions object and in file.`);
+      logger.warn(`session for ${fbid} does not exist in sessions object and in file.`);
       return null;
     }
     else {

@@ -3,6 +3,7 @@ const _ = require('lodash');
 const request = require('request');
 const logger = require('./my-logger');
 const TripData = require('./trip-data');
+const TripInfoProvider = require('./trip-info-provider');
 const TripDataFormatter = require('./trip-data-formatter');
 const Sessions = require('./sessions');
 const moment = require('moment');
@@ -20,7 +21,7 @@ function WebpageHandler(id, tripName) {
     logger.error(`No session exists for id ${this.fbid}`);
     return;
   }
-  logger.info(`identified session with id ${this.session.sessionId} for id ${this.fbid}`);
+  logger.info(`This page's session id is ${this.session.sessionId}; fbid: ${this.fbid}`);
   if(_.isUndefined(tripName)) {
     // some functions below (like sendFriendsList & handleTravelersForNewTrip) don't require trip and formatter
     logger.info("WebpageHandler: tripName was not passed");
@@ -58,7 +59,9 @@ WebpageHandler.prototype.displayComments = function(res) {
 }
 
 WebpageHandler.prototype.displayWeatherDetails = function(res) {
-  return res.send(this.formatter.formatWeatherDetails());
+  const tip = new TripInfoProvider(this.trip);
+  const weatherDetails = tip.getStoredWeatherDetails();
+  return res.send(this.formatter.formatWeatherDetails(weatherDetails));
 }
 
 WebpageHandler.prototype.displayFlightDetails = function(res) {
@@ -141,23 +144,32 @@ WebpageHandler.prototype.displayCities = function(res) {
   return res.send(this.formatter.formatCities());
 }
 
-WebpageHandler.prototype.handleCityChoice = function(req, res) {
+function formParseCallback(err, fields, files, res) {
+  if(_.isUndefined(fields.cities)) {
+    return res.send("No cities added.");
+  }
+  // convert field.cities into an array
+  const c = [];
+  const cities = c.concat(fields.cities);
+  logger.info(`handleCityChoice: The cities chosen for trip ${this.session.tripNameInContext} are: ${JSON.stringify(cities)}`);
+  this.session.tripData().addCities(cities);
+  // indicate that the tripData for this trip is stale in the session object.
+  this.session.invalidateTripData();
+  return res.send(this.formatter.formatCityChoicePage());
+}
+
+WebpageHandler.prototype.handleCityChoice = function(req, res, postHandler) {
   // store the chosen cities in the trip, persist it and return success.
 	if(_.isNull(this.session)) {
 		logger.error("There is no session corresponding to this request.");
 		return res.send("Cannot add trip to your friend travel list because Polaama does not know about them yet.");
 	}
   const form = new formidable.IncomingForm(); 
-  const trip = this.session.tripData();
-  const localFormatter = this.formatter;
   // All activities need to happen within the the form.parse function
-  form.parse(req, function (err, fields, files) {
-    if(_.isUndefined(fields.cities)) {
-      return res.send("No cities added.");
-    }
-    logger.info("handleCityChoice: The cities are: " + JSON.stringify(fields.cities));
-    trip.addCities(fields.cities);
-    return res.send(localFormatter.formatCityChoicePage());
+  const callback = formParseCallback.bind(this);
+  form.parse(req, function(err, fields, files) {
+    callback(err, fields, files, res);
+    postHandler.startPlanningTrip();
   });
 }
 

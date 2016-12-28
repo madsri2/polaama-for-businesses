@@ -80,8 +80,28 @@ TripDataFormatter.prototype.formatPackList = function(headers) {
   return packList.toPack;
 }
 
-TripDataFormatter.prototype.formatWeatherDetails = function() {
-  return fs.readFileSync("html-templates/weather-details.html", 'utf8');
+TripDataFormatter.prototype.formatWeatherDetails = function(weatherDetails) {
+  const html = fs.readFileSync("html-templates/weather-details.html", 'utf8');
+  let wText = "";
+  const keys = Object.keys(weatherDetails);
+  if(keys.indexOf("nocity") > -1) {
+    // no weather details available since the trip does not have any city information
+    return html.replace("${weatherDetails}", weatherDetails.nocity);
+  }
+
+  wText += `<div data-role="collapsibleset">\n`;
+
+  keys.forEach(city => {
+    wText += `<div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d">\n`;
+    wText += `<h1>${city}</h1>\n`;
+    weatherDetails[city].forEach(note => {
+      wText += `<p>${note}</p>\n`;
+    });
+    wText += `</div>\n`;
+  });
+
+  wText += `</div>\n`;
+  return html.replace("${weatherDetails}", wText);
 }
 
 TripDataFormatter.prototype.formatFlightDetails = function() {
@@ -98,7 +118,7 @@ TripDataFormatter.prototype.formatCities = function() {
     return `No cities for country ${this.trip.data.name}`;
   }
   const cities = this.trip.country.cities;
-  logger.info(`Found ${cities.length} cities in ${this.trip.name}`);
+  logger.info(`Found ${cities.length} cities in ${this.trip.data.name}`);
   let selection = "";
   cities.forEach(city => {
     selection += `<option value="${city}">${city}</option>`;

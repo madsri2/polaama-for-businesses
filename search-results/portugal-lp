@@ -1,0 +1,822 @@
+{
+ "kind": "customsearch#search",
+ "url": {
+  "type": "application/json",
+  "template": "https://www.googleapis.com/customsearch/v1?q={searchTerms}&num={count?}&start={startIndex?}&lr={language?}&safe={safe?}&cx={cx?}&cref={cref?}&sort={sort?}&filter={filter?}&gl={gl?}&cr={cr?}&googlehost={googleHost?}&c2coff={disableCnTwTranslation?}&hq={hq?}&hl={hl?}&siteSearch={siteSearch?}&siteSearchFilter={siteSearchFilter?}&exactTerms={exactTerms?}&excludeTerms={excludeTerms?}&linkSite={linkSite?}&orTerms={orTerms?}&relatedSite={relatedSite?}&dateRestrict={dateRestrict?}&lowRange={lowRange?}&highRange={highRange?}&searchType={searchType}&fileType={fileType?}&rights={rights?}&imgSize={imgSize?}&imgType={imgType?}&imgColorType={imgColorType?}&imgDominantColor={imgDominantColor?}&alt=json"
+ },
+ "queries": {
+  "request": [
+   {
+    "title": "Google Custom Search - portugal weather lonelyplanet",
+    "totalResults": "24200",
+    "searchTerms": "portugal weather lonelyplanet",
+    "count": 10,
+    "startIndex": 1,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "portugal"
+   }
+  ],
+  "nextPage": [
+   {
+    "title": "Google Custom Search - portugal weather lonelyplanet",
+    "totalResults": "24200",
+    "searchTerms": "portugal weather lonelyplanet",
+    "count": 10,
+    "startIndex": 11,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "portugal"
+   }
+  ]
+ },
+ "context": {
+  "title": "Polaama"
+ },
+ "searchInformation": {
+  "searchTime": 0.366572,
+  "formattedSearchTime": "0.37",
+  "totalResults": "24200",
+  "formattedTotalResults": "24,200"
+ },
+ "items": [
+  {
+   "kind": "customsearch#result",
+   "title": "Weather in Portugal - Lonely Planet",
+   "htmlTitle": "\u003cb\u003eWeather\u003c/b\u003e in \u003cb\u003ePortugal\u003c/b\u003e - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/portugal/weather",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "The best time to go to Portugal, including current weather conditions, \ntemperatures and rainfall.",
+   "htmlSnippet": "The best time to go to \u003cb\u003ePortugal\u003c/b\u003e, including current \u003cb\u003eweather\u003c/b\u003e conditions, \u003cbr\u003e\n\u003cb\u003etemperatures\u003c/b\u003e and rainfall.",
+   "cacheId": "vMnOpD3TT9IJ",
+   "formattedUrl": "www.lonelyplanet.com/portugal/weather",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/\u003cb\u003eportugal\u003c/b\u003e/\u003cb\u003eweather\u003c/b\u003e",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "157",
+      "height": "321",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTNohdzuDaeLHUbnQ-aW5eZwkGDSkOErKuoh4qZywfRbKel5RUAr5fYfsrH"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Weather in Portugal - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Weather in Portugal - Lonely Planet",
+      "twitter:description": "The best time to go to Portugal, including current weather conditions, temperatures and rainfall",
+      "twitter:image:src": "https://images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/assets/image/30400e69e545fd4b0ca81bbe2fcf56bddc2900603681790fba3cf2dba62bfd06/97430d4f2f7a1f12f244cc131163937f0cc5ca6e567c84d2711d07e2fd39c6bf.jpg",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Weather in Portugal - Lonely Planet",
+      "og:description": "The best time to go to Portugal, including current weather conditions, temperatures and rainfall",
+      "og:url": "http://www.lonelyplanet.com/portugal/weather",
+      "og:type": "website",
+      "og:image": "//images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/assets/image/30400e69e545fd4b0ca81bbe2fcf56bddc2900603681790fba3cf2dba62bfd06/97430d4f2f7a1f12f244cc131163937f0cc5ca6e567c84d2711d07e2fd39c6bf.jpg",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "iYLoUTU3+0TPvnC35tz8TBDqxzlXSEnh7BkzPfBhmEo="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "http://assets.staticlp.com/country-shapes/PRT.svg"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Portugal - Lonely Planet",
+   "htmlTitle": "\u003cb\u003ePortugal\u003c/b\u003e - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/portugal",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Medieval castles, cobblestone villages, captivating cities and golden beaches: \nthe Portugal experience can be many things. History, great food and...",
+   "htmlSnippet": "Medieval castles, cobblestone villages, captivating cities and golden beaches: \u003cbr\u003e\nthe \u003cb\u003ePortugal\u003c/b\u003e experience can be many things. History, great food and...",
+   "cacheId": "7C9LzOClTJkJ",
+   "formattedUrl": "https://www.lonelyplanet.com/portugal",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/\u003cb\u003eportugal\u003c/b\u003e",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "275",
+      "height": "183",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRviHiviKSLBhWbEdB_96bPLxdYZ6bazOagZu5tWE2uvcVtwpDlHcgqx-8z"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Portugal - Lonely Planet",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Portugal - Lonely Planet",
+      "twitter:image:src": "https://lonelyplanetimages.imgix.net/mastheads/24745089.jpg?sharp=10&vib=20&w=1200",
+      "og:site_name": "Lonely Planet",
+      "og:type": "website",
+      "og:title": "Portugal - Lonely Planet",
+      "og:url": "http://www.lonelyplanet.com/portugal",
+      "og:description": "Medieval castles, cobblestone villages, captivating cities and golden beaches: the Portugal experience can be many things. History, great food and...",
+      "og:image": "https://lonelyplanetimages.imgix.net/mastheads/24745089.jpg?sharp=10&vib=20&w=1200",
+      "sailthru.date": "2016-12-26 19:16:13 +0000",
+      "sailthru.tags": "Portugal, adventure-travel, architecture-and-buildings, art-and-literature, beaches, boats-and-sailing, cities, coasts-and-islands, cycling, diving-and-snorkelling, eco-tourism, festivals-and-events, food-and-drink, history-heritage-and-tradition, honeymoons-and-romance, luxury-travel, music, off-the-beaten-track, parks-and-reserves, road-trips, shopping, surfing, train-travel-and-railways, walking-and-trekking, wildlife-and-nature"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://lonelyplanetimages.imgix.net/mastheads/24745089.jpg?sharp=10&vib=20&w=1200"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Weather in The Algarve - Lonely Planet",
+   "htmlTitle": "\u003cb\u003eWeather\u003c/b\u003e in The Algarve - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/portugal/the-algarve/weather",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "The best time to go to The Algarve, including current weather conditions, ... Any \ntime The region is blessed with good weather, with a mild winter, and sun almost\n ...",
+   "htmlSnippet": "The best time to go to The Algarve, including current \u003cb\u003eweather\u003c/b\u003e conditions, ... Any \u003cbr\u003e\ntime The region is blessed with good \u003cb\u003eweather\u003c/b\u003e, with a mild winter, and sun almost\u003cbr\u003e\n&nbsp;...",
+   "cacheId": "iW1--wYhk4cJ",
+   "formattedUrl": "www.lonelyplanet.com/portugal/the-algarve/weather",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/\u003cb\u003eportugal\u003c/b\u003e/the-algarve/\u003cb\u003eweather\u003c/b\u003e",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "310",
+      "height": "163",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSpNU4lwkBydVex1KmfDapPS48Z7DBBF7gZaAyAYy7uMFvWEeofL4kSEUNP"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Weather in The Algarve - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Weather in The Algarve - Lonely Planet",
+      "twitter:description": "The best time to go to The Algarve, including current weather conditions, temperatures and rainfall",
+      "twitter:image:src": "https://images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/a/g/hi/t/5c767b76a13f33891d697a72b682c25a-ponta-da-piedade.jpg",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Weather in The Algarve - Lonely Planet",
+      "og:description": "The best time to go to The Algarve, including current weather conditions, temperatures and rainfall",
+      "og:url": "http://www.lonelyplanet.com/portugal/the-algarve/weather",
+      "og:type": "website",
+      "og:image": "//images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/a/g/hi/t/5c767b76a13f33891d697a72b682c25a-ponta-da-piedade.jpg",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "R4U2N8Ol7WepVCpo904lqN4brtTOl8oaX8FyKn7pSN8="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "http://images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/a/g/hi/t/5c767b76a13f33891d697a72b682c25a-ponta-da-piedade.jpg"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "This other Eden: the Azores, Europe's secret islands of adventure ...",
+   "htmlTitle": "This other Eden: the Azores, Europe&#39;s secret islands of adventure ...",
+   "link": "http://www.lonelyplanet.com/portugal/the-azores-1341351/travel-tips-and-articles/this-other-eden-the-azores-europes-secret-islands-of-adventure",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Aug 1, 2016 ... Lonely Planet Writer ... As if that wasn't tantalising enough, there is a new reason \nto visit this autonomous region of Portugal: restrictions on air ...",
+   "htmlSnippet": "Aug 1, 2016 \u003cb\u003e...\u003c/b\u003e \u003cb\u003eLonely Planet\u003c/b\u003e Writer ... As if that wasn&#39;t tantalising enough, there is a new reason \u003cbr\u003e\nto visit this autonomous region of \u003cb\u003ePortugal\u003c/b\u003e: restrictions on air&nbsp;...",
+   "cacheId": "yx8-ieEyBcgJ",
+   "formattedUrl": "www.lonelyplanet.com/portugal/.../this-other-eden-the-azores-europes-secret- islands-of-adventure",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/\u003cb\u003eportugal\u003c/b\u003e/.../this-other-eden-the-azores-europes-secret- islands-of-adventure",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "275",
+      "height": "183",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQnxwGCpfYZsZI1VSTm8CD_NQgFSJlMpj5D-qsa39o1OmEKv5tUVVueHFl"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "This other Eden: the Azores, Europe's secret islands of adventure - Lonely Planet",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article",
+      "og:title": "This other Eden: the Azores, Europe's secret islands of adventure - Lonely Planet",
+      "og:url": "http://www.lonelyplanet.com/portugal/the-azores-1341351/travel-tips-and-articles/this-other-eden-the-azores-europes-secret-islands-of-adventure",
+      "og:description": "Read This other Eden: the Azores, Europe's secret islands of adventure",
+      "og:image": "https://lonelyplanetwp.imgix.net/2015/06/DSC04346-1-bc2e90a24230.jpg?sharp=10&vib=20&w=748",
+      "article:tag": "Adventure travel, Wildlife and nature, Coasts and islands, Ecotourism, Sailing and cruising, Diving and snorkelling, Off the beaten track, Walking and trekking",
+      "article:published_time": "2016-08-01T09:50:24+00:00",
+      "article:author": "James Kay"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://lonelyplanetwp.imgix.net/2015/06/DSC04346-1-bc2e90a24230.jpg?sharp=10&vib=20&w=748"
+     }
+    ],
+    "article": [
+     {
+      "headline": "This other Eden: the Azores, Europe's secret islands of adventure",
+      "alternativeheadline": "This other Eden: the Azores, Europe's secret islands of adventure",
+      "datepublished": "2016-08-01T09:50:24+00:00",
+      "articlebody": "For in-the-know travellers, the Azores have long represented a beckoning blip on the radar of possible destinations. Recognition from Unesco and other organisations has helped that blip to..."
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Porto - Lonely Planet",
+   "htmlTitle": "Porto - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/portugal/the-north/porto",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Porto on a plate: a perfect day in Portugal's food capital. When it comes to talent \nin the kitchen, Porto knows few rivals in Portugal. With the Atlantic on its ...",
+   "htmlSnippet": "Porto on a plate: a perfect day in \u003cb\u003ePortugal&#39;s\u003c/b\u003e food capital. When it comes to talent \u003cbr\u003e\nin the kitchen, Porto knows few rivals in \u003cb\u003ePortugal\u003c/b\u003e. With the Atlantic on its&nbsp;...",
+   "cacheId": "rkBJ71_reHkJ",
+   "formattedUrl": "https://www.lonelyplanet.com/portugal/the-north/porto",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/\u003cb\u003eportugal\u003c/b\u003e/the-north/porto",
+   "pagemap": {
+    "offer": [
+     {
+      "category": "Gastronomy"
+     },
+     {
+      "category": "Portuguese"
+     },
+     {
+      "category": "Argentine"
+     },
+     {
+      "category": "Gastronomy"
+     },
+     {
+      "category": "Gastronomy"
+     },
+     {
+      "category": "Portuguese"
+     },
+     {
+      "category": "Sandwiches"
+     },
+     {
+      "category": "Portuguese"
+     },
+     {
+      "category": "Gastronomy"
+     },
+     {
+      "category": "Modern Portuguese"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "300",
+      "height": "168",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRD5gLUagt_gIxRSUziCUROi27gvkqOTU5LGWrsPTRr42nKeRbsMfQfOv8"
+     }
+    ],
+    "foodestablishment": [
+     {
+      "name": "Pedro Lemos in Foz do Douro"
+     },
+     {
+      "name": "Cantina 32 in Ribeira"
+     },
+     {
+      "name": "Belos Aires in Miragaia"
+     },
+     {
+      "name": "Yeatman in Vila Nova de Gaia"
+     },
+     {
+      "name": "DOP in Ribeira"
+     },
+     {
+      "name": "Flor dos Congregados in Aliados & Bolhão"
+     },
+     {
+      "name": "A Sandeira in Miragaia"
+     },
+     {
+      "name": "O Paparico in Porto"
+     },
+     {
+      "name": "Boa Nova Tea House in Porto"
+     },
+     {
+      "name": "Camafeu in Aliados & Bolhão"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Porto - Lonely Planet",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Porto - Lonely Planet",
+      "twitter:image:src": "https://lonelyplanetimages.imgix.net/mastheads/73014649.jpg?sharp=10&vib=20&w=1200",
+      "og:site_name": "Lonely Planet",
+      "og:type": "website",
+      "og:title": "Porto - Lonely Planet",
+      "og:url": "http://www.lonelyplanet.com/portugal/the-north/porto",
+      "og:description": "Opening up like a pop-up book from the Rio Douro at sunset, humble-yet-opulent Porto entices with its higgledy-piggledy medieval centre, divine...",
+      "og:image": "https://lonelyplanetimages.imgix.net/mastheads/73014649.jpg?sharp=10&vib=20&w=1200",
+      "sailthru.date": "2016-12-26 14:03:08 +0000",
+      "sailthru.tags": "Porto, architecture-and-buildings, art-and-literature, boats-and-sailing, cities, eco-tourism, festivals-and-events, food-and-drink, history-heritage-and-tradition, honeymoons-and-romance, luxury-travel, music, shopping, walking-and-trekking, wildlife-and-nature"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://lonelyplanetimages.imgix.net/mastheads/73014649.jpg?sharp=10&vib=20&w=1200"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Lisbon - Lonely Planet",
+   "htmlTitle": "Lisbon - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/portugal/lisbon",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "A cold beer in Portugal has traditionally meant one of two things: Sagres or Super \nBock. These two everyman lagers, created during military dictatorships, have ...",
+   "htmlSnippet": "A cold beer in \u003cb\u003ePortugal\u003c/b\u003e has traditionally meant one of two things: Sagres or Super \u003cbr\u003e\nBock. These two everyman lagers, created during military dictatorships, have&nbsp;...",
+   "cacheId": "5DBHPk9-1w0J",
+   "formattedUrl": "https://www.lonelyplanet.com/portugal/lisbon",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/\u003cb\u003eportugal\u003c/b\u003e/lisbon",
+   "pagemap": {
+    "offer": [
+     {
+      "category": "Mediterranean"
+     },
+     {
+      "category": "Modern Portuguese"
+     },
+     {
+      "category": "Portuguese"
+     },
+     {
+      "category": "Fusion"
+     },
+     {
+      "category": "Modern Portuguese"
+     },
+     {
+      "category": "Portuguese"
+     },
+     {
+      "category": "Contemporary Portuguese"
+     },
+     {
+      "category": "Portuguese"
+     },
+     {
+      "category": "Portuguese"
+     },
+     {
+      "category": "Portuguese"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "275",
+      "height": "183",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSPH11aa49wv_ORzFlLXzWHgenwj29XICK6u-z3PMBLPGYXu_2CKStXK5rG"
+     }
+    ],
+    "foodestablishment": [
+     {
+      "name": "Pharmacia in Bairro Alto & Chiado"
+     },
+     {
+      "name": "Assinatura in"
+     },
+     {
+      "name": "Santo António de Alfama in Alfama, Castelo & Graça"
+     },
+     {
+      "name": "100 Maneiras in Bairro Alto & Chiado"
+     },
+     {
+      "name": "Feitoria in Belém"
+     },
+     {
+      "name": "A Travessa in Príncipe Real, Santos & Estrela"
+     },
+     {
+      "name": "Alma in"
+     },
+     {
+      "name": "Solar dos Presuntos in Baixa & Rossio"
+     },
+     {
+      "name": "Casa da Comida in"
+     },
+     {
+      "name": "Ti-Natércia in Alfama, Castelo & Graça"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Lisbon - Lonely Planet",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Lisbon - Lonely Planet",
+      "twitter:image:src": "https://lonelyplanetimages.imgix.net/mastheads/54989636.jpg?sharp=10&vib=20&w=1200",
+      "og:site_name": "Lonely Planet",
+      "og:type": "website",
+      "og:title": "Lisbon - Lonely Planet",
+      "og:url": "http://www.lonelyplanet.com/portugal/lisbon",
+      "og:description": "Seven cinematic hillsides overlooking the Rio Tejo cradle Lisbon's postcard-perfect panorama of cobbled alleyways, ancient ruins and white-domed...",
+      "og:image": "https://lonelyplanetimages.imgix.net/mastheads/54989636.jpg?sharp=10&vib=20&w=1200",
+      "sailthru.date": "2016-12-26 17:34:18 +0000",
+      "sailthru.tags": "Lisbon, architecture-and-buildings, art-and-literature, beaches, cities, festivals-and-events, food-and-drink, history-heritage-and-tradition, honeymoons-and-romance, luxury-travel, music, shopping, train-travel-and-railways"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://lonelyplanetimages.imgix.net/mastheads/54989636.jpg?sharp=10&vib=20&w=1200"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Portugal weather in November?",
+   "htmlTitle": "\u003cb\u003ePortugal weather\u003c/b\u003e in November?",
+   "link": "https://www.lonelyplanet.com/thorntree/forums/europe-western-europe/portugal/portugal-weather-in-november",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Jul 28, 2011 ... I'm planning to take a trip with my parents to Portugal for about 10 days; \nunfortunately we can't do this until November. We're thinking about ...",
+   "htmlSnippet": "Jul 28, 2011 \u003cb\u003e...\u003c/b\u003e I&#39;m planning to take a trip with my parents to \u003cb\u003ePortugal\u003c/b\u003e for about 10 days; \u003cbr\u003e\nunfortunately we can&#39;t do this until November. We&#39;re thinking about&nbsp;...",
+   "cacheId": "MIAbtkq6QgoJ",
+   "formattedUrl": "https://www.lonelyplanet.com/.../portugal/portugal-weather-in-november",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../\u003cb\u003eportugal\u003c/b\u003e/\u003cb\u003eportugal\u003c/b\u003e-\u003cb\u003eweather\u003c/b\u003e-in-november",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "225",
+      "height": "225",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSqRemPSRVtvlwaxn3MfC7zsLjzOoK5uUM0cDjdqchf2Fvexvm4z9sAZObq"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Thorn Tree",
+      "title": "Thorn Tree"
+     },
+     {
+      "url": "Country forums",
+      "title": "Country forums"
+     },
+     {
+      "url": "Western Europe",
+      "title": "Western Europe"
+     },
+     {
+      "url": "Portugal",
+      "title": "Portugal"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Portugal weather in November?",
+      "og:title": "Portugal weather in November?",
+      "og:description": "I'm planning to take a trip with my parents to Portugal for about 10 days; unfortunately we can't do this until November. We're thinking about November 11-20. We don't necessarily…",
+      "og:url": "https://www.lonelyplanet.com/thorntree/forums/europe-western-europe/portugal/portugal-weather-in-november",
+      "og:image": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "og:type": "website",
+      "twitter:title": "Portugal weather in November?",
+      "twitter:description": "I'm planning to take a trip with my parents to Portugal for about 10 days; unfortunately we can't do this until November. We're thinking about November 11-20. We don't necessarily…",
+      "twitter:image:src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "5gN7smw2alfpWqXBzOT1xm2vt61i4F0q10FbzMT3On4BSQyb1vI8V2ucVfQ9yUoLwdqyjWQKgVxDs1BZhdNuHg=="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Welcome",
+      "name": "Welcome"
+     },
+     {
+      "url": "Destinations",
+      "name": "Destinations"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Madeira - Lonely Planet",
+   "htmlTitle": "Madeira - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/portugal/madeira",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Travel guides. Starting at $24.99. Image for. Ready to go? Get to the heart of \nMadeira with one of Lonely Planet's in-depth, award-winning guidebooks.",
+   "htmlSnippet": "Travel guides. Starting at $24.99. Image for. Ready to go? Get to the heart of \u003cbr\u003e\nMadeira with one of \u003cb\u003eLonely Planet&#39;s\u003c/b\u003e in-depth, award-winning guidebooks.",
+   "cacheId": "1EpxOYgJdG8J",
+   "formattedUrl": "https://www.lonelyplanet.com/portugal/madeira",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/\u003cb\u003eportugal\u003c/b\u003e/madeira",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "275",
+      "height": "183",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRf6hAvXzI1WRwGxA8cOF089s_rZzbV1gZM6CI3t-dex2iv_WfZcNYnHCc"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Madeira - Lonely Planet",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Madeira - Lonely Planet",
+      "twitter:image:src": "https://lonelyplanetimages.imgix.net/mastheads/536911419_full.jpg?sharp=10&vib=20&w=1200",
+      "og:site_name": "Lonely Planet",
+      "og:type": "website",
+      "og:title": "Madeira - Lonely Planet",
+      "og:url": "http://www.lonelyplanet.com/portugal/madeira",
+      "og:image": "https://lonelyplanetimages.imgix.net/mastheads/536911419_full.jpg?sharp=10&vib=20&w=1200",
+      "sailthru.date": "2016-12-25 07:27:25 +0000",
+      "sailthru.tags": "Madeira"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://lonelyplanetimages.imgix.net/mastheads/536911419_full.jpg?sharp=10&vib=20&w=1200"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Portugal",
+   "htmlTitle": "\u003cb\u003ePortugal\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/thorntree/forums/europe-western-europe/portugal",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "1 day ago ... I need this at Portugal and Seville visit and appreciate your help. ... Any \ncomments on the weather and suggestions where to travel (or not) ...",
+   "htmlSnippet": "1 day ago \u003cb\u003e...\u003c/b\u003e I need this at \u003cb\u003ePortugal\u003c/b\u003e and Seville visit and appreciate your help. ... Any \u003cbr\u003e\ncomments on the \u003cb\u003eweather\u003c/b\u003e and suggestions where to travel (or not)&nbsp;...",
+   "cacheId": "C5u76lMzPoQJ",
+   "formattedUrl": "https://www.lonelyplanet.com/thorntree/forums/europe.../portugal",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/thorntree/forums/europe.../\u003cb\u003eportugal\u003c/b\u003e",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "225",
+      "height": "225",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSqRemPSRVtvlwaxn3MfC7zsLjzOoK5uUM0cDjdqchf2Fvexvm4z9sAZObq"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Thorn Tree",
+      "title": "Thorn Tree"
+     },
+     {
+      "url": "Country forums",
+      "title": "Country forums"
+     },
+     {
+      "url": "Western Europe",
+      "title": "Western Europe"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Western Europe forum at Lonely Planet",
+      "og:title": "Western Europe forum at Lonely Planet",
+      "og:description": "Advice from travellers about Western Europe",
+      "og:url": "https://www.lonelyplanet.com/thorntree/forums/europe-western-europe/portugal",
+      "og:image": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "og:type": "website",
+      "twitter:title": "Western Europe forum at Lonely Planet",
+      "twitter:description": "Advice from travellers about Western Europe",
+      "twitter:image:src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "tJGCmQd61FjtcRSHvIwnz7EFePn4WOZI3umbp9XygZMA58iJDDcUyICbJJa4fZrCxAGewlYJifGDWYXM26f04w=="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Welcome",
+      "name": "Welcome"
+     },
+     {
+      "url": "Destinations",
+      "name": "Destinations"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Lagos - Lonely Planet",
+   "htmlTitle": "Lagos - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/portugal/the-algarve/lagos",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Shop · Sign In · Europe / Portugal .... Image for. Ready to go? Get to the heart of \nLagos with one of Lonely Planet's in-depth, award-winning guidebooks.",
+   "htmlSnippet": "Shop &middot; Sign In &middot; Europe / \u003cb\u003ePortugal\u003c/b\u003e .... Image for. Ready to go? Get to the heart of \u003cbr\u003e\nLagos with one of \u003cb\u003eLonely Planet&#39;s\u003c/b\u003e in-depth, award-winning guidebooks.",
+   "cacheId": "b26B0fu6b3sJ",
+   "formattedUrl": "https://www.lonelyplanet.com/portugal/the-algarve/lagos",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/\u003cb\u003eportugal\u003c/b\u003e/the-algarve/lagos",
+   "pagemap": {
+    "offer": [
+     {
+      "category": "Portuguese"
+     },
+     {
+      "category": "International"
+     },
+     {
+      "category": "Portuguese"
+     },
+     {
+      "category": "Tapas"
+     },
+     {
+      "category": "Seafood"
+     },
+     {
+      "category": "Portuguese"
+     },
+     {
+      "category": "Cafe"
+     },
+     {
+      "category": "Portuguese"
+     },
+     {
+      "category": "Cafe"
+     },
+     {
+      "category": "Bakery"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "295",
+      "height": "171",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQD-9--yp4phRjQQig-X9RKxCV_wumAF4y0ISH8drLNEnGYOmkiM4DhU9U8"
+     }
+    ],
+    "foodestablishment": [
+     {
+      "name": "A Forja"
+     },
+     {
+      "name": "Dom Vinho II"
+     },
+     {
+      "name": "Adega da Marina"
+     },
+     {
+      "name": "Cervejaria Dois Irmãos"
+     },
+     {
+      "name": "O Camilo"
+     },
+     {
+      "name": "Atlântico"
+     },
+     {
+      "name": "Mimar Café"
+     },
+     {
+      "name": "Arribalé"
+     },
+     {
+      "name": "Bora Café"
+     },
+     {
+      "name": "Padaria Central"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Lagos - Lonely Planet",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Lagos - Lonely Planet",
+      "twitter:image:src": "https://lonelyplanetimages.imgix.net/a/g/hi/t/5c767b76a13f33891d697a72b682c25a-ponta-da-piedade.jpg?sharp=10&vib=20&w=1200",
+      "og:site_name": "Lonely Planet",
+      "og:type": "website",
+      "og:title": "Lagos - Lonely Planet",
+      "og:url": "http://www.lonelyplanet.com/portugal/the-algarve/lagos",
+      "og:description": "As far as touristy towns go, Lagos (lah-goosh) has got the lot. It lies along the bank of the Rio Bensafrim, with 16th-century walls enclosing the...",
+      "og:image": "https://lonelyplanetimages.imgix.net/a/g/hi/t/5c767b76a13f33891d697a72b682c25a-ponta-da-piedade.jpg?sharp=10&vib=20&w=1200",
+      "sailthru.date": "2016-12-25 12:33:45 +0000",
+      "sailthru.tags": "Lagos"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://lonelyplanetimages.imgix.net/a/g/hi/t/5c767b76a13f33891d697a72b682c25a-ponta-da-piedade.jpg?sharp=10&vib=20&w=1200"
+     }
+    ]
+   }
+  }
+ ]
+}

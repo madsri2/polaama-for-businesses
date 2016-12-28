@@ -131,5 +131,11 @@ function testUndefinedMemberInObject(key) {
   }
 }
 
-testUndefinedMemberInObject("a");
-testUndefinedMemberInObject("b");
+// testUndefinedMemberInObject("a");
+// testUndefinedMemberInObject("b");
+
+function lonelyPlanetEncodeTest(country) {
+  return country.replace(/ /g,'-').replace(/_/g,'-').toLowerCase();
+}
+
+console.log(lonelyPlanetEncodeTest("Canary_Islands"));
