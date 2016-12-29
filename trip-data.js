@@ -137,7 +137,9 @@ TripData.prototype.addTripDetailsAndPersist = function(tripDetails) {
 }
 
 TripData.prototype.addCities = function(cities) {
-  this.data.cities = cities;
+  cities.forEach(city => {
+    this.data.cities.push(Encoder.encode(city));
+  }, this);
   this.persistUpdatedTrip();
 }
 

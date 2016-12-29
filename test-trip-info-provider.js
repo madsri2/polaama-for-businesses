@@ -32,5 +32,17 @@ function testGetStoredWeatherDetails() {
   console.log(JSON.stringify(weatherDetails));
 }
 
-testGetWeatherInformation();
-testGetStoredWeatherDetails();
+function testGetActivity() {
+  const tripData = new TripData("Portugal");
+  tripData.data.destination = "portugal";
+  tripData.data.startDate = "2/12/17";
+  tripData.data.cities = ["lisbon"];
+  const tip = new TripInfoProvider(tripData);
+  tip.getActivities(function(cities) {
+    console.log(JSON.stringify(cities));
+  });
+}
+
+testGetActivity();
+// testGetWeatherInformation();
+// testGetStoredWeatherDetails();

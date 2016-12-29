@@ -2,6 +2,7 @@
 const fs = require('fs');
 const _ = require('lodash');
 const WeatherInfoProvider = require('./weather-info-provider');
+const ActivityInfoProvider = require('./activity-info-provider');
 const logger = require('./my-logger');
 const TripData = require('./trip-data');
 
@@ -20,7 +21,7 @@ function TripInfoProvider(tripData) {
 }
 
 function encodeForLonelyPlanet() {
-  if(_.isUndefined(this.trip.destination) {
+  if(_.isUndefined(this.trip.destination)) {
     logger.warn("encodeForLonelyPlanet: No country specified in trip");
     return undefined;
   }
@@ -31,8 +32,8 @@ function encodeForLonelyPlanet() {
 function handleGetWeatherResponse(city, weatherDetails) {
   if(_.isUndefined(weatherDetails)) {
     logger.error(`could not get weather information for city ${city}`);
-    if(this.invokeCallback) {
-      this.invokeCallback = false;
+    if(this.invokeWCallback) {
+      this.invokeWCallback = false;
       return this.callback();
     }
   }
@@ -57,8 +58,8 @@ function handleGetWeatherResponse(city, weatherDetails) {
     logger.error(`Cannot write tripData details to file ${this.trip.tripDataFile()}. Error is ${err.stack}`);
   }
   // call the callback that was passed to getWeatherInformation if we are asked to.
-  if(this.invokeCallback) {
-    this.invokeCallback = false;
+  if(this.invokeWCallback) {
+    this.invokeWCallback = false;
     return this.callback();
   }
   return;
@@ -87,7 +88,7 @@ TripInfoProvider.prototype.getWeatherInformation = function(callback) {
     logger.error(`getWeatherInformation: No city defined in trip ${this.trip.data.name}. Doing nothing!`);
     return callback();
   }
-  this.callback = callback;
+  this.wCallback = callback;
   this.trip.data.cities.forEach((city,index,a) => {
     if(_.isUndefined(this.tripDetails.cities[city])) {
       this.tripDetails.cities[city] = {};
@@ -96,9 +97,10 @@ TripInfoProvider.prototype.getWeatherInformation = function(callback) {
     if(index == (this.trip.data.cities.length-1)) {
       logger.info(`Gathering weather details for last city ${city}. Asking handleGetWeatherResponse to invoke the callback passed.`);
       if(!_.isUndefined(this.tripDetails.cities[city].weather)) {
-        return this.callback();
+        // if we already have weather details for this city, there is nothing else left to do.
+        return this.wCallback();
       }
-      this.invokeCallback = true;
+      this.invokeWCallback = true;
     }
     if( _.isUndefined(this.tripDetails.cities[city].weather)) {
       this.weatherInfoProvider.getWeather(city, handleGetWeatherResponse.bind(this));
@@ -110,30 +112,32 @@ TripInfoProvider.prototype.getFlightDetails = function() {
   // https://developers.google.com/qpx-express/v1/prereqs
 }
 
-// AIzaSyAKOhBJ0jUpku5AhKnclyBzCi0eoJLc0r0
-TripInfoProvider.prototype.getActivities = function() {
-  const cityDetails = {
-    "trip-advisor": {
-      "search-term": `${city} tourism trip advisor`,
-      "filter" ["tourism"]
+TripInfoProvider.prototype.getActivities = function(callback) {
+  if(_.isUndefined(this.trip.data.cities)) {
+    logger.error(`getActivities: No city defined in trip ${this.trip.data.name}. Doing nothing!`);
+    return callback(this.tripDetails.cities);
+  }
+  this.trip.data.cities.forEach((city, index, a) => {
+    if(_.isUndefined(this.tripDetails.cities[city])) {
+      this.tripDetails.cities[city] = {};
     }
-  };
-  const activities = {
-    "lonely-planet": {
-      "search-term": `${city} lonely planet things to do`,
-      "filter": ["things-to-do", "attractions", "activities"]
-    },
-    "trip-advisor": {
-      "search-term": `${city} attractions trip advisor`,
-      "filter": ["attractions"]
+    const aip = new ActivityInfoProvider(this.trip.data.destination, city, this.trip.data.startDate);
+    const cityDetails = this.tripDetails.cities[city];
+    const cities = this.tripDetails.cities;
+    if(index == (this.trip.data.cities.length-1)) {
+      // last city. Invoke the callback passed to us after gathering necessary information
+      aip.getActivities(function(activityDetails) {
+        cityDetails.activity = activityDetails;
+        console.log("getActivities: Gathered activities for all cities in the trip. Calling callback()");
+        return callback(cities);
+      });
     }
-  };
-  // GET https://www.googleapis.com/customsearch/v1?q=best+cities+to+visit+portugal+in+february&cx=016727128883863036563%3Azuqchmgec0u&exactTerms=portugal&key=AIzaSyAKOhBJ0jUpku5AhKnclyBzCi0eoJLc0r0
-  /*
-    Search Terms:
-    1) Details about city: "cityName tourism trip advisor", "cityName country lonely planet"
-    2) Details about things to do: "cityName attractions trip advisor" 
-  */
+    // simply gather information
+    aip.getActivities(function(activityDetails) {
+      cityDetails.activity = activityDetails;
+    });
+  }, this);
+  return;
 }
  
 

@@ -1,0 +1,838 @@
+{
+ "kind": "customsearch#search",
+ "url": {
+  "type": "application/json",
+  "template": "https://www.googleapis.com/customsearch/v1?q={searchTerms}&num={count?}&start={startIndex?}&lr={language?}&safe={safe?}&cx={cx?}&cref={cref?}&sort={sort?}&filter={filter?}&gl={gl?}&cr={cr?}&googlehost={googleHost?}&c2coff={disableCnTwTranslation?}&hq={hq?}&hl={hl?}&siteSearch={siteSearch?}&siteSearchFilter={siteSearchFilter?}&exactTerms={exactTerms?}&excludeTerms={excludeTerms?}&linkSite={linkSite?}&orTerms={orTerms?}&relatedSite={relatedSite?}&dateRestrict={dateRestrict?}&lowRange={lowRange?}&highRange={highRange?}&searchType={searchType}&fileType={fileType?}&rights={rights?}&imgSize={imgSize?}&imgType={imgType?}&imgColorType={imgColorType?}&imgDominantColor={imgDominantColor?}&alt=json"
+ },
+ "queries": {
+  "request": [
+   {
+    "title": "Google Custom Search - lonely planet lisbon november things to do",
+    "totalResults": "2400",
+    "searchTerms": "lonely planet lisbon november things to do",
+    "count": 10,
+    "startIndex": 1,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "lisbon"
+   }
+  ],
+  "nextPage": [
+   {
+    "title": "Google Custom Search - lonely planet lisbon november things to do",
+    "totalResults": "2400",
+    "searchTerms": "lonely planet lisbon november things to do",
+    "count": 10,
+    "startIndex": 11,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "lisbon"
+   }
+  ]
+ },
+ "context": {
+  "title": "Polaama"
+ },
+ "searchInformation": {
+  "searchTime": 0.336439,
+  "formattedSearchTime": "0.34",
+  "totalResults": "2400",
+  "formattedTotalResults": "2,400"
+ },
+ "items": [
+  {
+   "kind": "customsearch#result",
+   "title": "Top things to do in Lisbon, Portugal - Lonely Planet",
+   "htmlTitle": "Top \u003cb\u003ethings to do in Lisbon\u003c/b\u003e, Portugal - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/portugal/lisbon/top-things-to-do/a/poi/360366",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Discover the best top things to do in Lisbon including 100 Maneiras, Feitoria, \nCervejaria Ramiro.",
+   "htmlSnippet": "Discover the best top \u003cb\u003ethings to do in Lisbon\u003c/b\u003e including 100 Maneiras, Feitoria, \u003cbr\u003e\nCervejaria Ramiro.",
+   "cacheId": "64elFN0hME8J",
+   "formattedUrl": "https://www.lonelyplanet.com/portugal/lisbon/...things-to-do/.../360366",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/portugal/\u003cb\u003elisbon\u003c/b\u003e/...\u003cb\u003ethings-to-do\u003c/b\u003e/.../360366",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Europe"
+     }
+    ],
+    "country": [
+     {
+      "name": "Portugal"
+     }
+    ],
+    "city": [
+     {
+      "name": "Lisbon"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Top things to do in Lisbon, Portugal",
+      "og:title": "Top things to do in Lisbon, Portugal",
+      "og:description": "Discover the best top things to do in Lisbon including 100 Maneiras, Feitoria, Cervejaria Ramiro.",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Attractions in Lisbon, Portugal - Lonely Planet",
+   "htmlTitle": "\u003cb\u003eAttractions\u003c/b\u003e in \u003cb\u003eLisbon\u003c/b\u003e, Portugal - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/portugal/lisbon/attractions/a/poi-sig/360366",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Discover the best attractions in Lisbon including Praça do Comércio, Núcleo \nArqueológico da Rua dos Correeiros, Miradouro de São Pedro de Alcântara.",
+   "htmlSnippet": "Discover the best \u003cb\u003eattractions\u003c/b\u003e in \u003cb\u003eLisbon\u003c/b\u003e including Praça do Comércio, Núcleo \u003cbr\u003e\nArqueológico da Rua dos Correeiros, Miradouro de São Pedro de Alcântara.",
+   "cacheId": "wyQsuBUZLrwJ",
+   "formattedUrl": "https://www.lonelyplanet.com/portugal/lisbon/attractions/a/.../360366",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/portugal/\u003cb\u003elisbon\u003c/b\u003e/\u003cb\u003eattractions\u003c/b\u003e/a/.../360366",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Europe"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "136",
+      "height": "84",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJEUtDqwP4ng4FahpePeso2pDSNEE1A35RyCemik5AA3xlNVHOeBZkfw"
+     }
+    ],
+    "country": [
+     {
+      "name": "Portugal"
+     }
+    ],
+    "city": [
+     {
+      "name": "Lisbon"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Attractions in Lisbon, Portugal",
+      "og:title": "Attractions in Lisbon, Portugal",
+      "og:description": "Discover the best attractions in Lisbon including Praça do Comércio, Núcleo Arqueológico da Rua dos Correeiros, Miradouro de São Pedro de Alcântara.",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://lonelyplanetimages.imgix.net/a/g/hi/t/e02127f5cb4f5c02b7357270b861f7af-praca-do-comercio.jpg?w=170&h=106&fit=crop&q=50&auto=enhance&crop=entropy"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Activities in Lisbon, Portugal - Lonely Planet",
+   "htmlTitle": "\u003cb\u003eActivities\u003c/b\u003e in \u003cb\u003eLisbon\u003c/b\u003e, Portugal - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/portugal/lisbon/activities/a/pa-act/360366",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Discover the best activities in Lisbon including Sintra and Cascais Small-Group \nDay Trip from Lisbon, Experience Lisbon: Small-Group Walking Tour with Food ...",
+   "htmlSnippet": "Discover the best \u003cb\u003eactivities\u003c/b\u003e in \u003cb\u003eLisbon\u003c/b\u003e including Sintra and Cascais Small-Group \u003cbr\u003e\nDay Trip from \u003cb\u003eLisbon\u003c/b\u003e, Experience \u003cb\u003eLisbon\u003c/b\u003e: Small-Group Walking Tour with Food&nbsp;...",
+   "cacheId": "_ezPY_2pY2QJ",
+   "formattedUrl": "https://www.lonelyplanet.com/portugal/lisbon/activities/a/pa.../360366",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/portugal/\u003cb\u003elisbon\u003c/b\u003e/\u003cb\u003eactivities\u003c/b\u003e/a/pa.../360366",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Europe"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "102",
+      "height": "128",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQMg6TdimdkHLY2mV-xFhQphrnXu1P8EfAW3JI9eBNSFRRA_DVW51uSoac"
+     }
+    ],
+    "country": [
+     {
+      "name": "Portugal"
+     }
+    ],
+    "city": [
+     {
+      "name": "Lisbon"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Activities in Lisbon, Portugal",
+      "og:title": "Activities in Lisbon, Portugal",
+      "og:description": "Discover the best activities in Lisbon including Sintra and Cascais Small-Group Day Trip from Lisbon, Experience Lisbon: Small-Group Walking Tour with Food and …",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://lpviator.imgix.net/graphicslib/thumbs674x446/5383/SITours/sintra-and-cascais-small-group-day-trip-from-lisbon-in-lisbon-105668.jpg?w=128&h=160&fit=crop&q=50&auto=enhance&crop=entropy"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Lisbon - Lonely Planet",
+   "htmlTitle": "\u003cb\u003eLisbon\u003c/b\u003e - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/portugal/lisbon",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Experience the perfect introduction to Lisbon aboard this City Sightseeing hop-on \nhop-off sightseeing tour! You'll see all the beautiful sights of Lisbon in a ...",
+   "htmlSnippet": "Experience the perfect introduction to \u003cb\u003eLisbon\u003c/b\u003e aboard this City Sightseeing hop-on \u003cbr\u003e\nhop-off sightseeing tour! You&#39;ll see all the beautiful \u003cb\u003esights\u003c/b\u003e of \u003cb\u003eLisbon\u003c/b\u003e in a&nbsp;...",
+   "cacheId": "5DBHPk9-1w0J",
+   "formattedUrl": "https://www.lonelyplanet.com/portugal/lisbon",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/portugal/\u003cb\u003elisbon\u003c/b\u003e",
+   "pagemap": {
+    "offer": [
+     {
+      "category": "Mediterranean"
+     },
+     {
+      "category": "Modern Portuguese"
+     },
+     {
+      "category": "Portuguese"
+     },
+     {
+      "category": "Fusion"
+     },
+     {
+      "category": "Modern Portuguese"
+     },
+     {
+      "category": "Portuguese"
+     },
+     {
+      "category": "Contemporary Portuguese"
+     },
+     {
+      "category": "Portuguese"
+     },
+     {
+      "category": "Portuguese"
+     },
+     {
+      "category": "Portuguese"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "275",
+      "height": "183",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSPH11aa49wv_ORzFlLXzWHgenwj29XICK6u-z3PMBLPGYXu_2CKStXK5rG"
+     }
+    ],
+    "foodestablishment": [
+     {
+      "name": "Pharmacia in Bairro Alto & Chiado"
+     },
+     {
+      "name": "Assinatura in"
+     },
+     {
+      "name": "Santo António de Alfama in Alfama, Castelo & Graça"
+     },
+     {
+      "name": "100 Maneiras in Bairro Alto & Chiado"
+     },
+     {
+      "name": "Feitoria in Belém"
+     },
+     {
+      "name": "A Travessa in Príncipe Real, Santos & Estrela"
+     },
+     {
+      "name": "Alma in"
+     },
+     {
+      "name": "Solar dos Presuntos in Baixa & Rossio"
+     },
+     {
+      "name": "Casa da Comida in"
+     },
+     {
+      "name": "Ti-Natércia in Alfama, Castelo & Graça"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Lisbon - Lonely Planet",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Lisbon - Lonely Planet",
+      "twitter:image:src": "https://lonelyplanetimages.imgix.net/mastheads/54989636.jpg?sharp=10&vib=20&w=1200",
+      "og:site_name": "Lonely Planet",
+      "og:type": "website",
+      "og:title": "Lisbon - Lonely Planet",
+      "og:url": "http://www.lonelyplanet.com/portugal/lisbon",
+      "og:description": "Seven cinematic hillsides overlooking the Rio Tejo cradle Lisbon's postcard-perfect panorama of cobbled alleyways, ancient ruins and white-domed...",
+      "og:image": "https://lonelyplanetimages.imgix.net/mastheads/54989636.jpg?sharp=10&vib=20&w=1200",
+      "sailthru.date": "2016-12-28 22:18:12 +0000",
+      "sailthru.tags": "Lisbon, architecture-and-buildings, art-and-literature, beaches, cities, festivals-and-events, food-and-drink, history-heritage-and-tradition, honeymoons-and-romance, luxury-travel, music, shopping, train-travel-and-railways"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://lonelyplanetimages.imgix.net/mastheads/54989636.jpg?sharp=10&vib=20&w=1200"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Cascais - Lonely Planet",
+   "htmlTitle": "Cascais - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/portugal/lisbon/cascais",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "... playground. Sights; Hotels; Restaurants; Survival guide; Map; Books; \nCommunity ... Don't expect to get much sand to yourself at the weekend, though.",
+   "htmlSnippet": "... playground. \u003cb\u003eSights\u003c/b\u003e; Hotels; Restaurants; Survival guide; Map; Books; \u003cbr\u003e\nCommunity ... Don&#39;t expect to get much sand to yourself at the weekend, though.",
+   "cacheId": "VJRuK5Ku9b8J",
+   "formattedUrl": "https://www.lonelyplanet.com/portugal/lisbon/cascais",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/portugal/\u003cb\u003elisbon\u003c/b\u003e/cascais",
+   "pagemap": {
+    "offer": [
+     {
+      "category": "Cafe"
+     },
+     {
+      "category": "Portuguese"
+     },
+     {
+      "category": "Portuguese"
+     },
+     {
+      "category": "Japanese"
+     },
+     {
+      "category": "Burgers"
+     },
+     {
+      "category": "Bakery"
+     },
+     {
+      "category": "Seafood"
+     },
+     {
+      "category": "Seafood"
+     },
+     {
+      "category": "International"
+     },
+     {
+      "category": "Portuguese"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "299",
+      "height": "168",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSUB2YB17ksPKTD29sXkuVo-94OoUQTRmYAwM8JOZCf2kyKfugvcBzWw9Ht"
+     }
+    ],
+    "foodestablishment": [
+     {
+      "name": "Café Galeria House of Wonders"
+     },
+     {
+      "name": "Bar do Guincho"
+     },
+     {
+      "name": "Páteo do Petisco"
+     },
+     {
+      "name": "Confraria Sushi"
+     },
+     {
+      "name": "Os Bordallos"
+     },
+     {
+      "name": "Sacolinha"
+     },
+     {
+      "name": "Baía do Peixe"
+     },
+     {
+      "name": "Mar do Inferno"
+     },
+     {
+      "name": "Casa da Guia"
+     },
+     {
+      "name": "5 Sentidos"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Cascais - Lonely Planet",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Cascais - Lonely Planet",
+      "twitter:image:src": "https://lonelyplanetimages.imgix.net/mastheads/53751012.jpg?sharp=10&vib=20&w=1200",
+      "og:site_name": "Lonely Planet",
+      "og:type": "website",
+      "og:title": "Cascais - Lonely Planet",
+      "og:url": "http://www.lonelyplanet.com/portugal/lisbon/cascais",
+      "og:description": "Cascais (kush-kaish) has rocketed from sleepy fishing village to much-loved summertime playground of wave-frolicking lisboêtas ever since King Luís...",
+      "og:image": "https://lonelyplanetimages.imgix.net/mastheads/53751012.jpg?sharp=10&vib=20&w=1200",
+      "sailthru.date": "2016-12-28 21:26:28 +0000",
+      "sailthru.tags": "Cascais, architecture-and-buildings, beaches, boats-and-sailing, diving-and-snorkelling, festivals-and-events, food-and-drink, surfing"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://lonelyplanetimages.imgix.net/mastheads/53751012.jpg?sharp=10&vib=20&w=1200"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Portugal, Lisbon travel tips and articles - Lonely Planet",
+   "htmlTitle": "Portugal, \u003cb\u003eLisbon\u003c/b\u003e travel tips and articles - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/portugal/lisbon/travel-tips-and-articles",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Get the latest Portugal, Lisbon travel articles plus advice, tips and news from the \n... A cold beer in Portugal has traditionally meant one of two things: Sagres or ...",
+   "htmlSnippet": "\u003cb\u003eGet\u003c/b\u003e the latest Portugal, \u003cb\u003eLisbon\u003c/b\u003e travel articles plus advice, tips and news from the \u003cbr\u003e\n... A cold beer in Portugal has traditionally meant one of two \u003cb\u003ethings\u003c/b\u003e: Sagres or&nbsp;...",
+   "cacheId": "j83fnZUB6ZYJ",
+   "formattedUrl": "www.lonelyplanet.com/portugal/lisbon/travel-tips-and-articles",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/portugal/\u003cb\u003elisbon\u003c/b\u003e/travel-tips-and-articles",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "153",
+      "height": "148",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAPwPn3E7kwZC0oYtVEUNt9STGlHC1TZLv9Vd8LgQFMBq2syFRt5JjjLY"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Western Europe",
+      "title": "Western Europe"
+     },
+     {
+      "url": "Portugal",
+      "title": "Portugal"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Portugal, Lisbon travel tips and articles - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Portugal, Lisbon travel tips and articles - Lonely Planet",
+      "twitter:description": "Get the latest Portugal, Lisbon travel articles plus advice, tips and news from the travel experts, Lonely Planet.",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Portugal, Lisbon travel tips and articles - Lonely Planet",
+      "og:description": "Get the latest Portugal, Lisbon travel articles plus advice, tips and news from the travel experts, Lonely Planet.",
+      "og:url": "http://www.lonelyplanet.com/portugal/lisbon/travel-tips-and-articles",
+      "og:type": "website",
+      "sailthru.date": "2016-12-27 17:24:45 +0000",
+      "sailthru.tags": "Europe, Portugal, Lisbon, architecture-and-buildings, art-and-literature, beaches, cities, festivals-and-events, food-and-drink, history-heritage-and-tradition, honeymoons-and-romance, luxury-travel, music, shopping, train-travel-and-railways",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "x7XiUrpClOcIkF6NFHmlLqpAkqaMgEUie3qNZgkanc0="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "http://images-resrc.staticlp.com/C=SQ/S=W192,U/C=W192,H185,X0,Y3/O=85/http://www.lonelyplanet.com/travel-blog/tip-article/wordpress_uploads/2014/08/pasteisdebelem-flickr.jpg"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Lisbon in November",
+   "htmlTitle": "\u003cb\u003eLisbon\u003c/b\u003e in \u003cb\u003eNovember\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/thorntree/forums/europe-western-europe/portugal/lisbon-in-november-957fc63b-3480-4475-814e-9da2f9330420",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Aug 31, 2016 ... Hi, I'm visiting Lisbon with my girlfriend for a few days in November. Besides the \nobvious, can anybody help recommend things to see or do?",
+   "htmlSnippet": "Aug 31, 2016 \u003cb\u003e...\u003c/b\u003e Hi, I&#39;m visiting \u003cb\u003eLisbon\u003c/b\u003e with my girlfriend for a few days in \u003cb\u003eNovember\u003c/b\u003e. Besides the \u003cbr\u003e\nobvious, can anybody help recommend \u003cb\u003ethings\u003c/b\u003e to see or \u003cb\u003edo\u003c/b\u003e?",
+   "cacheId": "uD-C5i_FQsUJ",
+   "formattedUrl": "https://www.lonelyplanet.com/.../lisbon-in-november-957fc63b-3480-4475- 814e-9da2f9330420",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../\u003cb\u003elisbon\u003c/b\u003e-in-\u003cb\u003enovember\u003c/b\u003e-957fc63b-3480-4475- 814e-9da2f9330420",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "225",
+      "height": "225",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSqRemPSRVtvlwaxn3MfC7zsLjzOoK5uUM0cDjdqchf2Fvexvm4z9sAZObq"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Thorn Tree",
+      "title": "Thorn Tree"
+     },
+     {
+      "url": "Country forums",
+      "title": "Country forums"
+     },
+     {
+      "url": "Western Europe",
+      "title": "Western Europe"
+     },
+     {
+      "url": "Portugal",
+      "title": "Portugal"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Lisbon in November",
+      "og:title": "Lisbon in November",
+      "og:description": "Hi, I'm visiting Lisbon with my girlfriend for a few days in November. Besides the obvious, can anybody help recommend things to see or do? Things that might normally go…",
+      "og:url": "https://www.lonelyplanet.com/thorntree/forums/europe-western-europe/portugal/lisbon-in-november-957fc63b-3480-4475-814e-9da2f9330420",
+      "og:image": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "og:type": "website",
+      "twitter:title": "Lisbon in November",
+      "twitter:description": "Hi, I'm visiting Lisbon with my girlfriend for a few days in November. Besides the obvious, can anybody help recommend things to see or do? Things that might normally go…",
+      "twitter:image:src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "ZQ+VpaEHza1JGOtXAyQUjbHtBBZVW6u1g3o8Ttc2Q2FP96c0kFQ6D2Ey4Ynv11LA6WZ2m8aj35igwajGniwLmw=="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Welcome",
+      "name": "Welcome"
+     },
+     {
+      "url": "Destinations",
+      "name": "Destinations"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "The Top 10 Things to Do in Lisbon - TripAdvisor - Lisbon, Portugal ...",
+   "htmlTitle": "The Top 10 \u003cb\u003eThings to Do in Lisbon\u003c/b\u003e - TripAdvisor - \u003cb\u003eLisbon\u003c/b\u003e, Portugal ...",
+   "link": "https://www.tripadvisor.com/Attractions-g189158-Activities-Lisbon_Lisbon_District_Central_Portugal.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Book your tickets online for the top things to do in Lisbon, Portugal on TripAdvisor\n: See 255175 traveler reviews and photos of Lisbon tourist attractions.",
+   "htmlSnippet": "Book your tickets online for the top \u003cb\u003ethings to do in Lisbon\u003c/b\u003e, Portugal on TripAdvisor\u003cbr\u003e\n: See 255175 traveler reviews and photos of \u003cb\u003eLisbon\u003c/b\u003e tourist \u003cb\u003eattractions\u003c/b\u003e.",
+   "cacheId": "_ZaGjslvvlUJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attractions-g189158-Activities-Lisbon_Lisbon_ District_Central_Portugal.html",
+   "htmlFormattedUrl": "https://www.tripadvisor.com/\u003cb\u003eAttractions\u003c/b\u003e-g189158-\u003cb\u003eActivities\u003c/b\u003e-\u003cb\u003eLisbon\u003c/b\u003e_\u003cb\u003eLisbon\u003c/b\u003e_ District_Central_Portugal.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "290",
+      "height": "174",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyrVQdLa1DqbiYDywVTIPE1numCf9PdcZF84Hw6WTh1u71BvKbWVt8ANXg"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Portugal",
+      "title": "Portugal"
+     },
+     {
+      "url": "Central Portugal",
+      "title": "Central Portugal"
+     },
+     {
+      "url": "Lisbon District",
+      "title": "Lisbon District"
+     },
+     {
+      "url": "Lisbon",
+      "title": "Lisbon"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "The Top 10 Things to Do in Lisbon - TripAdvisor - Lisbon, Portugal Attractions - Find What to Do Today, This Weekend, or in January",
+      "og:description": "Book your tickets online for the top things to do in Lisbon, Portugal on TripAdvisor: See 255,175 traveler reviews and photos of Lisbon tourist attractions. Find what to do today, this weekend, or in January. We have reviews of the best places to see in Lisbon. Visit top-rated & must-see attractions.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/03/9b/2f/c5/lisbon.jpg",
+      "og:image:width": "550",
+      "og:image:height": "331",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attractions-g189158-Activities-m33762-Lisbon_Lisbon_District_Central_Portugal.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attractions-g189158-Activities-m33762-Lisbon_Lisbon_District_Central_Portugal.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attractions-g189158-Activities-m33762-Lisbon_Lisbon_District_Central_Portugal.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/03/9b/2f/c5/lisbon.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Early November in Portugal -- Lisbon, Porto.. and a seaside town?!",
+   "htmlTitle": "Early \u003cb\u003eNovember\u003c/b\u003e in Portugal -- \u003cb\u003eLisbon\u003c/b\u003e, Porto.. and a seaside town?!",
+   "link": "https://www.lonelyplanet.com/thorntree/forums/europe-western-europe/portugal/early-november-in-portugal-lisbon-porto-and-a-seaside-town",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Sep 9, 2010 ... 2 and out of Lisbon the morning of Nov. 8. ... I don't want to push things just to \ncheck something off a list... but.. . the sea is calling to me and the ...",
+   "htmlSnippet": "Sep 9, 2010 \u003cb\u003e...\u003c/b\u003e 2 and out of \u003cb\u003eLisbon\u003c/b\u003e the morning of \u003cb\u003eNov\u003c/b\u003e. 8. ... I don&#39;t want to push \u003cb\u003ethings\u003c/b\u003e just to \u003cbr\u003e\ncheck something off a list... but.. . the sea is calling to me and the&nbsp;...",
+   "cacheId": "8Gypu5rNTpEJ",
+   "formattedUrl": "https://www.lonelyplanet.com/.../early-november-in-portugal-lisbon-porto- and-a-seaside-town",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../early-\u003cb\u003enovember\u003c/b\u003e-in-portugal-\u003cb\u003elisbon\u003c/b\u003e-porto- and-a-seaside-town",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "225",
+      "height": "225",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSqRemPSRVtvlwaxn3MfC7zsLjzOoK5uUM0cDjdqchf2Fvexvm4z9sAZObq"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Thorn Tree",
+      "title": "Thorn Tree"
+     },
+     {
+      "url": "Country forums",
+      "title": "Country forums"
+     },
+     {
+      "url": "Western Europe",
+      "title": "Western Europe"
+     },
+     {
+      "url": "Portugal",
+      "title": "Portugal"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Early November in Portugal -- Lisbon, Porto.. and a seaside town?!",
+      "og:title": "Early November in Portugal -- Lisbon, Porto.. and a seaside town?!",
+      "og:description": "My boyfriend in I are spending 6 nights in Portugal -- flying into Porto in the afternoon of Nov. 2 and out of Lisbon the morning of Nov. 8. I…",
+      "og:url": "https://www.lonelyplanet.com/thorntree/forums/europe-western-europe/portugal/early-november-in-portugal-lisbon-porto-and-a-seaside-town",
+      "og:image": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "og:type": "website",
+      "twitter:title": "Early November in Portugal -- Lisbon, Porto.. and a seaside town?!",
+      "twitter:description": "My boyfriend in I are spending 6 nights in Portugal -- flying into Porto in the afternoon of Nov. 2 and out of Lisbon the morning of Nov. 8. I…",
+      "twitter:image:src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "+LcOLRN1ViOPU4MlxWgfqzxVxIRLjYBFqqA6Xmzp8anL6vrYpa+bOcA3JlOJoEZ0lAv6VHekjG7rEKlKWcsSdQ=="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Welcome",
+      "name": "Welcome"
+     },
+     {
+      "url": "Destinations",
+      "name": "Destinations"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Castelo de São Jorge in Lisbon, Portugal - Lonely Planet",
+   "htmlTitle": "Castelo de São Jorge in \u003cb\u003eLisbon\u003c/b\u003e, Portugal - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/portugal/lisbon/attractions/castelo-de-sao-jorge/a/poi-sig/400925/360366",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Towering dramatically above Lisbon, the mid-11th-century hilltop fortifications of \nCastelo de São ... Lisbon Attractions ... 9am-9pm Mar-Oct, to 6pm Nov-Feb ...",
+   "htmlSnippet": "Towering dramatically above \u003cb\u003eLisbon\u003c/b\u003e, the mid-11th-century hilltop fortifications of \u003cbr\u003e\nCastelo de São ... \u003cb\u003eLisbon Attractions\u003c/b\u003e ... 9am-9pm Mar-Oct, to 6pm \u003cb\u003eNov\u003c/b\u003e-Feb&nbsp;...",
+   "cacheId": "6AiNX5UPBUsJ",
+   "formattedUrl": "https://www.lonelyplanet.com/.../lisbon/attractions/castelo.../360366",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../\u003cb\u003elisbon\u003c/b\u003e/\u003cb\u003eattractions\u003c/b\u003e/castelo.../360366",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Europe"
+     }
+    ],
+    "country": [
+     {
+      "name": "Portugal"
+     }
+    ],
+    "city": [
+     {
+      "name": "Lisbon"
+     }
+    ],
+    "postaladdress": [
+     {
+      "addresslocality": "Lisbon",
+      "addresscountry": "Portugal"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Castelo de São Jorge in Lisbon, Portugal",
+      "og:title": "Castelo de São Jorge in Lisbon, Portugal",
+      "og:description": "Towering dramatically above Lisbon, the mid-11th-century hilltop fortifications of Castelo de São Jorge sneak into almost every snapshot. Roam its snaking rampa…",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "thing": [
+     {
+      "name": "Attractions"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     },
+     {
+      "position": "4"
+     }
+    ]
+   }
+  }
+ ]
+}

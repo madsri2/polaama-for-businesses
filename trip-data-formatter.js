@@ -82,14 +82,13 @@ TripDataFormatter.prototype.formatPackList = function(headers) {
 
 TripDataFormatter.prototype.formatWeatherDetails = function(weatherDetails) {
   const html = fs.readFileSync("html-templates/weather-details.html", 'utf8');
-  let wText = "";
   const keys = Object.keys(weatherDetails);
   if(keys.indexOf("nocity") > -1) {
     // no weather details available since the trip does not have any city information
     return html.replace("${weatherDetails}", weatherDetails.nocity);
   }
 
-  wText += `<div data-role="collapsibleset">\n`;
+  let wText = `<div data-role="collapsibleset">\n`;
 
   keys.forEach(city => {
     wText += `<div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d">\n`;
@@ -102,6 +101,28 @@ TripDataFormatter.prototype.formatWeatherDetails = function(weatherDetails) {
 
   wText += `</div>\n`;
   return html.replace("${weatherDetails}", wText);
+}
+
+// TODO: Might be a duplicate of above function.
+TripDataFormatter.prototype.formatActivityDetails = function(activityDetails) {
+  const html = fs.readFileSync("html-templates/activity-details.html", 'utf8');
+
+  const keys = Object.keys(activityDetails);
+  if(keys.indexOf("nocity") > -1) {
+    // no activity details available since the trip does not have any city information
+    return html.replace("${activityDetails}", activityDetails.nocity);
+  }
+  let aText = `<div data-role="collapsibleset">\n`;
+  keys.forEach(city => {
+      aText += `<div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d">\n`;
+      aText += `<h1>${city}</h1>\n`;
+      activityDetails[city].forEach(note => {
+          aText += `<p>${note}</p>\n`;
+          });
+      aText += `</div>\n`;
+  });
+  aText += `</div>\n`;
+  return html.replace("${activityDetails}", aText);
 }
 
 TripDataFormatter.prototype.formatFlightDetails = function() {

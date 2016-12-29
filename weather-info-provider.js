@@ -4,8 +4,8 @@ const logger = require('./my-logger');
 const fs = require('fs');
 const moment = require('moment');
 const TripData = require('./trip-data');
-
 const request = require('request');
+
 const months = ["01010130","02010228","03010330","04010430","05010530","06010630","07010730","08010830","09010930","10011030","11011130","12011230"];
 const usCities = {
   "Lake_Powell": "UT",
@@ -102,6 +102,7 @@ function extractWeatherDetails(city) {
   return undefined;
 }
 
+/*
 function persistWeatherConditions() {
   console.log("Obtained weather condition for all cities and months. persisting ",JSON.stringify(weatherDetails));
   fs.writeFile("weatherInformation", JSON.stringify(weatherDetails), 
@@ -175,5 +176,6 @@ function getWeatherForSupportedCities() {
       });
   });
 }
+*/
 
 module.exports = WeatherInfoProvider;
