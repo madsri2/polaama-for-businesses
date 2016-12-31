@@ -60,8 +60,15 @@ WebpageHandler.prototype.displayComments = function(res) {
 
 WebpageHandler.prototype.displayWeatherDetails = function(res) {
   const tip = new TripInfoProvider(this.trip);
-  const weatherDetails = tip.getStoredWeatherDetails();
-  return res.send(this.formatter.formatWeatherDetails(weatherDetails));
+  return res.send(this.formatter.formatWeatherDetails(
+    tip.getStoredWeatherDetails(),
+    tip.getStoredAdditionalWeatherDetails()));
+}
+
+WebpageHandler.prototype.displayActivityDetails = function(res) {
+  const tip = new TripInfoProvider(this.trip);
+  const activityDetails = tip.getStoredActivityDetails();
+  return res.send(this.formatter.formatActivityDetails(activityDetails));
 }
 
 WebpageHandler.prototype.displayFlightDetails = function(res) {

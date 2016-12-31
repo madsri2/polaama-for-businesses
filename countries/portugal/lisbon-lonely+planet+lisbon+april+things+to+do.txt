@@ -1,0 +1,682 @@
+{
+ "kind": "customsearch#search",
+ "url": {
+  "type": "application/json",
+  "template": "https://www.googleapis.com/customsearch/v1?q={searchTerms}&num={count?}&start={startIndex?}&lr={language?}&safe={safe?}&cx={cx?}&cref={cref?}&sort={sort?}&filter={filter?}&gl={gl?}&cr={cr?}&googlehost={googleHost?}&c2coff={disableCnTwTranslation?}&hq={hq?}&hl={hl?}&siteSearch={siteSearch?}&siteSearchFilter={siteSearchFilter?}&exactTerms={exactTerms?}&excludeTerms={excludeTerms?}&linkSite={linkSite?}&orTerms={orTerms?}&relatedSite={relatedSite?}&dateRestrict={dateRestrict?}&lowRange={lowRange?}&highRange={highRange?}&searchType={searchType}&fileType={fileType?}&rights={rights?}&imgSize={imgSize?}&imgType={imgType?}&imgColorType={imgColorType?}&imgDominantColor={imgDominantColor?}&alt=json"
+ },
+ "queries": {
+  "request": [
+   {
+    "title": "Google Custom Search - lonely planet lisbon april things to do",
+    "totalResults": "900",
+    "searchTerms": "lonely planet lisbon april things to do",
+    "count": 10,
+    "startIndex": 1,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "lisbon"
+   }
+  ],
+  "nextPage": [
+   {
+    "title": "Google Custom Search - lonely planet lisbon april things to do",
+    "totalResults": "900",
+    "searchTerms": "lonely planet lisbon april things to do",
+    "count": 10,
+    "startIndex": 11,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "lisbon"
+   }
+  ]
+ },
+ "context": {
+  "title": "Polaama"
+ },
+ "searchInformation": {
+  "searchTime": 0.386526,
+  "formattedSearchTime": "0.39",
+  "totalResults": "900",
+  "formattedTotalResults": "900"
+ },
+ "items": [
+  {
+   "kind": "customsearch#result",
+   "title": "Top things to do in Lisbon, Portugal - Lonely Planet",
+   "htmlTitle": "Top \u003cb\u003ethings to do in Lisbon\u003c/b\u003e, Portugal - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/portugal/lisbon/top-things-to-do/a/poi/360366",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Discover the best top things to do in Lisbon including 100 Maneiras, Feitoria, \nCervejaria Ramiro.",
+   "htmlSnippet": "Discover the best top \u003cb\u003ethings to do in Lisbon\u003c/b\u003e including 100 Maneiras, Feitoria, \u003cbr\u003e\nCervejaria Ramiro.",
+   "cacheId": "64elFN0hME8J",
+   "formattedUrl": "https://www.lonelyplanet.com/portugal/lisbon/...things-to-do/.../360366",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/portugal/\u003cb\u003elisbon\u003c/b\u003e/...\u003cb\u003ethings-to-do\u003c/b\u003e/.../360366",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Europe"
+     }
+    ],
+    "country": [
+     {
+      "name": "Portugal"
+     }
+    ],
+    "city": [
+     {
+      "name": "Lisbon"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Top things to do in Lisbon, Portugal",
+      "og:title": "Top things to do in Lisbon, Portugal",
+      "og:description": "Discover the best top things to do in Lisbon including 100 Maneiras, Feitoria, Cervejaria Ramiro.",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "The Top 10 Things to Do in Lisbon - TripAdvisor - Lisbon, Portugal ...",
+   "htmlTitle": "The Top 10 \u003cb\u003eThings to Do in Lisbon\u003c/b\u003e - TripAdvisor - \u003cb\u003eLisbon\u003c/b\u003e, Portugal ...",
+   "link": "https://www.tripadvisor.com/Attractions-g189158-Activities-Lisbon_Lisbon_District_Central_Portugal.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Book your tickets online for the top things to do in Lisbon, Portugal on TripAdvisor\n: See 255175 traveler reviews and photos of Lisbon tourist attractions.",
+   "htmlSnippet": "Book your tickets online for the top \u003cb\u003ethings to do in Lisbon\u003c/b\u003e, Portugal on TripAdvisor\u003cbr\u003e\n: See 255175 traveler reviews and photos of \u003cb\u003eLisbon\u003c/b\u003e tourist \u003cb\u003eattractions\u003c/b\u003e.",
+   "cacheId": "_ZaGjslvvlUJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attractions-g189158-Activities-Lisbon_Lisbon_ District_Central_Portugal.html",
+   "htmlFormattedUrl": "https://www.tripadvisor.com/\u003cb\u003eAttractions\u003c/b\u003e-g189158-\u003cb\u003eActivities\u003c/b\u003e-\u003cb\u003eLisbon\u003c/b\u003e_\u003cb\u003eLisbon\u003c/b\u003e_ District_Central_Portugal.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "290",
+      "height": "174",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyrVQdLa1DqbiYDywVTIPE1numCf9PdcZF84Hw6WTh1u71BvKbWVt8ANXg"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Portugal",
+      "title": "Portugal"
+     },
+     {
+      "url": "Central Portugal",
+      "title": "Central Portugal"
+     },
+     {
+      "url": "Lisbon District",
+      "title": "Lisbon District"
+     },
+     {
+      "url": "Lisbon",
+      "title": "Lisbon"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "The Top 10 Things to Do in Lisbon - TripAdvisor - Lisbon, Portugal Attractions - Find What to Do Today, This Weekend, or in January",
+      "og:description": "Book your tickets online for the top things to do in Lisbon, Portugal on TripAdvisor: See 255,175 traveler reviews and photos of Lisbon tourist attractions. Find what to do today, this weekend, or in January. We have reviews of the best places to see in Lisbon. Visit top-rated & must-see attractions.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/03/9b/2f/c5/lisbon.jpg",
+      "og:image:width": "550",
+      "og:image:height": "331",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attractions-g189158-Activities-m33762-Lisbon_Lisbon_District_Central_Portugal.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attractions-g189158-Activities-m33762-Lisbon_Lisbon_District_Central_Portugal.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attractions-g189158-Activities-m33762-Lisbon_Lisbon_District_Central_Portugal.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/03/9b/2f/c5/lisbon.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Top things to do in Portugal - Lonely Planet",
+   "htmlTitle": "Top \u003cb\u003ethings to do in\u003c/b\u003e Portugal - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/portugal/top-things-to-do/a/poi/360356",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Discover the best top things to do in Portugal including Buddha Eden, 100 ... \nOpened in 1956, Ramiro has legendary status among Lisbon's seafood lovers.",
+   "htmlSnippet": "Discover the best top \u003cb\u003ethings to do in\u003c/b\u003e Portugal including Buddha Eden, 100 ... \u003cbr\u003e\nOpened in 1956, Ramiro has legendary status among \u003cb\u003eLisbon&#39;s\u003c/b\u003e seafood lovers.",
+   "cacheId": "p4zcERCMiKIJ",
+   "formattedUrl": "https://www.lonelyplanet.com/portugal/top-things-to-do/a/.../360356",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/portugal/top-\u003cb\u003ethings-to-do\u003c/b\u003e/a/.../360356",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Europe"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "136",
+      "height": "84",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcR3PDUfusQAAvI3aOXk_9DY165dufBkfyPAcICK0H64CH8HZWE1rdndRw"
+     }
+    ],
+    "country": [
+     {
+      "name": "Portugal"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Top things to do in Portugal",
+      "og:title": "Top things to do in Portugal",
+      "og:description": "Discover the best top things to do in Portugal including Buddha Eden, 100 Maneiras, Feitoria.",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://lonelyplanetimages.imgix.net/mastheads/GettyImages-181218907_full.jpg?w=170&h=106&fit=crop&q=50&auto=enhance&crop=entropy"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Feast of St Anthony: a guide to Lisbon's sardine festival - Lonely Planet",
+   "htmlTitle": "Feast of St Anthony: a guide to \u003cb\u003eLisbon&#39;s\u003c/b\u003e sardine festival - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/portugal/lisbon/travel-tips-and-articles/77201",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Apr 30, 2013 ... Read Feast of St Anthony: a guide to Lisbon's sardine festival. ... Unsurprisingly, \na popular soundtrack for these activities is fado, the ... This article was first \npublished in December 2010 and was refreshed in April 2013.",
+   "htmlSnippet": "Apr 30, 2013 \u003cb\u003e...\u003c/b\u003e Read Feast of St Anthony: a guide to \u003cb\u003eLisbon&#39;s\u003c/b\u003e sardine festival. ... Unsurprisingly, \u003cbr\u003e\na popular soundtrack for these \u003cb\u003eactivities\u003c/b\u003e is fado, the ... This article was first \u003cbr\u003e\npublished in December 2010 and was refreshed in \u003cb\u003eApril\u003c/b\u003e 2013.",
+   "cacheId": "tcdsmMnFR9gJ",
+   "formattedUrl": "www.lonelyplanet.com/portugal/lisbon/travel-tips-and.../77201",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/portugal/\u003cb\u003elisbon\u003c/b\u003e/travel-tips-and.../77201",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "327",
+      "height": "154",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMxJpiwRMaSQWZWivf6xwD4IJeYjCbGkg63cl-yLewM-LUXCDYoOCs1CA"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Feast of St Anthony: a guide to Lisbon's sardine festival - Lonely Planet",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article",
+      "og:title": "Feast of St Anthony: a guide to Lisbon's sardine festival - Lonely Planet",
+      "og:url": "http://www.lonelyplanet.com/portugal/lisbon/travel-tips-and-articles/77201",
+      "og:description": "Read Feast of St Anthony: a guide to Lisbon's sardine festival",
+      "og:image": "https://lonelyplanetwp.imgix.net/2012/05/2896626238_3312b6b62b_z.jpg?sharp=10&vib=20&w=748",
+      "article:tag": "Food and drink, Festivals",
+      "article:published_time": "2013-04-30T14:10:48+00:00",
+      "article:author": "Lonely Planet"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://lonelyplanetwp.imgix.net/2012/05/2896626238_3312b6b62b_z.jpg?sharp=10&vib=20&w=748"
+     }
+    ],
+    "article": [
+     {
+      "headline": "Feast of St Anthony: a guide to Lisbon's sardine festival",
+      "alternativeheadline": "Feast of St Anthony: a guide to Lisbon's sardine festival",
+      "datepublished": "2013-04-30T14:10:48+00:00",
+      "articlebody": "'Alfama - Lisbon 's oldest district 'by detengase. Creative Commons Attribution Location: Alfama, Lisbon, Portugal Dates: 12–14 June Level of participation: 2 - snack on sardines On the feast..."
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Tagus River Sunset Cruise in Lisbon in Portugal - Lonely Planet",
+   "htmlTitle": "Tagus River Sunset Cruise in \u003cb\u003eLisbon\u003c/b\u003e in Portugal - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/portugal/activities/tagus-river-sunset-cruise-in-lisbon/a/pa-act/v-6271SUNSET/360356",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Sail along Lisbon's Tagus River at sunset while admiring the city sights! ... Step \naboard your sailboat at Lisbon's 25th of April Bridge, and then sit back and relax\n ...",
+   "htmlSnippet": "Sail along \u003cb\u003eLisbon&#39;s\u003c/b\u003e Tagus River at sunset while admiring the city \u003cb\u003esights\u003c/b\u003e! ... Step \u003cbr\u003e\naboard your sailboat at \u003cb\u003eLisbon&#39;s\u003c/b\u003e 25th of \u003cb\u003eApril\u003c/b\u003e Bridge, and then sit back and relax\u003cbr\u003e\n&nbsp;...",
+   "cacheId": "7Ooej6YizPoJ",
+   "formattedUrl": "https://www.lonelyplanet.com/.../activities/tagus...lisbon/a/.../360356",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../\u003cb\u003eactivities\u003c/b\u003e/tagus...\u003cb\u003elisbon\u003c/b\u003e/a/.../360356",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Europe"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "102",
+      "height": "128",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRQIUmc6Q4BjNfAMIG9jKLdAWd1KkpnF47hIZV6GrQTzr4-cxOULr07lw"
+     }
+    ],
+    "country": [
+     {
+      "name": "Portugal"
+     }
+    ],
+    "aggregaterating": [
+     {
+      "ratingvalue": "4"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Tagus River Sunset Cruise in Lisbon in Portugal",
+      "og:title": "Tagus River Sunset Cruise in Lisbon in Portugal",
+      "og:description": "Sail along Lisbon’s Tagus River at sunset while admiring the city sights! The 2-hour cruise by sailboat includes sights of top Lisbon attractions and historical…",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://lpviator.imgix.net/graphicslib/thumbs674x446/6271/SITours/tagus-river-sunset-cruise-in-lisbon-in-lisbon-148717.jpg?w=128&h=160&fit=crop&q=50&auto=enhance&crop=entropy"
+     }
+    ],
+    "thing": [
+     {
+      "name": "Activities"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "On the hop: Lisbon's exploding craft beer scene - Lonely Planet",
+   "htmlTitle": "On the hop: \u003cb\u003eLisbon&#39;s\u003c/b\u003e exploding craft beer scene - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/portugal/lisbon/travel-tips-and-articles/on-the-hop-lisbons-exploding-craft-beer-scene",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Sep 20, 2016 ... A cold beer in Portugal has traditionally meant one of two things: Sagres or Super \nBock. ... But a hop-heavy suds revolution is brewing in Lisbon and beyond. ... \nBento won Portugal's National Craft Beer Contest last April for his Juniper ... \nChimera is co-run by American Adam Heller, who brews tipples such ...",
+   "htmlSnippet": "Sep 20, 2016 \u003cb\u003e...\u003c/b\u003e A cold beer in Portugal has traditionally meant one of two \u003cb\u003ethings\u003c/b\u003e: Sagres or Super \u003cbr\u003e\nBock. ... But a hop-heavy suds revolution is brewing in \u003cb\u003eLisbon\u003c/b\u003e and beyond. ... \u003cbr\u003e\nBento won Portugal&#39;s National Craft Beer Contest last \u003cb\u003eApril\u003c/b\u003e for his Juniper ... \u003cbr\u003e\nChimera is co-\u003cb\u003erun\u003c/b\u003e by American Adam Heller, who brews tipples such&nbsp;...",
+   "cacheId": "_6kRz_mB6foJ",
+   "formattedUrl": "www.lonelyplanet.com/.../lisbon/.../on-the-hop-lisbons-exploding-craft-beer- scene",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../\u003cb\u003elisbon\u003c/b\u003e/.../on-the-hop-\u003cb\u003elisbon\u003c/b\u003es-exploding-craft-beer- scene",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "259",
+      "height": "194",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRp6ExpPMrqos9cP1LdbPck6srFq1vag1z-A5_5pI4YMWJBhbF_kgXaqJFR"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "On the hop: Lisbon's exploding craft beer scene - Lonely Planet",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article",
+      "og:title": "On the hop: Lisbon's exploding craft beer scene - Lonely Planet",
+      "og:url": "http://www.lonelyplanet.com/portugal/lisbon/travel-tips-and-articles/on-the-hop-lisbons-exploding-craft-beer-scene",
+      "og:description": "Read On the hop: Lisbon's exploding craft beer scene",
+      "og:image": "https://lonelyplanetwp.imgix.net/2016/09/1-Cascais-Mercado-Cerveja-Petiscos-6e6560595f37.jpg?sharp=10&vib=20&w=748",
+      "article:tag": "Food and drink",
+      "article:published_time": "2016-09-20T12:58:31+00:00",
+      "article:author": "Kevin Raub"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://lonelyplanetwp.imgix.net/2016/09/1-Cascais-Mercado-Cerveja-Petiscos-6e6560595f37.jpg?sharp=10&vib=20&w=748"
+     }
+    ],
+    "article": [
+     {
+      "headline": "On the hop: Lisbon's exploding craft beer scene",
+      "alternativeheadline": "On the hop: Lisbon's exploding craft beer scene",
+      "datepublished": "2016-09-20T12:58:31+00:00",
+      "articlebody": "A cold beer in Portugal has traditionally meant one of two things: Sagres or Super Bock. These two everyman lagers, created during military dictatorships, have dominated the country's beer..."
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "April 25th Bridge and Christ the King from Lisbon in Lisbon, Portugal ...",
+   "htmlTitle": "\u003cb\u003eApril\u003c/b\u003e 25th Bridge and Christ the King from \u003cb\u003eLisbon\u003c/b\u003e in \u003cb\u003eLisbon\u003c/b\u003e, Portugal ...",
+   "link": "https://www.lonelyplanet.com/portugal/lisbon/activities/sightseeing-tours/april-25th-bridge-christ-king-bus-tour-lisbon/item-v-5550PONTE-id",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Lisbon activities. April 25th Bridge and Christ the King from Lisbon. Tours & \nsightseeing in Lisbon. From. $28. Check prices and availability ...",
+   "htmlSnippet": "\u003cb\u003eLisbon activities\u003c/b\u003e. \u003cb\u003eApril\u003c/b\u003e 25th Bridge and Christ the King from \u003cb\u003eLisbon\u003c/b\u003e. Tours &amp; \u003cbr\u003e\nsightseeing in \u003cb\u003eLisbon\u003c/b\u003e. From. $28. Check prices and availability&nbsp;...",
+   "cacheId": "EdWPUNR0COgJ",
+   "formattedUrl": "https://www.lonelyplanet.com/.../lisbon/activities/sightseeing.../april...lisbon/ item-v-5550PONTE-id",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../\u003cb\u003elisbon\u003c/b\u003e/\u003cb\u003eactivities\u003c/b\u003e/\u003cb\u003esights\u003c/b\u003eeeing.../\u003cb\u003eapril\u003c/b\u003e...\u003cb\u003elisbon\u003c/b\u003e/ item-v-5550PONTE-id",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Europe"
+     }
+    ],
+    "country": [
+     {
+      "name": "Portugal"
+     }
+    ],
+    "city": [
+     {
+      "name": "Lisbon"
+     }
+    ],
+    "aggregaterating": [
+     {
+      "ratingvalue": "4"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "April 25th Bridge and Christ the King from Lisbon in Lisbon, Portugal",
+      "og:title": "April 25th Bridge and Christ the King from Lisbon in Lisbon, Portugal",
+      "og:description": "Take sightseeing to new heights with this bus tour from Lisbon to the famous Christ the King monument (Cristo Rei). Sitting comfortably aboard an open-air sight…",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "thing": [
+     {
+      "name": "Activities"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     },
+     {
+      "position": "4"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Stops needed between Porto and Lisbon",
+   "htmlTitle": "Stops needed between Porto and \u003cb\u003eLisbon\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/thorntree/forums/europe-western-europe/portugal/stops-needed-between-porto-and-lisbon",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Jun 19, 2013 ... April 2014 ... land in Porto 18th (good Friday) and depart Lisbon 26th (following \nSaturday. ... We don't need crazy nightlife but we do need a bar to hang at and \nsome sort of places which are not dead. Any of these ... If you like to visit those \nkind of things, they are very well-known too. .... About Lonely Planet.",
+   "htmlSnippet": "Jun 19, 2013 \u003cb\u003e...\u003c/b\u003e \u003cb\u003eApril\u003c/b\u003e 2014 ... land in Porto 18th (good Friday) and depart \u003cb\u003eLisbon\u003c/b\u003e 26th (following \u003cbr\u003e\nSaturday. ... We don&#39;t need crazy nightlife but we \u003cb\u003edo\u003c/b\u003e need a bar to hang at and \u003cbr\u003e\nsome sort of places which are not dead. Any of these ... If you like to visit those \u003cbr\u003e\nkind of \u003cb\u003ethings\u003c/b\u003e, they are very well-known too. .... About \u003cb\u003eLonely Planet\u003c/b\u003e.",
+   "cacheId": "sFFNki0see4J",
+   "formattedUrl": "https://www.lonelyplanet.com/.../stops-needed-between-porto-and-lisbon",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../stops-needed-between-porto-and-\u003cb\u003elisbon\u003c/b\u003e",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "225",
+      "height": "225",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSqRemPSRVtvlwaxn3MfC7zsLjzOoK5uUM0cDjdqchf2Fvexvm4z9sAZObq"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Thorn Tree",
+      "title": "Thorn Tree"
+     },
+     {
+      "url": "Country forums",
+      "title": "Country forums"
+     },
+     {
+      "url": "Western Europe",
+      "title": "Western Europe"
+     },
+     {
+      "url": "Portugal",
+      "title": "Portugal"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Stops needed between Porto and Lisbon",
+      "og:title": "Stops needed between Porto and Lisbon",
+      "og:description": "Yes - I know this topic has been done before - have read LOTS of posts ... but here is mine: April 2014 ... land in Porto 18th (good Friday)…",
+      "og:url": "https://www.lonelyplanet.com/thorntree/forums/europe-western-europe/portugal/stops-needed-between-porto-and-lisbon",
+      "og:image": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "og:type": "website",
+      "twitter:title": "Stops needed between Porto and Lisbon",
+      "twitter:description": "Yes - I know this topic has been done before - have read LOTS of posts ... but here is mine: April 2014 ... land in Porto 18th (good Friday)…",
+      "twitter:image:src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "hjGBiuJoOvCIFsd1pXvg4HhVZfsFUHhUljJzMyZ4whQ3toaIaovuvW+wRW5SOnXAODxb35fQT8EnI16Ddlq9dQ=="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Welcome",
+      "name": "Welcome"
+     },
+     {
+      "url": "Destinations",
+      "name": "Destinations"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Weather in Portugal - Lonely Planet",
+   "htmlTitle": "Weather in Portugal - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/portugal/weather",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Shoulder (Apr–Jun & Sep–Nov). Wildflowers and mild days are ideal for hikes \nand outdoor activities. Lively festivals take place in June. Crowds and prices are\n ...",
+   "htmlSnippet": "Shoulder (Apr–Jun &amp; Sep–Nov). Wildflowers and mild days are ideal for hikes \u003cbr\u003e\nand outdoor \u003cb\u003eactivities\u003c/b\u003e. Lively festivals take place in June. Crowds and prices are\u003cbr\u003e\n&nbsp;...",
+   "cacheId": "vMnOpD3TT9IJ",
+   "formattedUrl": "www.lonelyplanet.com/portugal/weather",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/portugal/weather",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "157",
+      "height": "321",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTNohdzuDaeLHUbnQ-aW5eZwkGDSkOErKuoh4qZywfRbKel5RUAr5fYfsrH"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Weather in Portugal - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Weather in Portugal - Lonely Planet",
+      "twitter:description": "The best time to go to Portugal, including current weather conditions, temperatures and rainfall",
+      "twitter:image:src": "https://images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/assets/image/30400e69e545fd4b0ca81bbe2fcf56bddc2900603681790fba3cf2dba62bfd06/97430d4f2f7a1f12f244cc131163937f0cc5ca6e567c84d2711d07e2fd39c6bf.jpg",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Weather in Portugal - Lonely Planet",
+      "og:description": "The best time to go to Portugal, including current weather conditions, temperatures and rainfall",
+      "og:url": "http://www.lonelyplanet.com/portugal/weather",
+      "og:type": "website",
+      "og:image": "//images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/assets/image/30400e69e545fd4b0ca81bbe2fcf56bddc2900603681790fba3cf2dba62bfd06/97430d4f2f7a1f12f244cc131163937f0cc5ca6e567c84d2711d07e2fd39c6bf.jpg",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "MZcbGENUJy9gl8cyxaSyhSsN+H98NMxJuHmH1IceWDU="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "http://assets.staticlp.com/country-shapes/PRT.svg"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Lisbon public holidays - Lonely Planet",
+   "htmlTitle": "\u003cb\u003eLisbon\u003c/b\u003e public holidays - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/portugal/lisbon/public-holidays",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Quick reference guide to public holidays dates in Lisbon. ... and Cascais), entry to \nall key museums and attractions, and up to 50% discount on tours, cruises and ...",
+   "htmlSnippet": "Quick reference guide to public holidays dates in \u003cb\u003eLisbon\u003c/b\u003e. ... and Cascais), entry to \u003cbr\u003e\nall key museums and \u003cb\u003eattractions\u003c/b\u003e, and up to 50% discount on tours, cruises and&nbsp;...",
+   "cacheId": "qm1d-SDpMnkJ",
+   "formattedUrl": "www.lonelyplanet.com/portugal/lisbon/public-holidays",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/portugal/\u003cb\u003elisbon\u003c/b\u003e/public-holidays",
+   "pagemap": {
+    "metatags": [
+     {
+      "title": "Lisbon public holidays - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Lisbon public holidays - Lonely Planet",
+      "twitter:description": "Quick reference guide to public holidays dates in Lisbon",
+      "twitter:image:src": "https://images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/mastheads/100344755.jpg",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Lisbon public holidays - Lonely Planet",
+      "og:description": "Quick reference guide to public holidays dates in Lisbon",
+      "og:url": "http://www.lonelyplanet.com/portugal/lisbon/public-holidays",
+      "og:type": "website",
+      "og:image": "//images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/mastheads/100344755.jpg",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "+7NFUVAyf79HS0mkcBj2P1bkEs60q9htm01dTqbBVmc="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "//images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/mastheads/100344755.jpg"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Destinations",
+      "name": "Destinations"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  }
+ ]
+}

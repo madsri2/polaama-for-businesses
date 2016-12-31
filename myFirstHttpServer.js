@@ -134,6 +134,11 @@ app.get('/:id/:tripName/comments/weather', function(req, res) {
   return handler.handleWebpage(res, handler.displayWeatherDetails);
 });
 
+app.get('/:id/:tripName/comments/activities', function(req, res) {
+  const handler = new WebpageHandler(req.params.id, req.params.tripName);
+  return handler.handleWebpage(res, handler.displayActivityDetails);
+});
+
 app.get('/:id/:tripName/comments/flight', function(req, res) {
   const handler = new WebpageHandler(req.params.id, req.params.tripName);
   return handler.handleWebpage(res, handler.displayFlightDetails);

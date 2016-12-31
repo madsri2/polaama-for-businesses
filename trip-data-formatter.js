@@ -80,12 +80,12 @@ TripDataFormatter.prototype.formatPackList = function(headers) {
   return packList.toPack;
 }
 
-TripDataFormatter.prototype.formatWeatherDetails = function(weatherDetails) {
+TripDataFormatter.prototype.formatWeatherDetails = function(weatherDetails, addlWeatherDetails) {
   const html = fs.readFileSync("html-templates/weather-details.html", 'utf8');
   const keys = Object.keys(weatherDetails);
   if(keys.indexOf("nocity") > -1) {
     // no weather details available since the trip does not have any city information
-    return html.replace("${weatherDetails}", weatherDetails.nocity);
+    return html.replace("${citiesWeatherDetails}", weatherDetails.nocity);
   }
 
   let wText = `<div data-role="collapsibleset">\n`;
@@ -94,13 +94,13 @@ TripDataFormatter.prototype.formatWeatherDetails = function(weatherDetails) {
     wText += `<div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d">\n`;
     wText += `<h1>${city}</h1>\n`;
     weatherDetails[city].forEach(note => {
-      wText += `<p>${note}</p>\n`;
+      wText += `<p>${toLink(note)}</p>\n`;
     });
     wText += `</div>\n`;
   });
 
   wText += `</div>\n`;
-  return html.replace("${weatherDetails}", wText);
+  return html.replace("${citiesWeatherDetails}", wText).replace("${additionalWeatherDetails}", toLink(addlWeatherDetails));
 }
 
 // TODO: Might be a duplicate of above function.
@@ -117,7 +117,7 @@ TripDataFormatter.prototype.formatActivityDetails = function(activityDetails) {
       aText += `<div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d">\n`;
       aText += `<h1>${city}</h1>\n`;
       activityDetails[city].forEach(note => {
-          aText += `<p>${note}</p>\n`;
+          aText += `<p>${toLink(note)}</p>\n`;
           });
       aText += `</div>\n`;
   });
@@ -153,21 +153,30 @@ TripDataFormatter.prototype.formatCityChoicePage = function() {
   return fs.readFileSync("html-templates/handle-city-choice.html", 'utf8');
 }
 
+function toLink(text) {
+  const words = text.split(' ');
+  words.forEach((word, i) => {
+    if(/^https?:\/\//.test(word)) {
+      words[i] = `<a href=${word}>${word}</a>`;
+    }
+  });
+  return words.join(' ');
+}
+
 function listAsHtml(list) {
   let html = "<ol>";
   if(_.isNull(list) || _.isUndefined(list) || _.isEmpty(list)) {
     return "";
   }
   list.forEach(function(item) {
+    /*
     const itemWords = item.split(' ');
     itemWords.forEach(function(word,i) {
-      if(/^https?:\/\//.test(word)) {
-        const wordUrl = "<a href=" + word + ">" + word + "</a>";
-        itemWords[i] = wordUrl;
-      }
+      itemWords[i] = toLink(word);
     });
     item = itemWords.join(' ');
-    html += "<li>" + item + "</li>";
+    */
+    html += "<li>" + toLink(item) + "</li>";
   });
   html += "</ol>";
   return html;

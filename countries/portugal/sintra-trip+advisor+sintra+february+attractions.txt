@@ -1,0 +1,1133 @@
+{
+ "kind": "customsearch#search",
+ "url": {
+  "type": "application/json",
+  "template": "https://www.googleapis.com/customsearch/v1?q={searchTerms}&num={count?}&start={startIndex?}&lr={language?}&safe={safe?}&cx={cx?}&cref={cref?}&sort={sort?}&filter={filter?}&gl={gl?}&cr={cr?}&googlehost={googleHost?}&c2coff={disableCnTwTranslation?}&hq={hq?}&hl={hl?}&siteSearch={siteSearch?}&siteSearchFilter={siteSearchFilter?}&exactTerms={exactTerms?}&excludeTerms={excludeTerms?}&linkSite={linkSite?}&orTerms={orTerms?}&relatedSite={relatedSite?}&dateRestrict={dateRestrict?}&lowRange={lowRange?}&highRange={highRange?}&searchType={searchType}&fileType={fileType?}&rights={rights?}&imgSize={imgSize?}&imgType={imgType?}&imgColorType={imgColorType?}&imgDominantColor={imgDominantColor?}&alt=json"
+ },
+ "queries": {
+  "request": [
+   {
+    "title": "Google Custom Search - trip advisor sintra february attractions",
+    "totalResults": "16600",
+    "searchTerms": "trip advisor sintra february attractions",
+    "count": 10,
+    "startIndex": 1,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "sintra"
+   }
+  ],
+  "nextPage": [
+   {
+    "title": "Google Custom Search - trip advisor sintra february attractions",
+    "totalResults": "16600",
+    "searchTerms": "trip advisor sintra february attractions",
+    "count": 10,
+    "startIndex": 11,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "sintra"
+   }
+  ]
+ },
+ "context": {
+  "title": "Polaama"
+ },
+ "searchInformation": {
+  "searchTime": 0.345248,
+  "formattedSearchTime": "0.35",
+  "totalResults": "16600",
+  "formattedTotalResults": "16,600"
+ },
+ "items": [
+  {
+   "kind": "customsearch#result",
+   "title": "Sintra 2016: Best of Sintra, Portugal Tourism - TripAdvisor",
+   "htmlTitle": "\u003cb\u003eSintra\u003c/b\u003e 2016: Best of \u003cb\u003eSintra\u003c/b\u003e, Portugal Tourism - \u003cb\u003eTripAdvisor\u003c/b\u003e",
+   "link": "https://www.tripadvisor.com/Tourism-g189164-Sintra_Sintra_Municipality_Lisbon_District_Central_Portugal-Vacations.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Sintra Tourism: TripAdvisor has 61851 reviews of Sintra Hotels, Attractions, and \nRestaurants making it your best Sintra resource.",
+   "htmlSnippet": "\u003cb\u003eSintra\u003c/b\u003e Tourism: \u003cb\u003eTripAdvisor\u003c/b\u003e has 61851 reviews of \u003cb\u003eSintra\u003c/b\u003e Hotels, \u003cb\u003eAttractions\u003c/b\u003e, and \u003cbr\u003e\nRestaurants making it your best \u003cb\u003eSintra\u003c/b\u003e resource.",
+   "cacheId": "gRTNNLGnAu8J",
+   "formattedUrl": "https://www.tripadvisor.com/Tourism-g189164-Sintra_Sintra_Municipality_ Lisbon_District_Central_Portugal-Vacations.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/Tourism-g189164-\u003cb\u003eSintra\u003c/b\u003e_\u003cb\u003eSintra\u003c/b\u003e_Municipality_ Lisbon_District_Central_Portugal-Vacations.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "259",
+      "height": "194",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSlNn_MyLz_IzihGq7QMYR844kG3TQTUKQgt74cOrb-DGdC9NgnRCKMlIY"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Portugal",
+      "title": "Portugal"
+     },
+     {
+      "url": "Central Portugal",
+      "title": "Central Portugal"
+     },
+     {
+      "url": "Lisbon District",
+      "title": "Lisbon District"
+     },
+     {
+      "url": "Sintra Municipality",
+      "title": "Sintra Municipality"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Sintra 2016: Best of Sintra, Portugal Tourism - TripAdvisor",
+      "og:description": "Sintra Tourism: TripAdvisor has 61,851 reviews of Sintra Hotels, Attractions, and Restaurants making it your best Sintra resource.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/01/80/28/cb/sintra.jpg",
+      "og:image:width": "550",
+      "og:image:height": "412",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Tourism-g189164-m33762-Sintra_Sintra_Municipality_Lisbon_District_Central_Portugal-Vacations.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Tourism-g189164-m33762-Sintra_Sintra_Municipality_Lisbon_District_Central_Portugal-Vacations.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Tourism-g189164-m33762-Sintra_Sintra_Municipality_Lisbon_District_Central_Portugal-Vacations.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/01/80/28/cb/sintra.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Lisbon and Sintra in February - Review of Lisbon, Portugal ...",
+   "htmlTitle": "Lisbon and \u003cb\u003eSintra\u003c/b\u003e in \u003cb\u003eFebruary\u003c/b\u003e - Review of Lisbon, Portugal ...",
+   "link": "https://www.tripadvisor.com/ShowUserReviews-g189158-r3181147-Lisbon_Lisbon_District_Central_Portugal.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Lisbon: Lisbon and Sintra in February - See 830367 traveler reviews, 61350 \ncandid photos, and great deals for Lisbon, Portugal, at TripAdvisor. ... of interest \nand character combining places of historical interest, good shopping, museums \nand ...",
+   "htmlSnippet": "Lisbon: Lisbon and \u003cb\u003eSintra\u003c/b\u003e in \u003cb\u003eFebruary\u003c/b\u003e - See 830367 traveler reviews, 61350 \u003cbr\u003e\ncandid photos, and great deals for Lisbon, Portugal, at \u003cb\u003eTripAdvisor\u003c/b\u003e. ... of interest \u003cbr\u003e\nand character combining \u003cb\u003eplaces\u003c/b\u003e of historical interest, good shopping, museums \u003cbr\u003e\nand&nbsp;...",
+   "cacheId": "eB88aNg0X-wJ",
+   "formattedUrl": "https://www.tripadvisor.com/ShowUserReviews-g189158-r3181147-Lisbon_ Lisbon_District_Central_Portugal.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/ShowUserReviews-g189158-r3181147-Lisbon_ Lisbon_District_Central_Portugal.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "290",
+      "height": "174",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyrVQdLa1DqbiYDywVTIPE1numCf9PdcZF84Hw6WTh1u71BvKbWVt8ANXg"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Portugal",
+      "title": "Portugal"
+     },
+     {
+      "url": "Central Portugal",
+      "title": "Central Portugal"
+     },
+     {
+      "url": "Lisbon District",
+      "title": "Lisbon District"
+     },
+     {
+      "url": "Lisbon",
+      "title": "Lisbon"
+     }
+    ],
+    "review": [
+     {
+      "reviewer": "a TripAdvisor user",
+      "reviewdate": "2005-02-11",
+      "ratingstars": "4.0"
+     }
+    ],
+    "hreview": [
+     {
+      "summary": "“Lisbon and Sintra in February”",
+      "dtreviewed": "2005-02-11",
+      "description": "My husband and I just returned from a week in Portugal. It was an enriching experience filled with chance encounters and scenery that dreams are made of. It was chilly with just a bit of rain,..."
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Lisbon and Sintra in February - Review of Lisbon, Portugal - TripAdvisor",
+      "og:description": "Lisbon: Lisbon and Sintra in February - See 830,367 traveler reviews, 61,350 candid photos, and great deals for Lisbon, Portugal, at TripAdvisor.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/03/9b/2f/c5/lisbon.jpg",
+      "og:image:width": "550",
+      "og:image:height": "331",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/ShowUserReviews-g189158-r3181147-m33762-Lisbon_Lisbon_District_Central_Portugal.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/ShowUserReviews-g189158-r3181147-m33762-Lisbon_Lisbon_District_Central_Portugal.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/ShowUserReviews-g189158-r3181147-m33762-Lisbon_Lisbon_District_Central_Portugal.html"
+     }
+    ],
+    "Review": [
+     {
+      "author": "a TripAdvisor user",
+      "name": "“Lisbon and Sintra in February”",
+      "datePublished": "2005-02-11",
+      "reviewBody": "My husband and I just returned from a week in Portugal. It was an enriching experience filled with chance encounters and scenery that dreams are made of. It was chilly with just a bit of rain,..."
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/03/9b/2f/c5/lisbon.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Inside Sintra : Inside - TripAdvisor",
+   "htmlTitle": "Inside \u003cb\u003eSintra\u003c/b\u003e : Inside - \u003cb\u003eTripAdvisor\u003c/b\u003e",
+   "link": "https://www.tripadvisor.com/Travel-g189164-s1/Sintra:Portugal:Inside.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "On foot: Sintra is small enough that many area attractions can be accessed on... \nLast edited: August 25, ... day than at night. The... Last edited: February 20, 2009.",
+   "htmlSnippet": "On foot: \u003cb\u003eSintra\u003c/b\u003e is small enough that many area \u003cb\u003eattractions\u003c/b\u003e can be accessed on... \u003cbr\u003e\nLast edited: August 25, ... day than at night. The... Last edited: \u003cb\u003eFebruary\u003c/b\u003e 20, 2009.",
+   "cacheId": "dsD-T5aPXzAJ",
+   "formattedUrl": "https://www.tripadvisor.com/Travel...s1/Sintra:Portugal:Inside.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/Travel...s1/\u003cb\u003eSintra\u003c/b\u003e:Portugal:Inside.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "80",
+      "height": "80",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTVQflH0VqVMp6PDcRILO5PBISjTfAm4CWJ85aFIrZtIGOJanUlknhw"
+     }
+    ],
+    "metatags": [
+     {
+      "og:image": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "10 Best Sintra Apartments, Villas (with Photos) | TripAdvisor ...",
+   "htmlTitle": "10 Best \u003cb\u003eSintra\u003c/b\u003e Apartments, Villas (with Photos) | \u003cb\u003eTripAdvisor\u003c/b\u003e ...",
+   "link": "https://www.tripadvisor.com/VacationRentals-g189164-Reviews-Sintra_Sintra_Municipality_Lisbon_District_Central_Portugal-Vacation_Rentals.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "... apartments in Sintra. View TripAdvisor's 232 unbiased reviews and great deals \non villas in Sintra, Portugal. ... This was one of the most well appointed places we \nhave stayed in. It was well ..... 5 of 5 bubbles Reviewed February 14, 2016.",
+   "htmlSnippet": "... apartments in \u003cb\u003eSintra\u003c/b\u003e. View \u003cb\u003eTripAdvisor&#39;s\u003c/b\u003e 232 unbiased reviews and great deals \u003cbr\u003e\non villas in \u003cb\u003eSintra\u003c/b\u003e, Portugal. ... This was one of the most well appointed \u003cb\u003eplaces\u003c/b\u003e we \u003cbr\u003e\nhave stayed in. It was well ..... 5 of 5 bubbles Reviewed \u003cb\u003eFebruary\u003c/b\u003e 14, 2016.",
+   "cacheId": "smRU9LWEn_MJ",
+   "formattedUrl": "https://www.tripadvisor.com/VacationRentals-g189164-Reviews-Sintra_Sintra _Municipality_Lisbon_District_Central_Portugal-Vacation_Rentals....",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/VacationRentals-g189164-Reviews-\u003cb\u003eSintra\u003c/b\u003e_\u003cb\u003eSintra\u003c/b\u003e _Municipality_Lisbon_District_Central_Portugal-Vacation_Rentals....",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "259",
+      "height": "194",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSlNn_MyLz_IzihGq7QMYR844kG3TQTUKQgt74cOrb-DGdC9NgnRCKMlIY"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "10 Best Sintra Apartments, Villas (with Photos) | TripAdvisor -  Holiday Rentals in Sintra, Portugal",
+      "og:description": "View the Best apartments in Sintra. View TripAdvisor's 232 unbiased reviews and great deals on villas in Sintra, Portugal",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/01/80/28/cb/sintra.jpg",
+      "og:image:width": "550",
+      "og:image:height": "412",
+      "og:type": "company",
+      "og:url": "/VacationRentals-g189164-Reviews-Sintra_Sintra_Municipality_Lisbon_District_Central_Portugal-Vacation_Rentals.html",
+      "og:site_name": "TripAdvisor",
+      "fb:admins": "100000982334629",
+      "fb:app_id": "162729813767876",
+      "twitter:title": "10 Best Sintra Apartments, Villas (with Photos) | TripAdvisor -  Holiday Rentals in Sintra, Portugal",
+      "twitter:card": "summary_large_image",
+      "twitter:url": "http://www.tripadvisor.com/VacationRentals-g189164-Reviews-Sintra_Sintra_Municipality_Lisbon_District_Central_Portugal-Vacation_Rentals.html",
+      "twitter:image:src": "https://media-cdn.tripadvisor.com/media/photo-s/01/10/e2/af/moorish-castel.jpg",
+      "twitter:site": "http://www.tripadvisor.com/Rentals",
+      "twitter:description": "View the Best apartments in Sintra. View TripAdvisor's 232 unbiased reviews and great deals on villas in Sintra, Portugal",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/VacationRentals-g189164-Reviews-m33762-Sintra_Sintra_Municipality_Lisbon_District_Central_Portugal-Vacation_Rentals.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/VacationRentals-g189164-Reviews-m33762-Sintra_Sintra_Municipality_Lisbon_District_Central_Portugal-Vacation_Rentals.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/VacationRentals-g189164-Reviews-m33762-Sintra_Sintra_Municipality_Lisbon_District_Central_Portugal-Vacation_Rentals.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/01/80/28/cb/sintra.jpg"
+     }
+    ],
+    "listitem": [
+     {
+      "item": "Europe",
+      "name": "Europe"
+     },
+     {
+      "item": "Portugal",
+      "name": "Portugal"
+     },
+     {
+      "item": "Central Portugal",
+      "name": "Central Portugal"
+     },
+     {
+      "item": "Lisbon District",
+      "name": "Lisbon District"
+     },
+     {
+      "item": "Sintra Municipality",
+      "name": "Sintra Municipality"
+     },
+     {
+      "item": "Sintra Apartments",
+      "name": "Sintra Apartments"
+     },
+     {
+      "position": "1",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/95/7f/a1.jpg",
+      "url": "Casal de São Pedro",
+      "name": "Casal de São Pedro",
+      "description": "Casal de São Pedro is an ideal haven for families. In the summer offering plenty of entertainment within its walls as well as opportunities to keep busy or quiet surroundings includes hidden..."
+     },
+     {
+      "position": "2",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/08/e0/3d.jpg",
+      "url": "Sunny flat in Old Town Sintra",
+      "name": "Sunny flat in Old Town Sintra",
+      "description": "PERFECT LOCATION: Beautiful and cozy rooftop apartment, full of character and light, located in the heart of charismatic Sintra Town. Essentially romantic in character this town was poetically..."
+     },
+     {
+      "position": "3",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/23/29/c9.jpg",
+      "url": "Villa Maria - close to Pena Palace - Sintra",
+      "name": "Villa Maria - close to Pena Palace - Sintra",
+      "description": "Villa Maria is a Villa dated from early 30's, completly refurbished, located at Parque Natural Sintra-Cascais, in retro vintage style. It has a awesome view over the valley and it's close to..."
+     },
+     {
+      "position": "4",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/fb/12/c9.jpg",
+      "url": "Exclusive apartment in historical Sintra villa",
+      "name": "Exclusive apartment in historical Sintra villa",
+      "description": "Casa José Ricardo is a bright and comfortable 180 m2 duplex-apartment in one of Sintra's charming turn-of-century chalets in the central but quiet Estefania district. Perfect location to explore..."
+     },
+     {
+      "position": "5",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/39/bc/30.jpg",
+      "url": "Villa Lunae - Beach House",
+      "name": "Villa Lunae - Beach House",
+      "description": "\u200bVilla Lunae - Beach House offers a prime accomodation in the surroundings of Sintra, nearby several beaches, and only 15 minutes of Sintra old town by car. The house has a modern design..."
+     },
+     {
+      "position": "6",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/7b/9d/2b.jpg",
+      "url": "Charming Country Estate in Sintra",
+      "name": "Charming Country Estate in Sintra",
+      "description": "Absolute privacy in a Unesco heritage site. Surrounded by nature, 10min to the beach, 5 minutes to the old town of Sintra, Pool and Ocean views. Golf, riding, charming villages and famous beaches..."
+     },
+     {
+      "position": "7",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/05/2d/8d.jpg",
+      "url": "Almoçageme holiday house",
+      "name": "Almoçageme holiday house",
+      "description": "Great place for a couple or family wanting to experience a relaxing holiday in a quiet picturesque Portuguese village. It's close to the beach, the countryside and key historical landmarks..."
+     },
+     {
+      "position": "8",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/65/cb/f4.jpg",
+      "url": "5 Bedroom Villa at Penha Longa Golf Resort, Sintra",
+      "name": "5 Bedroom Villa at Penha Longa Golf Resort, Sintra",
+      "description": "This attractive and comfortably furnished self catering villa is in the grounds of the Penha Longa Golf course. \u003cBR\u003eThe accommodation consists of 2 large living rooms, 5 bedrooms (3 ensuite),..."
+     },
+     {
+      "position": "9",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/02/16/e5.jpg",
+      "url": "Casa do Jasmim - Sintra Centre",
+      "name": "Casa do Jasmim - Sintra Centre",
+      "description": "Casa do Jasmin is a quaint little cottage within a family villa situated at Sintra village. An ample living room, a modern spacious kitchen, 2 bedrooms and bathroom make this a perfect little..."
+     },
+     {
+      "position": "10",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/af/0d/ad.jpg",
+      "url": "Casa da Monservia 11033/AL",
+      "name": "Casa da Monservia 11033/AL",
+      "description": "View all property information"
+     },
+     {
+      "position": "11",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/8a/47/11.jpg",
+      "url": "Getaway Praia Grande",
+      "name": "Getaway Praia Grande",
+      "description": "With an amazing breath taking view an incredible place to stay. Located in one of the most beautiful beaches of Portugal here you can watch some of the most incredible sunsets or fall asleep..."
+     },
+     {
+      "position": "12",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/a5/5e/db.jpg",
+      "url": "Vintage chic romantic cosy cottage",
+      "name": "Vintage chic romantic cosy cottage",
+      "description": "You don't have to be on your honeymoon to enjoy our 'honeymoon hideaway retreat'. Set in a private garden with access to a private pool, it's the perfect romantic setting, right in the heart..."
+     },
+     {
+      "position": "13",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/6c/5f/e7.jpg",
+      "url": "In Golf House Lisboa-Sintra",
+      "name": "In Golf House Lisboa-Sintra",
+      "description": "The proprietor of In Golf House welcomes all guests and golf players with the same confort he wishes for himself. Located in a private condominium with security 24/24, Belas Country Club. The..."
+     },
+     {
+      "position": "14",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/05/ba/91.jpg",
+      "url": "Casa Açucena Vintage B&B - Get your early book...",
+      "name": "Casa Açucena Vintage B&B - Get your early book...",
+      "description": "Very special B&B accommodation in Sintra Built in 1927 and restored in 2015 we have preserved the antique furniture and added modern day facilities. Swimming pool, lounge areas, terraces, cable..."
+     },
+     {
+      "position": "15",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/9b/f1/8c.jpg",
+      "url": "QUINTA SANTA JOANA / TRANQUILIDADE À BEIRA MAR",
+      "name": "QUINTA SANTA JOANA / TRANQUILIDADE À BEIRA MAR",
+      "description": "Lovely double room in a farmhouse named \"Quinta Santa Joana Princesa\" in the countryside for you or your family, romantic vacation in the beautiful area of \u200b\u200bSintra, in the village of Magoito...."
+     },
+     {
+      "position": "16",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/8a/a3/76.jpg",
+      "url": "Beach and Golf House",
+      "name": "Beach and Golf House",
+      "description": "The house is in a small Village in Sintra, ten minute walk from restaurants, cafes, shops, supermarkets and Old Town UNESCO Sintra (voted best European destination) . Also accessible directly..."
+     },
+     {
+      "position": "17",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/1f/74/73.jpg",
+      "url": "heaven in the florest of sintra",
+      "name": "heaven in the florest of sintra",
+      "description": "fantastic house in a great situation , with two bed rooms , 1 living room , a dining corner , american kitchen , one bathroom a beautifull swimming pool and an incredible view to all the surounding..."
+     },
+     {
+      "position": "18",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/11/7a/7e.jpg",
+      "url": "Apartment with lovely mountain and golf view",
+      "name": "Apartment with lovely mountain and golf view",
+      "description": "Apartment located in front of the 18 hole golf course, with lovely mountain view. Close to Sintra and its heritage palaces, and Cascais and its lovely beaches. The apartment is inserted in..."
+     },
+     {
+      "position": "19",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/f6/49/4a.jpg",
+      "url": "Apartment 2 rooms in Portela Sintra",
+      "name": "Apartment 2 rooms in Portela Sintra",
+      "description": "Renovated apartment with 2 bedroom. It's 150 mt from train station (takes you to Lisbon in 40 min) and Bus Terminal ( takes you to Cascais, Estoril, Colares, Praia das Maçãs, Ericeira and..."
+     },
+     {
+      "position": "20",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/a2/c7/dc.jpg",
+      "url": "La Galette - Sintra Windmill AL",
+      "name": "La Galette - Sintra Windmill AL",
+      "description": "Located on the edge of Gouveia village, in the center of Sintra-Cascais Natural Park, 8,5 km from Sintra historic center and 2,5 km from Aguda Beach, the windmill is ideal for a romantic getaway..."
+     },
+     {
+      "position": "21",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/65/76/4a.jpg",
+      "url": "Suites |Terrace&Pool |Mountain &Sea Views...",
+      "name": "Suites |Terrace&Pool |Mountain &Sea Views...",
+      "description": "Hello! From your comfortable and cozy bedroom, you can enjoy beautiful views ... ... the City, the Mountain and the Sea... and also the beautiful and romantic \"Palace of Sintra\". There is a..."
+     },
+     {
+      "position": "22",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/e3/b2/11.jpg",
+      "url": "Villa, 150m to the sea, mountains, Sintra, Lisbon",
+      "name": "Villa, 150m to the sea, mountains, Sintra, Lisbon",
+      "description": "Great villa, situated in Praia das Maçãs, Sintra, Lisbon. Only 150m to the sea, and five minutes walk to the nearest beach, Praia das Maçãs. Perfect for families or friend groups who are..."
+     },
+     {
+      "position": "23",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/f5/1b/63.jpg",
+      "url": "Studio in the center of old town Sintra",
+      "name": "Studio in the center of old town Sintra",
+      "description": "View all property information"
+     },
+     {
+      "position": "24",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/fc/0c/c5.jpg",
+      "url": "Sintra, Cascais, Lisboa to visite",
+      "name": "Sintra, Cascais, Lisboa to visite",
+      "description": "View all property information"
+     },
+     {
+      "position": "25",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/57/84/bb.jpg",
+      "url": "Sintra: Villa - Praia Grande",
+      "name": "Sintra: Villa - Praia Grande",
+      "description": "This secluded, modern, oceanfront villa stands out for the unity of good architecture, great natural outdoors, clean and luxurious interiors and a great pool facing the sky and the ocean: Truly..."
+     },
+     {
+      "position": "26",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/0a/5a/b8.jpg",
+      "url": "Villa Limao - Secluded Luxury, pool, Atlantic view",
+      "name": "Villa Limao - Secluded Luxury, pool, Atlantic view",
+      "description": "Villa Limao offers stunning comfort with absolute privacy. The Hunter's suite living room is cozy and charming with high wooden ceiling and a fireplace. The bedroom has a double bed and a desk...."
+     },
+     {
+      "position": "27",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/35/c4/28.jpg",
+      "url": "House in Sintra with a marvelous view",
+      "name": "House in Sintra with a marvelous view",
+      "description": "House with a nice view, close to the beach and the historic monuments. A cozy place, fully equiped.\u003cBR\u003e\u003cBR\u003eYou can enjoy a swimming pool, a barbeque and a garden.\u003cBR\u003e\u003cBR\u003eThere are good access..."
+     },
+     {
+      "position": "28",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/74/7a/a8.jpg",
+      "url": "Sintra ideal pied-a-terre.",
+      "name": "Sintra ideal pied-a-terre.",
+      "description": "A small comfortable garden apartment on the fringe of the historic centre, superior backpacker for grownups, a large terrace has a portable bbq , loungers, table and chairs, sunshades and a..."
+     },
+     {
+      "position": "29",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/11/7a/7e.jpg",
+      "url": "Apartment with lovely mountain and golf view",
+      "name": "Apartment with lovely mountain and golf view",
+      "description": "Apartment located in front of the 18 hole golf course, with lovely mountain view. Close to Sintra and its heritage palaces, and Cascais and its lovely beaches. The apartment is inserted in..."
+     },
+     {
+      "position": "30",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/d7/24/e0.jpg",
+      "url": "Historic House | Stunning Views",
+      "name": "Historic House | Stunning Views",
+      "description": "Peaceful and Charming house in Colares (10m to Sintra/30 to Lisbon), classified as a public interest building, as its origins in the end of the XVI century. Wide views over Sintra mountains..."
+     },
+     {
+      "position": "31",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/2b/02/e6.jpg",
+      "url": "Villa Lunae - Sintra Flats IV",
+      "name": "Villa Lunae - Sintra Flats IV",
+      "description": "The apartment is very central and conveniently located in front of Sintra's train Station where you can easily get to Lisbon. The old centre of Sintra is only a 10 min walk away and the bus..."
+     },
+     {
+      "position": "32",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/a1/1c/8c.jpg",
+      "url": "Villa Graca",
+      "name": "Villa Graca",
+      "description": "A magnificent 5 bedroom deluxe villa, the sea at your doorstep. The villa has immense areas, perfect to accommodate large groups. Big families will enjoy the extra-large swimming pool and the..."
+     },
+     {
+      "position": "33",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/07/b5/5d.jpg",
+      "url": "Sintra: Villa - Colares",
+      "name": "Sintra: Villa - Colares",
+      "description": "The property has a main house (10 guests) and a studio by the pool (5 guests). If your group has more than 10 guests, and you would like to book the studio, please indicate only a maximum of..."
+     },
+     {
+      "position": "34",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/0f/08/2b.jpg",
+      "url": "Sintra - Casa da Portela",
+      "name": "Sintra - Casa da Portela",
+      "description": "Apartamento no centro de Sintra. Renovado durante o ano de 2016. Solarengo e com decoração suave e relaxante. Ótimo para férias descontraídas na praia, montanha ou na cidade. Junto a todas..."
+     },
+     {
+      "position": "35",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/5d/65/ed.jpg",
+      "url": "Sintra Luxury Villa near Lisbon",
+      "name": "Sintra Luxury Villa near Lisbon",
+      "description": "Luxury, modern and very spacious villa in a quiet location near the center o Sintra and 30 mn away from the center of Lisbon. The villa (300 sqm) has excellent sea view and mountain view and..."
+     },
+     {
+      "position": "36",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/77/49/b7.jpg",
+      "url": "Villa Cecilia",
+      "name": "Villa Cecilia",
+      "description": "This wonderful seafront 6-bedroom villa is likely to turn your desire for peace and relaxation into reality. The beach (Praia Grande) is just a few steps away from the front gate as well as..."
+     },
+     {
+      "position": "37",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/2c/d2/db.jpg",
+      "url": "Villa with private pool.2km to beach in Sintra...",
+      "name": "Villa with private pool.2km to beach in Sintra...",
+      "description": "View all property information"
+     },
+     {
+      "position": "38",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/2c/d1/b8.jpg",
+      "url": "Calm villa with pool in Sintra. 2km from beach...",
+      "name": "Calm villa with pool in Sintra. 2km from beach...",
+      "description": "View all property information"
+     },
+     {
+      "position": "39",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/96/fc/1a.jpg",
+      "url": "Casa do Caseiro",
+      "name": "Casa do Caseiro",
+      "description": "Casa do Caseiro have one bedroom (sleeps 2) (1 more in the sofa bed in living room and 1 cot) only a short 10 minute drive from Sintra Unesco World Heritage site. \u003cBR\u003e\u003cBR\u003eBuilt in 1945, it..."
+     },
+     {
+      "position": "40",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/3c/7a/b4.jpg",
+      "url": "refuge holiday homes | villa nola",
+      "name": "refuge holiday homes | villa nola",
+      "description": "Cascais | 14 guests | 6 bedrooms | 4,5 bathrooms | Located in Cascais, close to the center and the beach in a quiet neighborhood. The house has a living room with fireplace and terrace overlooking..."
+     },
+     {
+      "position": "41",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/55/00/f8.jpg",
+      "url": "RestingPoints - Costa I",
+      "name": "RestingPoints - Costa I",
+      "description": "Apartment on the 1st floor of a typical Sintra building. Located in the history center, very quiet and safe, with easy access, transports and an astonishing view over the Sintra National Palace,..."
+     },
+     {
+      "position": "42",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/0b/87/53.jpg",
+      "url": "Quinta Beira-Mar, Bed and Breakfast",
+      "name": "Quinta Beira-Mar, Bed and Breakfast",
+      "description": "Quinta-Beira-Mar is a spacious guesthouse situated on the beautiful Sintra coast-line, in UNESCO natural parkland, above the beach and with the Sintra mountains behind. 2 mins from Praia Pequena,..."
+     },
+     {
+      "position": "43",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/df/5f/55.jpg",
+      "url": "Centenary Home with Fantastic Gardens and Views",
+      "name": "Centenary Home with Fantastic Gardens and Views",
+      "description": "A genuine Sintra Experience sleeps up to 10 in 6 bedrooms in centre of S Pedro de Penaferrim - oldest settlement in Sintra that backs up onto the Moorish Castle. \u003cBR\u003e\u003cBR\u003eThis centenary home..."
+     },
+     {
+      "position": "44",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/54/fc/d2.jpg",
+      "url": "RestingPoints - Costa II",
+      "name": "RestingPoints - Costa II",
+      "description": "Apartment on the 1st floor of a typical Sintra building. Located in the history center, very quiet and safe, with easy access, transports and an amazing view over the Sintra landscape and forest...."
+     },
+     {
+      "position": "45",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/0d/d7/3f.jpg",
+      "url": "Arribana",
+      "name": "Arribana",
+      "description": "Situated in the magnificent valley of Sintra, a cottage Arribana is fully equipped to provide you with the best accommodation for your vacation. The house has a magnificent view of the Sintra..."
+     },
+     {
+      "position": "46",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/14/b2/ff.jpg",
+      "url": "Sintra Town Centre - Wonderful Views !",
+      "name": "Sintra Town Centre - Wonderful Views !",
+      "description": "Welcome to our sunny and bright attic-with-a-terrace, the upper floor of our picturesque romantic style 19th century old chalet nestled in the mountainside of Old Town Sintra! It has an independent..."
+     },
+     {
+      "position": "47",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/9b/41/6d.jpg",
+      "url": "Quinta da Luz",
+      "name": "Quinta da Luz",
+      "description": "Quinta da Luz has been in the Luz family for many generations. This eighteen-century 2 hectare farming estate provides the ideal location for a great holiday with family and friends. Set in..."
+     },
+     {
+      "position": "48",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/3f/9b/9a.jpg",
+      "url": "CASA PATIO SEM CANTIGAS -2",
+      "name": "CASA PATIO SEM CANTIGAS -2",
+      "description": "View all property information"
+     },
+     {
+      "position": "49",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/27/af/04.jpg",
+      "url": "Stylish Beach House",
+      "name": "Stylish Beach House",
+      "description": "This exquisite little beach house is located on a small “vila”named “Villa Tereza, situated just 250m from the sandy beach and the centre of Praia das Macas. With 5 houses and a large..."
+     },
+     {
+      "position": "50",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/d9/f2/b2.jpg",
+      "url": "Villa ValeVerde | RentExperience",
+      "name": "Villa ValeVerde | RentExperience",
+      "description": "LOCATION This amazing villa is located in Galamares a small neighborhood at a 5min drive from the city center of Sintra. At a 2min walk from the apartment you have a very nice restaurante called..."
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Portuguese Hostel (Sintra, Portugal) - UPDATED 2016 Reviews ...",
+   "htmlTitle": "Portuguese Hostel (\u003cb\u003eSintra\u003c/b\u003e, Portugal) - UPDATED 2016 Reviews ...",
+   "link": "https://www.tripadvisor.com/Hotel_Review-g189164-d6443320-Reviews-Portuguese_Hostel-Sintra_Sintra_Municipality_Lisbon_District_Central_Portugal.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Book Portuguese Hostel, Sintra on TripAdvisor: See 13 traveler reviews, 8 candid \nphotos, and ... We stayed here for one night in February. ... you get the train to \nLisbon Rossio Station) and the buses for the main tourist attractions of Sintra.",
+   "htmlSnippet": "Book Portuguese Hostel, \u003cb\u003eSintra\u003c/b\u003e on \u003cb\u003eTripAdvisor\u003c/b\u003e: See 13 traveler reviews, 8 candid \u003cbr\u003e\nphotos, and ... We stayed here for one night in \u003cb\u003eFebruary\u003c/b\u003e. ... you get the train to \u003cbr\u003e\nLisbon Rossio Station) and the buses for the main tourist \u003cb\u003eattractions\u003c/b\u003e of \u003cb\u003eSintra\u003c/b\u003e.",
+   "cacheId": "ppqQK6W6jWgJ",
+   "formattedUrl": "https://www.tripadvisor.com/Hotel_Review-g189164-d6443320-Reviews- Portuguese_Hostel-Sintra_Sintra_Municipality_Lisbon_District_Cen...",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/Hotel_Review-g189164-d6443320-Reviews- Portuguese_Hostel-\u003cb\u003eSintra\u003c/b\u003e_\u003cb\u003eSintra\u003c/b\u003e_Municipality_Lisbon_District_Cen...",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "275",
+      "height": "183",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTMfOKQUXmE63h_MRWX6rapDN38pdlYIccXtwAeNGt4QUPxnJxL5pS6MFY"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Portugal",
+      "title": "Portugal"
+     },
+     {
+      "url": "Central Portugal",
+      "title": "Central Portugal"
+     },
+     {
+      "url": "Lisbon District",
+      "title": "Lisbon District"
+     },
+     {
+      "url": "Sintra Municipality",
+      "title": "Sintra Municipality"
+     },
+     {
+      "url": "Sintra",
+      "title": "Sintra"
+     },
+     {
+      "url": "Sintra Specialty Lodging",
+      "title": "Sintra Specialty Lodging"
+     },
+     {
+      "url": "Hostels in Sintra",
+      "title": "Hostels in Sintra"
+     }
+    ],
+    "LodgingBusiness": [
+     {
+      "name": "Portuguese Hostel",
+      "priceRange": "$20 - $43 (Based on Average Rates for a Standard Room)"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "4.0",
+      "ratingcount": "47",
+      "pricerange": "$20 - $43 (Based on Average Rates for a Standard Room)"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "pricerange": "$20 - $43 (Based on Average Rates for a Standard Room)",
+      "count": "47"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Portuguese Hostel (Sintra, Portugal) - UPDATED 2016  Reviews - TripAdvisor",
+      "og:description": "Book Portuguese Hostel, Sintra on TripAdvisor: See 13 traveler reviews, 8 candid photos, and great deals for Portuguese Hostel, ranked #7 of 28 specialty lodging in Sintra and rated 4 of 5 at TripAdvisor.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/07/6e/56/eb/portuguese-hostel.jpg",
+      "og:image:width": "550",
+      "og:image:height": "366",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Hotel_Review-g189164-d6443320-Reviews-m33762-Portuguese_Hostel-Sintra_Sintra_Municipality_Lisbon_District_Central_Portugal.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Hotel_Review-g189164-d6443320-Reviews-m33762-Portuguese_Hostel-Sintra_Sintra_Municipality_Lisbon_District_Central_Portugal.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Hotel_Review-g189164-d6443320-Reviews-m33762-Portuguese_Hostel-Sintra_Sintra_Municipality_Lisbon_District_Central_Portugal.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/07/6e/56/eb/portuguese-hostel.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Bengal Tandoori Sintra - Restaurant Reviews, Phone Number ...",
+   "htmlTitle": "Bengal Tandoori \u003cb\u003eSintra\u003c/b\u003e - Restaurant Reviews, Phone Number ...",
+   "link": "https://www.tripadvisor.com/Restaurant_Review-g189164-d1888255-Reviews-Bengal_Tandoori_Sintra-Sintra_Sintra_Municipality_Lisbon_District_Central_Portuga.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Bengal Tandoori Sintra, Sintra: See 145 unbiased reviews of Bengal Tandoori \nSintra, rated 4 of 5 on TripAdvisor and ranked ... 145 Reviews from our \nTripAdvisor Community .... Reviewed February 27, 2016 .... Top-rated Attractions \nNearby.",
+   "htmlSnippet": "Bengal Tandoori \u003cb\u003eSintra\u003c/b\u003e, \u003cb\u003eSintra\u003c/b\u003e: See 145 unbiased reviews of Bengal Tandoori \u003cbr\u003e\n\u003cb\u003eSintra\u003c/b\u003e, rated 4 of 5 on \u003cb\u003eTripAdvisor\u003c/b\u003e and ranked ... 145 Reviews from our \u003cbr\u003e\n\u003cb\u003eTripAdvisor\u003c/b\u003e Community .... Reviewed \u003cb\u003eFebruary\u003c/b\u003e 27, 2016 .... Top-rated \u003cb\u003eAttractions\u003c/b\u003e \u003cbr\u003e\nNearby.",
+   "cacheId": "o0t6mP-E5H8J",
+   "formattedUrl": "https://www.tripadvisor.com/Restaurant_Review-g189164-d1888255- Reviews-Bengal_Tandoori_Sintra-Sintra_Sintra_Municipality_Lisbo...",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/Restaurant_Review-g189164-d1888255- Reviews-Bengal_Tandoori_\u003cb\u003eSintra\u003c/b\u003e-\u003cb\u003eSintra\u003c/b\u003e_\u003cb\u003eSintra\u003c/b\u003e_Municipality_Lisbo...",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "259",
+      "height": "194",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFLsWTDHPfqUAgu5slhThK4IE5cQUlgVq5SUbPDizQ-W0jX_pDa8XTTR4"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Portugal",
+      "title": "Portugal"
+     },
+     {
+      "url": "Central Portugal",
+      "title": "Central Portugal"
+     },
+     {
+      "url": "Lisbon District",
+      "title": "Lisbon District"
+     },
+     {
+      "url": "Sintra Municipality",
+      "title": "Sintra Municipality"
+     },
+     {
+      "url": "Sintra",
+      "title": "Sintra"
+     },
+     {
+      "url": "Sintra Restaurants",
+      "title": "Sintra Restaurants"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "4.0",
+      "ratingcount": "145",
+      "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/01/a6/32/f9/bengal-tandoori.jpg"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "145"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Bengal Tandoori Sintra - Restaurant Reviews, Phone Number & Photos - TripAdvisor",
+      "og:description": "Bengal Tandoori Sintra, Sintra: See 145 unbiased reviews of Bengal Tandoori Sintra, rated 4 of 5 on TripAdvisor and ranked #40 of 245 restaurants in Sintra.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/01/a6/32/f9/bengal-tandoori.jpg",
+      "og:image:width": "550",
+      "og:image:height": "412",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Restaurant_Review-g189164-d1888255-Reviews-m33762-Bengal_Tandoori_Sintra-Sintra_Sintra_Municipality_Lisbon_District_Central_.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Restaurant_Review-g189164-d1888255-Reviews-m33762-Bengal_Tandoori_Sintra-Sintra_Sintra_Municipality_Lisbon_District_Central_.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Restaurant_Review-g189164-d1888255-Reviews-m33762-Bengal_Tandoori_Sintra-Sintra_Sintra_Municipality_Lisbon_District_Central_.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/01/a6/32/f9/bengal-tandoori.jpg"
+     }
+    ],
+    "FoodEstablishment": [
+     {
+      "servesCuisine": "Italian",
+      "image": "https://media-cdn.tripadvisor.com/media/photo-s/01/a6/32/f9/bengal-tandoori.jpg",
+      "name": "Bengal Tandoori Sintra"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Sintra, Braintree - Menu, Prices & Restaurant Reviews - TripAdvisor",
+   "htmlTitle": "\u003cb\u003eSintra\u003c/b\u003e, Braintree - Menu, Prices &amp; Restaurant Reviews - \u003cb\u003eTripAdvisor\u003c/b\u003e",
+   "link": "https://www.tripadvisor.com/Restaurant_Review-g41474-d541041-Reviews-Sintra-Braintree_Massachusetts.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Reserve a table at Sintra, Braintree on TripAdvisor: See 85 unbiased reviews of \nSintra, rated ... Reviewed February 20, 2016 via mobile .... Browse all attractions.",
+   "htmlSnippet": "Reserve a table at \u003cb\u003eSintra\u003c/b\u003e, Braintree on \u003cb\u003eTripAdvisor\u003c/b\u003e: See 85 unbiased reviews of \u003cbr\u003e\n\u003cb\u003eSintra\u003c/b\u003e, rated ... Reviewed \u003cb\u003eFebruary\u003c/b\u003e 20, 2016 via mobile .... Browse all \u003cb\u003eattractions\u003c/b\u003e.",
+   "cacheId": "ZMqYgZN3C8kJ",
+   "formattedUrl": "https://www.tripadvisor.com/Restaurant_Review-g41474-d541041-Reviews- Sintra-Braintree_Massachusetts.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/Restaurant_Review-g41474-d541041-Reviews- \u003cb\u003eSintra\u003c/b\u003e-Braintree_Massachusetts.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "194",
+      "height": "259",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQxVb1D1tVIqDV5Riqs4Ii6RsANFb3Lfuz0qT1g5tjJ5oQrqTmtJqRI7bcl"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "United States",
+      "title": "United States"
+     },
+     {
+      "url": "Massachusetts (MA)",
+      "title": "Massachusetts (MA)"
+     },
+     {
+      "url": "Braintree",
+      "title": "Braintree"
+     },
+     {
+      "url": "Braintree Restaurants",
+      "title": "Braintree Restaurants"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "4.0",
+      "ratingcount": "85",
+      "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/06/c3/b6/dd/salmon-on-fresh-pasta.jpg"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "85"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Sintra, Braintree - Menu, Prices & Restaurant Reviews - TripAdvisor",
+      "og:description": "Reserve a table at Sintra, Braintree on TripAdvisor: See 85 unbiased reviews of Sintra, rated 4 of 5 on TripAdvisor and ranked #5 of 134 restaurants in Braintree.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/06/c3/b6/dd/salmon-on-fresh-pasta.jpg",
+      "og:image:width": "338",
+      "og:image:height": "450",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Restaurant_Review-g41474-d541041-Reviews-m33762-Sintra-Braintree_Massachusetts.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Restaurant_Review-g41474-d541041-Reviews-m33762-Sintra-Braintree_Massachusetts.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Restaurant_Review-g41474-d541041-Reviews-m33762-Sintra-Braintree_Massachusetts.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/06/c3/b6/dd/salmon-on-fresh-pasta.jpg"
+     }
+    ],
+    "FoodEstablishment": [
+     {
+      "servesCuisine": "American",
+      "image": "https://media-cdn.tripadvisor.com/media/photo-s/06/c3/b6/dd/salmon-on-fresh-pasta.jpg",
+      "name": "Sintra"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Cafe Da Vila, Sintra - Calcada do Pelourinho - Restaurant Reviews ...",
+   "htmlTitle": "Cafe Da Vila, \u003cb\u003eSintra\u003c/b\u003e - Calcada do Pelourinho - Restaurant Reviews ...",
+   "link": "https://www.tripadvisor.com/Restaurant_Review-g189164-d6840726-Reviews-Cafe_Da_Vila-Sintra_Sintra_Municipality_Lisbon_District_Central_Portugal.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Cafe Da Vila, Sintra: See 170 unbiased reviews of Cafe Da Vila, rated 3 of 5 on \nTripAdvisor and ranked #125 of 245 restaurants in Sintra. ... Reviewed February \n7, 2016. The outside of that restaurant/cafe is not it's major asset! But we thought \nwe'd give it a try as other places were quite busy and more expensive. This one ...",
+   "htmlSnippet": "Cafe Da Vila, \u003cb\u003eSintra\u003c/b\u003e: See 170 unbiased reviews of Cafe Da Vila, rated 3 of 5 on \u003cbr\u003e\n\u003cb\u003eTripAdvisor\u003c/b\u003e and ranked #125 of 245 restaurants in \u003cb\u003eSintra\u003c/b\u003e. ... Reviewed \u003cb\u003eFebruary\u003c/b\u003e \u003cbr\u003e\n7, 2016. The outside of that restaurant/cafe is not it&#39;s major asset! But we thought \u003cbr\u003e\nwe&#39;d give it a try as other \u003cb\u003eplaces\u003c/b\u003e were quite busy and more expensive. This one&nbsp;...",
+   "cacheId": "VNqzfA8jdrUJ",
+   "formattedUrl": "https://www.tripadvisor.com/Restaurant_Review-g189164-d6840726- Reviews-Cafe_Da_Vila-Sintra_Sintra_Municipality_Lisbon_District...",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/Restaurant_Review-g189164-d6840726- Reviews-Cafe_Da_Vila-\u003cb\u003eSintra\u003c/b\u003e_\u003cb\u003eSintra\u003c/b\u003e_Municipality_Lisbon_District...",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "193",
+      "height": "261",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQnDRj3iarDdlKAoo9biLa9XuSVraHLwv8anqHhmsiG57XHmiKkd6gowyIC"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Portugal",
+      "title": "Portugal"
+     },
+     {
+      "url": "Central Portugal",
+      "title": "Central Portugal"
+     },
+     {
+      "url": "Lisbon District",
+      "title": "Lisbon District"
+     },
+     {
+      "url": "Sintra Municipality",
+      "title": "Sintra Municipality"
+     },
+     {
+      "url": "Sintra",
+      "title": "Sintra"
+     },
+     {
+      "url": "Sintra Restaurants",
+      "title": "Sintra Restaurants"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "3.0",
+      "ratingcount": "170",
+      "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/06/7d/ce/cb/cafe-da-vila.jpg"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "170"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Cafe Da Vila, Sintra - Calcada do Pelourinho - Restaurant Reviews, Phone Number & Photos - TripAdvisor",
+      "og:description": "Cafe Da Vila, Sintra: See 170 unbiased reviews of Cafe Da Vila, rated 3 of 5 on TripAdvisor and ranked #125 of 245 restaurants in Sintra.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/06/7d/ce/cb/cafe-da-vila.jpg",
+      "og:image:width": "333",
+      "og:image:height": "450",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Restaurant_Review-g189164-d6840726-Reviews-m33762-Cafe_Da_Vila-Sintra_Sintra_Municipality_Lisbon_District_Central_Portugal.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Restaurant_Review-g189164-d6840726-Reviews-m33762-Cafe_Da_Vila-Sintra_Sintra_Municipality_Lisbon_District_Central_Portugal.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Restaurant_Review-g189164-d6840726-Reviews-m33762-Cafe_Da_Vila-Sintra_Sintra_Municipality_Lisbon_District_Central_Portugal.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/06/7d/ce/cb/cafe-da-vila.jpg"
+     }
+    ],
+    "FoodEstablishment": [
+     {
+      "servesCuisine": "Bar",
+      "image": "https://media-cdn.tripadvisor.com/media/photo-s/06/7d/ce/cb/cafe-da-vila.jpg",
+      "name": "Cafe Da Vila"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Map of Sintra - Hotels and Attractions on a Sintra map - TripAdvisor",
+   "htmlTitle": "Map of \u003cb\u003eSintra\u003c/b\u003e - Hotels and \u003cb\u003eAttractions\u003c/b\u003e on a \u003cb\u003eSintra\u003c/b\u003e map - \u003cb\u003eTripAdvisor\u003c/b\u003e",
+   "link": "https://www.tripadvisor.com/LocalMaps-g189164-Sintra-Area.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Map of Sintra area hotels: Locate Sintra hotels on a map based on popularity, \nprice, ... de Arte, fiquei fascinado com a sua decoração... more; February 11, \n2016.",
+   "htmlSnippet": "Map of \u003cb\u003eSintra\u003c/b\u003e area hotels: Locate \u003cb\u003eSintra\u003c/b\u003e hotels on a map based on popularity, \u003cbr\u003e\nprice, ... de Arte, fiquei fascinado com a sua decoração... more; \u003cb\u003eFebruary\u003c/b\u003e 11, \u003cbr\u003e\n2016.",
+   "cacheId": "N1sL-Xh23n8J",
+   "formattedUrl": "https://www.tripadvisor.com/LocalMaps-g189164-Sintra-Area.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/LocalMaps-g189164-\u003cb\u003eSintra\u003c/b\u003e-Area.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "80",
+      "height": "80",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTVQflH0VqVMp6PDcRILO5PBISjTfAm4CWJ85aFIrZtIGOJanUlknhw"
+     }
+    ],
+    "metatags": [
+     {
+      "og:image": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Sao Martinho Church, Sintra - TripAdvisor",
+   "htmlTitle": "Sao Martinho Church, \u003cb\u003eSintra\u003c/b\u003e - \u003cb\u003eTripAdvisor\u003c/b\u003e",
+   "link": "https://www.tripadvisor.com/Attraction_Review-g189164-d4003911-Reviews-Sao_Martinho_Church-Sintra_Sintra_Municipality_Lisbon_District_Central_Portugal.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Sao Martinho Church, Sintra: See 41 reviews, articles, and 32 photos of Sao \nMartinho Church, ranked No.39 on TripAdvisor among 65 attractions in Sintra. ... \n4 of 5 bubbles Reviewed February 13, 2016. bas k. ,. Amsterdam, The \nNetherlands ...",
+   "htmlSnippet": "Sao Martinho Church, \u003cb\u003eSintra\u003c/b\u003e: See 41 reviews, articles, and 32 photos of Sao \u003cbr\u003e\nMartinho Church, ranked No.39 on \u003cb\u003eTripAdvisor\u003c/b\u003e among 65 \u003cb\u003eattractions\u003c/b\u003e in \u003cb\u003eSintra\u003c/b\u003e. ... \u003cbr\u003e\n4 of 5 bubbles Reviewed \u003cb\u003eFebruary\u003c/b\u003e 13, 2016. bas k. ,. Amsterdam, The \u003cbr\u003e\nNetherlands&nbsp;...",
+   "cacheId": "9FQC6L8HP_0J",
+   "formattedUrl": "https://www.tripadvisor.com/Attraction_Review-g189164-d4003911-Reviews -Sao_Martinho_Church-Sintra_Sintra_Municipality_Lisbon_District...",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttraction\u003c/b\u003e_Review-g189164-d4003911-Reviews -Sao_Martinho_Church-\u003cb\u003eSintra\u003c/b\u003e_\u003cb\u003eSintra\u003c/b\u003e_Municipality_Lisbon_District...",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "194",
+      "height": "259",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ337aPtIrEcGGoG8dnofStD2hpZMkLijL7lCtfJ6lqeBwFHqFzWe2dtGWE"
+     }
+    ],
+    "LocalBusiness": [
+     {
+      "name": "Sao Martinho Church"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Portugal",
+      "title": "Portugal"
+     },
+     {
+      "url": "Central Portugal",
+      "title": "Central Portugal"
+     },
+     {
+      "url": "Lisbon District",
+      "title": "Lisbon District"
+     },
+     {
+      "url": "Sintra Municipality",
+      "title": "Sintra Municipality"
+     },
+     {
+      "url": "Sintra",
+      "title": "Sintra"
+     },
+     {
+      "url": "Things to Do in Sintra",
+      "title": "Things to Do in Sintra"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "4.0",
+      "ratingcount": "41"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "41"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Sao Martinho Church, Sintra - TripAdvisor",
+      "og:description": "Sao Martinho Church, Sintra: See 41 reviews, articles, and 32 photos of Sao Martinho Church, ranked No.39 on TripAdvisor among 65 attractions in Sintra.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/06/c1/e0/cc/sao-martinho-church.jpg",
+      "og:image:width": "338",
+      "og:image:height": "450",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189164-d4003911-Reviews-m33762-Sao_Martinho_Church-Sintra_Sintra_Municipality_Lisbon_District_Central_Por.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189164-d4003911-Reviews-m33762-Sao_Martinho_Church-Sintra_Sintra_Municipality_Lisbon_District_Central_Por.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189164-d4003911-Reviews-m33762-Sao_Martinho_Church-Sintra_Sintra_Municipality_Lisbon_District_Central_Por.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/06/c1/e0/cc/sao-martinho-church.jpg"
+     }
+    ]
+   }
+  }
+ ]
+}

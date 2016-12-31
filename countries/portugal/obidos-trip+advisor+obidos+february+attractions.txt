@@ -1,0 +1,1228 @@
+{
+ "kind": "customsearch#search",
+ "url": {
+  "type": "application/json",
+  "template": "https://www.googleapis.com/customsearch/v1?q={searchTerms}&num={count?}&start={startIndex?}&lr={language?}&safe={safe?}&cx={cx?}&cref={cref?}&sort={sort?}&filter={filter?}&gl={gl?}&cr={cr?}&googlehost={googleHost?}&c2coff={disableCnTwTranslation?}&hq={hq?}&hl={hl?}&siteSearch={siteSearch?}&siteSearchFilter={siteSearchFilter?}&exactTerms={exactTerms?}&excludeTerms={excludeTerms?}&linkSite={linkSite?}&orTerms={orTerms?}&relatedSite={relatedSite?}&dateRestrict={dateRestrict?}&lowRange={lowRange?}&highRange={highRange?}&searchType={searchType}&fileType={fileType?}&rights={rights?}&imgSize={imgSize?}&imgType={imgType?}&imgColorType={imgColorType?}&imgDominantColor={imgDominantColor?}&alt=json"
+ },
+ "queries": {
+  "request": [
+   {
+    "title": "Google Custom Search - trip advisor obidos february attractions",
+    "totalResults": "2080",
+    "searchTerms": "trip advisor obidos february attractions",
+    "count": 10,
+    "startIndex": 1,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "obidos"
+   }
+  ],
+  "nextPage": [
+   {
+    "title": "Google Custom Search - trip advisor obidos february attractions",
+    "totalResults": "2080",
+    "searchTerms": "trip advisor obidos february attractions",
+    "count": 10,
+    "startIndex": 11,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "obidos"
+   }
+  ]
+ },
+ "context": {
+  "title": "Polaama"
+ },
+ "searchInformation": {
+  "searchTime": 0.293282,
+  "formattedSearchTime": "0.29",
+  "totalResults": "2080",
+  "formattedTotalResults": "2,080"
+ },
+ "items": [
+  {
+   "kind": "customsearch#result",
+   "title": "Obidos Village (Portugal): Top Tips Before You Go - TripAdvisor",
+   "htmlTitle": "\u003cb\u003eObidos\u003c/b\u003e Village (Portugal): Top Tips Before You Go - \u003cb\u003eTripAdvisor\u003c/b\u003e",
+   "link": "https://www.tripadvisor.com/Attraction_Review-g189160-d548030-Reviews-Obidos_Village-Obidos_Leiria_District_Central_Portugal.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Book your tickets online for Obidos Village, Obidos: See 2793 reviews, articles, \nand ... photos of Obidos Village, ranked No.1 on TripAdvisor among 31 \nattractions in Obidos. ... in July and august only is just fantastic , chocolate town in \nFebruary.",
+   "htmlSnippet": "Book your tickets online for \u003cb\u003eObidos\u003c/b\u003e Village, \u003cb\u003eObidos\u003c/b\u003e: See 2793 reviews, articles, \u003cbr\u003e\nand ... photos of \u003cb\u003eObidos\u003c/b\u003e Village, ranked No.1 on \u003cb\u003eTripAdvisor\u003c/b\u003e among 31 \u003cbr\u003e\n\u003cb\u003eattractions\u003c/b\u003e in \u003cb\u003eObidos\u003c/b\u003e. ... in July and august only is just fantastic , chocolate town in \u003cbr\u003e\n\u003cb\u003eFebruary\u003c/b\u003e.",
+   "cacheId": "q2MlxRiZ9jUJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attraction_Review-g189160-d548030-Reviews- Obidos_Village-Obidos_Leiria_District_Central_Portugal.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttraction\u003c/b\u003e_Review-g189160-d548030-Reviews- \u003cb\u003eObidos\u003c/b\u003e_Village-\u003cb\u003eObidos\u003c/b\u003e_Leiria_District_Central_Portugal.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "259",
+      "height": "194",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcS960-cuhGKSYTk3AF_NMORgxZcQzx06xRsqob8jsqnKEgUS7jjiipciWpJ"
+     }
+    ],
+    "LocalBusiness": [
+     {
+      "name": "Obidos Village"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Portugal",
+      "title": "Portugal"
+     },
+     {
+      "url": "Central Portugal",
+      "title": "Central Portugal"
+     },
+     {
+      "url": "Leiria District",
+      "title": "Leiria District"
+     },
+     {
+      "url": "Obidos",
+      "title": "Obidos"
+     },
+     {
+      "url": "Things to Do in Obidos",
+      "title": "Things to Do in Obidos"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "4.5",
+      "ratingcount": "2793"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "2793"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Obidos Village (Portugal): Top Tips Before You Go - TripAdvisor",
+      "og:description": "Book your tickets online for Obidos Village, Obidos: See 2,793 reviews, articles, and 3,055 photos of Obidos Village, ranked No.1 on TripAdvisor among 31 attractions in Obidos.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/05/40/28/a0/obidos-village.jpg",
+      "og:image:width": "550",
+      "og:image:height": "412",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189160-d548030-Reviews-m33762-Obidos_Village-Obidos_Leiria_District_Central_Portugal.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189160-d548030-Reviews-m33762-Obidos_Village-Obidos_Leiria_District_Central_Portugal.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189160-d548030-Reviews-m33762-Obidos_Village-Obidos_Leiria_District_Central_Portugal.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/05/40/28/a0/obidos-village.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Obidos 2016: Best of Obidos, Portugal Tourism - TripAdvisor",
+   "htmlTitle": "\u003cb\u003eObidos\u003c/b\u003e 2016: Best of \u003cb\u003eObidos\u003c/b\u003e, Portugal Tourism - \u003cb\u003eTripAdvisor\u003c/b\u003e",
+   "link": "https://www.tripadvisor.com/Tourism-g189160-Obidos_Leiria_District_Central_Portugal-Vacations.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Obidos Tourism: TripAdvisor has 17001 reviews of Obidos Hotels, Attractions, \nand Restaurants making it your best Obidos resource.",
+   "htmlSnippet": "\u003cb\u003eObidos\u003c/b\u003e Tourism: \u003cb\u003eTripAdvisor\u003c/b\u003e has 17001 reviews of \u003cb\u003eObidos\u003c/b\u003e Hotels, \u003cb\u003eAttractions\u003c/b\u003e, \u003cbr\u003e\nand Restaurants making it your best \u003cb\u003eObidos\u003c/b\u003e resource.",
+   "cacheId": "ez6hMyQkypIJ",
+   "formattedUrl": "https://www.tripadvisor.com/Tourism-g189160-Obidos_Leiria_District_ Central_Portugal-Vacations.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/Tourism-g189160-\u003cb\u003eObidos\u003c/b\u003e_Leiria_District_ Central_Portugal-Vacations.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "259",
+      "height": "194",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTzHn1mQdiJWy40AtIzlhaDeHXgX7lr727HgcsLROiIP8Sdpam3SM478fYy"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Portugal",
+      "title": "Portugal"
+     },
+     {
+      "url": "Central Portugal",
+      "title": "Central Portugal"
+     },
+     {
+      "url": "Leiria District",
+      "title": "Leiria District"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Obidos 2016: Best of Obidos, Portugal Tourism - TripAdvisor",
+      "og:description": "Obidos Tourism: TripAdvisor has 17,001 reviews of Obidos Hotels, Attractions, and Restaurants making it your best Obidos resource.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/01/0f/0a/49/obidos-castle-portuguese.jpg",
+      "og:image:width": "550",
+      "og:image:height": "412",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Tourism-g189160-m33762-Obidos_Leiria_District_Central_Portugal-Vacations.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Tourism-g189160-m33762-Obidos_Leiria_District_Central_Portugal-Vacations.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Tourism-g189160-m33762-Obidos_Leiria_District_Central_Portugal-Vacations.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/01/0f/0a/49/obidos-castle-portuguese.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Casa de Campo Sao Rafael (Obidos, Portugal) - UPDATED 2016 ...",
+   "htmlTitle": "Casa de Campo Sao Rafael (\u003cb\u003eObidos\u003c/b\u003e, Portugal) - UPDATED 2016 ...",
+   "link": "https://www.tripadvisor.com/Hotel_Review-g189160-d559357-Reviews-Casa_de_Campo_Sao_Rafael-Obidos_Leiria_District_Central_Portugal.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Book Casa de Campo Sao Rafael, Obidos on TripAdvisor: See 53 traveler \nreviews, 177 candid photos, and great deals for Casa de Campo ... Estrada \nNacional 8 | Casal do Zambujeiro, Obidos 2510-082, Portugal ..... Reviewed \nFebruary 24, 2016 via mobile .... Can tickets for local attractions be purchased at \nthe front desk?",
+   "htmlSnippet": "Book Casa de Campo Sao Rafael, \u003cb\u003eObidos\u003c/b\u003e on \u003cb\u003eTripAdvisor\u003c/b\u003e: See 53 traveler \u003cbr\u003e\nreviews, 177 candid photos, and great deals for Casa de Campo ... Estrada \u003cbr\u003e\nNacional 8 | Casal do Zambujeiro, \u003cb\u003eObidos\u003c/b\u003e 2510-082, Portugal ..... Reviewed \u003cbr\u003e\n\u003cb\u003eFebruary\u003c/b\u003e 24, 2016 via mobile .... Can tickets for local \u003cb\u003eattractions\u003c/b\u003e be purchased at \u003cbr\u003e\nthe front desk?",
+   "cacheId": "0pL7YzQNQUoJ",
+   "formattedUrl": "https://www.tripadvisor.com/Hotel_Review-g189160-d559357-Reviews-Casa _de_Campo_Sao_Rafael-Obidos_Leiria_District_Central_Portugal.h...",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/Hotel_Review-g189160-d559357-Reviews-Casa _de_Campo_Sao_Rafael-\u003cb\u003eObidos\u003c/b\u003e_Leiria_District_Central_Portugal.h...",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "276",
+      "height": "183",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQm-ZXcvihHEX5ImhkDXEJ4M5iICvIryc_awu3mBNpRWyuu4XeowN2t5gDT"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Portugal",
+      "title": "Portugal"
+     },
+     {
+      "url": "Central Portugal",
+      "title": "Central Portugal"
+     },
+     {
+      "url": "Leiria District",
+      "title": "Leiria District"
+     },
+     {
+      "url": "Obidos",
+      "title": "Obidos"
+     },
+     {
+      "url": "Obidos B&Bs / Inns",
+      "title": "Obidos B&Bs / Inns"
+     }
+    ],
+    "LodgingBusiness": [
+     {
+      "name": "Casa de Campo Sao Rafael",
+      "priceRange": "$42 - $82 (Based on Average Rates for a Standard Room)"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "4.5",
+      "ratingcount": "182",
+      "pricerange": "$42 - $82 (Based on Average Rates for a Standard Room)"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "pricerange": "$42 - $82 (Based on Average Rates for a Standard Room)",
+      "count": "182"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Casa de Campo Sao Rafael (Obidos, Portugal) - UPDATED 2016  Guest house Reviews - TripAdvisor",
+      "og:description": "Book Casa de Campo Sao Rafael, Obidos on TripAdvisor: See 53 traveler reviews, 177 candid photos, and great deals for Casa de Campo Sao Rafael, ranked #1 of 20 B&Bs / inns in Obidos and rated 4.5 of 5 at TripAdvisor.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/01/c1/fc/4d/front-hotel.jpg",
+      "og:image:width": "550",
+      "og:image:height": "365",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Hotel_Review-g189160-d559357-Reviews-m33762-Casa_de_Campo_Sao_Rafael-Obidos_Leiria_District_Central_Portugal.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Hotel_Review-g189160-d559357-Reviews-m33762-Casa_de_Campo_Sao_Rafael-Obidos_Leiria_District_Central_Portugal.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Hotel_Review-g189160-d559357-Reviews-m33762-Casa_de_Campo_Sao_Rafael-Obidos_Leiria_District_Central_Portugal.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/01/c1/fc/4d/front-hotel.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Municipal Museum of Obidos (Portugal): Top Tips Before You Go ...",
+   "htmlTitle": "Municipal Museum of \u003cb\u003eObidos\u003c/b\u003e (Portugal): Top Tips Before You Go ...",
+   "link": "https://www.tripadvisor.com/Attraction_Review-g189160-d3556168-Reviews-Municipal_Museum_of_Obidos-Obidos_Leiria_District_Central_Portugal.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Municipal Museum of Obidos, Obidos: See 48 reviews, articles, and 24 photos of \nMunicipal Museum of Obidos, ranked No.13 on TripAdvisor among 31 attractions \nin Obidos. ... Reviewed February 27, 2016. Maybe not great for us but the ...",
+   "htmlSnippet": "Municipal Museum of \u003cb\u003eObidos\u003c/b\u003e, \u003cb\u003eObidos\u003c/b\u003e: See 48 reviews, articles, and 24 photos of \u003cbr\u003e\nMunicipal Museum of \u003cb\u003eObidos\u003c/b\u003e, ranked No.13 on \u003cb\u003eTripAdvisor\u003c/b\u003e among 31 \u003cb\u003eattractions\u003c/b\u003e \u003cbr\u003e\nin \u003cb\u003eObidos\u003c/b\u003e. ... Reviewed \u003cb\u003eFebruary\u003c/b\u003e 27, 2016. Maybe not great for us but the&nbsp;...",
+   "cacheId": "pQQH-PvHRMgJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attraction_Review-g189160-d3556168-Reviews -Municipal_Museum_of_Obidos-Obidos_Leiria_District_Central_P...",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttraction\u003c/b\u003e_Review-g189160-d3556168-Reviews -Municipal_Museum_of_\u003cb\u003eObidos\u003c/b\u003e-\u003cb\u003eObidos\u003c/b\u003e_Leiria_District_Central_P...",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "276",
+      "height": "183",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRsBUlo9nWkEFWluLkcbCp0PeUyiczBWwqf8XtNWUgWXlPnCksBLUrdO14"
+     }
+    ],
+    "LocalBusiness": [
+     {
+      "name": "Municipal Museum of Obidos"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Portugal",
+      "title": "Portugal"
+     },
+     {
+      "url": "Central Portugal",
+      "title": "Central Portugal"
+     },
+     {
+      "url": "Leiria District",
+      "title": "Leiria District"
+     },
+     {
+      "url": "Obidos",
+      "title": "Obidos"
+     },
+     {
+      "url": "Things to Do in Obidos",
+      "title": "Things to Do in Obidos"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "4.0",
+      "ratingcount": "48"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "48"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Municipal Museum of Obidos (Portugal): Top Tips Before You Go - TripAdvisor",
+      "og:description": "Municipal Museum of Obidos, Obidos: See 48 reviews, articles, and 24 photos of Municipal Museum of Obidos, ranked No.13 on TripAdvisor among 31 attractions in Obidos.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/06/0e/96/e5/municipal-museum-of-obidos.jpg",
+      "og:image:width": "550",
+      "og:image:height": "365",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189160-d3556168-Reviews-m33762-Municipal_Museum_of_Obidos-Obidos_Leiria_District_Central_Portugal.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189160-d3556168-Reviews-m33762-Municipal_Museum_of_Obidos-Obidos_Leiria_District_Central_Portugal.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189160-d3556168-Reviews-m33762-Municipal_Museum_of_Obidos-Obidos_Leiria_District_Central_Portugal.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/06/0e/96/e5/municipal-museum-of-obidos.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Kalyan Fitness & Spa (Obidos, Portugal): Top Tips Before You Go ...",
+   "htmlTitle": "Kalyan Fitness &amp; Spa (\u003cb\u003eObidos\u003c/b\u003e, Portugal): Top Tips Before You Go ...",
+   "link": "https://www.tripadvisor.com/Attraction_Review-g189160-d6615500-Reviews-Kalyan_Fitness_Spa-Obidos_Leiria_District_Central_Portugal.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Kalyan Fitness & Spa, Obidos: See 3 reviews, articles, and photos of Kalyan \nFitness & Spa ... Spa, Obidos: Address, Phone Number, Top-Rated Attraction \nReviews .... Reviewed February 18, 2015 ... 3 Reviews from our TripAdvisor \nCommunity.",
+   "htmlSnippet": "Kalyan Fitness &amp; Spa, \u003cb\u003eObidos\u003c/b\u003e: See 3 reviews, articles, and photos of Kalyan \u003cbr\u003e\nFitness &amp; Spa ... Spa, \u003cb\u003eObidos\u003c/b\u003e: Address, Phone Number, Top-Rated \u003cb\u003eAttraction\u003c/b\u003e \u003cbr\u003e\nReviews .... Reviewed \u003cb\u003eFebruary\u003c/b\u003e 18, 2015 ... 3 Reviews from our \u003cb\u003eTripAdvisor\u003c/b\u003e \u003cbr\u003e\nCommunity.",
+   "cacheId": "_L97czrV3sMJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attraction_Review-g189160-d6615500-Reviews -Kalyan_Fitness_Spa-Obidos_Leiria_District_Central_Portugal.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttraction\u003c/b\u003e_Review-g189160-d6615500-Reviews -Kalyan_Fitness_Spa-\u003cb\u003eObidos\u003c/b\u003e_Leiria_District_Central_Portugal.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "274",
+      "height": "184",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQYIeZ3lffFDLINaVlM3zaN5HFQSbJGOo6tf2GajyPXOnj7h08LEVg90ZU"
+     }
+    ],
+    "LocalBusiness": [
+     {
+      "name": "Kalyan Fitness & Spa"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Portugal",
+      "title": "Portugal"
+     },
+     {
+      "url": "Central Portugal",
+      "title": "Central Portugal"
+     },
+     {
+      "url": "Leiria District",
+      "title": "Leiria District"
+     },
+     {
+      "url": "Obidos",
+      "title": "Obidos"
+     },
+     {
+      "url": "Things to Do in Obidos",
+      "title": "Things to Do in Obidos"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "5.0",
+      "ratingcount": "3"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "3"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Kalyan Fitness & Spa (Obidos, Portugal): Top Tips Before You Go - TripAdvisor",
+      "og:description": "Kalyan Fitness & Spa, Obidos: See 3 reviews, articles, and photos of Kalyan Fitness & Spa on TripAdvisor.",
+      "og:image": "https://static.tacdn.com/img2/branding/TA_550x370.png",
+      "og:image:width": "550",
+      "og:image:height": "370",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189160-d6615500-Reviews-m33762-Kalyan_Fitness_Spa-Obidos_Leiria_District_Central_Portugal.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189160-d6615500-Reviews-m33762-Kalyan_Fitness_Spa-Obidos_Leiria_District_Central_Portugal.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189160-d6615500-Reviews-m33762-Kalyan_Fitness_Spa-Obidos_Leiria_District_Central_Portugal.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://static.tacdn.com/img2/branding/TA_550x370.png"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Obidos - Review of Obidos Village, Obidos, Portugal - TripAdvisor",
+   "htmlTitle": "\u003cb\u003eObidos\u003c/b\u003e - Review of \u003cb\u003eObidos\u003c/b\u003e Village, \u003cb\u003eObidos\u003c/b\u003e, Portugal - \u003cb\u003eTripAdvisor\u003c/b\u003e",
+   "link": "https://www.tripadvisor.com/ShowUserReviews-g189160-d548030-r349518983-Obidos_Village-Obidos_Leiria_District_Central_Portugal.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "10 attraction reviews. common_n_attraction_reviews_1bd8 22 helpful votes. “\nObidos”. 5 of 5 bubbles Reviewed February 20, 2016. It is worth a visit! Obidos is\n ...",
+   "htmlSnippet": "10 \u003cb\u003eattraction\u003c/b\u003e reviews. common_n_attraction_reviews_1bd8 22 helpful votes. “\u003cbr\u003e\n\u003cb\u003eObidos\u003c/b\u003e”. 5 of 5 bubbles Reviewed \u003cb\u003eFebruary\u003c/b\u003e 20, 2016. It is worth a visit! \u003cb\u003eObidos\u003c/b\u003e is\u003cbr\u003e\n&nbsp;...",
+   "cacheId": "Te5uBSJmv_4J",
+   "formattedUrl": "https://www.tripadvisor.com/ShowUserReviews-g189160-d548030- r349518983-Obidos_Village-Obidos_Leiria_District_Central_Portu...",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/ShowUserReviews-g189160-d548030- r349518983-\u003cb\u003eObidos\u003c/b\u003e_Village-\u003cb\u003eObidos\u003c/b\u003e_Leiria_District_Central_Portu...",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "259",
+      "height": "194",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcS960-cuhGKSYTk3AF_NMORgxZcQzx06xRsqob8jsqnKEgUS7jjiipciWpJ"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Portugal",
+      "title": "Portugal"
+     },
+     {
+      "url": "Central Portugal",
+      "title": "Central Portugal"
+     },
+     {
+      "url": "Leiria District",
+      "title": "Leiria District"
+     },
+     {
+      "url": "Obidos",
+      "title": "Obidos"
+     },
+     {
+      "url": "Obidos - Things to Do",
+      "title": "Obidos - Things to Do"
+     },
+     {
+      "url": "Obidos Village",
+      "title": "Obidos Village"
+     }
+    ],
+    "review": [
+     {
+      "reviewer": "a TripAdvisor user",
+      "reviewdate": "2016-02-20",
+      "ratingstars": "5.0"
+     }
+    ],
+    "hreview": [
+     {
+      "summary": "“Obidos”",
+      "dtreviewed": "2016-02-20",
+      "description": "It is worth a visit! Obidos is one of Portugal's picturesque gems. Its gorgeous historic center has cobbledstone streets and is surrounded by walls. It is worth a day's trip from Lisbon. Here,..."
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Obidos - Review of Obidos Village, Obidos, Portugal - TripAdvisor",
+      "og:description": "Obidos Village: Obidos - See 2,775 traveler reviews, 3,046 candid photos, and great deals for Obidos, Portugal, at TripAdvisor.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/05/40/28/a0/obidos-village.jpg",
+      "og:image:width": "550",
+      "og:image:height": "412",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/ShowUserReviews-g189160-d548030-r349518983-m33762-Obidos_Village-Obidos_Leiria_District_Central_Portugal.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/ShowUserReviews-g189160-d548030-r349518983-m33762-Obidos_Village-Obidos_Leiria_District_Central_Portugal.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/ShowUserReviews-g189160-d548030-r349518983-m33762-Obidos_Village-Obidos_Leiria_District_Central_Portugal.html"
+     }
+    ],
+    "Review": [
+     {
+      "author": "a TripAdvisor user",
+      "name": "“Obidos”",
+      "datePublished": "2016-02-20",
+      "reviewBody": "It is worth a visit! Obidos is one of Portugal's picturesque gems. Its gorgeous historic center has cobbledstone streets and is surrounded by walls. It is worth a day's trip from Lisbon. Here,..."
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/05/40/28/a0/obidos-village.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "10 Best Obidos Vacation Rentals, Apartments | TripAdvisor - Book ...",
+   "htmlTitle": "10 Best \u003cb\u003eObidos\u003c/b\u003e Vacation Rentals, Apartments | \u003cb\u003eTripAdvisor\u003c/b\u003e - Book ...",
+   "link": "https://www.tripadvisor.com/VacationRentals-g189160-Reviews-Obidos_Leiria_District_Central_Portugal-Vacation_Rentals.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "... and great deals on 168 vacation rentals, cabins and villas in Obidos, Portugal. \n... Quiet and peaceful, yet a short drive to stunning places like Peniche (famous \n...... could go to the Vila Natal (Winter Wonderland) Christmas Festival in Obidos.",
+   "htmlSnippet": "... and great deals on 168 vacation rentals, cabins and villas in \u003cb\u003eObidos\u003c/b\u003e, Portugal. \u003cbr\u003e\n... Quiet and peaceful, yet a short drive to stunning \u003cb\u003eplaces\u003c/b\u003e like Peniche (famous \u003cbr\u003e\n...... could go to the Vila Natal (\u003cb\u003eWinter\u003c/b\u003e Wonderland) Christmas Festival in \u003cb\u003eObidos\u003c/b\u003e.",
+   "cacheId": "CFCXF_HTEBgJ",
+   "formattedUrl": "https://www.tripadvisor.com/VacationRentals-g189160-Reviews-Obidos_ Leiria_District_Central_Portugal-Vacation_Rentals.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/VacationRentals-g189160-Reviews-\u003cb\u003eObidos\u003c/b\u003e_ Leiria_District_Central_Portugal-Vacation_Rentals.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "259",
+      "height": "194",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTzHn1mQdiJWy40AtIzlhaDeHXgX7lr727HgcsLROiIP8Sdpam3SM478fYy"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "10 Best Obidos Vacation Rentals, Apartments | TripAdvisor - Book Vacation Rentals in Obidos, Portugal",
+      "og:description": "Browse and Book from the Best Vacation Rentals in Obidos: View TripAdvisor's 368 unbiased reviews, 5,427 photos and great deals on 168 vacation rentals, cabins and villas in Obidos, Portugal",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/01/0f/0a/49/obidos-castle-portuguese.jpg",
+      "og:image:width": "550",
+      "og:image:height": "412",
+      "og:type": "company",
+      "og:url": "/VacationRentals-g189160-Reviews-Obidos_Leiria_District_Central_Portugal-Vacation_Rentals.html",
+      "og:site_name": "TripAdvisor",
+      "fb:admins": "100000982334629",
+      "fb:app_id": "162729813767876",
+      "twitter:title": "10 Best Obidos Vacation Rentals, Apartments | TripAdvisor - Book Vacation Rentals in Obidos, Portugal",
+      "twitter:card": "summary_large_image",
+      "twitter:url": "https://www.tripadvisor.com/VacationRentals-g189160-Reviews-Obidos_Leiria_District_Central_Portugal-Vacation_Rentals.html",
+      "twitter:image:src": "https://media-cdn.tripadvisor.com/media/photo-s/00/11/30/39/obidos-village.jpg",
+      "twitter:site": "http://www.tripadvisor.com/Rentals",
+      "twitter:description": "Browse and Book from the Best Vacation Rentals in Obidos: View TripAdvisor's 368 unbiased reviews, 5,427 photos and great deals on 168 vacation rentals, cabins and villas in Obidos, Portugal",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/VacationRentals-g189160-Reviews-m33762-Obidos_Leiria_District_Central_Portugal-Vacation_Rentals.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/VacationRentals-g189160-Reviews-m33762-Obidos_Leiria_District_Central_Portugal-Vacation_Rentals.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/VacationRentals-g189160-Reviews-m33762-Obidos_Leiria_District_Central_Portugal-Vacation_Rentals.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/01/0f/0a/49/obidos-castle-portuguese.jpg"
+     }
+    ],
+    "listitem": [
+     {
+      "item": "Europe",
+      "name": "Europe"
+     },
+     {
+      "item": "Portugal",
+      "name": "Portugal"
+     },
+     {
+      "item": "Central Portugal",
+      "name": "Central Portugal"
+     },
+     {
+      "item": "Leiria District",
+      "name": "Leiria District"
+     },
+     {
+      "item": "Obidos Villas",
+      "name": "Obidos Villas"
+     },
+     {
+      "position": "1",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/40/b0/aa.jpg",
+      "url": "Beautiful Modern villa, easy walk to lagoon",
+      "name": "Beautiful Modern villa, easy walk to lagoon",
+      "description": "The villa is well equipped to make the house home from home. Being modern open plan living it is a sociable house to enjoy being cool with fully tiled floors and all downstairs rooms open with..."
+     },
+     {
+      "position": "2",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/8f/62/5d.jpg",
+      "url": "36 Pinhal - private pool, 3 beds, 3 bathrooms",
+      "name": "36 Pinhal - private pool, 3 beds, 3 bathrooms",
+      "description": "Beautifully furnished, short walk to lagoon, golf and beaches a 5 minute drive This is a luxury detached property: tastefully decorated, light and spacious, there are three well appointed bedrooms..."
+     },
+     {
+      "position": "3",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/cb/3d/61.jpg",
+      "url": "Casa da Borboleta, sleeps up to 12 people",
+      "name": "Casa da Borboleta, sleeps up to 12 people",
+      "description": "Casa da Borboleta is a 6 bedroomed villa, decorated to a high standard and benefits high quality furnishings which offers an excellent stay in a beautiful location. The modern villa is set..."
+     },
+     {
+      "position": "4",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/af/4f/00.jpg",
+      "url": "Villa da Passadico",
+      "name": "Villa da Passadico",
+      "description": "This superb south facing villa is spacious inside and out with no neighbours. It will sleep up to 10 people but the prices shown are for 8 people, person 9 and 10 sleep on a put up bed. 2 of..."
+     },
+     {
+      "position": "5",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/cc/f5/b3.jpg",
+      "url": "Modern quiet villa with private pool",
+      "name": "Modern quiet villa with private pool",
+      "description": "A beautifully well presented, generously proportioned, 3 bedroom, 3 bathroom detached villa finished to a high standard with its own swimming pool, garage and landscaped private garden all..."
+     },
+     {
+      "position": "6",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/a2/a4/c4.jpg",
+      "url": "Peaceful villa, private pool, walk to lagoon",
+      "name": "Peaceful villa, private pool, walk to lagoon",
+      "description": "This beautiful contemporary villa is an easy stroll from the picturesque Obidos Lagoon and 5 minutes from the beaches at the sea. Quiet and peaceful, yet a short drive to stunning places like..."
+     },
+     {
+      "position": "7",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/47/2c/70.jpg",
+      "url": "Villa Rosie",
+      "name": "Villa Rosie",
+      "description": "This two floors villa situated near the entrance of Praia D'El Rey, 2 minutes walking to tennis centre and about 5 minutes walking to Clubhouse, children's playground and driving range. The..."
+     },
+     {
+      "position": "8",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/a9/c9/be.jpg",
+      "url": "Villa Arnoia - Luxuriously Furnished Holiday Villa",
+      "name": "Villa Arnoia - Luxuriously Furnished Holiday Villa",
+      "description": "Villa Arnoia, Fraction M, is our luxuriously Furnished 3 bedroom, 2 bathroom holiday villa / end of terrace Townhouse / vacances maison de ville in the charming & typically Portuguese village..."
+     },
+     {
+      "position": "9",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/e2/30/1f.jpg",
+      "url": "Sea Breeze",
+      "name": "Sea Breeze",
+      "description": "Idyllic getaway for anytime of the year right by the beautiful white beaches and atlantic surf of this corner of Portugal. Great links golf courses. Surfing for all ages. Luxury, airy beach-side..."
+     },
+     {
+      "position": "10",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/c8/04/9f.jpg",
+      "url": "5 Star Two bed town house on private golf resort",
+      "name": "5 Star Two bed town house on private golf resort",
+      "description": "Contemporary designed house with a great open space for the kids to play which is very safe and secure. This is a family owned house and we have enjoyed many fantastic holidays here. The shared..."
+     },
+     {
+      "position": "11",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/02/45/d3.jpg",
+      "url": "03 Portucale",
+      "name": "03 Portucale",
+      "description": "This is a 5 star resort which will suit families and is also a great base for a golfing holiday as well as sightseeing. The resort's own Children's Club (Clube Aventura) which operates in the..."
+     },
+     {
+      "position": "12",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/9b/b8/cc.jpg",
+      "url": "Torre de Maneys, Tower of Poets, Óbidos",
+      "name": "Torre de Maneys, Tower of Poets, Óbidos",
+      "description": "Torre de Maneys is two buildings linked by an enclosed bridge across the street. The main house in stone, dating from the XVI century, is believed to have been a former storage tower of the..."
+     },
+     {
+      "position": "13",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/f5/6a/85.jpg",
+      "url": "Pacific at Quinta do Bom Vento cottage w 2 qn beds",
+      "name": "Pacific at Quinta do Bom Vento cottage w 2 qn beds",
+      "description": "Perched on its own 4 acre wooded valley surrounded by apple and pear orchards, Quinta do Bom Vento offers stylish self catering accommodation just 7km from Obidos and Buddha Eden. The original..."
+     },
+     {
+      "position": "14",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/81/8d/20.jpg",
+      "url": "Ideally located, luxury top floor 3 bed apartment",
+      "name": "Ideally located, luxury top floor 3 bed apartment",
+      "description": "Spacious top floor apartment with rear south-west facing balconies giving uninterrupted views overlooking the 1st Fairway, large heated pool and Atlantic coast. Furnished to a very high standard..."
+     },
+     {
+      "position": "15",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/d2/6e/c8.jpg",
+      "url": "Villa Encantador Pinhal Obidos",
+      "name": "Villa Encantador Pinhal Obidos",
+      "description": "Our holiday home is suitable for adult only or families to enjoy. The lovely sandy beaches, which are within walking distance. Lovely resturants, bars, wildlife. Historical sites, Sintra,and..."
+     },
+     {
+      "position": "16",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/2c/49/97.jpg",
+      "url": "Beautiful Villa With Private Pool Near Obidos",
+      "name": "Beautiful Villa With Private Pool Near Obidos",
+      "description": "This fantastic new villa with its own private swimming pool is the ideal place to unwind and provides you with a wonderful home from home holiday. In a peaceful and perfect location within..."
+     },
+     {
+      "position": "17",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/af/a4/57.jpg",
+      "url": "Casa Rosa",
+      "name": "Casa Rosa",
+      "description": "This luxury villa is the ideal choice for those who wish to experience the unspoilt real Portugal. Set in a village surrounded by countryside this is the perfect base to explore this beautiful..."
+     },
+     {
+      "position": "18",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/b2/5f/4f.jpg",
+      "url": "Architecture (Pritzker) Resort, Golf Beach Lagoon",
+      "name": "Architecture (Pritzker) Resort, Golf Beach Lagoon",
+      "description": "View all property information"
+     },
+     {
+      "position": "19",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/1e/8c/2e.jpg",
+      "url": "Beco da Igreja No 3",
+      "name": "Beco da Igreja No 3",
+      "description": "Spacious detached villa with private pool and gardens set in a rural location with stunning views over the valley. \u003cBR\u003eSleeps 6 (3 Bedrooms) Upstairs bathroom with bath/shower over, wc, bidet,..."
+     },
+     {
+      "position": "20",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/06/7c/c2.jpg",
+      "url": "Casa RiJa",
+      "name": "Casa RiJa",
+      "description": "Villa RiJa is located just one hour drive north of Lisbon in a 'golden triangle' of Silver Coast, Portugal, on the resort of Perola da Lagoa close to the shores of Obidos Lagoon. The villa..."
+     },
+     {
+      "position": "21",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/1a/47/43.jpg",
+      "url": "Beautiful Villa + poll+ walk to beach + Wi Fi !",
+      "name": "Beautiful Villa + poll+ walk to beach + Wi Fi !",
+      "description": "This is a brand new Villa located in Bom Sucesso Perola da lagoa, about 1km from Lagoa de Óbidos and Bom Sucesso beach,It takes 3 minutes driving to the beach. It is a very spacious villa..."
+     },
+     {
+      "position": "22",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/17/13/20.jpg",
+      "url": "Casa de Convento 100 metres from Obidos Walls",
+      "name": "Casa de Convento 100 metres from Obidos Walls",
+      "description": "A recently built town house, situated just 100m metres outside the medieval walls of Obidos. The property offers spacious and comfortable accommodation on two floors plus a large terrace with..."
+     },
+     {
+      "position": "23",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/ab/31/fa.jpg",
+      "url": "Beautiful 2 bed.apartment",
+      "name": "Beautiful 2 bed.apartment",
+      "description": "Apartment situated at the centre of Praia D'El Rey Golf & Beach Resort with great views at first tee and golf course. Typology and Features: On the second floor, this apartment has 2 bedrooms..."
+     },
+     {
+      "position": "24",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/b3/d2/ff.jpg",
+      "url": "Lagoon Villa",
+      "name": "Lagoon Villa",
+      "description": "Lagoon Villa is a stunning contemporary property with a private pool and beautiful views accross pine forests towards Obidos Lagoon. This large 3 bedroom property is brand new for 2009. Guests..."
+     },
+     {
+      "position": "25",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/8f/ec/fe.jpg",
+      "url": "casa do limoeiro, 15138/Al",
+      "name": "casa do limoeiro, 15138/Al",
+      "description": "View all property information"
+     },
+     {
+      "position": "26",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/0e/78/90.jpg",
+      "url": "Adriatic at Quinta do Bom Vento, Queen loft studio",
+      "name": "Adriatic at Quinta do Bom Vento, Queen loft studio",
+      "description": "The Adriatic is the upper level of the original farm house at QBV and provides a queen bed studio with private bathroom, kitchenette and also a private tiled balcony terrace - a roomy 31sqm..."
+     },
+     {
+      "position": "27",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/ac/7d/d2.jpg",
+      "url": "Comfortable 2 Bed. Apartment",
+      "name": "Comfortable 2 Bed. Apartment",
+      "description": "In a quiet area at Praia D'El Rey Golf & Beach Resort you can find this comfortable apartment. It's very tastefully furnished and has everything you need for a family holiday. Typology and..."
+     },
+     {
+      "position": "28",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/7a/7c/8e.jpg",
+      "url": "Townhouse in Óbidos, Portugal.",
+      "name": "Townhouse in Óbidos, Portugal.",
+      "description": "Just steps away from the entrance to the castle walls in the beautiful village of Óbidos, this townhouse is comfortably decorated and fully equipped with a lovely back patio where you can..."
+     },
+     {
+      "position": "29",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/82/0a/d6.jpg",
+      "url": "Casa Maria d'Óbidos (inside the Castle)",
+      "name": "Casa Maria d'Óbidos (inside the Castle)",
+      "description": "Typical family house, full equipped, located in the centre of the historical village of Óbidos, ideal for families, couples and groups of friends.\u003cBR\u003e\u003cBR\u003eTHE HOUSE:\u003cBR\u003eLiving room (with fireplace)..."
+     },
+     {
+      "position": "30",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/a0/42/cf.jpg",
+      "url": "Obidos (Silver Coast)",
+      "name": "Obidos (Silver Coast)",
+      "description": "LOCATION & LUXURY - 10 minutes walk to center of Obidos & 5 minutes drive to a large modern supermarket - Large bright modern spacious & child friendly/safe villa in a quiet residential area,..."
+     },
+     {
+      "position": "31",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/b6/e4/ee.jpg",
+      "url": "Modern townhouse with views",
+      "name": "Modern townhouse with views",
+      "description": "Comfortable, newly furnished, two-bedroomed townhouse. This good quality accommodation has central heating, a well equipped, newly fitted kitchen, two bathrooms, and a large lounge/diner looking..."
+     },
+     {
+      "position": "32",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/87/f0/54.jpg",
+      "url": "Casa de Cima - Next to the Obidos Pousada / Hotel",
+      "name": "Casa de Cima - Next to the Obidos Pousada / Hotel",
+      "description": "A charming, 250+ year-old house occupying a commanding position at the foot of the castle and within the walls of medieval Obidos. A unique property - one of only a few available within the..."
+     },
+     {
+      "position": "33",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/ae/1f/23.jpg",
+      "url": "Bom Sucesso Design Resort Vila",
+      "name": "Bom Sucesso Design Resort Vila",
+      "description": "The Villa is situated on the Bom Sucesso Design Leisure & Golf Resort with Donald Steel designed 18-hole golf course near the towns of Óbidos and Peniche on the beautiful 'Silver Coast' (west..."
+     },
+     {
+      "position": "34",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/96/1d/0f.jpg",
+      "url": "Villa Ferreria",
+      "name": "Villa Ferreria",
+      "description": "Villa Ferreria is located at Quinta do Bom Sucesso in a new unique development next to a large pine and eucalyptus forest, just a 5 minutes walk to the peaceful Óbidos lagoon, an area of outstandi..."
+     },
+     {
+      "position": "35",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/1c/6a/53.jpg",
+      "url": "Perola Da Lagoa Villa",
+      "name": "Perola Da Lagoa Villa",
+      "description": "This 3 bedroom villa is nestled in a pine forest in the development of Perola Da Lagoa. Superbly situated at the end of a cul-de-sac, our house overlooks the beautiful Obidos lagoon. We are..."
+     },
+     {
+      "position": "36",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/c0/94/3e.jpg",
+      "url": "CASA DO MOLEIRO",
+      "name": "CASA DO MOLEIRO",
+      "description": "ÓBIDOS CHRISTMAS VILLAGE COSY HOUSE AT OBIDOS MEDIEVAL TOWN, WITH NICE LIVING ROOM WITH TWO SOFA BEDS, TV, WIFI, COMPLETELY FURNISHED AND EQUIPPED INCLUDING TOWELS AND LINEN,, MEZANINE WITH..."
+     },
+     {
+      "position": "37",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/83/c3/ae.jpg",
+      "url": "A villa with private pool and private tenniscourt",
+      "name": "A villa with private pool and private tenniscourt",
+      "description": "A villa with private pool and private tenniscourt, uniquely located Quinta Villa Casaflor is a contemporary villa, with private pool and private tennis court, built with Portuguese decorating..."
+     },
+     {
+      "position": "38",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/12/23/58.jpg",
+      "url": "BEACHFRONT HOUSE IN PRAIA DEL REY",
+      "name": "BEACHFRONT HOUSE IN PRAIA DEL REY",
+      "description": "Come stay at our beautiful two-floored townhouse with terrace and balconies featuring a spacious living room with fireplace, three bedrooms, one en-suite, a bespoke kitchen in cream units and..."
+     },
+     {
+      "position": "39",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/58/fb/18.jpg",
+      "url": "Fantastic holiday apartment (3 bedrooms)",
+      "name": "Fantastic holiday apartment (3 bedrooms)",
+      "description": "Located in one of the most sought-after areas of Praia D'El Rey Golf & Beach this spacious 3 bedroom apartment is a heaven of comfort! Typology and features: The apartment has 3 bedrooms (one..."
+     },
+     {
+      "position": "40",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/41/62/c5.jpg",
+      "url": "Irebienti House in Golf Resort",
+      "name": "Irebienti House in Golf Resort",
+      "description": "Irebienti is a cozy house in the seaside Praia D'El Rey 5* Golf Resort, featuring one of the most renouned courses in Europe, ranked 13th in 2007 and regularly in the Portuguese top ten.\u003cBR\u003eIt's..."
+     },
+     {
+      "position": "41",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/8a/0c/c4.jpg",
+      "url": "Luxury Villa Aislinn with Heated Pool & Hot Tu...",
+      "name": "Luxury Villa Aislinn with Heated Pool & Hot Tu...",
+      "description": "This contemporary style 4 bedroom 5 star villa with private heated pool and hot tub, landscaped garden, brick BBQ and large patio / terrace areas. \u003cBR\u003e\u003cBR\u003eLocated on the Praia del Rey Golf..."
+     },
+     {
+      "position": "42",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/2c/b3/76.jpg",
+      "url": "Óbidos - Casa da Travessa",
+      "name": "Óbidos - Casa da Travessa",
+      "description": "View all property information"
+     },
+     {
+      "position": "43",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/f5/7e/47.jpg",
+      "url": "Mediterranean at Quinta do Bom Vento, stone barn",
+      "name": "Mediterranean at Quinta do Bom Vento, stone barn",
+      "description": "This romantic stone clad spacious queen studio (51 sqm) features a private en suite bathroom with huge custom walk-in shower and exposed stone gourmet kitchen. You can relax in the Chesterfield..."
+     },
+     {
+      "position": "44",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/a9/3e/ab.jpg",
+      "url": "Sea view 2 bedroom apartment",
+      "name": "Sea view 2 bedroom apartment",
+      "description": "Located in one of the most sought-after areas of Praia D'El Rey Golf & Beach Resort, this 2 bedroom apartment is a perfect holiday spot. Typology and Features: The apartment is fully equipped..."
+     },
+     {
+      "position": "45",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/b0/84/0a.jpg",
+      "url": "Fabulous 2 bedroom apartment",
+      "name": "Fabulous 2 bedroom apartment",
+      "description": "2 bedroom apartment at the fabulous Praia D'El Rey Golf & Beach Resort. The configuration allows up to 6 people, making it ideal for fun, shared vacations with friends under the warm Portuguese..."
+     },
+     {
+      "position": "46",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/75/9a/f5.jpg",
+      "url": "Apartment (w.balcony) Praia Del Rey",
+      "name": "Apartment (w.balcony) Praia Del Rey",
+      "description": "Situated near the seventh fairway of the world famous Praia del Rey Golf Club and Beach Resort , this first floor , spacious ,south facing , modern ,private, luxury apartment has three double..."
+     },
+     {
+      "position": "47",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/fa/93/cc.jpg",
+      "url": "Villa Avarela",
+      "name": "Villa Avarela",
+      "description": "Beautiful detached villa just outside the ancient walled town of Obidos. Offering 3 large bedrooms (1 king, 1 double, 1 twin), plus a cot if requried, 3 bathrooms, large private pool with large..."
+     },
+     {
+      "position": "48",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/05/c1/e6.jpg",
+      "url": "Casa Orion",
+      "name": "Casa Orion",
+      "description": "Casa Orion is built in the style of a traditional Portuguese style home, located in the beautiful countryside surrounding the historic town of Obidos. On the outskirts of a quiet village and..."
+     },
+     {
+      "position": "49",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/0c/ae/df.jpg",
+      "url": "VILLA SOL",
+      "name": "VILLA SOL",
+      "description": "View all property information"
+     },
+     {
+      "position": "50",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/b2/ea/ed.jpg",
+      "url": "Gound floor 3 bed.apartment!",
+      "name": "Gound floor 3 bed.apartment!",
+      "description": "Very well located apartment, at the heart of a quiet area at Praia D'el Rey Golf & Beach Resort. Near the Praia D'el Rey Tennis Centre, within walking distance of most of the Resort's amenities,..."
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Belgituda (Obidos, Portugal): Top Tips Before You Go - TripAdvisor",
+   "htmlTitle": "Belgituda (\u003cb\u003eObidos\u003c/b\u003e, Portugal): Top Tips Before You Go - \u003cb\u003eTripAdvisor\u003c/b\u003e",
+   "link": "https://www.tripadvisor.com/Attraction_Review-g189160-d8842411-Reviews-Belgituda-Obidos_Leiria_District_Central_Portugal.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Belgituda, Obidos: See 23 reviews, articles, and 14 photos of Belgituda on \nTripAdvisor. ... Belgituda, Obidos: Address, Phone Number, Top-Rated Bar & \nClub Reviews. Review. Belgituda .... 12 attraction reviews .... Reviewed February \n27, 2016.",
+   "htmlSnippet": "Belgituda, \u003cb\u003eObidos\u003c/b\u003e: See 23 reviews, articles, and 14 photos of Belgituda on \u003cbr\u003e\n\u003cb\u003eTripAdvisor\u003c/b\u003e. ... Belgituda, \u003cb\u003eObidos\u003c/b\u003e: Address, Phone Number, Top-Rated Bar &amp; \u003cbr\u003e\nClub Reviews. Review. Belgituda .... 12 \u003cb\u003eattraction\u003c/b\u003e reviews .... Reviewed \u003cb\u003eFebruary\u003c/b\u003e \u003cbr\u003e\n27, 2016.",
+   "cacheId": "oMl1fHEt_wkJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attraction_Review-g189160-d8842411-Reviews -Belgituda-Obidos_Leiria_District_Central_Portugal.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttraction\u003c/b\u003e_Review-g189160-d8842411-Reviews -Belgituda-\u003cb\u003eObidos\u003c/b\u003e_Leiria_District_Central_Portugal.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "259",
+      "height": "194",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcT-C18wBzXvNd8DJRe_k2vw93M0JMBHzqPLdOWvkb8B4tCK13OolsYLVooG"
+     }
+    ],
+    "LocalBusiness": [
+     {
+      "name": "Belgituda"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Portugal",
+      "title": "Portugal"
+     },
+     {
+      "url": "Central Portugal",
+      "title": "Central Portugal"
+     },
+     {
+      "url": "Leiria District",
+      "title": "Leiria District"
+     },
+     {
+      "url": "Obidos",
+      "title": "Obidos"
+     },
+     {
+      "url": "Things to Do in Obidos",
+      "title": "Things to Do in Obidos"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "4.5",
+      "ratingcount": "23"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "23"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Belgituda (Obidos, Portugal): Top Tips Before You Go - TripAdvisor",
+      "og:description": "Belgituda, Obidos: See 23 reviews, articles, and 14 photos of Belgituda on TripAdvisor.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/0a/20/f6/37/photo0jpg.jpg",
+      "og:image:width": "550",
+      "og:image:height": "413",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189160-d8842411-Reviews-m33762-Belgituda-Obidos_Leiria_District_Central_Portugal.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189160-d8842411-Reviews-m33762-Belgituda-Obidos_Leiria_District_Central_Portugal.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189160-d8842411-Reviews-m33762-Belgituda-Obidos_Leiria_District_Central_Portugal.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/0a/20/f6/37/photo0jpg.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Comendador Silva, Obidos - Restaurant Reviews, Phone Number ...",
+   "htmlTitle": "Comendador Silva, \u003cb\u003eObidos\u003c/b\u003e - Restaurant Reviews, Phone Number ...",
+   "link": "https://www.tripadvisor.com/Restaurant_Review-g189160-d3354811-Reviews-Comendador_Silva-Obidos_Leiria_District_Central_Portugal.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Reserve a table at Comendador Silva, Obidos on TripAdvisor: See 111 unbiased \nreviews of ... Silva, rated 4 of 5 on TripAdvisor and ranked #22 of 65 restaurants \nin Obidos. ... Reviewed February 9, 2016 ... Top-rated Attractions Nearby.",
+   "htmlSnippet": "Reserve a table at Comendador Silva, \u003cb\u003eObidos\u003c/b\u003e on \u003cb\u003eTripAdvisor\u003c/b\u003e: See 111 unbiased \u003cbr\u003e\nreviews of ... Silva, rated 4 of 5 on \u003cb\u003eTripAdvisor\u003c/b\u003e and ranked #22 of 65 restaurants \u003cbr\u003e\nin \u003cb\u003eObidos\u003c/b\u003e. ... Reviewed \u003cb\u003eFebruary\u003c/b\u003e 9, 2016 ... Top-rated \u003cb\u003eAttractions\u003c/b\u003e Nearby.",
+   "cacheId": "NOfuKMzm1SAJ",
+   "formattedUrl": "https://www.tripadvisor.com/Restaurant_Review-g189160-d3354811- Reviews-Comendador_Silva-Obidos_Leiria_District_Central_Portug...",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/Restaurant_Review-g189160-d3354811- Reviews-Comendador_Silva-\u003cb\u003eObidos\u003c/b\u003e_Leiria_District_Central_Portug...",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "259",
+      "height": "194",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSOgCVcMcfL09DJsHXk1BTV2Eqm37ENSaZBfsS1GtE6lisESdzr44cUKSw"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Portugal",
+      "title": "Portugal"
+     },
+     {
+      "url": "Central Portugal",
+      "title": "Central Portugal"
+     },
+     {
+      "url": "Leiria District",
+      "title": "Leiria District"
+     },
+     {
+      "url": "Obidos",
+      "title": "Obidos"
+     },
+     {
+      "url": "Obidos Restaurants",
+      "title": "Obidos Restaurants"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "4.0",
+      "ratingcount": "111",
+      "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/09/31/4e/85/comendador-silva.jpg"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "111"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Comendador Silva, Obidos - Restaurant Reviews, Phone Number & Photos - TripAdvisor",
+      "og:description": "Reserve a table at Comendador Silva, Obidos on TripAdvisor: See 111 unbiased reviews of Comendador Silva, rated 4 of 5 on TripAdvisor and ranked #22 of 65 restaurants in Obidos.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/09/31/4e/85/comendador-silva.jpg",
+      "og:image:width": "550",
+      "og:image:height": "413",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Restaurant_Review-g189160-d3354811-Reviews-m33762-Comendador_Silva-Obidos_Leiria_District_Central_Portugal.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Restaurant_Review-g189160-d3354811-Reviews-m33762-Comendador_Silva-Obidos_Leiria_District_Central_Portugal.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Restaurant_Review-g189160-d3354811-Reviews-m33762-Comendador_Silva-Obidos_Leiria_District_Central_Portugal.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/09/31/4e/85/comendador-silva.jpg"
+     }
+    ],
+    "FoodEstablishment": [
+     {
+      "servesCuisine": "European",
+      "image": "https://media-cdn.tripadvisor.com/media/photo-s/09/31/4e/85/comendador-silva.jpg",
+      "name": "Comendador Silva"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Homestay Castleview (Obidos, Portugal) - UPDATED 2016 Hostel ...",
+   "htmlTitle": "Homestay Castleview (\u003cb\u003eObidos\u003c/b\u003e, Portugal) - UPDATED 2016 Hostel ...",
+   "link": "https://www.tripadvisor.com/Hotel_Review-g189160-d8517872-Reviews-Homestay_Castleview-Obidos_Leiria_District_Central_Portugal.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Homestay Castleview, Obidos: See 6 traveler reviews, 34 candid photos, and \ngreat deals ... ranked #7 of 18 specialty lodging in Obidos and rated 5 of 5 at \nTripAdvisor. ... I've stayed for 2 nights in early February. .... Top-rated Attractions \nNearby.",
+   "htmlSnippet": "Homestay Castleview, \u003cb\u003eObidos\u003c/b\u003e: See 6 traveler reviews, 34 candid photos, and \u003cbr\u003e\ngreat deals ... ranked #7 of 18 specialty lodging in \u003cb\u003eObidos\u003c/b\u003e and rated 5 of 5 at \u003cbr\u003e\n\u003cb\u003eTripAdvisor\u003c/b\u003e. ... I&#39;ve stayed for 2 nights in early \u003cb\u003eFebruary\u003c/b\u003e. .... Top-rated \u003cb\u003eAttractions\u003c/b\u003e \u003cbr\u003e\nNearby.",
+   "cacheId": "FLyV5RKDoHwJ",
+   "formattedUrl": "https://www.tripadvisor.com/Hotel_Review-g189160-d8517872-Reviews- Homestay_Castleview-Obidos_Leiria_District_Central_Portugal.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/Hotel_Review-g189160-d8517872-Reviews- Homestay_Castleview-\u003cb\u003eObidos\u003c/b\u003e_Leiria_District_Central_Portugal.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "259",
+      "height": "194",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTY-7eCJ6bHCHhrlCcqji4A0a_sjjV4OvrNFCjaaR_I77l5zfwDPvvpdec"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Portugal",
+      "title": "Portugal"
+     },
+     {
+      "url": "Central Portugal",
+      "title": "Central Portugal"
+     },
+     {
+      "url": "Leiria District",
+      "title": "Leiria District"
+     },
+     {
+      "url": "Obidos",
+      "title": "Obidos"
+     },
+     {
+      "url": "Obidos Specialty Lodging",
+      "title": "Obidos Specialty Lodging"
+     },
+     {
+      "url": "Hostels in Obidos",
+      "title": "Hostels in Obidos"
+     }
+    ],
+    "LodgingBusiness": [
+     {
+      "name": "Homestay Castleview",
+      "priceRange": "$16 - $26 (Based on Average Rates for a Standard Room)"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "5.0",
+      "ratingcount": "13",
+      "pricerange": "$16 - $26 (Based on Average Rates for a Standard Room)"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "pricerange": "$16 - $26 (Based on Average Rates for a Standard Room)",
+      "count": "13"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Homestay Castleview (Obidos, Portugal) - UPDATED 2016  Hostel Reviews - TripAdvisor",
+      "og:description": "Homestay Castleview, Obidos: See 6 traveler reviews, 34 candid photos, and great deals for Homestay Castleview, ranked #7 of 18 specialty lodging in Obidos and rated 5 of 5 at TripAdvisor.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/08/b4/5b/8a/homestay-castleview.jpg",
+      "og:image:width": "550",
+      "og:image:height": "413",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Hotel_Review-g189160-d8517872-Reviews-m33762-Homestay_Castleview-Obidos_Leiria_District_Central_Portugal.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Hotel_Review-g189160-d8517872-Reviews-m33762-Homestay_Castleview-Obidos_Leiria_District_Central_Portugal.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Hotel_Review-g189160-d8517872-Reviews-m33762-Homestay_Castleview-Obidos_Leiria_District_Central_Portugal.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/08/b4/5b/8a/homestay-castleview.jpg"
+     }
+    ]
+   }
+  }
+ ]
+}

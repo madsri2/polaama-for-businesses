@@ -1,0 +1,1088 @@
+{
+ "kind": "customsearch#search",
+ "url": {
+  "type": "application/json",
+  "template": "https://www.googleapis.com/customsearch/v1?q={searchTerms}&num={count?}&start={startIndex?}&lr={language?}&safe={safe?}&cx={cx?}&cref={cref?}&sort={sort?}&filter={filter?}&gl={gl?}&cr={cr?}&googlehost={googleHost?}&c2coff={disableCnTwTranslation?}&hq={hq?}&hl={hl?}&siteSearch={siteSearch?}&siteSearchFilter={siteSearchFilter?}&exactTerms={exactTerms?}&excludeTerms={excludeTerms?}&linkSite={linkSite?}&orTerms={orTerms?}&relatedSite={relatedSite?}&dateRestrict={dateRestrict?}&lowRange={lowRange?}&highRange={highRange?}&searchType={searchType}&fileType={fileType?}&rights={rights?}&imgSize={imgSize?}&imgType={imgType?}&imgColorType={imgColorType?}&imgDominantColor={imgDominantColor?}&alt=json"
+ },
+ "queries": {
+  "request": [
+   {
+    "title": "Google Custom Search - trip advisor lisbon august attractions",
+    "totalResults": "101000",
+    "searchTerms": "trip advisor lisbon august attractions",
+    "count": 10,
+    "startIndex": 1,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "lisbon"
+   }
+  ],
+  "nextPage": [
+   {
+    "title": "Google Custom Search - trip advisor lisbon august attractions",
+    "totalResults": "101000",
+    "searchTerms": "trip advisor lisbon august attractions",
+    "count": 10,
+    "startIndex": 11,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "lisbon"
+   }
+  ]
+ },
+ "context": {
+  "title": "Polaama"
+ },
+ "searchInformation": {
+  "searchTime": 0.409264,
+  "formattedSearchTime": "0.41",
+  "totalResults": "101000",
+  "formattedTotalResults": "101,000"
+ },
+ "spelling": {
+  "correctedQuery": "tripadvisor lisbon august attractions \"lisbon\"",
+  "htmlCorrectedQuery": "\u003cb\u003e\u003ci\u003etripadvisor\u003c/i\u003e\u003c/b\u003e lisbon august attractions &quot;lisbon&quot;"
+ },
+ "items": [
+  {
+   "kind": "customsearch#result",
+   "title": "The Top 10 Things to Do in Lisbon - TripAdvisor - Lisbon, Portugal ...",
+   "htmlTitle": "The Top 10 \u003cb\u003eThings to Do\u003c/b\u003e in \u003cb\u003eLisbon\u003c/b\u003e - \u003cb\u003eTripAdvisor\u003c/b\u003e - \u003cb\u003eLisbon\u003c/b\u003e, Portugal ...",
+   "link": "https://www.tripadvisor.com/Attractions-g189158-Activities-Lisbon_Lisbon_District_Central_Portugal.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Book your tickets online for the top things to do in Lisbon, Portugal on TripAdvisor\n: See 255393 traveler reviews and photos of Lisbon tourist attractions.",
+   "htmlSnippet": "Book your tickets online for the top \u003cb\u003ethings to do\u003c/b\u003e in \u003cb\u003eLisbon\u003c/b\u003e, Portugal on \u003cb\u003eTripAdvisor\u003c/b\u003e\u003cbr\u003e\n: See 255393 traveler reviews and photos of \u003cb\u003eLisbon\u003c/b\u003e tourist \u003cb\u003eattractions\u003c/b\u003e.",
+   "cacheId": "_ZaGjslvvlUJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attractions-g189158-Activities-Lisbon_Lisbon_ District_Central_Portugal.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttractions\u003c/b\u003e-g189158-\u003cb\u003eActivities\u003c/b\u003e-\u003cb\u003eLisbon\u003c/b\u003e_\u003cb\u003eLisbon\u003c/b\u003e_ District_Central_Portugal.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "290",
+      "height": "174",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyrVQdLa1DqbiYDywVTIPE1numCf9PdcZF84Hw6WTh1u71BvKbWVt8ANXg"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Portugal",
+      "title": "Portugal"
+     },
+     {
+      "url": "Central Portugal",
+      "title": "Central Portugal"
+     },
+     {
+      "url": "Lisbon District",
+      "title": "Lisbon District"
+     },
+     {
+      "url": "Lisbon",
+      "title": "Lisbon"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "The Top 10 Things to Do in Lisbon - TripAdvisor - Lisbon, Portugal Attractions - Find What to Do Today, This Weekend, or in January",
+      "og:description": "Book your tickets online for the top things to do in Lisbon, Portugal on TripAdvisor: See 255,393 traveler reviews and photos of Lisbon tourist attractions. Find what to do today, this weekend, or in January. We have reviews of the best places to see in Lisbon. Visit top-rated & must-see attractions.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/03/9b/2f/c5/lisbon.jpg",
+      "og:image:width": "550",
+      "og:image:height": "331",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attractions-g189158-Activities-m33762-Lisbon_Lisbon_District_Central_Portugal.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attractions-g189158-Activities-m33762-Lisbon_Lisbon_District_Central_Portugal.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attractions-g189158-Activities-m33762-Lisbon_Lisbon_District_Central_Portugal.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/03/9b/2f/c5/lisbon.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "The 10 Best Hotels in Lisbon, Portugal (with Pictures) - TripAdvisor",
+   "htmlTitle": "The 10 Best Hotels in \u003cb\u003eLisbon\u003c/b\u003e, Portugal (with Pictures) - \u003cb\u003eTripAdvisor\u003c/b\u003e",
+   "link": "https://www.tripadvisor.com/Hotels-g189158-Lisbon_Lisbon_District_Central_Portugal-Hotels.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Book the Best Lisbon Hotels on TripAdvisor: Find 154261 traveler reviews, 86259 \ncandid photos, and prices for 248 hotels in Lisbon, Portugal.",
+   "htmlSnippet": "Book the Best \u003cb\u003eLisbon\u003c/b\u003e Hotels on \u003cb\u003eTripAdvisor\u003c/b\u003e: Find 154261 traveler reviews, 86259 \u003cbr\u003e\ncandid photos, and prices for 248 hotels in \u003cb\u003eLisbon\u003c/b\u003e, Portugal.",
+   "cacheId": "UhzJRtiCFlwJ",
+   "formattedUrl": "https://www.tripadvisor.com/Hotels-g189158-Lisbon_Lisbon_District_ Central_Portugal-Hotels.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/Hotels-g189158-\u003cb\u003eLisbon\u003c/b\u003e_\u003cb\u003eLisbon\u003c/b\u003e_District_ Central_Portugal-Hotels.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "290",
+      "height": "174",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyrVQdLa1DqbiYDywVTIPE1numCf9PdcZF84Hw6WTh1u71BvKbWVt8ANXg"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Portugal",
+      "title": "Portugal"
+     },
+     {
+      "url": "Central Portugal",
+      "title": "Central Portugal"
+     },
+     {
+      "url": "Lisbon District",
+      "title": "Lisbon District"
+     },
+     {
+      "url": "Lisbon",
+      "title": "Lisbon"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "The 10 Best Hotels in Lisbon, Portugal (with Pictures) - TripAdvisor",
+      "og:description": "Book the Best Lisbon Hotels on TripAdvisor: Find 154,261 traveler reviews, 86,259 candid photos, and prices for 248 hotels in Lisbon, Portugal.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/03/9b/2f/c5/lisbon.jpg",
+      "og:image:width": "550",
+      "og:image:height": "331",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Hotels-g189158-m33762-Lisbon_Lisbon_District_Central_Portugal-Hotels.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Hotels-g189158-m33762-Lisbon_Lisbon_District_Central_Portugal-Hotels.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Hotels-g189158-m33762-Lisbon_Lisbon_District_Central_Portugal-Hotels.html",
+      "viewport": "width=1024, initial-scale=1"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/03/9b/2f/c5/lisbon.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "5 Cheap Flights to Lisbon, Portugal (LIS) from $467 - TripAdvisor",
+   "htmlTitle": "5 Cheap Flights to \u003cb\u003eLisbon\u003c/b\u003e, Portugal (LIS) from $467 - \u003cb\u003eTripAdvisor\u003c/b\u003e",
+   "link": "https://www.tripadvisor.com/Flights-g189158-Lisbon_Lisbon_District_Central_Portugal-Cheap_Discount_Airfares.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Cheap Flights to Lisbon: Enter your dates once and have TripAdvisor search ... \nand is a popular attraction with tourists who have purchased airfare to Lisbon.",
+   "htmlSnippet": "Cheap Flights to \u003cb\u003eLisbon\u003c/b\u003e: Enter your dates once and have \u003cb\u003eTripAdvisor\u003c/b\u003e search ... \u003cbr\u003e\nand is a popular \u003cb\u003eattraction\u003c/b\u003e with tourists who have purchased airfare to \u003cb\u003eLisbon\u003c/b\u003e.",
+   "cacheId": "UbRC5liaJ20J",
+   "formattedUrl": "https://www.tripadvisor.com/Flights-g189158-Lisbon_Lisbon_District_ Central_Portugal-Cheap_Discount_Airfares.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/Flights-g189158-\u003cb\u003eLisbon\u003c/b\u003e_\u003cb\u003eLisbon\u003c/b\u003e_District_ Central_Portugal-Cheap_Discount_Airfares.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "80",
+      "height": "80",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTVQflH0VqVMp6PDcRILO5PBISjTfAm4CWJ85aFIrZtIGOJanUlknhw"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Portugal",
+      "title": "Portugal"
+     },
+     {
+      "url": "Central Portugal",
+      "title": "Central Portugal"
+     },
+     {
+      "url": "Lisbon District",
+      "title": "Lisbon District"
+     },
+     {
+      "url": "Lisbon",
+      "title": "Lisbon"
+     },
+     {
+      "url": "Lisbon Flights",
+      "title": "Lisbon Flights"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "finding the cheapest flights",
+      "og:image": "https://static.tacdn.com/img2/postimg.jpg",
+      "viewport": "width=1040,user-scalable=no"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "10 Best Lisbon Apartments, Vacation Rentals (with Photos ...",
+   "htmlTitle": "10 Best \u003cb\u003eLisbon\u003c/b\u003e Apartments, Vacation Rentals (with Photos ...",
+   "link": "https://www.tripadvisor.com/VacationRentals-g189158-Reviews-Lisbon_Lisbon_District_Central_Portugal-Vacation_Rentals.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "View the Best apartments in Lisbon. View TripAdvisor's 8478 unbiased reviews \nand great deals on vacation rentals in Lisbon, ... Reviewed August 21, 2016 ... \nExtremely convenient to downtown attractions, a few steps from an elevator.",
+   "htmlSnippet": "View the Best apartments in \u003cb\u003eLisbon\u003c/b\u003e. View \u003cb\u003eTripAdvisor&#39;s\u003c/b\u003e 8478 unbiased reviews \u003cbr\u003e\nand great deals on vacation rentals in \u003cb\u003eLisbon\u003c/b\u003e, ... Reviewed \u003cb\u003eAugust\u003c/b\u003e 21, 2016 ... \u003cbr\u003e\nExtremely convenient to downtown \u003cb\u003eattractions\u003c/b\u003e, a few steps from an elevator.",
+   "formattedUrl": "https://www.tripadvisor.com/VacationRentals-g189158-Reviews-Lisbon_ Lisbon_District_Central_Portugal-Vacation_Rentals.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/VacationRentals-g189158-Reviews-\u003cb\u003eLisbon\u003c/b\u003e_ \u003cb\u003eLisbon\u003c/b\u003e_District_Central_Portugal-Vacation_Rentals.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "290",
+      "height": "174",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyrVQdLa1DqbiYDywVTIPE1numCf9PdcZF84Hw6WTh1u71BvKbWVt8ANXg"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "10 Best Lisbon Apartments, Vacation Rentals (with Photos) | TripAdvisor -  Apartment Rentals in Lisbon, Portugal",
+      "og:description": "View the Best apartments in Lisbon. View TripAdvisor's 8,478 unbiased reviews and great deals on vacation rentals in Lisbon, Portugal",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/03/9b/2f/c5/lisbon.jpg",
+      "og:image:width": "550",
+      "og:image:height": "331",
+      "og:type": "company",
+      "og:url": "/VacationRentals-g189158-Reviews-Lisbon_Lisbon_District_Central_Portugal-Vacation_Rentals.html",
+      "og:site_name": "TripAdvisor",
+      "fb:admins": "100000982334629",
+      "fb:app_id": "162729813767876",
+      "twitter:title": "10 Best Lisbon Apartments, Vacation Rentals (with Photos) | TripAdvisor -  Apartment Rentals in Lisbon, Portugal",
+      "twitter:card": "summary_large_image",
+      "twitter:url": "https://www.tripadvisor.com/VacationRentals-g189158-Reviews-Lisbon_Lisbon_District_Central_Portugal-Vacation_Rentals.html",
+      "twitter:image:src": "https://static.tacdn.com/img/destinations/189158.jpg",
+      "twitter:site": "http://www.tripadvisor.com/Rentals",
+      "twitter:description": "View the Best apartments in Lisbon. View TripAdvisor's 8,478 unbiased reviews and great deals on vacation rentals in Lisbon, Portugal",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/VacationRentals-g189158-Reviews-m33762-Lisbon_Lisbon_District_Central_Portugal-Vacation_Rentals.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/VacationRentals-g189158-Reviews-m33762-Lisbon_Lisbon_District_Central_Portugal-Vacation_Rentals.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/VacationRentals-g189158-Reviews-m33762-Lisbon_Lisbon_District_Central_Portugal-Vacation_Rentals.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/03/9b/2f/c5/lisbon.jpg"
+     }
+    ],
+    "listitem": [
+     {
+      "item": "Europe",
+      "name": "Europe"
+     },
+     {
+      "item": "Portugal",
+      "name": "Portugal"
+     },
+     {
+      "item": "Central Portugal",
+      "name": "Central Portugal"
+     },
+     {
+      "item": "Lisbon District",
+      "name": "Lisbon District"
+     },
+     {
+      "item": "Lisbon Apartments",
+      "name": "Lisbon Apartments"
+     },
+     {
+      "position": "1",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/25/fb/3f.jpg",
+      "url": "Spacious luxury apt in historic center with lift!",
+      "name": "Spacious luxury apt in historic center with lift!",
+      "description": "Located in a listed building dating back to the 18th century, this stylish urban apartment is ideal for those who want to explore Portugal’s fascinating history and beautiful surroundings...."
+     },
+     {
+      "position": "2",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/79/df/ea.jpg",
+      "url": "New duplex with fantastic view",
+      "name": "New duplex with fantastic view",
+      "description": "Lovely, lightly, big apartment with 3 double bedrooms: one double bedroom with a double king size bed, second bedroom with double bed and thirth double bedroom as a twin bedroom and a longe..."
+     },
+     {
+      "position": "3",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/fc/c3/52.jpg",
+      "url": "InSuitesII ChiadoDeluxeTerrace",
+      "name": "InSuitesII ChiadoDeluxeTerrace",
+      "description": "A luxury apartment located in the most prestigious, historical district of Lisbon. In this apartment the space is a clear engagement between history, sophistication and the modernization of..."
+     },
+     {
+      "position": "4",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/dc/0e/2d.jpg",
+      "url": "Madalena Gold",
+      "name": "Madalena Gold",
+      "description": "This Manificent apartment is located on the most central part of Lisbon, 5 mins walking from the Castle, Praça do Comércio and Rossio or 10min away from Chiado and Bairro alto. It has been..."
+     },
+     {
+      "position": "5",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/68/e3/05.jpg",
+      "url": "Avenida da Liberdade Apartment",
+      "name": "Avenida da Liberdade Apartment",
+      "description": "This spacious apartment (140 m2 or 1500 sqft) in a 19th century building is a beautiful mix of traditional charm and contemporary style and comfort. Located in the neighborhood of Avendida,..."
+     },
+     {
+      "position": "6",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/7d/e4/f7.jpg",
+      "url": "Royal Attic",
+      "name": "Royal Attic",
+      "description": "Welcome to Real Attic, a comfortable apartment in a fully recovered building, near Praça das Flores. The ideal house for a relaxing holiday in the the heart of the town.\u003cBR\u003e\u003cBR\u003eThe apartment..."
+     },
+     {
+      "position": "7",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/1a/e3/10.jpg",
+      "url": "Lisbon house triplex, patio and garage",
+      "name": "Lisbon house triplex, patio and garage",
+      "description": "The house has 3 floors with 3 bedrooms and 2 bathrooms ideal for 8 people. It has a garage for 2 cars, a kitchen with all the equipment with a pátio. It has a spacious living room with wi..."
+     },
+     {
+      "position": "8",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/d7/67/c7.jpg",
+      "url": "Príncipe Real House",
+      "name": "Príncipe Real House",
+      "description": "With 130m2, it’s on the 2t floor of a very charming building from the begining of the XIX century, with original ceiling stucco, old wooden floors. It’s perfect for families and groups..."
+     },
+     {
+      "position": "9",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/43/c2/8b.jpg",
+      "url": "Phoenix Golden Rentals: Apartment Principe Real",
+      "name": "Phoenix Golden Rentals: Apartment Principe Real",
+      "description": "Our 4-bedroom apartment is in the Principe Real neighborhood of Lisbon, considered the most chic and cosmopolitan area of the capital. Rich in historic architecture, with shopping, great restaurant..."
+     },
+     {
+      "position": "10",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/06/82/b3.jpg",
+      "url": "Bairro Alto - House Jasmin",
+      "name": "Bairro Alto - House Jasmin",
+      "description": "This lovely apartment has two bedroom, one bathroom, one kitchen, and a very spacious area that serves both as living room and dining room. It can have a sofa-bed set up in the living room,..."
+     },
+     {
+      "position": "11",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/80/a2/f4.jpg",
+      "url": "Casa Glória",
+      "name": "Casa Glória",
+      "description": "Sunny, very spacious, cosy apartment right in the centre of Lisbon\u003cBR\u003eRight in the heart of Lisbon – it's an ideal starting point to explore this lovely city on foot. In addition to being..."
+     },
+     {
+      "position": "12",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/45/db/e7.jpg",
+      "url": "Holiday flat rooftop terrace great view Lisbon",
+      "name": "Holiday flat rooftop terrace great view Lisbon",
+      "description": "Holiday Apartment (85 sq.m) with 2 bedrooms 1 bathroom, modern, luminous, totally refurbished in a typical building in Lisbon on the edge of Graça in Anjos. Large rooftop terrace (11 sq.m)..."
+     },
+     {
+      "position": "13",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/6e/e9/b2.jpg",
+      "url": "InSuitesII Chiado Deluxe",
+      "name": "InSuitesII Chiado Deluxe",
+      "description": "3 bedroom luxury apartment located in Chiado. In this apartment the space is a clear engagement between history, sophistication and the modernization of the finishing. The apartment possesses..."
+     },
+     {
+      "position": "14",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/06/75/2b.jpg",
+      "url": "Stylish Great View + Baby Friend |Courtesy Morning",
+      "name": "Stylish Great View + Baby Friend |Courtesy Morning",
+      "description": "A very Central, Stylish and Comfortable 4th Floor Apartment with a GREAT VIEW over the Castle and the hills of Lisbon. Baby Friendly Apartment. Fully prepared for babies. It has 2 Bedrooms..."
+     },
+     {
+      "position": "15",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/8e/e9/5c.jpg",
+      "url": "Modern Chiado 2BR + 2 Bath+ AC",
+      "name": "Modern Chiado 2BR + 2 Bath+ AC",
+      "description": "This 2 bedroom apartment is located in the fancy neighborhood of Chiado and very close to Bairro Alto. In a modern building with elevator and air conditioning you will be centrally located..."
+     },
+     {
+      "position": "16",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/31/58/d1.jpg",
+      "url": "Oliva Lisboa design apartment with view",
+      "name": "Oliva Lisboa design apartment with view",
+      "description": "CENTRAL, ROMANTIC, STYLISH, CONFORTABLE, SAFE, AMAZING VIEWS. Welcome to Oliva Lisboa, a charming, comfortable apartment with an amazing view over the river, the bridge and all Lisbon's downtown...."
+     },
+     {
+      "position": "17",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/de/bb/86.jpg",
+      "url": "Superbe T4 Duplex avec Terrasse",
+      "name": "Superbe T4 Duplex avec Terrasse",
+      "description": "View all property information"
+     },
+     {
+      "position": "18",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/f1/84/ba.jpg",
+      "url": "Spacious Sunny Flat - Baixa",
+      "name": "Spacious Sunny Flat - Baixa",
+      "description": "THE APARTMENT\u003cBR\u003eCharming and cozy apartment in downtown Lisbon (Rossio/Baixa), located behind the National Theatre D. Maria II.\u003cBR\u003e\u003cBR\u003eThe apartment is situated at the 4th floor (no elevator)..."
+     },
+     {
+      "position": "19",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/29/b1/88.jpg",
+      "url": "Bairro Alto Lisbon Apt, 7 Rooms Up To 20 Guest",
+      "name": "Bairro Alto Lisbon Apt, 7 Rooms Up To 20 Guest",
+      "description": "Property Description número de registo: 3076/AL. This Beautiful apartment is located in the most central neighbourhood of Lisbon, Bairro Alto/Principe Real. With a take-breathing view, you..."
+     },
+     {
+      "position": "20",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/4d/84/9e.jpg",
+      "url": "Lisbon4Real: Deluxe 3BR Apartment in Principe Real",
+      "name": "Lisbon4Real: Deluxe 3BR Apartment in Principe Real",
+      "description": "“Million dollar view!” The ‘jewel in the crown’ of Lisbon4Real’s modern three bedroom apartment on Rua Taipas is its private, massive rooftop deck, which offers stunning views and..."
+     },
+     {
+      "position": "21",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/57/ad/67.jpg",
+      "url": "Amazing city and river views",
+      "name": "Amazing city and river views",
+      "description": "Bright boutique apartment of 73 square meters (785 square feet) in the prestigious and historical area of Principe Real, 5 minutes walking distance from Bairro Alto/Chiado. It has been renovated..."
+     },
+     {
+      "position": "22",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/62/ad/03.jpg",
+      "url": "CHIADO CITY CENTER 5 ROOMS UP TO 17 GUESTS",
+      "name": "CHIADO CITY CENTER 5 ROOMS UP TO 17 GUESTS",
+      "description": "View all property information"
+     },
+     {
+      "position": "23",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/fc/8c/23.jpg",
+      "url": "Chiado Flat",
+      "name": "Chiado Flat",
+      "description": "Welcome to Chiado Flat, a charming and comfortable apartment in a historic building located in a typical street in the heart of Lisbon. Within walking distance you will find all the buzz, restauran..."
+     },
+     {
+      "position": "24",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/e4/1c/cb.jpg",
+      "url": "Chiado Apartments Camões Square 3 bedrooms",
+      "name": "Chiado Apartments Camões Square 3 bedrooms",
+      "description": "Two apartments in the city centre with 170 sqm is set in a recently rebuilt building in old historic Lisbon. Daylight-filled and bright, 3rd and 4th floor apartments are located near the Camões..."
+     },
+     {
+      "position": "25",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/7e/cd/c3.jpg",
+      "url": "28 Tram Balcony Apartment in Baixa",
+      "name": "28 Tram Balcony Apartment in Baixa",
+      "description": "This spacious 3 bedroom apartment is ideal for three couples or a group of friends to stay without being on top of each other. It's the perfect place to wake up and have a nice, quiet breakfast,..."
+     },
+     {
+      "position": "26",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/2c/d1/40.jpg",
+      "url": "InSuites Chiado Deluxe T2",
+      "name": "InSuites Chiado Deluxe T2",
+      "description": "A luxury apartment located in the most prestigious, historical district of Lisbon. In this apartment the space is a clear engagement between history, sophistication and the modernization of..."
+     },
+     {
+      "position": "27",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/f5/36/10.jpg",
+      "url": "Fantástico House in castle",
+      "name": "Fantástico House in castle",
+      "description": "Saudade Guest House is an accommodation with 2 floors. 2nd floor as 4 rooms surrounded by large windows where the typical sunny light of Lisbon shines in. It is located in Lisbon's most privileged..."
+     },
+     {
+      "position": "28",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/29/bb/24.jpg",
+      "url": "Downtown Alfama RIVER VIEW, 5 room 3 Wc",
+      "name": "Downtown Alfama RIVER VIEW, 5 room 3 Wc",
+      "description": "Nº Registo 10370/AL Property Description This Beautiful apartment is located is located in the most traditional neighbourhood of Lisbon, Alfama. With a fantastic view over the Tagus river,..."
+     },
+     {
+      "position": "29",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/09/c3/6a.jpg",
+      "url": "Lisbon Fabulous 17th Floor River View Duplex Expo",
+      "name": "Lisbon Fabulous 17th Floor River View Duplex Expo",
+      "description": "This fantastic apartment is located in Parque das Nações (17th, 18th floor), with 100 m2, offers a panoramic view over the Tagus River and the Gare do Oriente designed by Spanish architect..."
+     },
+     {
+      "position": "30",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/20/b1/5d.jpg",
+      "url": "Architectural Gem in Historic Biaxa",
+      "name": "Architectural Gem in Historic Biaxa",
+      "description": "NEW! Madalena House is a professionally managed, large (1550 sq ft) 2-bedroom, 2-bathroom apartment in a 200+ Yr old building in the historic center of Lisbon that has rare architectural features..."
+     },
+     {
+      "position": "31",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/24/50/74.jpg",
+      "url": "Sé Cathedral Lisbon Center 2 Terraces River View",
+      "name": "Sé Cathedral Lisbon Center 2 Terraces River View",
+      "description": "Cosy and lightful flat sited in the oldest area of Lisbon, Alfama. An amazingly romantic place with a marvellous river view, located on the ground floor of a recently renovated old building...."
+     },
+     {
+      "position": "32",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/dd/44/f2.jpg",
+      "url": "Casa Da Bica",
+      "name": "Casa Da Bica",
+      "description": "Right in the middle of the historical center of Lisbon, near \"Elevador da Bica\", this is a brand new house were you will fell at home,\u003cBR\u003eFrom here you can go visit Lisbon by walking nice surroundi..."
+     },
+     {
+      "position": "33",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/8b/c0/bc.jpg",
+      "url": "minha casa - luxury duplex",
+      "name": "minha casa - luxury duplex",
+      "description": "Ideally located, at the limit of classified Bairro Alto quarter and Chiado luxury neighbourhood, this duplex, with a 40sqm terrace overseeing the city, has been fully renovated in February..."
+     },
+     {
+      "position": "34",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/37/6c/03.jpg",
+      "url": "InSuites I Chiado - T2 Duplex",
+      "name": "InSuites I Chiado - T2 Duplex",
+      "description": "Duplex apartment in a prestigious building, located downtown in Chiado's center. Completely renovated and decorated on Feng Shui bases, by a team of architects and designers. Equipped with..."
+     },
+     {
+      "position": "35",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/4e/5a/26.jpg",
+      "url": "Engracia Spa, Private Sauna - Jacuzzi - Terrace",
+      "name": "Engracia Spa, Private Sauna - Jacuzzi - Terrace",
+      "description": "Amazing apartment in Santa Engracia, by one of the Historical neighbourhoods at Lisbon centre, with Private Hot Tub, Private Sauna and Private Deck. Property with 2 Bedrooms, maximum 6 people..."
+     },
+     {
+      "position": "36",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/57/4c/e6.jpg",
+      "url": "Lisbon UNIQUE Apartment",
+      "name": "Lisbon UNIQUE Apartment",
+      "description": "Stunning apartment with more than 100 square meters, located in the prestigious and fashionable district of Príncipe Real, 5 minutes walking distance from Bairro Alto district and from the..."
+     },
+     {
+      "position": "37",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/dd/b0/01.jpg",
+      "url": "Sé Apartamento",
+      "name": "Sé Apartamento",
+      "description": "View all property information"
+     },
+     {
+      "position": "38",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/73/e7/63.jpg",
+      "url": "Lisbon inGraça",
+      "name": "Lisbon inGraça",
+      "description": "This is the place you will happy to be, totally refurbished; this super luminous apartment is located in a very quiet and small street in the heart of Graça, one of the most historic districts..."
+     },
+     {
+      "position": "39",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/10/1c/5c.jpg",
+      "url": "28 Tram apartment - Lisbon Old Town",
+      "name": "28 Tram apartment - Lisbon Old Town",
+      "description": "Right in the center of old town, near Terreiro do Paço, Baixa, Chiado and Sé is this amazing and spacious apartment with all the commodities for your stay: fully equipped kitchen, air-conditioned..."
+     },
+     {
+      "position": "40",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/ff/ae/08.jpg",
+      "url": "Sumac Apartment, Graça, Lisbon",
+      "name": "Sumac Apartment, Graça, Lisbon",
+      "description": "Sumac Apartment is recently renovated and has an amazing view to the historic and romantic city of Lisbon. The apartment has a maximum capacity of 5 guests. Sumac Apartment features a private..."
+     },
+     {
+      "position": "41",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/49/0e/07.jpg",
+      "url": "Sunny garden apartment in Av. da Liberdade",
+      "name": "Sunny garden apartment in Av. da Liberdade",
+      "description": "Charming and cozy apartment ideally located on the in downtown Lisbon, S. José area, just besides Av da Liberdade. Beautiful garden with an orange tree to enjoy in warm and sunny days! Comfortable..."
+     },
+     {
+      "position": "42",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/83/ff/f9.jpg",
+      "url": "Chiado Apartments Camões Square 2 Bedrooms",
+      "name": "Chiado Apartments Camões Square 2 Bedrooms",
+      "description": "This city centre modern apartment is set in a recently rebuild building in old historic Lisbon. Bright, daylight filled, 5th floor apartment is located in Praça Luis de Camões, one of the..."
+     },
+     {
+      "position": "43",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/27/84/02.jpg",
+      "url": "SUNNY CHIADO w VIEW, 4 ROOMS 15 People",
+      "name": "SUNNY CHIADO w VIEW, 4 ROOMS 15 People",
+      "description": "número de registo: 3642/AL. Summary This is a 4 bedrooms apartment with 2 WC in Chiado/Bairro Alto and can host until 15 guests. The apartment is very sunny and has a gorgeous view over the..."
+     },
+     {
+      "position": "44",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/44/61/7e.jpg",
+      "url": "São Carlos Apartment | RentExperience",
+      "name": "São Carlos Apartment | RentExperience",
+      "description": "LOCATION This apartment is located in one of the best areas of Lisbon: Chiado - right beside the São Carlos theater in a small square. You have 3 great restaurants just outside the apartment..."
+     },
+     {
+      "position": "45",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/dc/21/28.jpg",
+      "url": "Classic&Modern duplex, \"Casa Belem\"",
+      "name": "Classic&Modern duplex, \"Casa Belem\"",
+      "description": "This is a duplex apartment with rooms on two adjoining floors connected by an inner staircase with a separating glass door. \u003cBR\u003eThe apartment has 4 bedrooms each with ensuite bathroom and can..."
+     },
+     {
+      "position": "46",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/de/bd/27.jpg",
+      "url": "Bica / Chiado - Garden House",
+      "name": "Bica / Chiado - Garden House",
+      "description": "The apartment is brand new (May of 2015) is fully equipped and furnished, very cozy, has a total of 3 rooms and it can fit up to 9 people. \u003cBR\u003eIt has one living room and one dining-room, 1..."
+     },
+     {
+      "position": "47",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/da/9b/18.jpg",
+      "url": "Alfama Apart in Rua Dos Remédios - River View !",
+      "name": "Alfama Apart in Rua Dos Remédios - River View !",
+      "description": "This beautiful apartment is located on the 2nd floor of a 19th century building in Rua dos Remédios. With it´s high ceilings and tall windows, It is full of light and space, with a small..."
+     },
+     {
+      "position": "48",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/52/84/45.jpg",
+      "url": "Santa Catarina Swimming Pool Apartment | RentExper...",
+      "name": "Santa Catarina Swimming Pool Apartment | RentExper...",
+      "description": "LOCATION Fabulous location in the heart of Lisbon old town offering shopping, tourist attractions, museums and fine dining. Fully renovated apartment located downtown at walking distance from..."
+     },
+     {
+      "position": "49",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/f4/25/e4.jpg",
+      "url": "Diva4 -Beautiful apartment in the center of Lisbon",
+      "name": "Diva4 -Beautiful apartment in the center of Lisbon",
+      "description": "This modern modern and lovely decorated apartment was completely renovated in 2010. The apartment is one of several Diva apartments in the same building. The apartment has a well designed living..."
+     },
+     {
+      "position": "50",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/03/c6/ae.jpg",
+      "url": "CASA ALTA",
+      "name": "CASA ALTA",
+      "description": "CASA ALTA – A bright and peaceful renewed apartment with, a surprisingly high ceiling witch gives it a particular charm. The balcony along the facades invites you for a chill drink in the..."
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Lisbon: Arriving & Departing - TripAdvisor",
+   "htmlTitle": "\u003cb\u003eLisbon\u003c/b\u003e: Arriving &amp; Departing - \u003cb\u003eTripAdvisor\u003c/b\u003e",
+   "link": "https://www.tripadvisor.com/Travel-g189158-s301/Lisbon:Portugal:Arriving.And.Departing.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Inside Lisbon: Arriving & Departing - Before you visit Lisbon, visit TripAdvisor for \nthe latest info and advice, ... Yellowbus website page for full details including list \nof places served ... Does not run on Saturdays, Sundays or Holidays in August.",
+   "htmlSnippet": "Inside \u003cb\u003eLisbon\u003c/b\u003e: Arriving &amp; Departing - Before you visit \u003cb\u003eLisbon\u003c/b\u003e, visit \u003cb\u003eTripAdvisor\u003c/b\u003e for \u003cbr\u003e\nthe latest info and advice, ... Yellowbus website page for full details including list \u003cbr\u003e\nof \u003cb\u003eplaces\u003c/b\u003e served ... Does not run on Saturdays, Sundays or Holidays in \u003cb\u003eAugust\u003c/b\u003e.",
+   "cacheId": "CcjjxjSp1LwJ",
+   "formattedUrl": "https://www.tripadvisor.com/Travel.../Lisbon:Portugal:Arriving.And. Departing.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eTravel\u003c/b\u003e.../\u003cb\u003eLisbon\u003c/b\u003e:Portugal:Arriving.And. Departing.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "80",
+      "height": "80",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTVQflH0VqVMp6PDcRILO5PBISjTfAm4CWJ85aFIrZtIGOJanUlknhw"
+     }
+    ],
+    "metatags": [
+     {
+      "og:image": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "National Tile Museum (Lisbon, Portugal): Top Tips Before You Go ...",
+   "htmlTitle": "National Tile Museum (\u003cb\u003eLisbon\u003c/b\u003e, Portugal): Top Tips Before You Go ...",
+   "link": "https://www.tripadvisor.com/Attraction_Review-g189158-d195776-Reviews-National_Tile_Museum-Lisbon_Lisbon_District_Central_Portugal.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Book your tickets online for National Tile Museum, Lisbon: See 2552 reviews ... \nTile Museum, ranked No.16 on TripAdvisor among 409 attractions in Lisbon. ... \nMy wife, two children, relatives and I visited Lisbon in August and September \n2016.",
+   "htmlSnippet": "Book your tickets online for National Tile Museum, \u003cb\u003eLisbon\u003c/b\u003e: See 2552 reviews ... \u003cbr\u003e\nTile Museum, ranked No.16 on \u003cb\u003eTripAdvisor\u003c/b\u003e among 409 \u003cb\u003eattractions\u003c/b\u003e in \u003cb\u003eLisbon\u003c/b\u003e. ... \u003cbr\u003e\nMy wife, two children, relatives and I visited \u003cb\u003eLisbon\u003c/b\u003e in \u003cb\u003eAugust\u003c/b\u003e and September \u003cbr\u003e\n2016.",
+   "cacheId": "IEWq871AJvoJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attraction_Review-g189158-d195776-Reviews- National_Tile_Museum-Lisbon_Lisbon_District_Central_Portugal.h...",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttraction\u003c/b\u003e_Review-g189158-d195776-Reviews- National_Tile_Museum-\u003cb\u003eLisbon\u003c/b\u003e_\u003cb\u003eLisbon\u003c/b\u003e_District_Central_Portugal.h...",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "194",
+      "height": "260",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSd9blyl7_Rw2XVsSgYff-FdOt-FF5pM6tGQVgwpRgfLsqeGkdfLrf79yR3"
+     }
+    ],
+    "LocalBusiness": [
+     {
+      "name": "National Tile Museum"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Portugal",
+      "title": "Portugal"
+     },
+     {
+      "url": "Central Portugal",
+      "title": "Central Portugal"
+     },
+     {
+      "url": "Lisbon District",
+      "title": "Lisbon District"
+     },
+     {
+      "url": "Lisbon",
+      "title": "Lisbon"
+     },
+     {
+      "url": "Things to Do in Lisbon",
+      "title": "Things to Do in Lisbon"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "4.5",
+      "ratingcount": "2552"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "2552"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "National Tile Museum (Lisbon, Portugal): Top Tips Before You Go - TripAdvisor",
+      "og:description": "Book your tickets online for National Tile Museum, Lisbon: See 2,552 reviews, articles, and 1,546 photos of National Tile Museum, ranked No.16 on TripAdvisor among 409 attractions in Lisbon.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/01/56/9a/5b/national-tile-museum.jpg",
+      "og:image:width": "337",
+      "og:image:height": "450",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189158-d195776-Reviews-m33762-National_Tile_Museum-Lisbon_Lisbon_District_Central_Portugal.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189158-d195776-Reviews-m33762-National_Tile_Museum-Lisbon_Lisbon_District_Central_Portugal.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189158-d195776-Reviews-m33762-National_Tile_Museum-Lisbon_Lisbon_District_Central_Portugal.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/01/56/9a/5b/national-tile-museum.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "The Best Nightlife in Lisbon - TripAdvisor",
+   "htmlTitle": "The Best Nightlife in \u003cb\u003eLisbon\u003c/b\u003e - \u003cb\u003eTripAdvisor\u003c/b\u003e",
+   "link": "https://www.tripadvisor.com/Attractions-g189158-Activities-c20-Lisbon_Lisbon_District_Central_Portugal.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Top Nightlife in Lisbon: See reviews and photos of nightlife attractions in Lisbon, \nPortugal on TripAdvisor.",
+   "htmlSnippet": "Top Nightlife in \u003cb\u003eLisbon\u003c/b\u003e: See reviews and photos of nightlife \u003cb\u003eattractions\u003c/b\u003e in \u003cb\u003eLisbon\u003c/b\u003e, \u003cbr\u003e\nPortugal on \u003cb\u003eTripAdvisor\u003c/b\u003e.",
+   "cacheId": "nnxjzGlHLmIJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attractions-g189158-Activities-c20-Lisbon_ Lisbon_District_Central_Portugal.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttractions\u003c/b\u003e-g189158-\u003cb\u003eActivities\u003c/b\u003e-c20-\u003cb\u003eLisbon\u003c/b\u003e_ \u003cb\u003eLisbon\u003c/b\u003e_District_Central_Portugal.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "290",
+      "height": "174",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyrVQdLa1DqbiYDywVTIPE1numCf9PdcZF84Hw6WTh1u71BvKbWVt8ANXg"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Portugal",
+      "title": "Portugal"
+     },
+     {
+      "url": "Central Portugal",
+      "title": "Central Portugal"
+     },
+     {
+      "url": "Lisbon District",
+      "title": "Lisbon District"
+     },
+     {
+      "url": "Lisbon",
+      "title": "Lisbon"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "The Best Nightlife in Lisbon - TripAdvisor",
+      "og:description": "Top Nightlife in Lisbon: See reviews and photos of nightlife attractions in Lisbon, Portugal on TripAdvisor.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/03/9b/2f/c5/lisbon.jpg",
+      "og:image:width": "550",
+      "og:image:height": "331"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/03/9b/2f/c5/lisbon.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Lisbon Bike Tour (Portugal): Top Tips Before You Go - TripAdvisor",
+   "htmlTitle": "\u003cb\u003eLisbon\u003c/b\u003e Bike Tour (Portugal): Top Tips Before You Go - \u003cb\u003eTripAdvisor\u003c/b\u003e",
+   "link": "https://www.tripadvisor.com/Attraction_Review-g189158-d1823200-Reviews-Lisbon_Bike_Tour-Lisbon_Lisbon_District_Central_Portugal.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Lisbon Bike Tour, Lisbon: See 470 reviews, articles, and 180 photos of Lisbon \nBike Tour, ranked No.6 on TripAdvisor among 162 attractions in Lisbon.",
+   "htmlSnippet": "\u003cb\u003eLisbon\u003c/b\u003e Bike Tour, \u003cb\u003eLisbon\u003c/b\u003e: See 470 reviews, articles, and 180 photos of \u003cb\u003eLisbon\u003c/b\u003e \u003cbr\u003e\nBike Tour, ranked No.6 on \u003cb\u003eTripAdvisor\u003c/b\u003e among 162 \u003cb\u003eattractions\u003c/b\u003e in \u003cb\u003eLisbon\u003c/b\u003e.",
+   "cacheId": "2UnQUfOP0nQJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attraction_Review-g189158-d1823200-Reviews -Lisbon_Bike_Tour-Lisbon_Lisbon_District_Central_Portugal.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttraction\u003c/b\u003e_Review-g189158-d1823200-Reviews -\u003cb\u003eLisbon\u003c/b\u003e_Bike_\u003cb\u003eTour\u003c/b\u003e-\u003cb\u003eLisbon\u003c/b\u003e_\u003cb\u003eLisbon\u003c/b\u003e_District_Central_Portugal.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "259",
+      "height": "194",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcT0OokHlvsgROQEU3LI1UwoUbJun6XC-efj-TrGAY9NK6uOOkqOpxuT9Q"
+     }
+    ],
+    "LocalBusiness": [
+     {
+      "name": "Lisbon Bike Tour"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Portugal",
+      "title": "Portugal"
+     },
+     {
+      "url": "Central Portugal",
+      "title": "Central Portugal"
+     },
+     {
+      "url": "Lisbon District",
+      "title": "Lisbon District"
+     },
+     {
+      "url": "Lisbon",
+      "title": "Lisbon"
+     },
+     {
+      "url": "Things to Do in Lisbon",
+      "title": "Things to Do in Lisbon"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "5.0",
+      "ratingcount": "470"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "470"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Lisbon Bike Tour (Portugal): Top Tips Before You Go - TripAdvisor",
+      "og:description": "Lisbon Bike Tour, Lisbon: See 470 reviews, articles, and 180 photos of Lisbon Bike Tour, ranked No.6 on TripAdvisor among 162 attractions in Lisbon.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/02/22/f9/ac/lisbon-bike-tour.jpg",
+      "og:image:width": "550",
+      "og:image:height": "412",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189158-d1823200-Reviews-m33762-Lisbon_Bike_Tour-Lisbon_Lisbon_District_Central_Portugal.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189158-d1823200-Reviews-m33762-Lisbon_Bike_Tour-Lisbon_Lisbon_District_Central_Portugal.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189158-d1823200-Reviews-m33762-Lisbon_Bike_Tour-Lisbon_Lisbon_District_Central_Portugal.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/02/22/f9/ac/lisbon-bike-tour.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Tram 28 (Lisbon, Portugal): Top Tips Before You Go - TripAdvisor",
+   "htmlTitle": "Tram 28 (\u003cb\u003eLisbon\u003c/b\u003e, Portugal): Top Tips Before You Go - \u003cb\u003eTripAdvisor\u003c/b\u003e",
+   "link": "https://www.tripadvisor.com/Attraction_Review-g189158-d262792-Reviews-Tram_28-Lisbon_Lisbon_District_Central_Portugal.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Book your tickets online for Tram 28, Lisbon: See 11314 reviews, articles, and \n2954 photos of Tram 28, ranked No.41 on TripAdvisor among 410 attractions in ...",
+   "htmlSnippet": "Book your tickets online for Tram 28, \u003cb\u003eLisbon\u003c/b\u003e: See 11314 reviews, articles, and \u003cbr\u003e\n2954 photos of Tram 28, ranked No.41 on \u003cb\u003eTripAdvisor\u003c/b\u003e among 410 \u003cb\u003eattractions\u003c/b\u003e in&nbsp;...",
+   "cacheId": "8-vRACNlKpoJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attraction_Review-g189158-d262792-Reviews- Tram_28-Lisbon_Lisbon_District_Central_Portugal.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttraction\u003c/b\u003e_Review-g189158-d262792-Reviews- Tram_28-\u003cb\u003eLisbon\u003c/b\u003e_\u003cb\u003eLisbon\u003c/b\u003e_District_Central_Portugal.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "259",
+      "height": "194",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTH6-B27rIqJ3RxXPEFTASQFjBVQRiAy8Bv75BQEQHDJunAu-MBFtbhezE"
+     }
+    ],
+    "LocalBusiness": [
+     {
+      "name": "Tram 28"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Portugal",
+      "title": "Portugal"
+     },
+     {
+      "url": "Central Portugal",
+      "title": "Central Portugal"
+     },
+     {
+      "url": "Lisbon District",
+      "title": "Lisbon District"
+     },
+     {
+      "url": "Lisbon",
+      "title": "Lisbon"
+     },
+     {
+      "url": "Things to Do in Lisbon",
+      "title": "Things to Do in Lisbon"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "4.0",
+      "ratingcount": "11314"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "11314"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Tram 28 (Lisbon, Portugal): Top Tips Before You Go - TripAdvisor",
+      "og:description": "Book your tickets online for Tram 28, Lisbon: See 11,314 reviews, articles, and 2,954 photos of Tram 28, ranked No.41 on TripAdvisor among 410 attractions in Lisbon.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/01/fc/d1/46/tram-28.jpg",
+      "og:image:width": "550",
+      "og:image:height": "412",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189158-d262792-Reviews-m33762-Tram_28-Lisbon_Lisbon_District_Central_Portugal.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189158-d262792-Reviews-m33762-Tram_28-Lisbon_Lisbon_District_Central_Portugal.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189158-d262792-Reviews-m33762-Tram_28-Lisbon_Lisbon_District_Central_Portugal.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/01/fc/d1/46/tram-28.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "SANDEMANs NEW Europe - Lisbon (Portugal): Top Tips Before You ...",
+   "htmlTitle": "SANDEMANs NEW Europe - \u003cb\u003eLisbon\u003c/b\u003e (Portugal): Top Tips Before You ...",
+   "link": "https://www.tripadvisor.com/Attraction_Review-g189158-d4541477-Reviews-SANDEMANs_NEW_Europe_Lisbon-Lisbon_Lisbon_District_Central_Portugal.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Book your tickets online for SANDEMANs NEW Europe - Lisbon, Lisbon: See ... \nNEW Europe - Lisbon, ranked No.1 on TripAdvisor among 199 attractions in ...",
+   "htmlSnippet": "Book your tickets online for SANDEMANs NEW Europe - \u003cb\u003eLisbon\u003c/b\u003e, \u003cb\u003eLisbon\u003c/b\u003e: See ... \u003cbr\u003e\nNEW Europe - \u003cb\u003eLisbon\u003c/b\u003e, ranked No.1 on \u003cb\u003eTripAdvisor\u003c/b\u003e among 199 \u003cb\u003eattractions\u003c/b\u003e in&nbsp;...",
+   "cacheId": "FEXSCuRR6YQJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attraction_Review-g189158-d4541477-Reviews -SANDEMANs_NEW_Europe_Lisbon-Lisbon_Lisbon_District_Ce...",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttraction\u003c/b\u003e_Review-g189158-d4541477-Reviews -SANDEMANs_NEW_Europe_\u003cb\u003eLisbon\u003c/b\u003e-\u003cb\u003eLisbon\u003c/b\u003e_\u003cb\u003eLisbon\u003c/b\u003e_District_Ce...",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "276",
+      "height": "182",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTI0A1lcRm0VSsXy4m_PIVMm8rr0IQlJv1bqV8bUH85RTZ5WEIhcpfHxOOx"
+     }
+    ],
+    "LocalBusiness": [
+     {
+      "name": "SANDEMANs NEW Europe - Lisbon"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Portugal",
+      "title": "Portugal"
+     },
+     {
+      "url": "Central Portugal",
+      "title": "Central Portugal"
+     },
+     {
+      "url": "Lisbon District",
+      "title": "Lisbon District"
+     },
+     {
+      "url": "Lisbon",
+      "title": "Lisbon"
+     },
+     {
+      "url": "Things to Do in Lisbon",
+      "title": "Things to Do in Lisbon"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "5.0",
+      "ratingcount": "4287"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "4287"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "SANDEMANs NEW Europe - Lisbon (Portugal): Top Tips Before You Go - TripAdvisor",
+      "og:description": "Book your tickets online for SANDEMANs NEW Europe - Lisbon, Lisbon: See 4,287 reviews, articles, and 707 photos of SANDEMANs NEW Europe - Lisbon, ranked No.1 on TripAdvisor among 199 attractions in Lisbon.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/0b/37/21/d2/sandemans-new-lisbon.jpg",
+      "og:image:width": "550",
+      "og:image:height": "363",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189158-d4541477-Reviews-m33762-SANDEMANs_NEW_Europe_Lisbon-Lisbon_Lisbon_District_Central_Portugal.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189158-d4541477-Reviews-m33762-SANDEMANs_NEW_Europe_Lisbon-Lisbon_Lisbon_District_Central_Portugal.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189158-d4541477-Reviews-m33762-SANDEMANs_NEW_Europe_Lisbon-Lisbon_Lisbon_District_Central_Portugal.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/0b/37/21/d2/sandemans-new-lisbon.jpg"
+     }
+    ]
+   }
+  }
+ ]
+}

@@ -79,7 +79,16 @@ function testingElements() {
   console.log(JSON.stringify(elements));
 }
 
-testingGetInfoFromTrip();
+function testAddCities() {
+  // remove previous file entry
+  const trip = new TripData("Testing");
+  trip.addCities(["a","b"]);
+  const updatedTrip = new TripData("Testing");
+  console.log(JSON.stringify(updatedTrip));
+}
+
+testAddCities();
+// testingGetInfoFromTrip();
 
 // testConstructor();
 /*

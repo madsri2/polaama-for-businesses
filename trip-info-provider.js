@@ -9,60 +9,37 @@ const TripData = require('./trip-data');
 /* Class to handle manipulation of the trips/israel-data.txt file. */
 function TripInfoProvider(tripData) {
   this.trip = tripData;
-  this.weatherInfoProvider = new WeatherInfoProvider(tripData.data.destination, tripData.data.startDate);
   try {
-    this.tripDetails = JSON.parse(fs.readFileSync(this.trip.tripDataFile(),'utf8'));
+    this.tripInfoDetails = JSON.parse(fs.readFileSync(this.trip.tripDataFile(),'utf8'));
   }
   catch(err) {
-    logger.info(`could not read trip details from file ${this.trip.tripDataFile()}. ${err.stack}`);
-    this.tripDetails = {};
-    this.tripDetails.cities = {};
+    logger.info(`could not read trip details from file ${this.trip.tripDataFile()}. ${err.message}`);
+    this.tripInfoDetails = {};
+    this.tripInfoDetails.cities = {};
   }
 }
 
-function encodeForLonelyPlanet() {
-  if(_.isUndefined(this.trip.destination)) {
-    logger.warn("encodeForLonelyPlanet: No country specified in trip");
-    return undefined;
-  }
-  return this.trip.destination.replace(/ /g,'-').replace(/_/g,'-').toLowerCase();
-}
 
 // callback function meant to be called by WeatherInfoProvider.getWeather 
-function handleGetWeatherResponse(city, weatherDetails) {
+function parseWeatherResponse(city, weatherDetails) {
   if(_.isUndefined(weatherDetails)) {
     logger.error(`could not get weather information for city ${city}`);
-    if(this.invokeWCallback) {
-      this.invokeWCallback = false;
-      return this.callback();
-    }
+    return;
   }
   const text = [];
   text.push(`The average weather when you are traveling is a max of ${weatherDetails.max_temp}F and a min of ${weatherDetails.min_temp}F`);
   text.push(`It will be ${weatherDetails.cloud_cover} in ${city}`);
   text.push(`There's a ${weatherDetails.tempoversixty} % chance of temperature over 60F`);
   text.push(`There's a ${weatherDetails.chanceofrain} % chance of rain`);
-  const lpEncodedCountry = encodeForLonelyPlanet.call(this);
-  if(!_.isUndefined(lpEncodedCountry)) {
-    // TODO: Extract this information and present it to the user rather than just show url
-    text.push(`Check https://www.lonelyplanet.com/${lpEncodedCountry}/weather to see if you are traveling in the low, shoulder or high season`); 
-  }
-  logger.info(`The text value is <${text}>`);
-  this.tripDetails.cities[city].weather = text;
-  try {
-    logger.info(`writing trip details information to trip data file`);
-    // TODO: Instead of writing for every city, gather all weather information and then write to the file just once.
-    fs.writeFileSync(this.trip.tripDataFile(),JSON.stringify(this.tripDetails));
-  }
-  catch(err) {
-    logger.error(`Cannot write tripData details to file ${this.trip.tripDataFile()}. Error is ${err.stack}`);
-  }
-  // call the callback that was passed to getWeatherInformation if we are asked to.
-  if(this.invokeWCallback) {
-    this.invokeWCallback = false;
-    return this.callback();
-  }
+  this.tripInfoDetails.cities[city].weather = text;
   return;
+}
+
+TripInfoProvider.prototype.getStoredAdditionalWeatherDetails = function() {
+  if(_.isUndefined(this.tripInfoDetails.weather)) {
+    return "";
+  }
+  return this.tripInfoDetails.weather;
 }
 
 TripInfoProvider.prototype.getStoredWeatherDetails = function() {
@@ -72,9 +49,9 @@ TripInfoProvider.prototype.getStoredWeatherDetails = function() {
     return weather;
   }
   this.trip.data.cities.forEach(city => {
-    if(!_.isUndefined(this.tripDetails.cities[city]) && 
-       !_.isUndefined(this.tripDetails.cities[city].weather)) {
-      weather[city] = this.tripDetails.cities[city].weather;
+    if(!_.isUndefined(this.tripInfoDetails.cities[city]) && 
+       !_.isUndefined(this.tripInfoDetails.cities[city].weather)) {
+      weather[city] = this.tripInfoDetails.cities[city].weather;
     }
     else {
       weather[city] = [`No weather information available`];
@@ -83,62 +60,129 @@ TripInfoProvider.prototype.getStoredWeatherDetails = function() {
   return weather;
 }
 
+function getWeatherForCity(city, index, callback) {
+  if(_.isUndefined(this.tripInfoDetails.cities[city])) {
+    this.tripInfoDetails.cities[city] = {};
+  }
+  // find out if this is the last city. If so, the callback passed to us needs to be invoked.
+  const tripData = this.trip.data;
+  const cities = tripData.cities;
+  const cityDetails = this.tripInfoDetails.cities[city];
+  if(!_.isUndefined(cityDetails.weather)) {
+    // we already have weather details for this city. nothing to do.
+    if(index == (cities.length-1)) {
+      logger.info(`getWeatherForCity: Details already available for final city ${city} in list. Invoking callback`);
+      return callback();
+    }
+    return;
+  }
+  const wip = new WeatherInfoProvider(tripData.destination, city, tripData.startDate);
+  const self = this;
+  const dataFile = this.trip.tripDataFile();
+  wip.getWeather(function(c, weatherDetails) {
+    parseWeatherResponse.call(self, c, weatherDetails);
+    if(index == (cities.length - 1)) {
+      logger.info(`Gathered weather details for final city ${c}. Persisting & invoking callback`);
+      try {
+        fs.writeFileSync(dataFile,JSON.stringify(self.tripInfoDetails));
+      }
+      catch(err) {
+        logger.error(`Cannot write tripData details to file ${dataFile}. Error is ${err.stack}`);
+      }
+      return callback();
+    }
+  });
+}
+
 TripInfoProvider.prototype.getWeatherInformation = function(callback) {
   if(_.isUndefined(this.trip.data.cities)) {
     logger.error(`getWeatherInformation: No city defined in trip ${this.trip.data.name}. Doing nothing!`);
     return callback();
   }
-  this.wCallback = callback;
+  const lpEncodedCountry = encodeForLonelyPlanet.call(this);
+  if(!_.isUndefined(lpEncodedCountry)) {
+    // TODO: Extract this information and present it to the user rather than just show url
+    this.tripInfoDetails.weather = `Check https://www.lonelyplanet.com/${lpEncodedCountry}/weather to see if you are traveling in the low, shoulder or high season`; 
+  }
   this.trip.data.cities.forEach((city,index,a) => {
-    if(_.isUndefined(this.tripDetails.cities[city])) {
-      this.tripDetails.cities[city] = {};
-    }
-    // find out if this is the last city. If so, the callback passed to us needs to be invoked.
-    if(index == (this.trip.data.cities.length-1)) {
-      logger.info(`Gathering weather details for last city ${city}. Asking handleGetWeatherResponse to invoke the callback passed.`);
-      if(!_.isUndefined(this.tripDetails.cities[city].weather)) {
-        // if we already have weather details for this city, there is nothing else left to do.
-        return this.wCallback();
-      }
-      this.invokeWCallback = true;
-    }
-    if( _.isUndefined(this.tripDetails.cities[city].weather)) {
-      this.weatherInfoProvider.getWeather(city, handleGetWeatherResponse.bind(this));
-    }
-  });
+    getWeatherForCity.call(this, city, index, callback);
+  }, this);
 }
 
+function encodeForLonelyPlanet() {
+  if(_.isUndefined(this.trip.data.destination)) {
+    logger.warn("encodeForLonelyPlanet: No country specified in trip");
+    return undefined;
+  }
+  return this.trip.data.destination.replace(/ /g,'-').replace(/_/g,'-').toLowerCase();
+}
+
+// cx code for flight custom search engine: '016727128883863036563:3i1x6jmqmwu';
 TripInfoProvider.prototype.getFlightDetails = function() {
   // https://developers.google.com/qpx-express/v1/prereqs
+}
+
+/***************** Activity Details ***************************/
+function getActivityForCity(city, index, callback) {
+  if(_.isUndefined(this.tripInfoDetails.cities[city])) {
+    this.tripInfoDetails.cities[city] = {};
+  }
+  // nothing to do if activity details are already present for this city
+  const details = this.tripInfoDetails;
+  const cityDetails = details.cities[city];
+  const cities = this.trip.data.cities;
+  const dataFile = this.trip.tripDataFile();
+  if(!_.isUndefined(cityDetails.activities)) {
+    // handle case where we have gathered data for all cities.
+    if(index == (cities.length-1)) {
+      logger.info("Invoking callback");
+      return callback();
+    }
+    return;
+  }
+  const aip = new ActivityInfoProvider(this.trip.data.destination, city, this.trip.data.startDate);
+  aip.getActivities(function(activityDetails) {
+    cityDetails.activities = activityDetails;
+    // handle case where we have gathered data for all cities.
+    if(index == (cities.length-1)) {
+      logger.info("getActivities: Gathered activities for all cities. Persisting data and calling callback");
+      try {
+        fs.writeFileSync(dataFile, JSON.stringify(details));
+      }
+      catch(e) {
+        logger.error(`Cannot write tripData details to file ${dataFile}. Error is ${err.stack}`);
+      }
+      return callback();
+    }
+  });
 }
 
 TripInfoProvider.prototype.getActivities = function(callback) {
   if(_.isUndefined(this.trip.data.cities)) {
     logger.error(`getActivities: No city defined in trip ${this.trip.data.name}. Doing nothing!`);
-    return callback(this.tripDetails.cities);
+    return callback();
   }
   this.trip.data.cities.forEach((city, index, a) => {
-    if(_.isUndefined(this.tripDetails.cities[city])) {
-      this.tripDetails.cities[city] = {};
-    }
-    const aip = new ActivityInfoProvider(this.trip.data.destination, city, this.trip.data.startDate);
-    const cityDetails = this.tripDetails.cities[city];
-    const cities = this.tripDetails.cities;
-    if(index == (this.trip.data.cities.length-1)) {
-      // last city. Invoke the callback passed to us after gathering necessary information
-      aip.getActivities(function(activityDetails) {
-        cityDetails.activity = activityDetails;
-        console.log("getActivities: Gathered activities for all cities in the trip. Calling callback()");
-        return callback(cities);
-      });
-    }
-    // simply gather information
-    aip.getActivities(function(activityDetails) {
-      cityDetails.activity = activityDetails;
-    });
+    getActivityForCity.call(this, city, index, callback);
   }, this);
-  return;
+}
+
+TripInfoProvider.prototype.getStoredActivityDetails = function() {
+  const activities = {};
+  if(_.isUndefined(this.trip.data.cities)) {
+    activities.nocity = `No city present in trip ${this.trip.data.name}`;
+    return activities;
+  }
+  this.trip.data.cities.forEach(city => {
+    if(!_.isUndefined(this.tripInfoDetails.cities[city]) && 
+       !_.isUndefined(this.tripInfoDetails.cities[city].activities)) {
+      activities[city] = this.tripInfoDetails.cities[city].activities;
+    }
+    else {
+      activities[city] = [`No activity information available`];
+    }
+  });
+  return activities;
 }
  
-
 module.exports = TripInfoProvider;

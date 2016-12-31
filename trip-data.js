@@ -12,7 +12,7 @@ TripData.todo = "todoList";
 
 function TripData(tripName) {
   this.rawTripName = tripName;
-  retrieveTripData.call(this);
+  this.retrieveTripData();
   if(!Object.keys(this.data).length) {
     // New trip: update trip with information to be persisted later
     this.data.name = myEncode(tripName);
@@ -67,20 +67,20 @@ TripData.prototype.getPackList = function() {
   return trip.packList;
 }
 
-function retrieveTripData() {
+TripData.prototype.retrieveTripData = function() {
+  const file = tripFile.call(this);
   try {
-    const file = tripFile.call(this);
     fs.accessSync(file, fs.F_OK);
     try {
       this.data = JSON.parse(fs.readFileSync(file, 'utf8')); 
       // console.log(`raw name from file ${file} is ${this.data.rawName}`);
     }
     catch(err) {
-      logger.error("error reading from ",file, err.stack);
+      logger.error(`error reading from file ${file}: ${err.stack}`);
     }
   }
   catch(err) {
-      logger.info("file does not exist. creating empty data object so it can be filled elsewhere");
+      logger.info(`File ${file} does not exist. Creating empty this.data object so it can be filled elsewhere`);
       this.data = {};
   }
 }
@@ -119,6 +119,7 @@ TripData.prototype.addTripDetailsAndPersist = function(tripDetails) {
   this.data = {}; 
   this.data.name = myEncode(this.rawTripName);
   this.data.rawName = this.rawTripName;
+  // rename destination to country.
   this.data.destination = myEncode(tripDetails.destination);
   this.country = new Country(tripDetails.destination);
   this.data.duration = tripDetails.duration;
@@ -137,6 +138,9 @@ TripData.prototype.addTripDetailsAndPersist = function(tripDetails) {
 }
 
 TripData.prototype.addCities = function(cities) {
+  if(_.isUndefined(this.data.cities)) {
+    this.data.cities = [];
+  }
   cities.forEach(city => {
     this.data.cities.push(Encoder.encode(city));
   }, this);
@@ -250,7 +254,7 @@ TripData.prototype.persistUpdatedTrip = function() {
 // ======== Encode =======
 // TODO: Make this private by removing/refactoring other references
 TripData.encode = function(name) {
-  return myEncode(name);
+  return Encoder.encode(name);
 }
 
 function myEncode(name) {

@@ -1,0 +1,821 @@
+{
+ "kind": "customsearch#search",
+ "url": {
+  "type": "application/json",
+  "template": "https://www.googleapis.com/customsearch/v1?q={searchTerms}&num={count?}&start={startIndex?}&lr={language?}&safe={safe?}&cx={cx?}&cref={cref?}&sort={sort?}&filter={filter?}&gl={gl?}&cr={cr?}&googlehost={googleHost?}&c2coff={disableCnTwTranslation?}&hq={hq?}&hl={hl?}&siteSearch={siteSearch?}&siteSearchFilter={siteSearchFilter?}&exactTerms={exactTerms?}&excludeTerms={excludeTerms?}&linkSite={linkSite?}&orTerms={orTerms?}&relatedSite={relatedSite?}&dateRestrict={dateRestrict?}&lowRange={lowRange?}&highRange={highRange?}&searchType={searchType}&fileType={fileType?}&rights={rights?}&imgSize={imgSize?}&imgType={imgType?}&imgColorType={imgColorType?}&imgDominantColor={imgDominantColor?}&alt=json"
+ },
+ "queries": {
+  "request": [
+   {
+    "title": "Google Custom Search - trip advisor bengaluru november attractions",
+    "totalResults": "79900",
+    "searchTerms": "trip advisor bengaluru november attractions",
+    "count": 10,
+    "startIndex": 1,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "bengaluru"
+   }
+  ],
+  "nextPage": [
+   {
+    "title": "Google Custom Search - trip advisor bengaluru november attractions",
+    "totalResults": "79900",
+    "searchTerms": "trip advisor bengaluru november attractions",
+    "count": 10,
+    "startIndex": 11,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "bengaluru"
+   }
+  ]
+ },
+ "context": {
+  "title": "Polaama"
+ },
+ "searchInformation": {
+  "searchTime": 0.419537,
+  "formattedSearchTime": "0.42",
+  "totalResults": "79900",
+  "formattedTotalResults": "79,900"
+ },
+ "items": [
+  {
+   "kind": "customsearch#result",
+   "title": "The Top 10 Things to Do in Bengaluru - TripAdvisor - Bengaluru ...",
+   "htmlTitle": "The Top 10 \u003cb\u003eThings to Do\u003c/b\u003e in \u003cb\u003eBengaluru\u003c/b\u003e - \u003cb\u003eTripAdvisor\u003c/b\u003e - \u003cb\u003eBengaluru\u003c/b\u003e ...",
+   "link": "https://www.tripadvisor.com/Attractions-g297628-Activities-Bengaluru_Karnataka.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Book your tickets online for the top things to do in Bengaluru, India on ... “\nBangalore s garden” 12/28/2016; “Lalbagh Botanical Garden - Nov 16” 12/28/\n2016.",
+   "htmlSnippet": "Book your tickets online for the top \u003cb\u003ethings to do\u003c/b\u003e in \u003cb\u003eBengaluru\u003c/b\u003e, India on ... “\u003cbr\u003e\n\u003cb\u003eBangalore\u003c/b\u003e s garden” 12/28/2016; “Lalbagh Botanical Garden - \u003cb\u003eNov\u003c/b\u003e 16” 12/28/\u003cbr\u003e\n2016.",
+   "cacheId": "QF2ebyulDngJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attractions-g297628-Activities-Bengaluru_ Karnataka.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttractions\u003c/b\u003e-g297628-\u003cb\u003eActivities\u003c/b\u003e-\u003cb\u003eBengaluru\u003c/b\u003e_ Karnataka.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "290",
+      "height": "174",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKfekxbEJgaQw6GI_AIpu2KU7ZhYvPiwutnOz23eL-RR9FrWXjTNHvddT4"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     },
+     {
+      "url": "Karnataka",
+      "title": "Karnataka"
+     },
+     {
+      "url": "Bengaluru",
+      "title": "Bengaluru"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "The Top 10 Things to Do in Bengaluru - TripAdvisor - Bengaluru, India Attractions - Find What to Do Today, This Weekend, or in January",
+      "og:description": "Book your tickets online for the top things to do in Bengaluru, India on TripAdvisor: See 35,714 traveler reviews and photos of Bengaluru tourist attractions. Find what to do today, this weekend, or in January. We have reviews of the best places to see in Bengaluru. Visit top-rated & must-see attractions.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/03/9b/2f/3a/bangalore.jpg",
+      "og:image:width": "550",
+      "og:image:height": "331",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attractions-g297628-Activities-m33762-Bengaluru_Karnataka.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attractions-g297628-Activities-m33762-Bengaluru_Karnataka.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attractions-g297628-Activities-m33762-Bengaluru_Karnataka.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/03/9b/2f/3a/bangalore.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Yours Truly India (Bengaluru): Top Tips Before You Go - TripAdvisor",
+   "htmlTitle": "Yours Truly India (\u003cb\u003eBengaluru\u003c/b\u003e): Top Tips Before You Go - \u003cb\u003eTripAdvisor\u003c/b\u003e",
+   "link": "https://www.tripadvisor.com/Attraction_Review-g297628-d10401865-Reviews-Yours_Truly_India-Bengaluru_Karnataka.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Book your tickets online for Yours Truly India, Bengaluru: See 19 reviews, articles\n, and 28 photos of Yours Truly India, ranked No.10 on TripAdvisor among 50 \nattractions in Bengaluru. ... 5 of 5 bubbles Reviewed November 10, 2016 via \nmobile.",
+   "htmlSnippet": "Book your tickets online for Yours Truly India, \u003cb\u003eBengaluru\u003c/b\u003e: See 19 reviews, articles\u003cbr\u003e\n, and 28 photos of Yours Truly India, ranked No.10 on \u003cb\u003eTripAdvisor\u003c/b\u003e among 50 \u003cbr\u003e\n\u003cb\u003eattractions\u003c/b\u003e in \u003cb\u003eBengaluru\u003c/b\u003e. ... 5 of 5 bubbles Reviewed \u003cb\u003eNovember\u003c/b\u003e 10, 2016 via \u003cbr\u003e\nmobile.",
+   "cacheId": "fQtWe8Z_ldAJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attraction_Review-g297628-d10401865- Reviews-Yours_Truly_India-Bengaluru_Karnataka.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttraction\u003c/b\u003e_Review-g297628-d10401865- Reviews-Yours_Truly_India-\u003cb\u003eBengaluru\u003c/b\u003e_Karnataka.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "276",
+      "height": "183",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkOvT84yybQzbMqyKz_CxYWxdPjO-g9jK7bmmHJTHfxiUgZNUI2mw6iq0"
+     }
+    ],
+    "LocalBusiness": [
+     {
+      "name": "Yours Truly India"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     },
+     {
+      "url": "Karnataka",
+      "title": "Karnataka"
+     },
+     {
+      "url": "Bengaluru",
+      "title": "Bengaluru"
+     },
+     {
+      "url": "Things to Do in Bengaluru",
+      "title": "Things to Do in Bengaluru"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "5.0",
+      "ratingcount": "19"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "19"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Yours Truly India (Bengaluru): Top Tips Before You Go - TripAdvisor",
+      "og:description": "Book your tickets online for Yours Truly India, Bengaluru: See 19 reviews, articles, and 28 photos of Yours Truly India, ranked No.10 on TripAdvisor among 50 attractions in Bengaluru.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/0b/c5/33/01/yours-truly-india.jpg",
+      "og:image:width": "550",
+      "og:image:height": "364",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attraction_Review-g297628-d10401865-Reviews-m33762-Yours_Truly_India-Bengaluru_Karnataka.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attraction_Review-g297628-d10401865-Reviews-m33762-Yours_Truly_India-Bengaluru_Karnataka.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attraction_Review-g297628-d10401865-Reviews-m33762-Yours_Truly_India-Bengaluru_Karnataka.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/0b/c5/33/01/yours-truly-india.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Good place for shopping - Review of Basavanagudi, Bengaluru ...",
+   "htmlTitle": "Good place for shopping - Review of Basavanagudi, \u003cb\u003eBengaluru\u003c/b\u003e ...",
+   "link": "https://www.tripadvisor.com/ShowUserReviews-g297628-d2587592-r435501454-Basavanagudi-Bengaluru_Karnataka.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Ranked #8 of 317 things to do in Bengaluru. 4.5 of 5 ... More attraction details. \nAttraction ... 24 attraction reviews ... Reviewed November 7, 2016 ... This review \nis the subjective opinion of a TripAdvisor member and not of TripAdvisor LLC.",
+   "htmlSnippet": "Ranked #8 of 317 \u003cb\u003ethings to do\u003c/b\u003e in \u003cb\u003eBengaluru\u003c/b\u003e. 4.5 of 5 ... More \u003cb\u003eattraction\u003c/b\u003e details. \u003cbr\u003e\n\u003cb\u003eAttraction\u003c/b\u003e ... 24 \u003cb\u003eattraction\u003c/b\u003e reviews ... Reviewed \u003cb\u003eNovember\u003c/b\u003e 7, 2016 ... This review \u003cbr\u003e\nis the subjective opinion of a \u003cb\u003eTripAdvisor\u003c/b\u003e member and not of \u003cb\u003eTripAdvisor\u003c/b\u003e LLC.",
+   "cacheId": "UY0RKEI72HMJ",
+   "formattedUrl": "https://www.tripadvisor.com/ShowUserReviews-g297628-d2587592- r435501454-Basavanagudi-Bengaluru_Karnataka.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/ShowUserReviews-g297628-d2587592- r435501454-Basavanagudi-\u003cb\u003eBengaluru\u003c/b\u003e_Karnataka.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "275",
+      "height": "183",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQ7uvfMhpoqfBJlPvwUWMc1WuKJ6soLw-G1-ccje3meDYn5q8Bb9cTbCAkE"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     },
+     {
+      "url": "Karnataka",
+      "title": "Karnataka"
+     },
+     {
+      "url": "Bengaluru",
+      "title": "Bengaluru"
+     },
+     {
+      "url": "Bengaluru - Things to Do",
+      "title": "Bengaluru - Things to Do"
+     },
+     {
+      "url": "Basavanagudi",
+      "title": "Basavanagudi"
+     }
+    ],
+    "review": [
+     {
+      "reviewer": "a TripAdvisor user",
+      "reviewdate": "2016-11-07",
+      "ratingstars": "4.0"
+     }
+    ],
+    "hreview": [
+     {
+      "summary": "“Good place for shopping”",
+      "dtreviewed": "2016-11-07",
+      "description": "Value for money shopping. With daily needs to party needs. Best place for one gram gold ornaments, to be more specific is bhavani stores. Should be good at bargain."
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Good place for shopping - Review of Basavanagudi, Bengaluru, India - TripAdvisor",
+      "og:description": "Basavanagudi: Good place for shopping - See 373 traveler reviews, 31 candid photos, and great deals for Bengaluru, India, at TripAdvisor.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/02/77/71/00/basavanagudi.jpg",
+      "og:image:width": "550",
+      "og:image:height": "366",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/ShowUserReviews-g297628-d2587592-r435501454-m33762-Basavanagudi-Bengaluru_Karnataka.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/ShowUserReviews-g297628-d2587592-r435501454-m33762-Basavanagudi-Bengaluru_Karnataka.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/ShowUserReviews-g297628-d2587592-r435501454-m33762-Basavanagudi-Bengaluru_Karnataka.html"
+     }
+    ],
+    "Review": [
+     {
+      "author": "a TripAdvisor user",
+      "name": "“Good place for shopping”",
+      "datePublished": "2016-11-07",
+      "reviewBody": "Value for money shopping. With daily needs to party needs. Best place for one gram gold ornaments, to be more specific is bhavani stores. Should be good at bargain."
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/02/77/71/00/basavanagudi.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Thottikallu Falls (Bengaluru, India): Top Tips Before You Go ...",
+   "htmlTitle": "Thottikallu Falls (\u003cb\u003eBengaluru\u003c/b\u003e, India): Top Tips Before You Go ...",
+   "link": "https://www.tripadvisor.com/Attraction_Review-g297628-d4435942-Reviews-Thottikallu_Falls-Bengaluru_Karnataka.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Thottikallu Falls, Bengaluru: See 15 reviews, articles, and 14 photos of Thottikallu \nFalls, ranked No.268 on TripAdvisor among 317 attractions in Bengaluru. ... \nReviewed November 10, 2015 via mobile. After a bumpy ride through scary \nvillage ...",
+   "htmlSnippet": "Thottikallu Falls, \u003cb\u003eBengaluru\u003c/b\u003e: See 15 reviews, articles, and 14 photos of Thottikallu \u003cbr\u003e\nFalls, ranked No.268 on \u003cb\u003eTripAdvisor\u003c/b\u003e among 317 \u003cb\u003eattractions\u003c/b\u003e in \u003cb\u003eBengaluru\u003c/b\u003e. ... \u003cbr\u003e\nReviewed \u003cb\u003eNovember\u003c/b\u003e 10, 2015 via mobile. After a bumpy ride through scary \u003cbr\u003e\nvillage&nbsp;...",
+   "cacheId": "QjWomVMwaIkJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attraction_Review-g297628-d4435942-Reviews -Thottikallu_Falls-Bengaluru_Karnataka.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttraction\u003c/b\u003e_Review-g297628-d4435942-Reviews -Thottikallu_Falls-\u003cb\u003eBengaluru\u003c/b\u003e_Karnataka.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "259",
+      "height": "194",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRX3keuLZLKA7aHQqSBVpGJtdggfrrpby851YqxMhb0l3LLo30By-A5x98"
+     }
+    ],
+    "LocalBusiness": [
+     {
+      "name": "Thottikallu Falls"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     },
+     {
+      "url": "Karnataka",
+      "title": "Karnataka"
+     },
+     {
+      "url": "Bengaluru",
+      "title": "Bengaluru"
+     },
+     {
+      "url": "Things to Do in Bengaluru",
+      "title": "Things to Do in Bengaluru"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "2.0",
+      "ratingcount": "15"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "15"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Thottikallu Falls (Bengaluru, India): Top Tips Before You Go - TripAdvisor",
+      "og:description": "Thottikallu Falls, Bengaluru: See 15 reviews, articles, and 14 photos of Thottikallu Falls, ranked No.268 on TripAdvisor among 317 attractions in Bengaluru.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/07/76/01/84/thottikallu-falls.jpg",
+      "og:image:width": "550",
+      "og:image:height": "413",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attraction_Review-g297628-d4435942-Reviews-m33762-Thottikallu_Falls-Bengaluru_Karnataka.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attraction_Review-g297628-d4435942-Reviews-m33762-Thottikallu_Falls-Bengaluru_Karnataka.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attraction_Review-g297628-d4435942-Reviews-m33762-Thottikallu_Falls-Bengaluru_Karnataka.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/07/76/01/84/thottikallu-falls.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Pearl Valley (Bengaluru, India): Top Tips Before You Go - TripAdvisor",
+   "htmlTitle": "Pearl Valley (\u003cb\u003eBengaluru\u003c/b\u003e, India): Top Tips Before You Go - \u003cb\u003eTripAdvisor\u003c/b\u003e",
+   "link": "https://www.tripadvisor.com/Attraction_Review-g297628-d3705755-Reviews-Pearl_Valley-Bengaluru_Karnataka.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Pearl Valley, Bengaluru: See 28 reviews, articles, and 24 photos of Pearl Valley, \nranked No.254 on TripAdvisor among 316 attractions in Bengaluru. ... Mar-May (8\n); Jun-Aug (6); Sep-Nov (9); Dec-Feb (5). Language. All languages; English (28).",
+   "htmlSnippet": "Pearl Valley, \u003cb\u003eBengaluru\u003c/b\u003e: See 28 reviews, articles, and 24 photos of Pearl Valley, \u003cbr\u003e\nranked No.254 on \u003cb\u003eTripAdvisor\u003c/b\u003e among 316 \u003cb\u003eattractions\u003c/b\u003e in \u003cb\u003eBengaluru\u003c/b\u003e. ... Mar-May (8\u003cbr\u003e\n); Jun-Aug (6); Sep-\u003cb\u003eNov\u003c/b\u003e (9); Dec-Feb (5). Language. All languages; English (28).",
+   "cacheId": "DnfKvIXOWQMJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attraction_Review-g297628-d3705755-Reviews -Pearl_Valley-Bengaluru_Karnataka.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttraction\u003c/b\u003e_Review-g297628-d3705755-Reviews -Pearl_Valley-\u003cb\u003eBengaluru\u003c/b\u003e_Karnataka.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "275",
+      "height": "183",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRlIqMRvuMd2p9rpy7VMxD4PneqdL0XWBdr-4NKz7Yb6r-gMV93LXkrwZtM"
+     }
+    ],
+    "LocalBusiness": [
+     {
+      "name": "Pearl Valley"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     },
+     {
+      "url": "Karnataka",
+      "title": "Karnataka"
+     },
+     {
+      "url": "Bengaluru",
+      "title": "Bengaluru"
+     },
+     {
+      "url": "Things to Do in Bengaluru",
+      "title": "Things to Do in Bengaluru"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "2.5",
+      "ratingcount": "28"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "28"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Pearl Valley (Bengaluru, India): Top Tips Before You Go - TripAdvisor",
+      "og:description": "Pearl Valley, Bengaluru: See 28 reviews, articles, and 24 photos of Pearl Valley, ranked No.254 on TripAdvisor among 316 attractions in Bengaluru.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/03/bb/49/57/pearl-valley.jpg",
+      "og:image:width": "550",
+      "og:image:height": "366",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attraction_Review-g297628-d3705755-Reviews-m33762-Pearl_Valley-Bengaluru_Karnataka.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attraction_Review-g297628-d3705755-Reviews-m33762-Pearl_Valley-Bengaluru_Karnataka.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attraction_Review-g297628-d3705755-Reviews-m33762-Pearl_Valley-Bengaluru_Karnataka.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/03/bb/49/57/pearl-valley.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "The Top Nightlife in Bengaluru - TripAdvisor",
+   "htmlTitle": "The Top Nightlife in \u003cb\u003eBengaluru\u003c/b\u003e - \u003cb\u003eTripAdvisor\u003c/b\u003e",
+   "link": "https://www.tripadvisor.com/Attractions-g297628-Activities-c20-Bengaluru_Bangalore_Karnataka.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Top Nightlife in Bengaluru: See reviews and photos of nightlife attractions in \nBengaluru, India on TripAdvisor.",
+   "htmlSnippet": "Top Nightlife in \u003cb\u003eBengaluru\u003c/b\u003e: See reviews and photos of nightlife \u003cb\u003eattractions\u003c/b\u003e in \u003cbr\u003e\n\u003cb\u003eBengaluru\u003c/b\u003e, India on \u003cb\u003eTripAdvisor\u003c/b\u003e.",
+   "cacheId": "jcf7AkM1JxsJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attractions-g297628-Activities-c20-Bengaluru_ Bangalore_Karnataka.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttractions\u003c/b\u003e-g297628-\u003cb\u003eActivities\u003c/b\u003e-c20-\u003cb\u003eBengaluru\u003c/b\u003e_ \u003cb\u003eBangalore\u003c/b\u003e_Karnataka.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "290",
+      "height": "174",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKfekxbEJgaQw6GI_AIpu2KU7ZhYvPiwutnOz23eL-RR9FrWXjTNHvddT4"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     },
+     {
+      "url": "Karnataka",
+      "title": "Karnataka"
+     },
+     {
+      "url": "Bengaluru",
+      "title": "Bengaluru"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "The Top Nightlife in Bengaluru - TripAdvisor",
+      "og:description": "Top Nightlife in Bengaluru: See reviews and photos of nightlife attractions in Bengaluru, India on TripAdvisor.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/03/9b/2f/3a/bangalore.jpg",
+      "og:image:width": "550",
+      "og:image:height": "331"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/03/9b/2f/3a/bangalore.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "One stop for all shopping. - Review of Basavanagudi, Bengaluru ...",
+   "htmlTitle": "One stop for all shopping. - Review of Basavanagudi, \u003cb\u003eBengaluru\u003c/b\u003e ...",
+   "link": "https://www.tripadvisor.com/ShowUserReviews-g297628-d2587592-r437975886-Basavanagudi-Bengaluru_Karnataka.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Nov 7, 2016 ... Ranked #8 of 316 things to do in Bengaluru ... Visited November 2016 ... This \nreview is the subjective opinion of a TripAdvisor member and not ...",
+   "htmlSnippet": "Nov 7, 2016 \u003cb\u003e...\u003c/b\u003e Ranked #8 of 316 \u003cb\u003ethings to do\u003c/b\u003e in \u003cb\u003eBengaluru\u003c/b\u003e ... Visited \u003cb\u003eNovember\u003c/b\u003e 2016 ... This \u003cbr\u003e\nreview is the subjective opinion of a \u003cb\u003eTripAdvisor\u003c/b\u003e member and not&nbsp;...",
+   "cacheId": "ggHOBjA_eJsJ",
+   "formattedUrl": "https://www.tripadvisor.com/ShowUserReviews-g297628-d2587592- r437975886-Basavanagudi-Bengaluru_Karnataka.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/ShowUserReviews-g297628-d2587592- r437975886-Basavanagudi-\u003cb\u003eBengaluru\u003c/b\u003e_Karnataka.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "275",
+      "height": "183",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQ7uvfMhpoqfBJlPvwUWMc1WuKJ6soLw-G1-ccje3meDYn5q8Bb9cTbCAkE"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     },
+     {
+      "url": "Karnataka",
+      "title": "Karnataka"
+     },
+     {
+      "url": "Bengaluru",
+      "title": "Bengaluru"
+     },
+     {
+      "url": "Bengaluru - Things to Do",
+      "title": "Bengaluru - Things to Do"
+     },
+     {
+      "url": "Basavanagudi",
+      "title": "Basavanagudi"
+     }
+    ],
+    "review": [
+     {
+      "reviewer": "a TripAdvisor user",
+      "reviewdate": "2016-11-16",
+      "ratingstars": "5.0"
+     }
+    ],
+    "hreview": [
+     {
+      "summary": "“One stop for all shopping.”",
+      "dtreviewed": "2016-11-16",
+      "description": "Whatever your daily needs you will get in Basavanagudi (Gandhi Bazaar, DVG Road ) @ best prices. You get all sorts of things footpath shopping to showroom shopping. Temples, Pooja items, Hotels,..."
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "One stop for all shopping. - Review of Basavanagudi, Bengaluru, India - TripAdvisor",
+      "og:description": "Basavanagudi: One stop for all shopping. - See 369 traveler reviews, 26 candid photos, and great deals for Bengaluru, India, at TripAdvisor.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/02/77/71/00/basavanagudi.jpg",
+      "og:image:width": "550",
+      "og:image:height": "366",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/ShowUserReviews-g297628-d2587592-r437975886-m33762-Basavanagudi-Bengaluru_Karnataka.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/ShowUserReviews-g297628-d2587592-r437975886-m33762-Basavanagudi-Bengaluru_Karnataka.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/ShowUserReviews-g297628-d2587592-r437975886-m33762-Basavanagudi-Bengaluru_Karnataka.html"
+     }
+    ],
+    "Review": [
+     {
+      "author": "a TripAdvisor user",
+      "name": "“One stop for all shopping.”",
+      "datePublished": "2016-11-16",
+      "reviewBody": "Whatever your daily needs you will get in Basavanagudi (Gandhi Bazaar, DVG Road ) @ best prices. You get all sorts of things footpath shopping to showroom shopping. Temples, Pooja items, Hotels,..."
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/02/77/71/00/basavanagudi.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Bangalore Mountaineering Club - Day Tours (Bengaluru, India): Top ...",
+   "htmlTitle": "\u003cb\u003eBangalore\u003c/b\u003e Mountaineering Club - Day Tours (\u003cb\u003eBengaluru\u003c/b\u003e, India): Top ...",
+   "link": "https://www.tripadvisor.com/Attraction_Review-g297628-d4994220-Reviews-Bangalore_Mountaineering_Club_Day_Tours-Bengaluru_Karnataka.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "#2 of 49 Outdoor Activities in Bengaluru. Certificate of Excellence .... Similar \nThings to Do in Bengaluru ... 88 Reviews from our TripAdvisor Community ... It \nwas my first trek through BMC to Munnar Kurangani Hills, 19-20 Nov, 2016. \nOverall it ...",
+   "htmlSnippet": "#2 of 49 Outdoor \u003cb\u003eActivities\u003c/b\u003e in \u003cb\u003eBengaluru\u003c/b\u003e. Certificate of Excellence .... Similar \u003cbr\u003e\n\u003cb\u003eThings to Do\u003c/b\u003e in \u003cb\u003eBengaluru\u003c/b\u003e ... 88 Reviews from our \u003cb\u003eTripAdvisor\u003c/b\u003e Community ... It \u003cbr\u003e\nwas my first trek through BMC to Munnar Kurangani Hills, 19-20 \u003cb\u003eNov\u003c/b\u003e, 2016. \u003cbr\u003e\nOverall it&nbsp;...",
+   "cacheId": "zhrGLUkod3AJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attraction_Review-g297628-d4994220-Reviews -Bangalore_Mountaineering_Club_Day_Tours-Bengaluru_Karnatak...",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttraction\u003c/b\u003e_Review-g297628-d4994220-Reviews -\u003cb\u003eBangalore\u003c/b\u003e_Mountaineering_Club_Day_Tours-\u003cb\u003eBengaluru\u003c/b\u003e_Karnatak...",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "194",
+      "height": "260",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQSkgInpejCPHNEsC1PX_pCffBcvJQyEC6KApyWb7q4Kq7Cmsls6Gak-IY"
+     }
+    ],
+    "LocalBusiness": [
+     {
+      "name": "Bangalore Mountaineering Club - Day Tours"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     },
+     {
+      "url": "Karnataka",
+      "title": "Karnataka"
+     },
+     {
+      "url": "Bengaluru",
+      "title": "Bengaluru"
+     },
+     {
+      "url": "Things to Do in Bengaluru",
+      "title": "Things to Do in Bengaluru"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "4.5",
+      "ratingcount": "88"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "88"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Bangalore Mountaineering Club - Day Tours (Bengaluru, India): Top Tips Before You Go - TripAdvisor",
+      "og:description": "Bangalore Mountaineering Club - Day Tours, Bengaluru: See 88 reviews, articles, and 27 photos of Bangalore Mountaineering Club - Day Tours, ranked No.2 on TripAdvisor among 49 attractions in Bengaluru.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/05/99/4d/b5/bangalore-mountaineering.jpg",
+      "og:image:width": "337",
+      "og:image:height": "450",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attraction_Review-g297628-d4994220-Reviews-m33762-Bangalore_Mountaineering_Club_Day_Tours-Bengaluru_Karnataka.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attraction_Review-g297628-d4994220-Reviews-m33762-Bangalore_Mountaineering_Club_Day_Tours-Bengaluru_Karnataka.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attraction_Review-g297628-d4994220-Reviews-m33762-Bangalore_Mountaineering_Club_Day_Tours-Bengaluru_Karnataka.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/05/99/4d/b5/bangalore-mountaineering.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Bluefoot Culture Tour, Bangalore Day Tours (Bengaluru, India): Top ...",
+   "htmlTitle": "Bluefoot Culture Tour, \u003cb\u003eBangalore\u003c/b\u003e Day Tours (\u003cb\u003eBengaluru\u003c/b\u003e, India): Top ...",
+   "link": "https://www.tripadvisor.com/Attraction_Review-g297628-d3509953-Reviews-Bluefoot_Culture_Tour_Bangalore_Day_Tours-Bengaluru_Karnataka.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Book your tickets online for Bluefoot Culture Tour, Bangalore Day Tours, \nBengaluru: See 149 reviews, articles, and 109 ... Day Tours, ranked No.1 on \nTripAdvisor among 50 attractions in Bengaluru. ... Reviewed November 18, 2016 \nvia mobile.",
+   "htmlSnippet": "Book your tickets online for Bluefoot Culture Tour, \u003cb\u003eBangalore\u003c/b\u003e Day Tours, \u003cbr\u003e\n\u003cb\u003eBengaluru\u003c/b\u003e: See 149 reviews, articles, and 109 ... Day Tours, ranked No.1 on \u003cbr\u003e\n\u003cb\u003eTripAdvisor\u003c/b\u003e among 50 \u003cb\u003eattractions\u003c/b\u003e in \u003cb\u003eBengaluru\u003c/b\u003e. ... Reviewed \u003cb\u003eNovember\u003c/b\u003e 18, 2016 \u003cbr\u003e\nvia mobile.",
+   "cacheId": "agMl-79qK5MJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attraction_Review-g297628-d3509953-Reviews -Bluefoot_Culture_Tour_Bangalore_Day_Tours-Bengaluru_Karnat...",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttraction\u003c/b\u003e_Review-g297628-d3509953-Reviews -Bluefoot_Culture_Tour_\u003cb\u003eBangalore\u003c/b\u003e_Day_Tours-\u003cb\u003eBengaluru\u003c/b\u003e_Karnat...",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "259",
+      "height": "194",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTR2TVRRG4Jqiw1QEizR62JDddawSJY-Eq4yAF88axMpwOfxkGhNnEyzupG"
+     }
+    ],
+    "LocalBusiness": [
+     {
+      "name": "Bluefoot Culture Tour, Bangalore Day Tours"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     },
+     {
+      "url": "Karnataka",
+      "title": "Karnataka"
+     },
+     {
+      "url": "Bengaluru",
+      "title": "Bengaluru"
+     },
+     {
+      "url": "Things to Do in Bengaluru",
+      "title": "Things to Do in Bengaluru"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "5.0",
+      "ratingcount": "149"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "149"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Bluefoot Culture Tour, Bangalore Day Tours (Bengaluru, India): Top Tips Before You Go - TripAdvisor",
+      "og:description": "Book your tickets online for Bluefoot Culture Tour, Bangalore Day Tours, Bengaluru: See 149 reviews, articles, and 109 photos of Bluefoot Culture Tour, Bangalore Day Tours, ranked No.1 on TripAdvisor among 50 attractions in Bengaluru.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/03/0e/46/91/bluefoot-culture-tour.jpg",
+      "og:image:width": "550",
+      "og:image:height": "412",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attraction_Review-g297628-d3509953-Reviews-m33762-Bluefoot_Culture_Tour_Bangalore_Day_Tours-Bengaluru_Karnataka.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attraction_Review-g297628-d3509953-Reviews-m33762-Bluefoot_Culture_Tour_Bangalore_Day_Tours-Bengaluru_Karnataka.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attraction_Review-g297628-d3509953-Reviews-m33762-Bluefoot_Culture_Tour_Bangalore_Day_Tours-Bengaluru_Karnataka.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/03/0e/46/91/bluefoot-culture-tour.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Bangalore Aquarium (Bengaluru, India): Top Tips Before You Go ...",
+   "htmlTitle": "\u003cb\u003eBangalore\u003c/b\u003e Aquarium (\u003cb\u003eBengaluru\u003c/b\u003e, India): Top Tips Before You Go ...",
+   "link": "https://www.tripadvisor.com/Attraction_Review-g297628-d3913104-Reviews-Bangalore_Aquarium-Bengaluru_Karnataka.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Bangalore Aquarium, Bengaluru: See 49 reviews, articles, and 16 photos of \nBangalore Aquarium, ranked No.108 on TripAdvisor among 317 attractions in \nBengaluru. ... Reviewed November 20, 2016. The Bangalore Aquarium is located \nclose ...",
+   "htmlSnippet": "\u003cb\u003eBangalore\u003c/b\u003e Aquarium, \u003cb\u003eBengaluru\u003c/b\u003e: See 49 reviews, articles, and 16 photos of \u003cbr\u003e\n\u003cb\u003eBangalore\u003c/b\u003e Aquarium, ranked No.108 on \u003cb\u003eTripAdvisor\u003c/b\u003e among 317 \u003cb\u003eattractions\u003c/b\u003e in \u003cbr\u003e\n\u003cb\u003eBengaluru\u003c/b\u003e. ... Reviewed \u003cb\u003eNovember\u003c/b\u003e 20, 2016. The \u003cb\u003eBangalore\u003c/b\u003e Aquarium is located \u003cbr\u003e\nclose&nbsp;...",
+   "cacheId": "V4Mugt11BakJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attraction_Review-g297628-d3913104-Reviews -Bangalore_Aquarium-Bengaluru_Karnataka.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttraction\u003c/b\u003e_Review-g297628-d3913104-Reviews -\u003cb\u003eBangalore\u003c/b\u003e_Aquarium-\u003cb\u003eBengaluru\u003c/b\u003e_Karnataka.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "194",
+      "height": "260",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRyimyk-6be2K-q0MgEU9I4lZFq3QU7bZnE0UQtpE3YTTzN1dSl7qptdaM"
+     }
+    ],
+    "LocalBusiness": [
+     {
+      "name": "Bangalore Aquarium"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     },
+     {
+      "url": "Karnataka",
+      "title": "Karnataka"
+     },
+     {
+      "url": "Bengaluru",
+      "title": "Bengaluru"
+     },
+     {
+      "url": "Things to Do in Bengaluru",
+      "title": "Things to Do in Bengaluru"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "3.0",
+      "ratingcount": "49"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "49"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Bangalore Aquarium (Bengaluru, India): Top Tips Before You Go - TripAdvisor",
+      "og:description": "Bangalore Aquarium, Bengaluru: See 49 reviews, articles, and 16 photos of Bangalore Aquarium, ranked No.108 on TripAdvisor among 317 attractions in Bengaluru.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/05/2d/c4/20/fish2.jpg",
+      "og:image:width": "337",
+      "og:image:height": "450",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attraction_Review-g297628-d3913104-Reviews-m33762-Bangalore_Aquarium-Bengaluru_Karnataka.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attraction_Review-g297628-d3913104-Reviews-m33762-Bangalore_Aquarium-Bengaluru_Karnataka.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attraction_Review-g297628-d3913104-Reviews-m33762-Bangalore_Aquarium-Bengaluru_Karnataka.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/05/2d/c4/20/fish2.jpg"
+     }
+    ]
+   }
+  }
+ ]
+}

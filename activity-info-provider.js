@@ -46,23 +46,14 @@ ActivityInfoProvider.prototype.getActivities = function(responseCallback) {
   this.callback = responseCallback;
   Object.keys(this.activities).forEach(key => {
     const srFile = srFileName.call(this, key);
-    try {
-      fs.statSync(srFile).isFile();
-      // logger.info(`file ${srFile} exists. Extracting details.`);
+    if(fs.existsSync(srFile)) {
+      logger.info(`getActivities: file ${srFile} exists. Extracting details`);
       // nothing to do if the file exists;
       return extractActivityDetails.call(this, key);
     }
-    catch(e) {
-      if(e.code != 'ENOENT') {
-        logger.error(`getActivities: Encountered error in stating file ${srFile}: ${e.stack}`);
-      }
-      else {
-        // file not present. Get it from google's custom search and update the file.
-        logger.info(`getActivities: ${srFile} does not exist. Getting it with custom search`);
-      }
-    }
+    // file not present. Get it from google's custom search and update the file.
     const url = this.url.replace("${search-term}",this.activities[key]["search-term"]).replace("${exact-term}",this.activities[key]["exact-term"]);
-    logger.info(`getActivities: using url ${url}`);
+    logger.info(`getActivities: file ${srFile} does not exist. Getting it with custom search url ${url}`);
     const self = this;
     request({
       uri: url,
@@ -71,17 +62,16 @@ ActivityInfoProvider.prototype.getActivities = function(responseCallback) {
     function(err, res, body) {
       if(!err & res.statusCode == 200) {
         try {
-          logger.info(`getActivities: ${key} anon function: writing results to file ${srFile}`);
           fs.writeFileSync(srFile,body);
           return extractActivityDetails.call(self, key);
         }
         catch(e) {
-          logger.error(`getActivities: could not write data from custom search into file ${srFile}: ${e.stack}.`);
+          logger.error(`getActivities: could not write data from custom search to file: ${e.stack}`);
           return extractActivityDetails.call(self, key);
         }
       }
       else {
-        logger.error("getActivities: Unable to send request to google: Response: ",res,"; Error: ",error);
+        logger.error(`getActivities: Unable to send request to google: Response: ${res}, Error: ${error}`);
         return extractActivityDetails.call(self, key);
       }
     });
@@ -89,7 +79,13 @@ ActivityInfoProvider.prototype.getActivities = function(responseCallback) {
 }
 
 function srFileName(key) {
- return `countries/${this.country}/${this.city}-${this.activities[key]["search-term"]}.txt`;
+  // create directory if it does not exist
+  const dir = `countries/${this.country}`;
+  if(!fs.existsSync(dir)) {
+    logger.info(`srFileName: Directory ${dir} not present. creating it`);
+    fs.mkdirSync(dir);
+  }
+  return `${dir}/${this.city}-${this.activities[key]["search-term"]}.txt`;
 }
 
 function extractActivityDetails(key) {
@@ -98,7 +94,6 @@ function extractActivityDetails(key) {
   let body = "";
   try {
     body = fs.readFileSync(srFile, 'utf8');
-    console.log(`read ${body.length} bytes from file ${srFile}`);
   }
   catch(e) {
     logger.error(`extractActivityDetails: could not read from file ${srFile}: ${e.stack}`);
@@ -123,7 +118,7 @@ function extractActivityDetails(key) {
 function determineResponse() {
   if(this.count == Object.keys(this.activities).length) {
     if(this.links.length == 0) {
-      console.log("No links found");
+      logger.warn("determineResponse: No links found from any of the files");
       return this.callback(undefined);
     }
     return this.callback(this.links);

@@ -10,15 +10,16 @@ function testGetWeatherInformation() {
   tripData.data.startDate = "11/1/17";
   tripData.data.cities = ["Mumbai", "Chennai"];
   const tip = new TripInfoProvider(tripData);
-  tip.getWeatherInformation();
-  // read from the tripData file and output the value.
-  fs.readFile(tripData.tripDataFile(), function(err,data) {
-    if(_.isNull(err)) {
-      console.log(`value in file is ${data}`);
-    }
-    else {
-      console.log(`Error reading file: ${JSON.stringify(err)}`);
-    }
+  tip.getWeatherInformation(function() {
+    // read from the tripData file and output the value.
+    fs.readFile(tripData.tripDataFile(), function(err,data) {
+      if(_.isNull(err)) {
+        console.log(`value in file is ${data}`);
+      }
+      else {
+        console.log(`Error reading file: ${JSON.stringify(err)}`);
+      }
+    });
   });
 }
 
@@ -35,11 +36,20 @@ function testGetStoredWeatherDetails() {
 function testGetActivity() {
   const tripData = new TripData("Portugal");
   tripData.data.destination = "portugal";
-  tripData.data.startDate = "2/12/17";
+  tripData.data.startDate = "9/12/17";
   tripData.data.cities = ["lisbon"];
   const tip = new TripInfoProvider(tripData);
-  tip.getActivities(function(cities) {
-    console.log(JSON.stringify(cities));
+  tip.getActivities(function() {
+    // read from the tripData file and output the value.
+    fs.readFile(tripData.tripDataFile(), function(err,data) {
+      if(_.isNull(err)) {
+        const tripData = JSON.parse(data);
+        console.log(`value in file is ${tripData.cities.lisbon.activities}`);
+      }
+      else {
+        console.log(`Error reading file: ${JSON.stringify(err)}`);
+      }
+    });
   });
 }
 

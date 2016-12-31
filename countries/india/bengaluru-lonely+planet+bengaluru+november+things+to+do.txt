@@ -1,0 +1,815 @@
+{
+ "kind": "customsearch#search",
+ "url": {
+  "type": "application/json",
+  "template": "https://www.googleapis.com/customsearch/v1?q={searchTerms}&num={count?}&start={startIndex?}&lr={language?}&safe={safe?}&cx={cx?}&cref={cref?}&sort={sort?}&filter={filter?}&gl={gl?}&cr={cr?}&googlehost={googleHost?}&c2coff={disableCnTwTranslation?}&hq={hq?}&hl={hl?}&siteSearch={siteSearch?}&siteSearchFilter={siteSearchFilter?}&exactTerms={exactTerms?}&excludeTerms={excludeTerms?}&linkSite={linkSite?}&orTerms={orTerms?}&relatedSite={relatedSite?}&dateRestrict={dateRestrict?}&lowRange={lowRange?}&highRange={highRange?}&searchType={searchType}&fileType={fileType?}&rights={rights?}&imgSize={imgSize?}&imgType={imgType?}&imgColorType={imgColorType?}&imgDominantColor={imgDominantColor?}&alt=json"
+ },
+ "queries": {
+  "request": [
+   {
+    "title": "Google Custom Search - lonely planet bengaluru november things to do",
+    "totalResults": "1470",
+    "searchTerms": "lonely planet bengaluru november things to do",
+    "count": 10,
+    "startIndex": 1,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "bengaluru"
+   }
+  ],
+  "nextPage": [
+   {
+    "title": "Google Custom Search - lonely planet bengaluru november things to do",
+    "totalResults": "1470",
+    "searchTerms": "lonely planet bengaluru november things to do",
+    "count": 10,
+    "startIndex": 11,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "bengaluru"
+   }
+  ]
+ },
+ "context": {
+  "title": "Polaama"
+ },
+ "searchInformation": {
+  "searchTime": 0.294737,
+  "formattedSearchTime": "0.29",
+  "totalResults": "1470",
+  "formattedTotalResults": "1,470"
+ },
+ "spelling": {
+  "correctedQuery": "lonely planet bangalore november things to do \"bengaluru\"",
+  "htmlCorrectedQuery": "lonely planet \u003cb\u003e\u003ci\u003ebangalore\u003c/i\u003e\u003c/b\u003e november things to do &quot;bengaluru&quot;"
+ },
+ "items": [
+  {
+   "kind": "customsearch#result",
+   "title": "Top things to do in India - Lonely Planet",
+   "htmlTitle": "Top \u003cb\u003ethings to do\u003c/b\u003e in India - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/india/top-things-to-do/a/poi/356195",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Discover the best top things to do in India including Bali Yatra, Karavalli, ... They \nsay half of Bengaluru's court cases are argued around Koshy's tables, and many\n ...",
+   "htmlSnippet": "Discover the best top \u003cb\u003ethings to do\u003c/b\u003e in India including Bali Yatra, Karavalli, ... They \u003cbr\u003e\nsay half of \u003cb\u003eBengaluru&#39;s\u003c/b\u003e court cases are argued around Koshy&#39;s tables, and many\u003cbr\u003e\n&nbsp;...",
+   "cacheId": "flPlC5FyC24J",
+   "formattedUrl": "https://www.lonelyplanet.com/india/top-things-to-do/a/poi/356195",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/india/top-\u003cb\u003ethings-to-do\u003c/b\u003e/a/poi/356195",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Asia"
+     }
+    ],
+    "country": [
+     {
+      "name": "India"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Top things to do in India",
+      "og:title": "Top things to do in India",
+      "og:description": "Discover the best top things to do in India including Bali Yatra, Karavalli, Koshy’s Bar & Restaurant.",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Essential guide to Bengaluru - Lonely Planet",
+   "htmlTitle": "Essential guide to \u003cb\u003eBengaluru\u003c/b\u003e - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/india/bengaluru-bangalore/essential-information",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Everything for your trip to Bengaluru - best time to go, weather, daily cost advisor \n... Some policies specifically exclude dangerous activities such as scuba diving, ...",
+   "htmlSnippet": "Everything for your trip to \u003cb\u003eBengaluru\u003c/b\u003e - best time to go, weather, daily cost advisor \u003cbr\u003e\n... Some policies specifically exclude dangerous \u003cb\u003eactivities\u003c/b\u003e such as scuba diving,&nbsp;...",
+   "cacheId": "Gc1GswB48xQJ",
+   "formattedUrl": "www.lonelyplanet.com/.../bengaluru-bangalore/essential-information",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../\u003cb\u003ebengaluru\u003c/b\u003e-\u003cb\u003ebangalore\u003c/b\u003e/essential-information",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "310",
+      "height": "163",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKQfxJtYwAnusShDYhk4m5ra52FyrhHKaTKFuW9_oiYf5IIUTYHiVZvNU"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Essential guide to Bengaluru - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Essential guide to Bengaluru - Lonely Planet",
+      "twitter:description": "Everything for your trip to Bengaluru - best time to go, weather, daily cost advisor, visas, cheapest flights and transport information",
+      "twitter:image:src": "https://images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/a/g/hi/t/9483508eeee2b78a7356a15ed9c337a1-bengaluru-bangalore.jpg",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Essential guide to Bengaluru - Lonely Planet",
+      "og:description": "Everything for your trip to Bengaluru - best time to go, weather, daily cost advisor, visas, cheapest flights and transport information",
+      "og:url": "http://www.lonelyplanet.com/india/bengaluru-bangalore/essential-information",
+      "og:type": "website",
+      "og:image": "//images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/a/g/hi/t/9483508eeee2b78a7356a15ed9c337a1-bengaluru-bangalore.jpg",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "FcYgpZl02WClV4G9Y/7mGB/mEJYk7OJ1HFQniy7xYmk="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "http://images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/a/g/hi/t/9483508eeee2b78a7356a15ed9c337a1-bengaluru-bangalore.jpg"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Destinations",
+      "name": "Destinations"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Land transport in Bengaluru - Lonely Planet",
+   "htmlTitle": "Land transport in \u003cb\u003eBengaluru\u003c/b\u003e - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/india/bengaluru-bangalore/transport/getting-there-away/land",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Ground transport in Bengaluru - expert advice on getting to Bengaluru by land. ... \nThings to do · Activities ... Karnataka State Road Transport Corporation buses run \nfrom here throughout Karnataka and to neighbouring states. .... November.",
+   "htmlSnippet": "Ground transport in \u003cb\u003eBengaluru\u003c/b\u003e - expert advice on getting to \u003cb\u003eBengaluru\u003c/b\u003e by land. ... \u003cbr\u003e\n\u003cb\u003eThings to do\u003c/b\u003e &middot; \u003cb\u003eActivities\u003c/b\u003e ... Karnataka State Road Transport Corporation buses run \u003cbr\u003e\nfrom here throughout Karnataka and to neighbouring states. .... \u003cb\u003eNovember\u003c/b\u003e.",
+   "cacheId": "0c4Abx7pB9gJ",
+   "formattedUrl": "www.lonelyplanet.com/india/bengaluru-bangalore/.../getting.../land",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/india/\u003cb\u003ebengaluru\u003c/b\u003e-\u003cb\u003ebangalore\u003c/b\u003e/.../\u003cb\u003eget\u003c/b\u003eting.../land",
+   "pagemap": {
+    "metatags": [
+     {
+      "title": "Land transport in Bengaluru - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Land transport in Bengaluru - Lonely Planet",
+      "twitter:description": "Ground transport in Bengaluru - expert advice on getting to Bengaluru by land",
+      "twitter:image:src": "https://images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/a/g/hi/t/9483508eeee2b78a7356a15ed9c337a1-bengaluru-bangalore.jpg",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Land transport in Bengaluru - Lonely Planet",
+      "og:description": "Ground transport in Bengaluru - expert advice on getting to Bengaluru by land",
+      "og:url": "http://www.lonelyplanet.com/india/bengaluru-bangalore/transport/getting-there-away/land",
+      "og:type": "website",
+      "og:image": "//images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/a/g/hi/t/9483508eeee2b78a7356a15ed9c337a1-bengaluru-bangalore.jpg",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "CfoX/GCpjJ9IZvtpj5TI3oCo2s+0s/oNNMylIEgLSH8="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "//images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/a/g/hi/t/9483508eeee2b78a7356a15ed9c337a1-bengaluru-bangalore.jpg"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Destinations",
+      "name": "Destinations"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "OYO Rooms Jayadeva Junction 2 in Bengaluru, India - Lonely Planet",
+   "htmlTitle": "OYO Rooms Jayadeva Junction 2 in \u003cb\u003eBengaluru\u003c/b\u003e, India - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/india/bengaluru-bangalore/hotels/oyo-rooms-jayadeva-junction-2",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Book your stay at OYO Rooms Jayadeva Junction 2 and get advice on \naccommodation options in Bengaluru from Lonely Planet's ... Things to do ... \nSituated in the BTM Layout district in Bangalore, 2.9 km from Forum Mall, ... \nNovember. 2016 ...",
+   "htmlSnippet": "Book your stay at OYO Rooms Jayadeva Junction 2 and get advice on \u003cbr\u003e\naccommodation options in \u003cb\u003eBengaluru\u003c/b\u003e from \u003cb\u003eLonely Planet&#39;s\u003c/b\u003e ... \u003cb\u003eThings to do\u003c/b\u003e ... \u003cbr\u003e\nSituated in the BTM Layout district in \u003cb\u003eBangalore\u003c/b\u003e, 2.9 km from Forum Mall, ... \u003cbr\u003e\n\u003cb\u003eNovember\u003c/b\u003e. 2016&nbsp;...",
+   "cacheId": "QGABPc3uNZ0J",
+   "formattedUrl": "www.lonelyplanet.com/.../bengaluru-bangalore/.../oyo-rooms-jayadeva- junction-2",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../\u003cb\u003ebengaluru\u003c/b\u003e-\u003cb\u003ebangalore\u003c/b\u003e/.../oyo-rooms-jayadeva- junction-2",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "275",
+      "height": "183",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQJcLu6T4HoO_4k_sQLr5QSw2HFiTtlo2JzbdIaxNiHjG8nu05mwIuoXxQC"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     },
+     {
+      "url": "South India",
+      "title": "South India"
+     },
+     {
+      "url": "Bengaluru & Karnataka",
+      "title": "Bengaluru & Karnataka"
+     },
+     {
+      "url": "Southern Karnataka",
+      "title": "Southern Karnataka"
+     },
+     {
+      "url": "Bengaluru",
+      "title": "Bengaluru"
+     }
+    ],
+    "postaladdress": [
+     {
+      "streetaddress": "Woodbridge 24-11 2nd Main N.S. Palya Road Opp. Shilpa Kalyan Mantapa Near Shopper\\'s Stop Bannerghatta Road",
+      "addresslocality": "Bangalore"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "OYO Rooms Jayadeva Junction 2 in Bengaluru, India - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "OYO Rooms Jayadeva Junction 2 in Bengaluru, India - Lonely Planet",
+      "twitter:description": "Book your stay at OYO Rooms Jayadeva Junction 2 and get advice on accommodation options in Bengaluru from Lonely Planet's independent on-the-ground travel writers.",
+      "og:site_name": "Lonely Planet",
+      "og:title": "OYO Rooms Jayadeva Junction 2 in Bengaluru, India - Lonely Planet",
+      "og:description": "Book your stay at OYO Rooms Jayadeva Junction 2 and get advice on accommodation options in Bengaluru from Lonely Planet's independent on-the-ground travel writers.",
+      "og:url": "http://www.lonelyplanet.com/india/bengaluru-bangalore/hotels/oyo-rooms-jayadeva-junction-2",
+      "og:type": "website",
+      "sailthru.date": "2016-11-18 01:29:20 +0000",
+      "sailthru.tags": "Asia, India, Bengaluru, cities, food-and-drink, shopping, train-travel-and-railways",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "eFR0rUhy3iSGz0Oon0Kh5HZzoGe57VahmDCUyhUqQ4s="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "http://aff.bstatic.com/images/hotel/max500/554/55422897.jpg"
+     }
+    ],
+    "localbusiness": [
+     {
+      "name": "OYO Rooms Jayadeva Junction 2"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Destinations",
+      "name": "Destinations"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "The Leela Palace Bangalore in Bengaluru, India - Lonely Planet",
+   "htmlTitle": "The Leela Palace \u003cb\u003eBangalore\u003c/b\u003e in \u003cb\u003eBengaluru\u003c/b\u003e, India - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/india/bengaluru/hotels/the-leela-palace-bangalore/a/lod/e38573dc-8f1b-44dc-9748-2f7deb420030/356328",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Bengaluru Hotels. The Leela Palace Bangalore. 5 star hotel in Bengaluru .... \nActivities. golf course (within 3 km); sauna; fitness centre; spa and wellness \ncentre ...",
+   "htmlSnippet": "\u003cb\u003eBengaluru\u003c/b\u003e Hotels. The Leela Palace \u003cb\u003eBangalore\u003c/b\u003e. 5 star hotel in \u003cb\u003eBengaluru\u003c/b\u003e .... \u003cbr\u003e\n\u003cb\u003eActivities\u003c/b\u003e. golf course (within 3 km); sauna; fitness centre; spa and wellness \u003cbr\u003e\ncentre&nbsp;...",
+   "cacheId": "uoCWUdN8OCMJ",
+   "formattedUrl": "https://www.lonelyplanet.com/.../bengaluru/...bangalore/.../356328",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../\u003cb\u003ebengaluru\u003c/b\u003e/...\u003cb\u003ebangalore\u003c/b\u003e/.../356328",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Asia"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "240",
+      "height": "131",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTnJvwnPC9cD6TbIr6ajMV7jYFisJRHeisDosdp_az3jIJX9WBxDBRDFo4"
+     }
+    ],
+    "country": [
+     {
+      "name": "India"
+     }
+    ],
+    "city": [
+     {
+      "name": "Bengaluru"
+     }
+    ],
+    "aggregaterating": [
+     {
+      "ratingvalue": "8.8"
+     }
+    ],
+    "postaladdress": [
+     {
+      "streetaddress": "23 Old Airport Road",
+      "addresslocality": "Bengaluru",
+      "addresscountry": "India"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "The Leela Palace Bangalore in Bengaluru, India",
+      "og:title": "The Leela Palace Bangalore in Bengaluru, India",
+      "og:description": "Nestled in the midst of lush gardens that spread across 9 acres, The Leela Palace Bangalore features décor reflecting the grandeur of the bygone era and boasts …",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "http://aff.bstatic.com/images/hotel/max300/482/48254908.jpg"
+     }
+    ],
+    "thing": [
+     {
+      "name": "Hotels"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     },
+     {
+      "position": "4"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Citrus Cunningham Road Bangalore in Bengaluru, India - Lonely ...",
+   "htmlTitle": "Citrus Cunningham Road \u003cb\u003eBangalore\u003c/b\u003e in \u003cb\u003eBengaluru\u003c/b\u003e, India - \u003cb\u003eLonely\u003c/b\u003e ...",
+   "link": "http://www.lonelyplanet.com/india/bengaluru-bangalore/hotels/citrus-cunningham-road-bangalore",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "At Citrus Cunningham Road Bangalore you will find a 24-hour front desk, a \nterrace and a bar. Other facilities offered at the property include meeting facilities,\n ...",
+   "htmlSnippet": "At Citrus Cunningham Road \u003cb\u003eBangalore\u003c/b\u003e you \u003cb\u003ewill\u003c/b\u003e find a 24-hour front desk, a \u003cbr\u003e\nterrace and a bar. Other facilities offered at the property include meeting facilities,\u003cbr\u003e\n&nbsp;...",
+   "cacheId": "4T-GJrBrVCEJ",
+   "formattedUrl": "www.lonelyplanet.com/.../bengaluru-bangalore/.../citrus-cunningham-road- bangalore",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../\u003cb\u003ebengaluru\u003c/b\u003e-\u003cb\u003ebangalore\u003c/b\u003e/.../citrus-cunningham-road- \u003cb\u003ebangalore\u003c/b\u003e",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Asia"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "228",
+      "height": "221",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcShg87YoyW96qfUsc7NrwwCTnoF_kzvCdc88r1lLrPsrVRktcmlJFkvcFU"
+     }
+    ],
+    "country": [
+     {
+      "name": "India"
+     }
+    ],
+    "city": [
+     {
+      "name": "Bengaluru"
+     }
+    ],
+    "aggregaterating": [
+     {
+      "ratingvalue": "7.9"
+     }
+    ],
+    "postaladdress": [
+     {
+      "streetaddress": "34, Cunningham Road, Bangalore",
+      "addresslocality": "Bengaluru",
+      "addresscountry": "India"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Citrus Cunningham Road Bangalore in Bengaluru, India",
+      "og:title": "Citrus Cunningham Road Bangalore in Bengaluru, India",
+      "og:description": "Offering a rooftop multi-cuisine restaurant and a fitness centre, Citrus Cunningham Road Bangalore within 2 km from popular attractions like Indira Gandhi Music…",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "http://aff.bstatic.com/images/hotel/max300/539/53933733.jpg"
+     }
+    ],
+    "thing": [
+     {
+      "name": "Hotels"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     },
+     {
+      "position": "4"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Taj West End in Bengaluru, India",
+   "htmlTitle": "Taj West End in \u003cb\u003eBengaluru\u003c/b\u003e, India",
+   "link": "https://www.lonelyplanet.com/india/bengaluru/hotels/taj-west-end/a/lod/5f5269b6-895c-4805-8a5f-f3f95f7cbf15/356328",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Bengaluru Hotels. Taj West End. 5 star hotel in Bengaluru .... For Indian guests, \ncash settlements of INR 25000 and above will require a pan card copy during ...",
+   "htmlSnippet": "\u003cb\u003eBengaluru\u003c/b\u003e Hotels. Taj West End. 5 star hotel in \u003cb\u003eBengaluru\u003c/b\u003e .... For Indian guests, \u003cbr\u003e\ncash settlements of INR 25000 and above \u003cb\u003ewill\u003c/b\u003e require a pan card copy during&nbsp;...",
+   "cacheId": "LxkBDNBzRM4J",
+   "formattedUrl": "https://www.lonelyplanet.com/india/bengaluru/hotels/.../356328",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/india/\u003cb\u003ebengaluru\u003c/b\u003e/hotels/.../356328",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Asia"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "240",
+      "height": "160",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpGxDy5Ee9n2WE8p866TmrkslYJeAdayn0qKYkkYmf_KMSIMwg-THVujCF"
+     }
+    ],
+    "country": [
+     {
+      "name": "India"
+     }
+    ],
+    "city": [
+     {
+      "name": "Bengaluru"
+     }
+    ],
+    "aggregaterating": [
+     {
+      "ratingvalue": "9"
+     }
+    ],
+    "postaladdress": [
+     {
+      "streetaddress": "Race Course Road",
+      "addresslocality": "Bengaluru",
+      "addresscountry": "India"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Taj West End in Bengaluru, India",
+      "og:title": "Taj West End in Bengaluru, India",
+      "og:description": "Spread over 20 acres of landscaped gardens, this city retreat is located in central Bangalore next to Bangalore Golf Club. The luxurious Taj West End presents a…",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "http://aff.bstatic.com/images/hotel/max300/170/17071483.jpg"
+     }
+    ],
+    "thing": [
+     {
+      "name": "Hotels"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     },
+     {
+      "position": "4"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Vivanta by Taj -Yeshwantpur in Bengaluru, India - Lonely Planet",
+   "htmlTitle": "Vivanta by Taj -Yeshwantpur in \u003cb\u003eBengaluru\u003c/b\u003e, India - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/india/bengaluru-bangalore/hotels/vivanta-by-taj-yeshwantpur",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Just 3 km from the ISKCON Temple Bangalore, Vivanta by Taj -Yeshwantpur is \n15 ... Activities. sauna; fitness centre; golf course (within 3 km); spa and wellness\n ...",
+   "htmlSnippet": "Just 3 km from the ISKCON Temple \u003cb\u003eBangalore\u003c/b\u003e, Vivanta by Taj -Yeshwantpur is \u003cbr\u003e\n15 ... \u003cb\u003eActivities\u003c/b\u003e. sauna; fitness centre; golf course (within 3 km); spa and wellness\u003cbr\u003e\n&nbsp;...",
+   "cacheId": "GegUOZPD-9MJ",
+   "formattedUrl": "www.lonelyplanet.com/.../bengaluru-bangalore/.../vivanta-by-taj- yeshwantpur",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../\u003cb\u003ebengaluru\u003c/b\u003e-\u003cb\u003ebangalore\u003c/b\u003e/.../vivanta-by-taj- yeshwantpur",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Asia"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "240",
+      "height": "171",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcR3C2gY_JCvW4Yl8Gb54rrkqBKHmgxIBjRm8QnLNTTECgzzTHkj-mmS8pw"
+     }
+    ],
+    "country": [
+     {
+      "name": "India"
+     }
+    ],
+    "city": [
+     {
+      "name": "Bengaluru"
+     }
+    ],
+    "aggregaterating": [
+     {
+      "ratingvalue": "8.4"
+     }
+    ],
+    "postaladdress": [
+     {
+      "streetaddress": "2275, Tumkur Road,Yeshwantpur",
+      "addresslocality": "Bengaluru",
+      "addresscountry": "India"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Vivanta by Taj -Yeshwantpur in Bengaluru, India",
+      "og:title": "Vivanta by Taj -Yeshwantpur in Bengaluru, India",
+      "og:description": "With a large outdoor pool fronting the property, this luxurious 5-star hotel features a day spa and fitness facilities. Modern rooms boast floor-to-ceiling wind…",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "http://aff.bstatic.com/images/hotel/max300/171/17173782.jpg"
+     }
+    ],
+    "thing": [
+     {
+      "name": "Hotels"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     },
+     {
+      "position": "4"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Hyatt Place Hampi in Bengaluru & Karnataka - Lonely Planet",
+   "htmlTitle": "Hyatt Place Hampi in \u003cb\u003eBengaluru\u003c/b\u003e &amp; Karnataka - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/india/bengaluru-karnataka/hotels/hyatt-place-hampi/a/lod/875fe440-22d9-4491-abbf-8e68a6f40280/356314",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Situated amidst the lush greenery of the Vidyanagar Township, Hyatt Place \nHampi houses an outdoor pool, a fitness centre and 2 dining options. \nComplimentary ...",
+   "htmlSnippet": "Situated amidst the lush greenery of the Vidyanagar Township, Hyatt Place \u003cbr\u003e\nHampi houses an outdoor pool, a fitness centre and 2 dining options. \u003cbr\u003e\nComplimentary&nbsp;...",
+   "cacheId": "A9atTZvGAcwJ",
+   "formattedUrl": "https://www.lonelyplanet.com/india/bengaluru.../a/.../356314",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/india/\u003cb\u003ebengaluru\u003c/b\u003e.../a/.../356314",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Asia"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "240",
+      "height": "135",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTuUx_idf_Z52c8b7ldyEjhi8d0YgjMgRu2RI_HF0zlzWbmFPD18G3bp_Wh"
+     }
+    ],
+    "country": [
+     {
+      "name": "India"
+     }
+    ],
+    "aggregaterating": [
+     {
+      "ratingvalue": "8.5"
+     }
+    ],
+    "postaladdress": [
+     {
+      "streetaddress": "Vidyanagar Township, Toranagallu, Bellary",
+      "addresscountry": "Bengaluru & Karnataka"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Hyatt Place Hampi in Bengaluru & Karnataka",
+      "og:title": "Hyatt Place Hampi in Bengaluru & Karnataka",
+      "og:description": "Situated amidst the lush greenery of the Vidyanagar Township, Hyatt Place Hampi houses an outdoor pool, a fitness centre and 2 dining options. Complimentary Wi-…",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "http://aff.bstatic.com/images/hotel/max300/144/14458261.jpg"
+     }
+    ],
+    "region": [
+     {
+      "name": "Bengaluru & Karnataka"
+     }
+    ],
+    "thing": [
+     {
+      "name": "Hotels"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     },
+     {
+      "position": "4"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Hotels in Bengaluru & Karnataka - Lonely Planet",
+   "htmlTitle": "Hotels in \u003cb\u003eBengaluru\u003c/b\u003e &amp; Karnataka - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/india/karnataka/hotels",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Discover the best hotels in Bengaluru & Karnataka including Lalitha Mahal \nPalace Hotel, Parklane Hotel, The Green Hotel.",
+   "htmlSnippet": "Discover the best hotels in \u003cb\u003eBengaluru\u003c/b\u003e &amp; Karnataka including Lalitha Mahal \u003cbr\u003e\nPalace Hotel, Parklane Hotel, The Green Hotel.",
+   "formattedUrl": "www.lonelyplanet.com/india/karnataka/hotels",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/india/karnataka/hotels",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Asia"
+     }
+    ],
+    "country": [
+     {
+      "name": "India"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Hotels in Bengaluru & Karnataka",
+      "og:title": "Hotels in Bengaluru & Karnataka",
+      "og:description": "Discover the best hotels in Bengaluru & Karnataka including Lalitha Mahal Palace Hotel, Parklane Hotel, The Green Hotel.",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "region": [
+     {
+      "name": "Bengaluru & Karnataka"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     }
+    ]
+   }
+  }
+ ]
+}

@@ -167,7 +167,9 @@ WebhookPostHandler.prototype.startPlanningTrip = function() {
   sendTypingAction.call(this);
   const dtdCallback = displayTripDetails.bind(this);
   const tripInfoProvider = new TripInfoProvider(this.session.tripData());
-  tripInfoProvider.getWeatherInformation(dtdCallback);
+  const getActivitiesCallback = tripInfoProvider.getActivities(dtdCallback);
+  // tripInfoProvider.getWeatherInformation(tripInfoProvider.getActivities(dtdCallback));
+  tripInfoProvider.getWeatherInformation(getActivitiesCallback);
   // TODO: If this is a beach destinataion, use http://www.blueflag.global/beaches2 to determine the swimmability. Also use http://www.myweather2.com/swimming-and-water-temp-index.aspx to determine if water conditions are swimmable
 }
 

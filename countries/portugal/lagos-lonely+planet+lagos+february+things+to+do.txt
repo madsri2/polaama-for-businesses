@@ -1,0 +1,741 @@
+{
+ "kind": "customsearch#search",
+ "url": {
+  "type": "application/json",
+  "template": "https://www.googleapis.com/customsearch/v1?q={searchTerms}&num={count?}&start={startIndex?}&lr={language?}&safe={safe?}&cx={cx?}&cref={cref?}&sort={sort?}&filter={filter?}&gl={gl?}&cr={cr?}&googlehost={googleHost?}&c2coff={disableCnTwTranslation?}&hq={hq?}&hl={hl?}&siteSearch={siteSearch?}&siteSearchFilter={siteSearchFilter?}&exactTerms={exactTerms?}&excludeTerms={excludeTerms?}&linkSite={linkSite?}&orTerms={orTerms?}&relatedSite={relatedSite?}&dateRestrict={dateRestrict?}&lowRange={lowRange?}&highRange={highRange?}&searchType={searchType}&fileType={fileType?}&rights={rights?}&imgSize={imgSize?}&imgType={imgType?}&imgColorType={imgColorType?}&imgDominantColor={imgDominantColor?}&alt=json"
+ },
+ "queries": {
+  "request": [
+   {
+    "title": "Google Custom Search - lonely planet lagos february things to do",
+    "totalResults": "470",
+    "searchTerms": "lonely planet lagos february things to do",
+    "count": 10,
+    "startIndex": 1,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "lagos"
+   }
+  ],
+  "nextPage": [
+   {
+    "title": "Google Custom Search - lonely planet lagos february things to do",
+    "totalResults": "470",
+    "searchTerms": "lonely planet lagos february things to do",
+    "count": 10,
+    "startIndex": 11,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "lagos"
+   }
+  ]
+ },
+ "context": {
+  "title": "Polaama"
+ },
+ "searchInformation": {
+  "searchTime": 0.380399,
+  "formattedSearchTime": "0.38",
+  "totalResults": "470",
+  "formattedTotalResults": "470"
+ },
+ "items": [
+  {
+   "kind": "customsearch#result",
+   "title": "Top things to do in The Algarve",
+   "htmlTitle": "Top \u003cb\u003ethings to do\u003c/b\u003e in The Algarve",
+   "link": "https://www.lonelyplanet.com/portugal/the-algarve/top-things-to-do/a/poi/360370",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Discover the best top things to do in The Algarve including Parque Natural da Ria \nFormosa, Restaurante O Barradas, Sé. ... Top Choice Portuguese in Lagos ...",
+   "htmlSnippet": "Discover the best top \u003cb\u003ethings to do\u003c/b\u003e in The Algarve including Parque Natural da Ria \u003cbr\u003e\nFormosa, Restaurante O Barradas, Sé. ... Top Choice Portuguese in \u003cb\u003eLagos\u003c/b\u003e&nbsp;...",
+   "cacheId": "xF68nlMTpvgJ",
+   "formattedUrl": "https://www.lonelyplanet.com/portugal/the...things-to-do/a/.../360370",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/portugal/the...\u003cb\u003ethings-to-do\u003c/b\u003e/a/.../360370",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Europe"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "136",
+      "height": "84",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSg1wGheIELQSYBQnVGpTU2k5f4AvvaqifL4oXfasb2Gu_HVALnIt1PhC0"
+     }
+    ],
+    "country": [
+     {
+      "name": "Portugal"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Top things to do in The Algarve",
+      "og:title": "Top things to do in The Algarve",
+      "og:description": "Discover the best top things to do in The Algarve including Parque Natural da Ria Formosa, Restaurante O Barradas, Sé.",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://lonelyplanetimages.imgix.net/a/g/hi/t/dd8995adca9049b066dce50936963cc2-parque-natural-da-ria-formosa.jpg?w=170&h=106&fit=crop&q=50&auto=enhance&crop=entropy"
+     }
+    ],
+    "region": [
+     {
+      "name": "The Algarve"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Things to do around Bay of Lagos, Greece - Lonely Planet",
+   "htmlTitle": "\u003cb\u003eThings to do\u003c/b\u003e around Bay of \u003cb\u003eLagos\u003c/b\u003e, Greece - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/greece/thrace/bay-of-lagos/things-to-do",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "0 things to do in Bay of Lagos, Greece - . ... This nationally famous celebration in \nmid- to late February features colourful floats accompanied by music and ...",
+   "htmlSnippet": "0 \u003cb\u003ethings to do\u003c/b\u003e in Bay of \u003cb\u003eLagos\u003c/b\u003e, Greece - . ... This nationally famous celebration in \u003cbr\u003e\nmid- to late \u003cb\u003eFebruary\u003c/b\u003e features colourful floats accompanied by music and&nbsp;...",
+   "cacheId": "eq7Esh90-I0J",
+   "formattedUrl": "www.lonelyplanet.com/greece/thrace/bay-of-lagos/things-to-do",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/greece/thrace/bay-of-\u003cb\u003elagos\u003c/b\u003e/\u003cb\u003ethings-to-do\u003c/b\u003e",
+   "pagemap": {
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Mediterranean Europe",
+      "title": "Mediterranean Europe"
+     },
+     {
+      "url": "Greece",
+      "title": "Greece"
+     },
+     {
+      "url": "Northern Greece",
+      "title": "Northern Greece"
+     },
+     {
+      "url": "Thrace",
+      "title": "Thrace"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Things to do around Bay of Lagos, Greece - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Things to do around Bay of Lagos, Greece - Lonely Planet",
+      "twitter:description": "0 things to do in Bay of Lagos, Greece - .",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Things to do around Bay of Lagos, Greece - Lonely Planet",
+      "og:description": "0 things to do in Bay of Lagos, Greece - .",
+      "og:url": "http://www.lonelyplanet.com/greece/thrace/bay-of-lagos/things-to-do",
+      "og:type": "website",
+      "sailthru.date": "2016-12-14 16:16:47 +0000",
+      "sailthru.tags": "Europe, Greece, Bay of Lagos",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "ypUH+t8+dr1+WQcznz/jPOP1Hzuv9jg4qshqKvuttN0="
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Destinations",
+      "name": "Destinations"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Madrid-Lisbon-Lagos-SEVILLE OR GRANADA???-Madrid",
+   "htmlTitle": "Madrid-Lisbon-\u003cb\u003eLagos\u003c/b\u003e-SEVILLE OR GRANADA???-Madrid",
+   "link": "https://www.lonelyplanet.com/thorntree/forums/europe-western-europe/spain/madrid-lisbon-lagos-seville-or-granada-madrid",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Feb 1, 2012 ... So I am flying into Madrid on Feb 17th and leaving from Madrid on March 3rd. \nThat gives me 14 ... This is because you can get a bus direct from Lagos to \nSevilla. ... Hope things get fixed with your girl:-)) .... About Lonely Planet.",
+   "htmlSnippet": "Feb 1, 2012 \u003cb\u003e...\u003c/b\u003e So I am flying into Madrid on \u003cb\u003eFeb\u003c/b\u003e 17th and leaving from Madrid on March 3rd. \u003cbr\u003e\nThat gives me 14 ... This is because you can get a bus direct from \u003cb\u003eLagos\u003c/b\u003e to \u003cbr\u003e\nSevilla. ... Hope \u003cb\u003ethings get\u003c/b\u003e fixed with your girl:-)) .... About \u003cb\u003eLonely Planet\u003c/b\u003e.",
+   "cacheId": "lK08fxzW_90J",
+   "formattedUrl": "https://www.lonelyplanet.com/.../madrid-lisbon-lagos-seville-or-granada- madrid",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../madrid-lisbon-\u003cb\u003elagos\u003c/b\u003e-seville-or-granada- madrid",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "225",
+      "height": "225",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSqRemPSRVtvlwaxn3MfC7zsLjzOoK5uUM0cDjdqchf2Fvexvm4z9sAZObq"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Thorn Tree",
+      "title": "Thorn Tree"
+     },
+     {
+      "url": "Country forums",
+      "title": "Country forums"
+     },
+     {
+      "url": "Western Europe",
+      "title": "Western Europe"
+     },
+     {
+      "url": "Spain",
+      "title": "Spain"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Madrid-Lisbon-Lagos-SEVILLE OR GRANADA???-Madrid",
+      "og:title": "Madrid-Lisbon-Lagos-SEVILLE OR GRANADA???-Madrid",
+      "og:description": "So I am flying into Madrid on Feb 17th and leaving from Madrid on March 3rd.  That gives me 14 full days in Iberia.  I was originally going to meet…",
+      "og:url": "https://www.lonelyplanet.com/thorntree/forums/europe-western-europe/spain/madrid-lisbon-lagos-seville-or-granada-madrid",
+      "og:image": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "og:type": "website",
+      "twitter:title": "Madrid-Lisbon-Lagos-SEVILLE OR GRANADA???-Madrid",
+      "twitter:description": "So I am flying into Madrid on Feb 17th and leaving from Madrid on March 3rd.  That gives me 14 full days in Iberia.  I was originally going to meet…",
+      "twitter:image:src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "rC5q8E0SVLZ1pUsJjKkmztmEemKIteVxDvcOJMn2zed9WwJBxDp7McNndyEHVX8QvcKsxmu7fiDcJSzLHS6Cvw=="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Welcome",
+      "name": "Welcome"
+     },
+     {
+      "url": "Destinations",
+      "name": "Destinations"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Weather in Nigeria - Lonely Planet",
+   "htmlTitle": "Weather in Nigeria - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/nigeria/weather",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Things to do · Sights · Transports · Restaurants · Activities · Entertainment · \nShoppings · Tours · Events · Hotels · Essential information · Tips & articles.",
+   "htmlSnippet": "\u003cb\u003eThings to do\u003c/b\u003e &middot; Sights &middot; Transports &middot; Restaurants &middot; \u003cb\u003eActivities\u003c/b\u003e &middot; Entertainment &middot; \u003cbr\u003e\nShoppings &middot; Tours &middot; Events &middot; Hotels &middot; Essential information &middot; Tips &amp; articles.",
+   "cacheId": "FOq-uFWfI6cJ",
+   "formattedUrl": "www.lonelyplanet.com/nigeria/weather",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/nigeria/weather",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "249",
+      "height": "202",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZOri2SS66ssY-C0bYFW3WtroDK7fd6kapXnaPtPY9pFno7WeCaN4nGggW"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Weather in Nigeria - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Weather in Nigeria - Lonely Planet",
+      "twitter:description": "The best time to go to Nigeria, including current weather conditions, temperatures and rainfall",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Weather in Nigeria - Lonely Planet",
+      "og:description": "The best time to go to Nigeria, including current weather conditions, temperatures and rainfall",
+      "og:url": "http://www.lonelyplanet.com/nigeria/weather",
+      "og:type": "website",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "zrn6TBe8hYdzf6LDjhZlP5wlQ6903J3LnirkbK8Ppw0="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "http://assets.staticlp.com/country-shapes/NGA.svg"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Im travelling to Nigeria on feb 5th",
+   "htmlTitle": "Im travelling to Nigeria on \u003cb\u003efeb\u003c/b\u003e 5th",
+   "link": "https://www.lonelyplanet.com/thorntree/forums/africa/nigeria/im-travelling-to-nigeria-on-feb-5th",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Jan 5, 2007 ... I arrive on monday early evening at Lagos airport. ... but as with the Danish \nCartons - these things get exploited and then mayhem breaks out.",
+   "htmlSnippet": "Jan 5, 2007 \u003cb\u003e...\u003c/b\u003e I arrive on monday early evening at \u003cb\u003eLagos\u003c/b\u003e airport. ... but as with the Danish \u003cbr\u003e\nCartons - these \u003cb\u003ethings get\u003c/b\u003e exploited and then mayhem breaks out.",
+   "cacheId": "ARzbxblN47EJ",
+   "formattedUrl": "https://www.lonelyplanet.com/.../im-travelling-to-nigeria-on-feb-5th",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../im-travelling-to-nigeria-on-\u003cb\u003efeb\u003c/b\u003e-5th",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "225",
+      "height": "225",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSqRemPSRVtvlwaxn3MfC7zsLjzOoK5uUM0cDjdqchf2Fvexvm4z9sAZObq"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Thorn Tree",
+      "title": "Thorn Tree"
+     },
+     {
+      "url": "Country forums",
+      "title": "Country forums"
+     },
+     {
+      "url": "Africa",
+      "title": "Africa"
+     },
+     {
+      "url": "Nigeria",
+      "title": "Nigeria"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Im travelling to Nigeria on feb 5th",
+      "og:title": "Im travelling to Nigeria on feb 5th",
+      "og:description": "Hi, im Esther from holland ,Im trilungual in dutch ,english,spanish.Im leaving for Nigeria on holidays in a month for 2 weeks.I arrive on monday early evening at Lagos airport.I have…",
+      "og:url": "https://www.lonelyplanet.com/thorntree/forums/africa/nigeria/im-travelling-to-nigeria-on-feb-5th",
+      "og:image": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "og:type": "website",
+      "twitter:title": "Im travelling to Nigeria on feb 5th",
+      "twitter:description": "Hi, im Esther from holland ,Im trilungual in dutch ,english,spanish.Im leaving for Nigeria on holidays in a month for 2 weeks.I arrive on monday early evening at Lagos airport.I have…",
+      "twitter:image:src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "pB4R3unjGxgo9sqEK3LxK9wVvIbgxeDz0UkkdiZWLT9arJaV9UwYRSBTOgjgJwEHTwKT+lv2b1CnLqYaIwrxYQ=="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Welcome",
+      "name": "Welcome"
+     },
+     {
+      "url": "Destinations",
+      "name": "Destinations"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Africa forum at Lonely Planet",
+   "htmlTitle": "Africa forum at \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/thorntree/forums/africa/nigeria",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "1 day ago ... Is it possible to get the entente visa (VTE) in Lagos? ... February. ... but seeing as \ni'll only be there 2 months I would like to get things lined up.",
+   "htmlSnippet": "1 day ago \u003cb\u003e...\u003c/b\u003e Is it possible to \u003cb\u003eget\u003c/b\u003e the entente visa (VTE) in \u003cb\u003eLagos\u003c/b\u003e? ... \u003cb\u003eFebruary\u003c/b\u003e. ... but seeing as \u003cbr\u003e\ni&#39;ll only be there 2 months I would like to \u003cb\u003eget things\u003c/b\u003e lined up.",
+   "cacheId": "SqXgNryBQ1gJ",
+   "formattedUrl": "https://www.lonelyplanet.com/thorntree/forums/africa/nigeria",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/thorntree/forums/africa/nigeria",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "225",
+      "height": "225",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSqRemPSRVtvlwaxn3MfC7zsLjzOoK5uUM0cDjdqchf2Fvexvm4z9sAZObq"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Thorn Tree",
+      "title": "Thorn Tree"
+     },
+     {
+      "url": "Country forums",
+      "title": "Country forums"
+     },
+     {
+      "url": "Africa",
+      "title": "Africa"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Africa forum at Lonely Planet",
+      "og:title": "Africa forum at Lonely Planet",
+      "og:description": "Advice from travellers about Africa",
+      "og:url": "https://www.lonelyplanet.com/thorntree/forums/africa/nigeria",
+      "og:image": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "og:type": "website",
+      "twitter:title": "Africa forum at Lonely Planet",
+      "twitter:description": "Advice from travellers about Africa",
+      "twitter:image:src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "EsVY/HDC8W9aR/6r5LIwL6cmDVWAC4xPTTlSQoUMuF2OjKtpSS949oJo7rMfhktGbVA3wPpD52gkEQDUGi0/oQ=="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Welcome",
+      "name": "Welcome"
+     },
+     {
+      "url": "Destinations",
+      "name": "Destinations"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Essential guide to Lagos de Montebello - Lonely Planet",
+   "htmlTitle": "Essential guide to \u003cb\u003eLagos\u003c/b\u003e de Montebello - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/mexico/tabasco-and-chiapas/lagos-de-montebello/essential-information",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Everything for your trip to Lagos de Montebello - best time to go, weather, daily ... \nSome policies specifically exclude dangerous activities such as scuba diving, ...",
+   "htmlSnippet": "Everything for your trip to \u003cb\u003eLagos\u003c/b\u003e de Montebello - best time to go, weather, daily ... \u003cbr\u003e\nSome policies specifically exclude dangerous \u003cb\u003eactivities\u003c/b\u003e such as scuba diving,&nbsp;...",
+   "cacheId": "mnpuOehPQyAJ",
+   "formattedUrl": "www.lonelyplanet.com/mexico/...and.../lagos.../essential-information",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/mexico/...and.../\u003cb\u003elagos\u003c/b\u003e.../essential-information",
+   "pagemap": {
+    "metatags": [
+     {
+      "title": "Essential guide to Lagos de Montebello - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Essential guide to Lagos de Montebello - Lonely Planet",
+      "twitter:description": "Everything for your trip to Lagos de Montebello - best time to go, weather, daily cost advisor, visas, cheapest flights and transport information",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Essential guide to Lagos de Montebello - Lonely Planet",
+      "og:description": "Everything for your trip to Lagos de Montebello - best time to go, weather, daily cost advisor, visas, cheapest flights and transport information",
+      "og:url": "http://www.lonelyplanet.com/mexico/tabasco-and-chiapas/lagos-de-montebello/essential-information",
+      "og:type": "website",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "cMfSLycR5ztp6QuQSfDzVXyJ3DH92AKfGPxr3hsgdvU="
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Destinations",
+      "name": "Destinations"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Where to find the Algarve's best beaches - Lonely Planet",
+   "htmlTitle": "Where to find the Algarve&#39;s best beaches - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/portugal/the-algarve/travel-tips-and-articles/where-to-find-the-algarves-best-beaches",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Apr 29, 2015 ... The areas near the car parks get packed in summer (especially as high ... \nStretching for 4km alongside the lively surfer party town of Lagos, this ...",
+   "htmlSnippet": "Apr 29, 2015 \u003cb\u003e...\u003c/b\u003e The areas near the car parks \u003cb\u003eget\u003c/b\u003e packed in summer (especially as high ... \u003cbr\u003e\nStretching for 4km alongside the lively surfer party town of \u003cb\u003eLagos\u003c/b\u003e, this&nbsp;...",
+   "cacheId": "nre2bJQ2Q14J",
+   "formattedUrl": "www.lonelyplanet.com/.../where-to-find-the-algarves-best-beaches",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../where-to-find-the-algarves-best-beaches",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "275",
+      "height": "183",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSBkHQmCrPPfpXeLZ4PhTcgEaikb0NqfF4pho_D6CpyXXR0cep67iuTKjXo"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Where to find the Algarve's best beaches - Lonely Planet",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article",
+      "og:title": "Where to find the Algarve's best beaches - Lonely Planet",
+      "og:url": "http://www.lonelyplanet.com/portugal/the-algarve/travel-tips-and-articles/where-to-find-the-algarves-best-beaches",
+      "og:description": "Read Where to find the Algarve's best beaches",
+      "og:image": "https://lonelyplanetwp.imgix.net/2015/04/Praia-da-Marinha-Algarve_CS.jpg?sharp=10&vib=20&w=748",
+      "article:tag": "Coasts and islands, Beaches, Family holidays, Sailing and cruising",
+      "article:published_time": "2015-04-29T10:16:22+00:00",
+      "article:author": "Andy Symington"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://lonelyplanetwp.imgix.net/2015/04/Praia-da-Marinha-Algarve_CS.jpg?sharp=10&vib=20&w=748"
+     }
+    ],
+    "article": [
+     {
+      "headline": "Where to find the Algarve's best beaches",
+      "alternativeheadline": "Where to find the Algarve's best beaches",
+      "datepublished": "2015-04-29T10:16:22+00:00",
+      "articlebody": "The coast of the Algarve in southern Portugal is a seemingly endless series of some of Europe’s finest beaches. They are seriously spectacular stretches of sand: the climate and atmosphere..."
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Essential guide to Los Lagos - Lonely Planet",
+   "htmlTitle": "Essential guide to Los \u003cb\u003eLagos\u003c/b\u003e - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/bolivia/los-lagos/essential-information",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Everything for your trip to Los Lagos - best time to go, weather, daily cost advisor \n... Some policies specifically exclude dangerous activities such as scuba diving, ...",
+   "htmlSnippet": "Everything for your trip to Los \u003cb\u003eLagos\u003c/b\u003e - best time to go, weather, daily cost advisor \u003cbr\u003e\n... Some policies specifically exclude dangerous \u003cb\u003eactivities\u003c/b\u003e such as scuba diving,&nbsp;...",
+   "cacheId": "ig_jaMiTcb0J",
+   "formattedUrl": "https://www.lonelyplanet.com/bolivia/los-lagos/essential-information",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/bolivia/los-\u003cb\u003elagos\u003c/b\u003e/essential-information",
+   "pagemap": {
+    "metatags": [
+     {
+      "title": "Essential guide to Los Lagos - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Essential guide to Los Lagos - Lonely Planet",
+      "twitter:description": "Everything for your trip to Los Lagos - best time to go, weather, daily cost advisor, visas, cheapest flights and transport information",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Essential guide to Los Lagos - Lonely Planet",
+      "og:description": "Everything for your trip to Los Lagos - best time to go, weather, daily cost advisor, visas, cheapest flights and transport information",
+      "og:url": "http://www.lonelyplanet.com/bolivia/los-lagos/essential-information",
+      "og:type": "website",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "/ZLmty/cyodfUlMmqhUvYoar8tw+pCyQS3DqlGtITvA="
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Destinations",
+      "name": "Destinations"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Travelling to Nigeria for the first time",
+   "htmlTitle": "Travelling to Nigeria for the first time",
+   "link": "https://www.lonelyplanet.com/thorntree/forums/africa/nigeria/travelling-to-nigeria-for-the-first-time",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "May 15, 2015 ... Things to do – What things can you recommend for me to do? I still want to ... It's \ncalm compared to Lagos or Onitsha, not Toronto). I wouldn't try ...",
+   "htmlSnippet": "May 15, 2015 \u003cb\u003e...\u003c/b\u003e \u003cb\u003eThings to do\u003c/b\u003e – What things can you recommend for me to do? I still want to ... It&#39;s \u003cbr\u003e\ncalm compared to \u003cb\u003eLagos\u003c/b\u003e or Onitsha, not Toronto). I wouldn&#39;t try&nbsp;...",
+   "cacheId": "IfHnhKjpu80J",
+   "formattedUrl": "https://www.lonelyplanet.com/.../travelling-to-nigeria-for-the-first-time",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../travelling-to-nigeria-for-the-first-time",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "225",
+      "height": "225",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSqRemPSRVtvlwaxn3MfC7zsLjzOoK5uUM0cDjdqchf2Fvexvm4z9sAZObq"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Thorn Tree",
+      "title": "Thorn Tree"
+     },
+     {
+      "url": "Country forums",
+      "title": "Country forums"
+     },
+     {
+      "url": "Africa",
+      "title": "Africa"
+     },
+     {
+      "url": "Nigeria",
+      "title": "Nigeria"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Travelling to Nigeria for the first time",
+      "og:title": "Travelling to Nigeria for the first time",
+      "og:description": "Hi,I am considering visiting Nigeria for 2 weeks (January 4-19, 2016) with a Nigerian friend who will be visiting family/friends for a month. I’m a single, Caucasian female, and…",
+      "og:url": "https://www.lonelyplanet.com/thorntree/forums/africa/nigeria/travelling-to-nigeria-for-the-first-time",
+      "og:image": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "og:type": "website",
+      "twitter:title": "Travelling to Nigeria for the first time",
+      "twitter:description": "Hi,I am considering visiting Nigeria for 2 weeks (January 4-19, 2016) with a Nigerian friend who will be visiting family/friends for a month. I’m a single, Caucasian female, and…",
+      "twitter:image:src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "0nxadVvExr5s5NTKqLgiyHEqQ1GxYL/d9grbMvYxjgjphDh5JLjoHdY/tAI/40FXeCUoFOMKB+72orrjPkbSFg=="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Welcome",
+      "name": "Welcome"
+     },
+     {
+      "url": "Destinations",
+      "name": "Destinations"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  }
+ ]
+}

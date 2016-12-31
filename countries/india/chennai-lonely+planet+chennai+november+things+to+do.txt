@@ -1,0 +1,766 @@
+{
+ "kind": "customsearch#search",
+ "url": {
+  "type": "application/json",
+  "template": "https://www.googleapis.com/customsearch/v1?q={searchTerms}&num={count?}&start={startIndex?}&lr={language?}&safe={safe?}&cx={cx?}&cref={cref?}&sort={sort?}&filter={filter?}&gl={gl?}&cr={cr?}&googlehost={googleHost?}&c2coff={disableCnTwTranslation?}&hq={hq?}&hl={hl?}&siteSearch={siteSearch?}&siteSearchFilter={siteSearchFilter?}&exactTerms={exactTerms?}&excludeTerms={excludeTerms?}&linkSite={linkSite?}&orTerms={orTerms?}&relatedSite={relatedSite?}&dateRestrict={dateRestrict?}&lowRange={lowRange?}&highRange={highRange?}&searchType={searchType}&fileType={fileType?}&rights={rights?}&imgSize={imgSize?}&imgType={imgType?}&imgColorType={imgColorType?}&imgDominantColor={imgDominantColor?}&alt=json"
+ },
+ "queries": {
+  "request": [
+   {
+    "title": "Google Custom Search - lonely planet chennai november things to do",
+    "totalResults": "1580",
+    "searchTerms": "lonely planet chennai november things to do",
+    "count": 10,
+    "startIndex": 1,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "chennai"
+   }
+  ],
+  "nextPage": [
+   {
+    "title": "Google Custom Search - lonely planet chennai november things to do",
+    "totalResults": "1580",
+    "searchTerms": "lonely planet chennai november things to do",
+    "count": 10,
+    "startIndex": 11,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "chennai"
+   }
+  ]
+ },
+ "context": {
+  "title": "Polaama"
+ },
+ "searchInformation": {
+  "searchTime": 0.342668,
+  "formattedSearchTime": "0.34",
+  "totalResults": "1580",
+  "formattedTotalResults": "1,580"
+ },
+ "items": [
+  {
+   "kind": "customsearch#result",
+   "title": "Top things to do in Chennai, India - Lonely Planet",
+   "htmlTitle": "Top \u003cb\u003ethings to do\u003c/b\u003e in \u003cb\u003eChennai\u003c/b\u003e, India - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/india/chennai/top-things-to-do/a/poi/356488",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Discover the best top things to do in Chennai including Higginbothams, Nalli \nSilks, Dakshin.",
+   "htmlSnippet": "Discover the best top \u003cb\u003ethings to do\u003c/b\u003e in \u003cb\u003eChennai\u003c/b\u003e including Higginbothams, Nalli \u003cbr\u003e\nSilks, Dakshin.",
+   "cacheId": "Uc5zzAeEFX8J",
+   "formattedUrl": "https://www.lonelyplanet.com/india/chennai/...things-to-do/a/.../356488",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/india/\u003cb\u003echennai\u003c/b\u003e/...\u003cb\u003ethings-to-do\u003c/b\u003e/a/.../356488",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Asia"
+     }
+    ],
+    "country": [
+     {
+      "name": "India"
+     }
+    ],
+    "city": [
+     {
+      "name": "Chennai"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Top things to do in Chennai, India",
+      "og:title": "Top things to do in Chennai, India",
+      "og:description": "Discover the best top things to do in Chennai including Higginbothams, Nalli Silks, Dakshin.",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Chennai flights - Lonely Planet",
+   "htmlTitle": "\u003cb\u003eChennai\u003c/b\u003e flights - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/india/tamil-nadu/chennai-madras/transport/getting-there-away/flights",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Cheapest flight to Chennai - search and compare Chennai flights and expert trip \nadvice. ... Things to do ... The Chennai Metro Rail system, expected to open in \nlate 2015, will provide a cheap, easy link between the airport and city. ... \nNovember.",
+   "htmlSnippet": "Cheapest flight to \u003cb\u003eChennai\u003c/b\u003e - search and compare \u003cb\u003eChennai\u003c/b\u003e flights and expert trip \u003cbr\u003e\nadvice. ... \u003cb\u003eThings to do\u003c/b\u003e ... The \u003cb\u003eChennai\u003c/b\u003e Metro Rail system, expected to open in \u003cbr\u003e\nlate 2015, will provide a cheap, easy link between the airport and city. ... \u003cbr\u003e\n\u003cb\u003eNovember\u003c/b\u003e.",
+   "cacheId": "otWIi9NBE1IJ",
+   "formattedUrl": "www.lonelyplanet.com/india/tamil-nadu/chennai.../getting.../flights",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/india/tamil-nadu/\u003cb\u003echennai\u003c/b\u003e.../\u003cb\u003eget\u003c/b\u003eting.../flights",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "310",
+      "height": "163",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRuWqjfo4_Kr1D9Nx930gsCqzWIfpdeHY1MOAvHCYnY59_kpdyivxjDMJ_E"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Chennai flights - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Chennai flights - Lonely Planet",
+      "twitter:description": "Cheapest flight to Chennai - search and compare Chennai flights and expert trip advice",
+      "twitter:image:src": "https://images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/a/g/hi/t/f142b3016a4a4bb7bb7c20b1aa38a7c6-chennai-madras.jpg",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Chennai flights - Lonely Planet",
+      "og:description": "Cheapest flight to Chennai - search and compare Chennai flights and expert trip advice",
+      "og:url": "http://www.lonelyplanet.com/india/tamil-nadu/chennai-madras/transport/getting-there-away/flights",
+      "og:type": "website",
+      "og:image": "//images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/a/g/hi/t/f142b3016a4a4bb7bb7c20b1aa38a7c6-chennai-madras.jpg",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "RCebdHC2r79OPJra1w/Sot11sUi1gf9+uLiTTccwMa0="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "http://images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/a/g/hi/t/f142b3016a4a4bb7bb7c20b1aa38a7c6-chennai-madras.jpg"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Destinations",
+      "name": "Destinations"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Hotels in Chennai, India - Lonely Planet",
+   "htmlTitle": "Hotels in \u003cb\u003eChennai\u003c/b\u003e, India - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/india/chennai/hotels/a/lod/356488",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Discover the best hotels in Chennai including La Woods Hotel, My Fortune - ITC's \nHotel Group, The Leela Palace Chennai.",
+   "htmlSnippet": "Discover the best hotels in \u003cb\u003eChennai\u003c/b\u003e including La Woods Hotel, My Fortune - ITC&#39;s \u003cbr\u003e\nHotel Group, The Leela Palace \u003cb\u003eChennai\u003c/b\u003e.",
+   "cacheId": "Oce-nUJznN0J",
+   "formattedUrl": "https://www.lonelyplanet.com/india/chennai/hotels/a/lod/356488",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/india/\u003cb\u003echennai\u003c/b\u003e/hotels/a/lod/356488",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Asia"
+     }
+    ],
+    "country": [
+     {
+      "name": "India"
+     }
+    ],
+    "city": [
+     {
+      "name": "Chennai"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Hotels in Chennai, India",
+      "og:title": "Hotels in Chennai, India",
+      "og:description": "Discover the best hotels in Chennai including La Woods Hotel, My Fortune - ITC's Hotel Group, The Leela Palace Chennai.",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Essential guide to Chennai - Lonely Planet",
+   "htmlTitle": "Essential guide to \u003cb\u003eChennai\u003c/b\u003e - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/india/tamil-nadu/chennai-madras/essential-information",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Everything for your trip to Chennai - best time to go, weather, daily cost advisor, ... \nSome policies specifically exclude dangerous activities such as scuba diving, ...",
+   "htmlSnippet": "Everything for your trip to \u003cb\u003eChennai\u003c/b\u003e - best time to go, weather, daily cost advisor, ... \u003cbr\u003e\nSome policies specifically exclude dangerous \u003cb\u003eactivities\u003c/b\u003e such as scuba diving,&nbsp;...",
+   "cacheId": "uE2UZKDM0PkJ",
+   "formattedUrl": "https://www.lonelyplanet.com/india/.../chennai.../essential-information",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/india/.../\u003cb\u003echennai\u003c/b\u003e.../essential-information",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "310",
+      "height": "163",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTxxsva2h4q7nOsTgCx9kNnXmgPgnMzvzF3Ur_HPNt2MfcrGNSSRqeiDvvh"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Essential guide to Chennai - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Essential guide to Chennai - Lonely Planet",
+      "twitter:description": "Everything for your trip to Chennai - best time to go, weather, daily cost advisor, visas, cheapest flights and transport information",
+      "twitter:image:src": "https://images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/a/g/hi/t/f142b3016a4a4bb7bb7c20b1aa38a7c6-chennai-madras.jpg",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Essential guide to Chennai - Lonely Planet",
+      "og:description": "Everything for your trip to Chennai - best time to go, weather, daily cost advisor, visas, cheapest flights and transport information",
+      "og:url": "http://www.lonelyplanet.com/india/tamil-nadu/chennai-madras/essential-information",
+      "og:type": "website",
+      "og:image": "//images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/a/g/hi/t/f142b3016a4a4bb7bb7c20b1aa38a7c6-chennai-madras.jpg",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "TnZ0+GiE6hpItk5i/pebubyZ7HMJJU8N6Cd9gzp+0zw="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/a/g/hi/t/f142b3016a4a4bb7bb7c20b1aa38a7c6-chennai-madras.jpg"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Destinations",
+      "name": "Destinations"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "OYO Rooms Mount Road Devi Theatre in Chennai, India - Lonely ...",
+   "htmlTitle": "OYO Rooms Mount Road Devi Theatre in \u003cb\u003eChennai\u003c/b\u003e, India - \u003cb\u003eLonely\u003c/b\u003e ...",
+   "link": "http://www.lonelyplanet.com/india/tamil-nadu/chennai-madras/hotels/oyo-rooms-mount-road-devi-theatre",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Book your stay at OYO Rooms Mount Road Devi Theatre and get advice on \naccommodation options in Chennai from ... Things to do ... 41/1, 41/2, old no 51-A\n, 51-B Anna Salai, (Devi Theatre Complex) Chennai ChennaiSee nearby area ... \nNovember ... Lonely Planet is not responsible for any inaccuracies in the photos.",
+   "htmlSnippet": "Book your stay at OYO Rooms Mount Road Devi Theatre and get advice on \u003cbr\u003e\naccommodation options in \u003cb\u003eChennai\u003c/b\u003e from ... \u003cb\u003eThings to do\u003c/b\u003e ... 41/1, 41/2, old no 51-A\u003cbr\u003e\n, 51-B Anna Salai, (Devi Theatre Complex) \u003cb\u003eChennai Chennai\u003c/b\u003eSee nearby area ... \u003cbr\u003e\n\u003cb\u003eNovember\u003c/b\u003e ... \u003cb\u003eLonely Planet\u003c/b\u003e is not responsible for any inaccuracies in the photos.",
+   "cacheId": "mczcEOExv4UJ",
+   "formattedUrl": "www.lonelyplanet.com/.../chennai.../oyo-rooms-mount-road-devi-theatre",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../\u003cb\u003echennai\u003c/b\u003e.../oyo-rooms-mount-road-devi-theatre",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "259",
+      "height": "194",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSJy0CiXxPR3j5Elxnqw7bV0iOdE1y37Iswe0koZWyAT-E8ZPx1IIzOMZw"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     },
+     {
+      "url": "South India",
+      "title": "South India"
+     },
+     {
+      "url": "Chennai & Tamil Nadu",
+      "title": "Chennai & Tamil Nadu"
+     },
+     {
+      "url": "Chennai",
+      "title": "Chennai"
+     }
+    ],
+    "postaladdress": [
+     {
+      "streetaddress": "The Mount City, Plot no. 41/1, 41/2, old no 51-A, 51-B Anna Salai, (Devi Theatre Complex) Chennai",
+      "addresslocality": "Chennai"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "OYO Rooms Mount Road Devi Theatre in Chennai, India - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "OYO Rooms Mount Road Devi Theatre in Chennai, India - Lonely Planet",
+      "twitter:description": "Book your stay at OYO Rooms Mount Road Devi Theatre and get advice on accommodation options in Chennai from Lonely Planet's independent on-the-ground travel writers.",
+      "og:site_name": "Lonely Planet",
+      "og:title": "OYO Rooms Mount Road Devi Theatre in Chennai, India - Lonely Planet",
+      "og:description": "Book your stay at OYO Rooms Mount Road Devi Theatre and get advice on accommodation options in Chennai from Lonely Planet's independent on-the-ground travel writers.",
+      "og:url": "http://www.lonelyplanet.com/india/tamil-nadu/chennai-madras/hotels/oyo-rooms-mount-road-devi-theatre",
+      "og:type": "website",
+      "sailthru.date": "2016-11-13 22:30:32 +0000",
+      "sailthru.tags": "Asia, India, Chennai, architecture-and-buildings, cities, festivals-and-events, food-and-drink, history-heritage-and-tradition, movies-and-television",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "vYmbGO2AspSXukT/PkOwE04/GD/9Bxhi1K3G82QHpo8="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "http://aff.bstatic.com/images/hotel/max500/619/61966307.jpg"
+     }
+    ],
+    "localbusiness": [
+     {
+      "name": "OYO Rooms Mount Road Devi Theatre"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Destinations",
+      "name": "Destinations"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Weather in Chennai & Tamil Nadu - Lonely Planet",
+   "htmlTitle": "Weather in \u003cb\u003eChennai\u003c/b\u003e &amp; Tamil Nadu - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/india/tamil-nadu/weather",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "The best time to go to Chennai & Tamil Nadu, including current weather \nconditions, temperatures and ... Things to do ... Nov–Dec The full-moon festival of \nlights.",
+   "htmlSnippet": "The best time to go to \u003cb\u003eChennai\u003c/b\u003e &amp; Tamil Nadu, including current weather \u003cbr\u003e\nconditions, temperatures and ... \u003cb\u003eThings to do\u003c/b\u003e ... \u003cb\u003eNov\u003c/b\u003e–Dec The full-moon festival of \u003cbr\u003e\nlights.",
+   "cacheId": "9h8KtTH7Fl8J",
+   "formattedUrl": "www.lonelyplanet.com/india/tamil-nadu/weather",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/india/tamil-nadu/weather",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "310",
+      "height": "163",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTX5YNssXUQ4R5PwsZwQaErwqa92nvjSjpVBnmp9dgKsdPQrAri_hsgJXt5"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Weather in Chennai & Tamil Nadu - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Weather in Chennai & Tamil Nadu - Lonely Planet",
+      "twitter:description": "The best time to go to Chennai & Tamil Nadu, including current weather conditions, temperatures and rainfall",
+      "twitter:image:src": "https://images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/assets/image/92327054722775f9c20c39af4771315b980f74ec7675527a6aad6b45a3b1ad1b/f7c6fbbaaaf4c1be53022641f8d50078a31e0e6df5e33bf88b9415be34383f28.jpg",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Weather in Chennai & Tamil Nadu - Lonely Planet",
+      "og:description": "The best time to go to Chennai & Tamil Nadu, including current weather conditions, temperatures and rainfall",
+      "og:url": "http://www.lonelyplanet.com/india/tamil-nadu/weather",
+      "og:type": "website",
+      "og:image": "//images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/assets/image/92327054722775f9c20c39af4771315b980f74ec7675527a6aad6b45a3b1ad1b/f7c6fbbaaaf4c1be53022641f8d50078a31e0e6df5e33bf88b9415be34383f28.jpg",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "ZaIASAcBzbDzTpTcfYmFyxjy5ypmLgLCYsR/uOAbr0w="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "http://images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/assets/image/92327054722775f9c20c39af4771315b980f74ec7675527a6aad6b45a3b1ad1b/f7c6fbbaaaf4c1be53022641f8d50078a31e0e6df5e33bf88b9415be34383f28.jpg"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "FAST TRACK Elite Thiruvanmiyur in Chennai, India - Lonely Planet",
+   "htmlTitle": "FAST TRACK Elite Thiruvanmiyur in \u003cb\u003eChennai\u003c/b\u003e, India - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/india/tamil-nadu/chennai-madras/hotels/fast-track-elite-thiruvanmiyur",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Things to do ... No: 10, Kalakshetra Avenue, Thiruvanmiyur, ChennaiSee nearby \narea. 2 of 1 1 of 1 ... November ... Chennai International Airport is 10 km away.",
+   "htmlSnippet": "\u003cb\u003eThings to do\u003c/b\u003e ... No: 10, Kalakshetra Avenue, Thiruvanmiyur, \u003cb\u003eChennai\u003c/b\u003eSee nearby \u003cbr\u003e\narea. 2 of 1 1 of 1 ... \u003cb\u003eNovember\u003c/b\u003e ... \u003cb\u003eChennai\u003c/b\u003e International Airport is 10 km away.",
+   "cacheId": "KulPBj3F-OcJ",
+   "formattedUrl": "www.lonelyplanet.com/.../chennai.../fast-track-elite-thiruvanmiyur",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../\u003cb\u003echennai\u003c/b\u003e.../fast-track-elite-thiruvanmiyur",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "276",
+      "height": "183",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcS3FUgoRgAfxDXtzRmpgh6ATOfbQ2cwaq4BBe0cCYwhzTn8l81JqyWGEn-D"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     },
+     {
+      "url": "South India",
+      "title": "South India"
+     },
+     {
+      "url": "Chennai & Tamil Nadu",
+      "title": "Chennai & Tamil Nadu"
+     },
+     {
+      "url": "Chennai",
+      "title": "Chennai"
+     }
+    ],
+    "postaladdress": [
+     {
+      "streetaddress": "No: 10, Kalakshetra Avenue, Thiruvanmiyur,",
+      "addresslocality": "Chennai"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "FAST TRACK Elite Thiruvanmiyur in Chennai, India - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "FAST TRACK Elite Thiruvanmiyur in Chennai, India - Lonely Planet",
+      "twitter:description": "Book your stay at FAST TRACK Elite Thiruvanmiyur and get advice on accommodation options in Chennai from Lonely Planet's independent on-the-ground travel writers.",
+      "og:site_name": "Lonely Planet",
+      "og:title": "FAST TRACK Elite Thiruvanmiyur in Chennai, India - Lonely Planet",
+      "og:description": "Book your stay at FAST TRACK Elite Thiruvanmiyur and get advice on accommodation options in Chennai from Lonely Planet's independent on-the-ground travel writers.",
+      "og:url": "http://www.lonelyplanet.com/india/tamil-nadu/chennai-madras/hotels/fast-track-elite-thiruvanmiyur",
+      "og:type": "website",
+      "sailthru.date": "2016-11-15 04:43:10 +0000",
+      "sailthru.tags": "Asia, India, Chennai, architecture-and-buildings, cities, festivals-and-events, food-and-drink, history-heritage-and-tradition, movies-and-television",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "jafHiO07/hu1oAnQuLryF29nR+rA0T6i5YZsDji7fxk="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "http://aff.bstatic.com/images/hotel/max500/541/54119575.jpg"
+     }
+    ],
+    "localbusiness": [
+     {
+      "name": "FAST TRACK Elite Thiruvanmiyur"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Destinations",
+      "name": "Destinations"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Hotels in Chennai & Tamil Nadu - Lonely Planet",
+   "htmlTitle": "Hotels in \u003cb\u003eChennai\u003c/b\u003e &amp; Tamil Nadu - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/india/chennai-tamil-nadu/hotels/a/lod/356482",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Discover the best hotels in Chennai & Tamil Nadu including The Carlton, Villa \nShanti, Lymond House.",
+   "htmlSnippet": "Discover the best hotels in \u003cb\u003eChennai\u003c/b\u003e &amp; Tamil Nadu including The Carlton, Villa \u003cbr\u003e\nShanti, Lymond House.",
+   "formattedUrl": "https://www.lonelyplanet.com/india/chennai-tamil-nadu/hotels/a/.../356482",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/india/\u003cb\u003echennai\u003c/b\u003e-tamil-nadu/hotels/a/.../356482",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Asia"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "102",
+      "height": "128",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTGHhejB73GNAFiwHvi5hgVd8AdXZ5dYQtvu5hUKvCod4KjytWLHCfg3A"
+     }
+    ],
+    "country": [
+     {
+      "name": "India"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Hotels in Chennai & Tamil Nadu",
+      "og:title": "Hotels in Chennai & Tamil Nadu",
+      "og:description": "Discover the best hotels in Chennai & Tamil Nadu including The Carlton, Villa Shanti, Lymond House.",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://lpbookingcom.imgix.net/images/hotel/max500/701/70194531.jpg?w=128&h=160&fit=crop&q=50&auto=enhance&crop=entropy"
+     }
+    ],
+    "region": [
+     {
+      "name": "Chennai & Tamil Nadu"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Chennai travel insurance - Lonely Planet",
+   "htmlTitle": "\u003cb\u003eChennai\u003c/b\u003e travel insurance - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/india/tamil-nadu/chennai-madras/travel-insurance",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Travel insurance for Chennai - information and recommended travel insurance ... \nSome policies specifically exclude dangerous activities such as scuba diving, ...",
+   "htmlSnippet": "Travel insurance for \u003cb\u003eChennai\u003c/b\u003e - information and recommended travel insurance ... \u003cbr\u003e\nSome policies specifically exclude dangerous \u003cb\u003eactivities\u003c/b\u003e such as scuba diving,&nbsp;...",
+   "cacheId": "Xkm8MAp9hOcJ",
+   "formattedUrl": "https://www.lonelyplanet.com/india/tamil.../chennai.../travel-insurance",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/india/tamil.../\u003cb\u003echennai\u003c/b\u003e.../travel-insurance",
+   "pagemap": {
+    "metatags": [
+     {
+      "title": "Chennai travel insurance - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Chennai travel insurance - Lonely Planet",
+      "twitter:description": "Travel insurance for Chennai - information and recommended travel insurance for Chennai",
+      "twitter:image:src": "https://images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/a/g/hi/t/f142b3016a4a4bb7bb7c20b1aa38a7c6-chennai-madras.jpg",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Chennai travel insurance - Lonely Planet",
+      "og:description": "Travel insurance for Chennai - information and recommended travel insurance for Chennai",
+      "og:url": "http://www.lonelyplanet.com/india/tamil-nadu/chennai-madras/travel-insurance",
+      "og:type": "website",
+      "og:image": "//images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/a/g/hi/t/f142b3016a4a4bb7bb7c20b1aa38a7c6-chennai-madras.jpg",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "Ucy5QJmL5loTYYZBtvx4ohvvJedzcL0CMGlUCVVrvHY="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "//images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/a/g/hi/t/f142b3016a4a4bb7bb7c20b1aa38a7c6-chennai-madras.jpg"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Destinations",
+      "name": "Destinations"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "The Residency Towers in Chennai, India - Lonely Planet",
+   "htmlTitle": "The Residency Towers in \u003cb\u003eChennai\u003c/b\u003e, India - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/india/tamil-nadu/chennai-madras/hotels/the-residency-towers",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "This Chennai hotel comes with an outdoor pool, a fitness room and pampering \nspa treatments. ... Activities. golf course (within 3 km); fitness centre; outdoor pool\n ...",
+   "htmlSnippet": "This \u003cb\u003eChennai\u003c/b\u003e hotel comes with an outdoor pool, a fitness room and pampering \u003cbr\u003e\nspa treatments. ... \u003cb\u003eActivities\u003c/b\u003e. golf course (within 3 km); fitness centre; outdoor pool\u003cbr\u003e\n&nbsp;...",
+   "cacheId": "jB0DmcxrYc4J",
+   "formattedUrl": "https://www.lonelyplanet.com/india/.../chennai.../the-residency-towers",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/india/.../\u003cb\u003echennai\u003c/b\u003e.../the-residency-towers",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Asia"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "240",
+      "height": "180",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVCELUHE083u1EYhZD9njj8ImVPLMtaAW7gyGZaVOzNsM1bUKjF917jlZf"
+     }
+    ],
+    "country": [
+     {
+      "name": "India"
+     }
+    ],
+    "city": [
+     {
+      "name": "Chennai"
+     }
+    ],
+    "aggregaterating": [
+     {
+      "ratingvalue": "8.1"
+     }
+    ],
+    "postaladdress": [
+     {
+      "streetaddress": "115 Sir Thyagaraya Road, T Nagar",
+      "addresslocality": "Chennai",
+      "addresscountry": "India"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "The Residency Towers in Chennai, India",
+      "og:title": "The Residency Towers in Chennai, India",
+      "og:description": "This Chennai hotel comes with an outdoor pool, a fitness room and pampering spa treatments. Providing free Wi-Fi, it is a short 2-minute walk from Globus Shoppi…",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "http://aff.bstatic.com/images/hotel/max300/354/35435954.jpg"
+     }
+    ],
+    "thing": [
+     {
+      "name": "Hotels"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     },
+     {
+      "position": "4"
+     }
+    ]
+   }
+  }
+ ]
+}
