@@ -1,119 +1,129 @@
 'use strict';
-const IataCode = require('iatacodes');
-const logger = require('./my-logger');
+const IataCodeGetter = require('./iatacode-getter.js');
+const request = require('request');
 const fs = require('fs');
 const _ = require('lodash');
-const walkSync = require('walk-sync');
-const ic = new IataCode('4a8368c8-4369-4ed3-90ab-f5c46ce34e54');
+const moment = require('moment');
+const logger = require('./my-logger');
+const sleep = require('sleep');
+const FlightDataExtracter = require('./skyscanner-flight-data.js');
 
-/* 
-ic.api('autocomplete', {query: 'lisbon'}, function(e, r) {
-  console.log(r);
-});
-
-// response
-{ countries: [],
-  cities_by_countries: [],
-  airports_by_countries: [],
-  cities: [ { code: 'LIS', name: 'Lisbon', country_name: 'Portugal' } ],
-  airports: 
-   [ { code: 'LIS', name: 'Lisbon Portela', country_name: 'Portugal' },
-     { code: 'ZYD', name: 'Lisbon TP', country_name: 'Portugal' } ],
-  cities_by_airports: [],
-  airports_by_cities: 
-   [ { code: 'LIS', name: 'Lisbon Portela', country_name: 'Portugal' },
-     { code: 'ZYD', name: 'Lisbon TP', country_name: 'Portugal' } ] 
-}
-*/
+const apiKey = "prtl6749387986743898559646983194";
 
 function FlightInfoProvider(origCity, destCity, startDate, returnDate) {
   this.origCity = origCity;
   this.destCity = destCity;
-  this.startDate = startDate;
-  this.returnDate = returnDate;
+  this.startDate = moment(new Date(startDate).toISOString()).format("YYYY-MM-DD");
+  this.returnDate = moment(new Date(returnDate).toISOString()).format("YYYY-MM-DD");
 }
 
 FlightInfoProvider.prototype.getFlightDetails = function(callback) {
-  const origCode = getIataCode.call(this, this.origCity, callback);
-  // const destCode = getIataCode.call(this, this.destCity);
-  // console.log(`Code for ${this.origCity} is ${origCode}; code for ${this.destCity} is ${destCode}`);
+  const self = this;
+  (new IataCodeGetter(this.origCity)).getCode(function(code) { self.origCode = code;});
+  (new IataCodeGetter(this.destCity)).getCode(function(code) {
+    self.destCode = code;
+    _postFlightDetails.call(self, callback);
+  });
 }
 
-function fileExists(fName) {
-  if(_.isUndefined(this.fileList)) {
-    this.fileList = walkSync("countries", {directories: false});
-  }
-  let absFileName;
-  this.fileList.forEach(file => {
-    if(file.indexOf(fName) > -1) {
-      absFileName = `countries/${file}`;
-      return;
-    }
+FlightInfoProvider.prototype.extractDataFromFile = function(callback) {
+  const self = this;
+  (new IataCodeGetter(this.origCity)).getCode(function(code) { 
+    self.origCode = code;
+    (new IataCodeGetter(self.destCity)).getCode(function(code) {
+      self.destCode = code;
+      const file = _getFileName.call(self);
+      try {
+        console.log(`extractDataFromFile: Reading from file ${file}`);
+        const json = JSON.parse(fs.readFileSync(file, 'utf8'));
+        const data = new FlightDataExtracter(json);
+      }
+      catch(e) {
+        logger.warn(`extractDataFromFile: Error reading file ${file}: ${e.stack}`);
+      }
+      return callback("");
+    });
   });
-  return absFileName;
 }
 
-function persistCode(city, body) {
-  if(_.isUndefined(body.iatacode)) {
-    logger.error(`persistCode: iatacode for city ${city} is undefined. Doing nothing`);
-    return;
-  }
-  let countryCode = undefined;
-  ic.api('cities', {code: body.iatacode}, function(err, response) {
-    if(_.isNull(err)) {
-      logger.error(`persistCode: Error getting country code for ${city} from iatacode.org: ${err}`);
-      return undefined;
+function _postFlightDetails(callback) {
+  console.log(`Code for ${this.origCity} is ${this.origCode}; code for ${this.destCity} is ${this.destCode}`);
+
+  const self = this;
+  const uri = "http://partners.api.skyscanner.net/apiservices/pricing/v1.0";
+  request.post({
+    uri: uri,
+    headers: {
+      Accept: "application/json"
+    },
+    form: {
+      apiKey: apiKey,
+      country: "US",
+      currency: "USD",
+      locale: "en-US",
+      originplace: `${this.origCode}-sky`,
+      destinationplace: `${this.destCode}-sky`,
+      outbounddate: this.startDate,
+      inbounddate: this.returnDate,
+      adults: "2"
     }
-    console.log(`Response from calling cities: ${JSON.stringify(response)}`);
-    countryCode = response.country_code;
+  }, function(err, res, body) {
+    if(!_.isUndefined(err) && !_.isNull(err)) {
+      logger.error(`Error talking to skyscanner: ${err}`);
+      return callback();
+    }
+    if(res.statusCode == "201") {
+      // console.log(`_postFlightDetails: Received response ${JSON.stringify(res)}. calling location ${res.headers.location}`);
+      sleep.sleep(1);
+      return _getFlightDetails.call(self, res.headers.location, callback);
+    }
+    // TODO: Retry a few times and then fall back to browse overview.
+    console.log(`_postFlightDetails: res is ${JSON.stringify(res)}`);
+    return callback();
   });
-  if(_.isUndefined(countryCode)) {
-    return undefined;
-  }
-  ic.api('countries', {code: countryCode}, function(err, response) {
-    if(_.isNull(err)) {
-      logger.error(`persistCode: Error getting country name for ${countryCode} from iatacode.org: ${err}`);
-      return;
-    }
-    console.log(`Response from calling countries: ${JSON.stringify(response)}`);
-    const file = `countries/${response.name}/${city}.txt`;
-    try {
-      fs.writeFileSync(file, body, 'utf8');
-      callback(body.iatacode);
-    }
-    catch(e) {
-      logger.error(`persistCode: Error writing to file ${file}: ${e.message}`);
-    }
-  });
-  return;
 }
 
-function getIataCode(city, callback) {
-  let body = {};
-  let file = fileExists.call(this, `${this.city}.txt`);
-  if(!_.isUndefined(file)) {
-    try {
-      const body = JSON.parse(fs.readFileSync(file, 'utf8'));
-      if(!_.isUndefined(body.iatacode)) {    
-        return body.iatacode;
+function _getFlightDetails(location, callback) {
+  console.log(`_getFlightDetails: calling ${location}`);
+  const uri = `${location}?apiKey=${apiKey}`;
+  const self = this;
+  request.get({
+    uri: uri,
+    headers: {
+      Accept: "application/json"
+    },
+  }, function(err, res, body) {
+    if(!_.isUndefined(err) && !_.isNull(err)) {
+      logger.error(`_getFlightDetaills: Error talking to skyscanner: ${err}`);
+      return callback();
+    }
+    if(res.statusCode == "200") {
+      console.log(`_getFlightDetails: res is ${res.statusCode}, content length: ${res.headers["content-length"]} bytes`);
+      try {
+        const file = _getFileName.call(self);
+        logger.info(`_getFlightDetails: writing body to file ${file}`);
+        fs.writeFileSync(file, body);
+      }
+      catch(e) {
+        logger.error(`_getFlightDetails: Error writing to file: ${e.stack}`);
       }
     }
-    catch(e) {
-      logger.error(`getIataCode: could not read data from file ${file}. Getting code from iatacode.org: ${e.message}`);
+    else {
+      console.log(`_getFlightDetails: res is ${JSON.stringify(res)}`);
     }
-  }
-  logger.info(`calling iata for city ${city}. file does not exist`);
-  ic.api('autocomplete', {query: `${city}`}, function(err, response) {
-    if(_.isNull(err)) {
-      logger.error(`getIataCode: Error getting ${city}'s code from iatacode.org: ${err} `);
-      return undefined;
-    }
-    console.log(`getIataCode: Response is ${JSON.stringify(response)}`);
-    body.iatacode = response.cities.code;
-    console.log(`code for ${city} is ${body.iatacode}`);
-    persistCode(city, body, callback);
+    return callback();
   });
-  return body.iatacode;
 }
+
+function _getFileName() {
+  return `flights/${this.origCode}to${this.destCode}on${this.startDate}.txt`;
+}
+
+/*
+[ec2-user@ip-172-31-55-42 ~]$ node test-flight-info-provider.js 
+Code for seattle is SEA; code for lisbon is LIS
+Doing nothing
+_postFlightDetails: res is {"statusCode":201,"body":"{}","headers":{"cache-control":"private","content-type":"application/json","date":"Tue, 03 Jan 2017 06:25:03 GMT","location":"http://partners.api.skyscanner.net/apiservices/pricing/uk1/v1.0/04f8eb1187874d678408f1785b4d740d_ecilpojl_9F8FCC373985856E60C7406085298F65","connection":"close","content-length":"2"},"request":{"uri":{"protocol":"http:","slashes":true,"auth":null,"host":"partners.api.skyscanner.net","port":80,"hostname":"partners.api.skyscanner.net","hash":null,"search":null,"query":null,"pathname":"/apiservices/pricing/v1.0","path":"/apiservices/pricing/v1.0","href":"http://partners.api.skyscanner.net/apiservices/pricing/v1.0"},"method":"POST","headers":{"Accept":"application/json","content-type":"application/x-www-form-urlencoded","content-length":177}}}
+*/
 
 module.exports = FlightInfoProvider;

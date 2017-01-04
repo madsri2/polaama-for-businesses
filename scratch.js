@@ -162,13 +162,16 @@ files.forEach(file => {
 });
 }
 
-
 const IataCode = require('iatacodes');
 const ic = new IataCode('4a8368c8-4369-4ed3-90ab-f5c46ce34e54');
 function testIataCode() {
   city = "seattle";
   ic.api('autocomplete', { query: `${city}`}, function(e, r) {
-    console.log(`response from iatacode.org: ${JSON.stringify(r,null,2)}; ${r.cities.code}`);
+    r.cities.forEach(city => {
+      if(city.name.toLowerCase() === "seattle") {
+        console.log(`response from iatacode.org: ${city.code}`);
+      }
+    });
   });
 }
 

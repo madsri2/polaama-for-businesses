@@ -28,9 +28,26 @@ function skyScanner() {
   });
 }
 
+// http://partners.api.skyscanner.net/apiservices/browseroutes/v1.0/{market}/{currency}/{locale}/{originPlace}/{destinationPlace}/{outboundPartialDate}/{inboundPartialDate}?apiKey={apiKey}
+
+// http://business.skyscanner.net/portal/en-GB/Documentation/FlightsBrowseCacheRoutes
+function browseRouteService() {
+  const uri = `http://partners.api.skyscanner.net/apiservices/browseroutes/v1.0/US/USD/en-US/SEA-sky/LIS-sky/2017-02-03/2017-02-17?apiKey=prtl6749387986743898559646983194`;
+  request({
+    uri: uri,
+    method: 'GET'
+  }, function(err, res, body) {
+    console.log(`err is ${err}`);
+    console.log(`res is ${res.statusCode}, content length: ${res.headers["content-length"]} bytes`);
+    // console.log(`body is ${body}`);
+    fs.writeFileSync("/tmp/browse-route.json", body);
+  });
+}
+
 function qpx() {
 }
 
-// skyScanner();
-const json = JSON.parse(fs.readFileSync('/tmp/sky-scanner','utf8'));
-console.log(JSON.stringify(json, null, 2));
+// browseRouteService();
+skyScanner();
+// const json = JSON.parse(fs.readFileSync('/tmp/sky-scanner','utf8'));
+// console.log(JSON.stringify(json, null, 2));
