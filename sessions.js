@@ -60,6 +60,7 @@ Sessions.retrieveSession = function(fbid) {
       const session = new Session(data.fbid,data.sessionId);
       session.tripNameInContext = data.tripNameInContext;
       session.rawTripNameInContext = data.rawTripNameInContext;
+      session.hometown = data.hometown;
       Object.keys(data.trips).forEach(name => {
         // we know that the name of the trip that was persisted is encoded.
         session.trips[name] = {
@@ -105,7 +106,7 @@ function findSessionId(fbid) {
     else {
       sessionId = session.sessionId;
       this.sessions[sessionId] = session;
-      logger.info(`found session ${session.sessionId} from file for fbid ${fbid}.`);
+      // logger.info(`found session ${session.sessionId} from file for fbid ${fbid}.`);
     }
   }
   return sessionId;

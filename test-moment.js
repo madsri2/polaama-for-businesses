@@ -21,4 +21,10 @@ function testFormat() {
   console.log(startDate.format("YYYY-MM-DD"));
 }
 
-testFormat();
+function testReturnDate() {
+  const sdIso = new Date("2/3/17").toISOString();
+  console.log(moment(sdIso).add(10,'days').format("YYYY-MM-DD"));
+}
+
+// testFormat();
+testReturnDate();

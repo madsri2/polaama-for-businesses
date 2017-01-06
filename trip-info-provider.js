@@ -5,10 +5,12 @@ const WeatherInfoProvider = require('./weather-info-provider');
 const ActivityInfoProvider = require('./activity-info-provider');
 const logger = require('./my-logger');
 const TripData = require('./trip-data');
+const FlightInfoProvider = require('./flight-info-provider');
 
 /* Class to handle manipulation of the trips/israel-data.txt file. */
-function TripInfoProvider(tripData) {
+function TripInfoProvider(tripData, hometown) {
   this.trip = tripData;
+  this.hometown = hometown;
   try {
     this.tripInfoDetails = JSON.parse(fs.readFileSync(this.trip.tripDataFile(),'utf8'));
   }
@@ -18,7 +20,6 @@ function TripInfoProvider(tripData) {
     this.tripInfoDetails.cities = {};
   }
 }
-
 
 // callback function meant to be called by WeatherInfoProvider.getWeather 
 function parseWeatherResponse(city, weatherDetails) {
@@ -117,9 +118,20 @@ function encodeForLonelyPlanet() {
   return this.trip.data.destination.replace(/ /g,'-').replace(/_/g,'-').toLowerCase();
 }
 
+/***************** Flight Details ***************************/
+
 // cx code for flight custom search engine: '016727128883863036563:3i1x6jmqmwu';
-TripInfoProvider.prototype.getFlightDetails = function() {
-  // https://developers.google.com/qpx-express/v1/prereqs
+// https://developers.google.com/qpx-express/v1/prereqs
+TripInfoProvider.prototype.getFlightDetails = function(callback) {
+  const tripData = this.trip.data;
+  const fip = new FlightInfoProvider(this.hometown, tripData.portOfEntry, tripData.startDate, tripData.returnDate);
+  return fip.getFlightDetails(callback);
+}
+
+TripInfoProvider.prototype.getStoredFlightDetails = function() {
+  const tripData = this.trip.data;
+  const fip = new FlightInfoProvider(this.hometown, tripData.portOfEntry, tripData.startDate, tripData.returnDate);
+  return fip.getStoredFlightDetails();
 }
 
 /***************** Activity Details ***************************/
@@ -145,7 +157,7 @@ function getActivityForCity(city, index, callback) {
     cityDetails.activities = activityDetails;
     // handle case where we have gathered data for all cities.
     if(index == (cities.length-1)) {
-      logger.info("getActivities: Gathered activities for all cities. Persisting data and calling callback");
+      // logger.info("getActivities: Gathered activities for all cities. Persisting data and calling callback");
       try {
         fs.writeFileSync(dataFile, JSON.stringify(details));
       }

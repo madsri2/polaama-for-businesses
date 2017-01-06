@@ -5,7 +5,7 @@ const file = "flights/SEAtoLISon2017-02-03.txt";
 const json = JSON.parse(fs.readFileSync(file, 'utf8'));
 console.log(`Keys are ${Object.keys(json)}`);
 
-const legId = "16177-1702031213--32171,-31899-2-13577-1702041130";
+const legId = "16177-1702032119--32171,-31781-1-13577-1702050605";
 const leg = _findLeg(legId);
 console.log(`${JSON.stringify(leg, null, 2)}`);
 // console.log(`${JSON.stringify(json.Carriers, null, 2)}`);

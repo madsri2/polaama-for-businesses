@@ -31,40 +31,48 @@ function IataCodeGetter(city) {
   this.city = city;
 }
 
-IataCodeGetter.prototype.getCode = function(callback) {
-  // TODO: Move the functionality of getting details from file into constructor.
-  let body = {};
+IataCodeGetter.prototype.getCodeSync = function() {
   const city = this.city;
   let file = cityFileExists.call(this);
   if(!_.isUndefined(file)) {
     try {
-      body = JSON.parse(fs.readFileSync(file, 'utf8'));
+      const body = JSON.parse(fs.readFileSync(file, 'utf8'));
       if(!_.isUndefined(body.iatacode)) {    
-        return callback(body.iatacode);
+        return body.iatacode;
       }
     }
     catch(e) {
-      logger.error(`getIataCode: could not read data from file ${file}. Getting code from iatacode.org: ${e.message}`);
+      logger.error(`getIataCode: could not read data from file ${file}. Error : ${e.message}`);
     }
   }
-  logger.info(`calling iata for city ${city}. file does not exist`);
+  return undefined;
+}
+
+IataCodeGetter.prototype.getCode = function(callback) {
+  // TODO: Move the functionality of getting details from file into constructor.
+  let iatacode = this.getCodeSync();
+  if(!_.isUndefined(iatacode)) {
+    return callback(iatacode);
+  }
+  logger.info(`Getting code for city ${city} from iatacode.org. file does not exist`);
   ic.api('autocomplete', {query: `${city}`}, function(err, response) {
     if(!_.isUndefined(err)) {
-      logger.error(`getIataCode: Error getting ${city}'s code from iatacode.org: ${err} `);
+      logger.error(`getIataCode: Error getting ${city}'s code from iatacode.org: ${err}`);
       return;
     }
     response.cities.forEach(c => {
       if(c.name.toLowerCase() === city) {
-        body.iatacode = c.code;
+        iatacode = c.code;
+        return;
       }
     });
-    if(_.isUndefined(body.iatacode)) {
+    if(_.isUndefined(iatacode)) {
       logger.warn(`getIataCode: Could not find code in response.cities: ${JSON.stringify(response.cities, null, 2)}`);
       return;
     }
     persistCode(city, body, callback);
   });
-  return body.iatacode;
+  return callback(iatacode);
 }
 
 function cityFileExists() {

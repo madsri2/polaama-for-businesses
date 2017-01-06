@@ -3,6 +3,7 @@ const _=require('lodash');
 const logger = require('./my-logger');
 const TripData = require('./trip-data');
 const fs = require('fs');
+const Encoder = require('./encoder');
 
 /*
 A session has a 1:1 relationship with a user and their trips. A session represents a user. Each user and their trips will have exactly one session at any given time. Today, the scope of a session is tied to the lifetime of this webserver. At any given time, the session will have one trip context that indicates which trip a user is talking about.
@@ -92,6 +93,12 @@ Session.prototype.persistSession = function() {
     rawTripNameInContext: this.rawTripNameInContext,
     trips: {}
   };
+  if(_.isUndefined(this.hometown)) {
+    data.hometown = "unknown";
+  }
+  else {
+    data.hometown = Encoder.encode(this.hometown);
+  }
   Object.keys(this.trips).forEach(name => {
     data.trips[name] = {
       aiContext: this.trips[name].aiContext,
@@ -101,7 +108,7 @@ Session.prototype.persistSession = function() {
   const file = `${Session.sessionBaseDir}/${this.fbid}.session`;
   try {
     fs.writeFileSync(file, JSON.stringify(data));
-    logger.info(`persisted session in file <${file}>`);
+    // logger.info(`persisted session in file <${file}>`);
   }
   catch(err) {
       logger.error(`error writing to session file: ${file}`, err.stack);

@@ -11,6 +11,11 @@ curl -X GET "https://graph.facebook.com/v2.6/1041923339269341?access_token=EAAXu
 
 function FbidHandler() {
   // list of all fbids that Polaama knows about.
+  // TODO: Use the following url to get the user's full name
+  /*
+  curl -X GET "https://graph.facebook.com/v2.8/1120615267993271?fields=hometown&access_token=$PAT"
+  {"first_name":"Madhuvanesh","last_name":"Parthasarathy","profile_pic":"https:\/\/scontent.xx.fbcdn.net\/v\/t31.0-1\/p960x960\/416136_10151101037035141_1635951042_o.jpg?oh=04b8577076c642ac843d41d066b381c2&oe=592206DD","locale":"en_US","timezone":-8,"gender":"male"}[ec2-user@ip-172-31-55-42 ~] 
+  */
   this.fbidNames = {
     "2": "Test test",
     "1120615267993271": "Madhuvanesh Parthasarathy",

@@ -80,7 +80,7 @@ TripData.prototype.retrieveTripData = function() {
     }
   }
   catch(err) {
-      logger.info(`File ${file} does not exist. Creating empty this.data object so it can be filled elsewhere`);
+      // logger.info(`File ${file} does not exist. Creating empty this.data object so it can be filled elsewhere`);
       this.data = {};
   }
 }
@@ -130,6 +130,10 @@ TripData.prototype.addTripDetailsAndPersist = function(tripDetails) {
   else if(tripDetails.startDate) {
     this.data.startDate = tripDetails.startDate;
   }
+  const sdIso = new Date(this.data.startDate).toISOString();
+  this.data.startDate = moment(sdIso).format("YYYY-MM-DD");
+  this.data.returnDate = 
+    moment(sdIso).add(this.data.duration,'days').format("YYYY-MM-DD");
   // TODO: Get this information from weather API or the file persisted.
   this.data.weather = "sunny";
   createPackList.call(this);
@@ -137,13 +141,18 @@ TripData.prototype.addTripDetailsAndPersist = function(tripDetails) {
   this.persistUpdatedTrip();
 }
 
-TripData.prototype.addCities = function(cities) {
+TripData.prototype.addCities = function(cities, portOfEntry) {
+  // TODO: Make this a set
   if(_.isUndefined(this.data.cities)) {
     this.data.cities = [];
   }
   cities.forEach(city => {
     this.data.cities.push(Encoder.encode(city));
   }, this);
+  if(!_.isUndefined(portOfEntry)) {
+    // this is needed for getting flight details.
+    this.data.portOfEntry = portOfEntry;
+  }
   this.persistUpdatedTrip();
 }
 
@@ -165,7 +174,7 @@ TripData.prototype.storePackList = function(senderId, messageText) {
   this.data.packList.toPack = this.data.packList.toPack.concat(items);
   // store it locally
   this.persistUpdatedTrip();
-  logger.info(`successfully stored item ${items} in packList's toPack list`);
+  // logger.info(`successfully stored item ${items} in packList's toPack list`);
   return `Saved! You can retrieve this by saying get pack list`;
 }
 
@@ -242,7 +251,7 @@ TripData.prototype.persistUpdatedTrip = function() {
   const file = tripFile.call(this);
   try {
     fs.writeFileSync(file, JSON.stringify(this.data));
-    logger.info("saved trip for ",this.data.name);
+    // logger.info("saved trip for ",this.data.name);
     return true;
   }
   catch(err) {

@@ -11,9 +11,8 @@ function testGetFlightDetails() {
 const fs = require('fs');
 function testExtractDataFromFile() {
   const fip = new FlightInfoProvider("seattle", "lisbon", "2/3/17", "2/17/17");
-  fip.extractDataFromFile(function(content) {
-    console.log(`test-flight-info-provider: Extracted content: <${content}>`);
-  });
+  const content = fip.getStoredFlightDetails();
+  console.log(`test-flight-info-provider: content: <${JSON.stringify(content, null, 2)}>`);
   /*
   const file = "flights/SEAtoLISon2017-02-03.txt";
   const json = JSON.parse(fs.readFileSync(file, 'utf8'));

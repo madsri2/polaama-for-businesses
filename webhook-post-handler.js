@@ -8,6 +8,7 @@ const moment = require('moment');
 const FbidHandler = require('./fbid-handler');
 const formidable = require('formidable');
 const TripInfoProvider = require('./trip-info-provider');
+const Promise = require('promise');
 
 function WebhookPostHandler(session) {
   this.sessions = new Sessions();
@@ -165,10 +166,26 @@ function displayTripDetails() {
 WebhookPostHandler.prototype.startPlanningTrip = function() {
   sendTextMessage(this.session.fbid, `Gathering weather, flight and stay related information for ${this.session.tripNameInContext}`);
   sendTypingAction.call(this);
+  const tip = new TripInfoProvider(this.session.tripData(), this.session.hometown);
+  const activities = Promise.denodeify(tip.getActivities.bind(tip));
+  const flightDetails = Promise.denodeify(tip.getFlightDetails.bind(tip));
+  const weatherDetails = Promise.denodeify(tip.getWeatherInformation.bind(tip));
   const dtdCallback = displayTripDetails.bind(this);
-  const tripInfoProvider = new TripInfoProvider(this.session.tripData());
+
+  activities()
+    .then(flightDetails())
+    .then(weatherDetails())
+    .done(
+      dtdCallback(), 
+      function(err) {
+        logger.error(`error in gathering data for trip ${this.session.tripNameInContext}: ${err.stack}`);
+    });
+
+  /*
   const getActivitiesCallback = tripInfoProvider.getActivities(dtdCallback);
-  tripInfoProvider.getWeatherInformation(getActivitiesCallback);
+  const getFlightDetailsCallback = tripInfoProvider.getFlightDetails(getActivitiesCallback);
+  tripInfoProvider.getWeatherInformation(getFlightDetailsCallback);
+  */
   // TODO: If this is a beach destinataion, use http://www.blueflag.global/beaches2 to determine the swimmability. Also use http://www.myweather2.com/swimming-and-water-temp-index.aspx to determine if water conditions are swimmable
 }
 
@@ -260,12 +277,11 @@ function receivedMessage(event) {
 
   if(message.is_echo) {
     // for now simply log a message and return 200;
-    logger.info("Echo message received. Doing nothing at this point");
+    // logger.info("Echo message received. Doing nothing at this point");
     return;
   }
 
-  logger.info("Received event for user %d and page %d at %d. Event: ", 
-    senderID, recipientID, timeOfMessage, JSON.stringify(event));
+  logger.info("Received event for user %d and page %d at %d. Event: ", senderID, recipientID, timeOfMessage, JSON.stringify(event));
 
   const messageText = message.text;
   const messageAttachments = message.attachments;
@@ -598,8 +614,7 @@ WebhookPostHandler.prototype.sendReminderNotification = function() {
         return;
       }
       const now = moment();
-      const sdIso = new Date(trip.data.startDate).toISOString();
-      const tripEnd = moment(sdIso).add(trip.data.duration,'days');
+      const tripEnd = this.data.returnDate;
       if(now.diff(tripEnd,'days') >= 0) {
         logger.info(`Trip ${trip.data.name} started on ${trip.data.startDate} and has a duration of ${trip.data.duration} days. No longer sending reminder because the trip is over (difference is ${now.diff(tripEnd,'days')} days).`);
         return;
@@ -772,7 +787,7 @@ function determineCities() {
     logger.warn(`determineCities: countries not defined in trip ${trip.rawTripName}. Doing nothing`);
     return false;
   }
-  logger.info(`Asking user to select from the following cities: ${JSON.stringify(country)} for country ${trip.rawTripName}.`);
+  // logger.info(`Asking user to select from the following cities: ${JSON.stringify(country)} for country ${trip.rawTripName}.`);
   sendTextMessage(this.session.fbid,`Which cities of ${country.name} are you traveling to?`);
   const messageData = {
     recipient: {
@@ -965,9 +980,7 @@ function callSendAPI(messageData) {
     if (!error && response.statusCode == 200) {
       var recipientId = body.recipient_id;
       var messageId = body.message_id;
-
-      logger.info("Successfully sent generic message with id %s to recipient %s", 
-        messageId, recipientId);
+      // logger.info("Successfully sent generic message with id %s to recipient %s", messageId, recipientId);
     } else {
       // TODO: If there was an error in sending an intercept message to a human, then send a push notification to the original sender that we are having some technical difficulty and will respond to them shortly.
       logger.error(`Unable to send message to recipient ${recipientId}. status code is ${response.statusCode}. Message from FB is <${response.body.error.message}>; Error type: ${response.body.error.type}`);

@@ -6,15 +6,17 @@ const _ = require('lodash');
 const moment = require('moment');
 const logger = require('./my-logger');
 const sleep = require('sleep');
-const FlightDataExtracter = require('./skyscanner-flight-data.js');
+const FlightDataExtractor = require('./skyscanner-flight-data.js');
 
 const apiKey = "prtl6749387986743898559646983194";
 
 function FlightInfoProvider(origCity, destCity, startDate, returnDate) {
   this.origCity = origCity;
   this.destCity = destCity;
-  this.startDate = moment(new Date(startDate).toISOString()).format("YYYY-MM-DD");
-  this.returnDate = moment(new Date(returnDate).toISOString()).format("YYYY-MM-DD");
+  // this.startDate = moment(new Date(startDate).toISOString()).format("YYYY-MM-DD");
+  // this.returnDate = moment(new Date(returnDate).toISOString()).format("YYYY-MM-DD");
+  this.startDate = startDate;
+  this.returnDate = returnDate;
 }
 
 FlightInfoProvider.prototype.getFlightDetails = function(callback) {
@@ -22,28 +24,46 @@ FlightInfoProvider.prototype.getFlightDetails = function(callback) {
   (new IataCodeGetter(this.origCity)).getCode(function(code) { self.origCode = code;});
   (new IataCodeGetter(this.destCity)).getCode(function(code) {
     self.destCode = code;
+    // Check if the flights file was created only 30 minutes ago and if so, short circuit.
+    const file = _getFileName.call(self);
+    if(fs.existsSync(file)) {
+      logger.info(`getFlightDetails: file ${file} exists. Simply calling callback.`);
+      return callback();
+    }
     _postFlightDetails.call(self, callback);
   });
 }
 
-FlightInfoProvider.prototype.extractDataFromFile = function(callback) {
-  const self = this;
-  (new IataCodeGetter(this.origCity)).getCode(function(code) { 
-    self.origCode = code;
-    (new IataCodeGetter(self.destCity)).getCode(function(code) {
-      self.destCode = code;
-      const file = _getFileName.call(self);
-      try {
-        console.log(`extractDataFromFile: Reading from file ${file}`);
-        const json = JSON.parse(fs.readFileSync(file, 'utf8'));
-        const data = new FlightDataExtracter(json);
-      }
-      catch(e) {
-        logger.warn(`extractDataFromFile: Error reading file ${file}: ${e.stack}`);
-      }
-      return callback("");
-    });
-  });
+FlightInfoProvider.prototype.getStoredFlightDetails = function() {
+  if(_.isUndefined(this.origCode)) {
+    this.origCode = new IataCodeGetter(this.origCity).getCodeSync();
+  }
+  if(_.isUndefined(this.destCode)) {
+    this.destCode = new IataCodeGetter(this.destCity).getCodeSync();
+  }
+  const file = _getFileName.call(this);
+  let json;
+  try {
+    console.log(`getStoredFlightDetails: Reading from file ${file}`);
+    json = JSON.parse(fs.readFileSync(file, 'utf8'));
+  }
+  catch(e) {
+    logger.warn(`getStoredFlightDetails: Error reading file ${file}: ${e.stack}`);
+    return {
+      noflight: 'No information for this segment'
+    };
+  }
+  const itin = new FlightDataExtractor(json).getItinerary();
+  if(_.isUndefined(itin)) {
+    logger.warn(`getStoredFlightDetails: did not get itinerary from FlightDataExtractor`);
+    return {
+      noflight: 'No information for this segment'
+    };
+  }
+  const fromTo = `${this.origCity} To ${this.destCity}`;
+  const data = {};
+  data[fromTo] = itin;
+  return data;
 }
 
 function _postFlightDetails(callback) {
@@ -98,6 +118,7 @@ function _getFlightDetails(location, callback) {
       return callback();
     }
     if(res.statusCode == "200") {
+      // TODO: Handle the case where this.json.Status = UpdatesPending (we need to retry until this value is UpdatesCompleted
       console.log(`_getFlightDetails: res is ${res.statusCode}, content length: ${res.headers["content-length"]} bytes`);
       try {
         const file = _getFileName.call(self);

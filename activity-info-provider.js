@@ -47,7 +47,7 @@ ActivityInfoProvider.prototype.getActivities = function(responseCallback) {
   Object.keys(this.activities).forEach(key => {
     const srFile = srFileName.call(this, key);
     if(fs.existsSync(srFile)) {
-      logger.info(`getActivities: file ${srFile} exists. Extracting details`);
+      // logger.info(`getActivities: file ${srFile} exists. Extracting details`);
       // nothing to do if the file exists;
       return extractActivityDetails.call(this, key);
     }

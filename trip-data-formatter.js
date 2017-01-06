@@ -31,11 +31,11 @@ TripDataFormatter.prototype.formatComments = function() {
   const comments = this.trip.parseComments();
   const html = fs.readFileSync("html-templates/comments.html", 'utf8');
   return html.replace("${tripName}",this.trip.rawTripName)
-             .replace("${activityList}",listAsHtml(comments.activities))
-             .replace("${stayList}",listAsHtml(comments.stay))
-             .replace("${flightList}",listAsHtml(comments.flight))
-             .replace("${rentalCarList}",listAsHtml(comments.car))
-             .replace("${otherComments}",listAsHtml(comments.others));
+    .replace("${activityList}",listAsHtml(comments.activities))
+    .replace("${stayList}",listAsHtml(comments.stay))
+    .replace("${flightList}",listAsHtml(comments.flight))
+    .replace("${rentalCarList}",listAsHtml(comments.car))
+    .replace("${otherComments}",listAsHtml(comments.others));
 }
 
 TripDataFormatter.prototype.formatTripDetails = function() {
@@ -44,19 +44,19 @@ TripDataFormatter.prototype.formatTripDetails = function() {
   const packList = this.trip.getPackList();
   const html = fs.readFileSync("html-templates/trip-page.html", 'utf8');
   return html.replace("${tripName}",this.trip.rawTripName)
-             .replace("${header1}","Activities Details")
-             .replace("${list1}",listAsHtml(comments.activities))
-             .replace("${header2}","Stay Details")
-             .replace("${list2}",listAsHtml(comments.stay))
-             .replace("${header3}","Flight Details")
-             .replace("${list3}",listAsHtml(comments.flight))
-             .replace("${header4}","Rental car Details")
-             .replace("${list4}",listAsHtml(comments.car))
-             .replace("${header5}","Other comments")
-             .replace("${list5}",listAsHtml(comments.others))
-             .replace("${todoList}",listAsHtml(todoList))
-             .replace("${toPackList}",listAsHtml(packList.toPack))
-             .replace("${donePackList}",listAsHtml(packList.done));
+    .replace("${header1}","Activities Details")
+    .replace("${list1}",listAsHtml(comments.activities))
+    .replace("${header2}","Stay Details")
+    .replace("${list2}",listAsHtml(comments.stay))
+    .replace("${header3}","Flight Details")
+    .replace("${list3}",listAsHtml(comments.flight))
+    .replace("${header4}","Rental car Details")
+    .replace("${list4}",listAsHtml(comments.car))
+    .replace("${header5}","Other comments")
+    .replace("${list5}",listAsHtml(comments.others))
+    .replace("${todoList}",listAsHtml(todoList))
+    .replace("${toPackList}",listAsHtml(packList.toPack))
+    .replace("${donePackList}",listAsHtml(packList.done));
 }
 
 TripDataFormatter.prototype.formatPackList = function(headers) {
@@ -73,8 +73,8 @@ TripDataFormatter.prototype.formatPackList = function(headers) {
     logger.info("request call from browser. sending back html");
     const html = fs.readFileSync("html-templates/pack-list.html", 'utf8');
     return html.replace("${toPackList}",listAsHtml(packList.toPack))
-               .replace("${tripName}", this.trip.rawTripName)
-               .replace("${donePackList}",listAsHtml(packList.done));
+      .replace("${tripName}", this.trip.rawTripName)
+      .replace("${donePackList}",listAsHtml(packList.done));
   }
   logger.info("request call from something other than browser. sending back json");
   return packList.toPack;
@@ -91,13 +91,13 @@ TripDataFormatter.prototype.formatWeatherDetails = function(weatherDetails, addl
   let wText = `<div data-role="collapsibleset">\n`;
 
   keys.forEach(city => {
-    wText += `<div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d">\n`;
-    wText += `<h1>${city}</h1>\n`;
-    weatherDetails[city].forEach(note => {
-      wText += `<p>${toLink(note)}</p>\n`;
-    });
-    wText += `</div>\n`;
-  });
+      wText += `<div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d">\n`;
+      wText += `<h1>${city}</h1>\n`;
+      weatherDetails[city].forEach(note => {
+          wText += `<p>${toLink(note)}</p>\n`;
+          });
+      wText += `</div>\n`;
+      });
 
   wText += `</div>\n`;
   return html.replace("${citiesWeatherDetails}", wText).replace("${additionalWeatherDetails}", toLink(addlWeatherDetails));
@@ -120,13 +120,83 @@ TripDataFormatter.prototype.formatActivityDetails = function(activityDetails) {
           aText += `<p>${toLink(note)}</p>\n`;
           });
       aText += `</div>\n`;
-  });
+      });
   aText += `</div>\n`;
   return html.replace("${activityDetails}", aText);
 }
 
-TripDataFormatter.prototype.formatFlightDetails = function() {
-  return fs.readFileSync("html-templates/flight-details.html", 'utf8');
+/*
+   {
+   "Seattle to Lisbon roundtrip": [
+   {
+   },
+   {
+   "price":
+   "bookLink":
+   "agent":
+   "onward": {
+   "travelDate":
+   "duration":
+   "stops":
+   "segments":
+   },
+   "return": {
+   "travelDate":
+   "duration":
+   "stops":
+   "segments":
+   }
+   }
+   }
+
+   Itinerary 1:
+Price: $780/-; Agent: ; Link: ;
+Onward:
+Stops: ; 
+Segment Details:
+Start date: ; Return date: ; Duration: ; Origin: ; Destination: ; Flight: ; Flight Name: ;
+Return:
+Segment Details:
+Start date: ; Return date: ; Duration: ; Origin: ; Destination: ; Flight: ; Flight Name: ;
+*/
+TripDataFormatter.prototype.formatFlightDetails = function(flightDetails) {
+  const html = fs.readFileSync("html-templates/flight-details.html", 'utf8');
+
+  const keys = Object.keys(flightDetails);
+  if(keys.indexOf("noflight") > -1) {
+    return html.replace("${flightDetails}", flightDetails.noflight);
+  }
+  let fText = `<div data-role="collapsibleset">\n`;
+  keys.forEach(fromTo => {
+    fText += `<div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d">\n`;
+    fText += `<h1>${fromTo} roundtrip</h1>\n`;
+    const itinList = flightDetails[fromTo];
+    for(let i = 0; i < itinList.length; i++) {
+      fText += `<div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d">\n`;
+        fText += `<h1>Itinerary ${i+1}</h1>\n`;
+        const itin = itinList[i];
+        const options = itin.options[0];
+        fText += `<p>Price per person: $${options.price}/-; Agent: ${options.agent}; <a href=${options.uri}>Book it</a></p>\n`;
+        fText += _itinDetailsHtml("Onward", itin.outbound);
+        fText += _itinDetailsHtml("Return", itin.inbound);
+      fText += "</div>\n"; // itinerary collapsible
+    }
+    fText += "</div>\n"; // fromTo collapsible
+  });
+  fText += `</div>\n`; // close for collapsible set
+  return html.replace("${flightDetails}", fText);
+}
+
+function _itinDetailsHtml(title, details) {
+  let html = `<h2>${title}</h2>\n`;
+  html += `<p>Stops: ${details.stops}; Leave at: ${details.departure}; Arrive at: ${details.arrival}; Duration: ${details.duration}; </p>\n`;
+  html += `<div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d">\n`;
+  html += "<h2>Segment Details</h2>\n";
+  details.segmentDetails.forEach(segment => {
+    html += `<p>Leave at: ${segment.departure}; Arrive: ${segment.arrival}; Duration: ${segment.duration}; Origin: ${segment.origin}; Destination: ${segment.destination}; Flight: ${segment.airlines}; FlightNum: ${segment.flightNum}</p>\n`;
+  });
+  html += "</div>\n"; // segment collapsible
+  return html;
 }
 
 TripDataFormatter.prototype.formatHandleTravelersPage = function() {
@@ -142,8 +212,8 @@ TripDataFormatter.prototype.formatCities = function() {
   logger.info(`Found ${cities.length} cities in ${this.trip.data.name}`);
   let selection = "";
   cities.forEach(city => {
-    selection += `<option value="${city}">${city}</option>`;
-  });
+      selection += `<option value="${city}">${city}</option>`;
+      });
   return fs.readFileSync("html-templates/cities.html", 'utf8')
     .replace("${cityList}", selection)
     .replace("${country}", this.trip.data.destination);
@@ -156,10 +226,10 @@ TripDataFormatter.prototype.formatCityChoicePage = function() {
 function toLink(text) {
   const words = text.split(' ');
   words.forEach((word, i) => {
-    if(/^https?:\/\//.test(word)) {
+      if(/^https?:\/\//.test(word)) {
       words[i] = `<a href=${word}>${word}</a>`;
-    }
-  });
+      }
+      });
   return words.join(' ');
 }
 
@@ -169,15 +239,15 @@ function listAsHtml(list) {
     return "";
   }
   list.forEach(function(item) {
-    /*
-    const itemWords = item.split(' ');
-    itemWords.forEach(function(word,i) {
-      itemWords[i] = toLink(word);
-    });
-    item = itemWords.join(' ');
-    */
-    html += "<li>" + toLink(item) + "</li>";
-  });
+      /*
+         const itemWords = item.split(' ');
+         itemWords.forEach(function(word,i) {
+         itemWords[i] = toLink(word);
+         });
+         item = itemWords.join(' ');
+         */
+      html += "<li>" + toLink(item) + "</li>";
+      });
   html += "</ol>";
   return html;
 }
