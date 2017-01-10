@@ -2,7 +2,7 @@
 const FlightInfoProvider = require('./flight-info-provider');
 
 function testGetFlightDetails() {
-  const fip = new FlightInfoProvider("seattle", "lisbon", "2/3/17", "2/17/17");
+  const fip = new FlightInfoProvider("seattle", "lisbon", "2017-02-03", "2017-02-17");
   fip.getFlightDetails(function() {
     console.log("test-flight-info-provider: Doing nothing");
   });
@@ -10,7 +10,7 @@ function testGetFlightDetails() {
 
 const fs = require('fs');
 function testExtractDataFromFile() {
-  const fip = new FlightInfoProvider("seattle", "lisbon", "2/3/17", "2/17/17");
+  const fip = new FlightInfoProvider("seattle", "lisbon",  "2017-02-03", "2017-02-17");
   const content = fip.getStoredFlightDetails();
   console.log(`test-flight-info-provider: content: <${JSON.stringify(content, null, 2)}>`);
   /*
@@ -20,5 +20,5 @@ function testExtractDataFromFile() {
   */
 }
 
-testExtractDataFromFile();
-// testGetFlightDetails();
+// testExtractDataFromFile();
+testGetFlightDetails();

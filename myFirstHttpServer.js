@@ -79,7 +79,8 @@ const jsonParser = bodyParser.json();
 app.use(bodyParser.json({ verify: verifyRequestSignature }));
 
 app.get('/', function(req, res) {
-  return res.send("<meta name='B-verify' content='ee02308f7491f4aef923b2d1184072ccd1f6367a' /><body>Hello secure world</body>");
+  // return res.send("<meta name='B-verify' content='ee02308f7491f4aef923b2d1184072ccd1f6367a' /><body>Hello secure world</body>");
+  return res.send(fs.readFileSync("html-templates/home.html", 'utf8'));
 });
 
 // var json2html = require('node-json2html');

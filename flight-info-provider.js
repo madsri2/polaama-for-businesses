@@ -13,22 +13,29 @@ const apiKey = "prtl6749387986743898559646983194";
 function FlightInfoProvider(origCity, destCity, startDate, returnDate) {
   this.origCity = origCity;
   this.destCity = destCity;
-  // this.startDate = moment(new Date(startDate).toISOString()).format("YYYY-MM-DD");
-  // this.returnDate = moment(new Date(returnDate).toISOString()).format("YYYY-MM-DD");
   this.startDate = startDate;
   this.returnDate = returnDate;
 }
 
+// http://partners.api.skyscanner.net/apiservices/pricing/uk1/v1.0/47f84618953245ab86105b0062c5d9ea_ecilpojl_F86CEB22248C4E68C7C54A17455C84BE
 FlightInfoProvider.prototype.getFlightDetails = function(callback) {
   const self = this;
   (new IataCodeGetter(this.origCity)).getCode(function(code) { self.origCode = code;});
   (new IataCodeGetter(this.destCity)).getCode(function(code) {
     self.destCode = code;
-    // Check if the flights file was created only 30 minutes ago and if so, short circuit.
+    // TODO: Check if the flights file was created only 30 minutes ago and if so, short circuit.
     const file = _getFileName.call(self);
     if(fs.existsSync(file)) {
-      logger.info(`getFlightDetails: file ${file} exists. Simply calling callback.`);
-      return callback();
+      const maxAgeInMinutes = 5;
+      const ctime = (new Date(fs.statSync(file).ctime)).getTime();
+      const diffInMinutes = (Date.now()-ctime)/(1000*60);
+      if(diffInMinutes < maxAgeInMinutes) { // file's age is less than 30 minutes
+        logger.info(`getFlightDetails: file ${file} was created ${diffInMinutes} minutes ago. Simply calling callback.`);
+        return callback();
+      }
+      else {
+        logger.info(`getFlightDetails: file ${file} exists but it is older than ${maxAgeInMinutes} minutes (${diffInMinutes} minutes). Calling skyscanner API`);
+      }
     }
     _postFlightDetails.call(self, callback);
   });
@@ -67,7 +74,7 @@ FlightInfoProvider.prototype.getStoredFlightDetails = function() {
 }
 
 function _postFlightDetails(callback) {
-  console.log(`Code for ${this.origCity} is ${this.origCode}; code for ${this.destCity} is ${this.destCode}`);
+  logger.info(`_postFlightDetails: Calling skyscanner url. Code for ${this.origCity} is ${this.origCode}; code for ${this.destCity} is ${this.destCode}`);
 
   const self = this;
   const uri = "http://partners.api.skyscanner.net/apiservices/pricing/v1.0";
@@ -95,16 +102,27 @@ function _postFlightDetails(callback) {
     if(res.statusCode == "201") {
       // console.log(`_postFlightDetails: Received response ${JSON.stringify(res)}. calling location ${res.headers.location}`);
       sleep.sleep(1);
+      self.locationUrlRetry = 0;
+      const location = res.headers.location;
+      logger.info(`_getFlightDetails: Calling location ${location}`);
+      try {
+        const file = _getFileName.call(self);
+        fs.writeFileSync(`${file}.lastKnownLocation`,location);
+      }
+      catch(e) {
+        logger.error(`_postFlightDetails. Error writing location url ${location} to file: ${e.stack}`);
+      }
       return _getFlightDetails.call(self, res.headers.location, callback);
     }
+    // TODO: Handle status code 429 by calling the location written in lastKnownLocation file.
     // TODO: Retry a few times and then fall back to browse overview.
-    console.log(`_postFlightDetails: res is ${JSON.stringify(res)}`);
+    logger.error(`_postFlightDetails: skyscanner api returned a non-20X status code: res is ${JSON.stringify(res)}`);
     return callback();
   });
 }
 
 function _getFlightDetails(location, callback) {
-  console.log(`_getFlightDetails: calling ${location}`);
+  // console.log(`_getFlightDetails: calling ${location}`);
   const uri = `${location}?apiKey=${apiKey}`;
   const self = this;
   request.get({
@@ -117,8 +135,19 @@ function _getFlightDetails(location, callback) {
       logger.error(`_getFlightDetaills: Error talking to skyscanner: ${err}`);
       return callback();
     }
+    if(res.statusCode == "304" || ((res.statusCode == "200") && (JSON.parse(body).Status == "UpdatesPending"))) {
+      if(self.locationUrlRetry < 3) {
+        sleep.sleep(1);
+        self.locationUrlRetry++;
+        logger.info(`_getFlightDetails: Retrying location url: ${location}`);
+        return _getFlightDetails.call(self, location, callback);
+      }
+      else {
+        logger.error("_getFlightDetails: Retried the skyscanner location url 3 times, but status is stuck at UpdatesPending. Giving up");
+        return callback();
+      }
+    }
     if(res.statusCode == "200") {
-      // TODO: Handle the case where this.json.Status = UpdatesPending (we need to retry until this value is UpdatesCompleted
       console.log(`_getFlightDetails: res is ${res.statusCode}, content length: ${res.headers["content-length"]} bytes`);
       try {
         const file = _getFileName.call(self);
@@ -130,7 +159,7 @@ function _getFlightDetails(location, callback) {
       }
     }
     else {
-      console.log(`_getFlightDetails: res is ${JSON.stringify(res)}`);
+      console.log(`_getFlightDetails: location url returned non-20X status code: res is ${JSON.stringify(res)}`);
     }
     return callback();
   });

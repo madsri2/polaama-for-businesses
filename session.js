@@ -93,10 +93,7 @@ Session.prototype.persistSession = function() {
     rawTripNameInContext: this.rawTripNameInContext,
     trips: {}
   };
-  if(_.isUndefined(this.hometown)) {
-    data.hometown = "unknown";
-  }
-  else {
+  if(!_.isUndefined(this.hometown)) {
     data.hometown = Encoder.encode(this.hometown);
   }
   Object.keys(this.trips).forEach(name => {
@@ -115,6 +112,10 @@ Session.prototype.persistSession = function() {
   }
 }
 
+Session.prototype.persistHometown = function(town) {
+  this.hometown = town;
+  this.persistSession();
+}
 
 // TODO: Implement for the feature that allows user Madhu to use Polaama like another traveler (not a human).
 Session.prototype.nooneAwaitingResponse = function() {

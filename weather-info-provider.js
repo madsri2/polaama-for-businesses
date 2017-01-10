@@ -86,8 +86,8 @@ function extractWeatherDetails() {
   try {
     const weather = JSON.parse(fs.readFileSync(file));
     const myWeather = {
-      max_temp: weather.trip.temp_high.max.F,
-      min_temp: weather.trip.temp_high.min.F,
+      max_temp: weather.trip.temp_high.avg.F,
+      min_temp: weather.trip.temp_low.avg.F,
       cloud_cover: weather.trip.cloud_cover.cond,
       tempoversixty: weather.trip.chance_of.tempoversixty.percentage,
       chanceofrain: weather.trip.chance_of.chanceofrainday.percentage

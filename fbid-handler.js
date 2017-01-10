@@ -21,12 +21,14 @@ function FbidHandler() {
     "1120615267993271": "Madhuvanesh Parthasarathy",
     "1041923339269341": "Aparna Rangarajan",
     "1326674134041820": "Pol Aama",
+    "1280537748676473": "Adhu Artha",
   };
   this.fbidMap = {
     "aaaa": "2",
     "aeXf": "1120615267993271",
     "eA12": "1041923339269341",
-    "bRt2": "1326674134041820"
+    "bRt2": "1326674134041820",
+    "xeMt": "1280537748676473",
   };
   this.friends = {};
   // Now add friends for each fbid;
@@ -45,7 +47,8 @@ function FbidHandler() {
         break;
       case "Madhuvanesh Parthasarathy":
         this.friends[id].push(
-          this.fbid("Pol Aama")
+          this.fbid("Pol Aama"),
+          this.fbid("Adhu Artha")
           // this.fbid("Aparna Rangarajan")
         );
         break;

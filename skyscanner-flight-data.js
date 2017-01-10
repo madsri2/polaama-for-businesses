@@ -6,7 +6,7 @@ function FlightDataExtractor(json) {
   this.json = json;
   console.log(`There are ${this.json.Itineraries.length} itineraries. Json keys are ${Object.keys(json)}`); // Itin keys are ${Object.keys(json.Itineraries[0]};`);
   this.itin = [];
-  for(let i = 0; i < 1; i++) {
+  for(let i = 0; i < 5; i++) {
     const itinDetails = this.json.Itineraries[i];
     // console.log(Object.keys(itin.PricingOptions));
     this.itin[i] = {
