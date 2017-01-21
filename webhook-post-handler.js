@@ -126,7 +126,6 @@ function getTripInContext(payload) {
   const tripName = payload.substring("trip_in_context ".length);
   logger.info(`Setting the trip name for this session's context to ${tripName}. User assumes this is an existing trip.`);
   this.session.addTrip(tripName);
-  // sendTextMessage(this.session.fbid, `Choose from the following list of features so I can help plan your trip to ${tripName}.`);
   sendHelpMessage.call(this);
   return;
 }
@@ -230,6 +229,9 @@ function receivedPostback(event) {
 
   logger.info("Received postback for user %d, page %d, session %d at timestamp: %d. Payload: %s", senderID, recipientID, this.session.fbid, timeOfPostback, payload);
 
+  // A postback is indicative of the beginning of a new state in the state machine. So, clear the session's "awaiting" states to indicate the beginning of a new state.
+  this.session.clearAllAwaitingStates();
+
 	// new trip cta
   if(payload === "new_trip" || payload === "pmenu_new_trip") {
     planNewTrip.call(this);
@@ -256,11 +258,6 @@ function receivedPostback(event) {
 	
 	if(payload === "pmenu_add_travelers") {
 		determineTravelCompanions.call(this);
-		return;
-	}
-  // Help related actions
-	if(payload === "pmenu_help") {
-		sendHelpMessage.call(this);
 		return;
 	}
 
@@ -503,6 +500,7 @@ function determineResponseType(event) {
 
     // 2) Get hometown if it's undefined.
     if(_.isUndefined(this.session.hometown)) {
+      // TODO: If the hometown is defined, don't simply assume that to be the point of origin. Confirm with the user.
       if(this.session.awaitingHometownInfo) {
         // TODO: Validate hometown
         this.session.persistHometown(messageText); 
@@ -510,7 +508,6 @@ function determineResponseType(event) {
       }
       else {
         sendTextMessage(this.session.fbid, "What is your home city? We will use this as your trip's origin");
-        sendTextMessage(this.session.fbid, "You will only have to enter this information once");
         this.session.awaitingHometownInfo = true;
         return;
       }
@@ -908,7 +905,7 @@ function determineCities() {
 }
 
 function determineTravelCompanions() {
-  sendTextMessage(this.session.fbid, `Are you traveling by yourselves?`);
+  sendTextMessage(this.session.fbid, `Choose your travel companions`);
   const messageData = {
     recipient: {
       id: this.session.fbid

@@ -2,7 +2,7 @@
 const FlightInfoProvider = require('./flight-info-provider');
 
 function testGetFlightDetails() {
-  const fip = new FlightInfoProvider("seattle", "lisbon", "2017-02-03", "2017-02-17");
+  const fip = new FlightInfoProvider("seattle", "lisbon", "2017-02-04", "2017-02-12");
   fip.getFlightDetails(function() {
     console.log("test-flight-info-provider: Doing nothing");
   });

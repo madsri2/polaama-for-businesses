@@ -101,7 +101,7 @@ function _postFlightDetails(callback) {
     }
     if(res.statusCode == "201") {
       // console.log(`_postFlightDetails: Received response ${JSON.stringify(res)}. calling location ${res.headers.location}`);
-      sleep.sleep(1);
+      sleep.sleep(2);
       self.locationUrlRetry = 0;
       const location = res.headers.location;
       logger.info(`_getFlightDetails: Calling location ${location}`);
@@ -137,8 +137,8 @@ function _getFlightDetails(location, callback) {
     }
     if(res.statusCode == "304" || ((res.statusCode == "200") && (JSON.parse(body).Status == "UpdatesPending"))) {
       if(self.locationUrlRetry < 3) {
-        sleep.sleep(1);
         self.locationUrlRetry++;
+        sleep.sleep(2*self.locationUrlRetry);
         logger.info(`_getFlightDetails: Retrying location url: ${location}`);
         return _getFlightDetails.call(self, location, callback);
       }
@@ -159,6 +159,7 @@ function _getFlightDetails(location, callback) {
       }
     }
     else {
+      // TODO: Handle status code 429 by backing off and retrying location url in a bit.
       console.log(`_getFlightDetails: location url returned non-20X status code: res is ${JSON.stringify(res)}`);
     }
     return callback();

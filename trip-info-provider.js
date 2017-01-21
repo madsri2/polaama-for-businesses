@@ -130,6 +130,7 @@ TripInfoProvider.prototype.getFlightDetails = function(callback) {
 
 TripInfoProvider.prototype.getStoredFlightDetails = function() {
   const tripData = this.trip.data;
+  // console.log(`dest: ${tripData.portOfEntry}; tripData: ${JSON.stringify(tripData)}`);
   const fip = new FlightInfoProvider(this.hometown, tripData.portOfEntry, tripData.startDate, tripData.returnDate);
   return fip.getStoredFlightDetails();
 }

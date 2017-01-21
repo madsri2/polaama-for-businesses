@@ -220,4 +220,13 @@ Session.prototype.getTrip = function(tripName) {
   return trip.tripData;
 }
 
+Session.prototype.clearAllAwaitingStates = function() {
+  this.awaitingComment = false;
+  this.awaitingTodoItem = false;
+  this.awaitingPacklistItem = false;
+  this.awaitingNewTripDetails = false;
+  this.awaitingHometownInfo = false;
+  this.awaitingCitiesForNewTrip = false;
+}
+
 module.exports = Session;

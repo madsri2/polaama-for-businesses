@@ -36,11 +36,6 @@ function set_persistent_menu {
     "call_to_actions":[
       {
         "type":"postback",
-        "title":"Help",
-        "payload":"pmenu_help"
-      },
-      {
-        "type":"postback",
         "title":"Create New Trip", 
         "payload":"pmenu_new_trip"
       },

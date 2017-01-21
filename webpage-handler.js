@@ -82,6 +82,7 @@ WebpageHandler.prototype.displayFlightDetails = function(res) {
    */ 
 WebpageHandler.prototype.handleWebpage = function(res, callback, args) {
   if(_.isNull(this.session)) {
+    logger.error("handleWebPage: No session exists");
     return res.send("Invalid request.");
   }
   if(_.isNull(this.trip)) {
