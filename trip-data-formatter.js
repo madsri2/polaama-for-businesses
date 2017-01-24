@@ -216,6 +216,7 @@ TripDataFormatter.prototype.formatCities = function() {
       });
   return fs.readFileSync("html-templates/cities.html", 'utf8')
     .replace("${cityList}", selection)
+    .replace("${portOfEntryList}", selection)
     .replace("${country}", this.trip.data.destination);
 }
 

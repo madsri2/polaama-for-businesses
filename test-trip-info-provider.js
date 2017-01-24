@@ -53,6 +53,6 @@ function testGetActivity() {
   });
 }
 
-testGetActivity();
-// testGetWeatherInformation();
+// testGetActivity();
+testGetWeatherInformation();
 // testGetStoredWeatherDetails();

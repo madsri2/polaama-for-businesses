@@ -175,6 +175,19 @@ function testIataCode() {
   });
 }
 
-testIataCode();
+function testUndefinedVsFalse() {
+  const a = {
+    v1: "v1",
+    v2: true
+  };
+  if(!a.v2) {
+    console.log("a.v2 is undefined");
+  }
+}
+
+testUndefinedVsFalse();
+
+// testIataCode();
+
 
 // console.log(lonelyPlanetEncodeTest("Canary_Islands"));

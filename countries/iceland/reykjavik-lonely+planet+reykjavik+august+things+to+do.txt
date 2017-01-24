@@ -1,0 +1,679 @@
+{
+ "kind": "customsearch#search",
+ "url": {
+  "type": "application/json",
+  "template": "https://www.googleapis.com/customsearch/v1?q={searchTerms}&num={count?}&start={startIndex?}&lr={language?}&safe={safe?}&cx={cx?}&cref={cref?}&sort={sort?}&filter={filter?}&gl={gl?}&cr={cr?}&googlehost={googleHost?}&c2coff={disableCnTwTranslation?}&hq={hq?}&hl={hl?}&siteSearch={siteSearch?}&siteSearchFilter={siteSearchFilter?}&exactTerms={exactTerms?}&excludeTerms={excludeTerms?}&linkSite={linkSite?}&orTerms={orTerms?}&relatedSite={relatedSite?}&dateRestrict={dateRestrict?}&lowRange={lowRange?}&highRange={highRange?}&searchType={searchType}&fileType={fileType?}&rights={rights?}&imgSize={imgSize?}&imgType={imgType?}&imgColorType={imgColorType?}&imgDominantColor={imgDominantColor?}&alt=json"
+ },
+ "queries": {
+  "request": [
+   {
+    "title": "Google Custom Search - lonely planet reykjavik august things to do",
+    "totalResults": "1430",
+    "searchTerms": "lonely planet reykjavik august things to do",
+    "count": 10,
+    "startIndex": 1,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "reykjavik"
+   }
+  ],
+  "nextPage": [
+   {
+    "title": "Google Custom Search - lonely planet reykjavik august things to do",
+    "totalResults": "1430",
+    "searchTerms": "lonely planet reykjavik august things to do",
+    "count": 10,
+    "startIndex": 11,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "reykjavik"
+   }
+  ]
+ },
+ "context": {
+  "title": "Polaama"
+ },
+ "searchInformation": {
+  "searchTime": 0.320401,
+  "formattedSearchTime": "0.32",
+  "totalResults": "1430",
+  "formattedTotalResults": "1,430"
+ },
+ "items": [
+  {
+   "kind": "customsearch#result",
+   "title": "Top things to do in Reykjavík, Iceland - Lonely Planet",
+   "htmlTitle": "Top \u003cb\u003ethings to do in Reykjavík\u003c/b\u003e, Iceland - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/iceland/reykjavik/top-things-to-do/a/poi/359560",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Discover the best top things to do in Reykjavík including Skúmaskot, Bakarí \nSandholt, Sægreifinn.",
+   "htmlSnippet": "Discover the best top \u003cb\u003ethings to do in Reykjavík\u003c/b\u003e including Skúmaskot, Bakarí \u003cbr\u003e\nSandholt, Sægreifinn.",
+   "cacheId": "wCHYKMa2Mx4J",
+   "formattedUrl": "https://www.lonelyplanet.com/.../reykjavik/top-things-to-do/a/.../359560",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../\u003cb\u003ereykjavik\u003c/b\u003e/top-\u003cb\u003ethings-to-do\u003c/b\u003e/a/.../359560",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Europe"
+     }
+    ],
+    "country": [
+     {
+      "name": "Iceland"
+     }
+    ],
+    "city": [
+     {
+      "name": "Reykjavík"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Top things to do in Reykjavík, Iceland",
+      "og:title": "Top things to do in Reykjavík, Iceland",
+      "og:description": "Discover the best top things to do in Reykjavík including Skúmaskot, Bakarí Sandholt, Sægreifinn.",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Hotels in Reykjavík, Iceland - Lonely Planet",
+   "htmlTitle": "Hotels in \u003cb\u003eReykjavík\u003c/b\u003e, Iceland - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/iceland/reykjavik/hotels/a/lod/359560",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Discover the best hotels in Reykjavík including Icelandair Hotel Reykjavik Marina\n, Rey Apartments, Grettisborg Apartments.",
+   "htmlSnippet": "Discover the best hotels in \u003cb\u003eReykjavík\u003c/b\u003e including Icelandair Hotel \u003cb\u003eReykjavik\u003c/b\u003e Marina\u003cbr\u003e\n, Rey Apartments, Grettisborg Apartments.",
+   "formattedUrl": "https://www.lonelyplanet.com/iceland/reykjavik/hotels/a/lod/359560",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/iceland/\u003cb\u003ereykjavik\u003c/b\u003e/hotels/a/lod/359560",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Europe"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "102",
+      "height": "128",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQzDgFhzZ8CdR-t0HrMBwHYym9ML3vD96pQIi8Rfnauvt0BSOvZnlD-xQ"
+     }
+    ],
+    "country": [
+     {
+      "name": "Iceland"
+     }
+    ],
+    "city": [
+     {
+      "name": "Reykjavík"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Hotels in Reykjavík, Iceland",
+      "og:title": "Hotels in Reykjavík, Iceland",
+      "og:description": "Discover the best hotels in Reykjavík including Icelandair Hotel Reykjavik Marina, Rey Apartments, Grettisborg Apartments.",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://lpbookingcom.imgix.net/images/hotel/max500/845/8450572.jpg?w=128&h=160&fit=crop&q=50&auto=enhance&crop=entropy"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Two days in Reykjavik - Lonely Planet",
+   "htmlTitle": "Two days in \u003cb\u003eReykjavik\u003c/b\u003e - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/iceland/reykjavik/travel-tips-and-articles/75852",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Aug 27, 2010 ... Reykjavík may seem like a mystifying place, but this two-day itinerary will have \nyou feeling like a hearty local.",
+   "htmlSnippet": "Aug 27, 2010 \u003cb\u003e...\u003c/b\u003e \u003cb\u003eReykjavík\u003c/b\u003e may seem like a mystifying place, but this two-day itinerary \u003cb\u003ewill\u003c/b\u003e have \u003cbr\u003e\nyou feeling like a hearty local.",
+   "cacheId": "7rgGQEmzHQ0J",
+   "formattedUrl": "www.lonelyplanet.com/iceland/reykjavik/travel-tips-and.../75852",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/iceland/\u003cb\u003ereykjavik\u003c/b\u003e/travel-tips-and.../75852",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "108",
+      "height": "108",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAOSvQbZ4IMA0cnnx6sif0tJKAYsta2cLFoWfB6ObJom5DB4VG5ODv"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Two days in Reykjavik - Lonely Planet",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article",
+      "og:title": "Two days in Reykjavik - Lonely Planet",
+      "og:url": "http://www.lonelyplanet.com/iceland/reykjavik/travel-tips-and-articles/75852",
+      "og:description": "Read Two days in Reykjavik",
+      "article:tag": "Food and drink, Architecture and buildings, Heritage and history",
+      "article:published_time": "2010-08-27T04:30:15+00:00",
+      "article:author": "Lonely Planet"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://assets.staticlp.com/profiles/users/placeholders/large.png"
+     }
+    ],
+    "article": [
+     {
+      "headline": "Two days in Reykjavik",
+      "alternativeheadline": "Two days in Reykjavik",
+      "datepublished": "2010-08-27T04:30:15+00:00",
+      "articlebody": "Reykjavík may seem like a mystifying place, but this two-day itinerary will have you feeling like a hearty local. Day one: Early risers should visit the bustling working harbour to watch the..."
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "How to have a budget break in Iceland - Lonely Planet",
+   "htmlTitle": "How to have a budget break in Iceland - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/iceland/travel-tips-and-articles/how-to-have-a-budget-break-in-iceland",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "May 1, 2015 ... The most popular day trip from the capital, Reykjavík, is to the Golden Circle. ... \nglacier hiking and descending into a volcano, Iceland offers incredible activities. \n... Iceland's peak season is from June to August, and in May or ...",
+   "htmlSnippet": "May 1, 2015 \u003cb\u003e...\u003c/b\u003e The most popular day trip from the capital, \u003cb\u003eReykjavík\u003c/b\u003e, is to the Golden Circle. ... \u003cbr\u003e\nglacier hiking and descending into a volcano, Iceland offers incredible \u003cb\u003eactivities\u003c/b\u003e. \u003cbr\u003e\n... Iceland&#39;s peak season is from June to \u003cb\u003eAugust\u003c/b\u003e, and in May or&nbsp;...",
+   "cacheId": "Rn6HC-yRulEJ",
+   "formattedUrl": "www.lonelyplanet.com/.../how-to-have-a-budget-break-in-iceland",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../how-to-have-a-bud\u003cb\u003eget\u003c/b\u003e-break-in-iceland",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "108",
+      "height": "108",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSwHA2vGF-g4eVwF1vvgQZ3RvR3JabnuMtbI5cYcQbMyty6NSdj0zUHlA"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "How to have a budget break in Iceland - Lonely Planet",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article",
+      "og:title": "How to have a budget break in Iceland - Lonely Planet",
+      "og:url": "http://www.lonelyplanet.com/iceland/travel-tips-and-articles/how-to-have-a-budget-break-in-iceland",
+      "og:description": "Read How to have a budget break in Iceland",
+      "og:image": "https://lonelyplanetwp.imgix.net/2015/04/Kleifarvatn.jpg?sharp=10&vib=20&w=748",
+      "article:tag": "Adventure travel, Road trips, Wildlife and nature, Travel on a budget, Walking and trekking",
+      "article:published_time": "2015-05-01T07:55:11+00:00",
+      "article:author": "Heather Carswell"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://community-media.lonelyplanet.com/users/avatars/388c8cbe-f496-4d93-a0e9-c0e6a119a702/large/DSC02761.jpg?1425419820"
+     }
+    ],
+    "article": [
+     {
+      "headline": "How to have a budget break in Iceland",
+      "alternativeheadline": "How to have a budget break in Iceland",
+      "datepublished": "2015-05-01T07:55:11+00:00",
+      "articlebody": "‘Iceland is too expensive to visit if you’re on a budget’. Along with ‘don’t eat the street food – it will make you ill’, this is one of the great travel myths. And it could lead..."
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Iceland - Lonely Planet",
+   "htmlTitle": "Iceland - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/iceland",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Unpronounceable ales and local whisky: 10 of Reykjavík's best bars ... Spend \nfive days doing really cool things like hiking glaciers, snowshoeing ... This 2-day \nice cave tour will take you to all the main attractions of the south coast of Iceland.",
+   "htmlSnippet": "Unpronounceable ales and local whisky: 10 of \u003cb\u003eReykjavík&#39;s\u003c/b\u003e best bars ... Spend \u003cbr\u003e\nfive days doing really cool \u003cb\u003ethings\u003c/b\u003e like hiking glaciers, snowshoeing ... This 2-day \u003cbr\u003e\nice cave tour \u003cb\u003ewill\u003c/b\u003e take you to all the main attractions of the south coast of Iceland.",
+   "cacheId": "zdK24LOqNLQJ",
+   "formattedUrl": "https://www.lonelyplanet.com/iceland",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/iceland",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "275",
+      "height": "183",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcR2-d6yLXWtpZ0e_5Ef3MMAOY79mpsm2TwtiNWRHfteNm4K5qVh-xfjk-VO"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Iceland - Lonely Planet",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Iceland - Lonely Planet",
+      "twitter:image:src": "https://lonelyplanetimages.imgix.net/mastheads/55961822.jpg?sharp=10&vib=20&w=1200",
+      "og:site_name": "Lonely Planet",
+      "og:type": "website",
+      "og:title": "Iceland - Lonely Planet",
+      "og:url": "http://www.lonelyplanet.com/iceland",
+      "og:description": "Hitting headlines, topping bucket lists, wooing nature lovers and dazzling increasing numbers of visitors – there seems no end to the talents of...",
+      "og:image": "https://lonelyplanetimages.imgix.net/mastheads/55961822.jpg?sharp=10&vib=20&w=1200",
+      "sailthru.date": "2017-01-20 16:57:34 +0000",
+      "sailthru.tags": "Iceland, health-and-wellbeing"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://lonelyplanetimages.imgix.net/mastheads/55961822.jpg?sharp=10&vib=20&w=1200"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Puffin Express Cruise to Akurey from Reykjavik in Reykjavík, Iceland ...",
+   "htmlTitle": "Puffin Express Cruise to Akurey from \u003cb\u003eReykjavik\u003c/b\u003e in \u003cb\u003eReykjavík\u003c/b\u003e, Iceland ...",
+   "link": "https://www.lonelyplanet.com/iceland/reykjavik/activities/puffin-express-cruise-to-akurey-from-reykjavik/a/pa-act/v-5477PUFFIN/359560",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "See puffins up close on the puffin express tour from Reykjavik. ... Search Lonely \nPlanet and beyond ... Reykjavík activities ... Central Reykjavik hotels - Returns to \noriginal departure point ... Puffins nest between May and August on this island, \nwhich is covered with small hills and slopes and known for its colorful bird life.",
+   "htmlSnippet": "See puffins up close on the puffin express tour from \u003cb\u003eReykjavik\u003c/b\u003e. ... Search \u003cb\u003eLonely\u003c/b\u003e \u003cbr\u003e\n\u003cb\u003ePlanet\u003c/b\u003e and beyond ... \u003cb\u003eReykjavík activities\u003c/b\u003e ... Central \u003cb\u003eReykjavik\u003c/b\u003e hotels - Returns to \u003cbr\u003e\noriginal departure point ... Puffins nest between May and \u003cb\u003eAugust\u003c/b\u003e on this island, \u003cbr\u003e\nwhich is covered with small hills and slopes and known for its colorful bird life.",
+   "cacheId": "sqpX21vp27YJ",
+   "formattedUrl": "https://www.lonelyplanet.com/.../reykjavik/activities/...reykjavik/.../359560",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../\u003cb\u003ereykjavik\u003c/b\u003e/\u003cb\u003eactivities\u003c/b\u003e/...\u003cb\u003ereykjavik\u003c/b\u003e/.../359560",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Europe"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "276",
+      "height": "183",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcScVAWG8I3fRLwSU4k09Av5ikV2FealTtEDh6rRHKAyohPU_J4MjkLF-JHC"
+     }
+    ],
+    "country": [
+     {
+      "name": "Iceland"
+     }
+    ],
+    "city": [
+     {
+      "name": "Reykjavík"
+     }
+    ],
+    "aggregaterating": [
+     {
+      "ratingvalue": "4.5"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Puffin Express Cruise to Akurey from Reykjavik in Reykjavík, Iceland",
+      "og:title": "Puffin Express Cruise to Akurey from Reykjavik in Reykjavík, Iceland",
+      "og:description": "See puffins up close on the puffin express tour from Reykjavik. The specially designed boat takes you close to the rocky shore of Akurey island to see the lovel…",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "http://cache-graphicslib.viator.com/graphicslib/thumbs674x446/5477/SITours/puffin-express-cruise-to-akurey-from-reykjavik-in-reykjavik-110314.jpg"
+     }
+    ],
+    "thing": [
+     {
+      "name": "Activities"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     },
+     {
+      "position": "4"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Hotels in Reykjavík, Iceland - Lonely Planet",
+   "htmlTitle": "Hotels in \u003cb\u003eReykjavík\u003c/b\u003e, Iceland - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/iceland/reykjavik/hotels/icelandair-hotel-reykjavik-marina",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Discover the best hotels in Reykjavík. ... Flights · Adventure tours · Sightseeing \ntours · Airport transfers · Car rental · Shop · Sign In · Europe Iceland Reykjavík ...",
+   "htmlSnippet": "Discover the best hotels in \u003cb\u003eReykjavík\u003c/b\u003e. ... Flights &middot; Adventure tours &middot; Sightseeing \u003cbr\u003e\ntours &middot; Airport transfers &middot; Car rental &middot; Shop &middot; Sign In &middot; Europe Iceland \u003cb\u003eReykjavík\u003c/b\u003e&nbsp;...",
+   "cacheId": "GwDhkYbaOk8J",
+   "formattedUrl": "https://www.lonelyplanet.com/.../reykjavik/.../icelandair-hotel-reykjavik- marina",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../\u003cb\u003ereykjavik\u003c/b\u003e/.../icelandair-hotel-\u003cb\u003ereykjavik\u003c/b\u003e- marina",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Europe"
+     }
+    ],
+    "country": [
+     {
+      "name": "Iceland"
+     }
+    ],
+    "city": [
+     {
+      "name": "Reykjavík"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Hotels in Reykjavík, Iceland",
+      "og:title": "Hotels in Reykjavík, Iceland",
+      "og:description": "Discover the best hotels in Reykjavík.",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Helicopter Flight from Reykjavik: Volcano Eruption - Lonely Planet",
+   "htmlTitle": "Helicopter Flight from \u003cb\u003eReykjavik\u003c/b\u003e: Volcano Eruption - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/iceland/reykjavik/activities/scenic-flight/helicopter-flight-reykjavik-volcano-eruption",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Collections Top things to do in Reykjavík ... activities / Scenic flight ... In August \n2014, the Bárðarbunga volcano, located in a remote area of central Iceland, ...",
+   "htmlSnippet": "Collections Top \u003cb\u003ethings to do in Reykjavík\u003c/b\u003e ... \u003cb\u003eactivities\u003c/b\u003e / Scenic flight ... In \u003cb\u003eAugust\u003c/b\u003e \u003cbr\u003e\n2014, the Bárðarbunga volcano, located in a remote area of central Iceland,&nbsp;...",
+   "cacheId": "PFGGkNAaxeYJ",
+   "formattedUrl": "www.lonelyplanet.com/.../reykjavik/activities/.../helicopter-flight-reykjavik- volcano-eruption",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../\u003cb\u003ereykjavik\u003c/b\u003e/\u003cb\u003eactivities\u003c/b\u003e/.../helicopter-flight-\u003cb\u003ereykjavik\u003c/b\u003e- volcano-eruption",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "276",
+      "height": "183",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRcIf_vPUyxzUD5pmhj54Lb51U0KKWwDqLNaSGcf3Tss7l6p45YG7lrax9w"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Scandinavia",
+      "title": "Scandinavia"
+     },
+     {
+      "url": "Iceland",
+      "title": "Iceland"
+     },
+     {
+      "url": "Greater Reykjavík",
+      "title": "Greater Reykjavík"
+     },
+     {
+      "url": "Reykjavík",
+      "title": "Reykjavík"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Helicopter Flight from Reykjavik: Volcano Eruption - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Helicopter Flight from Reykjavik: Volcano Eruption - Lonely Planet",
+      "twitter:description": "Book your adventure - A volcano erupts in a fiery lava-splashed fury, as steam pours heavenward and rivers of lava descend down its sides — and you get the once-in-a-lifetime chance to see all the drama up close. Hop in a helicopter for this 3-hour tour to witness the furious strength of the Bárðarbunga volcanic system in its peak explosion. From the safety and comfort of the helicopter, witness the destructive force",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Helicopter Flight from Reykjavik: Volcano Eruption - Lonely Planet",
+      "og:description": "Book your adventure - A volcano erupts in a fiery lava-splashed fury, as steam pours heavenward and rivers of lava descend down its sides — and you get the once-in-a-lifetime chance to see all the drama up close. Hop in a helicopter for this 3-hour tour to witness the furious strength of the Bárðarbunga volcanic system in its peak explosion. From the safety and comfort of the helicopter, witness the destructive force",
+      "og:url": "http://www.lonelyplanet.com/iceland/reykjavik/activities/scenic-flight/helicopter-flight-reykjavik-volcano-eruption",
+      "og:type": "website",
+      "sailthru.date": "2016-09-23 23:46:53 +0000",
+      "sailthru.tags": "Europe, Iceland, Reykjavík, adventure-travel, cities, festivals-and-events, food-and-drink, history-heritage-and-tradition",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "qZSEjsnLj3OlFS+YRQH9RTk37Cbeughgs+4mfJBk8Fs="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "http://cache-graphicslib.viator.com/graphicslib/thumbs674x446/6269/SITours/helicopter-flight-from-reykjavik-volcano-eruption-in-reykjavik-178893.jpg"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Destinations",
+      "name": "Destinations"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "The best hotels and hostels in Reykjavik. - Lonely Planet",
+   "htmlTitle": "The best hotels and hostels in \u003cb\u003eReykjavik\u003c/b\u003e. - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/iceland/reykjavik/hotels/best-places-to-stay-in-reykjavik",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "In July and August accommodation fills up quickly; reservations are strongly \nadvised. Most places open ... Things to do · Activities · Restaurants ... This hotel is \nin the fashionable 101 District, close to Reykjavík Harbour. It offers a popular ...",
+   "htmlSnippet": "In July and \u003cb\u003eAugust\u003c/b\u003e accommodation fills up quickly; reservations are strongly \u003cbr\u003e\nadvised. Most places open ... \u003cb\u003eThings to do\u003c/b\u003e &middot; \u003cb\u003eActivities\u003c/b\u003e &middot; Restaurants ... This hotel is \u003cbr\u003e\nin the fashionable 101 District, close to \u003cb\u003eReykjavík\u003c/b\u003e Harbour. It offers a popular&nbsp;...",
+   "cacheId": "KoP087K6uv0J",
+   "formattedUrl": "www.lonelyplanet.com/.../reykjavik/.../best-places-to-stay-in-reykjavik",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../\u003cb\u003ereykjavik\u003c/b\u003e/.../best-places-to-stay-in-\u003cb\u003ereykjavik\u003c/b\u003e",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "200",
+      "height": "130",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGBxneoCppFGhJKBZwlzq92y4kjHuyEIFcPlsbVIMEgEPe61Hno0ZD5sAs"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Scandinavia",
+      "title": "Scandinavia"
+     },
+     {
+      "url": "Iceland",
+      "title": "Iceland"
+     },
+     {
+      "url": "Greater Reykjavík",
+      "title": "Greater Reykjavík"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "The best hotels and hostels in Reykjavik. - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "The best hotels and hostels in Reykjavik. - Lonely Planet",
+      "twitter:description": "Reykjavík has loads of accommodation choices, with midrange guest houses and business-class hotels predominating. In July and August accommodation fills up quickly; reservations are strongly advised. Most places open year-round apart from Christmas and offer 20% to 45% discounts from October to April.",
+      "og:site_name": "Lonely Planet",
+      "og:title": "The best hotels and hostels in Reykjavik. - Lonely Planet",
+      "og:description": "Reykjavík has loads of accommodation choices, with midrange guest houses and business-class hotels predominating. In July and August accommodation fills up quickly; reservations are strongly advised. Most places open year-round apart from Christmas and offer 20% to 45% discounts from October to April.",
+      "og:url": "http://www.lonelyplanet.com/iceland/reykjavik/hotels/best-places-to-stay-in-reykjavik",
+      "og:type": "website",
+      "sailthru.date": "2017-01-18 21:48:05 +0000",
+      "sailthru.tags": "Europe, Iceland, Reykjavík, adventure-travel, cities, festivals-and-events, food-and-drink, history-heritage-and-tradition",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=1024",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "Rl6w5PSqpH4vp0DgvlZ0nZFw23BZlvJwfVnC/dC/TvQ="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "http://ucd.hwstatic.com/propertyimages/8/8792/501_l.jpg"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Destinations",
+      "name": "Destinations"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Millionth tourist of the year set to arrive in Iceland in August",
+   "htmlTitle": "Millionth tourist of the year set to arrive in Iceland in \u003cb\u003eAugust\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/news/2016/08/03/millionth-tourist-iceland-august/",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Aug 3, 2016 ... Lonely Planet Travel News · Editor's Pick · Europe. Iceland's main airport will \nwelcome its millionth foreign visitor of the year in August ... referred to as \nReykjavík-Keflavík Airport – will reach the number in early August. ... Activities \ncoordinator needed at Ayers Rock Reserve in Australia · Australia Heatwave ...",
+   "htmlSnippet": "Aug 3, 2016 \u003cb\u003e...\u003c/b\u003e \u003cb\u003eLonely Planet\u003c/b\u003e Travel News &middot; Editor&#39;s Pick &middot; Europe. Iceland&#39;s main airport will \u003cbr\u003e\nwelcome its millionth foreign visitor of the year in \u003cb\u003eAugust\u003c/b\u003e ... referred to as \u003cbr\u003e\n\u003cb\u003eReykjavík\u003c/b\u003e-Keflavík Airport – will reach the number in early \u003cb\u003eAugust\u003c/b\u003e. ... \u003cb\u003eActivities\u003c/b\u003e \u003cbr\u003e\ncoordinator needed at Ayers Rock Reserve in Australia &middot; Australia Heatwave&nbsp;...",
+   "cacheId": "6p0LFnz-UpkJ",
+   "formattedUrl": "www.lonelyplanet.com/news/2016/.../millionth-tourist-iceland-august/",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/news/2016/.../millionth-tourist-iceland-\u003cb\u003eaugust\u003c/b\u003e/",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "275",
+      "height": "183",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQZGGUO9wNVBvG4IXJ8Kigmr7uOxMAFJO-iCtniCKdCEdAE1xbUTTDH5Ng"
+     }
+    ],
+    "metatags": [
+     {
+      "news_keywords": "airlines, iceland, travel, lifestyle, culture, world, environment, religion, food and beverage, celebrities",
+      "og:locale": "en_US",
+      "og:type": "article",
+      "og:title": "Millionth tourist of the year set to arrive in Iceland in August",
+      "og:description": "As Iceland’s tourist boom continues, the small island nation will welcome its millionth foreign visitor of the year to its main airport this month.",
+      "og:url": "http://www.lonelyplanet.com/news/2016/08/03/millionth-tourist-iceland-august/",
+      "og:site_name": "Lonely Planet Travel News",
+      "article:tag": "Airlines",
+      "article:section": "Other",
+      "article:published_time": "2016-08-03T16:00:07+00:00",
+      "article:modified_time": "2016-08-03T17:00:17+00:00",
+      "og:updated_time": "2016-08-03T17:00:17+00:00",
+      "og:image": "http://www.lonelyplanet.com/news/wp-content/uploads/2016/08/shutterstock_200202632.jpg",
+      "author": "Lonely Planet",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "u2Ig0wE06EJo8buhMfhHfDoqY9WzdrI6Ri6U7aEkmhk=",
+      "fb:pages": "1632004517052708"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "http://www.lonelyplanet.com/news/wp-content/uploads/2016/08/shutterstock_200202632.jpg"
+     }
+    ]
+   }
+  }
+ ]
+}

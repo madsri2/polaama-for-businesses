@@ -17,6 +17,7 @@ function WebhookPostHandler(session) {
   if(!_.isUndefined(session)) {
     logger.info(`WebhookPostHandler: A session with id ${session.sessionId} was passed. Using that in the post hook handler`);
     this.passedSession = session;
+    this.session = session;
   }
 }
 
@@ -217,6 +218,7 @@ function planNewTrip() {
   sendTextMessage(this.session.fbid, "Can you provide details about your trip (destination country, start date and duration in days) as a comma separated list?"); 
   sendTextMessage(this.session.fbid, "Example: India,11/1/2017,20");
 	this.session.awaitingNewTripDetails = true;
+  this.session.planningNewTrip = true;
 }
 
 function receivedPostback(event) {
@@ -477,7 +479,7 @@ New trip Workflow:
       Add trip to just this user's session.
       Discussions will be between user, polaama (and human in background).
 */
-
+// TODO: Use a State Machine pattern
 function determineResponseType(event) {
   const senderID = this.session.fbid;
   const messageText = event.message.text;
@@ -487,16 +489,18 @@ function determineResponseType(event) {
   if((_.isNull(this.session.tripNameInContext) 
 			|| _.isUndefined(this.session.tripNameInContext) 
 			|| this.session.tripNameInContext === "") 
-			&& !this.session.awaitingNewTripDetails) {
+			&& !this.session.planningNewTrip) {
     logger.info("determineResponseType: no trip name in context. Asking user!");
     sendTripButtons.call(this, true);
     return;
   }
 
   // New trip workflow
-  if(this.session.awaitingNewTripDetails) {
+  if(this.session.planningNewTrip) {
     // 1) Extract trip details like destination, start date and duration
-    extractNewTripDetails.call(this, messageText);
+    if(this.session.awaitingNewTripDetails) {
+      extractNewTripDetails.call(this, messageText);
+    }
 
     // 2) Get hometown if it's undefined.
     if(_.isUndefined(this.session.hometown)) {
@@ -520,17 +524,25 @@ function determineResponseType(event) {
     }
     const tripData = this.session.tripData();
     if(!determineCities.call(this)) {
-      if(_.isUndefined(this.session.awaitingCitiesForNewTrip)) {
-        sendTextMessage(this.session.fbid, `What cities in ${tripData.country.name} are you traveling to (comma separated list)?`);
+      if(!this.session.awaitingCitiesForNewTrip) {
+        sendTextMessage(this.session.fbid, `What cities in ${tripData.data.destination} are you traveling to (comma separated list)?`);
         sendTextMessage(this.session.fbid, `The first city in your list will be used as your port of entry`);
         this.session.awaitingCitiesForNewTrip = true;
+        return;
       }
       else {
-        logger.error(`determineResponseType: Session ${this.session.sessionId}: Cannot determine cities for trip ${tripData.data.destination} even after getting cities from customer. Possible BUG!`);
-        this.startPlanningTrip();
+        if(tripData.data.cities) {
+          logger.info(`determineResponseType: Start planning trip for customer`);
+          this.startPlanningTrip();
+        }
+        else {
+          logger.error(`determineResponseType: Session ${this.session.sessionId}: Cannot determine cities for trip ${tripData.data.destination} even after getting cities from customer. Possible BUG!`);
+          sendTextMessage(this.session.fbid,"Even bots need to eat! Be back in a bit..");
+        }
       }
     }
-    // End of new trip workflow. The workflow will complete when user selects cities (handled by determineCities function) and the webpage-handler calls startPlanningTrip.
+    // End of new trip workflow. The workflow will complete when user selects cities (handled by determineCities function) and webpage-handler.js calls the startPlanningTrip method
+    this.planningNewTrip = false;
     return;
   }
 
@@ -542,19 +554,19 @@ function determineResponseType(event) {
     return sendHelpMessage.call(this); 
   }
   const tripData = this.session.tripData();
-  if(mesg.startsWith("save") || (this.session.awaitingComment != undefined && this.session.awaitingComment === true)) {
+  if(mesg.startsWith("save") || this.session.awaitingComment) {
     const returnString = tripData.storeFreeFormText(senderID, messageText);
     sendTextMessage(senderID, returnString);
     this.session.awaitingComment = false;
     return;
   }
-  if(mesg.startsWith("todo") || (this.session.awaitingTodoItem != undefined && this.session.awaitingTodoItem === true)) {
+  if(mesg.startsWith("todo") || this.session.awaitingTodoItem) {
     const returnString = tripData.storeTodoList(senderID, messageText);
     sendTextMessage(senderID, returnString);
     this.session.awaitingTodoItem = false;
     return;
   }
-  if(mesg.startsWith("pack") || (this.session.awaitingPacklistItem != undefined && this.session.awaitingPacklistItem === true)) {
+  if(mesg.startsWith("pack") || this.session.awaitingPacklistItem) {
     const returnString = tripData.storePackList(senderID, messageText);
     sendTextMessage(senderID, returnString);
     this.session.awaitingPacklistItem = false;
@@ -800,7 +812,7 @@ function interceptMessage(hContext, senderID, event) {
   };
   logger.info("intercepting message and sending to human: " + JSON.stringify(messageData));
   callSendAPI(messageData);
-  sendTypingAction(senderID);
+  sendTypingAction.call(this, senderID);
   return;
 }
 

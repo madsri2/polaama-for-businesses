@@ -34,10 +34,11 @@ function IataCodeGetter(city) {
 IataCodeGetter.prototype.getCodeSync = function() {
   const city = this.city;
   let file = cityFileExists.call(this);
-  if(!_.isUndefined(file)) {
+  if(file) {
     try {
       const body = JSON.parse(fs.readFileSync(file, 'utf8'));
-      if(!_.isUndefined(body.iatacode)) {    
+      logger.info(`getCodeSync: Obtained body ${JSON.stringify(body)} from file ${file}`);
+      if(body.iatacode) {    
         return body.iatacode;
       }
     }
@@ -45,42 +46,50 @@ IataCodeGetter.prototype.getCodeSync = function() {
       logger.error(`getIataCode: could not read data from file ${file}. Error : ${e.message}`);
     }
   }
+  logger.info(`getCodeSync: File for city ${this.city} does not exist`);
   return undefined;
 }
 
 IataCodeGetter.prototype.getCode = function(callback) {
   // TODO: Move the functionality of getting details from file into constructor.
   let iatacode = this.getCodeSync();
-  if(!_.isUndefined(iatacode)) {
+  if(iatacode) {
+    logger.info(`getCode: Calling callback with code ${iatacode}`);
     return callback(iatacode);
   }
-  logger.info(`Getting code for city ${city} from iatacode.org. file does not exist`);
-  ic.api('autocomplete', {query: `${city}`}, function(err, response) {
+  logger.info(`getCode: Getting code for city ${this.city} from iatacode.org. file does not exist`);
+  const self = this;
+  ic.api('autocomplete', {query: `${this.city}`}, function(err, response) {
     if(!_.isUndefined(err)) {
-      logger.error(`getIataCode: Error getting ${city}'s code from iatacode.org: ${err}`);
+      logger.error(`getIataCode: Error getting ${self.city}'s code from iatacode.org: ${err}`);
       return;
     }
     response.cities.forEach(c => {
-      if(c.name.toLowerCase() === city) {
+      if(c.name.toLowerCase() === self.city) {
         iatacode = c.code;
         return;
       }
-    });
+    }, self);
     if(_.isUndefined(iatacode)) {
       logger.warn(`getIataCode: Could not find code in response.cities: ${JSON.stringify(response.cities, null, 2)}`);
       return;
     }
-    persistCode(city, body, callback);
+    const body = {
+      iatacode: iatacode
+    };
+    persistCode(self.city, body, callback);
   });
   return callback(iatacode);
 }
 
 function cityFileExists() {
   if(_.isUndefined(this.fileList)) {
+    logger.info(`cityFileExists: Walking the countries directory in search of file for city ${this.city}`);
     this.fileList = walkSync("countries", {directories: false});
   }
   let absFileName;
   const fName = `${Encoder.encode(this.city)}.txt`;
+  logger.info(`cityFileExists: file is ${fName}`);
   this.fileList.forEach(file => {
     if(file.indexOf(Encoder.encode(fName)) > -1) {
       absFileName = `countries/${file}`;
@@ -100,7 +109,7 @@ function getCountryAndPersist(countryCode, city, body, callback) {
       logger.error(`getCountryAndPersist: Error getting country name for ${countryCode} from iatacode.org: ${err}. Not persisting.`);
       return;
     }
-    // console.log(`Response from calling countries: ${JSON.stringify(response)}`);
+    logger.info(`getCountryAndPersist: Response from calling countries: ${JSON.stringify(response)}`);
     response.forEach(country => {
       if(country.code === countryCode) {
         const dir = `countries/${Encoder.encode(country.name)}`;
@@ -128,12 +137,13 @@ function persistCode(city, body, callback) {
     return;
   }
   let countryCode = undefined;
+  // In order to persist the code, we need the city name and the country. get it from iatacode.org
   ic.api('cities', {code: body.iatacode}, function(err, response) {
-    if(!_.isUndefined(err)) {
+    if(err) {
       logger.error(`persistCode: Error getting country code for ${city} from iatacode.org: ${err}. Not persisting`);
       return;
     }
-    // console.log(`Response from calling cities: ${JSON.stringify(response, null, 2)}`);
+    logger.info(`Response from calling cities: ${JSON.stringify(response, null, 2)}`);
     response.forEach(c => {
       countryCode = c.country_code;
     });

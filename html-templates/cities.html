@@ -40,6 +40,14 @@ MessengerExtensions.requestCloseBrowser(function success() {
           <!-- <option value="${city}">${rawCityName}</option> -->
         </select>
       </fieldset>
+      <fieldset>
+        <label for="portOfEntry">Select port of entry:</label>
+        <select name="portOfEntry" id="portOfEntry" data-native-menu="false">
+          <option data-placeholder="true">Choose one</option>
+          ${portOfEntryList}
+          <!-- <option value="${city}">${rawCityName}</option> -->
+        </select>
+      </fieldset>
       <input type="submit" data-inline="true" value="Submit">
     </form>
   </div>

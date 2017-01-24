@@ -33,6 +33,14 @@ function parseWeatherResponse(city, weatherDetails) {
   text.push(`There's a ${weatherDetails.tempoversixty} % chance of temperature over 60F`);
   text.push(`There's a ${weatherDetails.chanceofrain} % chance of rain`);
   this.tripInfoDetails.cities[city].weather = text;
+  // need to persist the weather information for every city individually because the weather URL for each city will return independently.
+  const dataFile = this.trip.tripDataFile();
+  try {
+    fs.writeFileSync(dataFile,JSON.stringify(this.tripInfoDetails));
+  }
+  catch(err) {
+    logger.error(`Cannot write tripData details to file ${dataFile}. Error is ${err.stack}`);
+  }
   return;
 }
 
@@ -79,23 +87,18 @@ function getWeatherForCity(city, index, callback) {
   }
   const wip = new WeatherInfoProvider(tripData.destination, city, tripData.startDate);
   const self = this;
-  const dataFile = this.trip.tripDataFile();
   wip.getWeather(function(c, weatherDetails) {
     parseWeatherResponse.call(self, c, weatherDetails);
     if(index == (cities.length - 1)) {
-      logger.info(`Gathered weather details for final city ${c}. Persisting & invoking callback`);
-      try {
-        fs.writeFileSync(dataFile,JSON.stringify(self.tripInfoDetails));
-      }
-      catch(err) {
-        logger.error(`Cannot write tripData details to file ${dataFile}. Error is ${err.stack}`);
-      }
+      // TODO: There is no guarantee that weather info for other cities have been fetched yet.. Handle this situation 
+      logger.info(`Gathered weather details for final city ${c}. Invoking callback`);
       return callback();
     }
   });
 }
 
 TripInfoProvider.prototype.getWeatherInformation = function(callback) {
+  logger.info(`getWeatherInformation: Callback is ${callback.toString()}`);
   if(_.isUndefined(this.trip.data.cities)) {
     logger.error(`getWeatherInformation: No city defined in trip ${this.trip.data.name}. Doing nothing!`);
     return callback();
@@ -123,14 +126,21 @@ function encodeForLonelyPlanet() {
 // cx code for flight custom search engine: '016727128883863036563:3i1x6jmqmwu';
 // https://developers.google.com/qpx-express/v1/prereqs
 TripInfoProvider.prototype.getFlightDetails = function(callback) {
+  logger.info(`getFlightDetails: Callback is ${callback.toString()}`);
   const tripData = this.trip.data;
   const fip = new FlightInfoProvider(this.hometown, tripData.portOfEntry, tripData.startDate, tripData.returnDate);
-  return fip.getFlightDetails(callback);
+  try {
+    return fip.getFlightDetails(callback);
+  }
+  catch(err) {
+    logger.error(`getFlightDetails: Received exception ${err.message} No flight information`);
+    return callback();
+  }
 }
 
 TripInfoProvider.prototype.getStoredFlightDetails = function() {
   const tripData = this.trip.data;
-  // console.log(`dest: ${tripData.portOfEntry}; tripData: ${JSON.stringify(tripData)}`);
+  logger.info(`getStoredFlightDetails: dest: ${tripData.portOfEntry}; tripData: ${JSON.stringify(tripData)}`);
   const fip = new FlightInfoProvider(this.hometown, tripData.portOfEntry, tripData.startDate, tripData.returnDate);
   return fip.getStoredFlightDetails();
 }
@@ -171,6 +181,7 @@ function getActivityForCity(city, index, callback) {
 }
 
 TripInfoProvider.prototype.getActivities = function(callback) {
+  logger.info(`getActivities: Callback is ${callback.toString()}`);
   if(_.isUndefined(this.trip.data.cities)) {
     logger.error(`getActivities: No city defined in trip ${this.trip.data.name}. Doing nothing!`);
     return callback();

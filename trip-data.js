@@ -73,6 +73,12 @@ TripData.prototype.retrieveTripData = function() {
     fs.accessSync(file, fs.F_OK);
     try {
       this.data = JSON.parse(fs.readFileSync(file, 'utf8')); 
+      if(this.data.cities) {
+        this.citySet = new Set();
+        this.data.cities.forEach(city => {
+          this.citySet.add(city);
+        }, this);
+      }
       // console.log(`raw name from file ${file} is ${this.data.rawName}`);
     }
     catch(err) {
@@ -142,15 +148,18 @@ TripData.prototype.addTripDetailsAndPersist = function(tripDetails) {
 
 TripData.prototype.addCities = function(cities, portOfEntry) {
   // TODO: Make this a set
-  if(_.isUndefined(this.data.cities)) {
-    this.data.cities = [];
+  if(_.isUndefined(this.citySet)) {
+    this.citySet = new Set();
   }
   cities.forEach(city => {
-    this.data.cities.push(Encoder.encode(city));
+    this.citySet.add(Encoder.encode(city));
   }, this);
   if(!_.isUndefined(portOfEntry)) {
     // this is needed for getting flight details.
-    this.data.portOfEntry = portOfEntry;
+    this.data.portOfEntry = Encoder.encode(portOfEntry);
+  }
+  else {
+    logger.error("addCities: port of entry is undefined. Possible BUG!");
   }
   this.persistUpdatedTrip();
 }
@@ -248,6 +257,12 @@ TripData.prototype.parseComments = function() {
 
 TripData.prototype.persistUpdatedTrip = function() {
   const file = tripFile.call(this);
+  if(this.citySet) {
+    this.data.cities = [];
+    this.citySet.forEach(city => {
+      this.data.cities.push(city);
+    }, this);
+  }
   try {
     fs.writeFileSync(file, JSON.stringify(this.data));
     // logger.info("saved trip for ",this.data.name);

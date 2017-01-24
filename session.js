@@ -225,6 +225,7 @@ Session.prototype.clearAllAwaitingStates = function() {
   this.awaitingTodoItem = false;
   this.awaitingPacklistItem = false;
   this.awaitingNewTripDetails = false;
+  this.planningNewTrip = false;
   this.awaitingHometownInfo = false;
   this.awaitingCitiesForNewTrip = false;
 }

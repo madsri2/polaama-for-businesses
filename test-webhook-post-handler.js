@@ -7,8 +7,15 @@ function testGatheringDetailsForNewTrip() {
   const dtdCallback = function() { 
     console.log("All callbacks successfully called");
   }
+  /* 
+  // Portugal
   const td = new TripData("portugal");
-  // td.addCities(["lisbon", "obidos", "lagos"],"lisbon");
+  td.addCities(["lisbon", "obidos", "lagos"],"lisbon");
+  const tip = new TripInfoProvider(td, "seattle");
+  */
+  // Iceland
+  const td = new TripData("iceland");
+  td.addCities(["landmannalaugar","reykjavik"], "reykjavik");
   const tip = new TripInfoProvider(td, "seattle");
   
   const activities = Promise.denodeify(tip.getActivities.bind(tip));
@@ -27,3 +34,5 @@ function testGatheringDetailsForNewTrip() {
 
 function testDetermineResponseType() {
 }
+
+testGatheringDetailsForNewTrip();

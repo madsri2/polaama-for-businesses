@@ -9,79 +9,79 @@
 	}
 		,
 	"trip": {
-		"title": "Historical Summary for November 01 - November 30",
-		"airport_code": "VOMM",
+		"title": "Historical Summary for March 01 - March 30",
+		"airport_code": "YSSY",
 		"error": "",
 		"period_of_record": {
 		"date_start": {
 		"date":{
-	"epoch":"1320129000",
-	"pretty":"12:00 PM IST on November 01, 2011",
+	"epoch":"1330563600",
+	"pretty":"12:00 PM AEDT on March 01, 2012",
 	"day":1,
-	"month":11,
-	"year":2011,
-	"yday":304,
+	"month":3,
+	"year":2012,
+	"yday":60,
 	"hour":12,
 	"min":"00",
 	"sec":0,
-	"isdst":"0",
-	"monthname":"November",
-	"monthname_short":"Nov",
-	"weekday_short":"Tue",
-	"weekday":"Tuesday",
+	"isdst":"1",
+	"monthname":"March",
+	"monthname_short":"Mar",
+	"weekday_short":"Thu",
+	"weekday":"Thursday",
 	"ampm":"PM",
-	"tz_short":"IST",
-	"tz_long":"Asia/Kolkata"
+	"tz_short":"AEDT",
+	"tz_long":"Australia/Sydney"
 }
 		},
 		"date_end": {
 		"date":{
-	"epoch":"1480487400",
-	"pretty":"12:00 PM IST on November 30, 2016",
+	"epoch":"1459299600",
+	"pretty":"12:00 PM AEDT on March 30, 2016",
 	"day":30,
-	"month":11,
+	"month":3,
 	"year":2016,
-	"yday":334,
+	"yday":89,
 	"hour":12,
 	"min":"00",
 	"sec":0,
-	"isdst":"0",
-	"monthname":"November",
-	"monthname_short":"Nov",
+	"isdst":"1",
+	"monthname":"March",
+	"monthname_short":"Mar",
 	"weekday_short":"Wed",
 	"weekday":"Wednesday",
 	"ampm":"PM",
-	"tz_short":"IST",
-	"tz_long":"Asia/Kolkata"
+	"tz_short":"AEDT",
+	"tz_long":"Australia/Sydney"
 }
 		}
 		},
 		"temp_high": {
 		"min": {
-		"F": "77",
-		"C": "25"
+		"F": "68",
+		"C": "20"
 		},
 		"avg": {
-		"F": "87",
-		"C": "31"
+		"F": "79",
+		"C": "26"
 		},
 		"max": {
-		"F": "94",
-		"C": "34"
+		"F": "100",
+		"C": "38"
 		}
 		},
 		"temp_low": {
 		"min": {
-		"F": "63",
-		"C": "17"
+		"F": "56",
+		"C": "13"
 		},
 		"avg": {
-		"F": "73",
-		"C": "23"
+		"F": "65",
+		"C": "19"
 		},
 		"max": {
-		"F": "77",
-		"C": "25"
+		"F": "74",
+		"C": "23"
 		}
 		},
 		"precip": {
@@ -90,105 +90,100 @@
 		"cm": "0.0"
 		},
 		"avg": {
-		"in": "0.20",
-		"cm": "5.0"
+		"in": "0.07",
+		"cm": "1.7"
 		},
 		"max": {
-		"in": "9.17",
-		"cm": "232.9"
+		"in": "1.38",
+		"cm": "35.0"
 		}
 		},
 		"dewpoint_high": {
 		"min": {
+		"F": "48",
+		"C": "9"
+		},
+		"avg": {
 		"F": "66",
 		"C": "19"
 		},
-		"avg": {
-		"F": "75",
-		"C": "24"
-		},
 		"max": {
-		"F": "82",
-		"C": "28"
+		"F": "73",
+		"C": "23"
 		}
 		},
 		"dewpoint_low": {
 		"min": {
-		"F": "50",
-		"C": "10"
+		"F": "23",
+		"C": "-5"
 		},
 		"avg": {
-		"F": "69",
-		"C": "20"
+		"F": "55",
+		"C": "13"
 		},
 		"max": {
-		"F": "75",
-		"C": "24"
+		"F": "68",
+		"C": "20"
 		}
 		},
 		"cloud_cover": {
-		"cond": "mostly sunny"
+		"cond": "partly cloudy"
 		},
 		"chance_of": {
-		"chanceofhumidday": {
-		"name": "Humid",
-		"description": "dew point over 60&deg;F / 16&deg;C",
-		"percentage": "100"
-		},
-		"chanceofsultryday": {
-		"name": "Sweltering",
-		"description": "dew point over 70&deg;F / 21&deg;C",
-		"percentage": "91"
-		},
 		"tempoversixty": {
 		"name": "Warm",
 		"description": "temperature over 60&deg;F / 16&deg;C and below 90&deg;F / 32&deg;C",
-		"percentage": "88"
+		"percentage": "98"
 		},
-		"chanceofsunnycloudyday": {
-		"name": "Sunny",
-		"description": "",
-		"percentage": "47"
-		},
-		"chanceofprecip": {
-		"name": "Precipitation",
-		"description": "",
-		"percentage": "38"
-		},
-		"chanceofrainday": {
-		"name": "Rain",
-		"description": "",
-		"percentage": "38"
+		"chanceofhumidday": {
+		"name": "Humid",
+		"description": "dew point over 60&deg;F / 16&deg;C",
+		"percentage": "89"
 		},
 		"chanceofpartlycloudyday": {
 		"name": "Partly Cloudy",
 		"description": "",
-		"percentage": "32"
+		"percentage": "57"
 		},
-		"chanceofthunderday": {
-		"name": "Thunderstorms",
+		"chanceofwindyday": {
+		"name": "Windy",
+		"description": "average wind over 10 mph / 15km/h",
+		"percentage": "55"
+		},
+		"chanceofprecip": {
+		"name": "Precipitation",
+		"description": "",
+		"percentage": "53"
+		},
+		"chanceofrainday": {
+		"name": "Rain",
+		"description": "",
+		"percentage": "53"
+		},
+		"chanceofsunnycloudyday": {
+		"name": "Sunny",
 		"description": "",
 		"percentage": "22"
 		},
 		"chanceofcloudyday": {
 		"name": "Cloudy",
 		"description": "",
-		"percentage": "21"
+		"percentage": "22"
+		},
+		"chanceofthunderday": {
+		"name": "Thunderstorms",
+		"description": "",
+		"percentage": "14"
+		},
+		"chanceofsultryday": {
+		"name": "Sweltering",
+		"description": "dew point over 70&deg;F / 21&deg;C",
+		"percentage": "5"
 		},
 		"tempoverninety": {
 		"name": "Hot",
 		"description": "temperature over 90&deg;F / 32&deg;C",
-		"percentage": "12"
-		},
-		"chanceoffogday": {
-		"name": "Fog",
-		"description": "",
-		"percentage": "4"
-		},
-		"chanceofwindyday": {
-		"name": "Windy",
-		"description": "average wind over 10 mph / 15km/h",
-		"percentage": "1"
+		"percentage": "2"
 		},
 		"chanceofhailday": {
 		"name": "Hail",
@@ -217,6 +212,11 @@
 		},
 		"chanceofsnowday": {
 		"name": "Snow",
+		"description": "",
+		"percentage": "0"
+		},
+		"chanceoffogday": {
+		"name": "Fog",
 		"description": "",
 		"percentage": "0"
 		}

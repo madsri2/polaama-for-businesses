@@ -160,12 +160,14 @@ function formParseCallback(err, fields, files, res) {
   // convert field.cities into an array
   const c = [];
   const cities = c.concat(fields.cities);
-  logger.info(`handleCityChoice: The cities chosen for trip ${this.session.tripNameInContext} are: ${JSON.stringify(cities)}`);
+  logger.info(`handleCityChoice: The cities chosen for trip ${this.session.tripNameInContext} are: ${JSON.stringify(cities)}. portOfEntry is ${fields.portOfEntry}`);
   // TODO: Get this from the user.
-  let portOfEntry;
-  if(cities.includes("lisbon") || cities.includes("Lisbon")) {
-    portOfEntry = "lisbon";
+  const portOfEntry = fields.portOfEntry;
+  if(portOfEntry === "Choose one") {
+    logger.error(`formParseCallback: port of entry is undefined`);
+    return res.send(`Required field port of entry is undefined. Cannot proceed!`);
   }
+  this.canProceed = true;
   this.session.tripData().addCities(cities, portOfEntry);
   // indicate that the tripData for this trip is stale in the session object.
   this.session.invalidateTripData();
@@ -181,9 +183,12 @@ WebpageHandler.prototype.handleCityChoice = function(req, res, postHandler) {
   const form = new formidable.IncomingForm(); 
   // All activities need to happen within the the form.parse function
   const callback = formParseCallback.bind(this);
+  const self = this;
   form.parse(req, function(err, fields, files) {
     callback(err, fields, files, res);
-    postHandler.startPlanningTrip();
+    if(self.canProceed) {
+      postHandler.startPlanningTrip();
+    }
   });
 }
 
