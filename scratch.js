@@ -185,9 +185,21 @@ function testUndefinedVsFalse() {
   }
 }
 
-testUndefinedVsFalse();
+function f1(et) {
+  if(et) {
+    console.log("ET");
+  }
+  else {
+    console.log("No ET");
+  }
+}
+
+f1();
+console.log("***");
+f1(true);
+
+// testUndefinedVsFalse();
 
 // testIataCode();
-
 
 // console.log(lonelyPlanetEncodeTest("Canary_Islands"));

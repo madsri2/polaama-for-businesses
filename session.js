@@ -144,6 +144,7 @@ Session.prototype.allTrips = function() {
   return tripDataList;
 }
 
+// TODO: Return the trip with the most recent start date first.
 Session.prototype.allTripNames = function() {
   const tripNames = [];
   Object.keys(this.trips).forEach(k => {

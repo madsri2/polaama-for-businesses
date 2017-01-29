@@ -21,7 +21,6 @@ function WebpageHandler(id, tripName) {
     logger.error(`No session exists for id ${this.fbid}`);
     return;
   }
-  // logger.info(`This page's session id is ${this.session.sessionId}; fbid: ${this.fbid}`);
   if(_.isUndefined(tripName)) {
     // some functions below (like sendFriendsList & handleTravelersForNewTrip) don't require trip and formatter
     logger.info("WebpageHandler: tripName was not passed");
@@ -36,7 +35,9 @@ function WebpageHandler(id, tripName) {
 }
 
 WebpageHandler.prototype.displayTrip = function(res) {
-  return res.send(this.formatter.formatTripDetails());
+  const tip = new TripInfoProvider(this.trip, this.session.hometown);
+  const html = res.send(this.formatter.formatTripDetails(
+    tip.getStoredWeatherDetails(), tip.getStoredActivityDetails()));
 }
 
 WebpageHandler.prototype.displayPackList = function(res, args) {
@@ -153,39 +154,48 @@ WebpageHandler.prototype.displayCities = function(res) {
   return res.send(this.formatter.formatCities());
 }
 
-function formParseCallback(err, fields, files, res) {
+WebpageHandler.prototype.displayCitiesForExistingTrip = function(res) {
+  return res.send(this.formatter.addCitiesExistingTrip());
+}
+
+function formParseCallback(err, fields, files, res, existingTrip) {
   if(_.isUndefined(fields.cities)) {
     return res.send("No cities added.");
   }
   // convert field.cities into an array
   const c = [];
   const cities = c.concat(fields.cities);
-  logger.info(`handleCityChoice: The cities chosen for trip ${this.session.tripNameInContext} are: ${JSON.stringify(cities)}. portOfEntry is ${fields.portOfEntry}`);
-  // TODO: Get this from the user.
-  const portOfEntry = fields.portOfEntry;
-  if(portOfEntry === "Choose one") {
-    logger.error(`formParseCallback: port of entry is undefined`);
-    return res.send(`Required field port of entry is undefined. Cannot proceed!`);
+  logger.info(`formParseCallback: The cities chosen for trip ${this.session.tripNameInContext} are: ${JSON.stringify(cities)}. portOfEntry is ${fields.portOfEntry}`);
+  this.session.tripData().addCities(cities);
+
+  if(!existingTrip) {
+    // new trip. So, add port of entry
+    const portOfEntry = fields.portOfEntry;
+    if(portOfEntry === "Choose one") {
+      logger.error(`formParseCallback: port of entry is undefined`);
+      return res.send(`Required field port of entry is undefined. Cannot proceed!`);
+    }
+    this.session.tripData().addPortOfEntry(portOfEntry);
   }
   this.canProceed = true;
-  this.session.tripData().addCities(cities, portOfEntry);
   // indicate that the tripData for this trip is stale in the session object.
   this.session.invalidateTripData();
   return res.send(this.formatter.formatCityChoicePage());
 }
 
-WebpageHandler.prototype.handleCityChoice = function(req, res, postHandler) {
+WebpageHandler.prototype.handleAddCityChoice = function(req, res, postHandler, existingTrip) {
   // store the chosen cities in the trip, persist it and return success.
   if(_.isNull(this.session)) {
     logger.error("There is no session corresponding to this request.");
-    return res.send("Cannot add trip to your friend travel list because Polaama does not know about them yet.");
+    return res.send("Cannot add cities because Polaama does not have your session details");
   }
   const form = new formidable.IncomingForm(); 
   // All activities need to happen within the the form.parse function
   const callback = formParseCallback.bind(this);
   const self = this;
+
   form.parse(req, function(err, fields, files) {
-    callback(err, fields, files, res);
+    callback(err, fields, files, res, existingTrip);
     if(self.canProceed) {
       postHandler.startPlanningTrip();
     }

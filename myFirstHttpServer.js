@@ -154,8 +154,22 @@ app.post('/:id/:tripName/handle-city-choice', function(req, res) {
   const handler = new WebpageHandler(req.params.id, req.params.tripName);
   // The global postHandler could have a different session than the one on this page. so, create a new webhook handler using the session belonging to this page to start planning a trip.
   const myPostHandler = new WebhookPostHandler(handler.session);
-  return handler.handleCityChoice(req, res, myPostHandler);
+  return handler.handleAddCityChoice(req, res, myPostHandler);
 });
+
+// Handling the addition of cities to existing trips
+app.get('/:id/:tripName/add-cities', function(req, res) {
+  const handler = new WebpageHandler(req.params.id, req.params.tripName);
+  return handler.handleWebpage(res, handler.displayCitiesForExistingTrip);
+});
+
+app.post('/:id/:tripName/handle-add-city-choice', function(req, res) {
+  const handler = new WebpageHandler(req.params.id, req.params.tripName);
+  // The global postHandler could have a different session than the one on this page. so, create a new webhook handler using the session belonging to this page to start planning a trip.
+  const myPostHandler = new WebhookPostHandler(handler.session);
+  return handler.handleAddCityChoice(req, res, myPostHandler, true /* existingTrip */);
+});
+
 
 // handling webhook
 app.get('/webhook', function(req, res) {

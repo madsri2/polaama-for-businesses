@@ -146,7 +146,18 @@ TripData.prototype.addTripDetailsAndPersist = function(tripDetails) {
   this.persistUpdatedTrip();
 }
 
-TripData.prototype.addCities = function(cities, portOfEntry) {
+TripData.prototype.addPortOfEntry = function(portOfEntry) {
+  if(!_.isUndefined(portOfEntry)) {
+    // this is needed for getting flight details.
+    this.data.portOfEntry = Encoder.encode(portOfEntry);
+  }
+  else {
+    logger.error("addPortOfEntry: port of entry is undefined");
+  }
+  this.persistUpdatedTrip();
+}
+
+TripData.prototype.addCities = function(cities) {
   // TODO: Make this a set
   if(_.isUndefined(this.citySet)) {
     this.citySet = new Set();
@@ -154,13 +165,6 @@ TripData.prototype.addCities = function(cities, portOfEntry) {
   cities.forEach(city => {
     this.citySet.add(Encoder.encode(city));
   }, this);
-  if(!_.isUndefined(portOfEntry)) {
-    // this is needed for getting flight details.
-    this.data.portOfEntry = Encoder.encode(portOfEntry);
-  }
-  else {
-    logger.error("addCities: port of entry is undefined. Possible BUG!");
-  }
   this.persistUpdatedTrip();
 }
 
@@ -218,11 +222,18 @@ function getActivitiesFromComments(comments) {
   comments.forEach(function(i) {
     const item = i.toLowerCase();
     // activities
-    if((item.indexOf("beach") > -1) || (item.indexOf("garden") > -1) || (item.indexOf("market") > -1)) {
+    if((item.indexOf("beach") > -1) || 
+       (item.indexOf("garden") > -1) || 
+       (item.indexOf("market") > -1) || 
+       (item.indexOf("activity") > -1) || 
+       (item.indexOf("activities") > -1)) {
       taggedComments.activities.push(i);
     }
     // stay
-    else if((item.indexOf("hotel") > -1) || (item.indexOf("condo") > -1) || (item.indexOf("airbnb") > -1)) {
+    else if((item.indexOf("hotel") > -1) || 
+            (item.indexOf("condo") > -1) || 
+            (item.indexOf("airbnb") > -1) || 
+            (item.indexOf("stay") > -1)) {
       taggedComments.stay.push(i);
     }
     // flight
@@ -231,6 +242,10 @@ function getActivitiesFromComments(comments) {
             (item.indexOf("alaska") > -1) || 
             (item.indexOf("united") > -1) || 
             (item.indexOf("southwest") > -1) || 
+            (item.indexOf("arrive at") > -1) || 
+            (item.indexOf("arrives at") > -1) || 
+            (item.indexOf("leave on") > -1) || 
+            (item.indexOf("depart") > -1) || 
             (item.indexOf("delta") > -1)) {
       taggedComments.flight.push(i);
     }

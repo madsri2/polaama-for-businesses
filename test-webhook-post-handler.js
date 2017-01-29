@@ -10,12 +10,14 @@ function testGatheringDetailsForNewTrip() {
   /* 
   // Portugal
   const td = new TripData("portugal");
-  td.addCities(["lisbon", "obidos", "lagos"],"lisbon");
+  td.addCities(["lisbon", "obidos", "lagos"]);
+  td.addPortOfEntry("lisbon");
   const tip = new TripInfoProvider(td, "seattle");
   */
   // Iceland
   const td = new TripData("iceland");
-  td.addCities(["landmannalaugar","reykjavik"], "reykjavik");
+  td.addCities(["landmannalaugar","reykjavik"]);
+  td.addPortOfEntry("reykjavik");
   const tip = new TripInfoProvider(td, "seattle");
   
   const activities = Promise.denodeify(tip.getActivities.bind(tip));

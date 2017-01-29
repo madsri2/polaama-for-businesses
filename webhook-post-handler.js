@@ -416,12 +416,16 @@ function handleQuickReplies(payload) {
       getPacklistItem.call(this);
       return;
     }
-    if(payload === "other_details") {
+    if(payload === "qr_other_details") {
       displayTripDetails.call(this);
       return;
     }
     if(payload === "qr_new_trip") {
       planNewTrip.call(this);
+      return;
+    }
+    if(payload === "qr_add_cities") {
+      addCitiesToExistingTrip.call(this);
       return;
     }
     logger.warn(`handleQuickReplies: Session ${this.session.fbid}: A quick reply without actionoble payload called: ${JSON.stringify(message.quick_reply)}`);
@@ -461,9 +465,33 @@ function extractNewTripDetails(messageText) {
 function extractCityDetails(messageText) {
   const cities = messageText.split(',');
   // TODO: Validate city
-  this.session.tripData().addCities(cities, cities[0] /* assume that the first city is port of entry. See determineResponseType 3rd step in new trip workflow */);
+  this.session.tripData().addCities(cities);
+  this.session.tripData().addPortOfEntry(cities[0]); // assume that the first city is port of entry. See determineResponseType 3rd step in new trip workflow
   // indicate that the tripData for this trip is stale in the session object.
   this.session.invalidateTripData();
+  this.session.awaitingCitiesForNewTrip = false;
+}
+
+// TODO: This code duplicates some aspects of "getting cities for the trip" in determineResponseType. Fix that.
+function addCitiesToExistingTrip() {
+    const tripData = this.session.tripData();
+    if(!determineCities.call(this, true /* existingTrip */)) {
+      if(!this.session.awaitingCitiesForExistingTrip) {
+        sendTextMessage(this.session.fbid, `What cities in ${tripData.data.destination} are you traveling to (comma separated list)?`);
+        this.session.awaitingCitiesForExistingTrip = true;
+        return;
+      }
+      else {
+        if(tripData.data.cities) {
+          logger.info(`addCitiesForExistingTrip: Start planning trip for customer`);
+          this.startPlanningTrip();
+        }
+        else {
+          logger.error(`addCitiesForExistingTrip: Session ${this.session.sessionId}: Cannot determine cities for trip ${tripData.data.destination} even after getting cities from customer. Possible BUG!`);
+          sendTextMessage(this.session.fbid,"Even bots need to eat! Be back in a bit..");
+        }
+      }
+    }
 }
 
 /*
@@ -522,22 +550,25 @@ function determineResponseType(event) {
     if(this.session.awaitingCitiesForNewTrip) {
       extractCityDetails.call(this, messageText);
     }
-    const tripData = this.session.tripData();
-    if(!determineCities.call(this)) {
-      if(!this.session.awaitingCitiesForNewTrip) {
-        sendTextMessage(this.session.fbid, `What cities in ${tripData.data.destination} are you traveling to (comma separated list)?`);
-        sendTextMessage(this.session.fbid, `The first city in your list will be used as your port of entry`);
-        this.session.awaitingCitiesForNewTrip = true;
-        return;
-      }
-      else {
-        if(tripData.data.cities) {
-          logger.info(`determineResponseType: Start planning trip for customer`);
-          this.startPlanningTrip();
+    else {
+      const tripData = this.session.tripData();
+      if(!determineCities.call(this)) {
+        // ask user to enter cities and port of entry
+        if(!this.session.awaitingCitiesForNewTrip) {
+          sendTextMessage(this.session.fbid, `What cities in ${tripData.data.destination} are you traveling to (comma separated list)?`);
+          sendTextMessage(this.session.fbid, `The first city in your list will be used as your port of entry`);
+          this.session.awaitingCitiesForNewTrip = true;
+          return;
         }
         else {
-          logger.error(`determineResponseType: Session ${this.session.sessionId}: Cannot determine cities for trip ${tripData.data.destination} even after getting cities from customer. Possible BUG!`);
-          sendTextMessage(this.session.fbid,"Even bots need to eat! Be back in a bit..");
+          if(tripData.data.cities) {
+            logger.info(`determineResponseType: Start planning trip for customer`);
+            this.startPlanningTrip();
+          }
+          else {
+            logger.error(`determineResponseType: Session ${this.session.sessionId}: Cannot determine cities for trip ${tripData.data.destination} even after getting cities from customer. Possible BUG!`);
+            sendTextMessage(this.session.fbid,"Even bots need to eat! Be back in a bit..");
+          }
         }
       }
     }
@@ -879,7 +910,7 @@ function sendResponseFromWitBot(senderID, messageText) {
   })
 }
 
-function determineCities() {
+function determineCities(existingTrip) {
 	const trip = this.session.tripData();
   const country = trip.country;
   if(_.isUndefined(country.cities)) {
@@ -888,6 +919,10 @@ function determineCities() {
   }
   // logger.info(`Asking user to select from the following cities: ${JSON.stringify(country)} for country ${trip.rawTripName}.`);
   sendTextMessage(this.session.fbid,`Which cities of ${country.name} are you traveling to?`);
+  let uri = "cities";
+  if(existingTrip) {
+    uri = "add-cities";
+  }
   const messageData = {
     recipient: {
       id: this.session.fbid
@@ -901,11 +936,11 @@ function determineCities() {
             title: "Select cities",
             buttons: [{
               type:"web_url",
-              url: sendUrl.call(this, `${trip.rawTripName}/cities`),
+              url: sendUrl.call(this, `${trip.rawTripName}/${uri}`),
               title:"Cities",
               webview_height_ratio: "compact",
               messenger_extensions: true,
-              url: sendUrl.call(this, `${trip.rawTripName}/cities`),
+              url: sendUrl.call(this, `${trip.rawTripName}/${uri}`),
             }]
           }]
         }
@@ -981,7 +1016,7 @@ function sendHelpMessage() {
         {
           content_type: "text",
           title: "Other details",
-          payload: "other_details",
+          payload: "qr_other_details",
         },
       ]
     }

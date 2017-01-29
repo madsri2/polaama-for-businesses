@@ -1,0 +1,758 @@
+{
+ "kind": "customsearch#search",
+ "url": {
+  "type": "application/json",
+  "template": "https://www.googleapis.com/customsearch/v1?q={searchTerms}&num={count?}&start={startIndex?}&lr={language?}&safe={safe?}&cx={cx?}&cref={cref?}&sort={sort?}&filter={filter?}&gl={gl?}&cr={cr?}&googlehost={googleHost?}&c2coff={disableCnTwTranslation?}&hq={hq?}&hl={hl?}&siteSearch={siteSearch?}&siteSearchFilter={siteSearchFilter?}&exactTerms={exactTerms?}&excludeTerms={excludeTerms?}&linkSite={linkSite?}&orTerms={orTerms?}&relatedSite={relatedSite?}&dateRestrict={dateRestrict?}&lowRange={lowRange?}&highRange={highRange?}&searchType={searchType}&fileType={fileType?}&rights={rights?}&imgSize={imgSize?}&imgType={imgType?}&imgColorType={imgColorType?}&imgDominantColor={imgDominantColor?}&alt=json"
+ },
+ "queries": {
+  "request": [
+   {
+    "title": "Google Custom Search - lonely planet evora february things to do",
+    "totalResults": "61",
+    "searchTerms": "lonely planet evora february things to do",
+    "count": 10,
+    "startIndex": 1,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "evora"
+   }
+  ],
+  "nextPage": [
+   {
+    "title": "Google Custom Search - lonely planet evora february things to do",
+    "totalResults": "61",
+    "searchTerms": "lonely planet evora february things to do",
+    "count": 10,
+    "startIndex": 11,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "evora"
+   }
+  ]
+ },
+ "context": {
+  "title": "Polaama"
+ },
+ "searchInformation": {
+  "searchTime": 0.506157,
+  "formattedSearchTime": "0.51",
+  "totalResults": "61",
+  "formattedTotalResults": "61"
+ },
+ "items": [
+  {
+   "kind": "customsearch#result",
+   "title": "Top things to do in Évora, Portugal - Lonely Planet",
+   "htmlTitle": "Top \u003cb\u003ethings to do\u003c/b\u003e in \u003cb\u003eÉvora\u003c/b\u003e, Portugal - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/portugal/evora/top-things-to-do/a/poi/360364",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Discover the best top things to do in Évora including Bardamoeda Gastropub, ... \nPoke around the old Moorish quarter to find some of Évora's finest food and wine \n... celebrating game in January, pork in February, soups in March, lamb in April ...",
+   "htmlSnippet": "Discover the best top \u003cb\u003ethings to do\u003c/b\u003e in \u003cb\u003eÉvora\u003c/b\u003e including Bardamoeda Gastropub, ... \u003cbr\u003e\nPoke around the old Moorish quarter to find some of \u003cb\u003eÉvora&#39;s\u003c/b\u003e finest food and wine \u003cbr\u003e\n... celebrating game in January, pork in \u003cb\u003eFebruary\u003c/b\u003e, soups in March, lamb in April&nbsp;...",
+   "cacheId": "BcN7a0URulwJ",
+   "formattedUrl": "https://www.lonelyplanet.com/portugal/evora/...things-to-do/.../360364",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/portugal/\u003cb\u003eevora\u003c/b\u003e/...\u003cb\u003ethings-to-do\u003c/b\u003e/.../360364",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Europe"
+     }
+    ],
+    "country": [
+     {
+      "name": "Portugal"
+     }
+    ],
+    "city": [
+     {
+      "name": "Évora"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Top things to do in Évora, Portugal",
+      "og:title": "Top things to do in Évora, Portugal",
+      "og:description": "Discover the best top things to do in Évora including Bardamoeda Gastropub, Botequim da Mouraria, Casa Cordovil.",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Hotels in Évora, Portugal - Lonely Planet",
+   "htmlTitle": "Hotels in \u003cb\u003eÉvora\u003c/b\u003e, Portugal - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/portugal/evora/hotels/a/lod/360364",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Discover the best hotels in Évora including Albergaria Do Calvario, Hotel Riviera, \nÉvora Terrace Hostel.",
+   "htmlSnippet": "Discover the best hotels in \u003cb\u003eÉvora\u003c/b\u003e including Albergaria \u003cb\u003eDo\u003c/b\u003e Calvario, Hotel Riviera, \u003cbr\u003e\n\u003cb\u003eÉvora\u003c/b\u003e Terrace Hostel.",
+   "formattedUrl": "https://www.lonelyplanet.com/portugal/evora/hotels/a/lod/360364",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/portugal/\u003cb\u003eevora\u003c/b\u003e/hotels/a/lod/360364",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Europe"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "102",
+      "height": "128",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQ48YtnkTVPTUDo2hqeH-J06yGJNRh5-nsCnx52iPK1bv3YiKzcDGVvpKc"
+     }
+    ],
+    "country": [
+     {
+      "name": "Portugal"
+     }
+    ],
+    "city": [
+     {
+      "name": "Évora"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Hotels in Évora, Portugal",
+      "og:title": "Hotels in Évora, Portugal",
+      "og:description": "Discover the best hotels in Évora including Albergaria Do Calvario, Hotel Riviera, Évora Terrace Hostel.",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://lpbookingcom.imgix.net/images/hotel/max500/136/13682375.jpg?w=128&h=160&fit=crop&q=50&auto=enhance&crop=entropy"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Hotels in Évora, Portugal - Lonely Planet",
+   "htmlTitle": "Hotels in \u003cb\u003eÉvora\u003c/b\u003e, Portugal - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/portugal/central-portugal/evora/hotels/hostels",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Discover the best hotels in Évora including Évora Terrace Hostel, Hostel \nNamaste, Good Mood Hostel.",
+   "htmlSnippet": "Discover the best hotels in \u003cb\u003eÉvora\u003c/b\u003e including \u003cb\u003eÉvora\u003c/b\u003e Terrace Hostel, Hostel \u003cbr\u003e\nNamaste, Good Mood Hostel.",
+   "cacheId": "kF2hBPyceSkJ",
+   "formattedUrl": "https://www.lonelyplanet.com/portugal/central.../evora/hotels/hostels",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/portugal/central.../\u003cb\u003eevora\u003c/b\u003e/hotels/hostels",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Europe"
+     }
+    ],
+    "country": [
+     {
+      "name": "Portugal"
+     }
+    ],
+    "city": [
+     {
+      "name": "Évora"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Hotels in Évora, Portugal",
+      "og:title": "Hotels in Évora, Portugal",
+      "og:description": "Discover the best hotels in Évora including Évora Terrace Hostel, Hostel Namaste, Good Mood Hostel.",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Hotels in Évora, Portugal - Lonely Planet",
+   "htmlTitle": "Hotels in \u003cb\u003eÉvora\u003c/b\u003e, Portugal - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/portugal/central-portugal/evora/hotels/free-parking",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Discover the best hotels in Évora including Hotel ibis Evora, Old Evora Hostel, \nCasa do Sol.",
+   "htmlSnippet": "Discover the best hotels in \u003cb\u003eÉvora\u003c/b\u003e including Hotel ibis \u003cb\u003eEvora\u003c/b\u003e, Old \u003cb\u003eEvora\u003c/b\u003e Hostel, \u003cbr\u003e\nCasa \u003cb\u003edo\u003c/b\u003e Sol.",
+   "cacheId": "zSnMGbBEzSIJ",
+   "formattedUrl": "https://www.lonelyplanet.com/portugal/central.../evora/.../free-parking",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/portugal/central.../\u003cb\u003eevora\u003c/b\u003e/.../free-parking",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Europe"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "102",
+      "height": "128",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTOHSy1y-Kh7yesnnXVzBIemyHZwFl5QvjWMrViGZwvTjdJoVZLym0EYpQ"
+     }
+    ],
+    "country": [
+     {
+      "name": "Portugal"
+     }
+    ],
+    "city": [
+     {
+      "name": "Évora"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Hotels in Évora, Portugal",
+      "og:title": "Hotels in Évora, Portugal",
+      "og:description": "Discover the best hotels in Évora including Hotel ibis Evora, Old Evora Hostel, Casa do Sol.",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://lpbookingcom.imgix.net/images/hotel/max500_watermarked_standard/1ed/1ed84f38bf1972fb16f35c702e22ad0f97eaf034.jpg?w=128&h=160&fit=crop&q=50&auto=enhance&crop=entropy"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Portugal in February",
+   "htmlTitle": "Portugal in \u003cb\u003eFebruary\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/thorntree/forums/europe-western-europe/portugal/portugal-in-february",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Aug 24, 2010 ... Has anybody traveled to Portugal in February? My wife ... Rent a car to do the bits \nof Elvas and Evora the rest you can do on public transport.",
+   "htmlSnippet": "Aug 24, 2010 \u003cb\u003e...\u003c/b\u003e Has anybody traveled to Portugal in \u003cb\u003eFebruary\u003c/b\u003e? My wife ... Rent a car to \u003cb\u003edo\u003c/b\u003e the bits \u003cbr\u003e\nof Elvas and \u003cb\u003eEvora\u003c/b\u003e the rest you can \u003cb\u003edo\u003c/b\u003e on public transport.",
+   "cacheId": "8tZIARRhK-QJ",
+   "formattedUrl": "https://www.lonelyplanet.com/thorntree/.../portugal-in-february",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/thorntree/.../portugal-in-\u003cb\u003efebruary\u003c/b\u003e",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "225",
+      "height": "225",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSqRemPSRVtvlwaxn3MfC7zsLjzOoK5uUM0cDjdqchf2Fvexvm4z9sAZObq"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Thorn Tree",
+      "title": "Thorn Tree"
+     },
+     {
+      "url": "Country forums",
+      "title": "Country forums"
+     },
+     {
+      "url": "Western Europe",
+      "title": "Western Europe"
+     },
+     {
+      "url": "Portugal",
+      "title": "Portugal"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Portugal in February",
+      "og:title": "Portugal in February",
+      "og:description": "Has anybody traveled to Portugal in February?  My wife and I are considering a trip and I'm wondering what the weather might be like that time of the year. I've…",
+      "og:url": "https://www.lonelyplanet.com/thorntree/forums/europe-western-europe/portugal/portugal-in-february",
+      "og:image": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "og:type": "website",
+      "twitter:title": "Portugal in February",
+      "twitter:description": "Has anybody traveled to Portugal in February?  My wife and I are considering a trip and I'm wondering what the weather might be like that time of the year. I've…",
+      "twitter:image:src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "kfBavNZjQiIRyaW7qXdsbJ64tcHypooadfhPccofe/sw85KvVy9vZzZaUToagXeoq4Xd+LRntM3jlxSErqTZLQ=="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Welcome",
+      "name": "Welcome"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Hotels in Évora, Portugal - Lonely Planet",
+   "htmlTitle": "Hotels in \u003cb\u003eÉvora\u003c/b\u003e, Portugal - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/portugal/central-portugal/evora/hotels/guesthouses",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Discover the best hotels in Évora including Casa dos Teles, Evora Guesthouse.",
+   "htmlSnippet": "Discover the best hotels in \u003cb\u003eÉvora\u003c/b\u003e including Casa dos Teles, \u003cb\u003eEvora\u003c/b\u003e Guesthouse.",
+   "cacheId": "gtJpL6U79woJ",
+   "formattedUrl": "https://www.lonelyplanet.com/portugal/central.../evora/.../guesthouses",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/portugal/central.../\u003cb\u003eevora\u003c/b\u003e/.../guesthouses",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Europe"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "102",
+      "height": "128",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPXroo2J8-lwpdd5zearqLKcHsTW1WR7vYuWwAINEu6UxGBknljgk8vb8"
+     }
+    ],
+    "country": [
+     {
+      "name": "Portugal"
+     }
+    ],
+    "city": [
+     {
+      "name": "Évora"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Hotels in Évora, Portugal",
+      "og:title": "Hotels in Évora, Portugal",
+      "og:description": "Discover the best hotels in Évora including Casa dos Teles, Evora Guesthouse.",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://lpbookingcom.imgix.net/images/hotel/max500/159/15923156.jpg?w=128&h=160&fit=crop&q=50&auto=enhance&crop=entropy"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Essential guide to Around Évora - Lonely Planet",
+   "htmlTitle": "Essential guide to Around \u003cb\u003eÉvora\u003c/b\u003e - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/portugal/around-evora/essential-information",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "With your own wheels, head west from Évora on the old Lisbon road (N114) for ... \nSome policies specifically exclude dangerous activities such as scuba diving, ...",
+   "htmlSnippet": "With your own wheels, head west from \u003cb\u003eÉvora\u003c/b\u003e on the old Lisbon road (N114) for ... \u003cbr\u003e\nSome policies specifically exclude dangerous \u003cb\u003eactivities\u003c/b\u003e such as scuba diving,&nbsp;...",
+   "cacheId": "TwXgWdNKFVIJ",
+   "formattedUrl": "www.lonelyplanet.com/portugal/around-evora/essential-information",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/portugal/around-\u003cb\u003eevora\u003c/b\u003e/essential-information",
+   "pagemap": {
+    "metatags": [
+     {
+      "title": "Essential guide to Around Évora - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Essential guide to Around Évora - Lonely Planet",
+      "twitter:description": "Everything for your trip to Around Évora - best time to go, weather, daily cost advisor, visas, cheapest flights and transport information",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Essential guide to Around Évora - Lonely Planet",
+      "og:description": "Everything for your trip to Around Évora - best time to go, weather, daily cost advisor, visas, cheapest flights and transport information",
+      "og:url": "http://www.lonelyplanet.com/portugal/around-evora/essential-information",
+      "og:type": "website",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "Pif/lQArW3h43tD5bI3Mu8T2Vd0+YNeWte3bosBKDx0="
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Destinations",
+      "name": "Destinations"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Things to do around Alto dos Cucos, Portugal - Lonely Planet",
+   "htmlTitle": "\u003cb\u003eThings to do\u003c/b\u003e around Alto dos Cucos, Portugal - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/portugal/central-portugal/evora/alto-dos-cucos/things-to-do",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "0 things to do in Alto dos Cucos, Portugal - . ... An icon of Évora's culinary scene, \nO Fialho has been wowing diners since 1945 – as evidenced by the photos of ...",
+   "htmlSnippet": "0 \u003cb\u003ethings to do\u003c/b\u003e in Alto dos Cucos, Portugal - . ... An icon of \u003cb\u003eÉvora&#39;s\u003c/b\u003e culinary scene, \u003cbr\u003e\nO Fialho has been wowing diners since 1945 – as evidenced by the photos of&nbsp;...",
+   "cacheId": "xyVD-RuXWcoJ",
+   "formattedUrl": "www.lonelyplanet.com/portugal/central.../evora/alto.../things-to-do",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/portugal/central.../\u003cb\u003eevora\u003c/b\u003e/alto.../\u003cb\u003ethings-to-do\u003c/b\u003e",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "153",
+      "height": "148",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRiRfntbQEH_3ob4t8Aqem-dI_mRHkECFMIfrud0qyB4sthQRwzMR2-hUQZ"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Western Europe",
+      "title": "Western Europe"
+     },
+     {
+      "url": "Portugal",
+      "title": "Portugal"
+     },
+     {
+      "url": "The Alentejo",
+      "title": "The Alentejo"
+     },
+     {
+      "url": "Alto Alentejo",
+      "title": "Alto Alentejo"
+     },
+     {
+      "url": "Évora",
+      "title": "Évora"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Things to do around Alto dos Cucos, Portugal - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Things to do around Alto dos Cucos, Portugal - Lonely Planet",
+      "twitter:description": "0 things to do in Alto dos Cucos, Portugal - .",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Things to do around Alto dos Cucos, Portugal - Lonely Planet",
+      "og:description": "0 things to do in Alto dos Cucos, Portugal - .",
+      "og:url": "http://www.lonelyplanet.com/portugal/central-portugal/evora/alto-dos-cucos/things-to-do",
+      "og:type": "website",
+      "sailthru.date": "2017-01-06 20:45:06 +0000",
+      "sailthru.tags": "Europe, Portugal, Alto dos Cucos",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "aKphzMx5l48/OmhgHMJ2vEkztLafmxYxIOxw4DdlAIc="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "http://images-resrc.staticlp.com/S=W192,U/C=W192,H185,X0,Y0/O=85/http://media.lonelyplanet.com/assets/image/4a265a962002b500a0ac8681912e1e7d23803e6fc29c7e99b330f6edbe588fba/06c74719d973bb5d7ee98fde1f013d1a79f95ad4626e240dcb5801a4e8bd8c1f.jpg"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Casa resevation Casa Evora Havanna",
+   "htmlTitle": "Casa resevation Casa \u003cb\u003eEvora\u003c/b\u003e Havanna",
+   "link": "https://www.lonelyplanet.com/thorntree/forums/americas-cuba/cuba/casa-resevation-casa-evora-havanna",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Oct 4, 2009 ... Got a positv confirmation on a Casa Evora in Havanna. ... Activities & Gear, \nCulture Vultures · Diving & Snorkelling · Experimental Travel · Gap Year ... If she \naccepted a reservation, she will honor such reservation. ... I am looking to book \nCasa Evoro for my 50th birthday in February. ... About Lonely Planet.",
+   "htmlSnippet": "Oct 4, 2009 \u003cb\u003e...\u003c/b\u003e Got a positv confirmation on a Casa \u003cb\u003eEvora\u003c/b\u003e in Havanna. ... \u003cb\u003eActivities\u003c/b\u003e &amp; Gear, \u003cbr\u003e\nCulture Vultures &middot; Diving &amp; Snorkelling &middot; Experimental Travel &middot; Gap Year ... If she \u003cbr\u003e\naccepted a reservation, she will honor such reservation. ... I am looking to book \u003cbr\u003e\nCasa Evoro for my 50th birthday in \u003cb\u003eFebruary\u003c/b\u003e. ... About \u003cb\u003eLonely Planet\u003c/b\u003e.",
+   "cacheId": "ZpxWn0VGZ7cJ",
+   "formattedUrl": "https://www.lonelyplanet.com/.../casa-resevation-casa-evora-havanna",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../casa-resevation-casa-\u003cb\u003eevora\u003c/b\u003e-havanna",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "225",
+      "height": "225",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSqRemPSRVtvlwaxn3MfC7zsLjzOoK5uUM0cDjdqchf2Fvexvm4z9sAZObq"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Thorn Tree",
+      "title": "Thorn Tree"
+     },
+     {
+      "url": "Country forums",
+      "title": "Country forums"
+     },
+     {
+      "url": "Cuba",
+      "title": "Cuba"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Casa resevation  Casa Evora Havanna",
+      "og:title": "Casa resevation  Casa Evora Havanna",
+      "og:description": "Hii We are going to Cuba next februar.Got a positv confirmation on a Casa Evora in Havanna.Anyone know that place ?, The booking is by www.casaparticularcuba.orgAny one…",
+      "og:url": "https://www.lonelyplanet.com/thorntree/forums/americas-cuba/cuba/casa-resevation-casa-evora-havanna",
+      "og:image": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "og:type": "website",
+      "twitter:title": "Casa resevation  Casa Evora Havanna",
+      "twitter:description": "Hii We are going to Cuba next februar.Got a positv confirmation on a Casa Evora in Havanna.Anyone know that place ?, The booking is by www.casaparticularcuba.orgAny one…",
+      "twitter:image:src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "qeiqG/yPjbg2viJx/C4/fcqG9JTux2PJzVnJMT6JM+VrpOM11UoTvy5kSWzeS2CXS9zo/AJ+jClqKWuEAVqsuQ=="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Welcome",
+      "name": "Welcome"
+     },
+     {
+      "url": "Destinations",
+      "name": "Destinations"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Beautiful little restaurant - Review of Botequim da Mouraria, Evora ...",
+   "htmlTitle": "Beautiful little restaurant - Review of Botequim da Mouraria, \u003cb\u003eEvora\u003c/b\u003e ...",
+   "link": "https://www.tripadvisor.com/ShowUserReviews-g189106-d1105913-r354173831-Botequim_da_Mouraria-Evora_Evora_District_Alentejo.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Mar 9, 2016 ... Things to Do ... I will admit I was a little sceptical that this restaurant could live up \nto the great reviews, but it does. ... Reviewed February 23, 2016 via mobile ... \nLonely planet says it works until 3pm and from 6 till 9:45pm.",
+   "htmlSnippet": "Mar 9, 2016 \u003cb\u003e...\u003c/b\u003e \u003cb\u003eThings to Do\u003c/b\u003e ... I will admit I was a little sceptical that this restaurant could live up \u003cbr\u003e\nto the great reviews, but it does. ... Reviewed \u003cb\u003eFebruary\u003c/b\u003e 23, 2016 via mobile ... \u003cbr\u003e\n\u003cb\u003eLonely planet\u003c/b\u003e says it works until 3pm and from 6 till 9:45pm.",
+   "cacheId": "GO1jGjJS9bwJ",
+   "formattedUrl": "https://www.tripadvisor.com/ShowUserReviews-g189106-d1105913- r354173831-Botequim_da_Mouraria-Evora_Evora_District_Alentej...",
+   "htmlFormattedUrl": "https://www.tripadvisor.com/ShowUserReviews-g189106-d1105913- r354173831-Botequim_da_Mouraria-\u003cb\u003eEvora\u003c/b\u003e_\u003cb\u003eEvora\u003c/b\u003e_District_Alentej...",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "275",
+      "height": "183",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQY7LEWbkm4SwBKsOsjvsJShtmkEQvZy48ONbPFl5DjN7bv7lW6F4m8Fw"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Portugal",
+      "title": "Portugal"
+     },
+     {
+      "url": "Alentejo",
+      "title": "Alentejo"
+     },
+     {
+      "url": "Evora District",
+      "title": "Evora District"
+     },
+     {
+      "url": "Evora",
+      "title": "Evora"
+     },
+     {
+      "url": "Evora Restaurants",
+      "title": "Evora Restaurants"
+     },
+     {
+      "url": "Botequim da Mouraria",
+      "title": "Botequim da Mouraria"
+     }
+    ],
+    "review": [
+     {
+      "reviewer": "a TripAdvisor user",
+      "reviewdate": "2016-03-09",
+      "ratingstars": "5.0"
+     }
+    ],
+    "hreview": [
+     {
+      "summary": "“Beautiful little restaurant ”",
+      "dtreviewed": "2016-03-09",
+      "description": "I will admit I was a little sceptical that this restaurant could live up to the great reviews, but it does. It is very small and you sit at the bar but this is the charm of the place. From..."
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Beautiful little restaurant  - Review of Botequim da Mouraria, Evora, Portugal - TripAdvisor",
+      "og:description": "Botequim da Mouraria: Beautiful little restaurant  - See 763 traveler reviews, 333 candid photos, and great deals for Evora, Portugal, at TripAdvisor.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/02/3c/5b/6c/botequim-da-mouraria.jpg",
+      "og:image:width": "550",
+      "og:image:height": "366",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/ShowUserReviews-g189106-d1105913-r354173831-m33762-Botequim_da_Mouraria-Evora_Evora_District_Alentejo.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/ShowUserReviews-g189106-d1105913-r354173831-m33762-Botequim_da_Mouraria-Evora_Evora_District_Alentejo.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/ShowUserReviews-g189106-d1105913-r354173831-m33762-Botequim_da_Mouraria-Evora_Evora_District_Alentejo.html"
+     }
+    ],
+    "Review": [
+     {
+      "author": "a TripAdvisor user",
+      "name": "“Beautiful little restaurant ”",
+      "datePublished": "2016-03-09",
+      "reviewBody": "I will admit I was a little sceptical that this restaurant could live up to the great reviews, but it does. It is very small and you sit at the bar but this is the charm of the place. From..."
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/02/3c/5b/6c/botequim-da-mouraria.jpg"
+     }
+    ]
+   }
+  }
+ ]
+}

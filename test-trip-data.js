@@ -87,7 +87,18 @@ function testAddCities() {
   console.log(JSON.stringify(updatedTrip));
 }
 
-testAddCities();
+function testAddPortOfEntry() {
+  // remove previous file entry
+  const trip = new TripData("Testing");
+  trip.addPortOfEntry("b");
+  const updatedTrip = new TripData("Testing");
+  console.log(JSON.stringify(updatedTrip));
+}
+
+testAddPortOfEntry();
+
+// testAddCities();
+
 // testingGetInfoFromTrip();
 
 // testConstructor();

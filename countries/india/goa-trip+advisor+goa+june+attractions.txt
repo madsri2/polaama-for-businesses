@@ -1,0 +1,948 @@
+{
+ "kind": "customsearch#search",
+ "url": {
+  "type": "application/json",
+  "template": "https://www.googleapis.com/customsearch/v1?q={searchTerms}&num={count?}&start={startIndex?}&lr={language?}&safe={safe?}&cx={cx?}&cref={cref?}&sort={sort?}&filter={filter?}&gl={gl?}&cr={cr?}&googlehost={googleHost?}&c2coff={disableCnTwTranslation?}&hq={hq?}&hl={hl?}&siteSearch={siteSearch?}&siteSearchFilter={siteSearchFilter?}&exactTerms={exactTerms?}&excludeTerms={excludeTerms?}&linkSite={linkSite?}&orTerms={orTerms?}&relatedSite={relatedSite?}&dateRestrict={dateRestrict?}&lowRange={lowRange?}&highRange={highRange?}&searchType={searchType}&fileType={fileType?}&rights={rights?}&imgSize={imgSize?}&imgType={imgType?}&imgColorType={imgColorType?}&imgDominantColor={imgDominantColor?}&alt=json"
+ },
+ "queries": {
+  "request": [
+   {
+    "title": "Google Custom Search - trip advisor goa june attractions",
+    "totalResults": "49700",
+    "searchTerms": "trip advisor goa june attractions",
+    "count": 10,
+    "startIndex": 1,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "goa"
+   }
+  ],
+  "nextPage": [
+   {
+    "title": "Google Custom Search - trip advisor goa june attractions",
+    "totalResults": "49700",
+    "searchTerms": "trip advisor goa june attractions",
+    "count": 10,
+    "startIndex": 11,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "goa"
+   }
+  ]
+ },
+ "context": {
+  "title": "Polaama"
+ },
+ "searchInformation": {
+  "searchTime": 0.567953,
+  "formattedSearchTime": "0.57",
+  "totalResults": "49700",
+  "formattedTotalResults": "49,700"
+ },
+ "items": [
+  {
+   "kind": "customsearch#result",
+   "title": "The Top 10 Things to Do in Goa - TripAdvisor - Goa, India Attractions ...",
+   "htmlTitle": "The Top 10 Things to Do in \u003cb\u003eGoa\u003c/b\u003e - \u003cb\u003eTripAdvisor\u003c/b\u003e - \u003cb\u003eGoa\u003c/b\u003e, India \u003cb\u003eAttractions\u003c/b\u003e ...",
+   "link": "https://www.tripadvisor.com/Attractions-g297604-Activities-Goa.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Book your tickets online for the top things to do in Goa, India on TripAdvisor: See \n50031 traveler reviews and photos of Goa tourist attractions. Find what to do ...",
+   "htmlSnippet": "Book your tickets online for the top things to do in \u003cb\u003eGoa\u003c/b\u003e, India on \u003cb\u003eTripAdvisor\u003c/b\u003e: See \u003cbr\u003e\n50031 traveler \u003cb\u003ereviews\u003c/b\u003e and photos of \u003cb\u003eGoa\u003c/b\u003e tourist \u003cb\u003eattractions\u003c/b\u003e. Find what to do&nbsp;...",
+   "cacheId": "pVsJ4YnamroJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attractions-g297604-Activities-Goa.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttractions\u003c/b\u003e-g297604-Activities-\u003cb\u003eGoa\u003c/b\u003e.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "290",
+      "height": "174",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREcsGefpK2zr3Eme4OsEK1arE_tvStVmk_fXto65JaVfZlfyMu-tzaDWm9"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     },
+     {
+      "url": "Goa",
+      "title": "Goa"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "The Top 10 Things to Do in Goa - TripAdvisor - Goa, India Attractions - Find What to Do Today, This Weekend, or in February",
+      "og:description": "Book your tickets online for the top things to do in Goa, India on TripAdvisor: See 50,031 traveler reviews and photos of Goa tourist attractions. Find what to do today, this weekend, or in February. We have reviews of the best places to see in Goa. Visit top-rated & must-see attractions.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/03/9b/2f/86/goa.jpg",
+      "og:image:width": "550",
+      "og:image:height": "331",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attractions-g297604-Activities-m33762-Goa.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attractions-g297604-Activities-m33762-Goa.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attractions-g297604-Activities-m33762-Goa.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/03/9b/2f/86/goa.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Inside Goa : Inside - TripAdvisor",
+   "htmlTitle": "Inside \u003cb\u003eGoa\u003c/b\u003e : Inside - \u003cb\u003eTripAdvisor\u003c/b\u003e",
+   "link": "https://www.tripadvisor.com/Travel-g297604-s1/Goa:India:Inside.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "In Goa the monsoon generally arriveds in the 2nd week of June by around 10-\n12th. ... Goa is one of the best places in India to travel as a woman, and/or alone.",
+   "htmlSnippet": "In \u003cb\u003eGoa\u003c/b\u003e the monsoon generally arriveds in the 2nd week of \u003cb\u003eJune\u003c/b\u003e by around 10-\u003cbr\u003e\n12th. ... \u003cb\u003eGoa\u003c/b\u003e is one of the best \u003cb\u003eplaces\u003c/b\u003e in India to \u003cb\u003etravel\u003c/b\u003e as a woman, and/or alone.",
+   "cacheId": "bTZlJ3F5Uy8J",
+   "formattedUrl": "https://www.tripadvisor.com/Travel-g297604.../Goa:India:Inside.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eTravel\u003c/b\u003e-g297604.../\u003cb\u003eGoa\u003c/b\u003e:India:Inside.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "80",
+      "height": "80",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTVQflH0VqVMp6PDcRILO5PBISjTfAm4CWJ85aFIrZtIGOJanUlknhw"
+     }
+    ],
+    "metatags": [
+     {
+      "og:image": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "The 10 Best Hotels in Goa, India (with Picture Gallery) - TripAdvisor",
+   "htmlTitle": "The 10 Best Hotels in \u003cb\u003eGoa\u003c/b\u003e, India (with Picture Gallery) - \u003cb\u003eTripAdvisor\u003c/b\u003e",
+   "link": "https://www.tripadvisor.com/Hotels-g297604-Goa-Hotels.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Book the Best Goa Hotels on TripAdvisor: Find 115539 traveler reviews, candid \nphotos, and prices for 510 hotels in Goa, India.",
+   "htmlSnippet": "Book the Best \u003cb\u003eGoa\u003c/b\u003e Hotels on \u003cb\u003eTripAdvisor\u003c/b\u003e: Find 115539 traveler \u003cb\u003ereviews\u003c/b\u003e, candid \u003cbr\u003e\nphotos, and prices for 510 hotels in \u003cb\u003eGoa\u003c/b\u003e, India.",
+   "cacheId": "VSLyp_3Z--gJ",
+   "formattedUrl": "https://www.tripadvisor.com/Hotels-g297604-Goa-Hotels.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/Hotels-g297604-\u003cb\u003eGoa\u003c/b\u003e-Hotels.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "290",
+      "height": "174",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREcsGefpK2zr3Eme4OsEK1arE_tvStVmk_fXto65JaVfZlfyMu-tzaDWm9"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     },
+     {
+      "url": "Goa",
+      "title": "Goa"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "The 10 Best Hotels in Goa, India (with Picture Gallery) - TripAdvisor",
+      "og:description": "Book the Best Goa Hotels on TripAdvisor: Find 115,539 traveler reviews,  candid photos, and prices for 510 hotels in Goa, India.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/03/9b/2f/86/goa.jpg",
+      "og:image:width": "550",
+      "og:image:height": "331",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Hotels-g297604-m33762-Goa-Hotels.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Hotels-g297604-m33762-Goa-Hotels.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Hotels-g297604-m33762-Goa-Hotels.html",
+      "viewport": "width=1024, initial-scale=1"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/03/9b/2f/86/goa.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Goa in June - Goa Forum - TripAdvisor",
+   "htmlTitle": "\u003cb\u003eGoa\u003c/b\u003e in \u003cb\u003eJune\u003c/b\u003e - \u003cb\u003eGoa\u003c/b\u003e Forum - \u003cb\u003eTripAdvisor\u003c/b\u003e",
+   "link": "https://www.tripadvisor.com/ShowTopic-g297604-i6045-k7419252-Goa_in_June-Goa.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Answer 1 of 20: I plan to visit goa around 5th June. ... 2 destinations mentioned in \nthis post ... Thanks for being a part of the TripAdvisor travel community!",
+   "htmlSnippet": "Answer 1 of 20: I plan to visit \u003cb\u003egoa\u003c/b\u003e around 5th \u003cb\u003eJune\u003c/b\u003e. ... 2 \u003cb\u003edestinations\u003c/b\u003e mentioned in \u003cbr\u003e\nthis post ... Thanks for being a part of the \u003cb\u003eTripAdvisor\u003c/b\u003e travel community!",
+   "cacheId": "-loazFoCS9QJ",
+   "formattedUrl": "https://www.tripadvisor.com/ShowTopic-g297604-i6045-k7419252-Goa_in_ June-Goa.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/ShowTopic-g297604-i6045-k7419252-\u003cb\u003eGoa\u003c/b\u003e_in_ \u003cb\u003eJune\u003c/b\u003e-\u003cb\u003eGoa\u003c/b\u003e.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "80",
+      "height": "80",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTVQflH0VqVMp6PDcRILO5PBISjTfAm4CWJ85aFIrZtIGOJanUlknhw"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     },
+     {
+      "url": "Goa",
+      "title": "Goa"
+     },
+     {
+      "url": "Goa Travel Forum",
+      "title": "Goa Travel Forum"
+     }
+    ],
+    "metatags": [
+     {
+      "og:image": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Agonda Beach (India): Top Tips Before You Go - TripAdvisor",
+   "htmlTitle": "Agonda Beach (India): Top Tips Before You Go - \u003cb\u003eTripAdvisor\u003c/b\u003e",
+   "link": "https://www.tripadvisor.com/Attraction_Review-g816969-d1751637-Reviews-Agonda_Beach-Agonda_Goa.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Agonda Beach, Agonda: See 1419 reviews, articles, and 924 photos of Agonda \n... Address: South Goa District, Agonda 403001, India .... 12 attraction reviews.",
+   "htmlSnippet": "Agonda Beach, Agonda: See 1419 \u003cb\u003ereviews\u003c/b\u003e, articles, and 924 photos of Agonda \u003cbr\u003e\n... Address: South \u003cb\u003eGoa\u003c/b\u003e District, Agonda 403001, India .... 12 \u003cb\u003eattraction reviews\u003c/b\u003e.",
+   "cacheId": "9X1uOCiBQg0J",
+   "formattedUrl": "https://www.tripadvisor.com/Attraction_Review-g816969-d1751637-Reviews -Agonda_Beach-Agonda_Goa.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttraction\u003c/b\u003e_Review-g816969-d1751637-\u003cb\u003eReviews\u003c/b\u003e -Agonda_Beach-Agonda_\u003cb\u003eGoa\u003c/b\u003e.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "276",
+      "height": "183",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTneWvX2tGxeM6T6nHBmDLMZ05dS9z3_mH-WJLSZsY1OAZMa-c3arh5ueE"
+     }
+    ],
+    "LocalBusiness": [
+     {
+      "image": "https://media-cdn.tripadvisor.com/media/photo-s/02/4d/2b/2b/cows-on-the-beach-a-familiar.jpg",
+      "name": "Agonda Beach"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     },
+     {
+      "url": "Goa",
+      "title": "Goa"
+     },
+     {
+      "url": "Agonda",
+      "title": "Agonda"
+     },
+     {
+      "url": "Things to Do in Agonda",
+      "title": "Things to Do in Agonda"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "4.5",
+      "ratingcount": "1419",
+      "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/02/4d/2b/2b/cows-on-the-beach-a-familiar.jpg"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "1419"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Agonda Beach (India): Top Tips Before You Go - TripAdvisor",
+      "og:description": "Agonda Beach, Agonda: See 1,419 reviews, articles, and 924 photos of Agonda Beach, ranked No.1 on TripAdvisor among 8 attractions in Agonda.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/02/4d/2b/2b/cows-on-the-beach-a-familiar.jpg",
+      "og:image:width": "550",
+      "og:image:height": "365",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attraction_Review-g816969-d1751637-Reviews-m33762-Agonda_Beach-Agonda_Goa.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attraction_Review-g816969-d1751637-Reviews-m33762-Agonda_Beach-Agonda_Goa.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attraction_Review-g816969-d1751637-Reviews-m33762-Agonda_Beach-Agonda_Goa.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/02/4d/2b/2b/cows-on-the-beach-a-familiar.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Dudhsagar Falls (Goa, India): Top Tips Before You Go - TripAdvisor",
+   "htmlTitle": "Dudhsagar Falls (\u003cb\u003eGoa\u003c/b\u003e, India): Top Tips Before You Go - \u003cb\u003eTripAdvisor\u003c/b\u003e",
+   "link": "https://www.tripadvisor.com/Attraction_Review-g297604-d3187540-Reviews-Dudhsagar_Falls-Goa.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Book your tickets online for Dudhsagar Falls, Goa: See 925 reviews, articles, and \n... of Dudhsagar Falls, ranked No.8 on TripAdvisor among 356 attractions in Goa.",
+   "htmlSnippet": "Book your tickets online for Dudhsagar Falls, \u003cb\u003eGoa\u003c/b\u003e: See 925 \u003cb\u003ereviews\u003c/b\u003e, articles, and \u003cbr\u003e\n... of Dudhsagar Falls, ranked No.8 on \u003cb\u003eTripAdvisor\u003c/b\u003e among 356 \u003cb\u003eattractions\u003c/b\u003e in \u003cb\u003eGoa\u003c/b\u003e.",
+   "cacheId": "we1u12F0d1oJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attraction_Review-g297604-d3187540-Reviews -Dudhsagar_Falls-Goa.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttraction\u003c/b\u003e_Review-g297604-d3187540-\u003cb\u003eReviews\u003c/b\u003e -Dudhsagar_Falls-\u003cb\u003eGoa\u003c/b\u003e.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "184",
+      "height": "273",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTHd0HDXP4BcfydPFNohywHI2WtAdNtPtX26SX8xjrsEKT5CR1GK2St0h8v"
+     }
+    ],
+    "LocalBusiness": [
+     {
+      "image": "https://media-cdn.tripadvisor.com/media/photo-s/03/ba/5d/b1/dudhsagar-falls.jpg",
+      "name": "Dudhsagar Falls"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     },
+     {
+      "url": "Goa",
+      "title": "Goa"
+     },
+     {
+      "url": "Things to Do in Goa",
+      "title": "Things to Do in Goa"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "4.5",
+      "ratingcount": "925",
+      "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/03/ba/5d/b1/dudhsagar-falls.jpg"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "925"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Dudhsagar Falls (Goa, India): Top Tips Before You Go - TripAdvisor",
+      "og:description": "Book your tickets online for Dudhsagar Falls, Goa: See 925 reviews, articles, and 1,546 photos of Dudhsagar Falls, ranked No.8 on TripAdvisor among 356 attractions in Goa.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/03/ba/5d/b1/dudhsagar-falls.jpg",
+      "og:image:width": "304",
+      "og:image:height": "450",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attraction_Review-g297604-d3187540-Reviews-m33762-Dudhsagar_Falls-Goa.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attraction_Review-g297604-d3187540-Reviews-m33762-Dudhsagar_Falls-Goa.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attraction_Review-g297604-d3187540-Reviews-m33762-Dudhsagar_Falls-Goa.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/03/ba/5d/b1/dudhsagar-falls.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "How is the nightlife in Goa during early June?? I...",
+   "htmlTitle": "How is the nightlife in \u003cb\u003eGoa\u003c/b\u003e during early \u003cb\u003eJune\u003c/b\u003e?? I...",
+   "link": "https://www.tripadvisor.com/FAQ_Answers-g312680-d2249732-t509644-How_is_the_nightlife_in_Goa_during_early_June_I.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Club Cubana, Arpora: See 613 reviews, articles, and 110 photos of Club Cubana\n, ranked No.2 on TripAdvisor among 12 attractions in Arpora.",
+   "htmlSnippet": "Club Cubana, Arpora: See 613 \u003cb\u003ereviews\u003c/b\u003e, articles, and 110 photos of Club Cubana\u003cbr\u003e\n, ranked No.2 on \u003cb\u003eTripAdvisor\u003c/b\u003e among 12 \u003cb\u003eattractions\u003c/b\u003e in Arpora.",
+   "cacheId": "2UeT-0WeQEYJ",
+   "formattedUrl": "https://www.tripadvisor.com/FAQ_Answers-g312680-d2249732-t509644- How_is_the_nightlife_in_Goa_during_early_June_I.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/FAQ_Answers-g312680-d2249732-t509644- How_is_the_nightlife_in_\u003cb\u003eGoa\u003c/b\u003e_during_early_\u003cb\u003eJune\u003c/b\u003e_I.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "80",
+      "height": "80",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTVQflH0VqVMp6PDcRILO5PBISjTfAm4CWJ85aFIrZtIGOJanUlknhw"
+     }
+    ],
+    "metatags": [
+     {
+      "og:image": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "10 Best Goa Vacation Rentals, Villas (with Photos) | TripAdvisor ...",
+   "htmlTitle": "10 Best \u003cb\u003eGoa\u003c/b\u003e Vacation Rentals, Villas (with Photos) | \u003cb\u003eTripAdvisor\u003c/b\u003e ...",
+   "link": "https://www.tripadvisor.com/VacationRentals-g297604-Reviews-Goa-Vacation_Rentals.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "View the Best 984 vacation rentals in Goa with TripAdvisor's 2225 unbiased ... \nThere are an array or restaurants and places to chill within a 1 km radius. ... \nvisited this property on 16th june,2016 with 8 other family members. place is just \nWOW.",
+   "htmlSnippet": "View the Best 984 vacation rentals in \u003cb\u003eGoa\u003c/b\u003e with \u003cb\u003eTripAdvisor&#39;s\u003c/b\u003e 2225 unbiased ... \u003cbr\u003e\nThere are an array or restaurants and \u003cb\u003eplaces\u003c/b\u003e to chill within a 1 km radius. ... \u003cbr\u003e\nvisited this property on 16th \u003cb\u003ejune\u003c/b\u003e,2016 with 8 other family members. place is just \u003cbr\u003e\nWOW.",
+   "cacheId": "BsplDL1VxS0J",
+   "formattedUrl": "https://www.tripadvisor.com/VacationRentals-g297604-Reviews-Goa- Vacation_Rentals.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/VacationRentals-g297604-\u003cb\u003eReviews\u003c/b\u003e-\u003cb\u003eGoa\u003c/b\u003e- Vacation_Rentals.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "290",
+      "height": "174",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREcsGefpK2zr3Eme4OsEK1arE_tvStVmk_fXto65JaVfZlfyMu-tzaDWm9"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "10 Best Goa Vacation Rentals, Villas (with Photos) | TripAdvisor -  Homestay in Goa, India",
+      "og:description": "View the Best 984 vacation rentals in Goa with TripAdvisor's 2,225 unbiased reviews for a great deal on villas in Goa, India",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/03/9b/2f/86/goa.jpg",
+      "og:image:width": "550",
+      "og:image:height": "331",
+      "og:type": "company",
+      "og:url": "/VacationRentals-g297604-Reviews-Goa-Vacation_Rentals.html",
+      "og:site_name": "TripAdvisor",
+      "fb:admins": "100000982334629",
+      "fb:app_id": "162729813767876",
+      "twitter:title": "10 Best Goa Vacation Rentals, Villas (with Photos) | TripAdvisor -  Homestay in Goa, India",
+      "twitter:card": "summary_large_image",
+      "twitter:url": "http://www.tripadvisor.com/VacationRentals-g297604-Reviews-Goa-Vacation_Rentals.html",
+      "twitter:image:src": "https://media-cdn.tripadvisor.com/media/photo-s/01/3e/d3/d2/cow-on-candolim-beach.jpg",
+      "twitter:site": "http://www.tripadvisor.com/Rentals",
+      "twitter:description": "View the Best 984 vacation rentals in Goa with TripAdvisor's 2,225 unbiased reviews for a great deal on villas in Goa, India",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/VacationRentals-g297604-Reviews-m33762-Goa-Vacation_Rentals.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/VacationRentals-g297604-Reviews-m33762-Goa-Vacation_Rentals.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/VacationRentals-g297604-Reviews-m33762-Goa-Vacation_Rentals.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/03/9b/2f/86/goa.jpg"
+     }
+    ],
+    "listitem": [
+     {
+      "item": "Asia",
+      "name": "Asia"
+     },
+     {
+      "item": "India",
+      "name": "India"
+     },
+     {
+      "item": "Goa Vacation Rentals",
+      "name": "Goa Vacation Rentals"
+     },
+     {
+      "position": "1",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/18/d3/7a.jpg",
+      "url": "Arroserene a beautiful getaway.",
+      "name": "Arroserene a beautiful getaway.",
+      "description": "This modern and luxurious property, beautifully built is situated in the quiet and picturesque village of Cansaulim, South Goa. Our private apartment is located on the 1st floor of \"PRISTINE..."
+     },
+     {
+      "position": "2",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/04/84/93/2e.jpg",
+      "url": "Mawi Infinitty Villa",
+      "name": "Mawi Infinitty Villa",
+      "description": "Mawi Infinitty Villa is a sea front, 3 bedroom villa with a private pool and a wooden deck with a cabana. It has a caretaker to look after the property. It is only a 2 minute walk to the beach...."
+     },
+     {
+      "position": "3",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/7e/03/10.jpg",
+      "url": "SUNSET SIESTA Holiday Home",
+      "name": "SUNSET SIESTA Holiday Home",
+      "description": "Sunset Siesta - your Holiday Home abode away from home is just a 9 minutes walk (750 m) from the enchanting Benaulim beach-nestled between the bustling Colva and tranquil Varca beaches. \u003cBR\u003e\u003cBR\u003eWhi..."
+     },
+     {
+      "position": "4",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/42/54/18.jpg",
+      "url": "Saudades Beach Bungalow - With Resort Facilities.",
+      "name": "Saudades Beach Bungalow - With Resort Facilities.",
+      "description": "SAUDADES is a modern beach house planted in rustic, village surroundings - Perfect for a getaway holiday. An abundance of trees around the house with clusters of plants bordering the compound..."
+     },
+     {
+      "position": "5",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/79/30/99.jpg",
+      "url": "Siesta - 2 Bedroom",
+      "name": "Siesta - 2 Bedroom",
+      "description": "If you are looking for something with a WOW factor look no further! “Siesta” is a stunningly stylish and exclusive three bedroom villa, idyllically located on the banks of the river Sal.\u003cBR\u003e\u003cBR..."
+     },
+     {
+      "position": "6",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/58/5f/0a.jpg",
+      "url": "DOLPHIN HEIGHTS, Ocean View Villa & Infinity P...",
+      "name": "DOLPHIN HEIGHTS, Ocean View Villa & Infinity P...",
+      "description": "We bring you the most exclusive luxury holiday villa on Tripadvisor. Find yourself with a 180° view of the Arabian Sea and only a 5 minute walk to the beach at this prestigious gated society..."
+     },
+     {
+      "position": "7",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/b1/cb/c6.jpg",
+      "url": "Sunny beach villa Goa retreat with infinity pool",
+      "name": "Sunny beach villa Goa retreat with infinity pool",
+      "description": "This apartment was designed with luxury and sophistication in mind, with marble en-suite bathrooms, air-conditioning fitted throughout and gorgeous first floor balconies it allows you to explore..."
+     },
+     {
+      "position": "8",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/2e/31/47.jpg",
+      "url": "LAZY COTTAGE ON THE RIVER BANKS",
+      "name": "LAZY COTTAGE ON THE RIVER BANKS",
+      "description": "LAZY COTTAGE ON THE RIVER BANKS is one of the two true Wooden Chalets situated on the banks of Goa's largest River \"Mandovi\". (Please check out WOODEN CHALET ON THE RIVER BANKS for information..."
+     },
+     {
+      "position": "9",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/b2/07/6b.jpg",
+      "url": "Riverside Cavelossim Goa: 2Bedroom Moderm Apartmen...",
+      "name": "Riverside Cavelossim Goa: 2Bedroom Moderm Apartmen...",
+      "description": "2 Bedroom fully furnished apartment in South Goa-Cavelossim. The apartment is located in the prime area of SOuth Goa in very close vicinity of all the 5 & 4 star resorts. Cavelossim beach is..."
+     },
+     {
+      "position": "10",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/2a/71/86.jpg",
+      "url": "WHISPERING PALMS-Holiday Home",
+      "name": "WHISPERING PALMS-Holiday Home",
+      "description": "WHISPERING PALMS – our luxurious and trendy holiday home promises you the most relaxing Goan holiday experience. We have truly tried to think of everything and more to make your stay here..."
+     },
+     {
+      "position": "11",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/3f/0b/00.jpg",
+      "url": "Stunning riverfront 2-bed villa, 5 min from beach",
+      "name": "Stunning riverfront 2-bed villa, 5 min from beach",
+      "description": "If you are looking for something with a WOW factor look no further! “Siesta” is a stunningly stylish and exclusive two bedroom villa, idyllically located on the banks of the river Sal...."
+     },
+     {
+      "position": "12",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/15/a9/d6.jpg",
+      "url": "luxury Villa for short/long term rent . Anjuna Goa",
+      "name": "luxury Villa for short/long term rent . Anjuna Goa",
+      "description": "The property is very close to the world famous Saturday Night Market, Club Cubana and Splash down water park , It is approx 2kms to Anjuna and Baga beaches. There are an array or restaurants..."
+     },
+     {
+      "position": "13",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/3f/0b/00.jpg",
+      "url": "Stunning riverfront 3-bed villa, 5 min from beach",
+      "name": "Stunning riverfront 3-bed villa, 5 min from beach",
+      "description": "If you are looking for something with the WOW factor look no further! Siesta is a stunningly stylish and exclusive three bedroom villa, idyllically located on the banks of the river Sal. Siesta..."
+     },
+     {
+      "position": "14",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/29/7a/74.jpg",
+      "url": "Captain - 4 Bed, PrivatePool, near Vagator",
+      "name": "Captain - 4 Bed, PrivatePool, near Vagator",
+      "description": "Step within the realm of Captain Joe’s and experience open spaces, portuguese styling, lovely swimming pool, well landscaped lawns, peace & tranquility, easy access (Anjuna is merely 3 kms..."
+     },
+     {
+      "position": "15",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/a1/60/c4.jpg",
+      "url": "GOA, &quot;SEA BREEZE&quot; 4 B/R SEA FRO...",
+      "name": "GOA, &quot;SEA BREEZE&quot; 4 B/R SEA FRO...",
+      "description": "THE FOUR BEDROOM VILLA ACCOMMODATES 8 GUESTS\u003cBR\u003eThis Beach Side luxury Villa is situated 200 meters from the sea and overlooks the picturesque Arabian Sea. Located in a coveted high-end gated..."
+     },
+     {
+      "position": "16",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/96/2e/63.jpg",
+      "url": "The Nest",
+      "name": "The Nest",
+      "description": "\"The Nest\" is a charming two bedroom villa with a private tropical garden, offering you the best of both worlds - a swimming pool located right next to the villa and the beautiful Cavelossim..."
+     },
+     {
+      "position": "17",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/04/85/7f/a8.jpg",
+      "url": "The Brook",
+      "name": "The Brook",
+      "description": "‘The Brook’ houses 4 ensuite bedrooms and a study with outdoor patios connected to each room. With a dining area for 8 people, attached kitchen with a centre island seating another 4 people..."
+     },
+     {
+      "position": "18",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/c7/61/9c.jpg",
+      "url": "Sagar Villa",
+      "name": "Sagar Villa",
+      "description": "The villa is in a gated resort property called Nanu Beach Retreat. The community has its own pool and guests are also allowed to use the pool at the Nanu resort which also has a restaurant..."
+     },
+     {
+      "position": "19",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/a9/0d/30.jpg",
+      "url": "SUNSHINE GLORY-Your Dream stay",
+      "name": "SUNSHINE GLORY-Your Dream stay",
+      "description": "SUNSHINE GLORY- Luxury Holiday within a budget...\u003cBR\u003e\u003cBR\u003eOur elegantly furnished, independent Holiday Home is just a short 9 minutes walk (750 m) from the enchanting Benaulim beach-nestled..."
+     },
+     {
+      "position": "20",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/0d/17/b3.jpg",
+      "url": "Zen Gardens 3 BHK Row Villa",
+      "name": "Zen Gardens 3 BHK Row Villa",
+      "description": "Luxuriously furnished, comfortable and immaculately kept 3 BHK Row Villa For Rent at Benaulim south Goa in a clean & secure complex with swimming pool and landscaped gardens. Unwind yourself..."
+     },
+     {
+      "position": "21",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/b3/cc/6a.jpg",
+      "url": "WOODEN CHALET ON THE RIVER BANKS",
+      "name": "WOODEN CHALET ON THE RIVER BANKS",
+      "description": "WOODEN CHALET ON THE RIVER BANKS is one of the two beautiful riverside properties (please check out LAZY RIVER COTTAGE) true Wooden Chalets situated on the banks of Goa's largest River, \"Mandovi\"..."
+     },
+     {
+      "position": "22",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/fb/63/52.jpg",
+      "url": "Misquita Holiday home",
+      "name": "Misquita Holiday home",
+      "description": "This magnificent holiday home stands in a colonial house in the picturesque village of Benaulim in the tropical paradise of Goa. It is homely, clean, well maintained, fully equipped with antique..."
+     },
+     {
+      "position": "23",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/04/73/0b/82.jpg",
+      "url": "Riviera - 4 Bed Luxury Private PoolVilla, Candolim",
+      "name": "Riviera - 4 Bed Luxury Private PoolVilla, Candolim",
+      "description": "Thanks for your interest in The Luxurious Riviera Villa - 4 Bed Private Pool North Goa Villa near Candolim and I'd love to welcome you to stay. Please note as a Tripadvisor policy we cannot..."
+     },
+     {
+      "position": "24",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/cc/7e/9f.jpg",
+      "url": "Exclusive Luxury Private Villa near Palolem beach",
+      "name": "Exclusive Luxury Private Villa near Palolem beach",
+      "description": "Located near Palolem, Patnem and Galgibag beaches in south Goa, Lua Cheia Villa is a stunning new property, with 6 bedrooms and a beautiful swimming pool. The wonderfully secluded villa is..."
+     },
+     {
+      "position": "25",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/0d/11/44.jpg",
+      "url": "5am Somewhere -Socorro, North Goa",
+      "name": "5am Somewhere -Socorro, North Goa",
+      "description": "This Goan home has been refurbished and designed keeping with warm Goan sensibilities in mind. A 4 bedroom villa, has an outdoor pool, gazebo, is located in Socorro area of North Goa. Our villa..."
+     },
+     {
+      "position": "26",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/ae/cf/66.jpg",
+      "url": "Goa Hideaway",
+      "name": "Goa Hideaway",
+      "description": "Goa Hideaway is a beautifully renovated, 140 years old heritage Portuguese villa situated in an idyllic, quaint & friendly village of Moira close to the market town of Mapusa. Surrounded by..."
+     },
+     {
+      "position": "27",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/fd/3e/60.jpg",
+      "url": "Vacation Rental 2 BHK Apartment (Air conditioned)",
+      "name": "Vacation Rental 2 BHK Apartment (Air conditioned)",
+      "description": "Spacious 760 sq. ft. apartment. 2 Air conditioned bedrooms. 2 Bathrooms with Western style commodes. Air Conditioned Living room Functional kitchen Access to common swimming pool Ample common..."
+     },
+     {
+      "position": "28",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/9d/32/11.jpg",
+      "url": "Shunya Yoga Varo 3 BR",
+      "name": "Shunya Yoga Varo 3 BR",
+      "description": "Fully staffed 3 Bedroom plus lounge plantation house located on an organic estate 15 mins from Morjim beach. Exclusive lap pool, home grown veggies, family activities, yoga pavilion with panoramic..."
+     },
+     {
+      "position": "29",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/3b/b0/8f.jpg",
+      "url": "Charming 2-bed villa, private garden, near beach",
+      "name": "Charming 2-bed villa, private garden, near beach",
+      "description": "\"The Nest\" is a charming two bedroom villa with a private tropical garden, offering you the best of both worlds - a swimming pool located right next to the villa and the beautiful Cavelossim..."
+     },
+     {
+      "position": "30",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/69/d1/20.jpg",
+      "url": "3 bedroom villa with pool in North Goa (Vagator).",
+      "name": "3 bedroom villa with pool in North Goa (Vagator).",
+      "description": "Themed contemporary 'Bali Style landscape and Villas' with exclusive interiors. The Villa is close to the awesome beaches of Anjuna and Vagator. You can catch the amazing sunsets from Thalassa..."
+     },
+     {
+      "position": "31",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/79/30/99.jpg",
+      "url": "Siesta-3 Bedroom",
+      "name": "Siesta-3 Bedroom",
+      "description": "If you are looking for something with the WOW factor look no further! Siesta is a stunningly stylish and exclusive three bedroom villa, idyllically located on the banks of the river Sal.\u003cBR\u003e\u003cBR\u003eSie..."
+     },
+     {
+      "position": "32",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/04/67/b4/34.jpg",
+      "url": "Avelina Guest House Room 5 - Deluxe Seaview",
+      "name": "Avelina Guest House Room 5 - Deluxe Seaview",
+      "description": "Stay in a beautiful and quiet huts near the bay of palolem. Enjoy the complimentary breakfast, fresh garden and gorgeous view. This charming and spacious houses is located in the quiet and..."
+     },
+     {
+      "position": "33",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/5a/ab/87.jpg",
+      "url": "Sea Breeze Villas Purva - 4 BR luxurious villa wit...",
+      "name": "Sea Breeze Villas Purva - 4 BR luxurious villa wit...",
+      "description": "Sea Breeze Villas Purva is a luxurious 4 bedroom spacious villa with private swimming pool and landscaped garden in Anjuna, North Goa. The villa has large airy rooms with big windows, large..."
+     },
+     {
+      "position": "34",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/7a/bf/f4.jpg",
+      "url": "Ghatswood _ We do not take bookings from this site...",
+      "name": "Ghatswood _ We do not take bookings from this site...",
+      "description": "Ghatswood\u003cBR\u003eGhatswood comprises 6 luxury apartments. These apartments have been finished to the highest specification, incorporating several architectural firsts in Goa. These include a light/vent..."
+     },
+     {
+      "position": "35",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/d8/83/ba.jpg",
+      "url": "Goa Luxury Villas",
+      "name": "Goa Luxury Villas",
+      "description": "This 4 bedroom Presidential Villa is a premium villa because of its tastefully decorated large living spaces and its private swimming pool. This makes it the most sought after villa in the..."
+     },
+     {
+      "position": "36",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/04/be/d9.jpg",
+      "url": "GOA 4 Bed/ 4 Bath Luxury Apt with Panoramic views",
+      "name": "GOA 4 Bed/ 4 Bath Luxury Apt with Panoramic views",
+      "description": "Goa 4 Bed/4 Bath Luxury apartment with panoramic ocean and valley views. Our Goa vacation home is located in Dona Paula, one of the premium neighborhoods in Goa. Our 4 Bed/4 bath luxury apartment..."
+     },
+     {
+      "position": "37",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/2b/ae/99.jpg",
+      "url": "5am Somewhere - Nandini, Candolim, Goa",
+      "name": "5am Somewhere - Nandini, Candolim, Goa",
+      "description": "Casa Nandini is a boutique vills located in Calangute. Its a 100 year old villa which has been refurbished within the interiors and has 2 Deluxe Rooms , a Premium and a Grand Suite for accomodation..."
+     },
+     {
+      "position": "38",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/b3/2f/f1.jpg",
+      "url": "Self Catering (Serviced) Apartment Mobor Cavelosim",
+      "name": "Self Catering (Serviced) Apartment Mobor Cavelosim",
+      "description": "Bright and airey 1st floor modern self catering 90sqm apartment facing main street with 10msq furnished sunny terrace plus additional balcony off master.\u003cBR\u003eSpacious bespoke wardrobes and vanity..."
+     },
+     {
+      "position": "39",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/8d/37/8f.jpg",
+      "url": "Regal Park, Candolim, Goa.",
+      "name": "Regal Park, Candolim, Goa.",
+      "description": "Property description Two bedroom, spacious second floor apartment with large balconies, set in walled complex with 24 hour gated security. The front balcony, where you can relax and dine or..."
+     },
+     {
+      "position": "40",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/40/a0/ec.jpg",
+      "url": "TripThrill Sakina Apartments",
+      "name": "TripThrill Sakina Apartments",
+      "description": "Sakina Apartments is located in Colva. The beautiful Colva Beach is 1.5 km and the Benaulim Beach is 2 km. Each air-conditioned room here will provide you with a TV and a seating area. There..."
+     },
+     {
+      "position": "41",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/23/42/e7.jpg",
+      "url": "SUNRISE HUES-Modern & Elegant",
+      "name": "SUNRISE HUES-Modern & Elegant",
+      "description": "'For your holiday - Hotels give you a room, we offer you our HOME'SUNRISE HUES - Our Spacious Apartment has a modern feel and overlooks lush green Palm trees dotting the nearby beach coastline...."
+     },
+     {
+      "position": "42",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/04/ad/37/65.jpg",
+      "url": "Heritage Portuguese Beach Villa",
+      "name": "Heritage Portuguese Beach Villa",
+      "description": "Heritage Portuguese Beach Villa 150 Mtrs. from Candolim Beach. Ocean facing balconies, teak wood flooring and lavish green huge private gardens with lots of flora and a private well complimenting..."
+     },
+     {
+      "position": "43",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/2f/cd/c0.jpg",
+      "url": "Villa ' DREAM ' Luisa By The Sea.",
+      "name": "Villa ' DREAM ' Luisa By The Sea.",
+      "description": "IF LOOKING FOR A SPACIOUS AND COZY COTTAGE , LET YOUR ' DREAM ' COME TRUE ! ! ! Friendly, private and exclusive, perfect for Couple or Honeymoon. Dream is a pretty very cosy, single story 2..."
+     },
+     {
+      "position": "44",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/0c/81/93.jpg",
+      "url": "Villa Jonquille - 2 BHK in Anjuna",
+      "name": "Villa Jonquille - 2 BHK in Anjuna",
+      "description": "This 2 bedroom, single storey lovely villa sleeps 4 but can accommodate up to a family of 6 people and is in a great location in Anjuna but is also close to Vagator. The villa provides what..."
+     },
+     {
+      "position": "45",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/57/a1/6e.jpg",
+      "url": "Morjim Beach Villa",
+      "name": "Morjim Beach Villa",
+      "description": "It is located on the Morjim beach just opposite to Bora Bora restaurant. House is full of amenities such Fridge ,Air conditioned, TV, internet, music system, equipped kitchen, Sea view from..."
+     },
+     {
+      "position": "46",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/ec/0f/5e.jpg",
+      "url": "00) 2 Bed Apart Nagoa Sleeps 4",
+      "name": "00) 2 Bed Apart Nagoa Sleeps 4",
+      "description": "The apartment is open plan! It has a very large terrace, large LCD TV, Tata Sky satellite, (Full Sky programs, Inc. English Films, all Sports Packs), DVD Player. There is seating for 6 people,..."
+     },
+     {
+      "position": "47",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/8a/50/1e.jpg",
+      "url": "3 Bedroom Villa in Benaulim, Goa",
+      "name": "3 Bedroom Villa in Benaulim, Goa",
+      "description": "Your home awaits... Sleeps a maximum of 6 guests. All 3 Bedrooms in the house have Air Conditioning, 3 Bathrooms (2 en-suite), a terrace, an integrated garage space, back-up power supply, safe..."
+     },
+     {
+      "position": "48",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/d6/61/eb.jpg",
+      "url": "Veera Strand Park Serviced Apartments",
+      "name": "Veera Strand Park Serviced Apartments",
+      "description": "\"Veera Strand Park\" offers modern classic and chic, all spacious air conditioned luxury serviced apartments with a Living, Dining area &Fully equipped Kitchens. Expansive Ensuite two Bedrooms..."
+     },
+     {
+      "position": "49",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/1a/38/0e.jpg",
+      "url": "GOAgaga-Ideal apts near beach 4 families n couples",
+      "name": "GOAgaga-Ideal apts near beach 4 families n couples",
+      "description": "(Pl look up GOAgaga to find my independent website. I choose to leave my BOOKED DATES in the calendar FREE, so pl ask for your required dates.) GOAgaga Holidays have one apt each in Saligao..."
+     },
+     {
+      "position": "50",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/3f/17/b8.jpg",
+      "url": "White Castles Anjuna",
+      "name": "White Castles Anjuna",
+      "description": "White Castles – Luxury Villas with private swimming pool for rent This luxury villa is nestled in the serene village of Anjuna Goa. It is one of those rare locations in North Goa where our..."
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Goa v Kerala (Posted on both forums) - Goa Forum - TripAdvisor",
+   "htmlTitle": "\u003cb\u003eGoa\u003c/b\u003e v Kerala (Posted on both forums) - \u003cb\u003eGoa\u003c/b\u003e Forum - \u003cb\u003eTripAdvisor\u003c/b\u003e",
+   "link": "https://www.tripadvisor.com/ShowTopic-g297604-i6045-k5320800-Goa_v_Kerala_Posted_on_both_forums-Goa.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Having been to Goa a number of times over the last 9 years we've often \nwondered how it compares to ... As with all places in India nowhere is quiet on \nthe roads.",
+   "htmlSnippet": "Having been to \u003cb\u003eGoa\u003c/b\u003e a number of times over the last 9 years we&#39;ve often \u003cbr\u003e\nwondered how it compares to ... As with all \u003cb\u003eplaces\u003c/b\u003e in India nowhere is quiet on \u003cbr\u003e\nthe roads.",
+   "cacheId": "5-OpmA4Aj8cJ",
+   "formattedUrl": "https://www.tripadvisor.com/ShowTopic-g297604-i6045-k5320800-Goa_v_ Kerala_Posted_on_both_forums-Goa.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/ShowTopic-g297604-i6045-k5320800-\u003cb\u003eGoa\u003c/b\u003e_v_ Kerala_Posted_on_both_forums-\u003cb\u003eGoa\u003c/b\u003e.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "80",
+      "height": "80",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTVQflH0VqVMp6PDcRILO5PBISjTfAm4CWJ85aFIrZtIGOJanUlknhw"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     },
+     {
+      "url": "Goa",
+      "title": "Goa"
+     },
+     {
+      "url": "Goa Travel Forum",
+      "title": "Goa Travel Forum"
+     }
+    ],
+    "metatags": [
+     {
+      "og:image": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "The 10 Best Cheap Hotels in Goa - Jan 2017 (with Prices ...",
+   "htmlTitle": "The 10 Best Cheap Hotels in \u003cb\u003eGoa\u003c/b\u003e - Jan 2017 (with Prices ...",
+   "link": "https://www.tripadvisor.com/HotelsList-Goa-Cheap-Hotels-zfp10556.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Cheap Hotels in Goa: Find 6209 traveler reviews, candid photos, and the top \nranked ... \"One of the finest and most affordable places to stay in North Goa.",
+   "htmlSnippet": "Cheap Hotels in \u003cb\u003eGoa\u003c/b\u003e: Find 6209 traveler \u003cb\u003ereviews\u003c/b\u003e, candid photos, and the top \u003cbr\u003e\nranked ... &quot;One of the finest and most affordable \u003cb\u003eplaces\u003c/b\u003e to stay in North \u003cb\u003eGoa\u003c/b\u003e.",
+   "cacheId": "EQOkDPxXlrMJ",
+   "formattedUrl": "https://www.tripadvisor.com/HotelsList-Goa-Cheap-Hotels-zfp10556.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/HotelsList-\u003cb\u003eGoa\u003c/b\u003e-Cheap-Hotels-zfp10556.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "80",
+      "height": "80",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTVQflH0VqVMp6PDcRILO5PBISjTfAm4CWJ85aFIrZtIGOJanUlknhw"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     },
+     {
+      "url": "Goa",
+      "title": "Goa"
+     },
+     {
+      "url": "Goa Hotels",
+      "title": "Goa Hotels"
+     }
+    ],
+    "metatags": [
+     {
+      "og:image": "https://static.tacdn.com/img2/postimg.jpg",
+      "viewport": "width=1024, initial-scale=1"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ]
+   }
+  }
+ ]
+}

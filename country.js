@@ -20,7 +20,7 @@ function Country(country) {
     return;
   }
   catch(err) {
-    // logger.warn(`file for country ${country} does not exist: ${err.message}`);
+    logger.warn(`file for country ${country} does not exist`);
   }
   return undefined;
 }

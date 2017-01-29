@@ -38,22 +38,20 @@ TripDataFormatter.prototype.formatComments = function() {
     .replace("${otherComments}",listAsHtml(comments.others));
 }
 
-TripDataFormatter.prototype.formatTripDetails = function() {
+TripDataFormatter.prototype.formatTripDetails = function(weatherDetails, activityDetails) {
   const comments = this.trip.parseComments();
   const todoList = this.trip.getInfoFromTrip(TripData.todo);
   const packList = this.trip.getPackList();
+  let activities = listAsHtml(comments.activities);
+  activities += formatActivities.call(this, activityDetails);
   const html = fs.readFileSync("html-templates/trip-page.html", 'utf8');
   return html.replace("${tripName}",this.trip.rawTripName)
-    .replace("${header1}","Activities Details")
-    .replace("${list1}",listAsHtml(comments.activities))
-    .replace("${header2}","Stay Details")
-    .replace("${list2}",listAsHtml(comments.stay))
-    .replace("${header3}","Flight Details")
-    .replace("${list3}",listAsHtml(comments.flight))
-    .replace("${header4}","Rental car Details")
-    .replace("${list4}",listAsHtml(comments.car))
-    .replace("${header5}","Other comments")
-    .replace("${list5}",listAsHtml(comments.others))
+    .replace("${activityDetails}",activities)
+    .replace("${weatherDetails}", formatWeatherDetails.call(this, weatherDetails))
+    .replace("${stayDetails}",listAsHtml(comments.stay))
+    .replace("${flightDetails}",listAsHtml(comments.flight))
+    .replace("${carDetails}",listAsHtml(comments.car))
+    .replace("${otherComments}",listAsHtml(comments.others))
     .replace("${todoList}",listAsHtml(todoList))
     .replace("${toPackList}",listAsHtml(packList.toPack))
     .replace("${donePackList}",listAsHtml(packList.done));
@@ -80,12 +78,11 @@ TripDataFormatter.prototype.formatPackList = function(headers) {
   return packList.toPack;
 }
 
-TripDataFormatter.prototype.formatWeatherDetails = function(weatherDetails, addlWeatherDetails) {
-  const html = fs.readFileSync("html-templates/weather-details.html", 'utf8');
+function formatWeatherDetails(weatherDetails) {
   const keys = Object.keys(weatherDetails);
   if(keys.indexOf("nocity") > -1) {
     // no weather details available since the trip does not have any city information
-    return html.replace("${citiesWeatherDetails}", weatherDetails.nocity);
+    return weatherDetails.nocity;
   }
 
   let wText = `<div data-role="collapsibleset">\n`;
@@ -100,17 +97,21 @@ TripDataFormatter.prototype.formatWeatherDetails = function(weatherDetails, addl
       });
 
   wText += `</div>\n`;
-  return html.replace("${citiesWeatherDetails}", wText).replace("${additionalWeatherDetails}", toLink(addlWeatherDetails));
+  return wText;
 }
 
-// TODO: Might be a duplicate of above function.
-TripDataFormatter.prototype.formatActivityDetails = function(activityDetails) {
-  const html = fs.readFileSync("html-templates/activity-details.html", 'utf8');
+TripDataFormatter.prototype.formatWeatherDetails = function(weatherDetails, addlWeatherDetails) {
+  const html = fs.readFileSync("html-templates/weather-details.html", 'utf8');
+  const formattedWeatherDetails = formatWeatherDetails.call(this, weatherDetails);
+  return html.replace("${citiesWeatherDetails}", formattedWeatherDetails)
+             .replace("${additionalWeatherDetails}", toLink(addlWeatherDetails));
+}
 
+function formatActivities(activityDetails) {
   const keys = Object.keys(activityDetails);
   if(keys.indexOf("nocity") > -1) {
     // no activity details available since the trip does not have any city information
-    return html.replace("${activityDetails}", activityDetails.nocity);
+    return activityDetails.nocity;
   }
   let aText = `<div data-role="collapsibleset">\n`;
   keys.forEach(city => {
@@ -122,6 +123,13 @@ TripDataFormatter.prototype.formatActivityDetails = function(activityDetails) {
       aText += `</div>\n`;
       });
   aText += `</div>\n`;
+  return aText;
+}
+
+// TODO: Might be a duplicate of above function.
+TripDataFormatter.prototype.formatActivityDetails = function(activityDetails) {
+  const html = fs.readFileSync("html-templates/activity-details.html", 'utf8');
+  const aText = formatActivities.call(this, activityDetails);
   return html.replace("${activityDetails}", aText);
 }
 
@@ -203,6 +211,7 @@ TripDataFormatter.prototype.formatHandleTravelersPage = function() {
   return fs.readFileSync("html-templates/new-trip-handle-travelers.html", 'utf8');
 }
 
+// choosing cities for a new trip. This will include selecting a port of entry as well.
 TripDataFormatter.prototype.formatCities = function() {
   if(_.isUndefined(this.trip.country)) {
     logger.warn(`formatCities: No country information for ${this.trip.data.name}`);
@@ -217,6 +226,23 @@ TripDataFormatter.prototype.formatCities = function() {
   return fs.readFileSync("html-templates/cities.html", 'utf8')
     .replace("${cityList}", selection)
     .replace("${portOfEntryList}", selection)
+    .replace("${country}", this.trip.data.destination);
+}
+
+// adding cities for existing trip
+TripDataFormatter.prototype.addCitiesExistingTrip = function() {
+  if(_.isUndefined(this.trip.country)) {
+    logger.warn(`addCitiesExistingTrip: No country information for ${this.trip.data.name}`);
+    return `No cities for country ${this.trip.data.name}`;
+  }
+  const cities = this.trip.country.cities;
+  logger.info(`Found ${cities.length} cities in ${this.trip.data.name}`);
+  let selection = "";
+  cities.forEach(city => {
+      selection += `<option value="${city}">${city}</option>`;
+  });
+  return fs.readFileSync("html-templates/add-cities.html", 'utf8')
+    .replace("${cityList}", selection)
     .replace("${country}", this.trip.data.destination);
 }
 

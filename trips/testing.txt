@@ -1,1 +1,1 @@
-{"name":"testing","rawName":"Testing","cities":["a","b"]}
+{"name":"testing","rawName":"Testing","cities":["a","b"],"portOfEntry":"b"}

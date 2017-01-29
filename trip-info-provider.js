@@ -58,8 +58,7 @@ TripInfoProvider.prototype.getStoredWeatherDetails = function() {
     return weather;
   }
   this.trip.data.cities.forEach(city => {
-    if(!_.isUndefined(this.tripInfoDetails.cities[city]) && 
-       !_.isUndefined(this.tripInfoDetails.cities[city].weather)) {
+    if(this.tripInfoDetails.cities[city] && this.tripInfoDetails.cities[city].weather) {
       weather[city] = this.tripInfoDetails.cities[city].weather;
     }
     else {

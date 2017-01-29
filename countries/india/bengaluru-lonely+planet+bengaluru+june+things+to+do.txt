@@ -1,0 +1,794 @@
+{
+ "kind": "customsearch#search",
+ "url": {
+  "type": "application/json",
+  "template": "https://www.googleapis.com/customsearch/v1?q={searchTerms}&num={count?}&start={startIndex?}&lr={language?}&safe={safe?}&cx={cx?}&cref={cref?}&sort={sort?}&filter={filter?}&gl={gl?}&cr={cr?}&googlehost={googleHost?}&c2coff={disableCnTwTranslation?}&hq={hq?}&hl={hl?}&siteSearch={siteSearch?}&siteSearchFilter={siteSearchFilter?}&exactTerms={exactTerms?}&excludeTerms={excludeTerms?}&linkSite={linkSite?}&orTerms={orTerms?}&relatedSite={relatedSite?}&dateRestrict={dateRestrict?}&lowRange={lowRange?}&highRange={highRange?}&searchType={searchType}&fileType={fileType?}&rights={rights?}&imgSize={imgSize?}&imgType={imgType?}&imgColorType={imgColorType?}&imgDominantColor={imgDominantColor?}&alt=json"
+ },
+ "queries": {
+  "request": [
+   {
+    "title": "Google Custom Search - lonely planet bengaluru june things to do",
+    "totalResults": "1050",
+    "searchTerms": "lonely planet bengaluru june things to do",
+    "count": 10,
+    "startIndex": 1,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "bengaluru"
+   }
+  ],
+  "nextPage": [
+   {
+    "title": "Google Custom Search - lonely planet bengaluru june things to do",
+    "totalResults": "1050",
+    "searchTerms": "lonely planet bengaluru june things to do",
+    "count": 10,
+    "startIndex": 11,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "bengaluru"
+   }
+  ]
+ },
+ "context": {
+  "title": "Polaama"
+ },
+ "searchInformation": {
+  "searchTime": 0.600233,
+  "formattedSearchTime": "0.60",
+  "totalResults": "1050",
+  "formattedTotalResults": "1,050"
+ },
+ "spelling": {
+  "correctedQuery": "lonely planet bangalore june things to do \"bangalore\"",
+  "htmlCorrectedQuery": "lonely planet \u003cb\u003e\u003ci\u003ebangalore\u003c/i\u003e\u003c/b\u003e june things to do &quot;\u003cb\u003e\u003ci\u003ebangalore\u003c/i\u003e\u003c/b\u003e&quot;"
+ },
+ "items": [
+  {
+   "kind": "customsearch#result",
+   "title": "Lonely Planet's Best in Travel: top 10 cities for 2012 - Lonely Planet",
+   "htmlTitle": "\u003cb\u003eLonely Planet&#39;s\u003c/b\u003e Best in Travel: top 10 cities for 2012 - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/travel-tips-and-articles/76861",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Jun 7, 2012 ... The coming year will put all of these cities in a fresh light, whether ... Muscat is the \nfocus for the revamp, with cultural events, luxury accommodation and aquatic \nactivities taking centre stage. ... The undisputed Elvis of South Asian megacities, \nBengaluru is in a class .... This article was updated in June 2012.",
+   "htmlSnippet": "Jun 7, 2012 \u003cb\u003e...\u003c/b\u003e The coming year will put all of these cities in a fresh light, whether ... Muscat is the \u003cbr\u003e\nfocus for the revamp, with cultural events, luxury accommodation and aquatic \u003cbr\u003e\n\u003cb\u003eactivities\u003c/b\u003e taking centre stage. ... The undisputed Elvis of South Asian megacities, \u003cbr\u003e\n\u003cb\u003eBengaluru\u003c/b\u003e is in a class .... This article was updated in \u003cb\u003eJune\u003c/b\u003e 2012.",
+   "cacheId": "fOi8hvBB5bcJ",
+   "formattedUrl": "www.lonelyplanet.com/travel-tips-and-articles/76861",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/travel-tips-and-articles/76861",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "302",
+      "height": "167",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTsOOVzf_fIKQoVorInxqHcqWZzJPZPvjMNrnEoE22MakBbJU0g1EVUT1GP"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Lonely Planet's Best in Travel: top 10 cities for 2012 - Lonely Planet",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article",
+      "og:title": "Lonely Planet's Best in Travel: top 10 cities for 2012 - Lonely Planet",
+      "og:url": "http://www.lonelyplanet.com/travel-tips-and-articles/76861",
+      "og:description": "Read Lonely Planet's Best in Travel: top 10 cities for 2012",
+      "og:image": "https://lonelyplanetwp.imgix.net/2012/05/3731398839_18aae7b2bb_z.jpg?sharp=10&vib=20&w=748",
+      "article:published_time": "2012-06-07T00:28:42+00:00",
+      "article:author": "Lonely Planet"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://lonelyplanetwp.imgix.net/2012/05/3731398839_18aae7b2bb_z.jpg?sharp=10&vib=20&w=748"
+     }
+    ],
+    "article": [
+     {
+      "headline": "Lonely Planet's Best in Travel: top 10 cities for 2012",
+      "alternativeheadline": "Lonely Planet's Best in Travel: top 10 cities for 2012",
+      "datepublished": "2012-06-07T00:28:42+00:00",
+      "articlebody": "After globe-trotting research and fierce debate, Lonely Planet has come to a decision on its favourite cities for 2012. As always, our shortlist has some known gems and a few to raise a quizzical..."
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Parambikulam Wildlife Sanctuary - Lonely Planet",
+   "htmlTitle": "Parambikulam Wildlife Sanctuary - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/india/south-india/sights/parks-gardens/parambikulam-wildlife-sanctuary/item-a-1150563-id",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "All things to do in South India (3732) ... The sanctuary is best avoided during \nmonsoon (June to August) and it sometimes closes in ... Bengaluru (Bangalore).",
+   "htmlSnippet": "All \u003cb\u003ethings to do\u003c/b\u003e in South India (3732) ... The sanctuary is best avoided during \u003cbr\u003e\nmonsoon (\u003cb\u003eJune\u003c/b\u003e to August) and it sometimes closes in ... \u003cb\u003eBengaluru\u003c/b\u003e (\u003cb\u003eBangalore\u003c/b\u003e).",
+   "cacheId": "jJP1QnnrEeMJ",
+   "formattedUrl": "https://www.lonelyplanet.com/india/south.../item-a-1150563-id",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/india/south.../item-a-1150563-id",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "276",
+      "height": "183",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRksoxToBqI8oXbdIlR7h5Q5s_5XVQjtohALXI5c7n8YGzDuLWCFogNjkKk"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     },
+     {
+      "url": "South India",
+      "title": "South India"
+     },
+     {
+      "url": "Kerala",
+      "title": "Kerala"
+     },
+     {
+      "url": "The Western Ghats",
+      "title": "The Western Ghats"
+     },
+     {
+      "url": "Parambikulam Wildlife Sanctuary",
+      "title": "Parambikulam Wildlife Sanctuary"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Parambikulam Wildlife Sanctuary - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Parambikulam Wildlife Sanctuary - Lonely Planet",
+      "twitter:description": "\u003cp\u003ePossibly the most protected environment in South India – nestled behind three dams in a valley surrounded by Keralan and Tamil Nadu sanctuaries...",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Parambikulam Wildlife Sanctuary - Lonely Planet",
+      "og:description": "\u003cp\u003ePossibly the most protected environment in South India – nestled behind three dams in a valley surrounded by Keralan and Tamil Nadu sanctuaries...",
+      "og:url": "http://www.lonelyplanet.com/india/south-india/sights/parks-gardens/parambikulam-wildlife-sanctuary/item-a-1150563-id",
+      "og:type": "website",
+      "sailthru.date": "2016-05-07 16:28:12 +0000",
+      "sailthru.tags": "Asia, India, South India",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "N05+AntsTvo+i1iNzARmfwciQ6VmkamnNK3VYgyq8Z8="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "http://cache-graphicslib.viator.com/graphicslib/thumbs674x446/8075/SITours/goa-kayaking-in-spike-s-river-in-candolim-198660.jpg"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "name": "View Basket",
+      "url": "Sign in"
+     },
+     {
+      "url": "Search",
+      "name": "Search"
+     },
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Destinations",
+      "name": "Destinations"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Travel places in India - Lonely Planet",
+   "htmlTitle": "Travel places in India - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/india/places",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "At its nerve centre is the capital Bengaluru (Bangalore), a progressive city famous \nfor its craft beer and restaurant scene. Destination ... Top things to do in India.",
+   "htmlSnippet": "At its nerve centre is the capital \u003cb\u003eBengaluru\u003c/b\u003e (\u003cb\u003eBangalore\u003c/b\u003e), a progressive city famous \u003cbr\u003e\nfor its craft beer and restaurant scene. Destination ... Top \u003cb\u003ethings to do\u003c/b\u003e in India.",
+   "cacheId": "eQQanGjbaIwJ",
+   "formattedUrl": "https://www.lonelyplanet.com/india/places",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/india/places",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "153",
+      "height": "304",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQoA6HGCjAPPp0akae3tOqKE82gDwwikOn5UdUcdIRYbd0sWWdcGAxI35Y"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     }
+    ],
+    "metatags": [
+     {
+      "sailthru.date": "2017-01-25 15:42:48 +0000",
+      "sailthru.tags": "Asia, India, adventure-travel, architecture-and-buildings, art-and-literature, beaches, business-travel, cities, coasts-and-islands, eco-tourism, extreme-travel, festivals-and-events, food-and-drink, health-and-wellbeing, history-heritage-and-tradition, honeymoons-and-romance, luxury-travel, movies-and-television, music, off-the-beaten-track, parks-and-reserves, safaris, train-travel-and-railways, walking-and-trekking, wildlife-and-nature",
+      "title": "Travel places in India - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Travel places in India - Lonely Planet",
+      "twitter:description": "Where to go in India top places to visit and travel destinations - Lonely Planet",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Travel places in India - Lonely Planet",
+      "og:description": "Where to go in India top places to visit and travel destinations - Lonely Planet",
+      "og:url": "http://www.lonelyplanet.com/india/places",
+      "og:type": "website",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "b22NZ4jFVcubSp4f7ue8cp8cmubPb0l9bMP2vVyq2gs="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://images-resrc.staticlp.com/S=H380,U/C=W192,H380,XOF50,Y0/O=85/http://media.lonelyplanet.com/assets/image/6da96e8bba0f6008d417ec3ebbd13cdf9e2e8892d6518f0c5e9c8fd5add50f28/362e8644c04dd190c5f2a0d43f983ba2706aeb620ec93cdd8f2fac585c9a78b9.jpg"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Surfing Ashram - Lonely Planet",
+   "htmlTitle": "Surfing Ashram - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/india/karnataka/mangalore/activities/water-sports/surfing-ashram",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "All things to do in Mangaluru (Mangalore) (29) ... activities / Water sports ... \nThere's surf year-round, but the best waves are May to June and September to ...",
+   "htmlSnippet": "All \u003cb\u003ethings to do\u003c/b\u003e in Mangaluru (Mangalore) (29) ... \u003cb\u003eactivities\u003c/b\u003e / Water sports ... \u003cbr\u003e\nThere&#39;s surf year-round, but the best waves are May to \u003cb\u003eJune\u003c/b\u003e and September to&nbsp;...",
+   "cacheId": "94eg_SjXpigJ",
+   "formattedUrl": "www.lonelyplanet.com/india/karnataka/.../activities/.../surfing-ashram",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/india/karnataka/.../\u003cb\u003eactivities\u003c/b\u003e/.../surfing-ashram",
+   "pagemap": {
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     },
+     {
+      "url": "South India",
+      "title": "South India"
+     },
+     {
+      "url": "Bengaluru & Karnataka",
+      "title": "Bengaluru & Karnataka"
+     },
+     {
+      "url": "Mangaluru (Mangalore)",
+      "title": "Mangaluru (Mangalore)"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Surfing Ashram - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Surfing Ashram - Lonely Planet",
+      "twitter:description": "\u003cp\u003eWhile there has always been a spiritual bond between surfer and Mother ocean, the Surfing Ashram at Mulki, 30km north of Mangaluru, takes things...",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Surfing Ashram - Lonely Planet",
+      "og:description": "\u003cp\u003eWhile there has always been a spiritual bond between surfer and Mother ocean, the Surfing Ashram at Mulki, 30km north of Mangaluru, takes things...",
+      "og:url": "http://www.lonelyplanet.com/india/karnataka/mangalore/activities/water-sports/surfing-ashram",
+      "og:type": "website",
+      "sailthru.date": "2017-01-25 03:40:29 +0000",
+      "sailthru.tags": "Asia, India, Mangaluru (Mangalore)",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "TgQrvlXZ6D5YjvOptvU7y47fqskDTrT0ROcWRU+v9u8="
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Weather in South India - Lonely Planet",
+   "htmlTitle": "Weather in South India - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/india/south-india/weather",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Things to do · Sights ... April is hot; May and June are scorching. Competitive \nhotel prices. From June, the monsoon sweeps from south to north, bringing \ndraining ...",
+   "htmlSnippet": "\u003cb\u003eThings to do\u003c/b\u003e &middot; Sights ... April is hot; May and \u003cb\u003eJune\u003c/b\u003e are scorching. Competitive \u003cbr\u003e\nhotel prices. From \u003cb\u003eJune\u003c/b\u003e, the monsoon sweeps from south to north, bringing \u003cbr\u003e\ndraining&nbsp;...",
+   "cacheId": "JTwCpWH8YFMJ",
+   "formattedUrl": "www.lonelyplanet.com/india/south-india/weather",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/india/south-india/weather",
+   "pagemap": {
+    "metatags": [
+     {
+      "title": "Weather in South India - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Weather in South India - Lonely Planet",
+      "twitter:description": "The best time to go to South India, including current weather conditions, temperatures and rainfall",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Weather in South India - Lonely Planet",
+      "og:description": "The best time to go to South India, including current weather conditions, temperatures and rainfall",
+      "og:url": "http://www.lonelyplanet.com/india/south-india/weather",
+      "og:type": "website",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "8An0w/kZCBlMgoZF8ZNA1j0Lk0Cc2EYHfMTpNRmFQhE="
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Essential guide to South India - Lonely Planet",
+   "htmlTitle": "Essential guide to South India - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/india/south-india/essential-information",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "From June, the monsoon sweeps from south to north, bringing draining humidity. \n... Some policies specifically exclude dangerous activities such as scuba diving ...",
+   "htmlSnippet": "From \u003cb\u003eJune\u003c/b\u003e, the monsoon sweeps from south to north, bringing draining humidity. \u003cbr\u003e\n... Some policies specifically exclude dangerous \u003cb\u003eactivities\u003c/b\u003e such as scuba diving&nbsp;...",
+   "cacheId": "iRBTkMEeLg0J",
+   "formattedUrl": "www.lonelyplanet.com/india/south-india/essential-information",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/india/south-india/essential-information",
+   "pagemap": {
+    "metatags": [
+     {
+      "title": "Essential guide to South India - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Essential guide to South India - Lonely Planet",
+      "twitter:description": "Everything for your trip to South India - best time to go, weather, daily cost advisor, visas, cheapest flights and transport information",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Essential guide to South India - Lonely Planet",
+      "og:description": "Everything for your trip to South India - best time to go, weather, daily cost advisor, visas, cheapest flights and transport information",
+      "og:url": "http://www.lonelyplanet.com/india/south-india/essential-information",
+      "og:type": "website",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "IE+F2WZjWBO3prd309bWBB1OU7ciAEwI4YQxgV1yQkY="
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "The best budget and customer friendly hotel in Bangalore - Review ...",
+   "htmlTitle": "The best budget and customer friendly hotel in \u003cb\u003eBangalore\u003c/b\u003e - Review ...",
+   "link": "https://www.tripadvisor.com/ShowUserReviews-g297628-d1446678-r91937764-Sri_Lakshmi_Comforts-Bengaluru_Bangalore_Karnataka.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Jan 6, 2011 ... Bengaluru .... In a nutshell,I will recommend this family run cozy,very comfortable,\nclean ... This is one area the things are beyond the reach of management .... \nStayed June 2010, traveled with family ... Though we understand and appreciate \nthe difficulty of our guests in finding us on portals like Lonely Planet, ...",
+   "htmlSnippet": "Jan 6, 2011 \u003cb\u003e...\u003c/b\u003e \u003cb\u003eBengaluru\u003c/b\u003e .... In a nutshell,I \u003cb\u003ewill\u003c/b\u003e recommend this family \u003cb\u003erun\u003c/b\u003e cozy,very comfortable,\u003cbr\u003e\nclean ... This is one area the \u003cb\u003ethings\u003c/b\u003e are beyond the reach of management .... \u003cbr\u003e\nStayed \u003cb\u003eJune\u003c/b\u003e 2010, traveled with family ... Though we understand and appreciate \u003cbr\u003e\nthe difficulty of our guests in finding us on portals like \u003cb\u003eLonely Planet\u003c/b\u003e,&nbsp;...",
+   "cacheId": "tL-bQ85_QkwJ",
+   "formattedUrl": "https://www.tripadvisor.com/ShowUserReviews-g297628-d1446678- r91937764-Sri_Lakshmi_Comforts-Bengaluru_Bangalore_Karnatak...",
+   "htmlFormattedUrl": "https://www.tripadvisor.com/ShowUserReviews-g297628-d1446678- r91937764-Sri_Lakshmi_Comforts-\u003cb\u003eBengaluru\u003c/b\u003e_\u003cb\u003eBangalore\u003c/b\u003e_Karnatak...",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "259",
+      "height": "194",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTcu_itQPeLGVcg2zIfiY0unxfLph-16grflQsc7svRngnMgmh0Z5PzTJo"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     },
+     {
+      "url": "Karnataka",
+      "title": "Karnataka"
+     },
+     {
+      "url": "Bengaluru",
+      "title": "Bengaluru"
+     },
+     {
+      "url": "Bengaluru Hotels",
+      "title": "Bengaluru Hotels"
+     },
+     {
+      "url": "Sri Lakshmi Comforts",
+      "title": "Sri Lakshmi Comforts"
+     }
+    ],
+    "review": [
+     {
+      "reviewer": "a TripAdvisor user",
+      "reviewdate": "2011-01-06",
+      "ratingstars": "4.0"
+     }
+    ],
+    "hreview": [
+     {
+      "summary": "“The best budget and customer friendly hotel in Bangalore”",
+      "dtreviewed": "2011-01-06",
+      "description": "Have visited Bangalore earlier a number of times on leisure and to meet relatives and friends,But this visit was only a transit to our long Karnataka tour,hence,my hotel requirement was very..."
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "The best budget and customer friendly hotel in Bangalore - Review of Sri Lakshmi Comforts, Bengaluru, India - TripAdvisor",
+      "og:description": "Sri Lakshmi Comforts: The best budget and customer friendly hotel in Bangalore - See 131 traveler reviews, 17 candid photos, and great deals for Sri Lakshmi Comforts at TripAdvisor.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/01/f5/89/9a/sri-lakshmi-comforts.jpg",
+      "og:image:width": "550",
+      "og:image:height": "412",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/ShowUserReviews-g297628-d1446678-r91937764-m33762-Sri_Lakshmi_Comforts-Bengaluru_Karnataka.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/ShowUserReviews-g297628-d1446678-r91937764-m33762-Sri_Lakshmi_Comforts-Bengaluru_Karnataka.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/ShowUserReviews-g297628-d1446678-r91937764-m33762-Sri_Lakshmi_Comforts-Bengaluru_Karnataka.html"
+     }
+    ],
+    "Review": [
+     {
+      "author": "a TripAdvisor user",
+      "name": "“The best budget and customer friendly hotel in Bangalore”",
+      "datePublished": "2011-01-06",
+      "reviewBody": "Have visited Bangalore earlier a number of times on leisure and to meet relatives and friends,But this visit was only a transit to our long Karnataka tour,hence,my hotel requirement was very..."
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/01/f5/89/9a/sri-lakshmi-comforts.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "my second home in Bangalore - Review of Sri Lakshmi Comforts ...",
+   "htmlTitle": "my second home in \u003cb\u003eBangalore\u003c/b\u003e - Review of Sri Lakshmi Comforts ...",
+   "link": "https://www.tripadvisor.com/ShowUserReviews-g297628-d1446678-r83395235-Sri_Lakshmi_Comforts-Bengaluru_Bangalore_Karnataka.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Oct 13, 2010 ... Sri Lakshmi Comforts: my second home in Bangalore - See 132 ... In a nutshell,I \nwill recommend this family run cozy,very comfortable,clean ... This is one area the \nthings are beyond the reach of management ..... the difficulty of our guests in \nfinding us on portals like Lonely Planet, ... Reviewed June 25, 2010.",
+   "htmlSnippet": "Oct 13, 2010 \u003cb\u003e...\u003c/b\u003e Sri Lakshmi Comforts: my second home in \u003cb\u003eBangalore\u003c/b\u003e - See 132 ... In a nutshell,I \u003cbr\u003e\n\u003cb\u003ewill\u003c/b\u003e recommend this family \u003cb\u003erun\u003c/b\u003e cozy,very comfortable,clean ... This is one area the \u003cbr\u003e\n\u003cb\u003ethings\u003c/b\u003e are beyond the reach of management ..... the difficulty of our guests in \u003cbr\u003e\nfinding us on portals like \u003cb\u003eLonely Planet\u003c/b\u003e, ... Reviewed \u003cb\u003eJune\u003c/b\u003e 25, 2010.",
+   "cacheId": "5ai4glhzr0AJ",
+   "formattedUrl": "https://www.tripadvisor.com/ShowUserReviews-g297628-d1446678- r83395235-Sri_Lakshmi_Comforts-Bengaluru_Bangalore_Karnatak...",
+   "htmlFormattedUrl": "https://www.tripadvisor.com/ShowUserReviews-g297628-d1446678- r83395235-Sri_Lakshmi_Comforts-\u003cb\u003eBengaluru\u003c/b\u003e_\u003cb\u003eBangalore\u003c/b\u003e_Karnatak...",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "259",
+      "height": "194",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTcu_itQPeLGVcg2zIfiY0unxfLph-16grflQsc7svRngnMgmh0Z5PzTJo"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     },
+     {
+      "url": "Karnataka",
+      "title": "Karnataka"
+     },
+     {
+      "url": "Bengaluru",
+      "title": "Bengaluru"
+     },
+     {
+      "url": "Bengaluru Hotels",
+      "title": "Bengaluru Hotels"
+     },
+     {
+      "url": "Sri Lakshmi Comforts",
+      "title": "Sri Lakshmi Comforts"
+     }
+    ],
+    "review": [
+     {
+      "reviewer": "a TripAdvisor user",
+      "reviewdate": "2010-10-13",
+      "ratingstars": "5.0",
+      "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/01/f5/89/9a/sri-lakshmi-comforts.jpg"
+     }
+    ],
+    "hreview": [
+     {
+      "summary": "“my second home in Bangalore”",
+      "dtreviewed": "2010-10-13",
+      "description": "I go to Bangalore every year for 6 weeks for my social.business and for my charities and I had always stayed in some other hotel in the same area ,ofcourse for a much higher price for the past..."
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "my second home in Bangalore - Review of Sri Lakshmi Comforts, Bengaluru, India - TripAdvisor",
+      "og:description": "Sri Lakshmi Comforts: my second home in Bangalore - See 132 traveler reviews, 17 candid photos, and great deals for Sri Lakshmi Comforts at TripAdvisor.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/01/f5/89/9a/sri-lakshmi-comforts.jpg",
+      "og:image:width": "550",
+      "og:image:height": "412",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/ShowUserReviews-g297628-d1446678-r83395235-m33762-Sri_Lakshmi_Comforts-Bengaluru_Karnataka.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/ShowUserReviews-g297628-d1446678-r83395235-m33762-Sri_Lakshmi_Comforts-Bengaluru_Karnataka.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/ShowUserReviews-g297628-d1446678-r83395235-m33762-Sri_Lakshmi_Comforts-Bengaluru_Karnataka.html"
+     }
+    ],
+    "Review": [
+     {
+      "author": "a TripAdvisor user",
+      "name": "“my second home in Bangalore”",
+      "datePublished": "2010-10-13",
+      "reviewBody": "I go to Bangalore every year for 6 weeks for my social.business and for my charities and I had always stayed in some other hotel in the same area ,ofcourse for a much higher price for the past..."
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/01/f5/89/9a/sri-lakshmi-comforts.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Near Whitefield at our company's place there, but... - Review of The ...",
+   "htmlTitle": "Near Whitefield at our company&#39;s place there, but... - Review of The ...",
+   "link": "https://www.tripadvisor.com/ShowUserReviews-g297628-d648201-r68032723-The_Bride_Corporate_Suites-Bengaluru_Bangalore_Karnataka.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Jun 19, 2010 ... Bengaluru ... “Superior Service, Great Rooms, the Lonely Planet got it Right! ... \nlocated making it very convenient to get to my meetings around the city and do \nsome last minute shopping on MG Road. ... Stayed June 2010, traveled on \nbusiness .... Hotels (649) | Restaurants (10,674) | Things to Do (611).",
+   "htmlSnippet": "Jun 19, 2010 \u003cb\u003e...\u003c/b\u003e \u003cb\u003eBengaluru\u003c/b\u003e ... “Superior Service, Great Rooms, the \u003cb\u003eLonely Planet\u003c/b\u003e got it Right! ... \u003cbr\u003e\nlocated making it very convenient to get to my meetings around the city and do \u003cbr\u003e\nsome last minute shopping on MG Road. ... Stayed \u003cb\u003eJune\u003c/b\u003e 2010, traveled on \u003cbr\u003e\nbusiness .... Hotels (649) | Restaurants (10,674) | \u003cb\u003eThings to Do\u003c/b\u003e (611).",
+   "cacheId": "_4IZc1pAPZMJ",
+   "formattedUrl": "https://www.tripadvisor.com/ShowUserReviews-g297628-d648201- r68032723-The_Bride_Corporate_Suites-Bengaluru_Bangalore_Ka...",
+   "htmlFormattedUrl": "https://www.tripadvisor.com/ShowUserReviews-g297628-d648201- r68032723-The_Bride_Corporate_Suites-\u003cb\u003eBengaluru\u003c/b\u003e_\u003cb\u003eBangalore\u003c/b\u003e_Ka...",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "276",
+      "height": "183",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTH6mh90WlhbbthuZ5kUSYfxOMDCwu8knzTSgnWuSr26J1Q0RmTproGl_4"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     },
+     {
+      "url": "Karnataka",
+      "title": "Karnataka"
+     },
+     {
+      "url": "Bengaluru",
+      "title": "Bengaluru"
+     },
+     {
+      "url": "Bengaluru Hotels",
+      "title": "Bengaluru Hotels"
+     },
+     {
+      "url": "The Bride Corporate Suites",
+      "title": "The Bride Corporate Suites"
+     }
+    ],
+    "review": [
+     {
+      "reviewer": "a TripAdvisor user",
+      "reviewdate": "2010-06-19",
+      "ratingstars": "5.0"
+     }
+    ],
+    "hreview": [
+     {
+      "summary": "“Superior Service, Great Rooms, the Lonely Planet got it Right!”",
+      "dtreviewed": "2010-06-19",
+      "description": "This was my 8th trip to Bangalore and first time at the Bride. I usually stay out near Whitefield at our company's place there, but wanted to be closer to clients. The Bride came recommended..."
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Near Whitefield at our company's place there, but... - Review of The Bride Corporate Suites - TripAdvisor",
+      "og:description": "The Bride Corporate Suites: Near Whitefield at our company's place there, but... - See 8 traveler reviews, 15 candid photos, and great deals for The Bride Corporate Suites at TripAdvisor.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/01/df/6f/53/the-bride-corporate-suites.jpg",
+      "og:image:width": "550",
+      "og:image:height": "365",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/ShowUserReviews-g297628-d648201-r68032723-m33762-The_Bride_Corporate_Suites-Bengaluru_Karnataka.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/ShowUserReviews-g297628-d648201-r68032723-m33762-The_Bride_Corporate_Suites-Bengaluru_Karnataka.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/ShowUserReviews-g297628-d648201-r68032723-m33762-The_Bride_Corporate_Suites-Bengaluru_Karnataka.html"
+     }
+    ],
+    "Review": [
+     {
+      "author": "a TripAdvisor user",
+      "name": "“Superior Service, Great Rooms, the Lonely Planet got it Right!”",
+      "datePublished": "2010-06-19",
+      "reviewBody": "This was my 8th trip to Bangalore and first time at the Bride. I usually stay out near Whitefield at our company's place there, but wanted to be closer to clients. The Bride came recommended..."
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/01/df/6f/53/the-bride-corporate-suites.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Essential guide to Odisha - Lonely Planet",
+   "htmlTitle": "Essential guide to Odisha - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/india/orissa/essential-information",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "June/July It's baking, but Puri's Rath Yatra festival is Odisha's biggest celebration. \nDec The ... Air routes connect Bhubaneswar with Bengaluru (Bangalore), Delhi, \n... Some policies specifically exclude dangerous activities such as scuba diving, ...",
+   "htmlSnippet": "\u003cb\u003eJune\u003c/b\u003e/July It&#39;s baking, but Puri&#39;s Rath Yatra festival is Odisha&#39;s biggest celebration. \u003cbr\u003e\nDec The ... Air routes connect Bhubaneswar with \u003cb\u003eBengaluru\u003c/b\u003e (\u003cb\u003eBangalore\u003c/b\u003e), Delhi, \u003cbr\u003e\n... Some policies specifically exclude dangerous \u003cb\u003eactivities\u003c/b\u003e such as scuba diving,&nbsp;...",
+   "cacheId": "Lghe4Pf6-qwJ",
+   "formattedUrl": "www.lonelyplanet.com/india/orissa/essential-information",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/india/orissa/essential-information",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "310",
+      "height": "163",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmgpbMhrfT7IeM87Ka5XTc8lVSr1Cmf9vpVe0e38Ez0eGPUp1iV-T79FKU"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Essential guide to Odisha - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Essential guide to Odisha - Lonely Planet",
+      "twitter:description": "Everything for your trip to Odisha - best time to go, weather, daily cost advisor, visas, cheapest flights and transport information",
+      "twitter:image:src": "https://images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/a/g/hi/t/8bba574647cc18bd6aad03fa7645fdd5-sun-temple.jpg",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Essential guide to Odisha - Lonely Planet",
+      "og:description": "Everything for your trip to Odisha - best time to go, weather, daily cost advisor, visas, cheapest flights and transport information",
+      "og:url": "http://www.lonelyplanet.com/india/orissa/essential-information",
+      "og:type": "website",
+      "og:image": "//images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/a/g/hi/t/8bba574647cc18bd6aad03fa7645fdd5-sun-temple.jpg",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "CsEYetrpjdzGDTxqyJ7JGOSg5ih6bdSod8c1NAavc7w="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "http://images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/a/g/hi/t/8bba574647cc18bd6aad03fa7645fdd5-sun-temple.jpg"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  }
+ ]
+}

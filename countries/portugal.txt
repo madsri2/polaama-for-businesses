@@ -1,1 +1,1 @@
-{"cities": ["Lisbon","Lagos","Sagres","Sintra","Porto","Obidos"], "notes": ["Rental car is preferred and convenient (based on lonely planet forums) since public transportation is infrequent"]}
+{"cities": ["Lisbon","Lagos","Sagres","Sintra","Porto","Obidos", "Evora"], "notes": ["Rental car is preferred and convenient (based on lonely planet forums) since public transportation is infrequent"]}
