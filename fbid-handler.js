@@ -48,8 +48,8 @@ function FbidHandler() {
       case "Madhuvanesh Parthasarathy":
         this.friends[id].push(
           this.fbid("Pol Aama"),
-          this.fbid("Adhu Artha")
-          // this.fbid("Aparna Rangarajan")
+          this.fbid("Adhu Artha"),
+          this.fbid("Aparna Rangarajan")
         );
         break;
     }
