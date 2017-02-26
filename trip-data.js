@@ -217,15 +217,24 @@ function getActivitiesFromComments(comments) {
     stay: [],
     flight: [],
     others: [],
-    car: []
+    car: [],
+    expenses: []
   };
   comments.forEach(function(i) {
     const item = i.toLowerCase();
+    // expenses
+    if((item.indexOf("paid for") > -1) ||
+       (item.indexOf("owes") > -1)) {
+      taggedComments.expenses.push(i);
+    }
     // activities
-    if((item.indexOf("beach") > -1) || 
+    else if((item.indexOf("beach") > -1) || 
        (item.indexOf("garden") > -1) || 
        (item.indexOf("market") > -1) || 
        (item.indexOf("activity") > -1) || 
+       (item.indexOf("tower") > -1) || 
+       (item.indexOf("castelo") > -1) || 
+       (item.indexOf("wine tour") > -1) || 
        (item.indexOf("activities") > -1)) {
       taggedComments.activities.push(i);
     }
@@ -250,7 +259,9 @@ function getActivitiesFromComments(comments) {
       taggedComments.flight.push(i);
     }
     // car
-    else if((item.indexOf("car") > -1) || (item.indexOf("uber") > -1) || (item.indexOf("suv") > -1)) {
+    else if((item.indexOf("car") > -1) || 
+            (item.indexOf("uber") > -1) || 
+            (item.indexOf("suv") > -1)) {
       taggedComments.car.push(i);
     }
     // everything else

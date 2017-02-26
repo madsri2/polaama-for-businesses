@@ -15,9 +15,9 @@ function skyScanner() {
       currency: "USD",
       locale: "en-US",
       originplace: "SEA-sky",
-      destinationplace: "LIS-sky",
-      outbounddate: "2017-02-03",
-      inbounddate: "2017-02-16",
+      destinationplace: "KEF-sky",
+      outbounddate: "2017-05-03",
+      inbounddate: "2017-05-16",
       adults: "2"
     }
   }, function(err, res, body) {

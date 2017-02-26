@@ -37,7 +37,7 @@ IataCodeGetter.prototype.getCodeSync = function() {
   if(file) {
     try {
       const body = JSON.parse(fs.readFileSync(file, 'utf8'));
-      logger.info(`getCodeSync: Obtained body ${JSON.stringify(body)} from file ${file}`);
+      // logger.info(`getCodeSync: Obtained body ${JSON.stringify(body)} from file ${file}`);
       if(body.iatacode) {    
         return body.iatacode;
       }
@@ -46,13 +46,16 @@ IataCodeGetter.prototype.getCodeSync = function() {
       logger.error(`getIataCode: could not read data from file ${file}. Error : ${e.message}`);
     }
   }
-  logger.info(`getCodeSync: File for city ${this.city} does not exist`);
   return undefined;
 }
 
+/*
+TODO: This is not perfect. Skyscanner does not support city codes (eg. it supports CDG, but not PAR). So, we are using airport_by_cities and looking for "international" airports. If we don't find tit, resort to the first airport in airport_by_cities, which is typically the best airport.
+*/
 IataCodeGetter.prototype.getCode = function(callback) {
-  // TODO: Move the functionality of getting details from file into constructor.
+  // TODO: Move the functionality of getting details from file into constructor
   let iatacode = this.getCodeSync();
+  let country;
   if(iatacode) {
     logger.info(`getCode: Calling callback with code ${iatacode}`);
     return callback(iatacode);
@@ -64,19 +67,24 @@ IataCodeGetter.prototype.getCode = function(callback) {
       logger.error(`getIataCode: Error getting ${self.city}'s code from iatacode.org: ${err}`);
       return;
     }
-    response.cities.forEach(c => {
-      if(c.name.toLowerCase() === self.city) {
-        iatacode = c.code;
-        return;
-      }
-    }, self);
-    if(_.isUndefined(iatacode)) {
-      logger.warn(`getIataCode: Could not find code in response.cities: ${JSON.stringify(response.cities, null, 2)}`);
+    const airports = response.airports_by_cities;
+    if(!airports) {
+      logger.warn(`getIataCode: Could not find code in response: ${JSON.stringify(response, null, 2)}`);
       return;
     }
-    const body = {
-      iatacode: iatacode
-    };
+    let body = {};
+    body.iatacode = airports[0].code;
+    body.country = airports[0].country_name;
+    if(!airports[0].name.includes("International")) {
+      for(let i = 1; i < airports.length; i++) {
+        const a = airports[i];
+        if(a.name.includes("International")) {
+          body.iatacode = a.code;
+          body.country = a.country_name;
+          logger.info(`Returning code ${iatacode} for airport ${a.name}. Country is ${country}`);
+        }
+      }
+    }
     persistCode(self.city, body, callback);
   });
   return callback(iatacode);
@@ -85,13 +93,12 @@ IataCodeGetter.prototype.getCode = function(callback) {
 function cityFileExists() {
   if(_.isUndefined(this.fileList)) {
     logger.info(`cityFileExists: Walking the countries directory in search of file for city ${this.city}`);
-    this.fileList = walkSync("countries", {directories: false});
+    this.fileList = walkSync("countries", {directories: true});
   }
   let absFileName;
-  const fName = `${Encoder.encode(this.city)}.txt`;
-  logger.info(`cityFileExists: file is ${fName}`);
+  const fName = `${Encoder.encode(this.city)}`;
   this.fileList.forEach(file => {
-    if(file.indexOf(Encoder.encode(fName)) > -1) {
+    if(file.includes(`/${fName}/iatacode.txt`)) {
       absFileName = `countries/${file}`;
       return;
     }
@@ -99,56 +106,30 @@ function cityFileExists() {
   return absFileName;
 }
 
-function getCountryAndPersist(countryCode, city, body, callback) {
-  if(_.isUndefined(countryCode)) {
-    logger.warn(`getCountryAndPersist: country_code is undefined for city ${body.iatacode}. Not persisting code.`);
-    return;
-  }
-  ic.api('countries', {code: countryCode}, function(err, response) {
-    if(!_.isUndefined(err)) {
-      logger.error(`getCountryAndPersist: Error getting country name for ${countryCode} from iatacode.org: ${err}. Not persisting.`);
-      return;
-    }
-    logger.info(`getCountryAndPersist: Response from calling countries: ${JSON.stringify(response)}`);
-    response.forEach(country => {
-      if(country.code === countryCode) {
-        const dir = `countries/${Encoder.encode(country.name)}`;
-        const file = `${dir}/${Encoder.encode(city)}.txt`;
-        try {
-          if(!fs.existsSync(dir)) {
-            logger.info(`getCountryAndPersist: Directory ${dir} not present. creating it`);
-            fs.mkdirSync(dir);
-          }
-          fs.writeFileSync(file, JSON.stringify(body), 'utf8');
-        }
-        catch(e) {
-          logger.error(`getCountryAndPersist: Error writing to file ${file}: ${e.message}`);
-        }
-        logger.info(`persisted city code to file ${file}`);
-        callback(body.iatacode);
-      }
-    });
-  });
-}
-
 function persistCode(city, body, callback) {
   if(_.isUndefined(body.iatacode)) {
     logger.error(`persistCode: iatacode for city ${city} is undefined. Doing nothing`);
     return;
   }
-  let countryCode = undefined;
-  // In order to persist the code, we need the city name and the country. get it from iatacode.org
-  ic.api('cities', {code: body.iatacode}, function(err, response) {
-    if(err) {
-      logger.error(`persistCode: Error getting country code for ${city} from iatacode.org: ${err}. Not persisting`);
-      return;
+  const dir = `countries/${Encoder.encode(body.country)}`;
+  const cityDir = `${dir}/${Encoder.encode(city)}`;
+  const file = `${cityDir}/iatacode.txt`;
+  try {
+    if(!fs.existsSync(dir)) {
+      logger.info(`persistCode: Directory ${dir} not present. creating it`);
+      fs.mkdirSync(dir);
     }
-    logger.info(`Response from calling cities: ${JSON.stringify(response, null, 2)}`);
-    response.forEach(c => {
-      countryCode = c.country_code;
-    });
-    getCountryAndPersist(countryCode, city, body, callback);
-  });
+    if(!fs.existsSync(cityDir)) {
+      logger.info(`persistCode: Directory ${cityDir} not present. creating it`);
+      fs.mkdirSync(cityDir);
+    }
+    fs.writeFileSync(file, JSON.stringify(body), 'utf8');
+  }
+  catch(e) {
+    logger.error(`persistCode: Error writing to file ${file}: ${e.message}`);
+  }
+  logger.info(`persisted city code to file ${file}`);
+  callback(body.iatacode);
 }
 
 module.exports = IataCodeGetter;

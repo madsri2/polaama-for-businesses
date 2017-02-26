@@ -6,14 +6,17 @@ DONE - Separate trips for each user / session. Each user should only see trips t
 DONE - Get trip details (start date, duration, where)
 DONE - "Add travelers" menu: Handle case where trip context does not exist in session.
 Find flight & stay related information and automatically update comments. 
-Activities information
+Activities information ???
 Users should be able to see comments in place using web_url (instead of getting a link that they need to open).
 Handle "existing trips" menu: update context based on user choice, do not display trips from the past. Use quick replies to show existing trips (instead of buttons).
 Add ability to remember message from user entered before we know the trip context of a session.
 Add support for google maps API
+Support "expenses:" comment going in the right bucket on landing page. Add support for expense report
 Support different start / end dates for group travel.
-Support "expenses:" comment going in the right bucket on landing page.
 Support adding memories (photoes with comments etc.)
+
+BUG Report:
+
 
 Notes:
 Some questions I would have liked answers for when planning:

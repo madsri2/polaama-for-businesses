@@ -8,12 +8,15 @@ const TripData = require('./trip-data');
 const logger = require('./my-logger');
 const crypto = require('crypto');
 const TripDataFormatter = require('./trip-data-formatter.js');
+const passport = require('passport');
+const fbStrategy = require('passport-facebook').Strategy;
 // ----------------------------------------------------------------------------
 // Set up a webserver
 
 // For validation with facebook & verifying signature
 const VALIDATION_TOKEN = "go-for-lake-powell";
 const FB_APP_SECRET = "a26c4ad2358b5b61942227574532d174";
+const FB_APP_ID = "1670120969968413";
 
 // Polaama related handler
 const postHandler = new WebhookPostHandler();
@@ -30,6 +33,53 @@ const options = {
     key: fs.readFileSync(sslPath + 'privkey.pem'),
     cert: fs.readFileSync(sslPath + 'fullchain.pem')
 };
+
+// use passport session
+app.use(passport.initialize());
+app.use(passport.session());
+
+// authentication
+passport.use(new fbStrategy({
+    clientID: FB_APP_ID,
+    clientSecret: FB_APP_SECRET,
+    callbackURL: "https://polaama.com/auth/facebook/callback"
+  },
+  function(accessToken, refreshToken, profile, done) {
+    // From https://scotch.io/tutorials/easy-node-authentication-facebook
+    // This is to store the user profile in local database. For now, simply persist the access token corresponding to the user.
+    logger.info(`login details: accessToken: ${accessToken}; profile: ${JSON.stringify(profile)}`);
+    const user = {
+      name: profile.name,
+      id: profile.id
+    };
+    done(null, user);
+  }
+));
+
+// used to serialize the user for the session
+passport.serializeUser(function(user, done) {
+    done(null, user);
+});
+
+// used to deserialize the user
+passport.deserializeUser(function(user, done) {
+  done(null, user);
+});
+
+// Routes for authentication
+// Redirect the user to Facebook for authentication.  When complete,
+// Facebook will redirect the user back to the application at
+//     /auth/facebook/callback
+app.get('/auth/facebook', passport.authenticate('facebook'));
+
+// Facebook will redirect the user to this URL after approval.  Finish the
+// authentication process by attempting to obtain an access token.  If
+// access was granted, the user will be logged in.  Otherwise,
+// authentication has failed.
+app.get('/auth/facebook/callback',
+  passport.authenticate('facebook', { successRedirect: '/',
+                                      failureRedirect: '/login' }));
+
 
 /*
  * Verify that the callback came from Facebook. Using the App Secret from
@@ -61,7 +111,6 @@ function verifyRequestSignature(req, res, buf) {
   }
 }
 
-// get weather info for later use
 const server = https.createServer(options, app);  
 server.listen(port, function() {
   logger.info("Listening on port " + port);
@@ -81,6 +130,10 @@ app.use(bodyParser.json({ verify: verifyRequestSignature }));
 app.get('/', function(req, res) {
   // return res.send("<meta name='B-verify' content='ee02308f7491f4aef923b2d1184072ccd1f6367a' /><body>Hello secure world</body>");
   return res.send(fs.readFileSync("html-templates/home.html", 'utf8'));
+});
+
+app.get('/login', function(req, res) {
+  return res.send(fs.readFileSync("html-templates/login.html", 'utf8'));
 });
 
 // var json2html = require('node-json2html');

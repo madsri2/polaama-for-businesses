@@ -63,14 +63,14 @@ FlightInfoProvider.prototype.getStoredFlightDetails = function() {
   catch(e) {
     logger.warn(`getStoredFlightDetails: Error reading file ${file}: ${e.stack}`);
     return {
-      noflight: 'No information for this segment'
+      noflight: 'No information yet for this segment'
     };
   }
   const itin = new FlightDataExtractor(json).getItinerary();
   if(_.isUndefined(itin)) {
     logger.warn(`getStoredFlightDetails: did not get itinerary from FlightDataExtractor`);
     return {
-      noflight: 'No information for this segment'
+      noflight: 'No information yet for this segment'
     };
   }
   const fromTo = `${this.origCity} To ${this.destCity}`;
@@ -144,7 +144,7 @@ function _getFlightDetails(location, callback) {
     if(res.statusCode == "304" || ((res.statusCode == "200") && (JSON.parse(body).Status == "UpdatesPending"))) {
       if(self.locationUrlRetry < 3) {
         self.locationUrlRetry++;
-        sleep.sleep(2*self.locationUrlRetry);
+        sleep.sleep(4*self.locationUrlRetry);
         logger.info(`_getFlightDetails: Retrying location url: ${location}`);
         return _getFlightDetails.call(self, location, callback);
       }

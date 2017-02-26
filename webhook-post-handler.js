@@ -9,6 +9,7 @@ const FbidHandler = require('./fbid-handler');
 const formidable = require('formidable');
 const TripInfoProvider = require('./trip-info-provider');
 const Promise = require('promise');
+const validator = require('node-validator');
 
 // NOTE: WebhookPostHandler is a singleton, so all state will need to be maintained in this.session object. fbidHandler is also a singleton, so that will be part of the WebhookPostHandler object.
 function WebhookPostHandler(session) {
@@ -215,8 +216,8 @@ WebhookPostHandler.prototype.startPlanningTrip = function() {
 
 function planNewTrip() {
   logger.info("User wants to plan a new trip");
-  sendTextMessage(this.session.fbid, "Can you provide details about your trip (destination country, start date and duration in days) as a comma separated list?"); 
-  sendTextMessage(this.session.fbid, "Example: India,11/1/2017,20");
+  sendTextMessage(this.session.fbid, "Can you provide details about your trip: destination country, start date, duration (in days) as a comma separated list?"); 
+  sendTextMessage(this.session.fbid, "Example: India,11/01,20 or India,11/01/17,20");
 	this.session.awaitingNewTripDetails = true;
   this.session.planningNewTrip = true;
 }
@@ -432,27 +433,59 @@ function handleQuickReplies(payload) {
     return;
 }
 
+function validateStartDate(value, onError) {
+  const now = moment();
+  
+  const check = validator.isObject()
+    .withRequired('startDate', validator.isDate());
+
+  var errCount = 0;
+  var error = {};
+  validator.run(check, { startDate: value}, function(ec, e) {
+      errCount = ec;
+      error = e;
+  });
+  if(errCount > 0) {
+    return onError(error[0].message, error.parameter, error.value);
+  }
+
+  if(now.diff(moment(new Date(value).toISOString()),'days') >= 0) {
+    return onError("Provided start date is in the past","",value);
+  }
+  return null;
+}
+
 function extractNewTripDetails(messageText) {
   const td = messageText.split(',');
+  if(td[1].match(/\d+\/\d+/)) {
+    td[1] = td[1].concat(`/${new Date().getFullYear()}`);
+  }
   const tripDetails = {
     destination: td[0],
     startDate:  td[1],
-    duration: td[2] // TODO: Parse & validate that it's a positive integer and is less than a year: Integre validation: http://tinyurl.com/hlxtta3
+    duration: parseInt(td[2]) 
   };
-  // TODO: Validate tripDetails
-  // https://www.npmjs.com/package/node-validator
-  // TODO: validate date format, that it's a valid date and that it's not in the past.
-  /*
-  if(td[1].match(new RegExp(/\d\d\/\d\d\/\d\d)) && moment(td[1],"MM/DD/YY")) {
-    logger.info("extractNewTripDetails: start date is valid");  
+  const customValidator = {
+      validate: validateStartDate
+  };
+  // validate tripData
+  const check = validator.isObject()
+    .withRequired('duration', validator.isInteger({min: 1, max: 200}))
+    .withRequired('startDate', customValidator)
+    .withRequired('destination', validator.isString({regex: /^[A-Za-z]+$/}));
+  
+  var error = null;
+  validator.run(check, tripDetails, function(ec, e) {
+    if(ec > 0) {
+      error = e;
+    }
+    return;
+  });
+  if(error) {
+    logger.warn(`extractNewDetails: Validation error: ${JSON.stringify(error)}`);
+    return error;
   }
-  else if(moment(tripDetails.startDate,"MM/DD/YYYY")) {
-  }
-  else if(moment(tripDetails.startDate,"MM/DD")) {
-  }
-  if(moment(tripDetails.startDate,"YYYY-MM-DD")) {
-  }
-  */
+
   this.session.addTrip(tripDetails.destination);
   const tripData = this.session.tripData();
   tripData.addTripDetailsAndPersist(tripDetails);
@@ -460,6 +493,7 @@ function extractNewTripDetails(messageText) {
   this.session.awaitingNewTripDetails = false;
   // this new trip will also be the context for this session;
   this.session.noTripContext = false;
+  return null;
 }
 
 function extractCityDetails(messageText) {
@@ -527,7 +561,11 @@ function determineResponseType(event) {
   if(this.session.planningNewTrip) {
     // 1) Extract trip details like destination, start date and duration
     if(this.session.awaitingNewTripDetails) {
-      extractNewTripDetails.call(this, messageText);
+      const err = extractNewTripDetails.call(this, messageText);
+      if(err) {
+        sendTextMessage(this.session.fbid, err[0].message);
+        return;
+      }
     }
 
     // 2) Get hometown if it's undefined.

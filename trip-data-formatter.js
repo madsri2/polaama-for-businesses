@@ -35,9 +35,11 @@ TripDataFormatter.prototype.formatComments = function() {
     .replace("${stayList}",listAsHtml(comments.stay))
     .replace("${flightList}",listAsHtml(comments.flight))
     .replace("${rentalCarList}",listAsHtml(comments.car))
+    .replace("${expenseReportDetails}",listAsHtml(comments.expenses))
     .replace("${otherComments}",listAsHtml(comments.others));
 }
 
+// TODO: Comments section here is a duplicate of formatComments above. Fix it.
 TripDataFormatter.prototype.formatTripDetails = function(weatherDetails, activityDetails) {
   const comments = this.trip.parseComments();
   const todoList = this.trip.getInfoFromTrip(TripData.todo);
@@ -51,6 +53,7 @@ TripDataFormatter.prototype.formatTripDetails = function(weatherDetails, activit
     .replace("${stayDetails}",listAsHtml(comments.stay))
     .replace("${flightDetails}",listAsHtml(comments.flight))
     .replace("${carDetails}",listAsHtml(comments.car))
+    .replace("${expenseReportDetails}",listAsHtml(comments.expenses))
     .replace("${otherComments}",listAsHtml(comments.others))
     .replace("${todoList}",listAsHtml(todoList))
     .replace("${toPackList}",listAsHtml(packList.toPack))
