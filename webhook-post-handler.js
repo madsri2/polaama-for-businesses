@@ -166,7 +166,7 @@ function displayTripDetails() {
             messenger_extensions: true,
             fallback_url: sendUrl.call(this, tripData.flightUrlPath())
           }]
-        }, {
+        }, /*{
           title: "Get Stay details",
           buttons: [{
             type:"web_url",
@@ -176,7 +176,7 @@ function displayTripDetails() {
             messenger_extensions: true,
             fallback_url: sendUrl.call(this, tripData.stayUrlPath())
           }]
-        }, {
+        },*/ {
           title: "Get Activities details",
           buttons: [{
             type:"web_url",
@@ -250,6 +250,10 @@ function receivedPostback(event) {
   if(payload === "pmenu_existing_trip") {
 		sendTripButtons.call(this);
 		return;
+  }
+  if(payload === "past_trips") {
+    sendPastTrips.call(this);
+    return;
   }
 	
 	// In order to add travelers to a trip, we need to know the trip in context.
@@ -334,10 +338,46 @@ function sendUrl(urlPath) {
   return `https://polaama.com/${encodedId}/${urlPath}`;
 }
 
+function sendPastTrips() {
+  // reset this sessions' context
+  this.session.noTripContext = true;
+  const elements = [];
+  const tripNames = this.session.getPastTrips();
+  tripNames.forEach(t => {
+    elements.push({
+      title: t.rawName,
+      buttons: [{
+        type: "web_url",
+        url:sendUrl.call(this, `${t.rawName}`),
+        title: t.name,
+        webview_height_ratio: "compact",
+        messenger_extensions: true
+      }]
+    })
+  });
+  const messageData = {
+    recipient: {
+      id: this.session.fbid
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "generic",
+          elements: elements
+        }
+      }
+    }
+  };
+  callSendAPI(messageData);
+  return;
+}
+
 function sendTripButtons(addNewTrip) {
-  const trips = this.session.allTripNames();
-  console.log(`sendTripButtons: trip length for fbid ${this.session.fbid} is ${trips.length}`);
-  if(trips.length == 0) {
+  const tripDetails = this.session.getFutureTrips();
+  const tripNames = tripDetails.futureTrips;
+  console.log(`sendTripButtons: trip length for fbid ${this.session.fbid} is ${tripNames.length}`);
+  if(tripNames.length == 0) {
     sendTextMessage(this.session.fbid, "You don't have any trips planned yet.");
     const messageData = {
       recipient: {
@@ -362,13 +402,13 @@ function sendTripButtons(addNewTrip) {
   this.session.noTripContext = true;
   sendTextMessage(this.session.fbid, "Hi, which trip are we discussing?");
   const elements = [];
-  trips.forEach(k => {
+  tripNames.forEach(t => {
     elements.push({
-      title: k.rawName,
+      title: t.rawName,
       buttons: [{
         type: "postback",
-        title: k.name,
-        payload: `trip_in_context ${k.name}`
+        title: t.name,
+        payload: `trip_in_context ${t.name}`
       }]
     })
   });
@@ -381,6 +421,16 @@ function sendTripButtons(addNewTrip) {
        title: "New Trip",
        payload: "new_trip"
     	}]
+    });
+  }
+  if(tripDetails.pastTrips) {
+    elements.push({
+      title: "Past trips",
+      buttons: [{
+        type: "postback",
+        title: "Past Trips",
+        payload: "past_trips"
+      }]
     });
   }
   const messageData = {
@@ -563,7 +613,7 @@ function determineResponseType(event) {
     if(this.session.awaitingNewTripDetails) {
       const err = extractNewTripDetails.call(this, messageText);
       if(err) {
-        sendTextMessage(this.session.fbid, err[0].message);
+        sendTextMessage(this.session.fbid, `Input error: parameter ${err[0].parameter}:${err[0].message}`);
         return;
       }
     }
@@ -978,7 +1028,7 @@ function determineCities(existingTrip) {
               title:"Cities",
               webview_height_ratio: "compact",
               messenger_extensions: true,
-              url: sendUrl.call(this, `${trip.rawTripName}/${uri}`),
+              // url: sendUrl.call(this, `${trip.rawTripName}/${uri}`),
             }]
           }]
         }

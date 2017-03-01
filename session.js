@@ -4,6 +4,7 @@ const logger = require('./my-logger');
 const TripData = require('./trip-data');
 const fs = require('fs');
 const Encoder = require('./encoder');
+const moment = require('moment');
 
 /*
 A session has a 1:1 relationship with a user and their trips. A session represents a user. Each user and their trips will have exactly one session at any given time. Today, the scope of a session is tied to the lifetime of this webserver. At any given time, the session will have one trip context that indicates which trip a user is talking about.
@@ -144,16 +145,58 @@ Session.prototype.allTrips = function() {
   return tripDataList;
 }
 
-// TODO: Return the trip with the most recent start date first.
-Session.prototype.allTripNames = function() {
-  const tripNames = [];
-  Object.keys(this.trips).forEach(k => {
-    tripNames.push({
-          name: this.trips[k].tripData.data.name,
-          rawName: this.trips[k].tripData.data.rawName
-    });
+Session.prototype.getPastTrips = function() {
+}
+
+Session.prototype.getPastTrips = function() {
+  let trips = [];
+  this.allTrips().forEach(trip => {
+    const start = moment(new Date(trip.data.startDate).toISOString());
+    const daysToTrip = start.diff(moment(),'days');
+    if(!trip.data.startDate || daysToTrip <= 0) {
+      trips.push({
+        name: trip.data.name,
+        rawName: trip.data.rawName,
+        daysToTrip: daysToTrip
+      });
+    }
   });
-  return tripNames;
+  return trips;
+}
+
+Session.prototype.getFutureTrips = function() {
+  let trips = [];
+  let pastTrips = false;
+  // Filter past trips
+  this.allTrips().forEach(trip => {
+    const start = moment(new Date(trip.data.startDate).toISOString());
+    const daysToTrip = start.diff(moment(),'days');
+    if(!trip.data.startDate || daysToTrip >= 0) {
+      trips.push({
+        name: trip.data.name,
+        rawName: trip.data.rawName,
+        daysToTrip: daysToTrip
+      });
+    }
+    else {
+      pastTrips = true;
+    }
+  });
+  const sortedArr = trips.sort(function(a,b) {
+    return a.daysToTrip - b.daysToTrip;
+  });
+  // Return the trip with the most recent start date first.
+  let names = [];
+  sortedArr.forEach(t => {
+    names.push({
+      name: t.name,
+      rawName: t.rawName
+    });  
+  });
+  return {
+    pastTrips: pastTrips,
+    futureTrips: names
+  };
 }
 
 Session.prototype.addTrip = function(tripName) {

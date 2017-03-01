@@ -11,11 +11,12 @@ function skyScanner() {
     },
     form: {
       apiKey: "prtl6749387986743898559646983194",
+      // apiKey: "ma592384304502739139844422016106",
       country: "US",
       currency: "USD",
       locale: "en-US",
       originplace: "SEA-sky",
-      destinationplace: "KEF-sky",
+      destinationplace: "BOM-sky",
       outbounddate: "2017-05-03",
       inbounddate: "2017-05-16",
       adults: "2"
@@ -32,7 +33,7 @@ function skyScanner() {
 
 // http://business.skyscanner.net/portal/en-GB/Documentation/FlightsBrowseCacheRoutes
 function browseRouteService() {
-  const uri = `http://partners.api.skyscanner.net/apiservices/browseroutes/v1.0/US/USD/en-US/SEA-sky/LIS-sky/2017-02-03/2017-02-17?apiKey=prtl6749387986743898559646983194`;
+  const uri = `http://partners.api.skyscanner.net/apiservices/browseroutes/v1.0/US/USD/en-US/SEA-sky/LIS-sky/2017-03-03/2017-03-17?apiKey=prtl6749387986743898559646983194`;
   request({
     uri: uri,
     method: 'GET'
@@ -47,7 +48,7 @@ function browseRouteService() {
 function qpx() {
 }
 
-// browseRouteService();
-skyScanner();
+browseRouteService();
+// skyScanner();
 // const json = JSON.parse(fs.readFileSync('/tmp/sky-scanner','utf8'));
 // console.log(JSON.stringify(json, null, 2));

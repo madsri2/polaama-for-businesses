@@ -10,6 +10,7 @@ const crypto = require('crypto');
 const TripDataFormatter = require('./trip-data-formatter.js');
 const passport = require('passport');
 const fbStrategy = require('passport-facebook').Strategy;
+const session = require('express-session');
 // ----------------------------------------------------------------------------
 // Set up a webserver
 
@@ -30,13 +31,12 @@ const https = require('https');
 const sslPath = '/etc/letsencrypt/live/polaama.com/';
 const port = 443
 const options = {  
-    key: fs.readFileSync(sslPath + 'privkey.pem'),
-    cert: fs.readFileSync(sslPath + 'fullchain.pem')
+  key: fs.readFileSync(sslPath + 'privkey.pem'),
+  cert: fs.readFileSync(sslPath + 'fullchain.pem')
 };
 
-// use passport session
-app.use(passport.initialize());
-app.use(passport.session());
+
+let u;
 
 // authentication
 passport.use(new fbStrategy({
@@ -49,27 +49,46 @@ passport.use(new fbStrategy({
     // This is to store the user profile in local database. For now, simply persist the access token corresponding to the user.
     logger.info(`login details: accessToken: ${accessToken}; profile: ${JSON.stringify(profile)}`);
     const user = {
-      name: profile.name,
-      id: profile.id
+      name: profile._json.name,
+      id: profile._json.id
     };
+    u = user;
     done(null, user);
   }
 ));
 
 // used to serialize the user for the session
 passport.serializeUser(function(user, done) {
-    done(null, user);
+  console.log(`serializeUser called with ${JSON.stringify(user)}`);
+  done(null, user.id);
 });
 
 // used to deserialize the user
-passport.deserializeUser(function(user, done) {
-  done(null, user);
+passport.deserializeUser(function(id, done) {
+  console.log(`deserializeUser called with ${id}. Returning ${JSON.stringify(u)}`);
+  done(null, u);
 });
+
+// configure
+app.use(session({
+  secret: 'polaama',
+  resave: false,
+  saveUninitialized: true
+}));
+// use passport session
+app.use(passport.initialize());
+app.use(passport.session());
+// logger. create a write stream (in append mode) 
+const accessLogStream = fs.createWriteStream('log/access.log', {flags: 'a'})
+app.use(morgan('common', 'immediate', { stream: accessLogStream }));
+// body parser
+const bodyParser = require('body-parser');
+const jsonParser = bodyParser.json();
+app.use(bodyParser.json({ verify: verifyRequestSignature }));
 
 // Routes for authentication
 // Redirect the user to Facebook for authentication.  When complete,
-// Facebook will redirect the user back to the application at
-//     /auth/facebook/callback
+// Facebook will redirect the user back to the application at /auth/facebook/callback
 app.get('/auth/facebook', passport.authenticate('facebook'));
 
 // Facebook will redirect the user to this URL after approval.  Finish the
@@ -77,9 +96,11 @@ app.get('/auth/facebook', passport.authenticate('facebook'));
 // access was granted, the user will be logged in.  Otherwise,
 // authentication has failed.
 app.get('/auth/facebook/callback',
-  passport.authenticate('facebook', { successRedirect: '/',
-                                      failureRedirect: '/login' }));
-
+  // Not using successRedirect here because ensureAuthentication handles that by setting req.session.redirect_to
+  passport.authenticate('facebook', { /* successRedirect: '/index', */
+                                      failureRedirect: '/login',
+                                      failureFlash: true,
+                                      session: true}));
 
 /*
  * Verify that the callback came from Facebook. Using the App Secret from
@@ -119,25 +140,38 @@ server.listen(port, function() {
   const intervalId = setInterval(sendTodoReminders, twoDaysInMsec);
 }); 
 
-// create a write stream (in append mode) 
-const accessLogStream = fs.createWriteStream('log/access.log', {flags: 'a'})
-app.use(morgan('common', 'immediate', { stream: accessLogStream }));
-
-const bodyParser = require('body-parser');
-const jsonParser = bodyParser.json();
-app.use(bodyParser.json({ verify: verifyRequestSignature }));
-
-app.get('/', function(req, res) {
+app.get('/index', function(req, res) {
   // return res.send("<meta name='B-verify' content='ee02308f7491f4aef923b2d1184072ccd1f6367a' /><body>Hello secure world</body>");
   return res.send(fs.readFileSync("html-templates/home.html", 'utf8'));
+});
+
+app.get('/', function(req, res) {
+  res.redirect('/auth/facebook');
 });
 
 app.get('/login', function(req, res) {
   return res.send(fs.readFileSync("html-templates/login.html", 'utf8'));
 });
 
+// Simple middleware to ensure user is authenticated.
+// Use this middleware on any resource that needs to be protected.
+// If the request is authenticated (typically via a persistent login session),
+// the request will proceed.  Otherwise, the user will be redirected to the
+// login page.
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    // req.user is available for use here
+    logger.info(`ensureAuthenticated: request is authenticated`);
+    return next(); 
+  }
+  // denied. redirect to login
+  logger.info(`ensureAuthenticated: not authenticated. Redirecting to /auth/facebook`);
+  req.session.redirect_to = req.path;
+  res.redirect('/');
+}
+
 // var json2html = require('node-json2html');
-app.get('/trips', function(req, res) {
+app.get('/trips', ensureAuthenticated, function(req, res) {
   return res.send("This will eventually return a list of trips planned for this user.");
 });
 

@@ -1,0 +1,822 @@
+{
+ "kind": "customsearch#search",
+ "url": {
+  "type": "application/json",
+  "template": "https://www.googleapis.com/customsearch/v1?q={searchTerms}&num={count?}&start={startIndex?}&lr={language?}&safe={safe?}&cx={cx?}&cref={cref?}&sort={sort?}&filter={filter?}&gl={gl?}&cr={cr?}&googlehost={googleHost?}&c2coff={disableCnTwTranslation?}&hq={hq?}&hl={hl?}&siteSearch={siteSearch?}&siteSearchFilter={siteSearchFilter?}&exactTerms={exactTerms?}&excludeTerms={excludeTerms?}&linkSite={linkSite?}&orTerms={orTerms?}&relatedSite={relatedSite?}&dateRestrict={dateRestrict?}&lowRange={lowRange?}&highRange={highRange?}&searchType={searchType}&fileType={fileType?}&rights={rights?}&imgSize={imgSize?}&imgType={imgType?}&imgColorType={imgColorType?}&imgDominantColor={imgDominantColor?}&alt=json"
+ },
+ "queries": {
+  "request": [
+   {
+    "title": "Google Custom Search - lonely planet chennai july things to do",
+    "totalResults": "457",
+    "searchTerms": "lonely planet chennai july things to do",
+    "count": 10,
+    "startIndex": 1,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "chennai"
+   }
+  ],
+  "nextPage": [
+   {
+    "title": "Google Custom Search - lonely planet chennai july things to do",
+    "totalResults": "457",
+    "searchTerms": "lonely planet chennai july things to do",
+    "count": 10,
+    "startIndex": 11,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "chennai"
+   }
+  ]
+ },
+ "context": {
+  "title": "Polaama"
+ },
+ "searchInformation": {
+  "searchTime": 0.625857,
+  "formattedSearchTime": "0.63",
+  "totalResults": "457",
+  "formattedTotalResults": "457"
+ },
+ "items": [
+  {
+   "kind": "customsearch#result",
+   "title": "Chennai - Lonely Planet",
+   "htmlTitle": "\u003cb\u003eChennai\u003c/b\u003e - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/india/tamil-nadu/chennai-madras",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "If you have time to explore Chennai (formerly Madras), this 400-sq-km \nconglomerate of ... Enjoy fun activities like surfing, spending time at the beach's \nnotable ...",
+   "htmlSnippet": "If you have time to explore \u003cb\u003eChennai\u003c/b\u003e (formerly Madras), this 400-sq-km \u003cbr\u003e\nconglomerate of ... Enjoy fun \u003cb\u003eactivities\u003c/b\u003e like surfing, spending time at the beach&#39;s \u003cbr\u003e\nnotable&nbsp;...",
+   "cacheId": "QYcjD_Gk6loJ",
+   "formattedUrl": "https://www.lonelyplanet.com/india/tamil-nadu/chennai-madras",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/india/tamil-nadu/\u003cb\u003echennai\u003c/b\u003e-madras",
+   "pagemap": {
+    "offer": [
+     {
+      "category": "Indian"
+     },
+     {
+      "category": "Multicuisine"
+     },
+     {
+      "category": "North Indian"
+     },
+     {
+      "category": "North Indian"
+     },
+     {
+      "category": "Keralan"
+     },
+     {
+      "category": "Chettinad"
+     },
+     {
+      "category": "South Indian"
+     },
+     {
+      "category": "Burgers"
+     },
+     {
+      "category": "Indian"
+     },
+     {
+      "category": "Indian"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "276",
+      "height": "183",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTCx6siXqDBph_h4RNNf_kB1AJpl6gxcXbpnQwP7458GCK9VvD7rhlxfb-C"
+     }
+    ],
+    "foodestablishment": [
+     {
+      "name": "Hotel Saravana Bhavan"
+     },
+     {
+      "name": "Amethyst"
+     },
+     {
+      "name": "Peshawri"
+     },
+     {
+      "name": "Copper Chimney"
+     },
+     {
+      "name": "Enté Keralam"
+     },
+     {
+      "name": "Raintree"
+     },
+     {
+      "name": "Junior Kuppanna"
+     },
+     {
+      "name": "Double Roti"
+     },
+     {
+      "name": "Barbeque Nation"
+     },
+     {
+      "name": "Annalakshmi"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Chennai - Lonely Planet",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Chennai - Lonely Planet",
+      "twitter:image:src": "https://lonelyplanetimages.imgix.net/mastheads/28902709.jpg?sharp=10&vib=20&w=1200",
+      "og:site_name": "Lonely Planet",
+      "og:type": "website",
+      "og:title": "Chennai - Lonely Planet",
+      "og:url": "http://www.lonelyplanet.com/india/tamil-nadu/chennai-madras",
+      "og:description": "If you have time to explore Chennai (formerly Madras), this 400-sq-km conglomerate of urban villages and diverse neighbourhoods making up Tamil...",
+      "og:image": "https://lonelyplanetimages.imgix.net/mastheads/28902709.jpg?sharp=10&vib=20&w=1200",
+      "sailthru.date": "2017-02-27 02:57:12 +0000",
+      "sailthru.tags": "Chennai, architecture-and-buildings, cities, festivals-and-events, food-and-drink, history-heritage-and-tradition, movies-and-television"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://lonelyplanetimages.imgix.net/mastheads/28902709.jpg?sharp=10&vib=20&w=1200"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Top things to do in Chennai, India - Lonely Planet",
+   "htmlTitle": "Top \u003cb\u003ethings to do\u003c/b\u003e in \u003cb\u003eChennai\u003c/b\u003e, India - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/india/chennai/top-things-to-do/a/poi/356488",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Discover the best top things to do in Chennai including Government Museum, \nKapaleeshwarar Temple, San Thome Cathedral.",
+   "htmlSnippet": "Discover the best top \u003cb\u003ethings to do\u003c/b\u003e in \u003cb\u003eChennai\u003c/b\u003e including Government Museum, \u003cbr\u003e\nKapaleeshwarar Temple, San Thome Cathedral.",
+   "cacheId": "Uc5zzAeEFX8J",
+   "formattedUrl": "https://www.lonelyplanet.com/india/chennai/...things-to-do/a/.../356488",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/india/\u003cb\u003echennai\u003c/b\u003e/...\u003cb\u003ethings-to-do\u003c/b\u003e/a/.../356488",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Asia"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "136",
+      "height": "84",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcR-DTV8giwCqJBrmoWrRYys1mCLZMfIlkJHWfUAEMyMu1zVCj84pmNCRQ"
+     }
+    ],
+    "country": [
+     {
+      "name": "India"
+     }
+    ],
+    "city": [
+     {
+      "name": "Chennai"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Top things to do in Chennai, India",
+      "og:title": "Top things to do in Chennai, India",
+      "og:description": "Discover the best top things to do in Chennai including Government Museum, Kapaleeshwarar Temple, San Thome Cathedral.",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://lonelyplanetimages.imgix.net/mastheads/GettyImages-128895295_full.jpg?w=170&h=106&fit=crop&q=50&auto=enhance&crop=entropy"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Hotels in Chennai, India - Lonely Planet",
+   "htmlTitle": "Hotels in \u003cb\u003eChennai\u003c/b\u003e, India - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/india/chennai/hotels/a/lod/356488",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Discover the best hotels in Chennai including Red Lollipop Hostel, Hotel Victoria, \nTaj Coromandel.",
+   "htmlSnippet": "Discover the best hotels in \u003cb\u003eChennai\u003c/b\u003e including Red Lollipop Hostel, Hotel Victoria, \u003cbr\u003e\nTaj Coromandel.",
+   "cacheId": "Oce-nUJznN0J",
+   "formattedUrl": "https://www.lonelyplanet.com/india/chennai/hotels/a/lod/356488",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/india/\u003cb\u003echennai\u003c/b\u003e/hotels/a/lod/356488",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Asia"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "204",
+      "height": "204",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcR9LHUXSCVth6pb6JkcY5YjZ6Nc8GaDjkRze9m6SbIWEELNmNcqidVs5wBv"
+     }
+    ],
+    "country": [
+     {
+      "name": "India"
+     }
+    ],
+    "city": [
+     {
+      "name": "Chennai"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Hotels in Chennai, India",
+      "og:title": "Hotels in Chennai, India",
+      "og:description": "Discover the best hotels in Chennai including Red Lollipop Hostel, Hotel Victoria, Taj Coromandel.",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://api.tiles.mapbox.com/v4/lonelyplanet.b963d424/12/2960/1896.png?access_token=pk.eyJ1IjoibG9uZWx5cGxhbmV0IiwiYSI6Imh1ODUtdUEifQ.OLLon0V6rcoTyayXzzUzsg"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Weather in Tamil Nadu - Lonely Planet",
+   "htmlTitle": "Weather in Tamil Nadu - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/india/tamil-nadu/weather",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Interests Adventure travel Beaches Budget travel Family travel Festivals and \nevents Food and drink Honeymoons and romance Luxury travel Round the world\n ...",
+   "htmlSnippet": "Interests Adventure travel Beaches Budget travel Family travel \u003cb\u003eFestivals\u003c/b\u003e and \u003cbr\u003e\nevents Food and drink Honeymoons and romance Luxury travel Round the world\u003cbr\u003e\n&nbsp;...",
+   "cacheId": "9h8KtTH7Fl8J",
+   "formattedUrl": "www.lonelyplanet.com/india/tamil-nadu/weather",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/india/tamil-nadu/weather",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "310",
+      "height": "163",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSx9kH0SNidRxLIqZjH-mfMfGj_qmgcnx9xYYjCJiEbwybgi8Px-7EsljKJ"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Weather in Tamil Nadu - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Weather in Tamil Nadu - Lonely Planet",
+      "twitter:description": "The best time to go to Tamil Nadu, including current weather conditions, temperatures and rainfall",
+      "twitter:image:src": "https://images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/assets/image/92327054722775f9c20c39af4771315b980f74ec7675527a6aad6b45a3b1ad1b/f7c6fbbaaaf4c1be53022641f8d50078a31e0e6df5e33bf88b9415be34383f28.jpg",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Weather in Tamil Nadu - Lonely Planet",
+      "og:description": "The best time to go to Tamil Nadu, including current weather conditions, temperatures and rainfall",
+      "og:url": "http://www.lonelyplanet.com/india/tamil-nadu/weather",
+      "og:type": "website",
+      "og:image": "//images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/assets/image/92327054722775f9c20c39af4771315b980f74ec7675527a6aad6b45a3b1ad1b/f7c6fbbaaaf4c1be53022641f8d50078a31e0e6df5e33bf88b9415be34383f28.jpg",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "S0HzA4UBCmeED5rkcRbcbSxshci+QvuPuusn+XiA89g="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "http://images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/assets/image/92327054722775f9c20c39af4771315b980f74ec7675527a6aad6b45a3b1ad1b/f7c6fbbaaaf4c1be53022641f8d50078a31e0e6df5e33bf88b9415be34383f28.jpg"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Buying travel gear in Chennai?",
+   "htmlTitle": "Buying travel gear in \u003cb\u003eChennai\u003c/b\u003e?",
+   "link": "https://www.lonelyplanet.com/thorntree/forums/asia-indian-subcontinent/india/buying-travel-gear-in-chennai",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Apr 19, 2016 ... We'll fly into Chennai and we don't have any of our… ... staying in a few places \nwhere things like sleep sheets will be welcome. ... Places like Ooty and Triv are \npretty wet in July; places like Madurai and .... About Lonely Planet.",
+   "htmlSnippet": "Apr 19, 2016 \u003cb\u003e...\u003c/b\u003e We&#39;ll fly into \u003cb\u003eChennai\u003c/b\u003e and we don&#39;t have any of our… ... staying in a few places \u003cbr\u003e\nwhere \u003cb\u003ethings\u003c/b\u003e like sleep sheets \u003cb\u003ewill\u003c/b\u003e be welcome. ... Places like Ooty and Triv are \u003cbr\u003e\npretty wet in \u003cb\u003eJuly\u003c/b\u003e; places like Madurai and .... About \u003cb\u003eLonely Planet\u003c/b\u003e.",
+   "cacheId": "oRjVdbeKTcAJ",
+   "formattedUrl": "https://www.lonelyplanet.com/.../buying-travel-gear-in-chennai",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../buying-travel-gear-in-\u003cb\u003echennai\u003c/b\u003e",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "225",
+      "height": "225",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSqRemPSRVtvlwaxn3MfC7zsLjzOoK5uUM0cDjdqchf2Fvexvm4z9sAZObq"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Thorn Tree",
+      "title": "Thorn Tree"
+     },
+     {
+      "url": "Country forums",
+      "title": "Country forums"
+     },
+     {
+      "url": "Indian Subcontinent",
+      "title": "Indian Subcontinent"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Buying travel gear in Chennai?",
+      "og:title": "Buying travel gear in Chennai?",
+      "og:description": "Hi,We are going straight from winter in Europe to summer in India - South India to be exact. We'll fly into Chennai and we don't have any of our…",
+      "og:url": "https://www.lonelyplanet.com/thorntree/forums/asia-indian-subcontinent/india/buying-travel-gear-in-chennai",
+      "og:image": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "og:type": "website",
+      "twitter:title": "Buying travel gear in Chennai?",
+      "twitter:description": "Hi,We are going straight from winter in Europe to summer in India - South India to be exact. We'll fly into Chennai and we don't have any of our…",
+      "twitter:image:src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "OQwyKggNBpDUAb6TIlJiRBmkJthMvvt41ZC7MMU5YhZFuhqs/F2sD5hQ1fs59PEwkHoUTvtuN+r5kIvwDVQHbA=="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Welcome",
+      "name": "Welcome"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Chennai Airport Safety - Transfer from Domestic to International",
+   "htmlTitle": "\u003cb\u003eChennai\u003c/b\u003e Airport Safety - Transfer from Domestic to International",
+   "link": "https://www.lonelyplanet.com/thorntree/forums/asia-indian-subcontinent/india/chennai-airport-safety-transfer-from-domestic-to-international",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Oct 20, 2013 ... I don't think that I will be able to stay on airside as flights are different ... I came \nthrough Chennai in July and walked from the international to the ...",
+   "htmlSnippet": "Oct 20, 2013 \u003cb\u003e...\u003c/b\u003e I don&#39;t think that I \u003cb\u003ewill\u003c/b\u003e be able to stay on airside as flights are different ... I came \u003cbr\u003e\nthrough \u003cb\u003eChennai\u003c/b\u003e in \u003cb\u003eJuly\u003c/b\u003e and walked from the international to the&nbsp;...",
+   "cacheId": "tsG3MCwR4lIJ",
+   "formattedUrl": "https://www.lonelyplanet.com/.../chennai-airport-safety-transfer-from- domestic-to-international",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../\u003cb\u003echennai\u003c/b\u003e-airport-safety-transfer-from- domestic-to-international",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "225",
+      "height": "225",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSqRemPSRVtvlwaxn3MfC7zsLjzOoK5uUM0cDjdqchf2Fvexvm4z9sAZObq"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Thorn Tree",
+      "title": "Thorn Tree"
+     },
+     {
+      "url": "Country forums",
+      "title": "Country forums"
+     },
+     {
+      "url": "Indian Subcontinent",
+      "title": "Indian Subcontinent"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Chennai Airport Safety - Transfer from Domestic to International",
+      "og:title": "Chennai Airport Safety - Transfer from Domestic to International",
+      "og:description": "HiLooking for advise for a solo female traveller considering arriving around 10pm on domestic flight at NEW domestic airport and departing at 4am on International. Would you advise arriving…",
+      "og:url": "https://www.lonelyplanet.com/thorntree/forums/asia-indian-subcontinent/india/chennai-airport-safety-transfer-from-domestic-to-international",
+      "og:image": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "og:type": "website",
+      "twitter:title": "Chennai Airport Safety - Transfer from Domestic to International",
+      "twitter:description": "HiLooking for advise for a solo female traveller considering arriving around 10pm on domestic flight at NEW domestic airport and departing at 4am on International. Would you advise arriving…",
+      "twitter:image:src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "ZyLuW4BiaTsG8hfsLNnfbOC1xZRAuYoX3HqaT+yZ/BWlLJGKCiXItPXCT1TPoFBTaq5vurQh0A9n6fvsWkOy5w=="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Welcome",
+      "name": "Welcome"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "One week in Chennai",
+   "htmlTitle": "One week in \u003cb\u003eChennai\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/thorntree/forums/asia-indian-subcontinent/topics/one-week-in-chennai",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Jul 5, 2011 ... ... India for a month (starting July 10th): Vellore for 3 weeks and that last one \nweek in Chennai. ... So now, I have one week in Chennai before flying home, \nwhat do you guys think? .... hi. i might stay a week in chennai for work. if i'm lucky, \ni will have a weekend to myself. could you guys ... About Lonely Planet.",
+   "htmlSnippet": "Jul 5, 2011 \u003cb\u003e...\u003c/b\u003e ... India for a month (starting \u003cb\u003eJuly\u003c/b\u003e 10th): Vellore for 3 weeks and that last one \u003cbr\u003e\nweek in \u003cb\u003eChennai\u003c/b\u003e. ... So now, I have one week in \u003cb\u003eChennai\u003c/b\u003e before flying home, \u003cbr\u003e\nwhat do you guys think? .... hi. i might stay a week in \u003cb\u003echennai\u003c/b\u003e for work. if i&#39;m lucky, \u003cbr\u003e\ni will have a \u003cb\u003eweekend\u003c/b\u003e to myself. could you guys ... About \u003cb\u003eLonely Planet\u003c/b\u003e.",
+   "cacheId": "99OgprjO0UwJ",
+   "formattedUrl": "https://www.lonelyplanet.com/thorntree/.../one-week-in-chennai",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/thorntree/.../one-week-in-\u003cb\u003echennai\u003c/b\u003e",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "225",
+      "height": "225",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSqRemPSRVtvlwaxn3MfC7zsLjzOoK5uUM0cDjdqchf2Fvexvm4z9sAZObq"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Thorn Tree",
+      "title": "Thorn Tree"
+     },
+     {
+      "url": "Country forums",
+      "title": "Country forums"
+     },
+     {
+      "url": "Indian Subcontinent",
+      "title": "Indian Subcontinent"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "One week in Chennai",
+      "og:title": "One week in Chennai",
+      "og:description": "Hey everyone, I'm Mae and I'll be going to South India for a month (starting July 10th): Vellore for 3 weeks and that last one week in Chennai.  I'm going…",
+      "og:url": "https://www.lonelyplanet.com/thorntree/forums/asia-indian-subcontinent/topics/one-week-in-chennai",
+      "og:image": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "og:type": "website",
+      "twitter:title": "One week in Chennai",
+      "twitter:description": "Hey everyone, I'm Mae and I'll be going to South India for a month (starting July 10th): Vellore for 3 weeks and that last one week in Chennai.  I'm going…",
+      "twitter:image:src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "p/PLaL5Arg2HInOg2B7htLwjYUGscmdpVU+OxRNTBZ9DOm9Gjw28XM8bxECIo3pY8xED/OJcL+CA7YXbgSuE5Q=="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Welcome",
+      "name": "Welcome"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Need traveller advice for 10 day trip in South India",
+   "htmlTitle": "Need traveller advice for 10 day trip in South India",
+   "link": "https://www.lonelyplanet.com/thorntree/forums/asia-indian-subcontinent/india/need-traveller-advice-for-10-day-trip-in-south-india",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Jun 27, 2016 ... Hi, I have read alot from this forum but some advice would still be appreciated for \nmy itinerary. I will be flying into Chennai second week of July ...",
+   "htmlSnippet": "Jun 27, 2016 \u003cb\u003e...\u003c/b\u003e Hi, I have read alot from this forum but some advice would still be appreciated for \u003cbr\u003e\nmy itinerary. I \u003cb\u003ewill\u003c/b\u003e be flying into \u003cb\u003eChennai\u003c/b\u003e second week of \u003cb\u003eJuly\u003c/b\u003e&nbsp;...",
+   "cacheId": "omyuGoE-tMUJ",
+   "formattedUrl": "https://www.lonelyplanet.com/.../need-traveller-advice-for-10-day-trip-in- south-india",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../need-traveller-advice-for-10-day-trip-in- south-india",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "225",
+      "height": "225",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSqRemPSRVtvlwaxn3MfC7zsLjzOoK5uUM0cDjdqchf2Fvexvm4z9sAZObq"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Thorn Tree",
+      "title": "Thorn Tree"
+     },
+     {
+      "url": "Country forums",
+      "title": "Country forums"
+     },
+     {
+      "url": "Indian Subcontinent",
+      "title": "Indian Subcontinent"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Need traveller advice for 10 day trip in South India",
+      "og:title": "Need traveller advice for 10 day trip in South India",
+      "og:description": "Hi, I have read alot from this forum but some advice would still be appreciated for my itinerary. I will be flying into Chennai second week of July and flying…",
+      "og:url": "https://www.lonelyplanet.com/thorntree/forums/asia-indian-subcontinent/india/need-traveller-advice-for-10-day-trip-in-south-india",
+      "og:image": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "og:type": "website",
+      "twitter:title": "Need traveller advice for 10 day trip in South India",
+      "twitter:description": "Hi, I have read alot from this forum but some advice would still be appreciated for my itinerary. I will be flying into Chennai second week of July and flying…",
+      "twitter:image:src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "o++HnNJH3lC3ZgImupKpU1lrHqtd3NDF4jYjt/LWjKCv7tzj4YLzB8Uu2hV63ME7SAoPNt+9yPZGx/qLVY/x5w=="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Welcome",
+      "name": "Welcome"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "GoAir plane strikes aerobridge at Chennai airport - Lonely Planet ...",
+   "htmlTitle": "GoAir plane strikes aerobridge at \u003cb\u003eChennai\u003c/b\u003e airport - \u003cb\u003eLonely Planet\u003c/b\u003e ...",
+   "link": "http://www.lonelyplanet.com/news/2015/07/10/goair-plane-strikes-aerobridge-at-chennai-airport/",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "July 10, 2015 at 12:10 pm. Passengers on a GoAir flight to Chennai had a lucky \nescape after their plane collided with an ... It is expected that other GoAir flights \nwill be affected as the airline only operates a small fleet. ... India may change the \nnames of its airports to make things easier for travellers · China's Lantern Festival\n.",
+   "htmlSnippet": "\u003cb\u003eJuly\u003c/b\u003e 10, 2015 at 12:10 pm. Passengers on a GoAir flight to \u003cb\u003eChennai\u003c/b\u003e had a lucky \u003cbr\u003e\nescape after their plane collided with an ... It is expected that other GoAir flights \u003cbr\u003e\n\u003cb\u003ewill\u003c/b\u003e be affected as the airline only operates a small fleet. ... India may change the \u003cbr\u003e\nnames of its airports to make \u003cb\u003ethings\u003c/b\u003e easier for travellers &middot; China&#39;s Lantern Festival\u003cbr\u003e\n.",
+   "cacheId": "Hw7W1cFA2J8J",
+   "formattedUrl": "www.lonelyplanet.com/.../goair-plane-strikes-aerobridge-at-chennai-airport/",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../goair-plane-strikes-aerobridge-at-\u003cb\u003echennai\u003c/b\u003e-airport/",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "274",
+      "height": "184",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQqlR7tqAbamiCC1z0cg0KbZpHMVprch4EAnUTKibOEaV33HkZIvR2r66fx"
+     }
+    ],
+    "metatags": [
+     {
+      "news_keywords": "travel, lifestyle, culture, world, environment, religion, food and beverage, celebrities",
+      "og:locale": "en_US",
+      "og:type": "article",
+      "og:title": "GoAir plane strikes aerobridge at Chennai airport - Lonely Planet Travel News",
+      "og:description": "Passengers on a GoAir flight to Chennai had a lucky escape after their plane collided with an aerobridge while the operator was allegedly talking on his mobile phone. The crash punched a hole in the aircraft fuselage but no passengers were injured and the aircraft was evacuated using mobile steps and taken out of service. … read more",
+      "og:url": "http://www.lonelyplanet.com/news/2015/07/10/goair-plane-strikes-aerobridge-at-chennai-airport/",
+      "og:site_name": "Lonely Planet Travel News",
+      "article:section": "Other",
+      "article:published_time": "2015-07-10T12:10:43+00:00",
+      "og:image": "http://www.lonelyplanet.com/news/wp-content/uploads/2015/07/GoAir.jpg",
+      "og:image:width": "625",
+      "og:image:height": "420",
+      "author": "Lonely Planet",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "u2Ig0wE06EJo8buhMfhHfDoqY9WzdrI6Ri6U7aEkmhk=",
+      "fb:pages": "1632004517052708"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "http://www.lonelyplanet.com/news/wp-content/uploads/2015/07/GoAir.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "In Chennai til Nov- Looking for someone to travel with",
+   "htmlTitle": "In \u003cb\u003eChennai\u003c/b\u003e til Nov- Looking for someone to travel with",
+   "link": "https://www.lonelyplanet.com/thorntree/forums/asia-indian-subcontinent/india/in-chennai-til-nov-looking-for-someone-to-travel-with",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Jun 24, 2009 ... I'm a 29 year old American in Chennai researching traffic safety til November ... I \nam off every weekend and can also… ... 8th july will be in kolkata on this day \nmaybe going towards south so do write to .... About Lonely Planet.",
+   "htmlSnippet": "Jun 24, 2009 \u003cb\u003e...\u003c/b\u003e I&#39;m a 29 year old American in \u003cb\u003eChennai\u003c/b\u003e researching traffic safety til November ... I \u003cbr\u003e\nam off every \u003cb\u003eweekend\u003c/b\u003e and can also… ... 8th \u003cb\u003ejuly\u003c/b\u003e will be in kolkata on this day \u003cbr\u003e\nmaybe going towards south so do write to .... About \u003cb\u003eLonely Planet\u003c/b\u003e.",
+   "cacheId": "-3H03Gx0KXgJ",
+   "formattedUrl": "https://www.lonelyplanet.com/.../in-chennai-til-nov-looking-for-someone-to- travel-with",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../in-\u003cb\u003echennai\u003c/b\u003e-til-nov-looking-for-someone-to- travel-with",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "225",
+      "height": "225",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSqRemPSRVtvlwaxn3MfC7zsLjzOoK5uUM0cDjdqchf2Fvexvm4z9sAZObq"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Thorn Tree",
+      "title": "Thorn Tree"
+     },
+     {
+      "url": "Country forums",
+      "title": "Country forums"
+     },
+     {
+      "url": "Indian Subcontinent",
+      "title": "Indian Subcontinent"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "In Chennai til Nov- Looking for someone to travel with",
+      "og:title": "In Chennai til Nov- Looking for someone to travel with",
+      "og:description": "Hello!  I'm a 29 year old American in Chennai researching traffic safety til November and am looking for someone to travel with.  I am off every weekend and can also…",
+      "og:url": "https://www.lonelyplanet.com/thorntree/forums/asia-indian-subcontinent/india/in-chennai-til-nov-looking-for-someone-to-travel-with",
+      "og:image": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "og:type": "website",
+      "twitter:title": "In Chennai til Nov- Looking for someone to travel with",
+      "twitter:description": "Hello!  I'm a 29 year old American in Chennai researching traffic safety til November and am looking for someone to travel with.  I am off every weekend and can also…",
+      "twitter:image:src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "/6TFrBJDKKgltoqsU+NbGRPn3EGlZLIdM8mgXpwpuf57JFsIWVmjc3tXcTobQoV88nbvF6EtNOn/56gdrgy5zQ=="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Welcome",
+      "name": "Welcome"
+     },
+     {
+      "url": "Destinations",
+      "name": "Destinations"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  }
+ ]
+}

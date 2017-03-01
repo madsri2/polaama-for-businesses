@@ -23,7 +23,7 @@ function TripInfoProvider(tripData, hometown) {
 
 // callback function meant to be called by WeatherInfoProvider.getWeather 
 function parseWeatherResponse(city, weatherDetails) {
-  if(_.isUndefined(weatherDetails)) {
+  if(!weatherDetails) {
     logger.error(`could not get weather information for city ${city}`);
     return;
   }

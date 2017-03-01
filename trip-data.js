@@ -30,7 +30,8 @@ TripData.getTrips = function() {
     if(!name.startsWith(".")) {
       const tripData = JSON.parse(fs.readFileSync(`${tripBaseDir}/${name}`,'utf8'));
       // only add those trips whose start date is after today or we don't know the start date
-      if(_.isUndefined(tripData.startDate) || moment(tripData.startDate).diff(moment(),'days') >= 0) { 
+      if(_.isUndefined(tripData.startDate) || 
+         moment(tripData.startDate).diff(moment(),'days') >= 0) { 
         tripList.push({
           name: tripData.name,
           rawName: tripData.rawName
@@ -315,7 +316,13 @@ function createPackList() {
   // if the weather is sunny, add corresponding items.
   switch(this.data.weather) {
     case "sunny": 
-      this.storePackList("unused", "A hat, Sunglasses, Rain Jacket, Gloves, Winter coat");
+      this.storePackList("unused", "A hat, Sunglasses, Sunscreen lotion");
+      break;
+    case "rainy":
+      this.storePackList("unused", "Rain Jacket, Gloves");
+      break;
+    case "cold":
+      this.storePackList("unused", "Winter coat, Gloves");
       break;
   }
   this.storePackList("unused", "Travel adapter");

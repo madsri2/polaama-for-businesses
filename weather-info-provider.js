@@ -73,7 +73,7 @@ function handleUrlResponse(error, res, body) {
    if(retry++ < 3) {
      logger.warn("weather condition undefined. retrying after sleep for 1 second..");
      sleep.sleep(1);
-     this.getWeather(this.city, responseCallback);
+     return this.getWeather(this.city, responseCallback);
    }
    else {
      logger.error(`3 retries to wunderground API failed. cannot obtain weather condition for ${this.city} and time range ${this.timeRange}`);

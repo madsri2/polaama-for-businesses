@@ -1,0 +1,796 @@
+{
+ "kind": "customsearch#search",
+ "url": {
+  "type": "application/json",
+  "template": "https://www.googleapis.com/customsearch/v1?q={searchTerms}&num={count?}&start={startIndex?}&lr={language?}&safe={safe?}&cx={cx?}&cref={cref?}&sort={sort?}&filter={filter?}&gl={gl?}&cr={cr?}&googlehost={googleHost?}&c2coff={disableCnTwTranslation?}&hq={hq?}&hl={hl?}&siteSearch={siteSearch?}&siteSearchFilter={siteSearchFilter?}&exactTerms={exactTerms?}&excludeTerms={excludeTerms?}&linkSite={linkSite?}&orTerms={orTerms?}&relatedSite={relatedSite?}&dateRestrict={dateRestrict?}&lowRange={lowRange?}&highRange={highRange?}&searchType={searchType}&fileType={fileType?}&rights={rights?}&imgSize={imgSize?}&imgType={imgType?}&imgColorType={imgColorType?}&imgDominantColor={imgDominantColor?}&alt=json"
+ },
+ "queries": {
+  "request": [
+   {
+    "title": "Google Custom Search - trip advisor bengaluru july attractions",
+    "totalResults": "64400",
+    "searchTerms": "trip advisor bengaluru july attractions",
+    "count": 10,
+    "startIndex": 1,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "bengaluru"
+   }
+  ],
+  "nextPage": [
+   {
+    "title": "Google Custom Search - trip advisor bengaluru july attractions",
+    "totalResults": "64400",
+    "searchTerms": "trip advisor bengaluru july attractions",
+    "count": 10,
+    "startIndex": 11,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "bengaluru"
+   }
+  ]
+ },
+ "context": {
+  "title": "Polaama"
+ },
+ "searchInformation": {
+  "searchTime": 1.308435,
+  "formattedSearchTime": "1.31",
+  "totalResults": "64400",
+  "formattedTotalResults": "64,400"
+ },
+ "items": [
+  {
+   "kind": "customsearch#result",
+   "title": "The Top 10 Things to Do in Bengaluru for 2017 - TripAdvisor ...",
+   "htmlTitle": "The Top 10 \u003cb\u003eThings to Do\u003c/b\u003e in \u003cb\u003eBengaluru\u003c/b\u003e for 2017 - \u003cb\u003eTripAdvisor\u003c/b\u003e ...",
+   "link": "https://www.tripadvisor.com/Attractions-g297628-Activities-Bengaluru_Karnataka.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Book your tickets online for the top things to do in Bengaluru, India on TripAdvisor\n: See 37693 traveler reviews and photos of Bengaluru tourist attractions.",
+   "htmlSnippet": "Book your tickets online for the top \u003cb\u003ethings to do\u003c/b\u003e in \u003cb\u003eBengaluru\u003c/b\u003e, India on \u003cb\u003eTripAdvisor\u003c/b\u003e\u003cbr\u003e\n: See 37693 traveler reviews and photos of \u003cb\u003eBengaluru\u003c/b\u003e tourist \u003cb\u003eattractions\u003c/b\u003e.",
+   "cacheId": "QF2ebyulDngJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attractions-g297628-Activities-Bengaluru_ Karnataka.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttractions\u003c/b\u003e-g297628-\u003cb\u003eActivities\u003c/b\u003e-\u003cb\u003eBengaluru\u003c/b\u003e_ Karnataka.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "290",
+      "height": "174",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKfekxbEJgaQw6GI_AIpu2KU7ZhYvPiwutnOz23eL-RR9FrWXjTNHvddT4"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     },
+     {
+      "url": "Karnataka",
+      "title": "Karnataka"
+     },
+     {
+      "url": "Bengaluru",
+      "title": "Bengaluru"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "The Top 10 Things to Do in Bengaluru for 2017 - TripAdvisor - Bengaluru, India Attractions - Find What to Do Today, This Weekend, or in March",
+      "og:description": "Book your tickets online for the top things to do in Bengaluru, India on TripAdvisor: See 37,693 traveler reviews and photos of Bengaluru tourist attractions. Find what to do today, this weekend, or in March. We have reviews of the best places to see in Bengaluru. Visit top-rated & must-see attractions.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/03/9b/2f/3a/bangalore.jpg",
+      "og:image:width": "550",
+      "og:image:height": "331",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attractions-g297628-Activities-m33762-Bengaluru_Karnataka.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attractions-g297628-Activities-m33762-Bengaluru_Karnataka.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attractions-g297628-Activities-m33762-Bengaluru_Karnataka.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/03/9b/2f/3a/bangalore.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Where to travel around Bangalore IN July End. - Bengaluru Forum ...",
+   "htmlTitle": "Where to travel around \u003cb\u003eBangalore\u003c/b\u003e IN \u003cb\u003eJuly\u003c/b\u003e End. - \u003cb\u003eBengaluru\u003c/b\u003e Forum ...",
+   "link": "https://www.tripadvisor.com/ShowTopic-g297628-i2499-k6642098-Where_to_travel_around_Bangalore_IN_July_End-Bengaluru_Karnataka.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Where to travel around Bangalore IN July End. Except : Mysore & Ooty. ... If you \nenjoy the monsoon, travelling to places other than coastal Karnataka should .... \n2017; Bengaluru to Shravanabelagola one-day road trip Feb 21, 2017; Which are \n... TripAdvisor LLC is not a booking agent and does not charge any service fees \nto ...",
+   "htmlSnippet": "Where to travel around \u003cb\u003eBangalore\u003c/b\u003e IN \u003cb\u003eJuly\u003c/b\u003e End. Except : Mysore &amp; Ooty. ... If you \u003cbr\u003e\nenjoy the monsoon, travelling to \u003cb\u003eplaces\u003c/b\u003e other than coastal Karnataka should .... \u003cbr\u003e\n2017; \u003cb\u003eBengaluru\u003c/b\u003e to Shravanabelagola one-day road trip Feb 21, 2017; Which are \u003cbr\u003e\n... \u003cb\u003eTripAdvisor\u003c/b\u003e LLC is not a booking agent and does not charge any service fees \u003cbr\u003e\nto&nbsp;...",
+   "cacheId": "opcYy0EKBr0J",
+   "formattedUrl": "https://www.tripadvisor.com/ShowTopic-g297628-i2499-k6642098-Where_ to_travel_around_Bangalore_IN_July_End-Bengaluru_Karnataka.h...",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/ShowTopic-g297628-i2499-k6642098-Where_ to_travel_around_\u003cb\u003eBangalore\u003c/b\u003e_IN_\u003cb\u003eJuly\u003c/b\u003e_End-\u003cb\u003eBengaluru\u003c/b\u003e_Karnataka.h...",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "80",
+      "height": "80",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTVQflH0VqVMp6PDcRILO5PBISjTfAm4CWJ85aFIrZtIGOJanUlknhw"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     },
+     {
+      "url": "Karnataka",
+      "title": "Karnataka"
+     },
+     {
+      "url": "Bengaluru",
+      "title": "Bengaluru"
+     },
+     {
+      "url": "Bengaluru Travel Forum",
+      "title": "Bengaluru Travel Forum"
+     }
+    ],
+    "metatags": [
+     {
+      "og:image": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Lalbagh Botanical Garden (Bengaluru, India): Top Tips Before You ...",
+   "htmlTitle": "Lalbagh Botanical Garden (\u003cb\u003eBengaluru\u003c/b\u003e, India): Top Tips Before You ...",
+   "link": "https://www.tripadvisor.com/Attraction_Review-g297628-d631367-Reviews-Lalbagh_Botanical_Garden-Bengaluru_Karnataka.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Book your tickets online for Lalbagh Botanical Garden, Bengaluru: See 4344 \nreviews, ... Garden, ranked No.7 on TripAdvisor among 318 attractions in \nBengaluru.",
+   "htmlSnippet": "Book your tickets online for Lalbagh Botanical Garden, \u003cb\u003eBengaluru\u003c/b\u003e: See 4344 \u003cbr\u003e\nreviews, ... Garden, ranked No.7 on \u003cb\u003eTripAdvisor\u003c/b\u003e among 318 \u003cb\u003eattractions\u003c/b\u003e in \u003cbr\u003e\n\u003cb\u003eBengaluru\u003c/b\u003e.",
+   "cacheId": "UlgDD0PdYowJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attraction_Review-g297628-d631367-Reviews- Lalbagh_Botanical_Garden-Bengaluru_Karnataka.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttraction\u003c/b\u003e_Review-g297628-d631367-Reviews- Lalbagh_Botanical_Garden-\u003cb\u003eBengaluru\u003c/b\u003e_Karnataka.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "259",
+      "height": "194",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTwHPtm1-KfQnbeAwaSNTsZhkQPLU-efCzDB2AUVkROz3TxKJdlc4Tlkrs"
+     }
+    ],
+    "LocalBusiness": [
+     {
+      "image": "https://media-cdn.tripadvisor.com/media/photo-s/01/5f/b0/ec/floral-watch-at-lal-bagh.jpg",
+      "name": "Lalbagh Botanical Garden"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     },
+     {
+      "url": "Karnataka",
+      "title": "Karnataka"
+     },
+     {
+      "url": "Bengaluru",
+      "title": "Bengaluru"
+     },
+     {
+      "url": "Things to Do in Bengaluru",
+      "title": "Things to Do in Bengaluru"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "4.0",
+      "ratingcount": "4344",
+      "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/01/5f/b0/ec/floral-watch-at-lal-bagh.jpg"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "4344"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Lalbagh Botanical Garden (Bengaluru, India): Top Tips Before You Go - TripAdvisor",
+      "og:description": "Book your tickets online for Lalbagh Botanical Garden, Bengaluru: See 4,344 reviews, articles, and 1,835 photos of Lalbagh Botanical Garden, ranked No.7 on TripAdvisor among 318 attractions in Bengaluru.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/01/5f/b0/ec/floral-watch-at-lal-bagh.jpg",
+      "og:image:width": "550",
+      "og:image:height": "412",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attraction_Review-g297628-d631367-Reviews-m33762-Lalbagh_Botanical_Garden-Bengaluru_Karnataka.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attraction_Review-g297628-d631367-Reviews-m33762-Lalbagh_Botanical_Garden-Bengaluru_Karnataka.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attraction_Review-g297628-d631367-Reviews-m33762-Lalbagh_Botanical_Garden-Bengaluru_Karnataka.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/01/5f/b0/ec/floral-watch-at-lal-bagh.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Where to travel around Bangalore IN July End. - Bengaluru Forum ...",
+   "htmlTitle": "Where to travel around \u003cb\u003eBangalore\u003c/b\u003e IN \u003cb\u003eJuly\u003c/b\u003e End. - \u003cb\u003eBengaluru\u003c/b\u003e Forum ...",
+   "link": "https://www.tripadvisor.com/ShowTopic-g297628-i2499-k6642098-o10-Where_to_travel_around_Bangalore_IN_July_End-Bengaluru_Bangalore_Karnataka.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Where to travel around Bangalore IN July End. Except : Mysore & Ooty. ... There \nare lots of attractions like Promenade Beach, Paradise Beach, The Auroville ... To \nreview the TripAdvisor Forums Posting Guidelines, please follow this link: ...",
+   "htmlSnippet": "Where to travel around \u003cb\u003eBangalore\u003c/b\u003e IN \u003cb\u003eJuly\u003c/b\u003e End. Except : Mysore &amp; Ooty. ... There \u003cbr\u003e\nare lots of \u003cb\u003eattractions\u003c/b\u003e like Promenade Beach, Paradise Beach, The Auroville ... To \u003cbr\u003e\nreview the \u003cb\u003eTripAdvisor\u003c/b\u003e Forums Posting Guidelines, please follow this link:&nbsp;...",
+   "cacheId": "F-_7PZO5iNwJ",
+   "formattedUrl": "https://www.tripadvisor.com/ShowTopic-g297628-i2499-k6642098-o10- Where_to_travel_around_Bangalore_IN_July_End-Bengaluru_Ban...",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/ShowTopic-g297628-i2499-k6642098-o10- Where_to_travel_around_\u003cb\u003eBangalore\u003c/b\u003e_IN_\u003cb\u003eJuly\u003c/b\u003e_End-\u003cb\u003eBengaluru\u003c/b\u003e_\u003cb\u003eBan\u003c/b\u003e...",
+   "pagemap": {
+    "hcard": [
+     {
+      "fn": "Mank1984",
+      "url": "https://www.tripadvisor.com/members-forums/Mank1984"
+     },
+     {
+      "fn": "Deepak_01",
+      "url": "https://www.tripadvisor.com/members-forums/Deepak_01"
+     },
+     {
+      "fn": "Raju495",
+      "url": "https://www.tripadvisor.com/members-forums/Raju495"
+     },
+     {
+      "fn": "Jessy B",
+      "url": "https://www.tripadvisor.com/members-forums/jessyb229"
+     },
+     {
+      "fn": "anayet2013",
+      "url": "https://www.tripadvisor.com/members-forums/anayet2013"
+     },
+     {
+      "fn": "Deepak_01",
+      "url": "https://www.tripadvisor.com/members-forums/Deepak_01"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "80",
+      "height": "80",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTVQflH0VqVMp6PDcRILO5PBISjTfAm4CWJ85aFIrZtIGOJanUlknhw"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     },
+     {
+      "url": "Karnataka",
+      "title": "Karnataka"
+     },
+     {
+      "url": "Bengaluru",
+      "title": "Bengaluru"
+     },
+     {
+      "url": "Bengaluru Travel Forum",
+      "title": "Bengaluru Travel Forum"
+     }
+    ],
+    "person": [
+     {
+      "location": "Bengaluru, India"
+     },
+     {
+      "url": "Mank1984",
+      "name": "Mank1984"
+     },
+     {
+      "url": "Deepak_01",
+      "name": "Deepak_01"
+     },
+     {
+      "url": "Raju495",
+      "name": "Raju495"
+     },
+     {
+      "url": "Jessy B",
+      "name": "Jessy B"
+     },
+     {
+      "url": "anayet2013",
+      "name": "anayet2013"
+     },
+     {
+      "url": "Deepak_01",
+      "name": "Deepak_01"
+     }
+    ],
+    "postaladdress": [
+     {
+      "addresslocality": "Bengaluru, India"
+     },
+     {
+      "addresslocality": "Bengaluru, India"
+     },
+     {
+      "addresslocality": "Bangalore..."
+     },
+     {
+      "addresslocality": "New York City"
+     },
+     {
+      "addresslocality": "Dhaka City..."
+     },
+     {
+      "addresslocality": "Bengaluru, India"
+     }
+    ],
+    "metatags": [
+     {
+      "og:image": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "5 Cheap Flights to Bengaluru, India (BLR) from $620 - TripAdvisor",
+   "htmlTitle": "5 Cheap Flights to \u003cb\u003eBengaluru\u003c/b\u003e, India (BLR) from $620 - \u003cb\u003eTripAdvisor\u003c/b\u003e",
+   "link": "https://www.tripadvisor.com/Flights-g297628-Bengaluru_Karnataka-Cheap_Discount_Airfares.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Cheap Flights to Bengaluru: Enter your dates once and have TripAdvisor search \nmultiple sites to find the best prices on Bengaluru flights.",
+   "htmlSnippet": "Cheap Flights to \u003cb\u003eBengaluru\u003c/b\u003e: Enter your dates once and have \u003cb\u003eTripAdvisor\u003c/b\u003e search \u003cbr\u003e\nmultiple sites to find the best prices on \u003cb\u003eBengaluru\u003c/b\u003e flights.",
+   "cacheId": "hWT558UbU9YJ",
+   "formattedUrl": "https://www.tripadvisor.com/Flights-g297628-Bengaluru_Karnataka-Cheap_ Discount_Airfares.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/Flights-g297628-\u003cb\u003eBengaluru\u003c/b\u003e_Karnataka-Cheap_ Discount_Airfares.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "80",
+      "height": "80",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTVQflH0VqVMp6PDcRILO5PBISjTfAm4CWJ85aFIrZtIGOJanUlknhw"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     },
+     {
+      "url": "Karnataka",
+      "title": "Karnataka"
+     },
+     {
+      "url": "Bengaluru",
+      "title": "Bengaluru"
+     },
+     {
+      "url": "Bengaluru Flights",
+      "title": "Bengaluru Flights"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "5 Cheap Flights to Bengaluru, India (BLR) from $620 - TripAdvisor",
+      "og:image": "https://static.tacdn.com/img2/postimg.jpg",
+      "viewport": "width=1040,user-scalable=no"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Rides and attractions - Picture of Lumbini Gardens, Bengaluru ...",
+   "htmlTitle": "Rides and \u003cb\u003eattractions\u003c/b\u003e - Picture of Lumbini Gardens, \u003cb\u003eBengaluru\u003c/b\u003e ...",
+   "link": "https://www.tripadvisor.com/LocationPhotoDirectLink-g297628-d1227390-i141767405-Lumbini_Gardens-Bengaluru_Bangalore_Karnataka.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Lumbini Gardens, Bengaluru Picture: Rides and attractions - Check out \nTripAdvisor members' ... #70 of 317 things to do in Bengaluru ... Reviewed July \n25, 2015.",
+   "htmlSnippet": "Lumbini Gardens, \u003cb\u003eBengaluru\u003c/b\u003e Picture: Rides and \u003cb\u003eattractions\u003c/b\u003e - Check out \u003cbr\u003e\n\u003cb\u003eTripAdvisor\u003c/b\u003e members&#39; ... #70 of 317 \u003cb\u003ethings to do\u003c/b\u003e in \u003cb\u003eBengaluru\u003c/b\u003e ... Reviewed \u003cb\u003eJuly\u003c/b\u003e \u003cbr\u003e\n25, 2015.",
+   "cacheId": "9BPclZ_SYzgJ",
+   "formattedUrl": "https://www.tripadvisor.com/LocationPhotoDirectLink-g297628-d1227390- i141767405-Lumbini_Gardens-Bengaluru_Bangalore_Karnataka.ht...",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/LocationPhotoDirectLink-g297628-d1227390- i141767405-Lumbini_Gardens-\u003cb\u003eBengaluru\u003c/b\u003e_\u003cb\u003eBangalore\u003c/b\u003e_Karnataka.ht...",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "194",
+      "height": "259",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTXtW2hv9B4OCjOej4paSwNMwRcu5cNHWHyLDWVc62aFH3KrksjGyO4t2Q"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Rides and attractions - Picture of Lumbini Gardens, Bengaluru - TripAdvisor",
+      "og:description": "Lumbini Gardens, Bengaluru Picture: Rides and attractions - Check out TripAdvisor members' 16,068 candid photos and videos of Lumbini Gardens",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/08/73/32/ed/rides-and-attractions.jpg",
+      "og:image:width": "338",
+      "og:image:height": "450",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/LocationPhotoDirectLink-g297628-d1227390-i141767405-m33762-Lumbini_Gardens-Bengaluru_Karnataka.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/LocationPhotoDirectLink-g297628-d1227390-i141767405-m33762-Lumbini_Gardens-Bengaluru_Karnataka.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/LocationPhotoDirectLink-g297628-d1227390-i141767405-m33762-Lumbini_Gardens-Bengaluru_Karnataka.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/08/73/32/ed/rides-and-attractions.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Smaaash (Bengaluru, India): Top Tips Before You Go - TripAdvisor",
+   "htmlTitle": "Smaaash (\u003cb\u003eBengaluru\u003c/b\u003e, India): Top Tips Before You Go - \u003cb\u003eTripAdvisor\u003c/b\u003e",
+   "link": "https://www.tripadvisor.com/Attraction_Review-g297628-d10091799-Reviews-Smaaash-Bengaluru_Karnataka.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Smaaash, Bengaluru: See 9 reviews, articles, and 7 photos of Smaaash, ranked \nNo.35 on TripAdvisor among 82 attractions in Bengaluru. ... Reviewed July 29, \n2016 via mobile. Good place to spend 3-5 hours of your day playing arcade, ...",
+   "htmlSnippet": "Smaaash, \u003cb\u003eBengaluru\u003c/b\u003e: See 9 reviews, articles, and 7 photos of Smaaash, ranked \u003cbr\u003e\nNo.35 on \u003cb\u003eTripAdvisor\u003c/b\u003e among 82 \u003cb\u003eattractions\u003c/b\u003e in \u003cb\u003eBengaluru\u003c/b\u003e. ... Reviewed \u003cb\u003eJuly\u003c/b\u003e 29, \u003cbr\u003e\n2016 via mobile. Good place to spend 3-5 hours of your day playing arcade,&nbsp;...",
+   "cacheId": "2eEg9ARE2cgJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attraction_Review-g297628-d10091799- Reviews-Smaaash-Bengaluru_Karnataka.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttraction\u003c/b\u003e_Review-g297628-d10091799- Reviews-Smaaash-\u003cb\u003eBengaluru\u003c/b\u003e_Karnataka.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "194",
+      "height": "260",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQar7w9jKIecZUQIuvoHHeIj50OZxY9FZaOF18I1tRyycopE3AWp8XMKns"
+     }
+    ],
+    "LocalBusiness": [
+     {
+      "image": "https://media-cdn.tripadvisor.com/media/photo-s/0a/bd/8b/41/cricket.jpg",
+      "name": "Smaaash"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     },
+     {
+      "url": "Karnataka",
+      "title": "Karnataka"
+     },
+     {
+      "url": "Bengaluru",
+      "title": "Bengaluru"
+     },
+     {
+      "url": "Things to Do in Bengaluru",
+      "title": "Things to Do in Bengaluru"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "3.5",
+      "ratingcount": "9",
+      "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/0a/bd/8b/41/cricket.jpg"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "9"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Smaaash (Bengaluru, India): Top Tips Before You Go - TripAdvisor",
+      "og:description": "Smaaash, Bengaluru: See 9 reviews, articles, and 7 photos of Smaaash, ranked No.35 on TripAdvisor among 82 attractions in Bengaluru.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/0a/bd/8b/41/cricket.jpg",
+      "og:image:width": "337",
+      "og:image:height": "450",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attraction_Review-g297628-d10091799-Reviews-m33762-Smaaash-Bengaluru_Karnataka.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attraction_Review-g297628-d10091799-Reviews-m33762-Smaaash-Bengaluru_Karnataka.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attraction_Review-g297628-d10091799-Reviews-m33762-Smaaash-Bengaluru_Karnataka.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/0a/bd/8b/41/cricket.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Bangalore Golf Club (Bengaluru, India): Top Tips Before You Go ...",
+   "htmlTitle": "\u003cb\u003eBangalore\u003c/b\u003e Golf Club (\u003cb\u003eBengaluru\u003c/b\u003e, India): Top Tips Before You Go ...",
+   "link": "https://www.tripadvisor.com/Attraction_Review-g297628-d5782153-Reviews-Bangalore_Golf_Club-Bengaluru_Karnataka.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Bangalore Golf Club, Bengaluru: See 25 reviews, articles, and 9 photos of \nBangalore Golf Club, ranked No.7 on TripAdvisor among 53 attractions in \nBengaluru. ... Reviewed July 29, 2016 via mobile. The club has extended its \nservice area and ...",
+   "htmlSnippet": "\u003cb\u003eBangalore\u003c/b\u003e Golf Club, \u003cb\u003eBengaluru\u003c/b\u003e: See 25 reviews, articles, and 9 photos of \u003cbr\u003e\n\u003cb\u003eBangalore\u003c/b\u003e Golf Club, ranked No.7 on \u003cb\u003eTripAdvisor\u003c/b\u003e among 53 \u003cb\u003eattractions\u003c/b\u003e in \u003cbr\u003e\n\u003cb\u003eBengaluru\u003c/b\u003e. ... Reviewed \u003cb\u003eJuly\u003c/b\u003e 29, 2016 via mobile. The club has extended its \u003cbr\u003e\nservice area and&nbsp;...",
+   "cacheId": "jhV0p2tl0gMJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attraction_Review-g297628-d5782153-Reviews -Bangalore_Golf_Club-Bengaluru_Karnataka.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttraction\u003c/b\u003e_Review-g297628-d5782153-Reviews -\u003cb\u003eBangalore\u003c/b\u003e_Golf_Club-\u003cb\u003eBengaluru\u003c/b\u003e_Karnataka.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "259",
+      "height": "194",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTpfZBYMhC65kmOziP1Zj7abcbtVjxXi2obxGEC8v-4r5rQO2kIC8Aiux0"
+     }
+    ],
+    "LocalBusiness": [
+     {
+      "image": "https://media-cdn.tripadvisor.com/media/photo-s/07/d2/6c/5f/bangalore-golf-club.jpg",
+      "name": "Bangalore Golf Club"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     },
+     {
+      "url": "Karnataka",
+      "title": "Karnataka"
+     },
+     {
+      "url": "Bengaluru",
+      "title": "Bengaluru"
+     },
+     {
+      "url": "Things to Do in Bengaluru",
+      "title": "Things to Do in Bengaluru"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "4.5",
+      "ratingcount": "25",
+      "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/07/d2/6c/5f/bangalore-golf-club.jpg"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "25"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Bangalore Golf Club (Bengaluru, India): Top Tips Before You Go - TripAdvisor",
+      "og:description": "Bangalore Golf Club, Bengaluru: See 25 reviews, articles, and 9 photos of Bangalore Golf Club, ranked No.7 on TripAdvisor among 53 attractions in Bengaluru.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/07/d2/6c/5f/bangalore-golf-club.jpg",
+      "og:image:width": "550",
+      "og:image:height": "413",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attraction_Review-g297628-d5782153-Reviews-m33762-Bangalore_Golf_Club-Bengaluru_Karnataka.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attraction_Review-g297628-d5782153-Reviews-m33762-Bangalore_Golf_Club-Bengaluru_Karnataka.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attraction_Review-g297628-d5782153-Reviews-m33762-Bangalore_Golf_Club-Bengaluru_Karnataka.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/07/d2/6c/5f/bangalore-golf-club.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Bheemeshwari (Bengaluru, India): Top Tips Before You Go ...",
+   "htmlTitle": "Bheemeshwari (\u003cb\u003eBengaluru\u003c/b\u003e, India): Top Tips Before You Go ...",
+   "link": "https://www.tripadvisor.com/Attraction_Review-g297628-d3238605-Reviews-Bheemeshwari-Bengaluru_Karnataka.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Bheemeshwari, Bengaluru: See 41 reviews, articles, and 57 photos of \nBheemeshwari, ranked No.91 on TripAdvisor among 318 attractions in \nBengaluru. ... We visited this place in July of 2016.This was my first visit to Jungle \nLodges ...",
+   "htmlSnippet": "Bheemeshwari, \u003cb\u003eBengaluru\u003c/b\u003e: See 41 reviews, articles, and 57 photos of \u003cbr\u003e\nBheemeshwari, ranked No.91 on \u003cb\u003eTripAdvisor\u003c/b\u003e among 318 \u003cb\u003eattractions\u003c/b\u003e in \u003cbr\u003e\n\u003cb\u003eBengaluru\u003c/b\u003e. ... We visited this place in \u003cb\u003eJuly\u003c/b\u003e of 2016.This was my first visit to Jungle \u003cbr\u003e\nLodges&nbsp;...",
+   "cacheId": "KalL4E5lK7QJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attraction_Review-g297628-d3238605-Reviews -Bheemeshwari-Bengaluru_Karnataka.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttraction\u003c/b\u003e_Review-g297628-d3238605-Reviews -Bheemeshwari-\u003cb\u003eBengaluru\u003c/b\u003e_Karnataka.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "276",
+      "height": "183",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTFAaVVXtxHpiknU3PTPQf-_UUOlpwIZcEcudWoXXBU4j9SEcwtO4Iq8fc"
+     }
+    ],
+    "LocalBusiness": [
+     {
+      "image": "https://media-cdn.tripadvisor.com/media/photo-s/02/d8/6e/c0/thrillophilia-bheemeshwari.jpg",
+      "name": "Bheemeshwari"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     },
+     {
+      "url": "Karnataka",
+      "title": "Karnataka"
+     },
+     {
+      "url": "Bengaluru",
+      "title": "Bengaluru"
+     },
+     {
+      "url": "Things to Do in Bengaluru",
+      "title": "Things to Do in Bengaluru"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "4.0",
+      "ratingcount": "41",
+      "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/02/d8/6e/c0/thrillophilia-bheemeshwari.jpg"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "41"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Bheemeshwari (Bengaluru, India): Top Tips Before You Go - TripAdvisor",
+      "og:description": "Bheemeshwari, Bengaluru: See 41 reviews, articles, and 57 photos of Bheemeshwari, ranked No.91 on TripAdvisor among 318 attractions in Bengaluru.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/02/d8/6e/c0/thrillophilia-bheemeshwari.jpg",
+      "og:image:width": "550",
+      "og:image:height": "365",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attraction_Review-g297628-d3238605-Reviews-m33762-Bheemeshwari-Bengaluru_Karnataka.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attraction_Review-g297628-d3238605-Reviews-m33762-Bheemeshwari-Bengaluru_Karnataka.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attraction_Review-g297628-d3238605-Reviews-m33762-Bheemeshwari-Bengaluru_Karnataka.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/02/d8/6e/c0/thrillophilia-bheemeshwari.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Forum Value Mall (Bengaluru, India): Top Tips Before You Go ...",
+   "htmlTitle": "Forum Value Mall (\u003cb\u003eBengaluru\u003c/b\u003e, India): Top Tips Before You Go ...",
+   "link": "https://www.tripadvisor.com/Attraction_Review-g297628-d5782152-Reviews-Forum_Value_Mall-Bengaluru_Karnataka.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Forum Value Mall, Bengaluru: See 44 reviews, articles, and 15 photos of Forum \nValue Mall, ranked No.74 on TripAdvisor among 318 attractions in Bengaluru. ... \n4 of 5 bubbles Reviewed July 24, 2016. This mall has 3 floors, top floor is for food\n ...",
+   "htmlSnippet": "Forum Value Mall, \u003cb\u003eBengaluru\u003c/b\u003e: See 44 reviews, articles, and 15 photos of Forum \u003cbr\u003e\nValue Mall, ranked No.74 on \u003cb\u003eTripAdvisor\u003c/b\u003e among 318 \u003cb\u003eattractions\u003c/b\u003e in \u003cb\u003eBengaluru\u003c/b\u003e. ... \u003cbr\u003e\n4 of 5 bubbles Reviewed \u003cb\u003eJuly\u003c/b\u003e 24, 2016. This mall has 3 floors, top floor is for food\u003cbr\u003e\n&nbsp;...",
+   "cacheId": "UEQC9AJWfjAJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attraction_Review-g297628-d5782152-Reviews -Forum_Value_Mall-Bengaluru_Karnataka.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttraction\u003c/b\u003e_Review-g297628-d5782152-Reviews -Forum_Value_Mall-\u003cb\u003eBengaluru\u003c/b\u003e_Karnataka.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "259",
+      "height": "194",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRI6XMuYK8Qr7q6rd5wuU-U-GZFaJue3yoApGmNQPlbyuADZWkAn-0PcKh_"
+     }
+    ],
+    "LocalBusiness": [
+     {
+      "image": "https://media-cdn.tripadvisor.com/media/photo-s/05/65/cf/e0/shopping-at-fvm.jpg",
+      "name": "Forum Value Mall"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     },
+     {
+      "url": "Karnataka",
+      "title": "Karnataka"
+     },
+     {
+      "url": "Bengaluru",
+      "title": "Bengaluru"
+     },
+     {
+      "url": "Things to Do in Bengaluru",
+      "title": "Things to Do in Bengaluru"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "4.0",
+      "ratingcount": "44",
+      "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/05/65/cf/e0/shopping-at-fvm.jpg"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "44"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Forum Value Mall (Bengaluru, India): Top Tips Before You Go - TripAdvisor",
+      "og:description": "Forum Value Mall, Bengaluru: See 44 reviews, articles, and 15 photos of Forum Value Mall, ranked No.74 on TripAdvisor among 318 attractions in Bengaluru.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/05/65/cf/e0/shopping-at-fvm.jpg",
+      "og:image:width": "550",
+      "og:image:height": "412",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attraction_Review-g297628-d5782152-Reviews-m33762-Forum_Value_Mall-Bengaluru_Karnataka.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attraction_Review-g297628-d5782152-Reviews-m33762-Forum_Value_Mall-Bengaluru_Karnataka.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attraction_Review-g297628-d5782152-Reviews-m33762-Forum_Value_Mall-Bengaluru_Karnataka.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/05/65/cf/e0/shopping-at-fvm.jpg"
+     }
+    ]
+   }
+  }
+ ]
+}

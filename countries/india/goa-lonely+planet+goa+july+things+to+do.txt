@@ -1,0 +1,778 @@
+{
+ "kind": "customsearch#search",
+ "url": {
+  "type": "application/json",
+  "template": "https://www.googleapis.com/customsearch/v1?q={searchTerms}&num={count?}&start={startIndex?}&lr={language?}&safe={safe?}&cx={cx?}&cref={cref?}&sort={sort?}&filter={filter?}&gl={gl?}&cr={cr?}&googlehost={googleHost?}&c2coff={disableCnTwTranslation?}&hq={hq?}&hl={hl?}&siteSearch={siteSearch?}&siteSearchFilter={siteSearchFilter?}&exactTerms={exactTerms?}&excludeTerms={excludeTerms?}&linkSite={linkSite?}&orTerms={orTerms?}&relatedSite={relatedSite?}&dateRestrict={dateRestrict?}&lowRange={lowRange?}&highRange={highRange?}&searchType={searchType}&fileType={fileType?}&rights={rights?}&imgSize={imgSize?}&imgType={imgType?}&imgColorType={imgColorType?}&imgDominantColor={imgDominantColor?}&alt=json"
+ },
+ "queries": {
+  "request": [
+   {
+    "title": "Google Custom Search - lonely planet goa july things to do",
+    "totalResults": "707",
+    "searchTerms": "lonely planet goa july things to do",
+    "count": 10,
+    "startIndex": 1,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "goa"
+   }
+  ],
+  "nextPage": [
+   {
+    "title": "Google Custom Search - lonely planet goa july things to do",
+    "totalResults": "707",
+    "searchTerms": "lonely planet goa july things to do",
+    "count": 10,
+    "startIndex": 11,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "goa"
+   }
+  ]
+ },
+ "context": {
+  "title": "Polaama"
+ },
+ "searchInformation": {
+  "searchTime": 0.559627,
+  "formattedSearchTime": "0.56",
+  "totalResults": "707",
+  "formattedTotalResults": "707"
+ },
+ "items": [
+  {
+   "kind": "customsearch#result",
+   "title": "Activities in Goa - Lonely Planet",
+   "htmlTitle": "\u003cb\u003eActivities\u003c/b\u003e in \u003cb\u003eGoa\u003c/b\u003e - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/india/goa/activities/a/pa-act/356223",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Discover the best activities in Goa including Private Cultural Tour: Ancestral Goa, \nShantadurga Temple and Spice Village Including Lunch, Private Portuguese ...",
+   "htmlSnippet": "Discover the best \u003cb\u003eactivities\u003c/b\u003e in \u003cb\u003eGoa\u003c/b\u003e including Private Cultural Tour: Ancestral \u003cb\u003eGoa\u003c/b\u003e, \u003cbr\u003e\nShantadurga Temple and Spice Village Including Lunch, Private Portuguese&nbsp;...",
+   "cacheId": "uWvVklNtPooJ",
+   "formattedUrl": "https://www.lonelyplanet.com/india/goa/activities/a/pa-act/356223",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/india/\u003cb\u003egoa\u003c/b\u003e/\u003cb\u003eactivities\u003c/b\u003e/a/pa-act/356223",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Asia"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "102",
+      "height": "128",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSy6i9TkBQgvaW5HHN3nfhHfIjo43rVDpdcaT8YwIEPhoUMDvz_Y34tpg"
+     }
+    ],
+    "country": [
+     {
+      "name": "India"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Activities in Goa",
+      "og:title": "Activities in Goa",
+      "og:description": "Discover the best activities in Goa including Private Cultural Tour: Ancestral Goa, Shantadurga Temple and Spice Village Including Lunch, Private Portuguese Her…",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://lpviator.imgix.net/graphicslib/thumbs674x446/5588/SITours/private-cultural-tour-ancestral-goa-shantadurga-temple-and-spice-in-goa-118059.jpg?w=128&h=160&fit=crop&q=50&auto=enhance&crop=entropy"
+     }
+    ],
+    "region": [
+     {
+      "name": "Goa"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Goa in July and the like",
+   "htmlTitle": "\u003cb\u003eGoa\u003c/b\u003e in \u003cb\u003eJuly\u003c/b\u003e and the like",
+   "link": "https://www.lonelyplanet.com/thorntree/forums/asia-indian-subcontinent/india/goa-in-july-and-the-like",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "May 26, 2010 ... Second question - since it will be low season in Goa this summer, ... Only thing I \ndon't like is that the prices are higher flying in and out of there.",
+   "htmlSnippet": "May 26, 2010 \u003cb\u003e...\u003c/b\u003e Second question - since it \u003cb\u003ewill\u003c/b\u003e be low season in \u003cb\u003eGoa\u003c/b\u003e this summer, ... Only \u003cb\u003ething\u003c/b\u003e I \u003cbr\u003e\ndon&#39;t like is that the prices are higher flying in and out of there.",
+   "cacheId": "Priza96UTS8J",
+   "formattedUrl": "https://www.lonelyplanet.com/thorntree/.../goa-in-july-and-the-like",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/thorntree/.../\u003cb\u003egoa\u003c/b\u003e-in-\u003cb\u003ejuly\u003c/b\u003e-and-the-like",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "225",
+      "height": "225",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSqRemPSRVtvlwaxn3MfC7zsLjzOoK5uUM0cDjdqchf2Fvexvm4z9sAZObq"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Thorn Tree",
+      "title": "Thorn Tree"
+     },
+     {
+      "url": "Country forums",
+      "title": "Country forums"
+     },
+     {
+      "url": "Indian Subcontinent",
+      "title": "Indian Subcontinent"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Goa in July and the like",
+      "og:title": "Goa in July and the like",
+      "og:description": "Hello, My friend and I will be traveling to India this July and finishing it in August. I realize it will be monsoon season in India by this time, but…",
+      "og:url": "https://www.lonelyplanet.com/thorntree/forums/asia-indian-subcontinent/india/goa-in-july-and-the-like",
+      "og:image": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "og:type": "website",
+      "twitter:title": "Goa in July and the like",
+      "twitter:description": "Hello, My friend and I will be traveling to India this July and finishing it in August. I realize it will be monsoon season in India by this time, but…",
+      "twitter:image:src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "L4rKydmhM9bFixDNazmsIAzk6XsAeXBuiD32Jbii+4xjKVMUcprz83GM7GNmc+svlX86Mt5qkO/svajqbNW4vg=="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Welcome",
+      "name": "Welcome"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Top things to do in North Goa - Lonely Planet",
+   "htmlTitle": "Top \u003cb\u003ethings to do in\u003c/b\u003e North \u003cb\u003eGoa\u003c/b\u003e - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/india/north-goa/top-things-to-do/a/poi/356224",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Discover the best top things to do in North Goa including Thalassa, Shimon, Café \nChocolatti.",
+   "htmlSnippet": "Discover the best top \u003cb\u003ethings to do in\u003c/b\u003e North \u003cb\u003eGoa\u003c/b\u003e including Thalassa, Shimon, Café \u003cbr\u003e\nChocolatti.",
+   "cacheId": "RRTsMeJhq9UJ",
+   "formattedUrl": "https://www.lonelyplanet.com/india/north-goa/...things-to-do/.../356224",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/india/north-\u003cb\u003egoa\u003c/b\u003e/...\u003cb\u003ethings-to-do\u003c/b\u003e/.../356224",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Asia"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "204",
+      "height": "204",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSJHHNgCrN5YBillvUZWlp-zvenuig7O2ArEyac9pXHKgWQl47hpDxrYU4"
+     }
+    ],
+    "country": [
+     {
+      "name": "India"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Top things to do in North Goa",
+      "og:title": "Top things to do in North Goa",
+      "og:description": "Discover the best top things to do in North Goa including Thalassa, Shimon, Café Chocolatti.",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://api.tiles.mapbox.com/v4/lonelyplanet.b963d424/11/1442/932.png?access_token=pk.eyJ1IjoibG9uZWx5cGxhbmV0IiwiYSI6Imh1ODUtdUEifQ.OLLon0V6rcoTyayXzzUzsg"
+     }
+    ],
+    "region": [
+     {
+      "name": "North Goa"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Goa in July",
+   "htmlTitle": "\u003cb\u003eGoa\u003c/b\u003e in \u003cb\u003eJuly\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/thorntree/forums/asia-indian-subcontinent/india/goa-in-july",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "May 30, 2011 ... We would ike to go to India in July, never been before. It seems like a lot of \npeople head to Goa and stay there. Why? Is there a lot to do there ...",
+   "htmlSnippet": "May 30, 2011 \u003cb\u003e...\u003c/b\u003e We would ike to go to India in \u003cb\u003eJuly\u003c/b\u003e, never been before. It seems like a lot of \u003cbr\u003e\npeople head to \u003cb\u003eGoa\u003c/b\u003e and stay there. Why? Is there a lot to \u003cb\u003edo\u003c/b\u003e there&nbsp;...",
+   "cacheId": "Q1WJkLrgUqsJ",
+   "formattedUrl": "https://www.lonelyplanet.com/thorntree/forums/asia.../goa-in-july",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/thorntree/forums/asia.../\u003cb\u003egoa\u003c/b\u003e-in-\u003cb\u003ejuly\u003c/b\u003e",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "225",
+      "height": "225",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSqRemPSRVtvlwaxn3MfC7zsLjzOoK5uUM0cDjdqchf2Fvexvm4z9sAZObq"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Thorn Tree",
+      "title": "Thorn Tree"
+     },
+     {
+      "url": "Country forums",
+      "title": "Country forums"
+     },
+     {
+      "url": "Indian Subcontinent",
+      "title": "Indian Subcontinent"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Goa in July",
+      "og:title": "Goa in July",
+      "og:description": "We would ike to go to India in July, never been before. It seems like a lot of people head to Goa and stay there. Why? Is there a lot…",
+      "og:url": "https://www.lonelyplanet.com/thorntree/forums/asia-indian-subcontinent/india/goa-in-july",
+      "og:image": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "og:type": "website",
+      "twitter:title": "Goa in July",
+      "twitter:description": "We would ike to go to India in July, never been before. It seems like a lot of people head to Goa and stay there. Why? Is there a lot…",
+      "twitter:image:src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "A/RoYnyawMZDOhM8V0bzEvPuxIOwV9Vou6b7Idm+fPP4/8ORCYT1bobk4XPjgZIj3nZ9eWtrPCehsBlp5EocBQ=="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Welcome",
+      "name": "Welcome"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Goa's hidden gems - Lonely Planet",
+   "htmlTitle": "\u003cb\u003eGoa&#39;s\u003c/b\u003e hidden gems - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/india/goa/travel-tips-and-articles/75988",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Sep 21, 2010 ... A week or two spent revelling in the languid luxury of Goa's sunny sosegado, ... \nHere you will find Siolim House (www.siolimhouse.com), ...",
+   "htmlSnippet": "Sep 21, 2010 \u003cb\u003e...\u003c/b\u003e A week or two spent revelling in the languid luxury of \u003cb\u003eGoa\u003c/b\u003e&#39;s sunny sosegado, ... \u003cbr\u003e\nHere you \u003cb\u003ewill\u003c/b\u003e find Siolim House (www.siolimhouse.com),&nbsp;...",
+   "cacheId": "wUzdshmszxUJ",
+   "formattedUrl": "www.lonelyplanet.com/india/goa/travel-tips-and-articles/75988",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/india/\u003cb\u003egoa\u003c/b\u003e/travel-tips-and-articles/75988",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "108",
+      "height": "108",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAOSvQbZ4IMA0cnnx6sif0tJKAYsta2cLFoWfB6ObJom5DB4VG5ODv"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Goa's hidden gems - Lonely Planet",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article",
+      "og:title": "Goa's hidden gems - Lonely Planet",
+      "og:url": "http://www.lonelyplanet.com/india/goa/travel-tips-and-articles/75988",
+      "og:description": "Read Goa's hidden gems",
+      "article:tag": "Beaches, Heritage and history, Off the beaten track",
+      "article:published_time": "2010-09-21T03:11:05+00:00",
+      "article:author": "Amelia Thomas"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://assets.staticlp.com/profiles/users/placeholders/large.png"
+     }
+    ],
+    "article": [
+     {
+      "headline": "Goa's hidden gems",
+      "alternativeheadline": "Goa's hidden gems",
+      "datepublished": "2010-09-21T03:11:05+00:00",
+      "articlebody": "A week or two spent revelling in the languid luxury of Goa’s sunny sosegado, or susegad, two Portuguese colonial-era terms roughly translated as ‘laid-backness,’ is one not to be missed..."
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Goa in June, what to expect?",
+   "htmlTitle": "\u003cb\u003eGoa\u003c/b\u003e in June, what to expect?",
+   "link": "https://www.lonelyplanet.com/thorntree/forums/asia-indian-subcontinent/india/goa-in-june-what-to-expect",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Mar 21, 2010 ... I went to Goa in July once and would have been more interesting watching paint \ndry .June will ... One good thing there will be no sellers.Get a ...",
+   "htmlSnippet": "Mar 21, 2010 \u003cb\u003e...\u003c/b\u003e I went to \u003cb\u003eGoa\u003c/b\u003e in \u003cb\u003eJuly\u003c/b\u003e once and would have been more interesting watching paint \u003cbr\u003e\ndry .June \u003cb\u003ewill\u003c/b\u003e ... One good \u003cb\u003ething\u003c/b\u003e there \u003cb\u003ewill\u003c/b\u003e be no sellers.\u003cb\u003eGet\u003c/b\u003e a&nbsp;...",
+   "cacheId": "tIOInBJifV4J",
+   "formattedUrl": "https://www.lonelyplanet.com/.../asia.../goa-in-june-what-to-expect",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../asia.../\u003cb\u003egoa\u003c/b\u003e-in-june-what-to-expect",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "225",
+      "height": "225",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSqRemPSRVtvlwaxn3MfC7zsLjzOoK5uUM0cDjdqchf2Fvexvm4z9sAZObq"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Thorn Tree",
+      "title": "Thorn Tree"
+     },
+     {
+      "url": "Country forums",
+      "title": "Country forums"
+     },
+     {
+      "url": "Indian Subcontinent",
+      "title": "Indian Subcontinent"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Goa in June, what to expect?",
+      "og:title": "Goa in June, what to expect?",
+      "og:description": "I am considering going to Goa in June, and have heard various things about what to expect there during that time. Hopefully some of you who have been there at…",
+      "og:url": "https://www.lonelyplanet.com/thorntree/forums/asia-indian-subcontinent/india/goa-in-june-what-to-expect",
+      "og:image": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "og:type": "website",
+      "twitter:title": "Goa in June, what to expect?",
+      "twitter:description": "I am considering going to Goa in June, and have heard various things about what to expect there during that time. Hopefully some of you who have been there at…",
+      "twitter:image:src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "KspCiAZEYyjIpSoTbWtGpt8RzzwKDV7EcDjaI5reeNIwS6N3gUh8R+5ISut2BLYhIpUM9s5//Ijj7g/Q1NGhLg=="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Welcome",
+      "name": "Welcome"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Top things to do in Anjuna - Lonely Planet",
+   "htmlTitle": "Top \u003cb\u003ethings to do in\u003c/b\u003e Anjuna - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/india/anjuna/top-things-to-do/a/poi/356225",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Discover the best top things to do in Anjuna including Artjuna Cafe, Burger \nFactory, ... Set in a lovely garden, Goa's Ark is a Middle Eastern style restaurant \nwith ...",
+   "htmlSnippet": "Discover the best top \u003cb\u003ethings to do in\u003c/b\u003e Anjuna including Artjuna Cafe, Burger \u003cbr\u003e\nFactory, ... Set in a lovely garden, \u003cb\u003eGoa&#39;s\u003c/b\u003e Ark is a Middle Eastern style restaurant \u003cbr\u003e\nwith&nbsp;...",
+   "cacheId": "HS0BZ2jt8DMJ",
+   "formattedUrl": "https://www.lonelyplanet.com/india/anjuna/...things-to-do/a/.../356225",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/india/anjuna/...\u003cb\u003ethings-to-do\u003c/b\u003e/a/.../356225",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Asia"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "204",
+      "height": "204",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRZZfBZxVpuc77j9-GRRzVxvRl3rsapD3ia0g0JjwXGyhURBkQ12JlDaVI"
+     }
+    ],
+    "country": [
+     {
+      "name": "India"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Top things to do in Anjuna",
+      "og:title": "Top things to do in Anjuna",
+      "og:description": "Discover the best top things to do in Anjuna including Artjuna Cafe, Burger Factory, Anjuna Flea Market.",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://api.tiles.mapbox.com/v4/lonelyplanet.b963d424/15/23095/14947.png?access_token=pk.eyJ1IjoibG9uZWx5cGxhbmV0IiwiYSI6Imh1ODUtdUEifQ.OLLon0V6rcoTyayXzzUzsg"
+     }
+    ],
+    "region": [
+     {
+      "name": "Anjuna"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "The best hotels and hostels in Goa. - Lonely Planet",
+   "htmlTitle": "The best hotels and hostels in \u003cb\u003eGoa\u003c/b\u003e. - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/india/goa/hotels/best-places-to-stay-in-goa",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Lonely Planet authors have picked out their favourite places to stay in Goa for \nyou. ... and lovingly conceived and run by Sumit, a young Mumbai escapee.",
+   "htmlSnippet": "\u003cb\u003eLonely Planet\u003c/b\u003e authors have picked out their favourite places to stay in \u003cb\u003eGoa\u003c/b\u003e for \u003cbr\u003e\nyou. ... and lovingly conceived and \u003cb\u003erun\u003c/b\u003e by Sumit, a young Mumbai escapee.",
+   "cacheId": "Ai5iXQ0DmLsJ",
+   "formattedUrl": "www.lonelyplanet.com/india/goa/hotels/best-places-to-stay-in-goa",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/india/\u003cb\u003egoa\u003c/b\u003e/hotels/best-places-to-stay-in-\u003cb\u003egoa\u003c/b\u003e",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "240",
+      "height": "160",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTfRZcGUxvwA1Iv3FQu6mOqdG4e3mmygxcUP23fMbSJbS4g3bIWvXzVTemc"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     },
+     {
+      "url": "South India",
+      "title": "South India"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "The best hotels and hostels in Goa. - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "The best hotels and hostels in Goa. - Lonely Planet",
+      "twitter:description": "From bustling backpacker hideaways to eco-lodges and top-end resorts, Goa caters for all tastes and budgets. Not all accommodation is open year-round, so check before you go. Lonely Planet authors have picked out their favourite places to stay in Goa for you.",
+      "og:site_name": "Lonely Planet",
+      "og:title": "The best hotels and hostels in Goa. - Lonely Planet",
+      "og:description": "From bustling backpacker hideaways to eco-lodges and top-end resorts, Goa caters for all tastes and budgets. Not all accommodation is open year-round, so check before you go. Lonely Planet authors have picked out their favourite places to stay in Goa for you.",
+      "og:url": "http://www.lonelyplanet.com/india/goa/hotels/best-places-to-stay-in-goa",
+      "og:type": "website",
+      "sailthru.date": "2017-02-20 12:09:43 +0000",
+      "sailthru.tags": "Asia, India, Goa, architecture-and-buildings, beaches, coasts-and-islands, festivals-and-events, food-and-drink, health-and-wellbeing, history-heritage-and-tradition, honeymoons-and-romance",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=1024",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "2Z6J1STRZfxOzZa0gWAj4ji4MyYgvclfn2kBgU1gsi4="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "http://aff.bstatic.com/images/hotel/max300/457/4574706.jpg"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Destinations",
+      "name": "Destinations"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Mandovi River Cruises - Lonely Planet",
+   "htmlTitle": "Mandovi River Cruises - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/india/goa/panaji-panjim/activities/boating-cruises/mandovi-river-cruises",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Goa Tourism operates a range of entertaining hour-long cruises along the \nMandovi River aboard the Santa Monica or ... activities / Boating & cruises.",
+   "htmlSnippet": "\u003cb\u003eGoa\u003c/b\u003e Tourism operates a range of entertaining hour-long cruises along the \u003cbr\u003e\nMandovi River aboard the Santa Monica or ... \u003cb\u003eactivities\u003c/b\u003e / Boating &amp; cruises.",
+   "cacheId": "s9QuxFy05tUJ",
+   "formattedUrl": "www.lonelyplanet.com/india/goa/.../activities/.../mandovi-river-cruises",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/india/\u003cb\u003egoa\u003c/b\u003e/.../\u003cb\u003eactivities\u003c/b\u003e/.../mandovi-river-cruises",
+   "pagemap": {
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     },
+     {
+      "url": "South India",
+      "title": "South India"
+     },
+     {
+      "url": "Goa",
+      "title": "Goa"
+     },
+     {
+      "url": "Panaji & Central Goa",
+      "title": "Panaji & Central Goa"
+     },
+     {
+      "url": "Panaji",
+      "title": "Panaji"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Mandovi River Cruises - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Mandovi River Cruises - Lonely Planet",
+      "twitter:description": "\u003cp\u003eGoa Tourism operates a range of entertaining hour-long cruises along the Mandovi River aboard the Santa Monica or Shantadurga . All include a...",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Mandovi River Cruises - Lonely Planet",
+      "og:description": "\u003cp\u003eGoa Tourism operates a range of entertaining hour-long cruises along the Mandovi River aboard the Santa Monica or Shantadurga . All include a...",
+      "og:url": "http://www.lonelyplanet.com/india/goa/panaji-panjim/activities/boating-cruises/mandovi-river-cruises",
+      "og:type": "website",
+      "sailthru.date": "2017-02-22 15:04:11 +0000",
+      "sailthru.tags": "Asia, India, Panaji",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "B0Fs/lI4UpTIe8mgbKOwr+juB12fVzfFDOCcRF4RtjE="
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Top things to do in Panaji, India - Lonely Planet",
+   "htmlTitle": "Top \u003cb\u003ethings to do in\u003c/b\u003e Panaji, India - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/india/panaji/top-things-to-do/a/poi/356231",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Discover the best top things to do in Panaji including Church of Our Lady of the ... \nOn the west side of the city, in Campal, is Goa's premier cultural centre, which ...",
+   "htmlSnippet": "Discover the best top \u003cb\u003ethings to do in\u003c/b\u003e Panaji including Church of Our Lady of the ... \u003cbr\u003e\nOn the west side of the city, in Campal, is \u003cb\u003eGoa&#39;s\u003c/b\u003e premier cultural centre, which&nbsp;...",
+   "cacheId": "uc68Ya5TX28J",
+   "formattedUrl": "https://www.lonelyplanet.com/india/panaji/top-things-to-do/.../356231",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/india/panaji/top-\u003cb\u003ethings-to-do\u003c/b\u003e/.../356231",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Asia"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "204",
+      "height": "204",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSBc20-0Opx1euP9b2tNmCDAZvXkaEe6DWdMBB4n-Tb5QamRhoFd3HrK84"
+     }
+    ],
+    "country": [
+     {
+      "name": "India"
+     }
+    ],
+    "city": [
+     {
+      "name": "Panaji"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Top things to do in Panaji, India",
+      "og:title": "Top things to do in Panaji, India",
+      "og:description": "Discover the best top things to do in Panaji including Church of Our Lady of the Immaculate Conception, Black Sheep Bistro, Viva Panjim.",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://api.tiles.mapbox.com/v4/lonelyplanet.b963d424/14/11551/7477.png?access_token=pk.eyJ1IjoibG9uZWx5cGxhbmV0IiwiYSI6Imh1ODUtdUEifQ.OLLon0V6rcoTyayXzzUzsg"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     }
+    ]
+   }
+  }
+ ]
+}

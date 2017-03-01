@@ -9,6 +9,7 @@ const sleep = require('sleep');
 const FlightDataExtractor = require('./skyscanner-flight-data.js');
 
 const apiKey = "prtl6749387986743898559646983194";
+// const apiKey = "ma592384304502739139844422016106";
 
 function FlightInfoProvider(origCity, destCity, startDate, returnDate) {
   this.origCity = origCity;
@@ -137,23 +138,23 @@ function _getFlightDetails(location, callback) {
       Accept: "application/json"
     },
   }, function(err, res, body) {
+    const getFlightDetailsHandle = _getFlightDetails.bind(self);
     if(!_.isUndefined(err) && !_.isNull(err)) {
       logger.error(`_getFlightDetaills: Error talking to skyscanner: ${err}`);
       return callback();
     }
     if(res.statusCode == "304" || ((res.statusCode == "200") && (JSON.parse(body).Status == "UpdatesPending"))) {
-      if(self.locationUrlRetry < 3) {
+      if(self.locationUrlRetry < 5) {
         self.locationUrlRetry++;
-        sleep.sleep(4*self.locationUrlRetry);
         logger.info(`_getFlightDetails: Retrying location url: ${location}`);
-        return _getFlightDetails.call(self, location, callback);
+        setTimeout(getFlightDetailsHandle, 4 * self.locationUrlRetry * 1000, location, callback);
+        // return _getFlightDetails.call(self, location, callback);
       }
       else {
-        logger.error("_getFlightDetails: Retried the skyscanner location url 3 times, but status is stuck at UpdatesPending. Giving up");
-        return callback();
+        logger.error("_getFlightDetails: Retried the skyscanner location url 5 times, but status is stuck at UpdatesPending. Giving up");
       }
     }
-    if(res.statusCode == "200") {
+    else if(res.statusCode == "200") {
       console.log(`_getFlightDetails: res is ${res.statusCode}, content length: ${res.headers["content-length"]} bytes`);
       try {
         const file = _getFileName.call(self);
@@ -166,7 +167,8 @@ function _getFlightDetails(location, callback) {
     }
     else {
       // TODO: Handle status code 429 by backing off and retrying location url in a bit.
-      console.log(`_getFlightDetails: location url returned non-20X status code: res is ${JSON.stringify(res)}`);
+      console.log(`_getFlightDetails: location url returned non-20X status code: res is ${JSON.stringify(res)}. Retrying in 60 seconds.`);
+      setTimeout(getFlightDetailsHandle, 60 * 1000, location, callback);
     }
     return callback();
   });

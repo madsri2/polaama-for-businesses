@@ -5,6 +5,10 @@ const logger = require('./my-logger');
 const Encoder = require('./encoder');
 
 function Country(country) {
+  if(!country) {
+    logger.warn(`Passed parameter country is not defined`);
+    return undefined;
+  }
   try {
     const file = `countries/${Encoder.encode(country)}.txt`;
     fs.accessSync(file, fs.F_OK);

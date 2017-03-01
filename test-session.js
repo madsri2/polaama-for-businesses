@@ -42,9 +42,45 @@ function testPersistAndRetrieve() {
     console.log("no match");
   }
 }  
-// testPersistAndRetrieve();
+
+function addNewTrip(id, name, destination, startDate, duration) {
+  const s = ss.findOrCreate(id);
+  s.addTrip(name);
+  const details = {
+    destination: destination,
+    startDate: startDate,
+    duration: duration
+  };
+  s.tripData().addTripDetailsAndPersist(details);
+  return s;
+}
+
+// TODO: This test needs to be changed to dynamic dates for it to succeed.
+function testGetFutureTrips() {
+  // three future trips and two past trips
+  addNewTrip("10", "ft1", "ft1", "1/1/17", "15");
+  addNewTrip("10", "ft2", "ft2", "1/10/17", "25");
+  addNewTrip("10", "ft3", "ft3", "5/1/17", "10");
+  addNewTrip("10", "ft4", "ft4", "3/1/17", "12");
+  const s = addNewTrip("10", "ft5", "ft5", "4/1/17", "15");
+  console.log(`testGetFutureTrips trip names: ${JSON.stringify(s.getFutureTrips())}`);
+}
+
+function testGetPastTrips() {
+  // three future trips and two past trips
+  addNewTrip("10", "ft1", "ft1", "1/1/17", "15");
+  addNewTrip("10", "ft2", "ft2", "1/10/17", "25");
+  addNewTrip("10", "ft3", "ft3", "5/1/17", "10");
+  addNewTrip("10", "ft4", "ft4", "3/10/17", "12");
+  const s = addNewTrip("10", "ft5", "ft5", "4/1/17", "15");
+  console.log(`testGetFutureTrips trip names: ${JSON.stringify(s.getPastTrips())}`);
+}
 
 function testSessions() {
   console.log(ss.findOrCreate("2"));
 }
-testSessions();
+
+// testPersistAndRetrieve();
+// testSessions();
+// testGetFutureTrips();
+testGetPastTrips();
