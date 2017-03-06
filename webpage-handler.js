@@ -78,9 +78,15 @@ WebpageHandler.prototype.displayFlightDetails = function(res) {
   return res.send(this.formatter.formatFlightDetails(flightDetails));
 }
 
+WebpageHandler.prototype.expenseReportDetails = function(res) {
+  const reporter = new ReportFetcher(this.tripName);
+  const report = reporter.getReport();
+  return res.send(this.formatter.formatExpensePage(report.summary, report.spendSummary, report.comments));
+}
+
 /*
-   This function serves as the entry point for all other functions. Callback will be one of the functions above. The args array is to handle cases where some functions require more than 1 argument (like displayRawComments above).
-   */ 
+This function serves as the entry point for all other functions. Callback will be one of the functions above. The args array is to handle cases where some functions require more than 1 argument (like displayRawComments above).
+*/ 
 WebpageHandler.prototype.handleWebpage = function(res, callback, args) {
   if(_.isNull(this.session)) {
     logger.error("handleWebPage: No session exists");

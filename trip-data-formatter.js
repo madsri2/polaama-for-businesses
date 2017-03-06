@@ -253,6 +253,25 @@ TripDataFormatter.prototype.formatCityChoicePage = function() {
   return fs.readFileSync("html-templates/handle-city-choice.html", 'utf8');
 }
 
+TripDataFormatter.prototype.formatExpensePage = function(reportSummary, spendSummary, comments) {
+  const html = fs.readFileSync("html-templates/expense-reports.html", 'utf8');
+  let ssHtml = "";
+  Object.keys(spendSummary).forEach(fam => {
+    ssHtml = ssHtml.concat(`<p>Family ${fam} spent ${spendSummary[fam]} dollars</p><br>`);
+  });
+  let summary = "";
+  Object.keys(reportSummary).forEach(key => {
+    const famOwed = reportSummary[key].owes.family;
+    const amount = reportSummary[key].owes.amount;
+    summary = summary.concat(`<p>Family ${key} owes ${famOwed} ${amount} dollars</p><br>`);
+    console.log(summary);
+  });
+
+  return html.replace("${reportSummary}", summary)
+             .replace("${spendSummary}", ssHtml)
+             .replace("${expenseReportDetails}", listAsHtml(comments));
+}
+
 function toLink(text) {
   const words = text.split(' ');
   words.forEach((word, i) => {
@@ -269,15 +288,8 @@ function listAsHtml(list) {
     return "";
   }
   list.forEach(function(item) {
-      /*
-         const itemWords = item.split(' ');
-         itemWords.forEach(function(word,i) {
-         itemWords[i] = toLink(word);
-         });
-         item = itemWords.join(' ');
-         */
-      html += "<li>" + toLink(item) + "</li>";
-      });
+    html += "<li>" + toLink(item) + "</li>";
+  });
   html += "</ol>";
   return html;
 }

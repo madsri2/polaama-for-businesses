@@ -101,6 +101,27 @@ function testFormatFlightDetails() {
   console.log(formatter.formatFlightDetails(flightDetails));
 }
 
-testFormatFlightDetails();
+function testFormatExpensePage() {
+  const trip = new TripData('Test Trip');
+  const formatter = new TripDataFormatter(trip);
+  const summary = {
+    'famA': {
+      'owes': { 
+          'family': "famB",
+          'amount': 100
+      }
+    }
+  };
+  const spendSummary = {
+    'famA': 200, 
+    'famB': 300
+  }; 
+  const comments = ["Comment 1", "Comment 2"];
+  console.log(formatter.formatExpensePage(summary, spendSummary, comments));
+}
+
+testFormatExpensePage();
+
+// testFormatFlightDetails();
 // testFormatActivityDetails();
 // testFormatWeatherDetails();

@@ -1,0 +1,17 @@
+{
+  "name": "expense-report",
+  "version": "1.0.0",
+  "description": "Manage expense reports for polaama",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha --reporter spec"
+  },
+  "author": "Madhu Parthasarathy",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "fast-levenshtein": "^2.0.6",
+    "lodash": "^4.17.4",
+    "mocha": "^3.2.0"
+  }
+}

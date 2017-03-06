@@ -3,9 +3,10 @@ const fs = require('fs');
 const _ = require('lodash');
 const moment = require('moment');
 const logger = require('./my-logger');
-const tripBaseDir = "trips";
+const tripBaseDir = "/home/ec2-user/trips";
 const Country = require('./country');
 const Encoder = require('./encoder');
+const CommentParser = require('./expense-report/app/comment-parser');
 
 // TODO: This is leaking data model to other classes. Fix this by moving all functionality that require this variable into a function in this class.
 TripData.todo = "todoList";
@@ -196,7 +197,38 @@ TripData.prototype.storePackList = function(senderId, messageText) {
  */
 TripData.prototype.storeFreeFormText = function(senderId, messageText) {
   const reg = new RegExp("^save:?[ ]*","i"); // ignore case
+  if(commentIsReportingExpense.call(this, messageText)) {
+    // const parser = new CommentParser();
+    // parser.validateComment(messageText));
+  }
   return storeList.call(this, senderId, messageText, reg, "comments", "comments, get comments or retrieve");
+}
+
+TripData.prototype.getExpenseReport = function() {
+  const comments = this.getInfoFromTrip("comments"); 
+  if(!Object.keys(comments).length) {
+    logger.warn(`No comments found for trip ${this.rawTripName}`);
+    return null;;
+  }
+  let report = [];
+  comments.forEach(item => {
+    const encItem = item.toLowerCase();
+    // expenses
+    if(commentIsReportingExpense.call(this, encItem)) {
+      report.push(item);
+    }
+  });
+  return report;
+}
+
+function commentIsReportingExpense(comment) {
+  const item = comment.toLowerCase();
+  if((item.indexOf("paid for") > -1) ||
+     (item.indexOf("owes") > -1) || 
+      item.toLowerCase().match(/.*paid \$?\d+/)) {
+    return true;
+  }
+  return false;
 }
 
 function storeList(senderId, messageText, regex, key, retrieveString) {
@@ -223,9 +255,7 @@ function getActivitiesFromComments(comments) {
   };
   comments.forEach(function(i) {
     const item = i.toLowerCase();
-    // expenses
-    if((item.indexOf("paid for") > -1) ||
-       (item.indexOf("owes") > -1)) {
+    if(commentIsReportingExpense(item)) {
       taggedComments.expenses.push(i);
     }
     // activities

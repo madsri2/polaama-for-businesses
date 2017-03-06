@@ -95,7 +95,14 @@ function testAddPortOfEntry() {
   console.log(JSON.stringify(updatedTrip));
 }
 
-testAddPortOfEntry();
+function testGetExpenseReport() {
+  const trip = new TripData("portugal");
+  console.log(trip.getExpenseReport());
+}
+
+testGetExpenseReport();
+
+// testAddPortOfEntry();
 
 // testAddCities();
 

@@ -2,7 +2,6 @@
 const _ = require('lodash');
 const request = require('request');
 const logger = require('./my-logger');
-const TripData = require('./trip-data');
 const Sessions = require('./sessions');
 const moment = require('moment');
 const FbidHandler = require('./fbid-handler');
