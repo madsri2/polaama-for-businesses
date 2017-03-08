@@ -102,6 +102,10 @@ TripData.prototype.todoUrlPath = function() {
   return `${this.data.name}/todo`;
 }
 
+TripData.prototype.expenseReportUrlPath = function() {
+  return `${this.data.name}/expense-report`;
+}
+
 TripData.prototype.packListPath = function() {
   return `${this.data.name}/pack-list`;
 }
@@ -361,11 +365,20 @@ function createPackList() {
 }
 
 function createTodoList() {
+  // TODO: So, check the travel duration and determine if visa is needed or not (instead of a static statement below
+  const visaRequirements = {
+    'india': `US Citizens need a tourist visa to travel to India. Electronic Tourist visas can be obtained from the <a href="https://indianvisaonline.gov.in/visa/tvoa.html">ETA website</a>. Additional details available at the <a href="https://travel.state.gov/content/passports/en/country/india.html">us.gov site</a>`,
+    'australia': `US Citizens need an Electronic Travel Authority (ETA) visa to travel to India. It can be obtained from <a href="https://www.eta.immi.gov.au/ETAS3/etas">ETA Website</a>. Additional details are available at the <a href="https://travel.state.gov/content/passports/en/country/australia.html">us.gov site</a>`,
+    'iceland': `US Citizens don't need a visa for stays less than 90 days, but please check the <a href="https://travel.state.gov/content/passports/en/country/iceland.html">us.gov site</a> for the latest information`,
+    'israel': `US Citizens don't need a visa for stays less than 90 days, but please check the <a href="https://travel.state.gov/content/passports/en/country/israel.html">us.gov site</a> for the latest information`,
+    'portugal': `US Citizens don't need a visa for stays less than 90 days, but please check the <a href="https://travel.state.gov/content/passports/en/country/portugal.html">us.gov site</a> for the latest information`
+  };
   this.data.todoList = [];
   this.data.todoList.push("Flight tickets");
   this.data.todoList.push("Place to stay");
   this.data.todoList.push("Rental car");
   this.data.todoList.push("[US Citizens only] Enroll in STEP (https://step.state.gov/step/) to get travel alerts and warnings.");
+  this.data.todoList.push(visaRequirements[this.data.destination]);
 }
 
 function tripFile() {

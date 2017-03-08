@@ -4,7 +4,7 @@ const logger = require('./my-logger');
 
 function FlightDataExtractor(json) {
   this.json = json;
-  console.log(`There are ${this.json.Itineraries.length} itineraries. Json keys are ${Object.keys(json)}`); // Itin keys are ${Object.keys(json.Itineraries[0]};`);
+  logger.info(`There are ${this.json.Itineraries.length} itineraries. Json keys are ${Object.keys(json)}`); // Itin keys are ${Object.keys(json.Itineraries[0]};`);
   this.itin = [];
   for(let i = 0; i < 5; i++) {
     const itinDetails = this.json.Itineraries[i];
@@ -43,7 +43,7 @@ function _getLegDetails(id) {
     arrival: leg.Arrival,
     departure: leg.Departure,
     duration: `${(leg.Duration/60).toFixed(2)} hours`,
-    stops: leg.SegmentIds.length,
+    stops: leg.SegmentIds.length - 1, // This includes the initial leg as well.
     segmentDetails: _segmentDetails.call(this, leg.SegmentIds)
   };
   return legDetails;

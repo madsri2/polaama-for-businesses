@@ -31,26 +31,30 @@ function send_message {
 
 function set_persistent_menu {
   curl -X POST -H "Content-Type: application/json" -d '{
-    "setting_type" : "call_to_actions",
-    "thread_state" : "existing_thread",
-    "call_to_actions":[
-      {
-        "type":"postback",
-        "title":"Create New Trip", 
-        "payload":"pmenu_new_trip"
-      },
-      {
-        "type":"postback",
-        "title":"Existing trips", 
-        "payload":"pmenu_existing_trip"
-      },
-			{
-        "type":"postback",
-        "title":"Add travelers", 
-        "payload":"pmenu_add_travelers"
-			}
-    ]
-  }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=$PAGE_ACCESS_TOKEN"    
+    "persistent_menu": [{
+      "locale": "default",
+      "call_to_actions":[
+        {
+          "type":"postback",
+          "title":"Create New Trip", 
+          "payload":"pmenu_new_trip"
+        },
+        {
+          "type":"postback",
+          "title":"Existing trips", 
+          "payload":"pmenu_existing_trips"
+        }
+      ]
+    }]
+  }' "https://graph.facebook.com/v2.6/me/messenger_profile?access_token=$PAGE_ACCESS_TOKEN"    
+}
+
+function set_get_started_menu {
+  curl -X POST -H "Content-Type: application/json" -d '{
+    "get_started": {
+      "payload": "GET_STARTED_PAYLOAD"
+    }
+  }' "https://graph.facebook.com/v2.6/me/messenger_profile?access_token=$PAGE_ACCESS_TOKEN"    
 }
 
 while [[ $# -ge 1 ]]
@@ -72,6 +76,10 @@ case $key in
     ;;
   -p|--pmenu)
     set_persistent_menu
+    shift # past argument
+    ;;
+  -g|--get-started)
+    set_get_started_menu
     shift # past argument
     ;;
 esac

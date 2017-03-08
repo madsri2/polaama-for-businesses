@@ -1,7 +1,6 @@
 'use strict';
 const random = require('randomstring');
-const Log = require('./logger');
-const logger = (new Log()).init();
+const logger = require('./my-logger');
 const _=require('lodash');
 
 /*
@@ -22,6 +21,8 @@ function FbidHandler() {
     "1041923339269341": "Aparna Rangarajan",
     "1326674134041820": "Pol Aama",
     "1280537748676473": "Adhu Artha",
+    "1111111111111111": "Jaideep Iyengar", // TODO: fbid is made up
+    "1111111111111112": "Reshma Ananthakrishnan", // TODO: fbid is made up
   };
   this.fbidMap = {
     "aaaa": "2",
@@ -29,6 +30,8 @@ function FbidHandler() {
     "eA12": "1041923339269341",
     "bRt2": "1326674134041820",
     "xeMt": "1280537748676473",
+    "azft": "1111111111111111",
+    "zw4g": "1111111111111112"
   };
   this.friends = {};
   // Now add friends for each fbid;
@@ -49,7 +52,9 @@ function FbidHandler() {
         this.friends[id].push(
           this.fbid("Pol Aama"),
           this.fbid("Adhu Artha"),
-          this.fbid("Aparna Rangarajan")
+          this.fbid("Aparna Rangarajan"),
+          this.fbid("Jaideep Iyengar"),
+          this.fbid("Reshma Ananthakrishnan")
         );
         break;
     }

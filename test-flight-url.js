@@ -40,7 +40,7 @@ function browseRouteService() {
   }, function(err, res, body) {
     console.log(`err is ${err}`);
     console.log(`res is ${res.statusCode}, content length: ${res.headers["content-length"]} bytes`);
-    // console.log(`body is ${body}`);
+    console.log(`body is ${body}`);
     fs.writeFileSync("/tmp/browse-route.json", body);
   });
 }
@@ -48,7 +48,7 @@ function browseRouteService() {
 function qpx() {
 }
 
-browseRouteService();
-// skyScanner();
+// browseRouteService();
+skyScanner();
 // const json = JSON.parse(fs.readFileSync('/tmp/sky-scanner','utf8'));
 // console.log(JSON.stringify(json, null, 2));

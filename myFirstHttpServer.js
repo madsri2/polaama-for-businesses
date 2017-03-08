@@ -97,7 +97,7 @@ app.get('/auth/facebook', passport.authenticate('facebook'));
 // authentication has failed.
 app.get('/auth/facebook/callback',
   // Not using successRedirect here because ensureAuthentication handles that by setting req.session.redirect_to
-  passport.authenticate('facebook', { /* successRedirect: '/index', */
+  passport.authenticate('facebook', { successRedirect: '/index',
                                       failureRedirect: '/login',
                                       failureFlash: true,
                                       session: true}));
@@ -235,6 +235,11 @@ app.get('/:id/:tripName/comments/flight', function(req, res) {
 app.get('/:id/:tripName/cities', function(req, res) {
   const handler = new WebpageHandler(req.params.id, req.params.tripName);
   return handler.handleWebpage(res, handler.displayCities);
+});
+
+app.get('/:id/:tripName/expense-report', function(req, res) {
+  const handler = new WebpageHandler(req.params.id, req.params.tripName);
+  return handler.handleWebpage(res, handler.displayExpenseReport);
 });
 
 app.post('/:id/:tripName/handle-city-choice', function(req, res) {

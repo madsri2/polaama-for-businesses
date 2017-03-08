@@ -1,0 +1,1165 @@
+{
+ "kind": "customsearch#search",
+ "url": {
+  "type": "application/json",
+  "template": "https://www.googleapis.com/customsearch/v1?q={searchTerms}&num={count?}&start={startIndex?}&lr={language?}&safe={safe?}&cx={cx?}&cref={cref?}&sort={sort?}&filter={filter?}&gl={gl?}&cr={cr?}&googlehost={googleHost?}&c2coff={disableCnTwTranslation?}&hq={hq?}&hl={hl?}&siteSearch={siteSearch?}&siteSearchFilter={siteSearchFilter?}&exactTerms={exactTerms?}&excludeTerms={excludeTerms?}&linkSite={linkSite?}&orTerms={orTerms?}&relatedSite={relatedSite?}&dateRestrict={dateRestrict?}&lowRange={lowRange?}&highRange={highRange?}&searchType={searchType}&fileType={fileType?}&rights={rights?}&imgSize={imgSize?}&imgType={imgType?}&imgColorType={imgColorType?}&imgDominantColor={imgDominantColor?}&alt=json"
+ },
+ "queries": {
+  "request": [
+   {
+    "title": "Google Custom Search - trip advisor reykjavik september attractions",
+    "totalResults": "150000",
+    "searchTerms": "trip advisor reykjavik september attractions",
+    "count": 10,
+    "startIndex": 1,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "reykjavik"
+   }
+  ],
+  "nextPage": [
+   {
+    "title": "Google Custom Search - trip advisor reykjavik september attractions",
+    "totalResults": "150000",
+    "searchTerms": "trip advisor reykjavik september attractions",
+    "count": 10,
+    "startIndex": 11,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "reykjavik"
+   }
+  ]
+ },
+ "context": {
+  "title": "Polaama"
+ },
+ "searchInformation": {
+  "searchTime": 0.627797,
+  "formattedSearchTime": "0.63",
+  "totalResults": "150000",
+  "formattedTotalResults": "150,000"
+ },
+ "spelling": {
+  "correctedQuery": "tripadvisor reykjavik september attractions \"reykjavik\"",
+  "htmlCorrectedQuery": "\u003cb\u003e\u003ci\u003etripadvisor\u003c/i\u003e\u003c/b\u003e reykjavik september attractions &quot;reykjavik&quot;"
+ },
+ "items": [
+  {
+   "kind": "customsearch#result",
+   "title": "The Top 10 Things to Do in Reykjavik - TripAdvisor - Reykjavik ...",
+   "htmlTitle": "The Top 10 Things to Do in \u003cb\u003eReykjavik\u003c/b\u003e - \u003cb\u003eTripAdvisor\u003c/b\u003e - \u003cb\u003eReykjavik\u003c/b\u003e ...",
+   "link": "https://www.tripadvisor.com/Attractions-g189970-Activities-Reykjavik_Capital_Region.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Book your tickets online for the top things to do in Reykjavik, Iceland on \nTripAdvisor: See 96544 traveler reviews and photos of Reykjavik tourist \nattractions.",
+   "htmlSnippet": "Book your tickets online for the top things to do in \u003cb\u003eReykjavik\u003c/b\u003e, Iceland on \u003cbr\u003e\n\u003cb\u003eTripAdvisor\u003c/b\u003e: See 96544 traveler reviews and photos of \u003cb\u003eReykjavik\u003c/b\u003e tourist \u003cbr\u003e\n\u003cb\u003eattractions\u003c/b\u003e.",
+   "cacheId": "XMIZayHJCeUJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attractions-g189970-Activities-Reykjavik_ Capital_Region.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttractions\u003c/b\u003e-g189970-\u003cb\u003eActivities\u003c/b\u003e-\u003cb\u003eReykjavik\u003c/b\u003e_ Capital_Region.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "300",
+      "height": "168",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcR5Znlar_8Z1Kz5fpGhcfr_t28zyX_y8qYfopXrr4yZM9UWOepKbWss6T4"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Iceland",
+      "title": "Iceland"
+     },
+     {
+      "url": "Capital Region",
+      "title": "Capital Region"
+     },
+     {
+      "url": "Reykjavik",
+      "title": "Reykjavik"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "The Top 10 Things to Do in Reykjavik - TripAdvisor - Reykjavik, Iceland Attractions - Find What to Do Today, This Weekend, or in March",
+      "og:description": "Book your tickets online for the top things to do in Reykjavik, Iceland on TripAdvisor: See 96,544 traveler reviews and photos of Reykjavik tourist attractions. Find what to do today, this weekend, or in March. We have reviews of the best places to see in Reykjavik. Visit top-rated & must-see attractions.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/0b/4a/09/bf/caption.jpg",
+      "og:image:width": "550",
+      "og:image:height": "309",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attractions-g189970-Activities-m33762-Reykjavik_Capital_Region.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attractions-g189970-Activities-m33762-Reykjavik_Capital_Region.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attractions-g189970-Activities-m33762-Reykjavik_Capital_Region.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/0b/4a/09/bf/caption.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Reykjavik Excursions (Iceland): Top Tips Before You Go - TripAdvisor",
+   "htmlTitle": "\u003cb\u003eReykjavik\u003c/b\u003e Excursions (Iceland): Top Tips Before You Go - \u003cb\u003eTripAdvisor\u003c/b\u003e",
+   "link": "https://www.tripadvisor.com/Attraction_Review-g189970-d1556635-Reviews-Reykjavik_Excursions-Reykjavik_Capital_Region.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Book your tickets online for Reykjavik Excursions, Reykjavik: See 3076 reviews, \narticles, and 1208 photos of ... #40 of 235 Outdoor Activities in Reykjavik.",
+   "htmlSnippet": "Book your tickets online for \u003cb\u003eReykjavik\u003c/b\u003e Excursions, \u003cb\u003eReykjavik\u003c/b\u003e: See 3076 reviews, \u003cbr\u003e\narticles, and 1208 photos of ... #40 of 235 Outdoor \u003cb\u003eActivities\u003c/b\u003e in \u003cb\u003eReykjavik\u003c/b\u003e.",
+   "cacheId": "rhbHVLNLVXcJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attraction_Review-g189970-d1556635-Reviews -Reykjavik_Excursions-Reykjavik_Capital_Region.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttraction\u003c/b\u003e_Review-g189970-d1556635-Reviews -\u003cb\u003eReykjavik\u003c/b\u003e_Excursions-\u003cb\u003eReykjavik\u003c/b\u003e_Capital_Region.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "318",
+      "height": "159",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7JRCDn3gCCcctZMu-u8N5ZQ451L_PxrRtTyC-5y-K3NA5zfebdGh_B-g"
+     }
+    ],
+    "LocalBusiness": [
+     {
+      "image": "https://media-cdn.tripadvisor.com/media/photo-s/0d/0e/56/31/northern-lights-in-iceland.jpg",
+      "name": "Reykjavik Excursions"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Iceland",
+      "title": "Iceland"
+     },
+     {
+      "url": "Capital Region",
+      "title": "Capital Region"
+     },
+     {
+      "url": "Reykjavik",
+      "title": "Reykjavik"
+     },
+     {
+      "url": "Things to Do in Reykjavik",
+      "title": "Things to Do in Reykjavik"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "4.0",
+      "ratingcount": "3076",
+      "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/0d/0e/56/31/northern-lights-in-iceland.jpg"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "3076"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Reykjavik Excursions (Iceland): Top Tips Before You Go - TripAdvisor",
+      "og:description": "Book your tickets online for Reykjavik Excursions, Reykjavik: See 3,076 reviews, articles, and 1,208 photos of Reykjavik Excursions, ranked No.40 on TripAdvisor among 235 attractions in Reykjavik.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/0d/0e/56/31/northern-lights-in-iceland.jpg",
+      "og:image:width": "550",
+      "og:image:height": "275",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189970-d1556635-Reviews-m33762-Reykjavik_Excursions-Reykjavik_Capital_Region.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189970-d1556635-Reviews-m33762-Reykjavik_Excursions-Reykjavik_Capital_Region.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189970-d1556635-Reviews-m33762-Reykjavik_Excursions-Reykjavik_Capital_Region.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/0d/0e/56/31/northern-lights-in-iceland.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Reykjavik Excursions Northern Lights Tour (Iceland): Top Tips ...",
+   "htmlTitle": "\u003cb\u003eReykjavik\u003c/b\u003e Excursions Northern Lights \u003cb\u003eTour\u003c/b\u003e (Iceland): Top Tips ...",
+   "link": "https://www.tripadvisor.com/Attraction_Review-g189970-d1492697-Reviews-Reykjavik_Excursions_Northern_Lights_Tour-Reykjavik_Capital_Region.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Book your tickets online for Reykjavik Excursions Northern Lights Tour, Reykjavik\n: ... Lights Tour, ranked No.64 on TripAdvisor among 317 attractions in Reykjavik.",
+   "htmlSnippet": "Book your tickets online for \u003cb\u003eReykjavik\u003c/b\u003e Excursions Northern Lights Tour, \u003cb\u003eReykjavik\u003c/b\u003e\u003cbr\u003e\n: ... Lights Tour, ranked No.64 on \u003cb\u003eTripAdvisor\u003c/b\u003e among 317 \u003cb\u003eattractions\u003c/b\u003e in \u003cb\u003eReykjavik\u003c/b\u003e.",
+   "cacheId": "fEPMcX8XYo4J",
+   "formattedUrl": "https://www.tripadvisor.com/Attraction_Review-g189970-d1492697-Reviews -Reykjavik_Excursions_Northern_Lights_Tour-Reykjavik_Capital_...",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttraction\u003c/b\u003e_Review-g189970-d1492697-Reviews -\u003cb\u003eReykjavik\u003c/b\u003e_Excursions_Northern_Lights_\u003cb\u003eTour\u003c/b\u003e-\u003cb\u003eReykjavik\u003c/b\u003e_Capital_...",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "328",
+      "height": "154",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcT4ZIrqccKas4FEglzl1XZKkjrEEEwAkqwOUwa0ccD4LuGPBskvJpBd5Nw"
+     }
+    ],
+    "LocalBusiness": [
+     {
+      "image": "https://media-cdn.tripadvisor.com/media/photo-s/07/0d/51/14/reykjavik-excursions.jpg",
+      "name": "Reykjavik Excursions Northern Lights Tour"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Iceland",
+      "title": "Iceland"
+     },
+     {
+      "url": "Capital Region",
+      "title": "Capital Region"
+     },
+     {
+      "url": "Reykjavik",
+      "title": "Reykjavik"
+     },
+     {
+      "url": "Things to Do in Reykjavik",
+      "title": "Things to Do in Reykjavik"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "3.5",
+      "ratingcount": "1060",
+      "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/07/0d/51/14/reykjavik-excursions.jpg"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "1060"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Reykjavik Excursions Northern Lights Tour (Iceland): Top Tips Before You Go - TripAdvisor",
+      "og:description": "Book your tickets online for Reykjavik Excursions Northern Lights Tour, Reykjavik: See 1,060 reviews, articles, and 301 photos of Reykjavik Excursions Northern Lights Tour, ranked No.64 on TripAdvisor among 317 attractions in Reykjavik.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/07/0d/51/14/reykjavik-excursions.jpg",
+      "og:image:width": "550",
+      "og:image:height": "258",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189970-d1492697-Reviews-m33762-Reykjavik_Excursions_Northern_Lights_Tour-Reykjavik_Capital_Region.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189970-d1492697-Reviews-m33762-Reykjavik_Excursions_Northern_Lights_Tour-Reykjavik_Capital_Region.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189970-d1492697-Reviews-m33762-Reykjavik_Excursions_Northern_Lights_Tour-Reykjavik_Capital_Region.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/07/0d/51/14/reykjavik-excursions.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Reykjavik 2017: Best of Reykjavik, Iceland Tourism - TripAdvisor",
+   "htmlTitle": "\u003cb\u003eReykjavik\u003c/b\u003e 2017: Best of \u003cb\u003eReykjavik\u003c/b\u003e, Iceland Tourism - \u003cb\u003eTripAdvisor\u003c/b\u003e",
+   "link": "https://www.tripadvisor.com/Tourism-g189970-Reykjavik_Capital_Region-Vacations.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Reykjavik Tourism: TripAdvisor has 269004 reviews of Reykjavik Hotels, \nAttractions, and Restaurants making it your best Reykjavik resource.",
+   "htmlSnippet": "\u003cb\u003eReykjavik\u003c/b\u003e Tourism: \u003cb\u003eTripAdvisor\u003c/b\u003e has 269004 reviews of \u003cb\u003eReykjavik\u003c/b\u003e Hotels, \u003cbr\u003e\n\u003cb\u003eAttractions\u003c/b\u003e, and Restaurants making it your best \u003cb\u003eReykjavik\u003c/b\u003e resource.",
+   "cacheId": "daOAbhqCHqcJ",
+   "formattedUrl": "https://www.tripadvisor.com/Tourism-g189970-Reykjavik_Capital_Region- Vacations.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eTour\u003c/b\u003eism-g189970-\u003cb\u003eReykjavik\u003c/b\u003e_Capital_Region- Vacations.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "300",
+      "height": "168",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcR5Znlar_8Z1Kz5fpGhcfr_t28zyX_y8qYfopXrr4yZM9UWOepKbWss6T4"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Iceland",
+      "title": "Iceland"
+     },
+     {
+      "url": "Capital Region",
+      "title": "Capital Region"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Reykjavik 2017: Best of Reykjavik, Iceland Tourism - TripAdvisor",
+      "og:description": "Reykjavik Tourism: TripAdvisor has 269,004 reviews of Reykjavik Hotels, Attractions, and Restaurants making it your best Reykjavik resource.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/0b/4a/09/bf/caption.jpg",
+      "og:image:width": "550",
+      "og:image:height": "309",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Tourism-g189970-m33762-Reykjavik_Capital_Region-Vacations.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Tourism-g189970-m33762-Reykjavik_Capital_Region-Vacations.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Tourism-g189970-m33762-Reykjavik_Capital_Region-Vacations.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/0b/4a/09/bf/caption.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "CityWalk Reykjavik (Iceland): Top Tips Before You Go - TripAdvisor",
+   "htmlTitle": "CityWalk \u003cb\u003eReykjavik\u003c/b\u003e (Iceland): Top Tips Before You Go - \u003cb\u003eTripAdvisor\u003c/b\u003e",
+   "link": "https://www.tripadvisor.com/Attraction_Review-g189970-d6638776-Reviews-CityWalk_Reykjavik-Reykjavik_Capital_Region.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "CityWalk Reykjavik, Reykjavik: See 2654 reviews, articles, and 621 photos of \nCityWalk Reykjavik, ranked No.1 on TripAdvisor among 39 attractions in \nReykjavik.",
+   "htmlSnippet": "CityWalk \u003cb\u003eReykjavik\u003c/b\u003e, \u003cb\u003eReykjavik\u003c/b\u003e: See 2654 reviews, articles, and 621 photos of \u003cbr\u003e\nCityWalk \u003cb\u003eReykjavik\u003c/b\u003e, ranked No.1 on \u003cb\u003eTripAdvisor\u003c/b\u003e among 39 \u003cb\u003eattractions\u003c/b\u003e in \u003cbr\u003e\n\u003cb\u003eReykjavik\u003c/b\u003e.",
+   "cacheId": "ACn7vS4QM3wJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attraction_Review-g189970-d6638776-Reviews -CityWalk_Reykjavik-Reykjavik_Capital_Region.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttraction\u003c/b\u003e_Review-g189970-d6638776-Reviews -CityWalk_\u003cb\u003eReykjavik\u003c/b\u003e-\u003cb\u003eReykjavik\u003c/b\u003e_Capital_Region.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "259",
+      "height": "194",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQaJJNjqNUn02EaZWdoLRc8sKCvLrvYwP_JjZHx-EGzYqdwg99YMlXU2sA"
+     }
+    ],
+    "LocalBusiness": [
+     {
+      "image": "https://media-cdn.tripadvisor.com/media/photo-s/05/f8/8c/d4/reykjavik-city-walk.jpg",
+      "name": "CityWalk Reykjavik"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Iceland",
+      "title": "Iceland"
+     },
+     {
+      "url": "Capital Region",
+      "title": "Capital Region"
+     },
+     {
+      "url": "Reykjavik",
+      "title": "Reykjavik"
+     },
+     {
+      "url": "Things to Do in Reykjavik",
+      "title": "Things to Do in Reykjavik"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "5.0",
+      "ratingcount": "2654",
+      "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/05/f8/8c/d4/reykjavik-city-walk.jpg"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "2654"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "CityWalk Reykjavik (Iceland): Top Tips Before You Go - TripAdvisor",
+      "og:description": "CityWalk Reykjavik, Reykjavik: See 2,654 reviews, articles, and 621 photos of CityWalk Reykjavik, ranked No.1 on TripAdvisor among 39 attractions in Reykjavik.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/05/f8/8c/d4/reykjavik-city-walk.jpg",
+      "og:image:width": "550",
+      "og:image:height": "412",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189970-d6638776-Reviews-m33762-CityWalk_Reykjavik-Reykjavik_Capital_Region.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189970-d6638776-Reviews-m33762-CityWalk_Reykjavik-Reykjavik_Capital_Region.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189970-d6638776-Reviews-m33762-CityWalk_Reykjavik-Reykjavik_Capital_Region.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/05/f8/8c/d4/reykjavik-city-walk.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Solstice Tours (Reykjavik, Iceland): Top Tips Before You Go ...",
+   "htmlTitle": "Solstice Tours (\u003cb\u003eReykjavik\u003c/b\u003e, Iceland): Top Tips Before You Go ...",
+   "link": "https://www.tripadvisor.com/Attraction_Review-g189970-d2190185-Reviews-Solstice_Tours-Reykjavik_Capital_Region.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Solstice Tours, Reykjavik: See 245 reviews, articles, and 162 photos of Solstice \nTours, ranked No.41 on TripAdvisor among 317 attractions in Reykjavik. ... \nReviewed September 17, 2016. A group of us on a cruise ship booked a tour \nmonths ...",
+   "htmlSnippet": "Solstice Tours, \u003cb\u003eReykjavik\u003c/b\u003e: See 245 reviews, articles, and 162 photos of Solstice \u003cbr\u003e\nTours, ranked No.41 on \u003cb\u003eTripAdvisor\u003c/b\u003e among 317 \u003cb\u003eattractions\u003c/b\u003e in \u003cb\u003eReykjavik\u003c/b\u003e. ... \u003cbr\u003e\nReviewed \u003cb\u003eSeptember\u003c/b\u003e 17, 2016. A group of us on a cruise ship booked a tour \u003cbr\u003e\nmonths&nbsp;...",
+   "cacheId": "H2jzNzmT0W8J",
+   "formattedUrl": "https://www.tripadvisor.com/Attraction_Review-g189970-d2190185-Reviews -Solstice_Tours-Reykjavik_Capital_Region.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttraction\u003c/b\u003e_Review-g189970-d2190185-Reviews -Solstice_\u003cb\u003eTour\u003c/b\u003es-\u003cb\u003eReykjavik\u003c/b\u003e_Capital_Region.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "275",
+      "height": "183",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRZUpJg0pB1CAzKJheueW0Cz6FCyq8K12zKvMQsoEje7NgCok2hXbvpV6iK"
+     }
+    ],
+    "LocalBusiness": [
+     {
+      "image": "https://media-cdn.tripadvisor.com/media/photo-s/03/06/51/8d/solstice-private-tours.jpg",
+      "name": "Solstice Tours"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Iceland",
+      "title": "Iceland"
+     },
+     {
+      "url": "Capital Region",
+      "title": "Capital Region"
+     },
+     {
+      "url": "Reykjavik",
+      "title": "Reykjavik"
+     },
+     {
+      "url": "Things to Do in Reykjavik",
+      "title": "Things to Do in Reykjavik"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "5.0",
+      "ratingcount": "245",
+      "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/03/06/51/8d/solstice-private-tours.jpg"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "245"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Solstice Tours (Reykjavik, Iceland): Top Tips Before You Go - TripAdvisor",
+      "og:description": "Solstice Tours, Reykjavik: See 245 reviews, articles, and 162 photos of Solstice Tours, ranked No.41 on TripAdvisor among 317 attractions in Reykjavik.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/03/06/51/8d/solstice-private-tours.jpg",
+      "og:image:width": "550",
+      "og:image:height": "366",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189970-d2190185-Reviews-m33762-Solstice_Tours-Reykjavik_Capital_Region.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189970-d2190185-Reviews-m33762-Solstice_Tours-Reykjavik_Capital_Region.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189970-d2190185-Reviews-m33762-Solstice_Tours-Reykjavik_Capital_Region.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/03/06/51/8d/solstice-private-tours.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "10 Best Reykjavik Apartments, Houses (with Photos) | TripAdvisor ...",
+   "htmlTitle": "10 Best \u003cb\u003eReykjavik\u003c/b\u003e Apartments, Houses (with Photos) | \u003cb\u003eTripAdvisor\u003c/b\u003e ...",
+   "link": "https://www.tripadvisor.com/VacationRentals-g189970-Reviews-Reykjavik_Capital_Region-Vacation_Rentals.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "View the Best apartments in Reykjavik. ... Close to many Reykjavik attractions as \nthe National Museum, Harpa Music hall, The ..... Reviewed September 7, 2016.",
+   "htmlSnippet": "View the Best apartments in \u003cb\u003eReykjavik\u003c/b\u003e. ... Close to many \u003cb\u003eReykjavik attractions\u003c/b\u003e as \u003cbr\u003e\nthe National Museum, Harpa Music hall, The ..... Reviewed \u003cb\u003eSeptember\u003c/b\u003e 7, 2016.",
+   "formattedUrl": "https://www.tripadvisor.com/VacationRentals-g189970-Reviews-Reykjavik_ Capital_Region-Vacation_Rentals.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/VacationRentals-g189970-Reviews-\u003cb\u003eReykjavik\u003c/b\u003e_ Capital_Region-Vacation_Rentals.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "300",
+      "height": "168",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcR5Znlar_8Z1Kz5fpGhcfr_t28zyX_y8qYfopXrr4yZM9UWOepKbWss6T4"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "10 Best Reykjavik Apartments, Houses (with Photos) | TripAdvisor -  Vacation Rentals in Reykjavik, Iceland",
+      "og:description": "View the Best apartments in Reykjavik. View TripAdvisor's 1,297 unbiased reviews and great deals on houses in Reykjavik, Iceland",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/0b/4a/09/bf/caption.jpg",
+      "og:image:width": "550",
+      "og:image:height": "309",
+      "og:type": "company",
+      "og:url": "/VacationRentals-g189970-Reviews-Reykjavik_Capital_Region-Vacation_Rentals.html",
+      "og:site_name": "TripAdvisor",
+      "fb:admins": "100000982334629",
+      "fb:app_id": "162729813767876",
+      "twitter:title": "10 Best Reykjavik Apartments, Houses (with Photos) | TripAdvisor -  Vacation Rentals in Reykjavik, Iceland",
+      "twitter:card": "summary_large_image",
+      "twitter:url": "https://www.tripadvisor.com/VacationRentals-g189970-Reviews-Reykjavik_Capital_Region-Vacation_Rentals.html",
+      "twitter:image:src": "https://media-cdn.tripadvisor.com/media/photo-s/01/06/2d/87/view-of-cathedral-from.jpg",
+      "twitter:site": "http://www.tripadvisor.com/Rentals",
+      "twitter:description": "View the Best apartments in Reykjavik. View TripAdvisor's 1,297 unbiased reviews and great deals on houses in Reykjavik, Iceland",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/VacationRentals-g189970-Reviews-m33762-Reykjavik_Capital_Region-Vacation_Rentals.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/VacationRentals-g189970-Reviews-m33762-Reykjavik_Capital_Region-Vacation_Rentals.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/VacationRentals-g189970-Reviews-m33762-Reykjavik_Capital_Region-Vacation_Rentals.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/0b/4a/09/bf/caption.jpg"
+     }
+    ],
+    "listitem": [
+     {
+      "item": "Europe",
+      "name": "Europe"
+     },
+     {
+      "item": "Iceland",
+      "name": "Iceland"
+     },
+     {
+      "item": "Capital Region",
+      "name": "Capital Region"
+     },
+     {
+      "item": "Reykjavik Apartments",
+      "name": "Reykjavik Apartments"
+     },
+     {
+      "position": "1",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/70/27/1b.jpg",
+      "url": "Brekka - A Quality Cottage with a View",
+      "name": "Brekka - A Quality Cottage with a View",
+      "description": "At lodge Brekka you sure have a warm welcome, independent of weather. You'll feel comfortable in the nice open space of the house and the big terrace around, enjoying the privacy of the site...."
+     },
+     {
+      "position": "2",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/57/c5/e1.jpg",
+      "url": "Beautiful home",
+      "name": "Beautiful home",
+      "description": "Luxurious apartment ..... home away from home. The apartment is on a quiet residential street in the heart of Reykjaviks charming old city where you will find all kinds of art galeries, museums,..."
+     },
+     {
+      "position": "3",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/cb/66/a1.jpg",
+      "url": "Harbour Luxury View",
+      "name": "Harbour Luxury View",
+      "description": "This brand new stylish 130 square meters three bedroom apartment with two bathrooms is just by the old harbour and a few minutes from the city centre. The view from the windows and balcony..."
+     },
+     {
+      "position": "4",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/db/23/8c.jpg",
+      "url": "Central Pond side Apartment",
+      "name": "Central Pond side Apartment",
+      "description": "Our Apartment has an amazing location by the city pond in the heart of downtown Reykjavik, with great views over the pond and City Hall. Close to many Reykjavik attractions as the National..."
+     },
+     {
+      "position": "5",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/04/62/12/04.jpg",
+      "url": "Leifsgata 9 - Queen Studio with Sofa Bed",
+      "name": "Leifsgata 9 - Queen Studio with Sofa Bed",
+      "description": "The apartment is located in a quiet neighborhood right downtown. It’s the perfect place for couples, families or friends. The apartment is a separate building so it’s very private. It is..."
+     },
+     {
+      "position": "6",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/ec/80/3d.jpg",
+      "url": "Reykjavik house",
+      "name": "Reykjavik house",
+      "description": "Historical design by the award winning Högna Sigurdardottir.\u003cBR\u003e\u003cBR\u003eOne of the most remarkable house designs in Iceland in the 20th Century.\u003cBR\u003e\u003cBR\u003eThe house has received many awards; in 1974..."
+     },
+     {
+      "position": "7",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/1e/0b/39.jpg",
+      "url": "Loft Apartments - Reykjavik Center",
+      "name": "Loft Apartments - Reykjavik Center",
+      "description": "The apartment which is more like hotel apartment is a two store loft apartment placed in the geothermal park, Laugardalur. We have licence from the Government of Iceland and Health department..."
+     },
+     {
+      "position": "8",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/97/0c/c6.jpg",
+      "url": "Beautiful Family House in Downtown Reykjavik",
+      "name": "Beautiful Family House in Downtown Reykjavik",
+      "description": "This welcoming family house sleeps 5 people in 3 bedrooms and is situated on a quiet residential street only 2 minutes' walk from the popular street Skolavordustigur with its handicraft shops..."
+     },
+     {
+      "position": "9",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/3a/8c/80.jpg",
+      "url": "Cozy cottage with great view and hot tub",
+      "name": "Cozy cottage with great view and hot tub",
+      "description": "You will be surrounded by tranquility and stunning natural beauty in the cottage. It´s just like time stands still when you stay in the countryside cottage, where nature alone are playing..."
+     },
+     {
+      "position": "10",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/bd/27/7f.jpg",
+      "url": "Luxury 4 BR/2BT Villa! Free wifi+parking. Hot tub.",
+      "name": "Luxury 4 BR/2BT Villa! Free wifi+parking. Hot tub.",
+      "description": "Perfect for large families and group of friends. Hot tub, private garden, bbq, Northern lights view from garden, candle fireplace and more, free wifi and parking. The house is 250 m², well..."
+     },
+     {
+      "position": "11",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/08/21/31.jpg",
+      "url": "Exclusive Reykjavik location",
+      "name": "Exclusive Reykjavik location",
+      "description": "The apartment is located in a quiet exclusive residential street in Reykjavik city center. The apartment is a perfect base from which to explore all that Reykjavik has to offer. All the main..."
+     },
+     {
+      "position": "12",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/5d/01/14.jpg",
+      "url": "Amazing Central Apartment",
+      "name": "Amazing Central Apartment",
+      "description": "Amazing 100 square meter apartment ideally located in the centre of Reykjavik. This apartment has a super comfortable living area with a very spacious kitchen. Located close to the old harbour..."
+     },
+     {
+      "position": "13",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/04/6f/25/ff.jpg",
+      "url": "Leifsgata 9 - Superior Three-Bedroom Apartment",
+      "name": "Leifsgata 9 - Superior Three-Bedroom Apartment",
+      "description": "A stylish and cozy renovated apartment (90 sqm) on the first floor in the city center. Sleeps 6 comfortably in 3 spacious bedrooms, each with double bed. Living room with flat screen TV, wireless..."
+     },
+     {
+      "position": "14",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/df/38/3d.jpg",
+      "url": "The Warm & Bright Downtown Apartment",
+      "name": "The Warm & Bright Downtown Apartment",
+      "description": "APARTMENT: Newly renovated, warm & bright downtown apartment next to main streets of Reykjavik. NEIGHBOURHOOD: The neighborhood is lively and easily accessible. Buses from the airport stop..."
+     },
+     {
+      "position": "15",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/1e/04/7a.jpg",
+      "url": "Loft Apartments - City Center",
+      "name": "Loft Apartments - City Center",
+      "description": "The apartment which is more like a hotel apartment is a luxuary apartment placed in the most popular down town area. From the apartment it takes only 3 minutes to walk to the largest shopping..."
+     },
+     {
+      "position": "16",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/46/31/32.jpg",
+      "url": "House of the Snowbird - The Philosopher's Flai...",
+      "name": "House of the Snowbird - The Philosopher's Flai...",
+      "description": "In the historic center where Reykjavík City‘s old heart beats there is a beautiful old house that used to be called Aberdeen. The house is owned by a family of artists who have left their..."
+     },
+     {
+      "position": "17",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/04/5f/1a/96.jpg",
+      "url": "Luxury apartment down town Reykjavik",
+      "name": "Luxury apartment down town Reykjavik",
+      "description": "Newly renovated 70 sqm apartment downtown Reykjavik with private balcony. Located right in front of the biggest landmark of Reykjavik, the Hallgrimskirkja Church. Everything that Reykjavik..."
+     },
+     {
+      "position": "18",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/3a/1b/36.jpg",
+      "url": "beautiful large apartment with Sea/mountain view",
+      "name": "beautiful large apartment with Sea/mountain view",
+      "description": "beautiful large 240 square meters apartment located in Mosfellbæ just outside of Reykjavík city. It has awesome views as you can confirm on the photos. Mosfellbær is just 15min from the..."
+     },
+     {
+      "position": "19",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/73/08/5e.jpg",
+      "url": "Live as locals apartments downtown Reykjavik (001)",
+      "name": "Live as locals apartments downtown Reykjavik (001)",
+      "description": "The apartment (ground floor) is in an old two apartments house downtown Reykjavik. The house is very well located in a quiet street close to Laugavegur, the main shopping street. There is a..."
+     },
+     {
+      "position": "20",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/04/5f/1b/fd.jpg",
+      "url": "New Luxury Apartment In Downtown Reykjavik",
+      "name": "New Luxury Apartment In Downtown Reykjavik",
+      "description": "Newly renovated 80 sqm apartment downtown Reykjavik. Located right in front of the biggest landmark of Reykjavik, the Hallgrimskirkja Church. Everything that Reykjavik has to offer is in walking..."
+     },
+     {
+      "position": "21",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/70/28/99.jpg",
+      "url": "Reykjavik 3 Bedroom Apartment in Perfect Location",
+      "name": "Reykjavik 3 Bedroom Apartment in Perfect Location",
+      "description": "This 3 bedroom apartment is in the heart of Reykjavik with easy access to all the sites, shopping, restaurants, night life, museums and the ocean front. Tour buses leave from around the corner..."
+     },
+     {
+      "position": "22",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/73/a1/f7.jpg",
+      "url": "Bright & cosy 2br apartment in city center",
+      "name": "Bright & cosy 2br apartment in city center",
+      "description": "Bright and cosy apartment on Laugavegur shopping street offers you a gateway to down town Reykjavik. There is a beautiful mountain and ocean view from the balcony with a chance of a northern..."
+     },
+     {
+      "position": "23",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/86/6c/4e.jpg",
+      "url": "Briet Apartment, Holiday home CENTER",
+      "name": "Briet Apartment, Holiday home CENTER",
+      "description": "Briet Apartments are right in the heart of Reykjavik city. This beautiful newly renovated house that was built in 1880 is perfectly suited for a family or a group of friends travelling together.\u003cBR..."
+     },
+     {
+      "position": "24",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/70/71/39.jpg",
+      "url": "Cozy Mid-Century Modern 60's Villa in Reykjavi...",
+      "name": "Cozy Mid-Century Modern 60's Villa in Reykjavi...",
+      "description": "A well located and comfortable property for small groups and families. Nice open living room with large windows, adjacent to dining room and kitchen. Three balconies, in living room, kitchen..."
+     },
+     {
+      "position": "25",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/94/3a/75.jpg",
+      "url": "Bæjarás 5 Studio apartment",
+      "name": "Bæjarás 5 Studio apartment",
+      "description": "Family-friendly accommodation Bæjarás 5 is located in the outskirt of Reykjavík (only 15 minutes drive). It has all the comforts of home and has a beautiful garden with playground, is perfect..."
+     },
+     {
+      "position": "26",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/10/4a/8e.jpg",
+      "url": "Enjoy downtown of Reykjavik",
+      "name": "Enjoy downtown of Reykjavik",
+      "description": "We present a very comfortable, clean and spacious apartment,located on a quiet street ,just two minutes walk to the city center.It has all the necessary amenities for a pleasant stay. The apartment..."
+     },
+     {
+      "position": "27",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/89/ca/3f.jpg",
+      "url": "Lisuholl cottage",
+      "name": "Lisuholl cottage",
+      "description": "Lisuholl is a traditional Icelandic summer cottage located in a wide valley off Hvalfjord, a fjord of spectacular beauty, only 40 minutes drive from the capital city of Reykjavik. It is the..."
+     },
+     {
+      "position": "28",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/b3/3a/bb.jpg",
+      "url": "Cozy downtown apartment",
+      "name": "Cozy downtown apartment",
+      "description": "A cozy newly renovated apartment in the heart of Reykjavík. The apartment has one bedroom with new comfortable double bed, bathroom with shower and the kitchen is fully equipped with refrigerator,..."
+     },
+     {
+      "position": "29",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/70/e5/cf.jpg",
+      "url": "Felicia´s Flat downtown Reykjavik.",
+      "name": "Felicia´s Flat downtown Reykjavik.",
+      "description": "Located in the center of town, Felicia's Flat is within easy walking distance of tourist attractions such as museums, Parliament, harbour, art galleries, shops and restaurants. 100 meters from..."
+     },
+     {
+      "position": "30",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/3f/6b/d7.jpg",
+      "url": "House of the Snowbird - The Artists' Enchantme...",
+      "name": "House of the Snowbird - The Artists' Enchantme...",
+      "description": "In the historic center where Reykjavík City‘s old heart beats there is a beautiful old house that used to be called Aberdeen. The house is owned by a family of artists who have left their..."
+     },
+     {
+      "position": "31",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/33/c4/b6.jpg",
+      "url": "Romantic penthouse apartment",
+      "name": "Romantic penthouse apartment",
+      "description": "The apartment is located in the heart of Reykjavik city. The house was built around 1900 and has recently been renovated in a modern Scandinavian style. Bright, warm and stylish it offers a..."
+     },
+     {
+      "position": "32",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/93/2b/2e.jpg",
+      "url": "Reykjavik Central Apartment",
+      "name": "Reykjavik Central Apartment",
+      "description": "The apartment is located in the middle of central Reykjavik at Vatnsstígur 3b, right next to Laugavegur, the main shopping street in Reykjavik. In Laugavegur you also can find the main restaurants..."
+     },
+     {
+      "position": "33",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/1a/15/76.jpg",
+      "url": "Luxury apartm. with Rental Car Incl.",
+      "name": "Luxury apartm. with Rental Car Incl.",
+      "description": "A luxury apartment in Reykjavik Center. Sleeps up to 4 people. One bedroom with quality double bed and sleeping sofa in living room. Bathroom with shower. Fully equipped kitchen. Rental car..."
+     },
+     {
+      "position": "34",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/3a/07/b9.jpg",
+      "url": "B14 Down Town modern apartment w/balcony",
+      "name": "B14 Down Town modern apartment w/balcony",
+      "description": "The apartment is in the heart of Reykjavik located at Skólavörðustígur that is the de-facto home of art and design shops in the city centre. Icelands oldest café, Kaffi Mokka is just across..."
+     },
+     {
+      "position": "35",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/39/4a/d5.jpg",
+      "url": "Cosy apartament in down town",
+      "name": "Cosy apartament in down town",
+      "description": "Home Apartment Free WI-FI Internet A modern comfortable apt fully furnished ,kitchen with all equipment needed, And we offer free cleanning, and towels are included.Nice and quiet neightboorhood..."
+     },
+     {
+      "position": "36",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/fa/c8/1a.jpg",
+      "url": "Brautarholt Modern One Bedroom Apt with Balcony",
+      "name": "Brautarholt Modern One Bedroom Apt with Balcony",
+      "description": "With Laugavegur shopping street just a few minutes’ walk away, Brautarholt Apartments offer you stylish accommodation in Reykjavík. Free WiFi and free parking spaces come standard with each..."
+     },
+     {
+      "position": "37",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/86/6c/4e.jpg",
+      "url": "Briet Apartments. CENTRAL 3 bdr",
+      "name": "Briet Apartments. CENTRAL 3 bdr",
+      "description": "Briet Apartments are right in the heart of Reykjavik city. This beautiful newly renovated house that was built in 1880 is perfectly suited for a family or a group of friends travelling together.\u003cBR..."
+     },
+     {
+      "position": "38",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/28/32/c7.jpg",
+      "url": "Extremely Well Situated In Downtown Reykjavik",
+      "name": "Extremely Well Situated In Downtown Reykjavik",
+      "description": "Reykjavik Laugavegur 3 bedroom apartment \u003cBR\u003eNewly renovated apartment in Laugavegur with 3 bedrooms 1 bathroom, sleeps for 6\u003cBR\u003eLuxery apartment right in the city center surrounded with a..."
+     },
+     {
+      "position": "39",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/41/f8/42.jpg",
+      "url": "B14 City Centre Penthouse for groups",
+      "name": "B14 City Centre Penthouse for groups",
+      "description": "Penthouse located right in Reykjavik city center. Ideal for groups, friends or family members Single or double rooms. The penthouse has 5 bedrooms Room #1 Queen size and a single bed Room #2..."
+     },
+     {
+      "position": "40",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/04/5f/1b/5d.jpg",
+      "url": "New Luxury Apartment In Downtown Reykjavik",
+      "name": "New Luxury Apartment In Downtown Reykjavik",
+      "description": "Newly renovated 70 sqm apartment downtown Reykjavik. Located right in front of the biggest landmark of Reykjavik, the Hallgrimskirkja Church. Everything that Reykjavik has to offer is in walking..."
+     },
+     {
+      "position": "41",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/30/8f/6b.jpg",
+      "url": "Family housing/Reykjavik/Ocean, Hlidsnes House 1",
+      "name": "Family housing/Reykjavik/Ocean, Hlidsnes House 1",
+      "description": "Fully furnished beautiful house ideal for families or small groups in an ocean front/country side setting, 10 minute drive to the store, 20 minutes to downtown Reykjavik. Sleeps up to six persons..."
+     },
+     {
+      "position": "42",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/98/74/34.jpg",
+      "url": "Nice two bedroom - Close to Downtown & Activit...",
+      "name": "Nice two bedroom - Close to Downtown & Activit...",
+      "description": "Spacious and bright apartment in Laugardalur, Reykjavík. Two bedrooms, balcony, living room, bathroom and a well equipped kitchen. Good location, bus stop right outside the apartment, 5-10..."
+     },
+     {
+      "position": "43",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/ef/b9/c6.jpg",
+      "url": "Beautiful Central Apartment",
+      "name": "Beautiful Central Apartment",
+      "description": "This apartment is only a few minutes walk from the city center. It is also very close to the old harbour area. Supermarkets and an ice cream shop are also close by. This apartment is in a new..."
+     },
+     {
+      "position": "44",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/2b/43/03.jpg",
+      "url": "Luxurious Villa Includes Free Car",
+      "name": "Luxurious Villa Includes Free Car",
+      "description": "A great house located in quiet residential neighboorhood in the city center. A 2014 Citroen C3 is included in the rent, guests can use it to take trips to the country such as the Golden Circle,..."
+     },
+     {
+      "position": "45",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/3a/1b/36.jpg",
+      "url": "Gorgeous big flat with great sea mountain view",
+      "name": "Gorgeous big flat with great sea mountain view",
+      "description": "beautiful large 240 square meters apartment located in Mosfellbæ just outside of Reykjavík city. It has awesome views as you can confirm on the photos. Mosfellbær is just 15min from the..."
+     },
+     {
+      "position": "46",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/70/4d/a4.jpg",
+      "url": "RoofTop Reykjavik with balcony",
+      "name": "RoofTop Reykjavik with balcony",
+      "description": "Bright, modern and newly renovated roof apartment, located in a quiet residential neighborhood about a 15-minute walk from the city center. It is 55 square meters + storage and balcony. The..."
+     },
+     {
+      "position": "47",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/70/1e/51.jpg",
+      "url": "B14 Apartment for group Down Town",
+      "name": "B14 Apartment for group Down Town",
+      "description": "Apartment down town Reykjavik. The apartment is unique with amazing mountain view on one side and big balcony overlooking the main shopping street, Laugavegur on the other. The decoration of..."
+     },
+     {
+      "position": "48",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/da/d0/e1.jpg",
+      "url": "Central park side apartment",
+      "name": "Central park side apartment",
+      "description": "Our apartment is very spacious, 135 sqm, with original scandinavian vintage decorations and furnishing. It has free parking in the street in front of the house. The apartment is centrally located,..."
+     },
+     {
+      "position": "49",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/a5/85/66.jpg",
+      "url": "Great Reykjavik 101 location",
+      "name": "Great Reykjavik 101 location",
+      "description": "A newly refurbished apartment located in a quiet residential street in Reykjavik city center. The apartment is a perfect base from which to explore all that Reykjavik has to offer. All the..."
+     },
+     {
+      "position": "50",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/4b/64/60.jpg",
+      "url": "Cozy house in city center - apartment V27",
+      "name": "Cozy house in city center - apartment V27",
+      "description": "Welcome to a comfortable accommodation in the center of Reykjavik Iceland. Apartment V27 is a 77 sq.m. newly renovated house where you get the feeling of home away from home. Located in the..."
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Extreme Iceland (Reykjavik): Top Tips Before You Go - TripAdvisor",
+   "htmlTitle": "Extreme Iceland (\u003cb\u003eReykjavik\u003c/b\u003e): Top Tips Before You Go - \u003cb\u003eTripAdvisor\u003c/b\u003e",
+   "link": "https://www.tripadvisor.com/Attraction_Review-g189970-d1648193-Reviews-Extreme_Iceland-Reykjavik_Capital_Region.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Extreme Iceland, Reykjavik: See 1125 reviews, articles, and 1234 photos of \nExtreme Iceland, ranked No.3 on TripAdvisor among 43 attractions in Reykjavik.",
+   "htmlSnippet": "Extreme Iceland, \u003cb\u003eReykjavik\u003c/b\u003e: See 1125 reviews, articles, and 1234 photos of \u003cbr\u003e\nExtreme Iceland, ranked No.3 on \u003cb\u003eTripAdvisor\u003c/b\u003e among 43 \u003cb\u003eattractions\u003c/b\u003e in \u003cb\u003eReykjavik\u003c/b\u003e.",
+   "cacheId": "dP5NDrxHgwkJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attraction_Review-g189970-d1648193-Reviews -Extreme_Iceland-Reykjavik_Capital_Region.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttraction\u003c/b\u003e_Review-g189970-d1648193-Reviews -Extreme_Iceland-\u003cb\u003eReykjavik\u003c/b\u003e_Capital_Region.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "277",
+      "height": "182",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSWDHOgNkMpL9IvliZi7hCZXX_7UCdMTyGgv6HidRiPFSQYycPXvMjJesI"
+     }
+    ],
+    "LocalBusiness": [
+     {
+      "image": "https://media-cdn.tripadvisor.com/media/photo-s/05/6f/16/a1/extreme-iceland-private.jpg",
+      "name": "Extreme Iceland"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Iceland",
+      "title": "Iceland"
+     },
+     {
+      "url": "Capital Region",
+      "title": "Capital Region"
+     },
+     {
+      "url": "Reykjavik",
+      "title": "Reykjavik"
+     },
+     {
+      "url": "Things to Do in Reykjavik",
+      "title": "Things to Do in Reykjavik"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "4.5",
+      "ratingcount": "1125",
+      "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/05/6f/16/a1/extreme-iceland-private.jpg"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "1125"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Extreme Iceland (Reykjavik): Top Tips Before You Go - TripAdvisor",
+      "og:description": "Extreme Iceland, Reykjavik: See 1,125 reviews, articles, and 1,234 photos of Extreme Iceland, ranked No.3 on TripAdvisor among 43 attractions in Reykjavik.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/05/6f/16/a1/extreme-iceland-private.jpg",
+      "og:image:width": "550",
+      "og:image:height": "362",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189970-d1648193-Reviews-m33762-Extreme_Iceland-Reykjavik_Capital_Region.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189970-d1648193-Reviews-m33762-Extreme_Iceland-Reykjavik_Capital_Region.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189970-d1648193-Reviews-m33762-Extreme_Iceland-Reykjavik_Capital_Region.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/05/6f/16/a1/extreme-iceland-private.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Grand Hotel Reykjavik - UPDATED 2017 Reviews, Pictures & Price ...",
+   "htmlTitle": "Grand Hotel \u003cb\u003eReykjavik\u003c/b\u003e - UPDATED 2017 Reviews, Pictures &amp; Price ...",
+   "link": "https://www.tripadvisor.com/Hotel_Review-g189970-d228920-Reviews-Grand_Hotel_Reykjavik-Reykjavik_Capital_Region.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Book Grand Hotel Reykjavik, Reykjavik on TripAdvisor: See 1203 traveler \nreviews, 620 candid photos, and great deals for Grand Hotel Reykjavik, ranked #\n26 of ...",
+   "htmlSnippet": "Book Grand Hotel \u003cb\u003eReykjavik\u003c/b\u003e, \u003cb\u003eReykjavik\u003c/b\u003e on \u003cb\u003eTripAdvisor\u003c/b\u003e: See 1203 traveler \u003cbr\u003e\nreviews, 620 candid photos, and great deals for Grand Hotel \u003cb\u003eReykjavik\u003c/b\u003e, ranked #\u003cbr\u003e\n26 of&nbsp;...",
+   "cacheId": "0xIumM8VoOoJ",
+   "formattedUrl": "https://www.tripadvisor.com/Hotel_Review-g189970-d228920-Reviews- Grand_Hotel_Reykjavik-Reykjavik_Capital_Region.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/Hotel_Review-g189970-d228920-Reviews- Grand_Hotel_\u003cb\u003eReykjavik\u003c/b\u003e-\u003cb\u003eReykjavik\u003c/b\u003e_Capital_Region.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "197",
+      "height": "256",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQpuiYOGB0tgEdT0zs5ZtsYjeJ4ZYHFnwTpJJG5P6TFZL8KwUEJ7kQNmOOW"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Iceland",
+      "title": "Iceland"
+     },
+     {
+      "url": "Capital Region",
+      "title": "Capital Region"
+     },
+     {
+      "url": "Reykjavik",
+      "title": "Reykjavik"
+     },
+     {
+      "url": "Reykjavik Hotels",
+      "title": "Reykjavik Hotels"
+     }
+    ],
+    "LodgingBusiness": [
+     {
+      "image": "https://media-cdn.tripadvisor.com/media/photo-s/05/42/21/30/grand-hotel-reykjavik.jpg",
+      "name": "Grand Hotel Reykjavik",
+      "priceRange": "$153 - $448 (Based on Average Rates for a Standard Room)"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "4.0",
+      "ratingcount": "1493",
+      "pricerange": "$153 - $448 (Based on Average Rates for a Standard Room)",
+      "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/05/42/21/30/grand-hotel-reykjavik.jpg"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "pricerange": "$153 - $448 (Based on Average Rates for a Standard Room)",
+      "count": "1493"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Grand Hotel Reykjavik - UPDATED 2017 Reviews, Pictures & Price Comparison (Iceland) - TripAdvisor",
+      "og:description": "Book Grand Hotel Reykjavik, Reykjavik on TripAdvisor: See 1,203 traveler reviews, 620 candid photos, and great deals for Grand Hotel Reykjavik, ranked #26 of 53 hotels in Reykjavik and rated 4 of 5 at TripAdvisor.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/05/42/21/30/grand-hotel-reykjavik.jpg",
+      "og:image:width": "347",
+      "og:image:height": "450",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Hotel_Review-g189970-d228920-Reviews-m33762-Grand_Hotel_Reykjavik-Reykjavik_Capital_Region.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Hotel_Review-g189970-d228920-Reviews-m33762-Grand_Hotel_Reykjavik-Reykjavik_Capital_Region.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Hotel_Review-g189970-d228920-Reviews-m33762-Grand_Hotel_Reykjavik-Reykjavik_Capital_Region.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/05/42/21/30/grand-hotel-reykjavik.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Aurora Reykjavik (Iceland): Top Tips Before You Go - TripAdvisor",
+   "htmlTitle": "Aurora \u003cb\u003eReykjavik\u003c/b\u003e (Iceland): Top Tips Before You Go - \u003cb\u003eTripAdvisor\u003c/b\u003e",
+   "link": "https://www.tripadvisor.com/Attraction_Review-g189970-d4508700-Reviews-Aurora_Reykjavik-Reykjavik_Capital_Region.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Book your tickets online for Aurora Reykjavik, Reykjavik: See 1009 reviews, \narticles, ... Reykjavik, ranked No.19 on TripAdvisor among 175 attractions in \nReykjavik.",
+   "htmlSnippet": "Book your tickets online for Aurora \u003cb\u003eReykjavik\u003c/b\u003e, \u003cb\u003eReykjavik\u003c/b\u003e: See 1009 reviews, \u003cbr\u003e\narticles, ... \u003cb\u003eReykjavik\u003c/b\u003e, ranked No.19 on \u003cb\u003eTripAdvisor\u003c/b\u003e among 175 \u003cb\u003eattractions\u003c/b\u003e in \u003cbr\u003e\n\u003cb\u003eReykjavik\u003c/b\u003e.",
+   "cacheId": "kvaPvQWUkEEJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attraction_Review-g189970-d4508700-Reviews -Aurora_Reykjavik-Reykjavik_Capital_Region.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttraction\u003c/b\u003e_Review-g189970-d4508700-Reviews -Aurora_\u003cb\u003eReykjavik\u003c/b\u003e-\u003cb\u003eReykjavik\u003c/b\u003e_Capital_Region.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "275",
+      "height": "183",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRNu0a5bB_d8TgUc6hRxir3T3_mXRRRL6pVTLfonFcKGJm9vIOoc4dwU_ea"
+     }
+    ],
+    "LocalBusiness": [
+     {
+      "image": "https://media-cdn.tripadvisor.com/media/photo-s/06/ff/f2/06/aurora-reykjavik.jpg",
+      "name": "Aurora Reykjavik"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Iceland",
+      "title": "Iceland"
+     },
+     {
+      "url": "Capital Region",
+      "title": "Capital Region"
+     },
+     {
+      "url": "Reykjavik",
+      "title": "Reykjavik"
+     },
+     {
+      "url": "Things to Do in Reykjavik",
+      "title": "Things to Do in Reykjavik"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "4.0",
+      "ratingcount": "1009",
+      "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/06/ff/f2/06/aurora-reykjavik.jpg"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "1009"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Aurora Reykjavik (Iceland): Top Tips Before You Go - TripAdvisor",
+      "og:description": "Book your tickets online for Aurora Reykjavik, Reykjavik: See 1,009 reviews, articles, and 242 photos of Aurora Reykjavik, ranked No.19 on TripAdvisor among 175 attractions in Reykjavik.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/06/ff/f2/06/aurora-reykjavik.jpg",
+      "og:image:width": "550",
+      "og:image:height": "366",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189970-d4508700-Reviews-m33762-Aurora_Reykjavik-Reykjavik_Capital_Region.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189970-d4508700-Reviews-m33762-Aurora_Reykjavik-Reykjavik_Capital_Region.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189970-d4508700-Reviews-m33762-Aurora_Reykjavik-Reykjavik_Capital_Region.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/06/ff/f2/06/aurora-reykjavik.jpg"
+     }
+    ]
+   }
+  }
+ ]
+}

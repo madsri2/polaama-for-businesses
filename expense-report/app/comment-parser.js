@@ -5,7 +5,9 @@ const logger = require('../../my-logger');
 const levenshtein = require('fast-levenshtein');
 
 function CommentsParser(families) {
-  this.families = families; // ids of families in the trip
+  if(families) {
+    this.families = families; // ids of families in the trip
+  }
 }
 
 // See test/test-parser.js to see what the return object structure is.
@@ -25,9 +27,15 @@ CommentsParser.prototype.parse = function(comment) {
   details[famId] = {
     'owes': {}
   };
+  details.spendSummary = {
+    'family': "",
+    'amount': 0
+  };
   // The second word can only be "paid" or "owes"
   if(words[1] === "paid") {
     const amt = parseAmount.call(this, words[2], words[3]);
+    details.spendSummary.family = famId;
+    details.spendSummary.amount = amt;
     // The families object includes the person who paid as well.
     const amtPerFam = +(amt / Object.keys(this.families).length).toFixed(3);
     Object.keys(this.families).forEach(fam => {
@@ -42,12 +50,29 @@ CommentsParser.prototype.parse = function(comment) {
   else if(words[1] === "owes") {
     const famOwed = findFamilyId.call(this, words[2]);
     const amt = parseAmount.call(this, words[3], words[4]);
+    details.spendSummary.family = famOwed;
+    details.spendSummary.amount = amt;
     details[famId].owes[famOwed] = amt;
     // console.log(`${famId} owes ${famOwed} ${amt} dollars`);
     return details;
   }
   throw new Error(`Second word in sentence needs to be "paid" or "owes", not ${words[1]}`);
 } 
+
+// if the comment looks like expense report detail, then validate. if not simply return true;
+CommentsParser.prototype.validate = function(comment) {
+  if(comment.contains("paid") || comment.contains("owes")) {
+    try {
+      const details = this.parse(comment);
+      return true;
+    }
+    catch(err) {
+      logger.error(err);
+      return false;
+    }
+  }
+  return true;
+}
 
 function findFamilyId(name) {
   const keys = Object.keys(this.families);

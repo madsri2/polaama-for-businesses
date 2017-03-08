@@ -29,14 +29,14 @@ FlightInfoProvider.prototype.getFlightDetails = function(callback) {
       logger.warn(`getFlightDetails: either origCode or destCode is undefined [origCode: ${self.origCode}; destCode: ${self.destCode}]. Not proceeding with getting flight details!`);
       throw new Error(`Either origCode or destCode is undefined`);
     }
-    // TODO: Check if the flights file was created only 30 minutes ago and if so, short circuit.
+    // TODO: Check if the flights file was created only maxAgeInMinutes ago and if so, short circuit.
     const file = _getFileName.call(self);
     logger.info(`callback: code is ${code}. file is ${file}. About to do something around getting flights`);
     if(fs.existsSync(file)) {
-      const maxAgeInMinutes = 5;
+      const maxAgeInMinutes = 120;
       const ctime = (new Date(fs.statSync(file).ctime)).getTime();
       const diffInMinutes = (Date.now()-ctime)/(1000*60);
-      if(diffInMinutes < maxAgeInMinutes) { // file's age is less than 30 minutes
+      if(diffInMinutes < maxAgeInMinutes) { // file's age is less than 120 minutes
         logger.info(`getFlightDetails: file ${file} was created ${diffInMinutes} minutes ago. Simply calling callback.`);
         return callback();
       }

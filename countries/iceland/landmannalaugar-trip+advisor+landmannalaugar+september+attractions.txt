@@ -1,0 +1,703 @@
+{
+ "kind": "customsearch#search",
+ "url": {
+  "type": "application/json",
+  "template": "https://www.googleapis.com/customsearch/v1?q={searchTerms}&num={count?}&start={startIndex?}&lr={language?}&safe={safe?}&cx={cx?}&cref={cref?}&sort={sort?}&filter={filter?}&gl={gl?}&cr={cr?}&googlehost={googleHost?}&c2coff={disableCnTwTranslation?}&hq={hq?}&hl={hl?}&siteSearch={siteSearch?}&siteSearchFilter={siteSearchFilter?}&exactTerms={exactTerms?}&excludeTerms={excludeTerms?}&linkSite={linkSite?}&orTerms={orTerms?}&relatedSite={relatedSite?}&dateRestrict={dateRestrict?}&lowRange={lowRange?}&highRange={highRange?}&searchType={searchType}&fileType={fileType?}&rights={rights?}&imgSize={imgSize?}&imgType={imgType?}&imgColorType={imgColorType?}&imgDominantColor={imgDominantColor?}&alt=json"
+ },
+ "queries": {
+  "request": [
+   {
+    "title": "Google Custom Search - trip advisor landmannalaugar september attractions",
+    "totalResults": "3260",
+    "searchTerms": "trip advisor landmannalaugar september attractions",
+    "count": 10,
+    "startIndex": 1,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "landmannalaugar"
+   }
+  ],
+  "nextPage": [
+   {
+    "title": "Google Custom Search - trip advisor landmannalaugar september attractions",
+    "totalResults": "3260",
+    "searchTerms": "trip advisor landmannalaugar september attractions",
+    "count": 10,
+    "startIndex": 11,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "landmannalaugar"
+   }
+  ]
+ },
+ "context": {
+  "title": "Polaama"
+ },
+ "searchInformation": {
+  "searchTime": 0.549946,
+  "formattedSearchTime": "0.55",
+  "totalResults": "3260",
+  "formattedTotalResults": "3,260"
+ },
+ "items": [
+  {
+   "kind": "customsearch#result",
+   "title": "September to Askja and Landmannalaugar? - Iceland Forum ...",
+   "htmlTitle": "\u003cb\u003eSeptember\u003c/b\u003e to Askja and \u003cb\u003eLandmannalaugar\u003c/b\u003e? - Iceland Forum ...",
+   "link": "https://www.tripadvisor.com/ShowTopic-g189952-i223-k5278152-September_to_Askja_and_Landmannalaugar-Iceland.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "One attraction mentioned in this post ... Diane O September 26, 2016 ... Askja \nand Landmannalaugar are not possible in one day by terrestrial mode of \ntransport. .... To review the TripAdvisor Forums Posting Guidelines, please follow \nthis link: ...",
+   "htmlSnippet": "One \u003cb\u003eattraction\u003c/b\u003e mentioned in this post ... Diane O \u003cb\u003eSeptember\u003c/b\u003e 26, 2016 ... Askja \u003cbr\u003e\nand \u003cb\u003eLandmannalaugar\u003c/b\u003e are not possible in one day by terrestrial mode of \u003cbr\u003e\ntransport. .... To review the \u003cb\u003eTripAdvisor\u003c/b\u003e Forums Posting Guidelines, please follow \u003cbr\u003e\nthis link:&nbsp;...",
+   "cacheId": "mxC9YeOYH2wJ",
+   "formattedUrl": "https://www.tripadvisor.com/ShowTopic-g189952-i223-k5278152- September_to_Askja_and_Landmannalaugar-Iceland.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/ShowTopic-g189952-i223-k5278152- \u003cb\u003eSeptember\u003c/b\u003e_to_Askja_and_\u003cb\u003eLandmannalaugar\u003c/b\u003e-Iceland.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "80",
+      "height": "80",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTVQflH0VqVMp6PDcRILO5PBISjTfAm4CWJ85aFIrZtIGOJanUlknhw"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Iceland",
+      "title": "Iceland"
+     },
+     {
+      "url": "Iceland Travel Forum",
+      "title": "Iceland Travel Forum"
+     }
+    ],
+    "metatags": [
+     {
+      "og:image": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Landmannalaugar Tours - Day Tours (Reykjavik, Iceland): Top Tips ...",
+   "htmlTitle": "\u003cb\u003eLandmannalaugar\u003c/b\u003e Tours - Day Tours (Reykjavik, Iceland): Top Tips ...",
+   "link": "https://www.tripadvisor.com/Attraction_Review-g189970-d8519603-Reviews-Landmannalaugar_Tours_Day_Tours-Reykjavik_Capital_Region.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Landmannalaugar Tours - Day Tours, Reykjavik: See 20 reviews, articles, and 27 \nphotos of Landmannalaugar Tours - Day Tours, ranked No.119 on TripAdvisor \namong 235 attractions in Reykjavik. ... Reviewed September 16, 2015. OMG.",
+   "htmlSnippet": "\u003cb\u003eLandmannalaugar\u003c/b\u003e Tours - Day Tours, Reykjavik: See 20 reviews, articles, and 27 \u003cbr\u003e\nphotos of \u003cb\u003eLandmannalaugar\u003c/b\u003e Tours - Day Tours, ranked No.119 on \u003cb\u003eTripAdvisor\u003c/b\u003e \u003cbr\u003e\namong 235 \u003cb\u003eattractions\u003c/b\u003e in Reykjavik. ... Reviewed \u003cb\u003eSeptember\u003c/b\u003e 16, 2015. OMG.",
+   "cacheId": "DbbInC-trK4J",
+   "formattedUrl": "https://www.tripadvisor.com/Attraction_Review-g189970-d8519603-Reviews -Landmannalaugar_Tours_Day_Tours-Reykjavik_Capital_Region.h...",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttraction\u003c/b\u003e_Review-g189970-d8519603-Reviews -\u003cb\u003eLandmannalaugar\u003c/b\u003e_\u003cb\u003eTour\u003c/b\u003es_Day_\u003cb\u003eTour\u003c/b\u003es-Reykjavik_Capital_Region.h...",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "259",
+      "height": "194",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQS0pBHzHgihp2Qo-jofofGWwC9P8yry6cR-Pdefn66R-BtOQAWbMoY8Ro"
+     }
+    ],
+    "LocalBusiness": [
+     {
+      "image": "https://media-cdn.tripadvisor.com/media/photo-s/08/a1/97/de/landmannalaugar-tours.jpg",
+      "name": "Landmannalaugar Tours - Day Tours"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Iceland",
+      "title": "Iceland"
+     },
+     {
+      "url": "Capital Region",
+      "title": "Capital Region"
+     },
+     {
+      "url": "Reykjavik",
+      "title": "Reykjavik"
+     },
+     {
+      "url": "Things to Do in Reykjavik",
+      "title": "Things to Do in Reykjavik"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "5.0",
+      "ratingcount": "20",
+      "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/08/a1/97/de/landmannalaugar-tours.jpg"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "20"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Landmannalaugar Tours - Day Tours (Reykjavik, Iceland): Top Tips Before You Go - TripAdvisor",
+      "og:description": "Landmannalaugar Tours - Day Tours, Reykjavik: See 20 reviews, articles, and 27 photos of Landmannalaugar Tours - Day Tours, ranked No.119 on TripAdvisor among 235 attractions in Reykjavik.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/08/a1/97/de/landmannalaugar-tours.jpg",
+      "og:image:width": "550",
+      "og:image:height": "412",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189970-d8519603-Reviews-m33762-Landmannalaugar_Tours_Day_Tours-Reykjavik_Capital_Region.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189970-d8519603-Reviews-m33762-Landmannalaugar_Tours_Day_Tours-Reykjavik_Capital_Region.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attraction_Review-g189970-d8519603-Reviews-m33762-Landmannalaugar_Tours_Day_Tours-Reykjavik_Capital_Region.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/08/a1/97/de/landmannalaugar-tours.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Laugavegur (Landmannalaugar, Iceland): Top Tips Before You Go ...",
+   "htmlTitle": "Laugavegur (\u003cb\u003eLandmannalaugar\u003c/b\u003e, Iceland): Top Tips Before You Go ...",
+   "link": "https://www.tripadvisor.com/Attraction_Review-g676801-d2039570-Reviews-Laugavegur-Landmannalaugar_South_Region.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Book your tickets online for Laugavegur, Landmannalaugar: See 209 reviews, \narticles, and 345 photos of Laugavegur, ranked No.1 on TripAdvisor among 3 \nattractions in Landmannalaugar. ... 5 of 5 bubbles Reviewed September 28, 2016\n.",
+   "htmlSnippet": "Book your tickets online for Laugavegur, \u003cb\u003eLandmannalaugar\u003c/b\u003e: See 209 reviews, \u003cbr\u003e\narticles, and 345 photos of Laugavegur, ranked No.1 on \u003cb\u003eTripAdvisor\u003c/b\u003e among 3 \u003cbr\u003e\n\u003cb\u003eattractions\u003c/b\u003e in \u003cb\u003eLandmannalaugar\u003c/b\u003e. ... 5 of 5 bubbles Reviewed \u003cb\u003eSeptember\u003c/b\u003e 28, 2016\u003cbr\u003e\n.",
+   "cacheId": "p_eOh2PjloAJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attraction_Review-g676801-d2039570-Reviews -Laugavegur-Landmannalaugar_South_Region.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttraction\u003c/b\u003e_Review-g676801-d2039570-Reviews -Laugavegur-\u003cb\u003eLandmannalaugar\u003c/b\u003e_South_Region.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "275",
+      "height": "183",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcR4ERAT1JbYXtilO9Gty4A5PH1aIEuPOILr71BQM1qMk4IaYy9Bxz6H_iH2"
+     }
+    ],
+    "LocalBusiness": [
+     {
+      "image": "https://media-cdn.tripadvisor.com/media/photo-s/02/28/70/e7/filename-088landmannalaugar.jpg",
+      "name": "Laugavegur"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Iceland",
+      "title": "Iceland"
+     },
+     {
+      "url": "South Region",
+      "title": "South Region"
+     },
+     {
+      "url": "Landmannalaugar",
+      "title": "Landmannalaugar"
+     },
+     {
+      "url": "Things to Do in Landmannalaugar",
+      "title": "Things to Do in Landmannalaugar"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "5.0",
+      "ratingcount": "209",
+      "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/02/28/70/e7/filename-088landmannalaugar.jpg"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "209"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Laugavegur (Landmannalaugar, Iceland): Top Tips Before You Go - TripAdvisor",
+      "og:description": "Book your tickets online for Laugavegur, Landmannalaugar: See 209 reviews, articles, and 345 photos of Laugavegur, ranked No.1 on TripAdvisor among 3 attractions in Landmannalaugar.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/02/28/70/e7/filename-088landmannalaugar.jpg",
+      "og:image:width": "550",
+      "og:image:height": "366",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attraction_Review-g676801-d2039570-Reviews-m33762-Laugavegur-Landmannalaugar_South_Region.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attraction_Review-g676801-d2039570-Reviews-m33762-Laugavegur-Landmannalaugar_South_Region.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attraction_Review-g676801-d2039570-Reviews-m33762-Laugavegur-Landmannalaugar_South_Region.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/02/28/70/e7/filename-088landmannalaugar.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Landmannalaugar In September - Iceland Forum - TripAdvisor",
+   "htmlTitle": "\u003cb\u003eLandmannalaugar\u003c/b\u003e In \u003cb\u003eSeptember\u003c/b\u003e - Iceland Forum - \u003cb\u003eTripAdvisor\u003c/b\u003e",
+   "link": "https://www.tripadvisor.com/ShowTopic-g189952-i223-k7501926-Landmannalaugar_In_September-Iceland.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "We would like to stay in the Landmannalaugar hut... ... My husband and I are \nplanning to travel to Iceland in September. .... One attraction mentioned in this \npost.",
+   "htmlSnippet": "We would like to stay in the \u003cb\u003eLandmannalaugar\u003c/b\u003e hut... ... My husband and I are \u003cbr\u003e\nplanning to \u003cb\u003etravel\u003c/b\u003e to Iceland in \u003cb\u003eSeptember\u003c/b\u003e. .... One \u003cb\u003eattraction\u003c/b\u003e mentioned in this \u003cbr\u003e\npost.",
+   "cacheId": "8EpND8qmTzkJ",
+   "formattedUrl": "https://www.tripadvisor.com/ShowTopic-g189952-i223-k7501926- Landmannalaugar_In_September-Iceland.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/ShowTopic-g189952-i223-k7501926- \u003cb\u003eLandmannalaugar\u003c/b\u003e_In_\u003cb\u003eSeptember\u003c/b\u003e-Iceland.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "80",
+      "height": "80",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTVQflH0VqVMp6PDcRILO5PBISjTfAm4CWJ85aFIrZtIGOJanUlknhw"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Iceland",
+      "title": "Iceland"
+     },
+     {
+      "url": "Iceland Travel Forum",
+      "title": "Iceland Travel Forum"
+     }
+    ],
+    "metatags": [
+     {
+      "og:image": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "September Hike of the Laugavegur trail - Landmannalaugar Forum ...",
+   "htmlTitle": "\u003cb\u003eSeptember\u003c/b\u003e Hike of the Laugavegur trail - \u003cb\u003eLandmannalaugar\u003c/b\u003e Forum ...",
+   "link": "https://www.tripadvisor.com/ShowTopic-g676801-i17291-k8493043-o10-September_Hike_of_the_Laugavegur_trail-Landmannalaugar_South_Region.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Would it be possible/wise to do the trail in the second week of September? ... 2 \nplaces mentioned in this post .... Different travel styles have different preperation \nmethods, and while one guy \"survived\" a 2 hour hike from his car, \"that one day \non that one place\", .... Get answers to your questions about Landmannalaugar.",
+   "htmlSnippet": "Would it be possible/wise to do the trail in the second week of \u003cb\u003eSeptember\u003c/b\u003e? ... 2 \u003cbr\u003e\n\u003cb\u003eplaces\u003c/b\u003e mentioned in this post .... Different \u003cb\u003etravel\u003c/b\u003e styles have different preperation \u003cbr\u003e\nmethods, and while one guy &quot;survived&quot; a 2 hour hike from his car, &quot;that one day \u003cbr\u003e\non that one place&quot;, .... Get answers to your questions about \u003cb\u003eLandmannalaugar\u003c/b\u003e.",
+   "cacheId": "pzoyhdTNd4UJ",
+   "formattedUrl": "https://www.tripadvisor.com/ShowTopic-g676801-i17291-k8493043-o10- September_Hike_of_the_Laugavegur_trail-Landmannalaugar_Sout...",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/ShowTopic-g676801-i17291-k8493043-o10- \u003cb\u003eSeptember\u003c/b\u003e_Hike_of_the_Laugavegur_trail-\u003cb\u003eLandmannalaugar\u003c/b\u003e_Sout...",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "80",
+      "height": "80",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTVQflH0VqVMp6PDcRILO5PBISjTfAm4CWJ85aFIrZtIGOJanUlknhw"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Iceland",
+      "title": "Iceland"
+     },
+     {
+      "url": "South Region",
+      "title": "South Region"
+     },
+     {
+      "url": "Landmannalaugar",
+      "title": "Landmannalaugar"
+     },
+     {
+      "url": "Landmannalaugar Travel Forum",
+      "title": "Landmannalaugar Travel Forum"
+     }
+    ],
+    "metatags": [
+     {
+      "og:image": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "September Hike of the Laugavegur trail - Landmannalaugar Forum ...",
+   "htmlTitle": "\u003cb\u003eSeptember\u003c/b\u003e Hike of the Laugavegur trail - \u003cb\u003eLandmannalaugar\u003c/b\u003e Forum ...",
+   "link": "https://www.tripadvisor.com/ShowTopic-g676801-i17291-k8493043-September_Hike_of_the_Laugavegur_trail-Landmannalaugar_South_Region.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Answer 1 of 41: Hi, My friend and I really would like to do the Laugavegur trail \nwhen we're in Iceland this Sept/Oct. at the beginning of our trip, as that seems to ...",
+   "htmlSnippet": "Answer 1 of 41: Hi, My friend and I really would like to do the Laugavegur trail \u003cbr\u003e\nwhen we&#39;re in Iceland this \u003cb\u003eSept\u003c/b\u003e/Oct. at the beginning of our \u003cb\u003etrip\u003c/b\u003e, as that seems to&nbsp;...",
+   "cacheId": "bGtNIb8LsXYJ",
+   "formattedUrl": "https://www.tripadvisor.com/ShowTopic-g676801-i17291-k8493043- September_Hike_of_the_Laugavegur_trail-Landmannalaugar_Sout...",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/ShowTopic-g676801-i17291-k8493043- \u003cb\u003eSeptember\u003c/b\u003e_Hike_of_the_Laugavegur_trail-\u003cb\u003eLandmannalaugar\u003c/b\u003e_Sout...",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "80",
+      "height": "80",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTVQflH0VqVMp6PDcRILO5PBISjTfAm4CWJ85aFIrZtIGOJanUlknhw"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Iceland",
+      "title": "Iceland"
+     },
+     {
+      "url": "South Region",
+      "title": "South Region"
+     },
+     {
+      "url": "Landmannalaugar",
+      "title": "Landmannalaugar"
+     },
+     {
+      "url": "Landmannalaugar Travel Forum",
+      "title": "Landmannalaugar Travel Forum"
+     }
+    ],
+    "metatags": [
+     {
+      "og:image": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Map of Landmannalaugar - Hotels and Attractions on a ...",
+   "htmlTitle": "Map of \u003cb\u003eLandmannalaugar\u003c/b\u003e - Hotels and \u003cb\u003eAttractions\u003c/b\u003e on a ...",
+   "link": "https://www.tripadvisor.com/LocalMaps-g676801-Landmannalaugar-Area.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Map of Landmannalaugar area hotels: Locate Landmannalaugar hotels on a \nmap based on popularity, price, or availability, and see TripAdvisor reviews, \nphotos, ... yu pay for a night on the parking area outside the... more; September \n17, 2016.",
+   "htmlSnippet": "Map of \u003cb\u003eLandmannalaugar\u003c/b\u003e area hotels: Locate \u003cb\u003eLandmannalaugar\u003c/b\u003e hotels on a \u003cbr\u003e\nmap based on popularity, price, or availability, and see \u003cb\u003eTripAdvisor\u003c/b\u003e reviews, \u003cbr\u003e\nphotos, ... yu pay for a night on the parking area outside the... more; \u003cb\u003eSeptember\u003c/b\u003e \u003cbr\u003e\n17, 2016.",
+   "cacheId": "iVNnZlKItwYJ",
+   "formattedUrl": "https://www.tripadvisor.com/LocalMaps-g676801-Landmannalaugar-Area. html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/LocalMaps-g676801-\u003cb\u003eLandmannalaugar\u003c/b\u003e-Area. html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "80",
+      "height": "80",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTVQflH0VqVMp6PDcRILO5PBISjTfAm4CWJ85aFIrZtIGOJanUlknhw"
+     }
+    ],
+    "metatags": [
+     {
+      "og:image": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Perfect! - Review of Landmannalaugar Tours - Day Tours, Reykjavik ...",
+   "htmlTitle": "Perfect! - Review of \u003cb\u003eLandmannalaugar\u003c/b\u003e Tours - Day Tours, Reykjavik ...",
+   "link": "https://www.tripadvisor.com/ShowUserReviews-g189970-d8519603-r332215999-Landmannalaugar_Tours_Day_Tours-Reykjavik_Capital_Region.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Dec 12, 2015 ... We just did Northern Lights Tour. It was a long cold night and it seemed we were \non the Super Jeep forever, but it was all worth it. The Northern ...",
+   "htmlSnippet": "Dec 12, 2015 \u003cb\u003e...\u003c/b\u003e We just did Northern Lights \u003cb\u003eTour\u003c/b\u003e. It was a long cold night and it seemed we were \u003cbr\u003e\non the Super Jeep forever, but it was all worth it. The Northern&nbsp;...",
+   "cacheId": "VsLfHH-ihQ8J",
+   "formattedUrl": "https://www.tripadvisor.com/ShowUserReviews-g189970-d8519603- r332215999-Landmannalaugar_Tours_Day_Tours-Reykjavik_Capi...",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/ShowUserReviews-g189970-d8519603- r332215999-\u003cb\u003eLandmannalaugar\u003c/b\u003e_\u003cb\u003eTour\u003c/b\u003es_Day_\u003cb\u003eTour\u003c/b\u003es-Reykjavik_Capi...",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "259",
+      "height": "194",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQS0pBHzHgihp2Qo-jofofGWwC9P8yry6cR-Pdefn66R-BtOQAWbMoY8Ro"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Iceland",
+      "title": "Iceland"
+     },
+     {
+      "url": "Capital Region",
+      "title": "Capital Region"
+     },
+     {
+      "url": "Reykjavik",
+      "title": "Reykjavik"
+     },
+     {
+      "url": "Reykjavik - Things to Do",
+      "title": "Reykjavik - Things to Do"
+     },
+     {
+      "url": "Landmannalaugar Tours - Day Tours",
+      "title": "Landmannalaugar Tours - Day Tours"
+     }
+    ],
+    "review": [
+     {
+      "reviewer": "a TripAdvisor user",
+      "reviewdate": "2015-12-12",
+      "ratingstars": "5.0",
+      "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/08/a1/97/de/landmannalaugar-tours.jpg"
+     }
+    ],
+    "hreview": [
+     {
+      "summary": "“Perfect!”",
+      "dtreviewed": "2015-12-12",
+      "description": "Thank you very much for this great experience! We went to Landmannalaugar with one Super Jeep and it was fantastic"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Perfect! - Review of Landmannalaugar Tours - Day Tours, Reykjavik, Iceland - TripAdvisor",
+      "og:description": "Landmannalaugar Tours - Day Tours: Perfect! - See 20 traveler reviews, 27 candid photos, and great deals for Reykjavik, Iceland, at TripAdvisor.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/08/a1/97/de/landmannalaugar-tours.jpg",
+      "og:image:width": "550",
+      "og:image:height": "412",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/ShowUserReviews-g189970-d8519603-r332215999-m33762-Landmannalaugar_Tours_Day_Tours-Reykjavik_Capital_Region.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/ShowUserReviews-g189970-d8519603-r332215999-m33762-Landmannalaugar_Tours_Day_Tours-Reykjavik_Capital_Region.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/ShowUserReviews-g189970-d8519603-r332215999-m33762-Landmannalaugar_Tours_Day_Tours-Reykjavik_Capital_Region.html"
+     }
+    ],
+    "Review": [
+     {
+      "author": "a TripAdvisor user",
+      "name": "“Perfect!”",
+      "datePublished": "2015-12-12",
+      "reviewBody": "Thank you very much for this great experience! We went to Landmannalaugar with one Super Jeep and it was fantastic"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/08/a1/97/de/landmannalaugar-tours.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Short Day Hike at Landmannalaugar - Review of Laugavegur ...",
+   "htmlTitle": "Short Day Hike at \u003cb\u003eLandmannalaugar\u003c/b\u003e - Review of Laugavegur ...",
+   "link": "https://www.tripadvisor.com/ShowUserReviews-g676801-d2039570-r141779647-Laugavegur-Landmannalaugar_South_Region.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Oct 1, 2012 ... Laugavegur: Short Day Hike at Landmannalaugar - See 209 traveler reviews, \n345 candid photos, and great deals for Landmannalaugar, Iceland, at TripAdvisor\n. ... 257 attraction reviews .... Reviewed September 16, 2011.",
+   "htmlSnippet": "Oct 1, 2012 \u003cb\u003e...\u003c/b\u003e Laugavegur: Short Day Hike at \u003cb\u003eLandmannalaugar\u003c/b\u003e - See 209 traveler reviews, \u003cbr\u003e\n345 candid photos, and great deals for \u003cb\u003eLandmannalaugar\u003c/b\u003e, Iceland, at \u003cb\u003eTripAdvisor\u003c/b\u003e\u003cbr\u003e\n. ... 257 \u003cb\u003eattraction\u003c/b\u003e reviews .... Reviewed \u003cb\u003eSeptember\u003c/b\u003e 16, 2011.",
+   "cacheId": "gtSCvX5ke0gJ",
+   "formattedUrl": "https://www.tripadvisor.com/ShowUserReviews-g676801-d2039570- r141779647-Laugavegur-Landmannalaugar_South_Region.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/ShowUserReviews-g676801-d2039570- r141779647-Laugavegur-\u003cb\u003eLandmannalaugar\u003c/b\u003e_South_Region.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "275",
+      "height": "183",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcR4ERAT1JbYXtilO9Gty4A5PH1aIEuPOILr71BQM1qMk4IaYy9Bxz6H_iH2"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Iceland",
+      "title": "Iceland"
+     },
+     {
+      "url": "South Region",
+      "title": "South Region"
+     },
+     {
+      "url": "Landmannalaugar",
+      "title": "Landmannalaugar"
+     },
+     {
+      "url": "Landmannalaugar - Things to Do",
+      "title": "Landmannalaugar - Things to Do"
+     },
+     {
+      "url": "Laugavegur",
+      "title": "Laugavegur"
+     }
+    ],
+    "review": [
+     {
+      "reviewer": "a TripAdvisor user",
+      "reviewdate": "2012-10-01",
+      "ratingstars": "5.0",
+      "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/02/28/70/e7/filename-088landmannalaugar.jpg"
+     }
+    ],
+    "hreview": [
+     {
+      "summary": "“Short Day Hike at Landmannalaugar”",
+      "dtreviewed": "2012-10-01",
+      "description": "Most hikers come to Landmannalaugar to start (or finish) hiking the Laugavegur trail. But if you're only visiting for a short time, there is a wonderful and short 4-km loop trail at Landmannalaugar..."
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Short Day Hike at Landmannalaugar - Review of Laugavegur, Landmannalaugar, Iceland - TripAdvisor",
+      "og:description": "Laugavegur: Short Day Hike at Landmannalaugar - See 209 traveler reviews, 345 candid photos, and great deals for Landmannalaugar, Iceland, at TripAdvisor.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/02/28/70/e7/filename-088landmannalaugar.jpg",
+      "og:image:width": "550",
+      "og:image:height": "366",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/ShowUserReviews-g676801-d2039570-r141779647-m33762-Laugavegur-Landmannalaugar_South_Region.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/ShowUserReviews-g676801-d2039570-r141779647-m33762-Laugavegur-Landmannalaugar_South_Region.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/ShowUserReviews-g676801-d2039570-r141779647-m33762-Laugavegur-Landmannalaugar_South_Region.html"
+     }
+    ],
+    "Review": [
+     {
+      "author": "a TripAdvisor user",
+      "name": "“Short Day Hike at Landmannalaugar”",
+      "datePublished": "2012-10-01",
+      "reviewBody": "Most hikers come to Landmannalaugar to start (or finish) hiking the Laugavegur trail. But if you're only visiting for a short time, there is a wonderful and short 4-km loop trail at Landmannalaugar..."
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/02/28/70/e7/filename-088landmannalaugar.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Ljotipollur Lake (Landmannalaugar, Iceland): Top Tips Before You ...",
+   "htmlTitle": "Ljotipollur Lake (\u003cb\u003eLandmannalaugar\u003c/b\u003e, Iceland): Top Tips Before You ...",
+   "link": "https://www.tripadvisor.com/Attraction_Review-g676801-d6874721-Reviews-Ljotipollur_Lake-Landmannalaugar_South_Region.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Ljotipollur Lake, Landmannalaugar: See 22 reviews, articles, and 15 photos of \nLjotipollur Lake, ranked No.3 on TripAdvisor among 3 attractions in \nLandmannalaugar. ... along with... read more. 4 of 5 bubbles Reviewed \nSeptember 28, 2016.",
+   "htmlSnippet": "Ljotipollur Lake, \u003cb\u003eLandmannalaugar\u003c/b\u003e: See 22 reviews, articles, and 15 photos of \u003cbr\u003e\nLjotipollur Lake, ranked No.3 on \u003cb\u003eTripAdvisor\u003c/b\u003e among 3 \u003cb\u003eattractions\u003c/b\u003e in \u003cbr\u003e\n\u003cb\u003eLandmannalaugar\u003c/b\u003e. ... along with... read more. 4 of 5 bubbles Reviewed \u003cbr\u003e\n\u003cb\u003eSeptember\u003c/b\u003e 28, 2016.",
+   "cacheId": "McVU6tJL2VEJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attraction_Review-g676801-d6874721-Reviews -Ljotipollur_Lake-Landmannalaugar_South_Region.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttraction\u003c/b\u003e_Review-g676801-d6874721-Reviews -Ljotipollur_Lake-\u003cb\u003eLandmannalaugar\u003c/b\u003e_South_Region.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "259",
+      "height": "194",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRFSPq9LarVOm4wLtd4IqAFR1p9hIveWBcV-9N6B7-S9owrQG0UHuRLfkY"
+     }
+    ],
+    "LocalBusiness": [
+     {
+      "image": "https://media-cdn.tripadvisor.com/media/photo-s/06/1f/2e/a3/getlstd-property-photo.jpg",
+      "name": "Ljotipollur Lake"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Iceland",
+      "title": "Iceland"
+     },
+     {
+      "url": "South Region",
+      "title": "South Region"
+     },
+     {
+      "url": "Landmannalaugar",
+      "title": "Landmannalaugar"
+     },
+     {
+      "url": "Things to Do in Landmannalaugar",
+      "title": "Things to Do in Landmannalaugar"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "4.5",
+      "ratingcount": "22",
+      "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/06/1f/2e/a3/getlstd-property-photo.jpg"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "22"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Ljotipollur Lake (Landmannalaugar, Iceland): Top Tips Before You Go - TripAdvisor",
+      "og:description": "Ljotipollur Lake, Landmannalaugar: See 22 reviews, articles, and 15 photos of Ljotipollur Lake, ranked No.3 on TripAdvisor among 3 attractions in Landmannalaugar.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/06/1f/2e/a3/getlstd-property-photo.jpg",
+      "og:image:width": "550",
+      "og:image:height": "413",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attraction_Review-g676801-d6874721-Reviews-m33762-Ljotipollur_Lake-Landmannalaugar_South_Region.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attraction_Review-g676801-d6874721-Reviews-m33762-Ljotipollur_Lake-Landmannalaugar_South_Region.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attraction_Review-g676801-d6874721-Reviews-m33762-Ljotipollur_Lake-Landmannalaugar_South_Region.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/06/1f/2e/a3/getlstd-property-photo.jpg"
+     }
+    ]
+   }
+  }
+ ]
+}

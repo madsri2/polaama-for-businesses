@@ -10,6 +10,7 @@ const moment = require('moment');
 const FbidHandler = require('./fbid-handler');
 const fs = require('fs');
 const formidable = require('formidable');
+const ReportFetcher = require('./expense-report/app/report-fetcher');
 
 function WebpageHandler(id, tripName) {
   this.fbidHandler = new FbidHandler();
@@ -78,10 +79,13 @@ WebpageHandler.prototype.displayFlightDetails = function(res) {
   return res.send(this.formatter.formatFlightDetails(flightDetails));
 }
 
-WebpageHandler.prototype.expenseReportDetails = function(res) {
+WebpageHandler.prototype.displayExpenseReport = function(res) {
   const reporter = new ReportFetcher(this.tripName);
   const report = reporter.getReport();
-  return res.send(this.formatter.formatExpensePage(report.summary, report.spendSummary, report.comments));
+  if(report.noreport) {
+    return res.send(report.noreport);
+  }
+  return res.send(this.formatter.formatExpensePage(report.owesReport, report.spendSummary, report.comments));
 }
 
 /*

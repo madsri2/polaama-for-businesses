@@ -255,16 +255,16 @@ TripDataFormatter.prototype.formatCityChoicePage = function() {
 
 TripDataFormatter.prototype.formatExpensePage = function(reportSummary, spendSummary, comments) {
   const html = fs.readFileSync("html-templates/expense-reports.html", 'utf8');
+  let summary = "";
+  const keys = Object.keys(reportSummary);
+  Object.keys(reportSummary).forEach(key => {
+    reportSummary[key].forEach(item => {
+      summary = summary.concat(`<p>${key} owes ${item.famOwed} <b>$${item.amtOwed}</b>/-</p>`);
+    });
+  });
   let ssHtml = "";
   Object.keys(spendSummary).forEach(fam => {
-    ssHtml = ssHtml.concat(`<p>Family ${fam} spent ${spendSummary[fam]} dollars</p><br>`);
-  });
-  let summary = "";
-  Object.keys(reportSummary).forEach(key => {
-    const famOwed = reportSummary[key].owes.family;
-    const amount = reportSummary[key].owes.amount;
-    summary = summary.concat(`<p>Family ${key} owes ${famOwed} ${amount} dollars</p><br>`);
-    console.log(summary);
+    ssHtml = ssHtml.concat(`<p>${fam} & family spent <b>$${spendSummary[fam]}</b>/-</p>`);
   });
 
   return html.replace("${reportSummary}", summary)

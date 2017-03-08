@@ -105,12 +105,10 @@ function testFormatExpensePage() {
   const trip = new TripData('Test Trip');
   const formatter = new TripDataFormatter(trip);
   const summary = {
-    'famA': {
-      'owes': { 
-          'family': "famB",
-          'amount': 100
-      }
-    }
+    'famA': [{
+      'famOwed': "famB",
+      'amtOwed': 100
+    }]
   };
   const spendSummary = {
     'famA': 200, 

@@ -13,6 +13,10 @@ describe("Comment Parser tests", function() {
       'owes': {
       'fam-C': -25
       }
+    },
+    'spendSummary': {
+      'amount': 50,
+      'family': "fam-A"
     }
   };
 
@@ -44,6 +48,10 @@ describe("Comment Parser tests", function() {
         'owes': {
           'fam-C': -74.403
         }
+      },
+      'spendSummary': {
+        "family": "fam-A",
+        "amount": 148.806
       }
     };
     expect(parser.parse(comment)).to.deep.equal(result);
@@ -56,6 +64,10 @@ describe("Comment Parser tests", function() {
         'owes': {
           'fam-C': -4.252
         }
+      },
+      'spendSummary': {
+        'family': 'fam-C',
+        'amount': 4.25
       }
     };
   });
@@ -68,6 +80,10 @@ describe("Comment Parser tests", function() {
         'owes': {
           'fam-C': 100
         }
+      },
+      'spendSummary': {
+        'family': 'fam-C',
+        'amount': 100
       }
     };
     expect(parser.parse(comment)).to.deep.equal(result);
@@ -80,6 +96,10 @@ describe("Comment Parser tests", function() {
         'owes': {
           'fam-C': 122.5
         }
+      },
+      'spendSummary': {
+        'family': 'fam-C',
+        'amount': 122.5
       }
     };
     expect(parser.parse(comment)).to.deep.equal(result);
@@ -97,6 +117,10 @@ describe("Test to match similar names", function() {
       'owes': {
       'fam-C': -25
       }
+    },
+    'spendSummary': {
+      'amount': 50,
+      'family': 'fam-A'
     }
   };
   it("Matching Aprna and Aparna", function() {

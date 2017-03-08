@@ -28,10 +28,15 @@ describe("Expense Report calculator tests", function() {
     const comments = ["A paid 50 usd for coffee", "Jaideep paid 100$ for dinner"];
     const calculator = new Calculator();
     const result = {
-      'fam-ma': {
-        'owes': {
-          'fam-rj': 25
-        }
+      'spendSummary': {
+        'fam-ma': 50,
+        'fam-rj': 100
+      },
+      'owesReport': {
+        'fam-ma': [{
+          'famOwed': 'fam-rj',
+          'amtOwed': 25
+        }]
       }
     };
     expect(calculator.calculate(comments, families)).to.deep.equals(result);
@@ -41,10 +46,15 @@ describe("Expense Report calculator tests", function() {
     const comments = ["Madhu paid 100$ for xyz", "A owes R 50 euros for yzf", "Madhu paid 50+10+20 euros for yzf", "Jaidep paid 105 euros for taxi"];
     const calculator = new Calculator();
     const result = {
-      'fam-ma': {
-        'owes': {
-          'fam-rj': 16.43
-        }
+      'owesReport': {
+        'fam-ma': [{
+          'famOwed': 'fam-rj',
+          'amtOwed': 16.43
+        }]
+      },
+      'spendSummary': {
+        'fam-ma': 185.03,
+        'fam-rj': 164.75
       }
     };
     expect(calculator.calculate(comments, families)).to.deep.equals(result);
@@ -81,10 +91,15 @@ describe("Expense Report calculator tests", function() {
     ];
     const calculator = new Calculator();
     const result = {
-      'fam-rj': {
-        'owes': {
-          'fam-ma': 118.72
-        }
+      'owesReport': {
+        'fam-rj': [{
+          'famOwed': 'fam-ma',
+          'amtOwed': 118.72
+        }]
+      },
+      'spendSummary': {
+        'fam-rj': 773.26,
+        'fam-ma': 681.27
       }
     };
     expect(calculator.calculate(comments, families)).to.deep.equals(result);

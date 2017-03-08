@@ -1,0 +1,792 @@
+{
+ "kind": "customsearch#search",
+ "url": {
+  "type": "application/json",
+  "template": "https://www.googleapis.com/customsearch/v1?q={searchTerms}&num={count?}&start={startIndex?}&lr={language?}&safe={safe?}&cx={cx?}&cref={cref?}&sort={sort?}&filter={filter?}&gl={gl?}&cr={cr?}&googlehost={googleHost?}&c2coff={disableCnTwTranslation?}&hq={hq?}&hl={hl?}&siteSearch={siteSearch?}&siteSearchFilter={siteSearchFilter?}&exactTerms={exactTerms?}&excludeTerms={excludeTerms?}&linkSite={linkSite?}&orTerms={orTerms?}&relatedSite={relatedSite?}&dateRestrict={dateRestrict?}&lowRange={lowRange?}&highRange={highRange?}&searchType={searchType}&fileType={fileType?}&rights={rights?}&imgSize={imgSize?}&imgType={imgType?}&imgColorType={imgColorType?}&imgDominantColor={imgDominantColor?}&alt=json"
+ },
+ "queries": {
+  "request": [
+   {
+    "title": "Google Custom Search - lonely planet landmannalaugar september things to do",
+    "totalResults": "111",
+    "searchTerms": "lonely planet landmannalaugar september things to do",
+    "count": 10,
+    "startIndex": 1,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "landmannalaugar"
+   }
+  ],
+  "nextPage": [
+   {
+    "title": "Google Custom Search - lonely planet landmannalaugar september things to do",
+    "totalResults": "111",
+    "searchTerms": "lonely planet landmannalaugar september things to do",
+    "count": 10,
+    "startIndex": 11,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "landmannalaugar"
+   }
+  ]
+ },
+ "context": {
+  "title": "Polaama"
+ },
+ "searchInformation": {
+  "searchTime": 0.555754,
+  "formattedSearchTime": "0.56",
+  "totalResults": "111",
+  "formattedTotalResults": "111"
+ },
+ "items": [
+  {
+   "kind": "customsearch#result",
+   "title": "Landmannalaugar and Hella info",
+   "htmlTitle": "\u003cb\u003eLandmannalaugar\u003c/b\u003e and Hella info",
+   "link": "https://www.lonelyplanet.com/thorntree/forums/europe-scandinavia-the-nordics/iceland/landmannalaugar-and-hella-info",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Jun 12, 2013 ... Things To Do in Landmannalaugar. Entrance to Landmannalaugar Reserve is \nfree. The reason why it's not enough to stop just for 2-3 hours in ...",
+   "htmlSnippet": "Jun 12, 2013 \u003cb\u003e...\u003c/b\u003e \u003cb\u003eThings To Do\u003c/b\u003e in \u003cb\u003eLandmannalaugar\u003c/b\u003e. Entrance to \u003cb\u003eLandmannalaugar\u003c/b\u003e Reserve is \u003cbr\u003e\nfree. The reason why it&#39;s not enough to stop just for 2-3 hours in&nbsp;...",
+   "cacheId": "xNao3wtiBgUJ",
+   "formattedUrl": "https://www.lonelyplanet.com/.../landmannalaugar-and-hella-info",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../\u003cb\u003elandmannalaugar\u003c/b\u003e-and-hella-info",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "225",
+      "height": "225",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSqRemPSRVtvlwaxn3MfC7zsLjzOoK5uUM0cDjdqchf2Fvexvm4z9sAZObq"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Thorn Tree",
+      "title": "Thorn Tree"
+     },
+     {
+      "url": "Country forums",
+      "title": "Country forums"
+     },
+     {
+      "url": "Scandinavia & the Nordics",
+      "title": "Scandinavia & the Nordics"
+     },
+     {
+      "url": "Iceland",
+      "title": "Iceland"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Landmannalaugar and Hella info",
+      "og:title": "Landmannalaugar and Hella info",
+      "og:description": "Now that roads to Landmannalaugar are about to open, I thought I'd give you guys some tips about the area. Landmannalaugar routes usually open around 15th June and stay open…",
+      "og:url": "https://www.lonelyplanet.com/thorntree/forums/europe-scandinavia-the-nordics/iceland/landmannalaugar-and-hella-info",
+      "og:image": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "og:type": "website",
+      "twitter:title": "Landmannalaugar and Hella info",
+      "twitter:description": "Now that roads to Landmannalaugar are about to open, I thought I'd give you guys some tips about the area. Landmannalaugar routes usually open around 15th June and stay open…",
+      "twitter:image:src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "ENj8Q77HWhmxeyhX3FnBBSgvI733GbgyqPL/xvEI0m9NUibVXDpmNFMkXNC1sacmhkN1/uuDxYoa3dJJqBNQWA=="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Welcome",
+      "name": "Welcome"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Iceland tour, cars, landmannalaugar",
+   "htmlTitle": "Iceland tour, cars, \u003cb\u003elandmannalaugar\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/thorntree/forums/europe-scandinavia-the-nordics/iceland/iceland-tour-cars-landmannalaugar",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Aug 16, 2013 ... However, we do want to visit places like Landmannalaugar and Gullfoss and it \nwas not clear to me from what i have read up to now whether or not this is an \neasy thing to do in September with a regular car. ... My intend is to go with basic \ninsurance and try not to do stupid things on the .... About Lonely Planet.",
+   "htmlSnippet": "Aug 16, 2013 \u003cb\u003e...\u003c/b\u003e However, we \u003cb\u003edo\u003c/b\u003e want to visit places like \u003cb\u003eLandmannalaugar\u003c/b\u003e and Gullfoss and it \u003cbr\u003e\nwas not clear to me from what i have read up to now whether or not this is an \u003cbr\u003e\neasy thing to \u003cb\u003edo\u003c/b\u003e in \u003cb\u003eSeptember\u003c/b\u003e with a regular car. ... My intend is to go with basic \u003cbr\u003e\ninsurance and try not to \u003cb\u003edo\u003c/b\u003e stupid \u003cb\u003ethings\u003c/b\u003e on the .... About \u003cb\u003eLonely Planet\u003c/b\u003e.",
+   "cacheId": "yK6jMhBMWFMJ",
+   "formattedUrl": "https://www.lonelyplanet.com/.../iceland-tour-cars-landmannalaugar",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../iceland-tour-cars-\u003cb\u003elandmannalaugar\u003c/b\u003e",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "225",
+      "height": "225",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSqRemPSRVtvlwaxn3MfC7zsLjzOoK5uUM0cDjdqchf2Fvexvm4z9sAZObq"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Thorn Tree",
+      "title": "Thorn Tree"
+     },
+     {
+      "url": "Country forums",
+      "title": "Country forums"
+     },
+     {
+      "url": "Scandinavia & the Nordics",
+      "title": "Scandinavia & the Nordics"
+     },
+     {
+      "url": "Iceland",
+      "title": "Iceland"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Iceland tour, cars, landmannalaugar",
+      "og:title": "Iceland tour, cars, landmannalaugar",
+      "og:description": "Hello, We are planning a two week tour in Iceland at the beginning of September starting in Reykjavik. We are at the beginning of our trip preparation (I know, we…",
+      "og:url": "https://www.lonelyplanet.com/thorntree/forums/europe-scandinavia-the-nordics/iceland/iceland-tour-cars-landmannalaugar",
+      "og:image": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "og:type": "website",
+      "twitter:title": "Iceland tour, cars, landmannalaugar",
+      "twitter:description": "Hello, We are planning a two week tour in Iceland at the beginning of September starting in Reykjavik. We are at the beginning of our trip preparation (I know, we…",
+      "twitter:image:src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "ckVd7LUR6liJbAbFYWoDp1OdbcC42yhifVoDx0wjZpAeJdFGyXq9FXJQ9n8sL2tCieN7l2tND7jBVS9i5NL+kQ=="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Welcome",
+      "name": "Welcome"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Getting around Iceland by bus - Lonely Planet",
+   "htmlTitle": "Getting around Iceland by bus - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/iceland/transport/getting-around/bus",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "From roughly June to mid-September regular scheduled buses run to most \nplaces on ... Ultimate Passport Travels the Ring Road, plus Landmannalaugar \nand ...",
+   "htmlSnippet": "From roughly June to mid-\u003cb\u003eSeptember\u003c/b\u003e regular scheduled buses \u003cb\u003erun\u003c/b\u003e to most \u003cbr\u003e\nplaces on ... Ultimate Passport Travels the Ring Road, plus \u003cb\u003eLandmannalaugar\u003c/b\u003e \u003cbr\u003e\nand&nbsp;...",
+   "cacheId": "Aqx2djqF6HcJ",
+   "formattedUrl": "www.lonelyplanet.com/iceland/transport/getting-around/bus",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/iceland/transport/\u003cb\u003eget\u003c/b\u003eting-around/bus",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "310",
+      "height": "163",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTGfV3uVuh4kBWXj1rOGnZR6lMsj7IR5VQxHh53grB7LchZBfkVgJnvwXE"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Getting around Iceland by bus - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Getting around Iceland by bus - Lonely Planet",
+      "twitter:description": "Catching the bus in Iceland - expert transport tips on getting around Iceland by bus",
+      "twitter:image:src": "https://images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/mastheads/GettyImages-556743167_high.jpg",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Getting around Iceland by bus - Lonely Planet",
+      "og:description": "Catching the bus in Iceland - expert transport tips on getting around Iceland by bus",
+      "og:url": "http://www.lonelyplanet.com/iceland/transport/getting-around/bus",
+      "og:type": "website",
+      "og:image": "//images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/mastheads/GettyImages-556743167_high.jpg",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "uRZZ0kUSo5SgcJVDMNxR1yRIulNTVMLsH/uEZS6Hg0s="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "http://images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/mastheads/GettyImages-556743167_high.jpg"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Landmannalaugar daytrip",
+   "htmlTitle": "\u003cb\u003eLandmannalaugar\u003c/b\u003e daytrip",
+   "link": "https://www.lonelyplanet.com/thorntree/forums/europe-scandinavia-the-nordics/iceland/landmannalaugar-daytrip",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Feb 11, 2013 ... We love to visit Landmannalaugar for a daytrip in June. ... We don't want to do the \ndaytrip from Rekjavik because this allows you only ... and #1 is apparently \noffering to supply you with further info on such things. ... 15th June and stays \nopen until the middle of September, more or less. .... About Lonely Planet.",
+   "htmlSnippet": "Feb 11, 2013 \u003cb\u003e...\u003c/b\u003e We love to visit \u003cb\u003eLandmannalaugar\u003c/b\u003e for a daytrip in June. ... We don&#39;t want to \u003cb\u003edo\u003c/b\u003e the \u003cbr\u003e\ndaytrip from Rekjavik because this allows you only ... and #1 is apparently \u003cbr\u003e\noffering to supply you with further info on such \u003cb\u003ethings\u003c/b\u003e. ... 15th June and stays \u003cbr\u003e\nopen until the middle of \u003cb\u003eSeptember\u003c/b\u003e, more or less. .... About \u003cb\u003eLonely Planet\u003c/b\u003e.",
+   "cacheId": "Gbo5MT99Tk8J",
+   "formattedUrl": "https://www.lonelyplanet.com/.../europe.../landmannalaugar-daytrip",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../europe.../\u003cb\u003elandmannalaugar\u003c/b\u003e-daytrip",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "225",
+      "height": "225",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSqRemPSRVtvlwaxn3MfC7zsLjzOoK5uUM0cDjdqchf2Fvexvm4z9sAZObq"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Thorn Tree",
+      "title": "Thorn Tree"
+     },
+     {
+      "url": "Country forums",
+      "title": "Country forums"
+     },
+     {
+      "url": "Scandinavia & the Nordics",
+      "title": "Scandinavia & the Nordics"
+     },
+     {
+      "url": "Iceland",
+      "title": "Iceland"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Landmannalaugar daytrip",
+      "og:title": "Landmannalaugar daytrip",
+      "og:description": "We love to visit Landmannalaugar for a daytrip in June.We are driving by a normal car so need a transfer to Landmannalaugar near Vik, Hella, or any other place…",
+      "og:url": "https://www.lonelyplanet.com/thorntree/forums/europe-scandinavia-the-nordics/iceland/landmannalaugar-daytrip",
+      "og:image": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "og:type": "website",
+      "twitter:title": "Landmannalaugar daytrip",
+      "twitter:description": "We love to visit Landmannalaugar for a daytrip in June.We are driving by a normal car so need a transfer to Landmannalaugar near Vik, Hella, or any other place…",
+      "twitter:image:src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "wI0TmrAaf9DcxWfW4qUbLPgefr7GtyN1HrrWruoxVWnJGmElFoVugDq6tuM3T0/WjTiqDJt+ysjikQQmqpt4sw=="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Welcome",
+      "name": "Welcome"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Landmannalaugar-Þórsmörk-Skogar",
+   "htmlTitle": "\u003cb\u003eLandmannalaugar\u003c/b\u003e-Þórsmörk-Skogar",
+   "link": "https://www.lonelyplanet.com/thorntree/forums/europe-scandinavia-the-nordics/iceland/landmannalaugar-thorsmork-skogar",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Jul 11, 2007 ... Hey All-I am going to be doing the Landmannalaugar-Þórsmörk-Skogar Hike in \nearly September (5-15th). I plan on renting car for the rest of our visit, but do not \nwant… ... Hmmm. That could make things difficult. .... a experienced hiker, that \nyou never hike in \"crampon territory\" alone. .... About Lonely Planet.",
+   "htmlSnippet": "Jul 11, 2007 \u003cb\u003e...\u003c/b\u003e Hey All-I am going to be doing the \u003cb\u003eLandmannalaugar\u003c/b\u003e-Þórsmörk-Skogar Hike in \u003cbr\u003e\nearly \u003cb\u003eSeptember\u003c/b\u003e (5-15th). I plan on renting car for the rest of our visit, but \u003cb\u003edo\u003c/b\u003e not \u003cbr\u003e\nwant… ... Hmmm. That could make \u003cb\u003ethings\u003c/b\u003e difficult. .... a experienced hiker, that \u003cbr\u003e\nyou never hike in &quot;crampon territory&quot; alone. .... About \u003cb\u003eLonely Planet\u003c/b\u003e.",
+   "cacheId": "Acgo_Rd5zV8J",
+   "formattedUrl": "https://www.lonelyplanet.com/.../landmannalaugar-thorsmork-skogar",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../\u003cb\u003elandmannalaugar\u003c/b\u003e-thorsmork-skogar",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "225",
+      "height": "225",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSqRemPSRVtvlwaxn3MfC7zsLjzOoK5uUM0cDjdqchf2Fvexvm4z9sAZObq"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Thorn Tree",
+      "title": "Thorn Tree"
+     },
+     {
+      "url": "Country forums",
+      "title": "Country forums"
+     },
+     {
+      "url": "Scandinavia & the Nordics",
+      "title": "Scandinavia & the Nordics"
+     },
+     {
+      "url": "Iceland",
+      "title": "Iceland"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Landmannalaugar-Þórsmörk-Skogar",
+      "og:title": "Landmannalaugar-Þórsmörk-Skogar",
+      "og:description": "Hey All-I am going to be doing the Landmannalaugar-Þórsmörk-Skogar Hike in early September (5-15th). I plan on renting car for the rest of our visit, but do not want…",
+      "og:url": "https://www.lonelyplanet.com/thorntree/forums/europe-scandinavia-the-nordics/iceland/landmannalaugar-thorsmork-skogar",
+      "og:image": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "og:type": "website",
+      "twitter:title": "Landmannalaugar-Þórsmörk-Skogar",
+      "twitter:description": "Hey All-I am going to be doing the Landmannalaugar-Þórsmörk-Skogar Hike in early September (5-15th). I plan on renting car for the rest of our visit, but do not want…",
+      "twitter:image:src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "NPdJmEZBoxMPYvn31/Pg9pXQ1LpIUXCHyj+otqeMxN7k7ilxYfQjUVTu99WxWab3877wl4jbBv9JLR7nIPuwnw=="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Welcome",
+      "name": "Welcome"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Bus from Airport to Landmannalaugar?",
+   "htmlTitle": "Bus from Airport to \u003cb\u003eLandmannalaugar\u003c/b\u003e?",
+   "link": "https://www.lonelyplanet.com/thorntree/forums/europe-scandinavia-the-nordics/iceland/bus-from-airport-to-landmannalaugar",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Aug 13, 2014 ... Will the Flybus from the airport get me to Reykjavik in time for my ... Even in \nSeptember when the Blue Lagoon opens at 10am? ... to schedule too tightly in \nIceland, stuff, like weather, happens, to interfere with things. ... At least that is the \ncase at Landmannalaugar itself, the other, less .... About Lonely Planet.",
+   "htmlSnippet": "Aug 13, 2014 \u003cb\u003e...\u003c/b\u003e \u003cb\u003eWill\u003c/b\u003e the Flybus from the airport \u003cb\u003eget\u003c/b\u003e me to Reykjavik in time for my ... Even in \u003cbr\u003e\n\u003cb\u003eSeptember\u003c/b\u003e when the Blue Lagoon opens at 10am? ... to schedule too tightly in \u003cbr\u003e\nIceland, stuff, like weather, happens, to interfere with \u003cb\u003ethings\u003c/b\u003e. ... At least that is the \u003cbr\u003e\ncase at \u003cb\u003eLandmannalaugar\u003c/b\u003e itself, the other, less .... About \u003cb\u003eLonely Planet\u003c/b\u003e.",
+   "cacheId": "51q4Be4vR4UJ",
+   "formattedUrl": "https://www.lonelyplanet.com/.../bus-from-airport-to-landmannalaugar",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../bus-from-airport-to-\u003cb\u003elandmannalaugar\u003c/b\u003e",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "225",
+      "height": "225",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSqRemPSRVtvlwaxn3MfC7zsLjzOoK5uUM0cDjdqchf2Fvexvm4z9sAZObq"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Thorn Tree",
+      "title": "Thorn Tree"
+     },
+     {
+      "url": "Country forums",
+      "title": "Country forums"
+     },
+     {
+      "url": "Scandinavia & the Nordics",
+      "title": "Scandinavia & the Nordics"
+     },
+     {
+      "url": "Iceland",
+      "title": "Iceland"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Bus from Airport to Landmannalaugar?",
+      "og:title": "Bus from Airport to Landmannalaugar?",
+      "og:description": "My flight lands at 6:20am.  Will the Flybus from the airport get me to Reykjavik in time for my Landmannalaugar bus at 8am? Or will I be spending one night…",
+      "og:url": "https://www.lonelyplanet.com/thorntree/forums/europe-scandinavia-the-nordics/iceland/bus-from-airport-to-landmannalaugar",
+      "og:image": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "og:type": "website",
+      "twitter:title": "Bus from Airport to Landmannalaugar?",
+      "twitter:description": "My flight lands at 6:20am.  Will the Flybus from the airport get me to Reykjavik in time for my Landmannalaugar bus at 8am? Or will I be spending one night…",
+      "twitter:image:src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "9CHoreJoOW62q2MziYjwpuLkg5H8liufDPHWDh9+OLyA7SIrjVxwwvwtixUBcpP21GmFzRDp6EFdTnlWbEzvnw=="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Welcome",
+      "name": "Welcome"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Essential guide to Kirkjubæjarklaustur - Lonely Planet",
+   "htmlTitle": "Essential guide to Kirkjubæjarklaustur - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/iceland/kirkjubaejarklaustur/essential-information",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Bus 12 to Höfn (kr4800, five hours, one daily June to mid-September) Stops for \nan hour at ... Bus 10/10a Skaftafell–Klaustur–Eldgjá–Landmannalaugar (one \ndaily ... Some policies specifically exclude dangerous activities such as scuba \ndiving, ...",
+   "htmlSnippet": "Bus 12 to Höfn (kr4800, five hours, one daily June to mid-\u003cb\u003eSeptember\u003c/b\u003e) Stops for \u003cbr\u003e\nan hour at ... Bus 10/10a Skaftafell–Klaustur–Eldgjá–\u003cb\u003eLandmannalaugar\u003c/b\u003e (one \u003cbr\u003e\ndaily ... Some policies specifically exclude dangerous \u003cb\u003eactivities\u003c/b\u003e such as scuba \u003cbr\u003e\ndiving,&nbsp;...",
+   "cacheId": "-vFFkNMD91kJ",
+   "formattedUrl": "www.lonelyplanet.com/iceland/.../essential-information",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/iceland/.../essential-information",
+   "pagemap": {
+    "metatags": [
+     {
+      "title": "Essential guide to Kirkjubæjarklaustur - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Essential guide to Kirkjubæjarklaustur - Lonely Planet",
+      "twitter:description": "Everything for your trip to Kirkjubæjarklaustur - best time to go, weather, daily cost advisor, visas, cheapest flights and transport information",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Essential guide to Kirkjubæjarklaustur - Lonely Planet",
+      "og:description": "Everything for your trip to Kirkjubæjarklaustur - best time to go, weather, daily cost advisor, visas, cheapest flights and transport information",
+      "og:url": "http://www.lonelyplanet.com/iceland/kirkjubaejarklaustur/essential-information",
+      "og:type": "website",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "fdweQUW77Gjh/hWcdLAYClobSrNeDw6kUyB+meplono="
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Essential guide to Landmannalaugar - Lonely Planet",
+   "htmlTitle": "Essential guide to \u003cb\u003eLandmannalaugar\u003c/b\u003e - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/iceland/landmannalaugar/essential-information",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Everything for your trip to Landmannalaugar - best time to go, weather, daily cost \n... Some policies specifically exclude dangerous activities such as scuba diving, ...",
+   "htmlSnippet": "Everything for your trip to \u003cb\u003eLandmannalaugar\u003c/b\u003e - best time to go, weather, daily cost \u003cbr\u003e\n... Some policies specifically exclude dangerous \u003cb\u003eactivities\u003c/b\u003e such as scuba diving,&nbsp;...",
+   "cacheId": "_9wDFtDgkp0J",
+   "formattedUrl": "www.lonelyplanet.com/.../landmannalaugar/essential-information",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../\u003cb\u003elandmannalaugar\u003c/b\u003e/essential-information",
+   "pagemap": {
+    "metatags": [
+     {
+      "title": "Essential guide to Landmannalaugar - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Essential guide to Landmannalaugar - Lonely Planet",
+      "twitter:description": "Everything for your trip to Landmannalaugar - best time to go, weather, daily cost advisor, visas, cheapest flights and transport information",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Essential guide to Landmannalaugar - Lonely Planet",
+      "og:description": "Everything for your trip to Landmannalaugar - best time to go, weather, daily cost advisor, visas, cheapest flights and transport information",
+      "og:url": "http://www.lonelyplanet.com/iceland/landmannalaugar/essential-information",
+      "og:type": "website",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "hGaV7CZqlINdNBkFQCNSw1rufc8Hp5x8WRNDd8PWMRk="
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "14 days in Iceland Aug/Sep - lots of questions",
+   "htmlTitle": "14 days in Iceland Aug/\u003cb\u003eSep\u003c/b\u003e - lots of questions",
+   "link": "https://www.lonelyplanet.com/thorntree/forums/europe-scandinavia-the-nordics/iceland/14-days-in-iceland-aug-sep-lots-of-questions",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Jun 16, 2013 ... If we hire a 2WD, how can we get cheaply to Landmannalaugar by bus (not from \n... 7) What are your favourite spots/activities in Iceland?",
+   "htmlSnippet": "Jun 16, 2013 \u003cb\u003e...\u003c/b\u003e If we hire a 2WD, how can we get cheaply to \u003cb\u003eLandmannalaugar\u003c/b\u003e by bus (not from \u003cbr\u003e\n... 7) What are your favourite spots/\u003cb\u003eactivities\u003c/b\u003e in Iceland?",
+   "cacheId": "3bbDNEBim_UJ",
+   "formattedUrl": "https://www.lonelyplanet.com/.../14-days-in-iceland-aug-sep-lots-of- questions",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../14-days-in-iceland-aug-\u003cb\u003esep\u003c/b\u003e-lots-of- questions",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "225",
+      "height": "225",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSqRemPSRVtvlwaxn3MfC7zsLjzOoK5uUM0cDjdqchf2Fvexvm4z9sAZObq"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Thorn Tree",
+      "title": "Thorn Tree"
+     },
+     {
+      "url": "Country forums",
+      "title": "Country forums"
+     },
+     {
+      "url": "Scandinavia & the Nordics",
+      "title": "Scandinavia & the Nordics"
+     },
+     {
+      "url": "Iceland",
+      "title": "Iceland"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "14 days in Iceland Aug/Sep - lots of questions",
+      "og:title": "14 days in Iceland Aug/Sep - lots of questions",
+      "og:description": "Hi all, we are a couple and we will spend 14 days in Iceland (last week of august/first week of september). We will rent a car, and we like nature…",
+      "og:url": "https://www.lonelyplanet.com/thorntree/forums/europe-scandinavia-the-nordics/iceland/14-days-in-iceland-aug-sep-lots-of-questions",
+      "og:image": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "og:type": "website",
+      "twitter:title": "14 days in Iceland Aug/Sep - lots of questions",
+      "twitter:description": "Hi all, we are a couple and we will spend 14 days in Iceland (last week of august/first week of september). We will rent a car, and we like nature…",
+      "twitter:image:src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "hS0/l8IR8Ou35Ifp27P48mkHrIQSMGFgNARhT6jLRmROeb/hzTMVTwDRRECnSL7WhDsmHMqxXbwDV1N4FiqJMQ=="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Welcome",
+      "name": "Welcome"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Landmannalaugar Guesthouses and B&B - Lonely Planet",
+   "htmlTitle": "\u003cb\u003eLandmannalaugar\u003c/b\u003e Guesthouses and B&amp;B - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/iceland/landmannalaugar/hotels/guesthouses",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Read Landmannalaugar, Iceland guesthouse reviews from independent authors \nand book Landmannalaugar, Iceland guesthouse ... Things to do · Activities ... \nLandmannalaugar has a large base with camping and hut facilities. ... September\n.",
+   "htmlSnippet": "Read \u003cb\u003eLandmannalaugar\u003c/b\u003e, Iceland guesthouse reviews from independent authors \u003cbr\u003e\nand book \u003cb\u003eLandmannalaugar\u003c/b\u003e, Iceland guesthouse ... \u003cb\u003eThings to do\u003c/b\u003e &middot; \u003cb\u003eActivities\u003c/b\u003e ... \u003cbr\u003e\n\u003cb\u003eLandmannalaugar\u003c/b\u003e has a large base with camping and hut facilities. ... \u003cb\u003eSeptember\u003c/b\u003e\u003cbr\u003e\n.",
+   "cacheId": "GU65EQRB7twJ",
+   "formattedUrl": "https://www.lonelyplanet.com/iceland/landmannalaugar/.../guesthouses",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/iceland/\u003cb\u003elandmannalaugar\u003c/b\u003e/.../guesthouses",
+   "pagemap": {
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Scandinavia",
+      "title": "Scandinavia"
+     },
+     {
+      "url": "Iceland",
+      "title": "Iceland"
+     },
+     {
+      "url": "Southwest Iceland & the Golden Circle",
+      "title": "Southwest Iceland & the Golden Circle"
+     },
+     {
+      "url": "The South",
+      "title": "The South"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Landmannalaugar Guesthouses and B&B - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Landmannalaugar Guesthouses and B&B - Lonely Planet",
+      "twitter:description": "Read Landmannalaugar, Iceland guesthouse reviews from independent authors and book Landmannalaugar, Iceland guesthouse accommodation online with Lonely Planet.",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Landmannalaugar Guesthouses and B&B - Lonely Planet",
+      "og:description": "Read Landmannalaugar, Iceland guesthouse reviews from independent authors and book Landmannalaugar, Iceland guesthouse accommodation online with Lonely Planet.",
+      "og:url": "http://www.lonelyplanet.com/iceland/landmannalaugar/hotels/guesthouses",
+      "og:type": "website",
+      "sailthru.date": "2016-10-01 19:32:09 +0000",
+      "sailthru.tags": "Europe, Iceland, Landmannalaugar",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=1024",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "CJAI5s7uJ809r+sUZkfH6dbnL7SEDx5xIuLypnCXK2M="
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Destinations",
+      "name": "Destinations"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  }
+ ]
+}

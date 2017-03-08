@@ -146,9 +146,6 @@ Session.prototype.allTrips = function() {
 }
 
 Session.prototype.getPastTrips = function() {
-}
-
-Session.prototype.getPastTrips = function() {
   let trips = [];
   this.allTrips().forEach(trip => {
     const start = moment(new Date(trip.data.startDate).toISOString());
@@ -272,6 +269,7 @@ Session.prototype.clearAllAwaitingStates = function() {
   this.planningNewTrip = false;
   this.awaitingHometownInfo = false;
   this.awaitingCitiesForNewTrip = false;
+  this.awaitingExpenseReport = false;
 }
 
 module.exports = Session;

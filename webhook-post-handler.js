@@ -1,12 +1,13 @@
 'use strict';
-const _ = require('lodash');
-const request = require('request');
 const logger = require('./my-logger');
 const Sessions = require('./sessions');
-const moment = require('moment');
 const FbidHandler = require('./fbid-handler');
-const formidable = require('formidable');
 const TripInfoProvider = require('./trip-info-provider');
+const CommentParser = require('./expense-report/app/comment-parser');
+const _ = require('lodash');
+const request = require('request');
+const moment = require('moment');
+const formidable = require('formidable');
 const Promise = require('promise');
 const validator = require('node-validator');
 
@@ -104,20 +105,20 @@ WebhookPostHandler.prototype.handle = function(req, res) {
   res.sendStatus(200);
 }
 
-function getComment() {
+function enterCommentAsMessage() {
   // update this session that we are awaiting response for comments postback
   this.session.awaitingComment = true;
   sendTextMessage(this.session.fbid, "Enter your free-form text");
   return;
 }
 
-function getTodoItem() {
+function enterTodoItemAsMessage() {
   this.session.awaitingTodoItem = true;
   sendTextMessage(this.session.fbid, "Enter a todo item");
   return;
 }
 
-function getPacklistItem() {
+function enterPackItemAsMessage() {
   this.session.awaitingPacklistItem = true;
   sendTextMessage(this.session.fbid, "Enter a pack-list item");
   return;
@@ -127,8 +128,38 @@ function getTripInContext(payload) {
   const tripName = payload.substring("trip_in_context ".length);
   logger.info(`Setting the trip name for this session's context to ${tripName}. User assumes this is an existing trip.`);
   this.session.addTrip(tripName);
-  sendHelpMessage.call(this);
+  sendAddOrGetOptions.call(this);
   return;
+}
+
+function sendUrlButton(title, urlPath) {
+  let messageData = {
+    recipient: {
+      id: this.session.fbid
+    }
+  };
+  const tripData = this.session.tripData();
+  const rawName = tripData.rawTripName;
+  messageData.message = {
+    attachment: {
+      type: "template",
+      payload: {
+        template_type: "generic",
+        elements: [{
+          title: "Link",
+          buttons: [{
+            type: "web_url",
+            url: sendUrl.call(this, urlPath),
+            title: title,
+            webview_height_ratio: "compact",
+            messenger_extensions: true,
+            fallback_url: sendUrl.call(this, urlPath)
+          }]
+        }]
+      }
+    }
+  };
+  callSendAPI(messageData);
 }
 
 // Gather trip details (weather, flight, hotel, etc.) and send it in a web_url format.
@@ -140,13 +171,14 @@ function displayTripDetails() {
     }
   };
   const tripData = this.session.tripData();
+  const rawName = tripData.rawTripName;
   messageData.message = {
     attachment: {
       type: "template",
       payload: {
         template_type: "generic",
         elements: [{
-          title: "Get Weather details",
+          title: "Get", 
           buttons: [{
             type: "web_url",
             url: sendUrl.call(this, tripData.weatherUrlPath()),
@@ -154,18 +186,15 @@ function displayTripDetails() {
             webview_height_ratio: "compact",
             messenger_extensions: true,
             fallback_url: sendUrl.call(this, tripData.weatherUrlPath()),
-          }]
-        }, {
-          title: "Get Flight details",
-          buttons: [{
+          },
+          {
             type:"web_url",
             url: sendUrl.call(this, tripData.flightUrlPath()),
             title:"Flight",
             webview_height_ratio: "compact",
             messenger_extensions: true,
             fallback_url: sendUrl.call(this, tripData.flightUrlPath())
-          }]
-        }, /*{
+          }, /*{ // NOT supported yet!
           title: "Get Stay details",
           buttons: [{
             type:"web_url",
@@ -175,15 +204,51 @@ function displayTripDetails() {
             messenger_extensions: true,
             fallback_url: sendUrl.call(this, tripData.stayUrlPath())
           }]
-        },*/ {
-          title: "Get Activities details",
-          buttons: [{
+          },*/ {
             type:"web_url",
             url: sendUrl.call(this, tripData.activitiesUrlPath()),
             title:"Activities",
             webview_height_ratio: "compact",
             messenger_extensions: true,
             fallback_url: sendUrl.call(this, tripData.activitiesUrlPath())
+          }]
+        }, {
+          title: "Get",
+          buttons: [{
+            type: "web_url",
+            url:sendUrl.call(this, `${rawName}/comments`),
+            title: "Comments",
+            webview_height_ratio: "compact",
+            messenger_extensions: true
+          }, {
+            type: "web_url",
+            url:sendUrl.call(this, `${rawName}/todo`),
+            title: "Tasks",
+            webview_height_ratio: "compact",
+            messenger_extensions: true
+          }, {
+            type: "web_url",
+            url:sendUrl.call(this, `${rawName}/pack-list`),
+            title: "Pack list",
+            webview_height_ratio: "compact",
+            messenger_extensions: true
+         }]
+        }, {
+          title: "Get",
+          buttons: [{
+            type: "web_url",
+            url:sendUrl.call(this, `${rawName}/expense-report`),
+            title: "Expense report",
+            webview_height_ratio: "compact",
+            messenger_extensions: true
+          }, {
+            type: "postback",
+            title: "-",
+            payload: "payload"
+          }, {
+            type: "postback",
+            title: "-",
+            payload: "payload"
           }]
         }]
       }
@@ -231,7 +296,13 @@ function receivedPostback(event) {
 
   logger.info("Received postback for user %d, page %d, session %d at timestamp: %d. Payload: %s", senderID, recipientID, this.session.fbid, timeOfPostback, payload);
 
-  // A postback is indicative of the beginning of a new state in the state machine. So, clear the session's "awaiting" states to indicate the beginning of a new state.
+
+  if(payload === "pb_other_details") {
+    sendOtherGetButtons.call(this);
+    return;
+  }
+
+  // A pmenu, past_trips or a postback starting with "trip_in_context" is indicative of the beginning of a new state in the state machine. So, clear the session's "awaiting" states to indicate the beginning of a new state.
   this.session.clearAllAwaitingStates();
 
 	// new trip cta
@@ -246,11 +317,12 @@ function receivedPostback(event) {
     this.session.noTripContext = false;
     return;
   }
-  if(payload === "pmenu_existing_trip") {
+  if(payload === "pmenu_existing_trips") {
 		sendTripButtons.call(this);
 		return;
   }
   if(payload === "past_trips") {
+    // Do not set past trip as trip context because there is not much users can do.
     sendPastTrips.call(this);
     return;
   }
@@ -261,29 +333,10 @@ function receivedPostback(event) {
     sendTripButtons.call(this, true /* add new trip */);
     return;
   }
-	
-	if(payload === "pmenu_add_travelers") {
-		determineTravelCompanions.call(this);
-		return;
-	}
-
-	// actual features
-  if(payload === "comments") {
-    getComment.call(this);
-    return;
-  }
-  if(payload === "todo") {
-    getTodoItem.call(this);
-    return;
-  }
-  if(payload === "qr_pack_item") {
-    getPacklistItem.call(this);
-    return;
-  }
 
   // When an unknown postback is called, we'll send a message back to the sender to 
   // let them know it was successful
-  sendTextMessage(senderID, "Postback called");
+  sendTextMessage(senderID, "Unhandled Postback called");
 }
 
 /*
@@ -401,37 +454,60 @@ function sendTripButtons(addNewTrip) {
   this.session.noTripContext = true;
   sendTextMessage(this.session.fbid, "Hi, which trip are we discussing?");
   const elements = [];
-  tripNames.forEach(t => {
-    elements.push({
-      title: t.rawName,
-      buttons: [{
-        type: "postback",
-        title: t.name,
-        payload: `trip_in_context ${t.name}`
-      }]
-    })
-  });
-
-  if(addNewTrip) {
-    elements.push({
-      title: "Create new trip",
-      buttons: [{
-       type: "postback",
-       title: "New Trip",
-       payload: "new_trip"
-    	}]
+  const buttons = [];
+  tripNames.forEach((t,i) => {
+    const j = parseInt(i/3);
+    if(!buttons[j]) {
+      buttons[j] = [];
+    }
+    buttons[j].push({
+      type: "postback",
+      title: t.name,
+      payload: `trip_in_context ${t.name}`
     });
+  });
+  let lastIndex = buttons.length - 1;
+  let numDashes = 3 - buttons[lastIndex].length;
+  // if numDashes is 0, the number of trips is an exact multiple of 3. Add another entry in buttons array
+  if(numDashes === 0) {
+    lastIndex++;
+    buttons[lastIndex] = []; // this does not exist, so create it.
+    numDashes = 3;
   }
-  if(tripDetails.pastTrips) {
-    elements.push({
-      title: "Past trips",
-      buttons: [{
+  let pastTrips = tripDetails.pastTrips;
+  while(numDashes-- > 0) {
+    if(pastTrips) {
+      buttons[lastIndex].push({
         type: "postback",
         title: "Past Trips",
         payload: "past_trips"
-      }]
+      });
+      pastTrips = false;
+      continue;
+    }
+    if(addNewTrip) {
+      buttons[lastIndex].push({
+         type: "postback",
+         title: "New Trip",
+         payload: "new_trip"
+      });
+      addNewTrip = false;
+      continue;
+    }
+    // fill the remaining slots with "-"
+    buttons[lastIndex].push({
+      type: "postback",
+      title: "-",
+      payload: "payload"
     });
   }
+  buttons.forEach(list => {
+    elements.push({
+      title: "Trips",
+      buttons: list
+    });
+  });
+
   const messageData = {
     recipient: {
       id: this.session.fbid
@@ -449,37 +525,102 @@ function sendTripButtons(addNewTrip) {
   callSendAPI(messageData);
 }
 
-function handleQuickReplies(payload) {
+function sendAllTripsButtons() {
+  const elements = [];
+  const futureTrips = this.session.getFutureTrips();
+  const pastTrips = this.session.getPastTrips();
+  pastTrips.forEach(t => {
+    elements.push({
+      title: t.rawName,
+      buttons: [{
+        type: "web_url",
+        url:sendUrl.call(this, `${t.rawName}/expense-report`),
+        title: t.name,
+        webview_height_ratio: "compact",
+        messenger_extensions: true
+      }]
+    })
+  });
+  futureTrips.forEach(t => {
+    elements.push({
+      title: t.rawName,
+      buttons: [{
+        type: "web_url",
+        url:sendUrl.call(this, `${t.rawName}/expense-report`),
+        title: t.name,
+        webview_height_ratio: "compact",
+        messenger_extensions: true
+      }]
+    })
+  });
+  const messageData = {
+    recipient: {
+      id: this.session.fbid
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "generic",
+          elements: elements
+        }
+      }
+    }
+  };
+  callSendAPI(messageData);
+  return;
+}
+
+function handleQuickReplies(quick_reply) {
+  const payload = quick_reply.payload;
   if(_.isUndefined(payload)) {
     logger.error(`handleQuickReplies: Payload is undefined in quick_reply.`);
     return;
   }
-    if(payload === "comments") {
-      getComment.call(this);
-      return;
-    }
-    if(payload === "todo") {
-      getTodoItem.call(this);
-      return;
-    }
-    if(payload === "qr_pack_item") {
-      getPacklistItem.call(this);
-      return;
-    }
-    if(payload === "qr_other_details") {
-      displayTripDetails.call(this);
-      return;
-    }
-    if(payload === "qr_new_trip") {
-      planNewTrip.call(this);
-      return;
-    }
-    if(payload === "qr_add_cities") {
-      addCitiesToExistingTrip.call(this);
-      return;
-    }
-    logger.warn(`handleQuickReplies: Session ${this.session.fbid}: A quick reply without actionoble payload called: ${JSON.stringify(message.quick_reply)}`);
+  // User clicked on "Add ..." or "Get ..." in help message or after choosing a trip under "Existing trips"
+  if(payload === "qr_add_") {
+    sendAddButtons.call(this);
     return;
+  }
+
+  if(payload === "qr_get_") {
+    displayTripDetails.call(this);
+    return;
+  }
+
+  // Use followed an "Add..." click with one of the following items.
+  if(payload === "qr_add_comments") {
+    enterCommentAsMessage.call(this);
+    return;
+  }
+  if(payload === "qr_add_todo") {
+    enterTodoItemAsMessage.call(this);
+    return;
+  }
+  if(payload === "qr_add_pack_item") {
+    enterPackItemAsMessage.call(this);
+    return;
+  }
+  if(payload === "qr_add_cities") {
+    addCitiesToExistingTrip.call(this);
+    return;
+  }
+  if(payload === "qr_add_travelers") {
+    determineTravelCompanions.call(this);
+  }
+  
+  // This quick reply came from the user typing "help" (see sendHelpMessage)
+  if(payload === "qr_new_trip") {
+    planNewTrip.call(this);
+    return;
+  }
+  if(payload === "qr_existing_trips") {
+		sendTripButtons.call(this);
+    return;
+  }
+
+  logger.warn(`handleQuickReplies: Session ${this.session.fbid}: A quick reply without actionoble payload called: ${JSON.stringify(quick_reply)}`);
+  return;
 }
 
 function validateStartDate(value, onError) {
@@ -506,7 +647,7 @@ function validateStartDate(value, onError) {
 
 function extractNewTripDetails(messageText) {
   const td = messageText.split(',');
-  if(td[1].match(/\d+\/\d+/)) {
+  if(td[1].match(/^ *\d+\/\d+$/)) { // if date is of the form "1/1", "10/10" or " 1/10", append year
     td[1] = td[1].concat(`/${new Date().getFullYear()}`);
   }
   const tripDetails = {
@@ -596,6 +737,13 @@ function determineResponseType(event) {
   const messageText = event.message.text;
   const mesg = messageText.toLowerCase();
 
+  // Before doing anything, if the user types help, send the help message!
+  if(mesg.startsWith("help ") || mesg === "help") {
+    // clear all states so that we can start on a clean state.
+    this.session.clearAllAwaitingStates();
+    return sendHelpMessage.call(this); 
+  }
+
   // if we don't know what trip is being discussed, ask the user for this, unless the user is adding details about a new trip.
   if((_.isNull(this.session.tripNameInContext) 
 			|| _.isUndefined(this.session.tripNameInContext) 
@@ -650,6 +798,9 @@ function determineResponseType(event) {
         else {
           if(tripData.data.cities) {
             logger.info(`determineResponseType: Start planning trip for customer`);
+            // End of new trip workflow. The workflow will complete when user selects cities (handled by determineCities function) and webpage-handler.js calls the startPlanningTrip method
+            this.session.planningNewTrip = false;
+            this.session.awaitingCitiesForNewTrip = false;
             this.startPlanningTrip();
           }
           else {
@@ -659,20 +810,23 @@ function determineResponseType(event) {
         }
       }
     }
-    // End of new trip workflow. The workflow will complete when user selects cities (handled by determineCities function) and webpage-handler.js calls the startPlanningTrip method
-    this.planningNewTrip = false;
     return;
   }
 
   if(!_.isUndefined(event.message.quick_reply)) { 
-    return handleQuickReplies.call(this, event.message.quick_reply.payload);
+    return handleQuickReplies.call(this, event.message.quick_reply);
   }
 
-  if(mesg.startsWith("help")) {
-    return sendHelpMessage.call(this); 
-  }
   const tripData = this.session.tripData();
   if(mesg.startsWith("save") || this.session.awaitingComment) {
+    /*
+    // if this comment is related to an expense, validate.
+    const parser = new CommentParser();
+    if(!parser.validate(messageText)) {
+      sendTextMessage(this.session.fbid, `Looks like an expense report. If so, please use one of the following formats: "A paid B $xx ...", "A owes B $xx ...", "A paid B xx usd/euro/currency ..." etc.`);
+      return;
+    }
+    */
     const returnString = tripData.storeFreeFormText(senderID, messageText);
     sendTextMessage(senderID, returnString);
     this.session.awaitingComment = false;
@@ -692,6 +846,10 @@ function determineResponseType(event) {
   }
   if(mesg.startsWith("get todo")) {
     sendTextMessage(senderID, sendUrl.call(this, tripData.todoUrlPath()));
+    return;
+  }
+  if(mesg.startsWith("get expense")) {
+    sendUrlButton.call(this, "Get expense report", tripData.expenseReportUrlPath());
     return;
   }
   if(mesg.startsWith("retrieve") || mesg.startsWith("comments") || mesg.startsWith("get comments")) {
@@ -1067,8 +1225,32 @@ function determineTravelCompanions() {
   callSendAPI(messageData);
 }
 
+function sendAddOrGetOptions() {
+  const messageData = {
+    recipient: {
+      id: this.session.fbid
+    },
+    message: {
+      text: `What would you like to do?`,
+      quick_replies:[
+        {
+          content_type: "text",
+          title: "Add ...",
+          payload: "qr_add_"
+        },
+        {
+          content_type: "text",
+          title: "Get ...",
+          payload: "qr_get_"
+        }
+      ]
+    }
+  };
+  callSendAPI(messageData);
+}
+
 /*
- * Send a few buttons in response to "Help message" from the user.
+ * Typically, this should match the top level entries in Persistent Menu.
  */
 function sendHelpMessage() {
   const messageData = {
@@ -1076,40 +1258,97 @@ function sendHelpMessage() {
       id: this.session.fbid
     },
     message: {
-      text: `Choose from the following list of features:`,
+      text: `What would you like to do?`,
       quick_replies:[
         {
           content_type: "text",
-          title: "Add comment",
-          payload: "comments"
-          // TODO: add image
-          // image_url: "https://polaama.com/img/destination.png"
+          title: "Create new trip",
+          payload: "qr_new_trip"
         },
         {
           content_type: "text",
-          title: "Add Task",
-          payload: "todo",
-        },
-        {
-          content_type: "text",
-          title: "Add pack item",
-          payload: "qr_pack_item",
-        },
-        {
-          content_type: "text",
-          title: "Add cities",
-          payload: "qr_add_cities",
-        },
-        {
-          content_type: "text",
-          title: "Other details",
-          payload: "qr_other_details",
-        },
+          title: "Get Existing trips",
+          payload: "qr_existing_trips"
+        }
       ]
     }
   };
   callSendAPI(messageData);
 }
+
+function sendAddButtons() {
+  const messageData = {
+    recipient: {
+      id: this.session.fbid
+    },
+    message: {
+      text: `What would you like to add?`,
+      quick_replies:[
+        {
+          content_type: "text",
+          title: "Comment",
+          payload: "qr_add_comments"
+          // TODO: add image
+          // image_url: "https://polaama.com/img/destination.png"
+        },
+        {
+          content_type: "text",
+          title: "Tasks",
+          payload: "qr_add_todo",
+        },
+        {
+          content_type: "text",
+          title: "Pack item",
+          payload: "qr_add_pack_item",
+        },
+        {
+          content_type: "text",
+          title: "Cities (to trip)",
+          payload: "qr_add_cities",
+        },
+        {
+          content_type: "text",
+          title: "Travelers",
+          payload: "qr_add_travelers",
+        }
+      ]
+    }
+  };
+  callSendAPI(messageData);
+}
+
+/*
+function sendOtherGetButtons() {
+  const rawName = this.session.tripData().rawTripName;
+  const elements = [
+    {
+      title: "Get",
+        type: "web_url",
+        url:sendUrl.call(this, `${rawName}/expense-report`),
+        title: "Expense report",
+        webview_height_ratio: "compact",
+        messenger_extensions: true
+      }]
+    }
+  ];
+  const messageData = {
+    recipient: {
+      id: this.session.fbid
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "generic",
+          elements: elements
+        }
+      }
+    }
+  };
+  callSendAPI(messageData);
+  return;
+}
+*/
 
 /*
  * Send a Structured Message (Generic Message type) using the Send API.

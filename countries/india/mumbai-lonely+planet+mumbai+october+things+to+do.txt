@@ -1,0 +1,808 @@
+{
+ "kind": "customsearch#search",
+ "url": {
+  "type": "application/json",
+  "template": "https://www.googleapis.com/customsearch/v1?q={searchTerms}&num={count?}&start={startIndex?}&lr={language?}&safe={safe?}&cx={cx?}&cref={cref?}&sort={sort?}&filter={filter?}&gl={gl?}&cr={cr?}&googlehost={googleHost?}&c2coff={disableCnTwTranslation?}&hq={hq?}&hl={hl?}&siteSearch={siteSearch?}&siteSearchFilter={siteSearchFilter?}&exactTerms={exactTerms?}&excludeTerms={excludeTerms?}&linkSite={linkSite?}&orTerms={orTerms?}&relatedSite={relatedSite?}&dateRestrict={dateRestrict?}&lowRange={lowRange?}&highRange={highRange?}&searchType={searchType}&fileType={fileType?}&rights={rights?}&imgSize={imgSize?}&imgType={imgType?}&imgColorType={imgColorType?}&imgDominantColor={imgDominantColor?}&alt=json"
+ },
+ "queries": {
+  "request": [
+   {
+    "title": "Google Custom Search - lonely planet mumbai october things to do",
+    "totalResults": "5030",
+    "searchTerms": "lonely planet mumbai october things to do",
+    "count": 10,
+    "startIndex": 1,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "mumbai"
+   }
+  ],
+  "nextPage": [
+   {
+    "title": "Google Custom Search - lonely planet mumbai october things to do",
+    "totalResults": "5030",
+    "searchTerms": "lonely planet mumbai october things to do",
+    "count": 10,
+    "startIndex": 11,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "mumbai"
+   }
+  ]
+ },
+ "context": {
+  "title": "Polaama"
+ },
+ "searchInformation": {
+  "searchTime": 0.649558,
+  "formattedSearchTime": "0.65",
+  "totalResults": "5030",
+  "formattedTotalResults": "5,030"
+ },
+ "items": [
+  {
+   "kind": "customsearch#result",
+   "title": "Top things to do in Mumbai, India - Lonely Planet",
+   "htmlTitle": "Top \u003cb\u003ethings to do\u003c/b\u003e in \u003cb\u003eMumbai\u003c/b\u003e, India - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/india/mumbai/top-things-to-do/a/poi/356405",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Discover the best top things to do in Mumbai including Taj Mahal Palace, \nMumbai, Chhatrapati Shivaji Terminus, Chhatrapati Shivaji Maharaj Vastu ...",
+   "htmlSnippet": "Discover the best top \u003cb\u003ethings to do\u003c/b\u003e in \u003cb\u003eMumbai\u003c/b\u003e including Taj Mahal Palace, \u003cbr\u003e\n\u003cb\u003eMumbai\u003c/b\u003e, Chhatrapati Shivaji Terminus, Chhatrapati Shivaji Maharaj Vastu&nbsp;...",
+   "cacheId": "dZXgL98JDFsJ",
+   "formattedUrl": "https://www.lonelyplanet.com/india/mumbai/...things-to-do/a/.../356405",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/india/\u003cb\u003emumbai\u003c/b\u003e/...\u003cb\u003ethings-to-do\u003c/b\u003e/a/.../356405",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Asia"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "204",
+      "height": "204",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSp4ECRIVfjrjNx-8901Vs_oJgdQ-DpqlhJ_jkZ1-YGOIKGSZMLSJEmlU0"
+     }
+    ],
+    "country": [
+     {
+      "name": "India"
+     }
+    ],
+    "city": [
+     {
+      "name": "Mumbai"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Top things to do in Mumbai, India",
+      "og:title": "Top things to do in Mumbai, India",
+      "og:description": "Discover the best top things to do in Mumbai including Taj Mahal Palace, Mumbai, Chhatrapati Shivaji Terminus, Chhatrapati Shivaji Maharaj Vastu Sangrahalaya.",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://api.tiles.mapbox.com/v4/lonelyplanet.b963d424/11/1437/912.png?access_token=pk.eyJ1IjoibG9uZWx5cGxhbmV0IiwiYSI6Imh1ODUtdUEifQ.OLLon0V6rcoTyayXzzUzsg"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Mumbai - Lonely Planet",
+   "htmlTitle": "\u003cb\u003eMumbai\u003c/b\u003e - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/india/mumbai-bombay",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "You'll get a real pulse on the city while observing Mumbai's people going about \ntheir daily lives. .... Hear about his stay here and the activities he participated in.",
+   "htmlSnippet": "You&#39;ll get a real pulse on the city while observing \u003cb\u003eMumbai&#39;s\u003c/b\u003e people going about \u003cbr\u003e\ntheir daily lives. .... Hear about his stay here and the \u003cb\u003eactivities\u003c/b\u003e he participated in.",
+   "cacheId": "5X_hSsGSsmQJ",
+   "formattedUrl": "https://www.lonelyplanet.com/india/mumbai-bombay",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/india/\u003cb\u003emumbai\u003c/b\u003e-\u003cb\u003ebombay\u003c/b\u003e",
+   "pagemap": {
+    "offer": [
+     {
+      "category": "North Indian"
+     },
+     {
+      "category": "Mughlai"
+     },
+     {
+      "category": "Seafood"
+     },
+     {
+      "category": "Burmese"
+     },
+     {
+      "category": "Mughlai"
+     },
+     {
+      "category": "Indian"
+     },
+     {
+      "category": "South Indian"
+     },
+     {
+      "category": "Cafe"
+     },
+     {
+      "category": "Cafe"
+     },
+     {
+      "category": "Modern Indian"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "257",
+      "height": "196",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRJqu-w1sEgX7-7-w0UkDdICL-gvwYPbcRzwh_Jr4tOgGAOjKe3CAb4N_o"
+     }
+    ],
+    "foodestablishment": [
+     {
+      "name": "Peshawri"
+     },
+     {
+      "name": "Bademiya Seekh Kebab Stall"
+     },
+     {
+      "name": "Bastian"
+     },
+     {
+      "name": "Burma Burma"
+     },
+     {
+      "name": "Khyber"
+     },
+     {
+      "name": "Bombay Canteen"
+     },
+     {
+      "name": "Dakshinayan"
+     },
+     {
+      "name": "Yoga House"
+     },
+     {
+      "name": "La Folie"
+     },
+     {
+      "name": "Masala Library"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Mumbai - Lonely Planet",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Mumbai - Lonely Planet",
+      "twitter:image:src": "https://lonelyplanetimages.imgix.net/a/g/hi/t/7485b46b2aa78a9c4e8384f3f40dca15-mumbai-bombay.jpg?sharp=10&vib=20&w=1200",
+      "og:site_name": "Lonely Planet",
+      "og:type": "website",
+      "og:title": "Mumbai - Lonely Planet",
+      "og:url": "http://www.lonelyplanet.com/india/mumbai-bombay",
+      "og:description": "Mumbai, formerly Bombay, is big. It’s full of dreamers and hard-labourers, starlets and gangsters, stray dogs and exotic birds, artists and...",
+      "og:image": "https://lonelyplanetimages.imgix.net/a/g/hi/t/7485b46b2aa78a9c4e8384f3f40dca15-mumbai-bombay.jpg?sharp=10&vib=20&w=1200",
+      "sailthru.date": "2017-03-07 23:38:38 +0000",
+      "sailthru.tags": "Mumbai, architecture-and-buildings, art-and-literature, business-travel, cities, festivals-and-events, food-and-drink, health-and-wellbeing, history-heritage-and-tradition, movies-and-television, music, shopping, train-travel-and-railways"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://lonelyplanetimages.imgix.net/a/g/hi/t/7485b46b2aa78a9c4e8384f3f40dca15-mumbai-bombay.jpg?sharp=10&vib=20&w=1200"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Things to do between Goa and Mumbai",
+   "htmlTitle": "\u003cb\u003eThings to do\u003c/b\u003e between Goa and \u003cb\u003eMumbai\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/thorntree/forums/asia-indian-subcontinent/india/things-to-do-between-goa-and-mumbai",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Aug 22, 2016 ... Things to do between Goa and Mumbai ... My friends and I are going to a \nwedding in Goa in October and then planning to spend Diwali in Mumbai. ... \nRecent thread on Ajanta and Ellora: https://www.lonelyplanet.com/thorntree ...",
+   "htmlSnippet": "Aug 22, 2016 \u003cb\u003e...\u003c/b\u003e \u003cb\u003eThings to do\u003c/b\u003e between Goa and \u003cb\u003eMumbai\u003c/b\u003e ... My friends and I are going to a \u003cbr\u003e\nwedding in Goa in \u003cb\u003eOctober\u003c/b\u003e and then planning to spend Diwali in \u003cb\u003eMumbai\u003c/b\u003e. ... \u003cbr\u003e\nRecent thread on Ajanta and Ellora: https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/thorntree&nbsp;...",
+   "cacheId": "Idp5-OHRCmsJ",
+   "formattedUrl": "https://www.lonelyplanet.com/.../things-to-do-between-goa-and-mumbai",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../\u003cb\u003ethings-to-do\u003c/b\u003e-between-goa-and-\u003cb\u003emumbai\u003c/b\u003e",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "225",
+      "height": "225",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSqRemPSRVtvlwaxn3MfC7zsLjzOoK5uUM0cDjdqchf2Fvexvm4z9sAZObq"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Thorn Tree",
+      "title": "Thorn Tree"
+     },
+     {
+      "url": "Country forums",
+      "title": "Country forums"
+     },
+     {
+      "url": "Indian Subcontinent",
+      "title": "Indian Subcontinent"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Things to do between Goa and Mumbai",
+      "og:title": "Things to do between Goa and Mumbai",
+      "og:description": "Hi, My friends and I are going to a wedding in Goa in October and then planning to spend Diwali in Mumbai. We have 6 days in between the two…",
+      "og:url": "https://www.lonelyplanet.com/thorntree/forums/asia-indian-subcontinent/india/things-to-do-between-goa-and-mumbai",
+      "og:image": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "og:type": "website",
+      "twitter:title": "Things to do between Goa and Mumbai",
+      "twitter:description": "Hi, My friends and I are going to a wedding in Goa in October and then planning to spend Diwali in Mumbai. We have 6 days in between the two…",
+      "twitter:image:src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "tXxPqL49dntVvgfq8LOr1oKm2/HWwrm4b586sprXaV2JE7hOj6K5NUfk1YLaObqBj3QvvWD1sDXZxS9RUutgtw=="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Welcome",
+      "name": "Welcome"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Weather in India - Lonely Planet",
+   "htmlTitle": "Weather in India - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/india/weather",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Things to do · Sights ... Go Mar–AprSep–Oct ... Go Oct–Mar. J. F. M ... The \nsoutheast coast and southern Kerala see heavy rain from October to early \nDecember.",
+   "htmlSnippet": "\u003cb\u003eThings to do\u003c/b\u003e &middot; Sights ... Go Mar–AprSep–\u003cb\u003eOct\u003c/b\u003e ... Go \u003cb\u003eOct\u003c/b\u003e–Mar. J. F. M ... The \u003cbr\u003e\nsoutheast coast and southern Kerala see heavy rain from \u003cb\u003eOctober\u003c/b\u003e to early \u003cbr\u003e\nDecember.",
+   "cacheId": "UOetgrkgeicJ",
+   "formattedUrl": "www.lonelyplanet.com/india/weather",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/india/weather",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "215",
+      "height": "234",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTm3843YuA3Ky4uLEnLQDj6keVLPzJkMcG8dD4AJu8u20O6arveKHqNeTvp"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Weather in India - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Weather in India - Lonely Planet",
+      "twitter:description": "The best time to go to India, including current weather conditions, temperatures and rainfall",
+      "twitter:image:src": "https://images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/a/g/hi/t/500b51642e481c4801faedfd832a2799-features-banner-card.jpg",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Weather in India - Lonely Planet",
+      "og:description": "The best time to go to India, including current weather conditions, temperatures and rainfall",
+      "og:url": "http://www.lonelyplanet.com/india/weather",
+      "og:type": "website",
+      "og:image": "//images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/a/g/hi/t/500b51642e481c4801faedfd832a2799-features-banner-card.jpg",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "+fBUIeakkQG+7gBFhHOrdADcymlM2mrVe6xk3wnvLsM="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "http://assets.staticlp.com/country-shapes/IND.svg"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Top things to do in Pune, India - Lonely Planet",
+   "htmlTitle": "Top \u003cb\u003ethings to do\u003c/b\u003e in Pune, India - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/india/pune/top-things-to-do/a/poi/356404",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Discover the best top things to do in Pune including Malaka Spice, Raja Dinkar ... \nPune's branch of Mumbai's famous Bluefrog is all Maharashtra has at this point ...",
+   "htmlSnippet": "Discover the best top \u003cb\u003ethings to do\u003c/b\u003e in Pune including Malaka Spice, Raja Dinkar ... \u003cbr\u003e\nPune&#39;s branch of \u003cb\u003eMumbai&#39;s\u003c/b\u003e famous Bluefrog is all Maharashtra has at this point&nbsp;...",
+   "cacheId": "cAP7VHZHQ04J",
+   "formattedUrl": "https://www.lonelyplanet.com/india/pune/top-things-to-do/.../356404",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/india/pune/top-\u003cb\u003ethings-to-do\u003c/b\u003e/.../356404",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Asia"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "204",
+      "height": "204",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQmfIB-tu3zOlyL4Spx2wtwsHXpI9yuUzMUFpGKc_1CsNeNtUcxVribBPo"
+     }
+    ],
+    "country": [
+     {
+      "name": "India"
+     }
+    ],
+    "city": [
+     {
+      "name": "Pune"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Top things to do in Pune, India",
+      "og:title": "Top things to do in Pune, India",
+      "og:description": "Discover the best top things to do in Pune including Malaka Spice, Raja Dinkar Kelkar Museum, Independence Brewing Company.",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://api.tiles.mapbox.com/v4/lonelyplanet.b963d424/12/2887/1832.png?access_token=pk.eyJ1IjoibG9uZWx5cGxhbmV0IiwiYSI6Imh1ODUtdUEifQ.OLLon0V6rcoTyayXzzUzsg"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Entertainment in Mumbai, India - Lonely Planet",
+   "htmlTitle": "Entertainment in \u003cb\u003eMumbai\u003c/b\u003e, India - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/india/mumbai/entertainment/a/poi-ent/356405",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Discover the best entertainment in Mumbai including Royal Opera House, Liberty \nCinema, National ... Top things to do · Attractions · Restaurants · Activities · \nShopping · Nightlife ... internationals are played a few times a year here in \nseason (October to April). ... Shows first-run English-language movies, and has a \nfood court.",
+   "htmlSnippet": "Discover the best entertainment in \u003cb\u003eMumbai\u003c/b\u003e including Royal Opera House, Liberty \u003cbr\u003e\nCinema, National ... Top \u003cb\u003ethings to do\u003c/b\u003e &middot; Attractions &middot; Restaurants &middot; \u003cb\u003eActivities\u003c/b\u003e &middot; \u003cbr\u003e\nShopping &middot; Nightlife ... internationals are played a few times a year here in \u003cbr\u003e\nseason (\u003cb\u003eOctober\u003c/b\u003e to April). ... Shows first-run English-language movies, and has a \u003cbr\u003e\nfood court.",
+   "cacheId": "DeKcgKrrU_YJ",
+   "formattedUrl": "https://www.lonelyplanet.com/india/mumbai/entertainment/.../356405",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/india/\u003cb\u003emumbai\u003c/b\u003e/entertainment/.../356405",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Asia"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "204",
+      "height": "204",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSLowKJN9wF17ukNgL2e3qcSu8sut9FerAoifbU1u-JZ1H8Sh77LroJ8E0"
+     }
+    ],
+    "country": [
+     {
+      "name": "India"
+     }
+    ],
+    "city": [
+     {
+      "name": "Mumbai"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Entertainment in Mumbai, India",
+      "og:title": "Entertainment in Mumbai, India",
+      "og:description": "Discover the best entertainment in Mumbai including Royal Opera House, Liberty Cinema, National Centre for the Performing Arts.",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://api.tiles.mapbox.com/v4/lonelyplanet.b963d424/12/2877/1826.png?access_token=pk.eyJ1IjoibG9uZWx5cGxhbmV0IiwiYSI6Imh1ODUtdUEifQ.OLLon0V6rcoTyayXzzUzsg"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "South India, Mumbai travel tips and articles - Lonely Planet",
+   "htmlTitle": "South India, \u003cb\u003eMumbai\u003c/b\u003e travel tips and articles - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/india/mumbai-bombay/travel-tips-and-articles",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Nightlife in Mumbai. Mumbai's best architecture. Best places to eat in Mumbai. \nBest places to stay in Mumbai (Bombay). Top things to do in Mumbai (Bombay).",
+   "htmlSnippet": "Nightlife in \u003cb\u003eMumbai\u003c/b\u003e. \u003cb\u003eMumbai&#39;s\u003c/b\u003e best architecture. Best places to eat in \u003cb\u003eMumbai\u003c/b\u003e. \u003cbr\u003e\nBest places to stay in \u003cb\u003eMumbai\u003c/b\u003e (\u003cb\u003eBombay\u003c/b\u003e). Top \u003cb\u003ethings to do\u003c/b\u003e in \u003cb\u003eMumbai\u003c/b\u003e (\u003cb\u003eBombay\u003c/b\u003e).",
+   "cacheId": "xVS3B3-Aub4J",
+   "formattedUrl": "www.lonelyplanet.com/india/mumbai-bombay/travel-tips-and-articles",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/india/\u003cb\u003emumbai\u003c/b\u003e-\u003cb\u003ebombay\u003c/b\u003e/travel-tips-and-articles",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "153",
+      "height": "148",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFE7dGRn_e8TE_7SGgBa33OWjBeMBSEFlyyuL7j47M-xaZu5XaGXy-wASW"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     },
+     {
+      "url": "South India",
+      "title": "South India"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "South India, Mumbai travel tips and articles - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "South India, Mumbai travel tips and articles - Lonely Planet",
+      "twitter:description": "Get the latest South India, Mumbai travel articles plus advice, tips and news from the travel experts, Lonely Planet.",
+      "og:site_name": "Lonely Planet",
+      "og:title": "South India, Mumbai travel tips and articles - Lonely Planet",
+      "og:description": "Get the latest South India, Mumbai travel articles plus advice, tips and news from the travel experts, Lonely Planet.",
+      "og:url": "http://www.lonelyplanet.com/india/mumbai-bombay/travel-tips-and-articles",
+      "og:type": "website",
+      "sailthru.date": "2017-03-04 22:58:34 +0000",
+      "sailthru.tags": "Asia, India, Mumbai, architecture-and-buildings, art-and-literature, business-travel, cities, festivals-and-events, food-and-drink, health-and-wellbeing, history-heritage-and-tradition, movies-and-television, music, shopping, train-travel-and-railways",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "4pWLcfWgYUgWd5eQodGd6FF6yK9EyM3v0mOfvLFtu5A="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "http://images-resrc.staticlp.com/C=SQ/S=W192,U/C=W192,H185,X0,Y3/O=85/http://www.lonelyplanet.com/travel-blog/tip-article/wordpress_uploads/2013/09/Bandras-Chapel-Street-Supriya-Sehgal.jpg"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "5 tips for India first-timers - Lonely Planet",
+   "htmlTitle": "5 tips for India first-timers - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/india/travel-tips-and-articles/76017",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Dec 15, 2015 ... India is all these things, and more. ... Rather than trying to see the whole country, \nyou may get more out of your trip if you concentrate on the ... exquisitely \ndecorated temple caves at Ajanta and Ellora, and Elephanta Island near Mumbai. \n... Ideal trekking season is in September/October, after the monsoon.",
+   "htmlSnippet": "Dec 15, 2015 \u003cb\u003e...\u003c/b\u003e India is all these \u003cb\u003ethings\u003c/b\u003e, and more. ... Rather than trying to see the whole country, \u003cbr\u003e\nyou may \u003cb\u003eget\u003c/b\u003e more out of your trip if you concentrate on the ... exquisitely \u003cbr\u003e\ndecorated temple caves at Ajanta and Ellora, and Elephanta Island near \u003cb\u003eMumbai\u003c/b\u003e. \u003cbr\u003e\n... Ideal trekking season is in September/\u003cb\u003eOctober\u003c/b\u003e, after the monsoon.",
+   "cacheId": "fhzTeyp9tA8J",
+   "formattedUrl": "www.lonelyplanet.com/india/travel-tips-and-articles/76017",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/india/travel-tips-and-articles/76017",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "275",
+      "height": "183",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPn1uwRXlzJJ8iHW065m22pGBqxXPf8s0G9OjMEKH3UAVkmSu-JSs0ZBq6"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "5 tips for India first-timers - Lonely Planet",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article",
+      "og:title": "5 tips for India first-timers - Lonely Planet",
+      "og:url": "http://www.lonelyplanet.com/india/travel-tips-and-articles/76017",
+      "og:description": "Read 5 tips for India first-timers",
+      "og:image": "https://lonelyplanetwp.imgix.net/2011/11/GettyImages-dv572010_cs.jpg?sharp=10&vib=20&w=748",
+      "article:tag": "Adventure travel",
+      "article:published_time": "2015-12-15T06:47:47+00:00",
+      "article:author": "Daniel McCrohan"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://lonelyplanetwp.imgix.net/2011/11/GettyImages-dv572010_cs.jpg?sharp=10&vib=20&w=748"
+     }
+    ],
+    "article": [
+     {
+      "headline": "5 tips for India first-timers",
+      "alternativeheadline": "5 tips for India first-timers",
+      "datepublished": "2015-12-15T06:47:47+00:00",
+      "articlebody": "Chaotic, bamboozling, intoxicating, crazy, exasperating, wonderful, squalid, beautiful, daunting, overwhelming, and fantastic. India is all these things, and more. How can you possibly prepare..."
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Mumbai-Goa-Kochi itinerary tips, anyone?",
+   "htmlTitle": "\u003cb\u003eMumbai\u003c/b\u003e-Goa-Kochi itinerary tips, anyone?",
+   "link": "https://www.lonelyplanet.com/thorntree/forums/asia-indian-subcontinent/india/mumbai-goa-kochi-itinerary-tips-anyone",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Aug 15, 2013 ... It depends on what you want to see and do during the trip. Mumbai is a big city- ... \nYes, flights already booked: Istanbul-Mumbai-Istanbul Oct 12-20. ... I already got \nmy Lonely Planet. :-) ... You can use the konkan rky -superfast trains to go from \nMumbai to Kerala stopping enroute to explore things yourself. 1.",
+   "htmlSnippet": "Aug 15, 2013 \u003cb\u003e...\u003c/b\u003e It depends on what you want to see and \u003cb\u003edo\u003c/b\u003e during the trip. \u003cb\u003eMumbai\u003c/b\u003e is a big city- ... \u003cbr\u003e\nYes, flights already booked: Istanbul-\u003cb\u003eMumbai\u003c/b\u003e-Istanbul \u003cb\u003eOct\u003c/b\u003e 12-20. ... I already got \u003cbr\u003e\nmy \u003cb\u003eLonely Planet\u003c/b\u003e. :-) ... You can use the konkan rky -superfast trains to go from \u003cbr\u003e\n\u003cb\u003eMumbai\u003c/b\u003e to Kerala stopping enroute to explore \u003cb\u003ethings\u003c/b\u003e yourself. 1.",
+   "cacheId": "BiYxh1_YlH0J",
+   "formattedUrl": "https://www.lonelyplanet.com/.../mumbai-goa-kochi-itinerary-tips-anyone",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../\u003cb\u003emumbai\u003c/b\u003e-goa-kochi-itinerary-tips-anyone",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "225",
+      "height": "225",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSqRemPSRVtvlwaxn3MfC7zsLjzOoK5uUM0cDjdqchf2Fvexvm4z9sAZObq"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Thorn Tree",
+      "title": "Thorn Tree"
+     },
+     {
+      "url": "Country forums",
+      "title": "Country forums"
+     },
+     {
+      "url": "Indian Subcontinent",
+      "title": "Indian Subcontinent"
+     },
+     {
+      "url": "India",
+      "title": "India"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Mumbai-Goa-Kochi itinerary tips, anyone?",
+      "og:title": "Mumbai-Goa-Kochi itinerary tips, anyone?",
+      "og:description": "Hi, Here's a question to all the seasoned India travelers here:  My friends and I are planning our very first trip to India in mid October and we have set…",
+      "og:url": "https://www.lonelyplanet.com/thorntree/forums/asia-indian-subcontinent/india/mumbai-goa-kochi-itinerary-tips-anyone",
+      "og:image": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "og:type": "website",
+      "twitter:title": "Mumbai-Goa-Kochi itinerary tips, anyone?",
+      "twitter:description": "Hi, Here's a question to all the seasoned India travelers here:  My friends and I are planning our very first trip to India in mid October and we have set…",
+      "twitter:image:src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "B8zvmGmuvAU90TiYTwfbqGZ6E6Ot5GEXtzP+7X+9/yXVtfXivhcdat8O/7hgGqGUqImLuS2uB0aiXpRMHYGMQg=="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Welcome",
+      "name": "Welcome"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Sanjay Gandhi National Park in Mumbai, India - Lonely Planet",
+   "htmlTitle": "Sanjay Gandhi National Park in \u003cb\u003eMumbai\u003c/b\u003e, India - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/india/mumbai/attractions/sanjay-gandhi-national-park/a/poi-sig/1149073/356405",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Mumbai Attractions. Sanjay Gandhi National Park. National park in Mumbai ... \nThe best time to see birds is October to April and butterflies from August to ...",
+   "htmlSnippet": "\u003cb\u003eMumbai\u003c/b\u003e Attractions. Sanjay Gandhi National Park. National park in \u003cb\u003eMumbai\u003c/b\u003e ... \u003cbr\u003e\nThe best time to see birds is \u003cb\u003eOctober\u003c/b\u003e to April and butterflies from August to&nbsp;...",
+   "cacheId": "cwSqC9UiLqQJ",
+   "formattedUrl": "https://www.lonelyplanet.com/india/mumbai/.../sanjay.../356405",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/india/\u003cb\u003emumbai\u003c/b\u003e/.../sanjay.../356405",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Asia"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "276",
+      "height": "183",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQE0-JwACmh5Rh9g9gTanHIAoD59e-upsfKjONI69iklHf4XInyr1npYAs"
+     }
+    ],
+    "country": [
+     {
+      "name": "India"
+     }
+    ],
+    "city": [
+     {
+      "name": "Mumbai"
+     }
+    ],
+    "postaladdress": [
+     {
+      "streetaddress": "Borivali",
+      "addresslocality": "Mumbai",
+      "addresscountry": "India"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Sanjay Gandhi National Park in Mumbai, India",
+      "og:title": "Sanjay Gandhi National Park in Mumbai, India",
+      "og:description": "It’s hard to believe that within 1½ hours of the teeming metropolis you can be surrounded by this 104-sq-km protected tropical forest. Here, bright flora, birds…",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://cache-graphicslib.viator.com/graphicslib/thumbs674x446/5683/SITours/new-york-city-food-cart-walking-tour-in-new-york-city-118502.jpg"
+     }
+    ],
+    "thing": [
+     {
+      "name": "Attractions"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     },
+     {
+      "position": "4"
+     }
+    ]
+   }
+  }
+ ]
+}
