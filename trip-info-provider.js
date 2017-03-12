@@ -127,6 +127,11 @@ function encodeForLonelyPlanet() {
 TripInfoProvider.prototype.getFlightDetails = function(callback) {
   logger.info(`getFlightDetails: Callback is ${callback.toString()}`);
   const tripData = this.trip.data;
+  // TODO: Putting this logic here is a hack. Ideally it would be in webhook-post-handler:startPlanningTrip. But because we are using promise there and I don't know of a clean way to NOT call getFlightDetails if the trip has started, I am placing this code here.
+  if(tripData.tripStarted) {
+    logger.info(`Trip ${tripData.rawTripName} has already started. Not getting flight details. Simply returning!`);
+    return callback();
+  }
   const fip = new FlightInfoProvider(this.hometown, tripData.portOfEntry, tripData.startDate, tripData.returnDate);
   try {
     return fip.getFlightDetails(callback);
@@ -139,6 +144,11 @@ TripInfoProvider.prototype.getFlightDetails = function(callback) {
 
 TripInfoProvider.prototype.getStoredFlightDetails = function() {
   const tripData = this.trip.data;
+  if(tripData.tripStarted) {
+    return {
+      noflight: "Since the trip has already started, no flight information is available.<br>Support for intracity flights will be available soon."
+    }
+  }
   logger.info(`getStoredFlightDetails: dest: ${tripData.portOfEntry}; tripData: ${JSON.stringify(tripData)}`);
   const fip = new FlightInfoProvider(this.hometown, tripData.portOfEntry, tripData.startDate, tripData.returnDate);
   return fip.getStoredFlightDetails();

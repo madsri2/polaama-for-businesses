@@ -61,13 +61,14 @@ CommentsParser.prototype.parse = function(comment) {
 
 // if the comment looks like expense report detail, then validate. if not simply return true;
 CommentsParser.prototype.validate = function(comment) {
-  if(comment.contains("paid") || comment.contains("owes")) {
+  if(comment.includes("paid") || comment.includes("owes")) {
     try {
       const details = this.parse(comment);
+      // if we were able to successfully parse, return true.
       return true;
     }
     catch(err) {
-      logger.error(err);
+      logger.error(`Error parsing ${comment}: ${err}`);
       return false;
     }
   }

@@ -23,6 +23,8 @@ function FbidHandler() {
     "1280537748676473": "Adhu Artha",
     "1111111111111111": "Jaideep Iyengar", // TODO: fbid is made up
     "1111111111111112": "Reshma Ananthakrishnan", // TODO: fbid is made up
+    "1370147206379852": "Dhu Rtha",
+    "1406396006101231": "Tha Hu"
   };
   this.fbidMap = {
     "aaaa": "2",
@@ -31,10 +33,12 @@ function FbidHandler() {
     "bRt2": "1326674134041820",
     "xeMt": "1280537748676473",
     "azft": "1111111111111111",
-    "zw4g": "1111111111111112"
+    "zw4g": "1111111111111112",
+    "bx6q": "1370147206379852",
   };
   this.friends = {};
   // Now add friends for each fbid;
+  // TODO: You need to use https://graph.facebook.com/v2.6/1370147206379852/friends to get friends who are using this app. For this to work, each user needs to give the app user_friends permission. Details are here: https://developers.facebook.com/docs/facebook-login/permissions#reference-user_friends. 
   Object.keys(this.fbidNames).forEach(id => {
     this.friends[id] = [];
     switch(this.fbidNames[id]) {

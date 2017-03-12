@@ -1,0 +1,749 @@
+{
+ "kind": "customsearch#search",
+ "url": {
+  "type": "application/json",
+  "template": "https://www.googleapis.com/customsearch/v1?q={searchTerms}&num={count?}&start={startIndex?}&lr={language?}&safe={safe?}&cx={cx?}&cref={cref?}&sort={sort?}&filter={filter?}&gl={gl?}&cr={cr?}&googlehost={googleHost?}&c2coff={disableCnTwTranslation?}&hq={hq?}&hl={hl?}&siteSearch={siteSearch?}&siteSearchFilter={siteSearchFilter?}&exactTerms={exactTerms?}&excludeTerms={excludeTerms?}&linkSite={linkSite?}&orTerms={orTerms?}&relatedSite={relatedSite?}&dateRestrict={dateRestrict?}&lowRange={lowRange?}&highRange={highRange?}&searchType={searchType}&fileType={fileType?}&rights={rights?}&imgSize={imgSize?}&imgType={imgType?}&imgColorType={imgColorType?}&imgDominantColor={imgDominantColor?}&alt=json"
+ },
+ "queries": {
+  "request": [
+   {
+    "title": "Google Custom Search - lonely planet rotterdam september things to do",
+    "totalResults": "820",
+    "searchTerms": "lonely planet rotterdam september things to do",
+    "count": 10,
+    "startIndex": 1,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "rotterdam"
+   }
+  ],
+  "nextPage": [
+   {
+    "title": "Google Custom Search - lonely planet rotterdam september things to do",
+    "totalResults": "820",
+    "searchTerms": "lonely planet rotterdam september things to do",
+    "count": 10,
+    "startIndex": 11,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "rotterdam"
+   }
+  ]
+ },
+ "context": {
+  "title": "Polaama"
+ },
+ "searchInformation": {
+  "searchTime": 0.600479,
+  "formattedSearchTime": "0.60",
+  "totalResults": "820",
+  "formattedTotalResults": "820"
+ },
+ "items": [
+  {
+   "kind": "customsearch#result",
+   "title": "Top things to do in Rotterdam, The Netherlands - Lonely Planet",
+   "htmlTitle": "Top \u003cb\u003ethings to do\u003c/b\u003e in \u003cb\u003eRotterdam\u003c/b\u003e, The Netherlands - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/the-netherlands/rotterdam/top-things-to-do/a/poi/360852",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Discover the best top things to do in Rotterdam including Museum Boijmans van \n... and sea shanties are part of early September's fascinating World Port Days.",
+   "htmlSnippet": "Discover the best top \u003cb\u003ethings to do\u003c/b\u003e in \u003cb\u003eRotterdam\u003c/b\u003e including Museum Boijmans van \u003cbr\u003e\n... and sea shanties are part of early \u003cb\u003eSeptember&#39;s\u003c/b\u003e fascinating World Port Days.",
+   "cacheId": "KzuGHxeLbssJ",
+   "formattedUrl": "https://www.lonelyplanet.com/the.../rotterdam/...things-to-do/a/.../360852",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/the.../\u003cb\u003erotterdam\u003c/b\u003e/...\u003cb\u003ethings-to-do\u003c/b\u003e/a/.../360852",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Europe"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "204",
+      "height": "204",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-4PnnMGs8cpybL2XYkJFBWaTkcDF50lQjIYdoh98kwWcLTF3q9HnHtoNP"
+     }
+    ],
+    "country": [
+     {
+      "name": "The Netherlands"
+     }
+    ],
+    "city": [
+     {
+      "name": "Rotterdam"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Top things to do in Rotterdam, The Netherlands",
+      "og:title": "Top things to do in Rotterdam, The Netherlands",
+      "og:description": "Discover the best top things to do in Rotterdam including Museum Boijmans van Beuningen, Fenix Food Factory, FG.",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://api.tiles.mapbox.com/v4/lonelyplanet.b963d424/12/2098/1353.png?access_token=pk.eyJ1IjoibG9uZWx5cGxhbmV0IiwiYSI6Imh1ODUtdUEifQ.OLLon0V6rcoTyayXzzUzsg"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "The vibrant waterfront of Rotterdam - Lonely Planet",
+   "htmlTitle": "The vibrant waterfront of \u003cb\u003eRotterdam\u003c/b\u003e - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/the-netherlands/rotterdam/travel-tips-and-articles/the-vibrant-waterfront-of-rotterdam",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Aug 22, 2016 ... ... waterfront is packed with attractions, from maritime museums to boat tours, ... \nWater shapes Rotterdam's cityscape and a boat trip is the ultimate way ... Get \nyour sea legs on one of Spido's fascinating 75-minute harbour tours ... If you're in \nRotterdam in early September, don't miss the Wereldhavendagen ...",
+   "htmlSnippet": "Aug 22, 2016 \u003cb\u003e...\u003c/b\u003e ... waterfront is packed with \u003cb\u003eattractions\u003c/b\u003e, from maritime museums to boat tours, ... \u003cbr\u003e\nWater shapes \u003cb\u003eRotterdam&#39;s\u003c/b\u003e cityscape and a boat trip is the ultimate way ... Get \u003cbr\u003e\nyour sea legs on one of Spido&#39;s fascinating 75-minute harbour tours ... If you&#39;re in \u003cbr\u003e\n\u003cb\u003eRotterdam\u003c/b\u003e in early \u003cb\u003eSeptember\u003c/b\u003e, don&#39;t miss the Wereldhavendagen&nbsp;...",
+   "cacheId": "7a-HtrzG_74J",
+   "formattedUrl": "www.lonelyplanet.com/.../rotterdam/.../the-vibrant-waterfront-of-rotterdam",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../\u003cb\u003erotterdam\u003c/b\u003e/.../the-vibrant-waterfront-of-\u003cb\u003erotterdam\u003c/b\u003e",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "275",
+      "height": "183",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTrHZliz8uDdjvDod-sU66AZiuyOLI4mE_F7JBAGT9KWS9LECqWNmosgqkq"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "The vibrant waterfront of Rotterdam - Lonely Planet",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article",
+      "og:title": "The vibrant waterfront of Rotterdam - Lonely Planet",
+      "og:url": "http://www.lonelyplanet.com/the-netherlands/rotterdam/travel-tips-and-articles/the-vibrant-waterfront-of-rotterdam",
+      "og:description": "Read The vibrant waterfront of Rotterdam",
+      "og:image": "https://lonelyplanetwp.imgix.net/2016/08/GettyImages-580818427_super-f8c01b194562.jpg?sharp=10&vib=20&w=748",
+      "article:tag": "Food and drink, Coasts and islands, Beaches, Festivals, Art and culture, Architecture and buildings, Sailing and cruising, Heritage and history",
+      "article:published_time": "2016-08-22T15:25:30+00:00",
+      "article:author": "Catherine Le Nevez"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://lonelyplanetwp.imgix.net/2016/08/GettyImages-580818427_super-f8c01b194562.jpg?sharp=10&vib=20&w=748"
+     }
+    ],
+    "article": [
+     {
+      "headline": "The vibrant waterfront of Rotterdam",
+      "alternativeheadline": "The vibrant waterfront of Rotterdam",
+      "datepublished": "2016-08-22T15:25:30+00:00",
+      "articlebody": "Rising along the vast Nieuwe Maas (a tributary of the Rhine), Rotterdam started life as a medieval fishing village. Its importance skyrocketed in the 17th-century Golden Age following the discovery..."
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Euromast in Rotterdam, The Netherlands - Lonely Planet",
+   "htmlTitle": "Euromast in \u003cb\u003eRotterdam\u003c/b\u003e, The Netherlands - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/the-netherlands/rotterdam/attractions/euromast/a/poi-sig/429654/360852",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Rotterdam Attractions ... A 1960-built landmark, the 185m Euromast offers \nunparalleled 360-degree views of Rotterdam from its 100m-high observation \ndeck, ...",
+   "htmlSnippet": "\u003cb\u003eRotterdam Attractions\u003c/b\u003e ... A 1960-built landmark, the 185m Euromast offers \u003cbr\u003e\nunparalleled 360-degree views of \u003cb\u003eRotterdam\u003c/b\u003e from its 100m-high observation \u003cbr\u003e\ndeck,&nbsp;...",
+   "cacheId": "RctNxrzpXdsJ",
+   "formattedUrl": "https://www.lonelyplanet.com/the.../rotterdam/attractions/.../360852",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/the.../\u003cb\u003erotterdam\u003c/b\u003e/\u003cb\u003eattractions\u003c/b\u003e/.../360852",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Europe"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "276",
+      "height": "183",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQcU8vYknrbxraLJExSAYE_fJ60Ym3pGxUlchSCNHsCpGYTythAqFeIO4Y"
+     }
+    ],
+    "country": [
+     {
+      "name": "The Netherlands"
+     }
+    ],
+    "city": [
+     {
+      "name": "Rotterdam"
+     }
+    ],
+    "postaladdress": [
+     {
+      "streetaddress": "Parkhaven 20",
+      "addresslocality": "Rotterdam",
+      "addresscountry": "The Netherlands"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Euromast in Rotterdam, The Netherlands",
+      "og:title": "Euromast in Rotterdam, The Netherlands",
+      "og:description": "A 1960-built landmark, the 185m Euromast offers unparalleled 360-degree views of Rotterdam from its 100m-high observation deck, reached by elevator in 30 second…",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://cache-graphicslib.viator.com/graphicslib/thumbs674x446/2550/SITours/holland-in-one-day-sightseeing-tour-in-amsterdam-115758.jpg"
+     }
+    ],
+    "thing": [
+     {
+      "name": "Attractions"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     },
+     {
+      "position": "4"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Line 10 - Lonely Planet",
+   "htmlTitle": "Line 10 - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/the-netherlands/rotterdam/activities/sightseeing-tours/line-10",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "activities / Sightseeing tours ... Prices: adult/child €7/4.50; Opening hours: \ndepartures 11am-4.35pm Tue-Sun Jul-Aug, Fri-Sun Sep-Oct ... Related activities \nto book ... This walking tour of the city will include all the usual suspects of \nRotterdam ...",
+   "htmlSnippet": "\u003cb\u003eactivities\u003c/b\u003e / Sightseeing tours ... Prices: adult/child €7/4.50; Opening hours: \u003cbr\u003e\ndepartures 11am-4.35pm Tue-Sun Jul-Aug, Fri-Sun \u003cb\u003eSep\u003c/b\u003e-Oct ... Related \u003cb\u003eactivities\u003c/b\u003e \u003cbr\u003e\nto book ... This walking tour of the city will include all the usual suspects of \u003cbr\u003e\n\u003cb\u003eRotterdam\u003c/b\u003e&nbsp;...",
+   "cacheId": "mq0i5p8KjroJ",
+   "formattedUrl": "www.lonelyplanet.com/the-netherlands/rotterdam/activities/.../line-10",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/the-netherlands/\u003cb\u003erotterdam\u003c/b\u003e/\u003cb\u003eactivities\u003c/b\u003e/.../line-10",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "276",
+      "height": "183",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQb5wIgdo8ztqLFFtvX7FvO78z0uY2qyQKpxQoAwUpOl3IO3q_NpGg-LRk"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "Western Europe",
+      "title": "Western Europe"
+     },
+     {
+      "url": "The Netherlands",
+      "title": "The Netherlands"
+     },
+     {
+      "url": "Southern Netherlands",
+      "title": "Southern Netherlands"
+     },
+     {
+      "url": "South Holland",
+      "title": "South Holland"
+     },
+     {
+      "url": "Rotterdam",
+      "title": "Rotterdam"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Line 10 - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Line 10 - Lonely Planet",
+      "twitter:description": "\u003cp\u003eRide a historic tram through the city on Line 10, which stops at eight key destinations including Markthall Rotterdam, the Euromast and...",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Line 10 - Lonely Planet",
+      "og:description": "\u003cp\u003eRide a historic tram through the city on Line 10, which stops at eight key destinations including Markthall Rotterdam, the Euromast and...",
+      "og:url": "http://www.lonelyplanet.com/the-netherlands/rotterdam/activities/sightseeing-tours/line-10",
+      "og:type": "website",
+      "sailthru.date": "2017-03-01 06:16:53 +0000",
+      "sailthru.tags": "Europe, The Netherlands, Rotterdam, architecture-and-buildings, art-and-literature, cities, cycling, festivals-and-events, food-and-drink, history-heritage-and-tradition, music, parks-and-reserves, shopping, train-travel-and-railways",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "Tt/UGVqTaSDWkpN5Rd27T4IOL1S8wksqA8QWSOgVpXY="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "http://cache-graphicslib.viator.com/graphicslib/thumbs674x446/40705/SITours/rotterdam-welcome-card-including-1-2-or-3-days-public-transport-in-rotterdam-363417.jpg"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Essential guide to Rotterdam - Lonely Planet",
+   "htmlTitle": "Essential guide to \u003cb\u003eRotterdam\u003c/b\u003e - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/the-netherlands/rotterdam/essential-information",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Everything for your trip to Rotterdam - best time to go, weather, daily cost advisor \n... Some policies specifically exclude dangerous activities such as scuba diving, ...",
+   "htmlSnippet": "Everything for your trip to \u003cb\u003eRotterdam\u003c/b\u003e - best time to go, weather, daily cost advisor \u003cbr\u003e\n... Some policies specifically exclude dangerous \u003cb\u003eactivities\u003c/b\u003e such as scuba diving,&nbsp;...",
+   "cacheId": "XN9LmnKh1sQJ",
+   "formattedUrl": "www.lonelyplanet.com/the.../rotterdam/essential-information",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/the.../\u003cb\u003erotterdam\u003c/b\u003e/essential-information",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "310",
+      "height": "163",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSK6yIb3CIxl98GP8bVPeDc5TUzvjelOA7wSR5B6rMt_v_yxI9V9kYqxho"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Essential guide to Rotterdam - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Essential guide to Rotterdam - Lonely Planet",
+      "twitter:description": "Everything for your trip to Rotterdam - best time to go, weather, daily cost advisor, visas, cheapest flights and transport information",
+      "twitter:image:src": "https://images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/a/g/hi/t/25b16feb8d0061ec61a188edd0577c26-delfshaven.jpg",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Essential guide to Rotterdam - Lonely Planet",
+      "og:description": "Everything for your trip to Rotterdam - best time to go, weather, daily cost advisor, visas, cheapest flights and transport information",
+      "og:url": "http://www.lonelyplanet.com/the-netherlands/rotterdam/essential-information",
+      "og:type": "website",
+      "og:image": "//images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/a/g/hi/t/25b16feb8d0061ec61a188edd0577c26-delfshaven.jpg",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "GDy68H3p3pjQpL+CvuiKipMHWu3axnJe1ceQ1KHVySI="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "http://images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/a/g/hi/t/25b16feb8d0061ec61a188edd0577c26-delfshaven.jpg"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Rotterdam travel insurance - Lonely Planet",
+   "htmlTitle": "\u003cb\u003eRotterdam\u003c/b\u003e travel insurance - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/the-netherlands/rotterdam/travel-insurance",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Travel insurance for Rotterdam - information and recommended travel insurance \n... Some policies specifically exclude dangerous activities such as scuba diving, ...",
+   "htmlSnippet": "Travel insurance for \u003cb\u003eRotterdam\u003c/b\u003e - information and recommended travel insurance \u003cbr\u003e\n... Some policies specifically exclude dangerous \u003cb\u003eactivities\u003c/b\u003e such as scuba diving,&nbsp;...",
+   "cacheId": "KZsMphCC9lIJ",
+   "formattedUrl": "www.lonelyplanet.com/the-netherlands/rotterdam/travel-insurance",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/the-netherlands/\u003cb\u003erotterdam\u003c/b\u003e/travel-insurance",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "310",
+      "height": "163",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSK6yIb3CIxl98GP8bVPeDc5TUzvjelOA7wSR5B6rMt_v_yxI9V9kYqxho"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Rotterdam travel insurance - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Rotterdam travel insurance - Lonely Planet",
+      "twitter:description": "Travel insurance for Rotterdam - information and recommended travel insurance for Rotterdam",
+      "twitter:image:src": "https://images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/a/g/hi/t/25b16feb8d0061ec61a188edd0577c26-delfshaven.jpg",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Rotterdam travel insurance - Lonely Planet",
+      "og:description": "Travel insurance for Rotterdam - information and recommended travel insurance for Rotterdam",
+      "og:url": "http://www.lonelyplanet.com/the-netherlands/rotterdam/travel-insurance",
+      "og:type": "website",
+      "og:image": "//images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/a/g/hi/t/25b16feb8d0061ec61a188edd0577c26-delfshaven.jpg",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "Hjx3ctVXWPT8QoS+vx90/AzBsjN5XXb6jLtfQde64as="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "http://images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/a/g/hi/t/25b16feb8d0061ec61a188edd0577c26-delfshaven.jpg"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Weather in The Netherlands - Lonely Planet",
+   "htmlTitle": "Weather in The Netherlands - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/the-netherlands/weather",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Things to do · Sights · Activities · Restaurants ... Rotterdam. Go Apr–Oct. Mar – \nMay. 14657 ... Prices peak, book ahead. Shoulder Season (Apr & May, Sep & Oct\n).",
+   "htmlSnippet": "\u003cb\u003eThings to do\u003c/b\u003e &middot; Sights &middot; \u003cb\u003eActivities\u003c/b\u003e &middot; Restaurants ... \u003cb\u003eRotterdam\u003c/b\u003e. Go Apr–Oct. Mar – \u003cbr\u003e\nMay. 14657 ... Prices peak, book ahead. Shoulder Season (Apr &amp; May, \u003cb\u003eSep\u003c/b\u003e &amp; Oct\u003cbr\u003e\n).",
+   "cacheId": "icS0NmWdqngJ",
+   "formattedUrl": "www.lonelyplanet.com/the-netherlands/weather",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/the-netherlands/weather",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "206",
+      "height": "245",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcT1zWkumR2yG8zPLTT3xJlcPhFFq5NWxKnja8fCkQR6RDi2ntkjI54UZ_w"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Weather in The Netherlands - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Weather in The Netherlands - Lonely Planet",
+      "twitter:description": "The best time to go to The Netherlands, including current weather conditions, temperatures and rainfall",
+      "twitter:image:src": "https://images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/mastheads/GettyImages-85911204_medium.jpg",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Weather in The Netherlands - Lonely Planet",
+      "og:description": "The best time to go to The Netherlands, including current weather conditions, temperatures and rainfall",
+      "og:url": "http://www.lonelyplanet.com/the-netherlands/weather",
+      "og:type": "website",
+      "og:image": "//images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/mastheads/GettyImages-85911204_medium.jpg",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "oOQFo2QbsI04BA/83zaJF02Fn25bSPQlfZyVikybi0A="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "http://assets.staticlp.com/country-shapes/NLD.svg"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Waterbus in Rotterdam, The Netherlands - Lonely Planet",
+   "htmlTitle": "Waterbus in \u003cb\u003eRotterdam\u003c/b\u003e, The Netherlands - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/the-netherlands/rotterdam/transportation/waterbus/a/poi-tra/1127498/360852",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "The Waterbus is a fast ferry service linking Rotterdam with Dordrecht via \nKinderdijk and is an enjoyable option for day trips, or alternative to the train. Boat\n…",
+   "htmlSnippet": "The Waterbus is a fast ferry service linking \u003cb\u003eRotterdam\u003c/b\u003e with Dordrecht via \u003cbr\u003e\nKinderdijk and is an enjoyable option for day trips, or alternative to the train. Boat\u003cbr\u003e\n…",
+   "cacheId": "WT-PGN_1GioJ",
+   "formattedUrl": "https://www.lonelyplanet.com/the-netherlands/rotterdam/.../360852",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/the-netherlands/\u003cb\u003erotterdam\u003c/b\u003e/.../360852",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Europe"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "204",
+      "height": "204",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRkXjEjWI6yazzXvc_wchyOs-lMKVfAoEdQ1sAzZyKPPQF6WHAAEu3RHFs"
+     }
+    ],
+    "country": [
+     {
+      "name": "The Netherlands"
+     }
+    ],
+    "city": [
+     {
+      "name": "Rotterdam"
+     }
+    ],
+    "postaladdress": [
+     {
+      "streetaddress": "Willemskade, Rotterdam",
+      "addresslocality": "Rotterdam",
+      "addresscountry": "The Netherlands"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Waterbus in Rotterdam, The Netherlands",
+      "og:title": "Waterbus in Rotterdam, The Netherlands",
+      "og:description": "The Waterbus is a fast ferry service linking Rotterdam with Dordrecht via Kinderdijk and is an enjoyable option for day trips, or alternative to the train. Boat…",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://api.tiles.mapbox.com/v4/lonelyplanet.b963d424/14/8396/5417.png?access_token=pk.eyJ1IjoibG9uZWx5cGxhbmV0IiwiYSI6Imh1ODUtdUEifQ.OLLon0V6rcoTyayXzzUzsg"
+     }
+    ],
+    "thing": [
+     {
+      "name": "Transportation"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     },
+     {
+      "position": "4"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Top things to do in Southern Netherlands - Lonely Planet",
+   "htmlTitle": "Top \u003cb\u003ethings to do\u003c/b\u003e in Southern Netherlands - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/the-netherlands/southern-netherlands/top-things-to-do/a/poi/1323073",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Discover the best top things to do in Southern Netherlands including Museum \nBoijmans van Beuningen, Mauritshuis, ... Top Choice Museum in Rotterdam ...",
+   "htmlSnippet": "Discover the best top \u003cb\u003ethings to do\u003c/b\u003e in Southern Netherlands including Museum \u003cbr\u003e\nBoijmans van Beuningen, Mauritshuis, ... Top Choice Museum in \u003cb\u003eRotterdam\u003c/b\u003e&nbsp;...",
+   "cacheId": "gZKgULRJKZIJ",
+   "formattedUrl": "https://www.lonelyplanet.com/the.../top-things-to-do/a/.../1323073",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/the.../top-\u003cb\u003ethings-to-do\u003c/b\u003e/a/.../1323073",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Europe"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "204",
+      "height": "204",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSypgNLJhcEngp3weNWhrfKz5D9jB32sdKCbMGBsHvM-LsqThC3I9fNBd0"
+     }
+    ],
+    "country": [
+     {
+      "name": "The Netherlands"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Top things to do in Southern Netherlands",
+      "og:title": "Top things to do in Southern Netherlands",
+      "og:description": "Discover the best top things to do in Southern Netherlands including Museum Boijmans van Beuningen, Mauritshuis, Binnenhof.",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://api.tiles.mapbox.com/v4/lonelyplanet.b963d424/9/261/167.png?access_token=pk.eyJ1IjoibG9uZWx5cGxhbmV0IiwiYSI6Imh1ODUtdUEifQ.OLLon0V6rcoTyayXzzUzsg"
+     }
+    ],
+    "region": [
+     {
+      "name": "Southern Netherlands"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Top things to do in The Netherlands - Lonely Planet",
+   "htmlTitle": "Top \u003cb\u003ethings to do\u003c/b\u003e in The Netherlands - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/the-netherlands/top-things-to-do/a/poi/360838",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Top things to do ... Top Choice Museum in Rotterdam ... in front of the station, the \nmuseum is, at the very least, a striking structure that will draw an opinion…",
+   "htmlSnippet": "Top \u003cb\u003ethings to do\u003c/b\u003e ... Top Choice Museum in \u003cb\u003eRotterdam\u003c/b\u003e ... in front of the station, the \u003cbr\u003e\nmuseum is, at the very least, a striking structure that will draw an opinion…",
+   "cacheId": "tU8fPrnoe4cJ",
+   "formattedUrl": "https://www.lonelyplanet.com/the.../top-things-to-do/a/poi/360838",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/the.../top-\u003cb\u003ethings-to-do\u003c/b\u003e/a/poi/360838",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Europe"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "204",
+      "height": "204",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTBwVbZ3qYGTQOq-csRCg4qunXDusoefv2VdgV-ccA-I-8z55lSVhK-ucJB"
+     }
+    ],
+    "country": [
+     {
+      "name": "The Netherlands"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Top things to do in The Netherlands",
+      "og:title": "Top things to do in The Netherlands",
+      "og:description": "Discover the best top things to do in The Netherlands including Zuiderzeemuseum, Museum Boijmans van Beuningen, Begijnhof.",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://api.tiles.mapbox.com/v4/lonelyplanet.b963d424/7/65/41.png?access_token=pk.eyJ1IjoibG9uZWx5cGxhbmV0IiwiYSI6Imh1ODUtdUEifQ.OLLon0V6rcoTyayXzzUzsg"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     }
+    ]
+   }
+  }
+ ]
+}

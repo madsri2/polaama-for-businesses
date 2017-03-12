@@ -134,4 +134,28 @@ describe("Test to match similar names", function() {
   });
 });
 
+describe("Validate comments", function() {
+  const families = {
+    "fam-A" : ["Aparna", "A"],
+    "fam-C" : ["C", "D"]
+  };
+  it("validate comment with word paid", function() {
+    const comment = "A paid $50 for blah";
+    const parser = new CommentsParser(families);
+    expect(parser.validate(comment)).to.equal(true);
+  });
+
+  it("validate comment with word owes", function() {
+    const comment = "A owes C 50 usd for blah";
+    const parser = new CommentsParser(families);
+    expect(parser.validate(comment)).to.equal(true);
+  });
+
+  it("test validation failing", function() {
+    const comment = "A paid B $50";
+    const parser = new CommentsParser(families);
+    expect(parser.validate(comment)).to.equal(false);
+  });
+});
+
 

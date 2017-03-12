@@ -4,6 +4,8 @@ const Sessions = require('./sessions');
 const FbidHandler = require('./fbid-handler');
 const TripInfoProvider = require('./trip-info-provider');
 const CommentParser = require('./expense-report/app/comment-parser');
+const ExpenseReportWorkflow = require('./expense-report/app/workflow');
+
 const _ = require('lodash');
 const request = require('request');
 const moment = require('moment');
@@ -48,7 +50,7 @@ function handleMessagingEvent(messagingEvent) {
   }
   catch(err) {
     logger.error("an exception was thrown: " + err.stack);
-    sendTextMessage(messagingEvent.sender.id,"Even bots need to eat! Be back in a bit..");
+		sendTextMessage(messagingEvent.sender.id,"Even bots need to eat! Be back in a bit (after fixing an internal server error)");
   }
 }
 
@@ -128,7 +130,6 @@ function getTripInContext(payload) {
   const tripName = payload.substring("trip_in_context ".length);
   logger.info(`Setting the trip name for this session's context to ${tripName}. User assumes this is an existing trip.`);
   this.session.addTrip(tripName);
-  sendAddOrGetOptions.call(this);
   return;
 }
 
@@ -292,14 +293,12 @@ function receivedPostback(event) {
   const timeOfPostback = event.timestamp;
   // The 'payload' param is a developer-defined field which is set in a postback 
   // button for Structured Messages. 
-  const payload = event.postback.payload;
+  let payload = event.postback.payload;
 
   logger.info("Received postback for user %d, page %d, session %d at timestamp: %d. Payload: %s", senderID, recipientID, this.session.fbid, timeOfPostback, payload);
 
-
-  if(payload === "pb_other_details") {
-    sendOtherGetButtons.call(this);
-    return;
+  if(payload === "GET_STARTED_PAYLOAD") {
+    return sendHelpMessage.call(this); 
   }
 
   // A pmenu, past_trips or a postback starting with "trip_in_context" is indicative of the beginning of a new state in the state machine. So, clear the session's "awaiting" states to indicate the beginning of a new state.
@@ -315,8 +314,18 @@ function receivedPostback(event) {
   if(payload.startsWith("trip_in_context")) {
     getTripInContext.call(this, payload);
     this.session.noTripContext = false;
-    return;
+    if(this.session.previousPayload) {
+      // use the payload that the user chose before getting the trip in context
+      payload = this.session.previousPayload;
+      this.session.previousPayload = null;
+    }
+    else {
+      // no previous payload. Simply present available options and return;
+      sendAddOrGetOptions.call(this);
+      return;
+    }
   }
+
   if(payload === "pmenu_existing_trips") {
 		sendTripButtons.call(this);
 		return;
@@ -328,10 +337,38 @@ function receivedPostback(event) {
   }
 	
 	// In order to add travelers to a trip, we need to know the trip in context.
-  if((_.isNull(this.session.tripNameInContext) || _.isUndefined(this.session.tripNameInContext) || this.session.tripNameInContext === "") && !this.session.noTripContext) {
+  if((!this.session.tripNameInContext || this.session.tripNameInContext === "") && 
+      !this.session.noTripContext) {
     logger.info("receivedPostback: no trip name in context. Asking user!");
+    // store the current payload so it can be handled once we have the tripInContext.
+    this.session.previousPayload = payload; 
     sendTripButtons.call(this, true /* add new trip */);
     return;
+  }
+
+  if(payload === "add_comments") {
+    enterCommentAsMessage.call(this);
+    return;
+  }
+  if(payload === "add_todo") {
+    enterTodoItemAsMessage.call(this);
+    return;
+  }
+  if(payload === "add_pack_item") {
+    enterPackItemAsMessage.call(this);
+    return;
+  }
+  if(payload === "add_cities") {
+    addCitiesToExistingTrip.call(this);
+    return;
+  }
+  if(payload === "add_expense") {
+    this.session.expenseReportWorkflow = new ExpenseReportWorkflow(this.session);
+    callSendAPI(this.session.expenseReportWorkflow.startWork());
+    return;
+  }
+  if(payload === "add_travelers") {
+    determineTravelCompanions.call(this);
   }
 
   // When an unknown postback is called, we'll send a message back to the sender to 
@@ -365,7 +402,7 @@ function receivedMessage(event) {
     return;
   }
 
-  logger.info("Received event for user %d, page %d, session %d at timestamp: %d. Event: ", senderID, recipientID, this.session.fbid, timeOfMessage, JSON.stringify(event));
+  logger.info("receivedMessage: Received event for user %d, page %d, session %d at timestamp: %d. Event: ", senderID, recipientID, this.session.fbid, timeOfMessage, JSON.stringify(event));
 
   const messageText = message.text;
   const messageAttachments = message.attachments;
@@ -426,17 +463,16 @@ function sendPastTrips() {
 }
 
 function sendTripButtons(addNewTrip) {
-  const tripDetails = this.session.getFutureTrips();
+  const tripDetails = this.session.getCurrentAndFutureTrips();
   const tripNames = tripDetails.futureTrips;
-  console.log(`sendTripButtons: trip length for fbid ${this.session.fbid} is ${tripNames.length}`);
+  logger.info(`sendTripButtons: trip length for fbid ${this.session.fbid} is ${tripNames.length}`);
   if(tripNames.length == 0) {
-    sendTextMessage(this.session.fbid, "You don't have any trips planned yet.");
     const messageData = {
       recipient: {
         id: this.session.fbid
       },
       message: {
-        text: `Create New Trip`,
+        text: `You don't have a any trips planned yet.`,
         quick_replies:[
           {
             content_type: "text",
@@ -498,7 +534,7 @@ function sendTripButtons(addNewTrip) {
     buttons[lastIndex].push({
       type: "postback",
       title: "-",
-      payload: "payload"
+      payload: "dash"
     });
   }
   buttons.forEach(list => {
@@ -527,7 +563,7 @@ function sendTripButtons(addNewTrip) {
 
 function sendAllTripsButtons() {
   const elements = [];
-  const futureTrips = this.session.getFutureTrips();
+  const futureTrips = this.session.getCurrentAndFutureTrips();
   const pastTrips = this.session.getPastTrips();
   pastTrips.forEach(t => {
     elements.push({
@@ -573,54 +609,33 @@ function sendAllTripsButtons() {
 
 function handleQuickReplies(quick_reply) {
   const payload = quick_reply.payload;
-  if(_.isUndefined(payload)) {
+  if(!payload) {
     logger.error(`handleQuickReplies: Payload is undefined in quick_reply.`);
-    return;
+    return true;
   }
   // User clicked on "Add ..." or "Get ..." in help message or after choosing a trip under "Existing trips"
   if(payload === "qr_add_") {
     sendAddButtons.call(this);
-    return;
+    return true;
   }
 
   if(payload === "qr_get_") {
     displayTripDetails.call(this);
-    return;
+    return true;
   }
 
-  // Use followed an "Add..." click with one of the following items.
-  if(payload === "qr_add_comments") {
-    enterCommentAsMessage.call(this);
-    return;
-  }
-  if(payload === "qr_add_todo") {
-    enterTodoItemAsMessage.call(this);
-    return;
-  }
-  if(payload === "qr_add_pack_item") {
-    enterPackItemAsMessage.call(this);
-    return;
-  }
-  if(payload === "qr_add_cities") {
-    addCitiesToExistingTrip.call(this);
-    return;
-  }
-  if(payload === "qr_add_travelers") {
-    determineTravelCompanions.call(this);
-  }
-  
   // This quick reply came from the user typing "help" (see sendHelpMessage)
   if(payload === "qr_new_trip") {
     planNewTrip.call(this);
-    return;
+    return true;
   }
   if(payload === "qr_existing_trips") {
 		sendTripButtons.call(this);
-    return;
+    return true;
   }
 
-  logger.warn(`handleQuickReplies: Session ${this.session.fbid}: A quick reply without actionoble payload called: ${JSON.stringify(quick_reply)}`);
-  return;
+  logger.warn(`handleQuickReplies: Session ${this.session.fbid}: quick_reply not handled here ${JSON.stringify(quick_reply)}`);
+  return false;
 }
 
 function validateStartDate(value, onError) {
@@ -645,7 +660,28 @@ function validateStartDate(value, onError) {
   return null;
 }
 
+// An object that is expected to be thrown by extractNewDetails below
+function UserConfirmation(message) {
+	this.message = message;
+	this.name = "UserConfirmation";
+}
+
+function createNewTrip(tripDetails) {
+  this.session.addTrip(tripDetails.destination);
+  const tripData = this.session.tripData();
+  tripData.addTripDetailsAndPersist(tripDetails);
+  logger.info(`extractNewTripDetails: This session's trip name in context is ${tripDetails.destination}`);
+  this.session.awaitingNewTripDetails = false;
+  // this new trip will also be the context for this session;
+  this.session.noTripContext = false;
+}
+
 function extractNewTripDetails(messageText) {
+	// short-circuit parsing the input and validation if the data already existed.
+	if(this.session.previouslyEnteredTripDetails && this.session.previouslyEnteredTripDetails.tripStarted) {
+		createNewTrip.call(this, this.session.previouslyEnteredTripDetails);
+		return;
+	}
   const td = messageText.split(',');
   if(td[1].match(/^ *\d+\/\d+$/)) { // if date is of the form "1/1", "10/10" or " 1/10", append year
     td[1] = td[1].concat(`/${new Date().getFullYear()}`);
@@ -672,18 +708,16 @@ function extractNewTripDetails(messageText) {
     return;
   });
   if(error) {
+		if(error.length === 1 && error[0].message.startsWith("Provided")) {
+			// store the tripDetail so we can use this depending on how the user responds to this question.
+			this.session.previouslyEnteredTripDetails = tripDetails;
+			throw new UserConfirmation('Provide date is in the past. Has your trip already started?');
+		}
     logger.warn(`extractNewDetails: Validation error: ${JSON.stringify(error)}`);
     return error;
   }
 
-  this.session.addTrip(tripDetails.destination);
-  const tripData = this.session.tripData();
-  tripData.addTripDetailsAndPersist(tripDetails);
-  logger.info(`extractNewTripDetails: This session's trip name in context is ${tripDetails.destination}`);
-  this.session.awaitingNewTripDetails = false;
-  // this new trip will also be the context for this session;
-  this.session.noTripContext = false;
-  return null;
+	createNewTrip.call(this, tripDetails);
 }
 
 function extractCityDetails(messageText) {
@@ -741,7 +775,12 @@ function determineResponseType(event) {
   if(mesg.startsWith("help ") || mesg === "help") {
     // clear all states so that we can start on a clean state.
     this.session.clearAllAwaitingStates();
-    return sendHelpMessage.call(this); 
+    if(this.session.tripNameInContext) {
+      return sendAddOrGetOptions.call(this);
+    }
+    else {
+      return sendHelpMessage.call(this); 
+    }
   }
 
   // if we don't know what trip is being discussed, ask the user for this, unless the user is adding details about a new trip.
@@ -758,15 +797,43 @@ function determineResponseType(event) {
   if(this.session.planningNewTrip) {
     // 1) Extract trip details like destination, start date and duration
     if(this.session.awaitingNewTripDetails) {
-      const err = extractNewTripDetails.call(this, messageText);
-      if(err) {
-        sendTextMessage(this.session.fbid, `Input error: parameter ${err[0].parameter}:${err[0].message}`);
-        return;
-      }
+			// if we are awaiting user confirmation, handle that differently
+			if(this.session.awaitingUserConfirmation) {
+        const userResponse = event.message.quick_reply.payload;
+				if(userResponse === "qr_yes") {
+					// Mark that the trip has already started. This will be used in startPlanningTrip
+					this.session.previouslyEnteredTripDetails.tripStarted = true;
+					this.session.awaitingUserConfirmation = false;
+				}
+				else if(userResponse === "qr_no") {
+					this.session.awaitingUserConfirmation = false;
+					planNewTrip.call(this);
+					return;
+				}		
+				else {
+					logger.error(`determineResponseType: BUG! Session is in state awaitingUserConfirmation  but the mesg is not qr_yes or qr_no. It is ${userResponse}. This is unexpected`);
+					sendTextMessage(messagingEvent.sender.id,"Even bots need to eat! Be back in a bit (after fixing an internal server error)");
+					return;
+				}
+			}
+			try {
+      	const err = extractNewTripDetails.call(this, messageText);
+      	if(err) {
+        	sendTextMessage(this.session.fbid, `Input error: parameter ${err[0].parameter}:${err[0].message}`);
+        	return;
+      	}
+			}
+			catch(e) {
+				// Assume that the only exception being thrown now is UserConfirmation. Update if this changes in the future
+				this.session.awaitingUserConfirmation = true;
+				sendYesNoButtons.call(this, e.message);
+				return;
+			}
     }
 
-    // 2) Get hometown if it's undefined.
-    if(_.isUndefined(this.session.hometown)) {
+    // 2) Get hometown if it's undefined and if the trip has not already started. If the trip has already started, we currently don't need it since the hometown is only needed for flight details currently
+    const thisTrip = this.session.tripData().data;
+    if(!this.session.hometown && !thisTrip.tripStarted) {
       // TODO: If the hometown is defined, don't simply assume that to be the point of origin. Confirm with the user.
       if(this.session.awaitingHometownInfo) {
         // TODO: Validate hometown
@@ -784,49 +851,60 @@ function determineResponseType(event) {
     // TODO: Handle case where user does not yet know which cities they are going to!
     if(this.session.awaitingCitiesForNewTrip) {
       extractCityDetails.call(this, messageText);
-    }
-    else {
       const tripData = this.session.tripData();
-      if(!determineCities.call(this)) {
-        // ask user to enter cities and port of entry
-        if(!this.session.awaitingCitiesForNewTrip) {
-          sendTextMessage(this.session.fbid, `What cities in ${tripData.data.destination} are you traveling to (comma separated list)?`);
-          sendTextMessage(this.session.fbid, `The first city in your list will be used as your port of entry`);
-          this.session.awaitingCitiesForNewTrip = true;
-          return;
-        }
-        else {
-          if(tripData.data.cities) {
-            logger.info(`determineResponseType: Start planning trip for customer`);
-            // End of new trip workflow. The workflow will complete when user selects cities (handled by determineCities function) and webpage-handler.js calls the startPlanningTrip method
-            this.session.planningNewTrip = false;
-            this.session.awaitingCitiesForNewTrip = false;
-            this.startPlanningTrip();
-          }
-          else {
-            logger.error(`determineResponseType: Session ${this.session.sessionId}: Cannot determine cities for trip ${tripData.data.destination} even after getting cities from customer. Possible BUG!`);
-            sendTextMessage(this.session.fbid,"Even bots need to eat! Be back in a bit..");
-          }
-        }
+      if(tripData.data.cities) {
+        logger.info(`determineResponseType: Start planning trip for customer`);
+        this.session.planningNewTrip = false;
+        this.startPlanningTrip();
       }
+      else {
+        logger.error(`determineResponseType: Session ${this.session.sessionId}: Cannot determine cities for trip ${tripData.data.destination} even after getting cities from customer. Possible BUG!`);
+        sendTextMessage(this.session.fbid,"Even bots need to eat! Be back in a bit..");
+      }
+      return;
+    }
+
+    const tripData = this.session.tripData();
+    if(!determineCities.call(this)) {
+      // ask user to enter cities and port of entry because we don't have that data yet.
+      sendTextMessage(this.session.fbid, `What cities in ${tripData.data.destination} are you traveling to (comma separated list)?`);
+      sendTextMessage(this.session.fbid, `The first city in your list will be used as your port of entry`);
+      this.session.awaitingCitiesForNewTrip = true;
+      return;
+    }
+    else { 
+      // determineCities returned true, indicating that we have city list information
+      // End of new trip workflow. The workflow will complete when user selects cities (handled by determineCities function) and webpage-handler.js calls the startPlanningTrip method
+      // TODO: Rather than let webpage-handler.js call startPlanning (and thus exposing this functionality there), consider calling startPlanningTrip from here.. The presence of tripData.data.cities can be a signal from webpage-handler.js's formParseCallback method that the cities were correctly chosen and added here.
+      this.session.planningNewTrip = false;
+      this.session.awaitingCitiesForNewTrip = false;
     }
     return;
   }
 
-  if(!_.isUndefined(event.message.quick_reply)) { 
-    return handleQuickReplies.call(this, event.message.quick_reply);
+  if(this.session.expenseReportWorkflow) {
+    const workflow = this.session.expenseReportWorkflow;
+    try {
+      callSendAPI(workflow.doWork(event.message));
+      if(workflow.done) {
+        this.session.expenseReportWorkflow = null;
+      }
+    }
+    catch(e) {
+      logger.error(`determineResponseType: Error from expense report workflow: ${e}`);
+      sendTextMessage(senderID,"Even bots need to eat. Out for lunch! Be back in a bit(after fixing the internal server error)");
+    }
+    return;
+  }
+
+  if(event.message.quick_reply) { 
+    handleQuickReplies.call(this, event.message.quick_reply);
+    return;
+    // if it was not handled, it's possible that the quick_reply is meant for some other step below. continue on.
   }
 
   const tripData = this.session.tripData();
   if(mesg.startsWith("save") || this.session.awaitingComment) {
-    /*
-    // if this comment is related to an expense, validate.
-    const parser = new CommentParser();
-    if(!parser.validate(messageText)) {
-      sendTextMessage(this.session.fbid, `Looks like an expense report. If so, please use one of the following formats: "A paid B $xx ...", "A owes B $xx ...", "A paid B xx usd/euro/currency ..." etc.`);
-      return;
-    }
-    */
     const returnString = tripData.storeFreeFormText(senderID, messageText);
     sendTextMessage(senderID, returnString);
     this.session.awaitingComment = false;
@@ -845,7 +923,7 @@ function determineResponseType(event) {
     return;
   }
   if(mesg.startsWith("get todo")) {
-    sendTextMessage(senderID, sendUrl.call(this, tripData.todoUrlPath()));
+    sendUrlButton.call(this, "Get Todo list", tripData.todoUrlPath());
     return;
   }
   if(mesg.startsWith("get expense")) {
@@ -853,11 +931,11 @@ function determineResponseType(event) {
     return;
   }
   if(mesg.startsWith("retrieve") || mesg.startsWith("comments") || mesg.startsWith("get comments")) {
-    sendTextMessage(senderID, sendUrl.call(this, tripData.commentUrlPath()));
+    sendUrlButton.call(this, "Get Comments", tripData.commentUrlPath());
     return;
   }
   if(mesg.startsWith("get list") || mesg.startsWith("get pack")) {
-    sendTextMessage(senderID, sendUrl.call(this, tripData.packListPath()));
+    sendUrlButton.call(this, "Get pack-list", tripData.packListPath());
     return;
   }
   if(mesg.startsWith("deals")) {
@@ -876,7 +954,7 @@ function determineResponseType(event) {
   logger.info("determineResponseType: human context: ",JSON.stringify(humanContext));
   if(senderID != humanContext.fbid) {
     // TODO: If response could not be sent to human as expected, we need to figure out what to do. One option is to wing it and send the message to bot. Another option is to simply throw an error that we are experieincing difficult. This might be a little 
-    interceptMessage(humanContext,senderID,event);
+    interceptMessage.call(this, humanContext,senderID,event);
     logger.info("intercepted message and updated human context: ",JSON.stringify(humanContext));
     return;
   }
@@ -1039,6 +1117,7 @@ function handleMessageSentByHuman(messageText, senderID) {
   else {
     sendMessageFromHuman(origSenderId, mesgToSender);
   }
+  // TODO: awaitingResponse should be reset automatically after a certain period of time.
   if(!_.isUndefined(done) || (mesgToSender === "ai")) {
     logger.info("handleMessageSentByHuman: human has sent the last message for this conversation. Mark awaiting response as done");
     thread.awaitingResponse = false;
@@ -1151,7 +1230,7 @@ function sendResponseFromWitBot(senderID, messageText) {
   })
   .catch((err) => {
     logger.error('Oops! Got an error from Wit: ', err.stack || err);
-    sendTextMessage(senderID,"Even bots need to eat. Out for lunch! Be back in a bit.");
+    sendTextMessage(senderID,"Even bots need to eat. Out for lunch! Be back in a bit(after fixing the internal server error)");
   })
 }
 
@@ -1185,7 +1264,6 @@ function determineCities(existingTrip) {
               title:"Cities",
               webview_height_ratio: "compact",
               messenger_extensions: true,
-              // url: sendUrl.call(this, `${trip.rawTripName}/${uri}`),
             }]
           }]
         }
@@ -1226,12 +1304,16 @@ function determineTravelCompanions() {
 }
 
 function sendAddOrGetOptions() {
+  let msgSuffix = "";
+  if(this.session.tripNameInContext) {
+    msgSuffix = ` for your ${this.session.tripNameInContext} trip`;
+  }
   const messageData = {
     recipient: {
       id: this.session.fbid
     },
     message: {
-      text: `What would you like to do?`,
+      text: `What would you like to do${msgSuffix}?`,
       quick_replies:[
         {
           content_type: "text",
@@ -1276,42 +1358,78 @@ function sendHelpMessage() {
   callSendAPI(messageData);
 }
 
+// used by workflow for planningNewTrip
+function sendYesNoButtons(message) {
+  const messageData = {
+    recipient: {
+      id: this.session.fbid
+    },
+    message: {
+      text: message,
+      quick_replies:[
+        {
+          content_type: "text",
+          title: "Yes",
+          payload: "qr_yes",
+        },
+				{
+					content_type: "text",
+					title: "Re-enter trip details",
+					payload: "qr_no",
+				},
+			]
+		}
+	};
+	callSendAPI(messageData);
+}
+
 function sendAddButtons() {
   const messageData = {
     recipient: {
       id: this.session.fbid
     },
     message: {
-      text: `What would you like to add?`,
-      quick_replies:[
-        {
-          content_type: "text",
-          title: "Comment",
-          payload: "qr_add_comments"
-          // TODO: add image
-          // image_url: "https://polaama.com/img/destination.png"
-        },
-        {
-          content_type: "text",
-          title: "Tasks",
-          payload: "qr_add_todo",
-        },
-        {
-          content_type: "text",
-          title: "Pack item",
-          payload: "qr_add_pack_item",
-        },
-        {
-          content_type: "text",
-          title: "Cities (to trip)",
-          payload: "qr_add_cities",
-        },
-        {
-          content_type: "text",
-          title: "Travelers",
-          payload: "qr_add_travelers",
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "generic",
+          elements: [{
+            title: "Add", // Comments, Tasks, Pack list
+            buttons:[{
+              type: "postback",
+              title: "Comments",
+              payload: "add_comments",
+            },
+            {
+              type: "postback",
+              title: "Tasks",
+              payload: "add_todo",
+            },
+            {
+              type: "postback",
+              title: "Pack item",
+              payload: "add_pack_item",
+            }],
+          }, {
+            title: "Add", // cities, Expense report 
+            buttons:[{
+              type: "postback",
+              title: "Cities",
+              payload: "add_cities"
+            },
+            {
+              type: "postback",
+              title: "Expense item",
+              payload: "add_expense"
+            },
+            {
+              type: "postback",
+              title: "Travelers",
+              payload: "add_travelers"
+            }],
+          }]
         }
-      ]
+      }
     }
   };
   callSendAPI(messageData);

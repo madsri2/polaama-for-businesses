@@ -29,6 +29,9 @@ TripDataFormatter.prototype.formatListResponse = function(headers, key) {
 
 TripDataFormatter.prototype.formatComments = function() {
   const comments = this.trip.parseComments();
+  if(Object.keys(comments).length === 0) {
+    return "No comments available";
+  }
   const html = fs.readFileSync("html-templates/comments.html", 'utf8');
   return html.replace("${tripName}",this.trip.rawTripName)
     .replace("${activityList}",listAsHtml(comments.activities))
@@ -47,6 +50,9 @@ TripDataFormatter.prototype.formatTripDetails = function(weatherDetails, activit
   let activities = listAsHtml(comments.activities);
   activities += formatActivities.call(this, activityDetails);
   const html = fs.readFileSync("html-templates/trip-page.html", 'utf8');
+  // since this is the entire trip, obtain expense information that is present under 'expenses' key in the trip object
+  comments.expenses = this.trip.getExpenseDetails();
+  // TODO: Do this for weather, flight and other details..
   return html.replace("${tripName}",this.trip.rawTripName)
     .replace("${activityDetails}",activities)
     .replace("${weatherDetails}", formatWeatherDetails.call(this, weatherDetails))
@@ -92,7 +98,7 @@ function formatWeatherDetails(weatherDetails) {
 
   keys.forEach(city => {
       wText += `<div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d">\n`;
-      wText += `<h1>${city}</h1>\n`;
+      wText += `<h1>${capitalize1stChar(city)}</h1>\n`;
       weatherDetails[city].forEach(note => {
           wText += `<p>${toLink(note)}</p>\n`;
           });
@@ -253,23 +259,38 @@ TripDataFormatter.prototype.formatCityChoicePage = function() {
   return fs.readFileSync("html-templates/handle-city-choice.html", 'utf8');
 }
 
-TripDataFormatter.prototype.formatExpensePage = function(reportSummary, spendSummary, comments) {
+function capitalize1stChar(str) {
+  return str.replace(/^[a-z]/g, function(letter, index, string) {
+    return index == 0 ? letter.toUpperCase() : letter;
+  });
+}
+
+TripDataFormatter.prototype.formatExpensePage = function(report) {
+  const reportSummary = report.owesReport;
+  const spendSummary = report.spendSummary;
+  const comments = report.comments;
+  const note = report.note;
   const html = fs.readFileSync("html-templates/expense-reports.html", 'utf8');
   let summary = "";
   const keys = Object.keys(reportSummary);
   Object.keys(reportSummary).forEach(key => {
     reportSummary[key].forEach(item => {
-      summary = summary.concat(`<p>${key} owes ${item.famOwed} <b>$${item.amtOwed}</b>/-</p>`);
+      summary = summary.concat(`<p>${capitalize1stChar(key)} owes ${capitalize1stChar(item.famOwed)} <b>$${item.amtOwed}</b>/-</p>`);
     });
   });
   let ssHtml = "";
   Object.keys(spendSummary).forEach(fam => {
-    ssHtml = ssHtml.concat(`<p>${fam} & family spent <b>$${spendSummary[fam]}</b>/-</p>`);
+    ssHtml = ssHtml.concat(`<p>${capitalize1stChar(fam)} & family spent <b>$${spendSummary[fam]}</b>/-</p>`);
   });
 
   return html.replace("${reportSummary}", summary)
              .replace("${spendSummary}", ssHtml)
+             .replace("${note}", note)
              .replace("${expenseReportDetails}", listAsHtml(comments));
+}
+
+TripDataFormatter.prototype.displayCalendar = function(report) {
+  return fs.readFileSync("html-templates/trip-calendar-view.html", 'utf8');
 }
 
 function toLink(text) {

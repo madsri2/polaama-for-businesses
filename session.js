@@ -161,13 +161,15 @@ Session.prototype.getPastTrips = function() {
   return trips;
 }
 
-Session.prototype.getFutureTrips = function() {
+Session.prototype.getCurrentAndFutureTrips = function() {
   let trips = [];
   let pastTrips = false;
   // Filter past trips
   this.allTrips().forEach(trip => {
-    const start = moment(new Date(trip.data.startDate).toISOString());
-    const daysToTrip = start.diff(moment(),'days');
+    console.log(`getCurrentAndFutureTrips: trip is ${trip.rawTripName}`);
+    const end = moment(new Date(trip.data.returnDate).toISOString());
+    const daysToTrip = end.diff(moment(),'days');
+    // if we don't know the start date for whatever reason, include those trips as well
     if(!trip.data.startDate || daysToTrip >= 0) {
       trips.push({
         name: trip.data.name,

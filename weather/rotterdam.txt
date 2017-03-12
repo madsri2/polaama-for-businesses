@@ -1,0 +1,55 @@
+
+{
+  "response": {
+  "version":"0.1",
+  "termsofService":"http://www.wunderground.com/weather/api/d/terms.html",
+  "features": {
+  "planner": 1
+  }
+		, "results": [
+		{
+		"name": "Rotterdam",
+		"city": "Rotterdam",
+		"state": "ZH",
+		"country": "NL",
+		"country_iso3166":"NL",
+		"country_name":"Netherlands",
+		"zmw": "00000.1.06344",
+		"l": "/q/zmw:00000.1.06344"
+		}
+		,
+		{
+		"name": "Rotterdam",
+		"city": "Rotterdam",
+		"state": "ZH",
+		"country": "NL",
+		"country_iso3166":"NL",
+		"country_name":"Netherlands",
+		"zmw": "00000.1.06343",
+		"l": "/q/zmw:00000.1.06343"
+		}
+		,
+		{
+		"name": "Rotterdam",
+		"city": "Rotterdam",
+		"state": "ZH",
+		"country": "NL",
+		"country_iso3166":"NL",
+		"country_name":"Netherlands",
+		"zmw": "00000.186.06344",
+		"l": "/q/zmw:00000.186.06344"
+		}
+		,
+		{
+		"name": "Rotterdam",
+		"city": "Rotterdam",
+		"state": "ZH",
+		"country": "NL",
+		"country_iso3166":"NL",
+		"country_name":"Netherlands",
+		"zmw": "00000.1.06344",
+		"l": "/q/zmw:00000.1.06344"
+		}
+		]
+	}
+}

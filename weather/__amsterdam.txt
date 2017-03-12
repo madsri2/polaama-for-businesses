@@ -1,0 +1,33 @@
+
+{
+  "response": {
+  "version":"0.1",
+  "termsofService":"http://www.wunderground.com/weather/api/d/terms.html",
+  "features": {
+  "planner": 1
+  }
+		, "results": [
+		{
+		"name": "Amsterdam",
+		"city": "Amsterdam",
+		"state": "NH",
+		"country": "NL",
+		"country_iso3166":"NL",
+		"country_name":"Netherlands",
+		"zmw": "00000.1.06240",
+		"l": "/q/zmw:00000.1.06240"
+		}
+		,
+		{
+		"name": "Amsterdam",
+		"city": "Amsterdam",
+		"state": "NH",
+		"country": "NL",
+		"country_iso3166":"NL",
+		"country_name":"Netherlands",
+		"zmw": "00000.1.06240",
+		"l": "/q/zmw:00000.1.06240"
+		}
+		]
+	}
+}

@@ -255,6 +255,12 @@ app.get('/:id/:tripName/add-cities', function(req, res) {
   return handler.handleWebpage(res, handler.displayCitiesForExistingTrip);
 });
 
+
+app.get('/:id/:tripName/calendar', function(req, res) {
+  const handler = new WebpageHandler(req.params.id, req.params.tripName);
+  return handler.handleWebpage(res, handler.displayCalendar);
+});
+
 app.post('/:id/:tripName/handle-add-city-choice', function(req, res) {
   const handler = new WebpageHandler(req.params.id, req.params.tripName);
   // The global postHandler could have a different session than the one on this page. so, create a new webhook handler using the session belonging to this page to start planning a trip.

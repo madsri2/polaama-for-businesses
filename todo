@@ -1,0 +1,3 @@
+Ensure that expense report works for iceland trip 
+Test case where you enter an "Add" or "Get" item but the trip in context is missing (previousPayload change)
+On safari, if you go to polaama.com and click on "Message Us", you are shown Adhu Artha's window, instead of Dhu Rtha's window, even though you are logged in as Dhu Rtha.

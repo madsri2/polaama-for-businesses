@@ -6,7 +6,6 @@ const logger = require('./my-logger');
 const tripBaseDir = "/home/ec2-user/trips";
 const Country = require('./country');
 const Encoder = require('./encoder');
-const CommentParser = require('./expense-report/app/comment-parser');
 
 // TODO: This is leaking data model to other classes. Fix this by moving all functionality that require this variable into a function in this class.
 TripData.todo = "todoList";
@@ -25,6 +24,7 @@ function TripData(tripName) {
 }
 
 // return the list of raw names for each trip.
+// TODO: Figure out who is using this and reconcile with the use of session.getFutureTrips
 TripData.getTrips = function() {
   let tripList = [];
   fs.readdirSync(tripBaseDir).forEach(name => {
@@ -142,6 +142,9 @@ TripData.prototype.addTripDetailsAndPersist = function(tripDetails) {
   else if(tripDetails.startDate) {
     this.data.startDate = tripDetails.startDate;
   }
+  if(tripDetails.tripStarted) {
+    this.data.tripStarted = tripDetails.tripStarted;
+  }
   const sdIso = new Date(this.data.startDate).toISOString();
   this.data.startDate = moment(sdIso).format("YYYY-MM-DD");
   this.data.returnDate = moment(sdIso).add(this.data.duration,'days').format("YYYY-MM-DD");
@@ -201,20 +204,22 @@ TripData.prototype.storePackList = function(senderId, messageText) {
  */
 TripData.prototype.storeFreeFormText = function(senderId, messageText) {
   const reg = new RegExp("^save:?[ ]*","i"); // ignore case
-  if(commentIsReportingExpense.call(this, messageText)) {
-    // const parser = new CommentParser();
-    // parser.validateComment(messageText));
-  }
   return storeList.call(this, senderId, messageText, reg, "comments", "comments, get comments or retrieve");
 }
 
-TripData.prototype.getExpenseReport = function() {
+TripData.prototype.storeExpenseEntry = function(senderId, messageText) {
+  const regex = new RegExp("^expense(-report)?:?[ ]*","i"); // ignore case
+  return storeList.call(this, senderId, messageText, regex, "expenses", "get expense-report, get expenses or get expense details");
+}
+
+// TO DEPRECATE!
+function getExpenseDetailsFromComments() {
   const comments = this.getInfoFromTrip("comments"); 
-  if(!Object.keys(comments).length) {
-    logger.warn(`No comments found for trip ${this.rawTripName}`);
-    return null;;
-  }
   let report = [];
+  if(!Object.keys(comments).length) {
+    logger.warn(`No comments found for trip ${this.rawTripName}. Returning empty list`);
+    return report;
+  }
   comments.forEach(item => {
     const encItem = item.toLowerCase();
     // expenses
@@ -223,7 +228,7 @@ TripData.prototype.getExpenseReport = function() {
     }
   });
   return report;
-}
+} 
 
 function commentIsReportingExpense(comment) {
   const item = comment.toLowerCase();
@@ -235,12 +240,26 @@ function commentIsReportingExpense(comment) {
   return false;
 }
 
+TripData.prototype.getExpenseDetails = function() {
+  const detailsFromComment = getExpenseDetailsFromComments.call(this);
+  const expenseDetails = this.getInfoFromTrip("expenses"); 
+  if(Array.isArray(expenseDetails)) {
+    return detailsFromComment.concat(expenseDetails);
+  }
+  return detailsFromComment;
+}
+
+TripData.prototype.getTravelers = function() {
+  return this.data.travelers;
+}
+
 function storeList(senderId, messageText, regex, key, retrieveString) {
   // retrieve text
   const items = messageText.replace(regex,"").split(',');
   if(!(key in this.data)) {
     this.data[key] = [];
   } 
+  // this.data[key] is an array, so concat here merges two arrays.
   this.data[key] = this.data[key].concat(items);
   // store it locally
   this.persistUpdatedTrip();
@@ -343,7 +362,6 @@ TripData.encode = function(name) {
 
 function myEncode(name) {
   return Encoder.encode(name);
-  // return name.toLowerCase().replace(" ","_");
 }
 
 function createPackList() {
