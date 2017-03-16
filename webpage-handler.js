@@ -172,6 +172,24 @@ WebpageHandler.prototype.displayCitiesForExistingTrip = function(res) {
   return res.send(this.formatter.addCitiesExistingTrip());
 }
 
+WebpageHandler.prototype.handleControlGroup = function(req, res) {
+  const form = new formidable.IncomingForm(); 
+  // All activities need to happen within the the form.parse function
+  const callback = formParseCallback.bind(this);
+  const self = this;
+
+  console.log("handleControlGroup called");
+  form.parse(req, function(err, fields, files) {
+    console.log("form.parse called");
+    if(err) {
+      console.log(`Error from parser: ${JSON.stringify(err)}`);
+      return res.send(`error from parser: ${JSON.stringify(err)}`);
+    }
+   console.log(`Fields in form are : ${JSON.stringify(fields)}`);
+    return res.send(`Fields in form are ${JSON.stringify(fields)}`);
+  });
+}
+
 function formParseCallback(err, fields, files, res, existingTrip) {
   if(_.isUndefined(fields.cities)) {
     return res.send("No cities added.");

@@ -5,6 +5,7 @@ const FbidHandler = require('./fbid-handler');
 const TripInfoProvider = require('./trip-info-provider');
 const CommentParser = require('./expense-report/app/comment-parser');
 const ExpenseReportWorkflow = require('./expense-report/app/workflow');
+const CreateItinerary = require('./trip-itinerary/app/create-itin');
 
 const _ = require('lodash');
 const request = require('request');
@@ -262,6 +263,11 @@ function displayTripDetails() {
 WebhookPostHandler.prototype.startPlanningTrip = function() {
   sendTextMessage(this.session.fbid, `Gathering weather, flight and stay related information for ${this.session.tripNameInContext}`);
   sendTypingAction.call(this);
+
+  // Create the itinerary based on cities and update the tripData.tripItin() file. This will be used to displayCalendar when the "/calendar" page is called
+  const createItin = new CreateItinerary(this.session.tripData());
+  createItin.create();
+
   const tip = new TripInfoProvider(this.session.tripData(), this.session.hometown);
   const activities = Promise.denodeify(tip.getActivities.bind(tip));
   const flightDetails = Promise.denodeify(tip.getFlightDetails.bind(tip));

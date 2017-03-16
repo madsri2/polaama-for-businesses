@@ -33,11 +33,11 @@ FlightInfoProvider.prototype.getFlightDetails = function(callback) {
     const file = _getFileName.call(self);
     logger.info(`callback: code is ${code}. file is ${file}. About to do something around getting flights`);
     if(fs.existsSync(file)) {
-      const maxAgeInMinutes = 120;
+      const maxAgeInMinutes = 240;
       const ctime = (new Date(fs.statSync(file).ctime)).getTime();
       const diffInMinutes = (Date.now()-ctime)/(1000*60);
       if(diffInMinutes < maxAgeInMinutes) { // file's age is less than 120 minutes
-        logger.info(`getFlightDetails: file ${file} was created ${diffInMinutes} minutes ago. Simply calling callback.`);
+        logger.info(`getFlightDetails: file ${file} was created ${diffInMinutes} minutes ago, which is less than ${maxAgeInMinutes} minutes. Simply calling callback`);
         return callback();
       }
       else {

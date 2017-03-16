@@ -3,6 +3,7 @@ const fs = require('fs');
 const _ = require('lodash');
 const TripData = require('./trip-data');
 const logger = require('./my-logger');
+const CalendarFormatter = require('./calendar-view/app/formatter');
 
 function TripDataFormatter(tripData) {
   // TODO: This needs to change when we add login by facebook to myFirstHttpServer.
@@ -125,7 +126,7 @@ function formatActivities(activityDetails) {
   let aText = `<div data-role="collapsibleset">\n`;
   keys.forEach(city => {
       aText += `<div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d">\n`;
-      aText += `<h1>${city}</h1>\n`;
+      aText += `<h1>${capitalize1stChar(city)}</h1>\n`;
       activityDetails[city].forEach(note => {
           aText += `<p>${toLink(note)}</p>\n`;
           });
@@ -289,8 +290,10 @@ TripDataFormatter.prototype.formatExpensePage = function(report) {
              .replace("${expenseReportDetails}", listAsHtml(comments));
 }
 
-TripDataFormatter.prototype.displayCalendar = function(report) {
-  return fs.readFileSync("html-templates/trip-calendar-view.html", 'utf8');
+TripDataFormatter.prototype.displayCalendar = function() {
+  // return fs.readFileSync("html-templates/trip-calendar-view.html", 'utf8');
+  const calFormatter = new CalendarFormatter(this.trip);
+  return calFormatter.format();
 }
 
 function toLink(text) {

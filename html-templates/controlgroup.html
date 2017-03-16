@@ -1,0 +1,61 @@
+<html>
+<!-- WORKING Version of a dynamic controlgroup to which we can add a grid of "Cities and number of days". Idea for this is from http://demos.jquerymobile.com/1.4.2/controlgroup-dynamic/ -->
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+<script>
+( function( $, undefined ) {
+    var counter = 0;
+    var grid = `
+        <div class="ui-grid-a">
+          <div class="ui-block-a"><div class="ui-bar ui-bar-a" style="height:40px">
+          <select name="cities-1" id="cities-1" data-native-menu="false">
+                <option>City</option>
+                <option>Goa</option>
+                <option>Chennai</option>
+                <option>Bengaluru</option>
+                <option>Mumbai</option>
+                <option>Pune</option>
+            </select>
+          </div></div>
+          <div class="ui-block-b"><div class="ui-bar ui-bar-a" style="height:40px">
+            <input type="number" data-clear-btn="false" name="number-1" id="number-1" value="">
+          </div></div>
+        </div>`;
+    $( document ).bind( "pagecreate", function( e ) {
+      $( "#append", e.target ).on( "click", function( e ) {
+           counter++;
+           var  group = $( "#my-controlgroup" ),
+                $el;
+            $el = $( grid );
+            $( "#my-controlgroup" ).controlgroup( "container" )[ $( this ).attr( "id" ) ]( $el );
+            group.controlgroup( "refresh" );
+      });
+    });
+})( jQuery );
+</script>
+
+</head>
+<body>
+<form id="add-city-form" data-ajax="false" method="post" action="handle-controlgroup"> 
+<!-- <form id="add-city-form" method="post"> -->
+  <div class="ui-body ui-body-d ui-corner-all">
+      <div data-role="controlgroup" id="my-controlgroup">
+          <div class="ui-grid-a">
+            <!-- items will be injected here -->
+            <div class="ui-block-a"><div class="ui-bar ui-bar-a" style="height:25px">City</div></div>
+            <div class="ui-block-b"><div class="ui-bar ui-bar-a" style="height:25px">Number of days</div></div>
+          </div>
+      </div>
+  </div>
+</form>
+  <div class="ui-field-contain">
+    <button id="append" data-mini="true" data-inline="true">Add row</button> 
+  </div>
+  <input type="submit" id="submit" data-inline="true" form="add-city-form" value="Submit">
+  <!-- <input type="submit" id="submit" data-inline="true" value="Submit" form="add-city-form" formaction = "handle-controlgroup"> -->
+</body>
+</html>

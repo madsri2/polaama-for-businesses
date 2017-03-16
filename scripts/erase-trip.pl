@@ -61,6 +61,7 @@ while(my $file = readdir DIR) {
 
 # Finally, delete the trip file from "trips" directory
 print "Removing trip file trips/$trip.txt and trips/$trip-data.txt\n";
-`mv trips/$trip.txt trips/.$trip.txt.orig`;
-`mv trips/$trip-data.txt trips/.$trip-data.txt.orig`;
+`mv trips/$trip.txt trips/.$trip.txt.orig` if -e "trips/$trip.txt";
+`mv trips/$trip-data.txt trips/.$trip-data.txt.orig` if -e "trips/$trip-data.txt";
+`mv trips/$trip-itinerary.txt trips/.$trip-itinerary.txt.orig` if -e "trips/$trip-itinerary.txt";
 }

@@ -409,4 +409,8 @@ TripData.prototype.tripDataFile = function() {
   return `${tripBaseDir}/${this.data.name}-data.txt`;
 }
 
+TripData.prototype.tripItinFile = function() {
+  return `${tripBaseDir}/${this.data.name}-itinerary.txt`;
+}
+
 module.exports = TripData;

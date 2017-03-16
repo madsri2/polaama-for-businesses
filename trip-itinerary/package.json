@@ -1,18 +1,16 @@
 {
-  "name": "expense-report",
+  "name": "trip-itinerary",
   "version": "1.0.0",
-  "description": "Manage expense reports for polaama",
+  "description": "Manages the itinerary for cities in the trip",
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha --reporter spec"
   },
   "author": "Madhu Parthasarathy",
   "license": "GPL-2.0",
-  "private": true,
   "dependencies": {
-    "fast-levenshtein": "^2.0.6",
-    "lodash": "^4.17.4",
-    "mocha": "^3.2.0",
-    "sinon": "^1.17.7"
+    "chai": "^3.5.0",
+    "fs": "0.0.1-security",
+    "mocha": "^3.2.0"
   }
 }

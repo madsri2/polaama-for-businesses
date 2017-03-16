@@ -1,0 +1,120 @@
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<style>
+/* ADD 6(e) and 7(f) column grid */
+.ui-grid-e, .ui-grid-f { overflow: hidden; }
+
+/* grid e: 16/16/16/16/16/16 */
+.ui-grid-e .ui-block-a, .ui-grid-e .ui-block-b, .ui-grid-e .ui-block-c, .ui-grid-e .ui-block-d, .ui-grid-e .ui-block-e, .ui-grid-e .ui-block-f { width: 16.59166666666667%; }
+.ui-grid-e > :nth-child(n) { width: 16.66666666666667%; }
+.ui-grid-e .ui-block-a { clear: left; }
+
+/* grid f: 14/14/14/14/14 */
+.ui-grid-f .ui-block-a, .ui-grid-f .ui-block-b, .ui-grid-f .ui-block-c, .ui-grid-f .ui-block-d, .ui-grid-f .ui-block-e, .ui-grid-f .ui-block-f, .ui-grid-f .ui-block-g { width: 14.21071428571429%; }
+.ui-grid-f > :nth-child(n) { width: 14.28571428571429%; }
+.ui-grid-f .ui-block-a { clear: left; }
+
+/* ADD 6th (f) and 7th (g) blocks in grid */
+.ui-header .ui-navbar .ui-grid-e li.ui-block-f .ui-btn,
+.ui-footer .ui-navbar .ui-grid-e li.ui-block-f .ui-btn { margin-right: -3px; }/* NOT TESTED */
+
+.ui-header .ui-navbar .ui-grid-f li.ui-block-g .ui-btn,
+.ui-footer .ui-navbar .ui-grid-f li.ui-block-g .ui-btn { margin-right: -2px; }/* NOT TESTED */
+
+.ui-grid-e .ui-btn, .ui-grid-f .ui-btn { margin-right: 5px; margin-left: 5px; }
+
+.ui-block-f, .ui-block-g { margin: 0; padding: 0; border: 0; float: left; min-height: 1px; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box; }
+
+.ui-header .ui-navbar .ui-grid-e li.ui-block-f .ui-btn-icon-right .ui-icon,
+.ui-footer .ui-navbar .ui-grid-f li.ui-block-g .ui-btn-icon-right .ui-icon { right: 8px; }
+</style>
+<style>
+.ui-btn.my-tooltip-btn * {
+  margin: 0 auto;
+},
+.ui-btn.my-tooltip-btn:hover,
+.ui-btn.my-tooltip-btn:active {
+    background: none;
+    border: 0;
+}
+
+</style>
+</head>
+<body>
+
+<p><b>May 2017</b></p>
+<div class="ui-grid-f">
+    <div class="ui-block-a"><div class="ui-bar ui-bar-b" style="height:30px"><b>Sun</b></div></div>
+    <div class="ui-block-b"><div class="ui-bar ui-bar-c" style="height:30px"><b>Mon</b></div></div>
+    <div class="ui-block-c"><div class="ui-bar ui-bar-b" style="height:30px"><B>Tue</B></div></div>
+    <div class="ui-block-d"><div class="ui-bar ui-bar-c" style="height:30px"><B>Wed</B></div></div>
+    <div class="ui-block-e"><div class="ui-bar ui-bar-b" style="height:30px"><B>Thu</B></div></div>
+    <div class="ui-block-f"><div class="ui-bar ui-bar-c" style="height:30px"><B>Fri</B></div></div>
+    <div class="ui-block-g"><div class="ui-bar ui-bar-b" style="height:30px"><B>Sat</B></div></div>
+    <div class="ui-block-a"><div class="ui-bar ui-bar-a" style="height:100px">
+    <p style="color:FireBrick;margin-top:0;margin-left:0;">1</p>
+    <a href="#popupInfo" data-rel="popup" data-transition="pop" class="ui-btn ui-corner-all ui-btn-inline ui-mini ui-shadow" title="Plan Details">Lisbon</a>
+		<div data-role="popup" id="popupInfo" class="ui-content" data-theme="a" style="max-width:350px;" data-arrow="true">
+  		<p>Avg Temp: 70&degF</p>
+      <p>Chance of rain: 36%</p>      
+      <p>Arrive at 10.00 AM</p>
+      <p>Directions from airport to Hotel Taj</p>
+    </div>
+    </div></div>
+    <div class="ui-block-b"><div class="ui-bar ui-bar-a" style="height:100px">
+    <p style="color:FireBrick;margin-top:0;margin-left:0;">2</p>
+    Lisbon<br>
+    </div></div>
+    <div class="ui-block-c"><div class="ui-bar ui-bar-a" style="height:100px">
+    <p style="color:FireBrick;margin-top:0;margin-left:0;">3</p>
+    Sintra<br>
+    </div></div>
+    <div class="ui-block-d"><div class="ui-bar ui-bar-a" style="height:100px">
+    <p style="color:FireBrick;margin-top:0;margin-left:0;">4</p>
+    Sintra<br>
+    </div></div>
+    <div class="ui-block-e"><div class="ui-bar ui-bar-a" style="height:100px">
+    <p style="color:FireBrick;margin-top:0;margin-left:0;">5</p>
+    Porto<br>
+    </div></div>
+    <div class="ui-block-f"><div class="ui-bar ui-bar-a" style="height:100px">
+    <p style="color:FireBrick;margin-top:0;margin-left:0;">6</p>
+    Porto<br>
+    </div></div>
+    <div class="ui-block-g"><div class="ui-bar ui-bar-a" style="height:100px">
+    <p style="color:FireBrick;margin-top:0;margin-left:0;">7</p>
+    Evora<br>
+    </div></div>
+    <div class="ui-block-a"><div class="ui-bar ui-bar-a" style="height:100px">Goa</div></div>
+    <div class="ui-block-b"><div class="ui-bar ui-bar-a" style="height:100px">Block B</div></div>
+    <div class="ui-block-c"><div class="ui-bar ui-bar-a" style="height:100px">Block C</div></div>
+    <div class="ui-block-d"><div class="ui-bar ui-bar-a" style="height:100px">Block D</div></div>
+    <div class="ui-block-e"><div class="ui-bar ui-bar-a" style="height:100px">Block E</div></div>
+    <div class="ui-block-f"><div class="ui-bar ui-bar-a" style="height:100px">Block F</div></div>
+    <div class="ui-block-g"><div class="ui-bar ui-bar-a" style="height:100px">Block G</div></div>
+    <div class="ui-block-a"><div class="ui-bar ui-bar-a" style="height:100px">Mumbai</div></div>
+    <div class="ui-block-b"><div class="ui-bar ui-bar-a" style="height:100px">Block B</div></div>
+    <div class="ui-block-c"><div class="ui-bar ui-bar-a" style="height:100px">Block C</div></div>
+    <div class="ui-block-d"><div class="ui-bar ui-bar-a" style="height:100px">Block D</div></div>
+    <div class="ui-block-e"><div class="ui-bar ui-bar-a" style="height:100px">Block E</div></div>
+    <div class="ui-block-f"><div class="ui-bar ui-bar-a" style="height:100px">Block F</div></div>
+    <div class="ui-block-g"><div class="ui-bar ui-bar-a" style="height:100px">Seattle</div></div>
+		<div class="ui-block-a"><div class="ui-bar ui-bar-a" style="height:100px">Block A</div></div>
+		<div class="ui-block-b"><div class="ui-bar ui-bar-a" style="height:100px">Block B</div></div>
+		<div class="ui-block-c"><div class="ui-bar ui-bar-a" style="height:100px">Block C</div></div>
+		<div class="ui-block-d"><div class="ui-bar ui-bar-a" style="height:100px">Block D</div></div>
+		<div class="ui-block-e"><div class="ui-bar ui-bar-a" style="height:100px">Block E</div></div>
+		<div class="ui-block-f"><div class="ui-bar ui-bar-a" style="height:100px">Block F</div></div>
+		<div class="ui-block-g"><div class="ui-bar ui-bar-a" style="height:100px">Block G</div></div>
+		<div class="ui-block-a"><div class="ui-bar ui-bar-a" style="height:100px">Block A</div></div>
+		<div class="ui-block-b"><div class="ui-bar ui-bar-a" style="height:100px">Block B</div></div>
+		<div class="ui-block-c"><div class="ui-bar ui-bar-a" style="height:100px">Block C</div></div>
+		<div class="ui-block-d"><div class="ui-bar ui-bar-a" style="height:100px">Block D</div></div>
+		<div class="ui-block-e"><div class="ui-bar ui-bar-a" style="height:100px">Block E</div></div>
+		<div class="ui-block-f"><div class="ui-bar ui-bar-a" style="height:100px">Block F</div></div>
+		<div class="ui-block-g"><div class="ui-bar ui-bar-a" style="height:100px">Block G</div></div>
+</div><!-- /grid-c -->

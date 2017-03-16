@@ -1,0 +1,136 @@
+{
+ "kind": "customsearch#search",
+ "url": {
+  "type": "application/json",
+  "template": "https://www.googleapis.com/customsearch/v1?q={searchTerms}&num={count?}&start={startIndex?}&lr={language?}&safe={safe?}&cx={cx?}&cref={cref?}&sort={sort?}&filter={filter?}&gl={gl?}&cr={cr?}&googlehost={googleHost?}&c2coff={disableCnTwTranslation?}&hq={hq?}&hl={hl?}&siteSearch={siteSearch?}&siteSearchFilter={siteSearchFilter?}&exactTerms={exactTerms?}&excludeTerms={excludeTerms?}&linkSite={linkSite?}&orTerms={orTerms?}&relatedSite={relatedSite?}&dateRestrict={dateRestrict?}&lowRange={lowRange?}&highRange={highRange?}&searchType={searchType}&fileType={fileType?}&rights={rights?}&imgSize={imgSize?}&imgType={imgType?}&imgColorType={imgColorType?}&imgDominantColor={imgDominantColor?}&alt=json"
+ },
+ "queries": {
+  "request": [
+   {
+    "title": "Google Custom Search - lonely planet san_francisco march things to do",
+    "totalResults": "2",
+    "searchTerms": "lonely planet san_francisco march things to do",
+    "count": 2,
+    "startIndex": 1,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "san_francisco"
+   }
+  ]
+ },
+ "context": {
+  "title": "Polaama"
+ },
+ "searchInformation": {
+  "searchTime": 0.763336,
+  "formattedSearchTime": "0.76",
+  "totalResults": "2",
+  "formattedTotalResults": "2"
+ },
+ "spelling": {
+  "correctedQuery": "lonely planet san francisco march things to do \"san francisco\"",
+  "htmlCorrectedQuery": "lonely planet \u003cb\u003e\u003ci\u003esan francisco\u003c/i\u003e\u003c/b\u003e march things to do &quot;\u003cb\u003e\u003ci\u003esan francisco\u003c/i\u003e\u003c/b\u003e&quot;"
+ },
+ "items": [
+  {
+   "kind": "customsearch#result",
+   "title": "First ever trip across the big pond............. - San Francisco Forum ...",
+   "htmlTitle": "First ever trip across the big pond............. - \u003cb\u003eSan Francisco\u003c/b\u003e Forum ...",
+   "link": "https://www.tripadvisor.com/ShowTopic-g60713-i30-k820547-First_ever_trip_across_the_big_pond-San_Francisco_California.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Greetings to you all, We will be celebrating our silver wedding in 2008 and I'm ... \nSince you have over 14 months to plan I would suggest getting a guide book \nsuch as Lonely Planet or similar. ..... Ranked #27 of 528 things to do in San \nFrancisco .... BUDGET HOTELS, Hostels, and Hotels with Parking, (Updated \nMarch 2016).",
+   "htmlSnippet": "Greetings to you all, We will be celebrating our silver wedding in 2008 and I&#39;m ... \u003cbr\u003e\nSince you have over 14 months to plan I would suggest getting a guide book \u003cbr\u003e\nsuch as \u003cb\u003eLonely Planet\u003c/b\u003e or similar. ..... Ranked #27 of 528 \u003cb\u003ethings to do\u003c/b\u003e in \u003cb\u003eSan\u003c/b\u003e \u003cbr\u003e\n\u003cb\u003eFrancisco\u003c/b\u003e .... BUDGET HOTELS, Hostels, and Hotels with Parking, (Updated \u003cbr\u003e\n\u003cb\u003eMarch\u003c/b\u003e 2016).",
+   "cacheId": "sruApuB1ykYJ",
+   "formattedUrl": "https://www.tripadvisor.com/ShowTopic-g60713-i30-k820547-First_ever_ trip_across_the_big_pond-San_Francisco_California.html",
+   "htmlFormattedUrl": "https://www.tripadvisor.com/ShowTopic-g60713-i30-k820547-First_ever_ trip_across_the_big_pond-\u003cb\u003eSan_Francisco\u003c/b\u003e_California.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "80",
+      "height": "80",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTVQflH0VqVMp6PDcRILO5PBISjTfAm4CWJ85aFIrZtIGOJanUlknhw"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "United States",
+      "title": "United States"
+     },
+     {
+      "url": "California (CA)",
+      "title": "California (CA)"
+     },
+     {
+      "url": "San Francisco",
+      "title": "San Francisco"
+     },
+     {
+      "url": "San Francisco Travel Forum",
+      "title": "San Francisco Travel Forum"
+     }
+    ],
+    "metatags": [
+     {
+      "og:image": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Land's End in San Francisco - San Francisco Forum - TripAdvisor",
+   "htmlTitle": "Land&#39;s End in \u003cb\u003eSan Francisco\u003c/b\u003e - \u003cb\u003eSan Francisco\u003c/b\u003e Forum - TripAdvisor",
+   "link": "https://www.tripadvisor.com/ShowTopic-g60713-i30-k355940-Land_s_End_in_San_Francisco-San_Francisco_California.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Ranked #68 of 527 things to do in San Francisco ... lonelyplanet.com/mapshells/\n…san_francisco.htm ... Get answers to your questions about San Francisco .... \nBUDGET HOTELS, Hostels, and Hotels with Parking, (Updated March 2016).",
+   "htmlSnippet": "Ranked #68 of 527 \u003cb\u003ethings to do\u003c/b\u003e in \u003cb\u003eSan Francisco\u003c/b\u003e ... \u003cb\u003elonelyplanet\u003c/b\u003e.com/mapshells/\u003cbr\u003e\n…\u003cb\u003esan_francisco\u003c/b\u003e.htm ... Get answers to your questions about \u003cb\u003eSan Francisco\u003c/b\u003e .... \u003cbr\u003e\nBUDGET HOTELS, Hostels, and Hotels with Parking, (Updated \u003cb\u003eMarch\u003c/b\u003e 2016).",
+   "cacheId": "gIF5Rgv8WdwJ",
+   "formattedUrl": "https://www.tripadvisor.com/ShowTopic-g60713-i30-k355940-Land_s_End _in_San_Francisco-San_Francisco_California.html",
+   "htmlFormattedUrl": "https://www.tripadvisor.com/ShowTopic-g60713-i30-k355940-Land_s_End _in_\u003cb\u003eSan_Francisco\u003c/b\u003e-\u003cb\u003eSan_Francisco\u003c/b\u003e_California.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "80",
+      "height": "80",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTVQflH0VqVMp6PDcRILO5PBISjTfAm4CWJ85aFIrZtIGOJanUlknhw"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "United States",
+      "title": "United States"
+     },
+     {
+      "url": "California (CA)",
+      "title": "California (CA)"
+     },
+     {
+      "url": "San Francisco",
+      "title": "San Francisco"
+     },
+     {
+      "url": "San Francisco Travel Forum",
+      "title": "San Francisco Travel Forum"
+     }
+    ],
+    "metatags": [
+     {
+      "og:image": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ]
+   }
+  }
+ ]
+}

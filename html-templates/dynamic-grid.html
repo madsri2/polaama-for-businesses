@@ -1,0 +1,87 @@
+<html>
+<!--- NOT WORKING: This is an attempt to dynamically add columns to a grid. Obtained from an idea in stackoverflow to add grids -->
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<script>
+var currentGrid = $('#currentgrid');
+var previousGrid;
+
+$('#addcolumn').click(function() {
+    grid = currentGrid.attr('class');
+    previousGrid = grid;
+    nextGrid = grid.substring(0,grid.length-1)+String.fromCharCode(grid.charCodeAt(grid.length-1)+1);
+    
+    $('#currentgrid').removeClass(grid).addClass(nextGrid);
+    $("#currentgrid").children().each(function() {
+        c = $(this);
+        block = c.attr('class');
+        nextBlock = block.substring(0,block.length-1)+String.fromCharCode(block.charCodeAt(block.length-1)+1);
+
+        if($('.'+nextBlock).length) {
+            doNothing = true;
+        } else {
+            c.after('<div class="'+nextBlock+'"><div class="ui-bar ui-bar-a" style="height:50px">I\'m a Block and text inside will wrap.</div></div>');
+        }
+    });
+});
+
+$('#removecolumn').click(function() {
+    grid = currentGrid.attr('class');
+    $('#currentgrid').removeClass(grid).addClass(previousGrid);
+    $("#currentgrid").children().last().remove();
+}).page();
+</script>
+</head>
+<body>
+<div data-role="page" id="gridplus"> 
+    <div data-role="content">
+        <div class="ui-grid-a" id="currentgrid"> 
+            <div class="ui-block-a"><div class="ui-bar ui-bar-a" style="height:50px">I'm a Block and text inside will wrap.</div></div>
+            <div class="ui-block-b"><div class="ui-bar ui-bar-a" style="height:50px">I'm a Block and text inside will wrap.</div></div> 
+        </div>
+        <br />
+        <input type="button" id="addcolumn" name="addcolumn" value="Add Column"/>
+        <input type="button" id="removecolumn" name="removecolumn" value="Remove Column"/>
+    </div>
+</div>
+<!--
+<div data-role="main" class="ui-content">
+  <form data-ajax="false" method="post" action="handle-controlgroup">
+    <div class="ui-grid-a">
+      <div class="ui-block-a"><div class="ui-bar ui-bar-a ui-mini" style="height:25">City</div></div>
+      <div class="ui-block-b"><div class="ui-bar ui-bar-a ui-mini" style="height:25px">Number of days</div></div>
+      <div class="ui-block-a"><div class="ui-bar ui-bar-a ui-mini" style="height:40px">
+      <select name="cities-1" id="cities-1" data-native-menu="false">
+            <option>City</option>
+            <option>Goa</option>
+            <option>Chennai</option>
+            <option>Bengaluru</option>
+            <option>Mumbai</option>
+            <option>Pune</option>
+        </select>
+      </div></div>
+      <div class="ui-block-b"><div class="ui-bar ui-bar-a ui-mini" style="height:40px">
+        <input type="number" data-clear-btn="false" name="number-1" id="number-1" value="">
+      </div></div>
+      <div class="ui-block-a"><div class="ui-bar ui-bar-a ui-mini" style="height:40px">
+      <select name="cities-2" id="cities-2" data-native-menu="false">
+            <option>City</option>
+            <option>Goa</option>
+            <option>Chennai</option>
+            <option>Bengaluru</option>
+            <option>Mumbai</option>
+            <option>Pune</option>
+        </select>
+      </div></div>
+      <div class="ui-block-b"><div class="ui-bar ui-bar-a ui-mini" style="height:40px">
+        <input type="number" data-clear-btn="false" name="number-2" id="number-2" value="">
+      </div></div>
+    </div>
+    <input type="submit" data-inline="true" value="Submit">
+  </form>
+</div>
+-->
+</body>

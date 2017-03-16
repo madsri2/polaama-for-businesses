@@ -62,8 +62,8 @@
 		"C": ""
 		},
 		"avg": {
-		"F": "",
-		"C": ""
+		"F": "75",
+		"C": "24"
 		},
 		"max": {
 		"F": "",
@@ -76,8 +76,8 @@
 		"C": ""
 		},
 		"avg": {
-		"F": "",
-		"C": ""
+		"F": "61",
+		"C": "16"
 		},
 		"max": {
 		"F": "",
@@ -153,7 +153,7 @@
 		"chanceofrainday": {
 		"name": "Rain",
 		"description": "",
-		"percentage": "0"
+		"percentage": "4"
 		},
 		"chanceofsnowday": {
 		"name": "Snow",
@@ -178,7 +178,7 @@
 		"tempoversixty": {
 		"name": "Warm",
 		"description": "temperature over 60&deg;F / 16&deg;C and below 90&deg;F / 32&deg;C",
-		"percentage": "0"
+		"percentage": "80"
 		},
 		"tempoverfreezing": {
 		"name": "Cool",

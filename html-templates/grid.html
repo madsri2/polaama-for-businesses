@@ -1,0 +1,45 @@
+<html>
+<!-- Static grid that works but no ability to add rows dynamically -->
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+</head>
+<body>
+<div data-role="main" class="ui-content">
+  <form data-ajax="false" method="post" action="handle-controlgroup">
+    <div class="ui-grid-a ui-responsive"> <!-- ui-responsive stacks the grid columns on a mobile phone -->
+      <div class="ui-block-a"><div class="ui-bar ui-bar-a ui-mini" style="height:25px">City</div></div>
+      <div class="ui-block-b"><div class="ui-bar ui-bar-a ui-mini" style="height:25px">Number of days</div></div>
+      <div class="ui-block-a"><div class="ui-bar ui-bar-a ui-mini" style="height:40px">
+      <select name="cities-1" id="cities-1" data-native-menu="false">
+            <option>City</option>
+            <option>Goa</option>
+            <option>Chennai</option>
+            <option>Bengaluru</option>
+            <option>Mumbai</option>
+            <option>Pune</option>
+        </select>
+      </div></div>
+      <div class="ui-block-b"><div class="ui-bar ui-bar-a ui-mini" style="height:40px">
+        <input type="number" data-clear-btn="false" name="number-1" id="number-1" value="">
+      </div></div>
+      <div class="ui-block-a"><div class="ui-bar ui-bar-a ui-mini" style="height:40px">
+      <select name="cities-2" id="cities-2" data-native-menu="false">
+            <option>City</option>
+            <option>Goa</option>
+            <option>Chennai</option>
+            <option>Bengaluru</option>
+            <option>Mumbai</option>
+            <option>Pune</option>
+        </select>
+      </div></div>
+      <div class="ui-block-b"><div class="ui-bar ui-bar-a ui-mini" style="height:40px">
+        <input type="number" data-clear-btn="false" name="number-2" id="number-2" value="">
+      </div></div>
+    </div>
+    <input type="submit" data-inline="true" value="Submit">
+  </form>
+</div>
+</body>

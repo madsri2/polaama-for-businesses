@@ -1,0 +1,525 @@
+{
+ "kind": "customsearch#search",
+ "url": {
+  "type": "application/json",
+  "template": "https://www.googleapis.com/customsearch/v1?q={searchTerms}&num={count?}&start={startIndex?}&lr={language?}&safe={safe?}&cx={cx?}&cref={cref?}&sort={sort?}&filter={filter?}&gl={gl?}&cr={cr?}&googlehost={googleHost?}&c2coff={disableCnTwTranslation?}&hq={hq?}&hl={hl?}&siteSearch={siteSearch?}&siteSearchFilter={siteSearchFilter?}&exactTerms={exactTerms?}&excludeTerms={excludeTerms?}&linkSite={linkSite?}&orTerms={orTerms?}&relatedSite={relatedSite?}&dateRestrict={dateRestrict?}&lowRange={lowRange?}&highRange={highRange?}&searchType={searchType}&fileType={fileType?}&rights={rights?}&imgSize={imgSize?}&imgType={imgType?}&imgColorType={imgColorType?}&imgDominantColor={imgDominantColor?}&alt=json"
+ },
+ "queries": {
+  "request": [
+   {
+    "title": "Google Custom Search - trip advisor san_francisco march attractions",
+    "totalResults": "149",
+    "searchTerms": "trip advisor san_francisco march attractions",
+    "count": 10,
+    "startIndex": 1,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "san_francisco"
+   }
+  ],
+  "nextPage": [
+   {
+    "title": "Google Custom Search - trip advisor san_francisco march attractions",
+    "totalResults": "149",
+    "searchTerms": "trip advisor san_francisco march attractions",
+    "count": 10,
+    "startIndex": 11,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "san_francisco"
+   }
+  ]
+ },
+ "context": {
+  "title": "Polaama"
+ },
+ "searchInformation": {
+  "searchTime": 0.573574,
+  "formattedSearchTime": "0.57",
+  "totalResults": "149",
+  "formattedTotalResults": "149"
+ },
+ "items": [
+  {
+   "kind": "customsearch#result",
+   "title": "Map of San Francisco - Hotels and Attractions on a San Francisco ...",
+   "htmlTitle": "Map of \u003cb\u003eSan Francisco\u003c/b\u003e - Hotels and \u003cb\u003eAttractions\u003c/b\u003e on a \u003cb\u003eSan Francisco\u003c/b\u003e ...",
+   "link": "https://www.tripadvisor.com/LocalMaps-g60713-San_Francisco-Area.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Map of San Francisco area hotels: Locate San Francisco hotels on a map based \non popularity, price, or availability, and see TripAdvisor reviews, photos, and \ndeals. ... The staff is amazingly friendly and helpful and the... more; March 9, 2017\n.",
+   "htmlSnippet": "Map of \u003cb\u003eSan Francisco\u003c/b\u003e area hotels: Locate \u003cb\u003eSan Francisco\u003c/b\u003e hotels on a map based \u003cbr\u003e\non popularity, price, or availability, and see \u003cb\u003eTripAdvisor\u003c/b\u003e reviews, photos, and \u003cbr\u003e\ndeals. ... The staff is amazingly friendly and helpful and the... more; \u003cb\u003eMarch\u003c/b\u003e 9, 2017\u003cbr\u003e\n.",
+   "cacheId": "wA1jD1XTddwJ",
+   "formattedUrl": "https://www.tripadvisor.com/LocalMaps-g60713-San_Francisco-Area.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/LocalMaps-g60713-\u003cb\u003eSan_Francisco\u003c/b\u003e-Area.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "80",
+      "height": "80",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTVQflH0VqVMp6PDcRILO5PBISjTfAm4CWJ85aFIrZtIGOJanUlknhw"
+     }
+    ],
+    "metatags": [
+     {
+      "og:image": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "san francisco - San Francisco Forum - TripAdvisor",
+   "htmlTitle": "\u003cb\u003esan francisco\u003c/b\u003e - \u003cb\u003eSan Francisco\u003c/b\u003e Forum - \u003cb\u003eTripAdvisor\u003c/b\u003e",
+   "link": "https://www.tripadvisor.com/ShowTopic-g60713-i30-k5586223-San_francisco-San_Francisco_California.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "... to get from a hotel in Pacifica to San Francisco to see the sights if we do not \nhave a car? ... Pacifica is on its way to becoming a tourist attraction in its own \nright. :). .... BUDGET HOTELS, Hostels, and Hotels with Parking, (Updated March \n2016).",
+   "htmlSnippet": "... to get from a hotel in Pacifica to \u003cb\u003eSan Francisco\u003c/b\u003e to see the sights if we do not \u003cbr\u003e\nhave a car? ... Pacifica is on its way to becoming a tourist \u003cb\u003eattraction\u003c/b\u003e in its own \u003cbr\u003e\nright. :). .... BUDGET HOTELS, Hostels, and Hotels with Parking, (Updated \u003cb\u003eMarch\u003c/b\u003e \u003cbr\u003e\n2016).",
+   "cacheId": "c7Q69mOqCJQJ",
+   "formattedUrl": "https://www.tripadvisor.com/ShowTopic-g60713-i30-k5586223-San_ francisco-San_Francisco_California.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/ShowTopic-g60713-i30-k5586223-\u003cb\u003eSan_ francisco\u003c/b\u003e-\u003cb\u003eSan_Francisco\u003c/b\u003e_California.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "80",
+      "height": "80",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTVQflH0VqVMp6PDcRILO5PBISjTfAm4CWJ85aFIrZtIGOJanUlknhw"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "United States",
+      "title": "United States"
+     },
+     {
+      "url": "California (CA)",
+      "title": "California (CA)"
+     },
+     {
+      "url": "San Francisco",
+      "title": "San Francisco"
+     },
+     {
+      "url": "San Francisco Travel Forum",
+      "title": "San Francisco Travel Forum"
+     }
+    ],
+    "metatags": [
+     {
+      "og:image": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "The 10 Best San Francisco Hotels with Kitchenette - Mar 2017 (with ...",
+   "htmlTitle": "The 10 Best \u003cb\u003eSan Francisco\u003c/b\u003e Hotels with Kitchenette - Mar 2017 (with ...",
+   "link": "https://www.tripadvisor.com/HotelsList-San_Francisco-Hotels-With-Kitchenette-zfp26428.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "San Francisco Hotels with Kitchenette: Find 23486 traveler reviews, candid \nphotos, and the top ranked Hotels with In-room Kitchen in San Francisco on \nTripAdvisor. ... Food is excellent cheap places to eat or expensive what ever you \nwant, you ...",
+   "htmlSnippet": "\u003cb\u003eSan Francisco\u003c/b\u003e Hotels with Kitchenette: Find 23486 traveler reviews, candid \u003cbr\u003e\nphotos, and the top ranked Hotels with In-room Kitchen in \u003cb\u003eSan Francisco\u003c/b\u003e on \u003cbr\u003e\n\u003cb\u003eTripAdvisor\u003c/b\u003e. ... Food is excellent cheap \u003cb\u003eplaces\u003c/b\u003e to eat or expensive what ever you \u003cbr\u003e\nwant, you&nbsp;...",
+   "cacheId": "ToHj7rW6j6IJ",
+   "formattedUrl": "https://www.tripadvisor.com/HotelsList-San_Francisco-Hotels-With- Kitchenette-zfp26428.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/HotelsList-\u003cb\u003eSan_Francisco\u003c/b\u003e-Hotels-With- Kitchenette-zfp26428.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "80",
+      "height": "80",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTVQflH0VqVMp6PDcRILO5PBISjTfAm4CWJ85aFIrZtIGOJanUlknhw"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "United States",
+      "title": "United States"
+     },
+     {
+      "url": "California (CA)",
+      "title": "California (CA)"
+     },
+     {
+      "url": "San Francisco",
+      "title": "San Francisco"
+     },
+     {
+      "url": "San Francisco Hotels",
+      "title": "San Francisco Hotels"
+     }
+    ],
+    "metatags": [
+     {
+      "og:image": "https://static.tacdn.com/img2/postimg.jpg",
+      "viewport": "width=1024, initial-scale=1"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "The 10 Best Unique San Francisco Hotels - Mar 2017 (with Prices ...",
+   "htmlTitle": "The 10 Best Unique \u003cb\u003eSan Francisco\u003c/b\u003e Hotels - Mar 2017 (with Prices ...",
+   "link": "https://www.tripadvisor.com/HotelsList-San_Francisco-Unique-Hotels-zfp316855.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Unique San Francisco Hotels: Find 53700 traveler reviews, candid photos, and \nthe top ranked Unique Hotels in San Francisco on TripAdvisor. ... It is located \nwithin walking distance to great restaurants and attractions . But best of...\".",
+   "htmlSnippet": "Unique \u003cb\u003eSan Francisco\u003c/b\u003e Hotels: Find 53700 traveler reviews, candid photos, and \u003cbr\u003e\nthe top ranked Unique Hotels in \u003cb\u003eSan Francisco\u003c/b\u003e on \u003cb\u003eTripAdvisor\u003c/b\u003e. ... It is located \u003cbr\u003e\nwithin walking distance to great restaurants and \u003cb\u003eattractions\u003c/b\u003e . But best of...&quot;.",
+   "cacheId": "D7hmTv1WTBgJ",
+   "formattedUrl": "https://www.tripadvisor.com/HotelsList-San_Francisco-Unique-Hotels- zfp316855.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/HotelsList-\u003cb\u003eSan_Francisco\u003c/b\u003e-Unique-Hotels- zfp316855.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "80",
+      "height": "80",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTVQflH0VqVMp6PDcRILO5PBISjTfAm4CWJ85aFIrZtIGOJanUlknhw"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "United States",
+      "title": "United States"
+     },
+     {
+      "url": "California (CA)",
+      "title": "California (CA)"
+     },
+     {
+      "url": "San Francisco",
+      "title": "San Francisco"
+     },
+     {
+      "url": "San Francisco Hotels",
+      "title": "San Francisco Hotels"
+     }
+    ],
+    "metatags": [
+     {
+      "og:image": "https://static.tacdn.com/img2/postimg.jpg",
+      "viewport": "width=1024, initial-scale=1"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "san francisco - San Francisco Forum - TripAdvisor",
+   "htmlTitle": "\u003cb\u003esan francisco\u003c/b\u003e - \u003cb\u003eSan Francisco\u003c/b\u003e Forum - \u003cb\u003eTripAdvisor\u003c/b\u003e",
+   "link": "https://www.tripadvisor.com/ShowTopic-g60713-i30-k4704435-San_francisco-San_Francisco_California.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "... can we walk about and see and do that are not on the major tourist attraction \nlist? .... it and my book to a nearby park up a hill (?) for lunch one day last March.",
+   "htmlSnippet": "... can we walk about and see and do that are not on the major tourist \u003cb\u003eattraction\u003c/b\u003e \u003cbr\u003e\nlist? .... it and my book to a nearby park up a hill (?) for lunch one day last \u003cb\u003eMarch\u003c/b\u003e.",
+   "cacheId": "ArV4AfwYdNMJ",
+   "formattedUrl": "https://www.tripadvisor.com/ShowTopic-g60713-i30-k4704435-San_ francisco-San_Francisco_California.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/ShowTopic-g60713-i30-k4704435-\u003cb\u003eSan_ francisco\u003c/b\u003e-\u003cb\u003eSan_Francisco\u003c/b\u003e_California.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "80",
+      "height": "80",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTVQflH0VqVMp6PDcRILO5PBISjTfAm4CWJ85aFIrZtIGOJanUlknhw"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "United States",
+      "title": "United States"
+     },
+     {
+      "url": "California (CA)",
+      "title": "California (CA)"
+     },
+     {
+      "url": "San Francisco",
+      "title": "San Francisco"
+     },
+     {
+      "url": "San Francisco Travel Forum",
+      "title": "San Francisco Travel Forum"
+     }
+    ],
+    "metatags": [
+     {
+      "og:image": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "san francisco - San Francisco Forum - TripAdvisor",
+   "htmlTitle": "\u003cb\u003esan francisco\u003c/b\u003e - \u003cb\u003eSan Francisco\u003c/b\u003e Forum - \u003cb\u003eTripAdvisor\u003c/b\u003e",
+   "link": "https://www.tripadvisor.com/ShowTopic-g60713-i30-k493345-San_francisco-San_Francisco_California.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "... southern california for a month. We love to stay in san francisco for 2 or 3 days. \nCan anyone recommend hotel,dining and attractions family friendly activities?",
+   "htmlSnippet": "... southern california for a month. We love to stay in \u003cb\u003esan francisco\u003c/b\u003e for 2 or 3 days. \u003cbr\u003e\nCan anyone recommend hotel,dining and \u003cb\u003eattractions\u003c/b\u003e family friendly activities?",
+   "cacheId": "9YSX6zgypisJ",
+   "formattedUrl": "https://www.tripadvisor.com/ShowTopic-g60713-i30-k493345-San_ francisco-San_Francisco_California.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/ShowTopic-g60713-i30-k493345-\u003cb\u003eSan_ francisco\u003c/b\u003e-\u003cb\u003eSan_Francisco\u003c/b\u003e_California.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "80",
+      "height": "80",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTVQflH0VqVMp6PDcRILO5PBISjTfAm4CWJ85aFIrZtIGOJanUlknhw"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "United States",
+      "title": "United States"
+     },
+     {
+      "url": "California (CA)",
+      "title": "California (CA)"
+     },
+     {
+      "url": "San Francisco",
+      "title": "San Francisco"
+     },
+     {
+      "url": "San Francisco Travel Forum",
+      "title": "San Francisco Travel Forum"
+     }
+    ],
+    "metatags": [
+     {
+      "og:image": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "The 10 Best San Francisco Convention Hotels - Mar 2017 (with ...",
+   "htmlTitle": "The 10 Best \u003cb\u003eSan Francisco\u003c/b\u003e Convention Hotels - Mar 2017 (with ...",
+   "link": "https://www.tripadvisor.com/HotelsList-San_Francisco-Convention-Hotels-zfp41441.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "San Francisco Convention Hotels: Find 80153 traveler reviews, candid photos, ... \nthe top ranked Hotels with Conference Rooms in San Francisco on TripAdvisor.",
+   "htmlSnippet": "\u003cb\u003eSan Francisco\u003c/b\u003e Convention Hotels: Find 80153 traveler reviews, candid photos, ... \u003cbr\u003e\nthe top ranked Hotels with Conference Rooms in \u003cb\u003eSan Francisco\u003c/b\u003e on \u003cb\u003eTripAdvisor\u003c/b\u003e.",
+   "cacheId": "YSYB0haDXrAJ",
+   "formattedUrl": "https://www.tripadvisor.com/HotelsList-San_Francisco-Convention-Hotels- zfp41441.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/HotelsList-\u003cb\u003eSan_Francisco\u003c/b\u003e-Convention-Hotels- zfp41441.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "80",
+      "height": "80",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTVQflH0VqVMp6PDcRILO5PBISjTfAm4CWJ85aFIrZtIGOJanUlknhw"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "United States",
+      "title": "United States"
+     },
+     {
+      "url": "California (CA)",
+      "title": "California (CA)"
+     },
+     {
+      "url": "San Francisco",
+      "title": "San Francisco"
+     },
+     {
+      "url": "San Francisco Hotels",
+      "title": "San Francisco Hotels"
+     }
+    ],
+    "metatags": [
+     {
+      "og:image": "https://static.tacdn.com/img2/postimg.jpg",
+      "viewport": "width=1024, initial-scale=1"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "The 10 Best San Francisco Hotels With Adjoining Rooms - Mar 2017 ...",
+   "htmlTitle": "The 10 Best \u003cb\u003eSan Francisco\u003c/b\u003e Hotels With Adjoining Rooms - Mar 2017 ...",
+   "link": "https://www.tripadvisor.com/HotelsList-San_Francisco-Hotels-With-Adjoining-Rooms-zfp41587.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "San Francisco Hotels With Adjoining Rooms: Find 73668 traveler reviews, ... the \ntop ranked Hotels With Adjoining Rooms in San Francisco on TripAdvisor. ... The \nbreakfast service isn't as good as I have had at other places but since it was...\".",
+   "htmlSnippet": "\u003cb\u003eSan Francisco\u003c/b\u003e Hotels With Adjoining Rooms: Find 73668 traveler reviews, ... the \u003cbr\u003e\ntop ranked Hotels With Adjoining Rooms in \u003cb\u003eSan Francisco\u003c/b\u003e on \u003cb\u003eTripAdvisor\u003c/b\u003e. ... The \u003cbr\u003e\nbreakfast service isn&#39;t as good as I have had at other \u003cb\u003eplaces\u003c/b\u003e but since it was...&quot;.",
+   "cacheId": "zxVNF0aeW5oJ",
+   "formattedUrl": "https://www.tripadvisor.com/HotelsList-San_Francisco-Hotels-With- Adjoining-Rooms-zfp41587.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/HotelsList-\u003cb\u003eSan_Francisco\u003c/b\u003e-Hotels-With- Adjoining-Rooms-zfp41587.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "80",
+      "height": "80",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTVQflH0VqVMp6PDcRILO5PBISjTfAm4CWJ85aFIrZtIGOJanUlknhw"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "United States",
+      "title": "United States"
+     },
+     {
+      "url": "California (CA)",
+      "title": "California (CA)"
+     },
+     {
+      "url": "San Francisco",
+      "title": "San Francisco"
+     },
+     {
+      "url": "San Francisco Hotels",
+      "title": "San Francisco Hotels"
+     }
+    ],
+    "metatags": [
+     {
+      "og:image": "https://static.tacdn.com/img2/postimg.jpg",
+      "viewport": "width=1024, initial-scale=1"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "The 10 Best San Francisco Spring Break Hotels - Mar 2017 (with ...",
+   "htmlTitle": "The 10 Best \u003cb\u003eSan Francisco\u003c/b\u003e Spring Break Hotels - Mar 2017 (with ...",
+   "link": "https://www.tripadvisor.com/HotelsList-San_Francisco-Spring-Break-Hotels-zfp622685.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "San Francisco Spring Break Hotels: Find 34252 traveler reviews, candid photos, \nand the top ranked Spring Break Hotels in San Francisco on TripAdvisor.",
+   "htmlSnippet": "\u003cb\u003eSan Francisco\u003c/b\u003e Spring Break Hotels: Find 34252 traveler reviews, candid photos, \u003cbr\u003e\nand the top ranked Spring Break Hotels in \u003cb\u003eSan Francisco\u003c/b\u003e on \u003cb\u003eTripAdvisor\u003c/b\u003e.",
+   "cacheId": "NZS3CXed7TcJ",
+   "formattedUrl": "https://www.tripadvisor.com/HotelsList-San_Francisco-Spring-Break-Hotels- zfp622685.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/HotelsList-\u003cb\u003eSan_Francisco\u003c/b\u003e-Spring-Break-Hotels- zfp622685.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "80",
+      "height": "80",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTVQflH0VqVMp6PDcRILO5PBISjTfAm4CWJ85aFIrZtIGOJanUlknhw"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "United States",
+      "title": "United States"
+     },
+     {
+      "url": "California (CA)",
+      "title": "California (CA)"
+     },
+     {
+      "url": "San Francisco",
+      "title": "San Francisco"
+     },
+     {
+      "url": "San Francisco Hotels",
+      "title": "San Francisco Hotels"
+     }
+    ],
+    "metatags": [
+     {
+      "og:image": "https://static.tacdn.com/img2/postimg.jpg",
+      "viewport": "width=1024, initial-scale=1"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "San francisco - San Francisco Forum - TripAdvisor",
+   "htmlTitle": "\u003cb\u003eSan francisco\u003c/b\u003e - \u003cb\u003eSan Francisco\u003c/b\u003e Forum - \u003cb\u003eTripAdvisor\u003c/b\u003e",
+   "link": "https://www.tripadvisor.com/ShowTopic-g60713-i30-k10116257-San_francisco-San_Francisco_California.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Jan 8, 2017 ... Things to make sure to see if only have a day and half in san francisco. ... 9:31 \nam; Places to see today; Public transport over Golden Gate ...",
+   "htmlSnippet": "Jan 8, 2017 \u003cb\u003e...\u003c/b\u003e Things to make sure to see if only have a day and half in \u003cb\u003esan francisco\u003c/b\u003e. ... 9:31 \u003cbr\u003e\nam; \u003cb\u003ePlaces\u003c/b\u003e to see today; Public transport over Golden Gate&nbsp;...",
+   "cacheId": "qiBRmWJzEI0J",
+   "formattedUrl": "https://www.tripadvisor.com/ShowTopic-g60713-i30-k10116257-San_ francisco-San_Francisco_California.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/ShowTopic-g60713-i30-k10116257-\u003cb\u003eSan_ francisco\u003c/b\u003e-\u003cb\u003eSan_Francisco\u003c/b\u003e_California.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "80",
+      "height": "80",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTVQflH0VqVMp6PDcRILO5PBISjTfAm4CWJ85aFIrZtIGOJanUlknhw"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "United States",
+      "title": "United States"
+     },
+     {
+      "url": "California (CA)",
+      "title": "California (CA)"
+     },
+     {
+      "url": "San Francisco",
+      "title": "San Francisco"
+     },
+     {
+      "url": "San Francisco Travel Forum",
+      "title": "San Francisco Travel Forum"
+     }
+    ],
+    "metatags": [
+     {
+      "og:image": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ]
+   }
+  }
+ ]
+}

@@ -255,10 +255,31 @@ app.get('/:id/:tripName/add-cities', function(req, res) {
   return handler.handleWebpage(res, handler.displayCitiesForExistingTrip);
 });
 
+app.get('/dynamic-city', function(req, res) {
+  return res.send(fs.readFileSync("/home/ec2-user/html-templates/dynamic-cities.html",'utf8'));
+});
+
+app.get('/controlgroup', function(req, res) {
+  return res.send(fs.readFileSync("/home/ec2-user/html-templates/controlgroup.html",'utf8'));
+});
+
+app.get('/grid', function(req, res) {
+  return res.send(fs.readFileSync("/home/ec2-user/html-templates/grid.html",'utf8'));
+});
+
 
 app.get('/:id/:tripName/calendar', function(req, res) {
   const handler = new WebpageHandler(req.params.id, req.params.tripName);
   return handler.handleWebpage(res, handler.displayCalendar);
+});
+
+app.get('/handle-controlgroup', function(req, res) {
+  return res.send("Successfully called handle-contrologroup");
+});
+
+app.post('/handle-controlgroup', function(req, res) {
+  const handler = new WebpageHandler(null, null);
+  return handler.handleControlGroup(req, res);
 });
 
 app.post('/:id/:tripName/handle-add-city-choice', function(req, res) {

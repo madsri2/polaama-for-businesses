@@ -1,0 +1,1 @@
+{"cities":{"san_francisco":{}},"weather":"Check https://www.lonelyplanet.com/usa/weather to see if you are traveling in the low, shoulder or high season"}
