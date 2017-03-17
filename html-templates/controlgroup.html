@@ -10,19 +10,21 @@
 ( function( $, undefined ) {
     var counter = 0;
     var grid = `
-        <div class="ui-grid-a">
+        <div class="ui-grid-a"> 
+          <!-- TODO: Consider making this a filterable select by following this: http://demos.jquerymobile.com/1.4.5/selectmenu-custom-filter/#&ui-state=dialog. Or even better, make this an autocomplete text field -->
           <div class="ui-block-a"><div class="ui-bar ui-bar-a" style="height:40px">
-          <select name="cities-1" id="cities-1" data-native-menu="false">
-                <option>City</option>
-                <option>Goa</option>
-                <option>Chennai</option>
-                <option>Bengaluru</option>
-                <option>Mumbai</option>
-                <option>Pune</option>
-            </select>
+						<select name="cities" data-native-menu="false">
+                <option>Select a City</option>
+                <option>Goa</option>
+                <option>Chennai</option>
+                <option>Bengaluru</option>
+                <option>Mumbai</option>
+                <option>Pune</option>
+            </select>
           </div></div>
+					<!-- TODO: Figure out a way to get the entire field to show up on mobile. It shows up correctily in grid.html -->
           <div class="ui-block-b"><div class="ui-bar ui-bar-a" style="height:40px">
-            <input type="number" data-clear-btn="false" name="number-1" id="number-1" value="">
+            <input type="number" data-clear-btn="false" name="numberOfDays" placeholder="Number of days"/>
           </div></div>
         </div>`;
     $( document ).bind( "pagecreate", function( e ) {
@@ -40,22 +42,25 @@
 
 </head>
 <body>
+<div data-role="main" class="ui-content">
 <form id="add-city-form" data-ajax="false" method="post" action="handle-controlgroup"> 
-<!-- <form id="add-city-form" method="post"> -->
-  <div class="ui-body ui-body-d ui-corner-all">
+	<fieldset>
+  <div class="ui-body ui-body-a ui-overlay-shadow ui-corner-all"> <!-- add ui-mini in the class to reduce the padding & proportion -->
       <div data-role="controlgroup" id="my-controlgroup">
+					<!-- items will be injected here -->
           <div class="ui-grid-a">
-            <!-- items will be injected here -->
-            <div class="ui-block-a"><div class="ui-bar ui-bar-a" style="height:25px">City</div></div>
-            <div class="ui-block-b"><div class="ui-bar ui-bar-a" style="height:25px">Number of days</div></div>
+            <div class="ui-block-a"><div class="ui-bar ui-bar-b" style="height:25px">City</div></div>
+            <div class="ui-block-b"><div class="ui-bar ui-bar-b" style="height:25px">Number of days</div></div>
           </div>
       </div>
   </div>
+	</fieldset>
 </form>
   <div class="ui-field-contain">
-    <button id="append" data-mini="true" data-inline="true">Add row</button> 
+    <button id="append" data-mini="true" data-inline="true">Add city</button> 
+    <!-- Using HTML5's form attribute in submit button to keep the submit button outside the form and still submit form data: https://www.impressivewebs.com/html5-form-attribute/ -->
+    <input type="submit" data-inline="true" form="add-city-form" value="Done">
   </div>
-  <input type="submit" id="submit" data-inline="true" form="add-city-form" value="Submit">
-  <!-- <input type="submit" id="submit" data-inline="true" value="Submit" form="add-city-form" formaction = "handle-controlgroup"> -->
+</div>
 </body>
 </html>
