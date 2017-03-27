@@ -5,13 +5,18 @@ const path = require('path')
 const PROJECT_ROOT = path.join(__dirname, '..')
 
 const Log = require('./logger');
-const logger = (new Log()).init();
+let logger = (new Log("logger.conf")).init();
 
 // this allows winston to handle output from express' morgan middleware
 logger.stream = {
   write: function (message) {
     logger.info(message)
   }
+}
+
+// Use this if you want to send a different conf file. See ~/test-logger.js for example
+module.exports.setTestConfig = function() {
+  logger = (new Log("test-logger.conf")).init();
 }
 
 // A custom logger interface that wraps winston, making it easy to instrument

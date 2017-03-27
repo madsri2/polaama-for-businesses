@@ -25,7 +25,7 @@ ReportFetcher.prototype.getReport = function() {
       'noreport': "No expense details available"
     }
   };
-  logger.info(`getReport: Got ${comments.length} comments from trip-data for trip ${this.tripName} ${comments}`);
+  logger.info(`getReport: Got ${comments.length} comments from trip-data for trip ${this.tripName}`);
   const calculator = new Calculator();
   const report = calculator.calculate(comments, families);
   report.comments = comments;
@@ -51,14 +51,6 @@ function setNote(report) {
     }
   });
   return;
-}
-
-function getFamilyDetails() {
-  // TODO: Use trip information / session info if needed to get travelers list and create the family accordingly.
-  return {
-    "Madhu" : ["Madhu", "Aparna", "M", "A"],
-    "Jaideep" : ["Reshma", "Jaideep", "J", "R"]
-  };
 }
 
 module.exports = ReportFetcher;

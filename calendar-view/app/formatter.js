@@ -77,7 +77,7 @@ function capitalize1stChar(str) {
 
 // return weather information, stay details and activities.
 function getPopupContents(day) {
-  // console.log(`getPopupContents: Getting details for ${day}`);
+  // logger.debug(`getPopupContents: Getting details for ${day}`);
   const cityDetails = this.itinDetails[day];
   if(!cityDetails || Object.keys(cityDetails).length == 0 || !cityDetails.name) {
     logger.info(`getPopupContents: No details present for day ${day}`);

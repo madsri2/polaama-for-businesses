@@ -8,10 +8,10 @@ const request = require('request');
 
 var retry = 0;
 
-function WeatherInfoProvider(destination, city, travelDate) {
+function WeatherInfoProvider(country, city, travelDate) {
   this.months = ["01010130","02010228","03010330","04010430","05010530","06010630","07010730","08010830","09010930","10011030","11011130","12011230"];
   // Might be a country or a city. If it's a city in US, the url is different from an international city
-  this.destination = destination; 
+  this.country = country; 
   this.travelDate = travelDate;
   this.city = city;
   const isoDate = new Date(travelDate).toISOString();
@@ -21,7 +21,7 @@ function WeatherInfoProvider(destination, city, travelDate) {
 
 // TODO: Figure out the directory structure and make it consistent with activities.
 function weatherFile() {
-  return `weather/${TripData.encode(this.city)}.txt`;
+  return `/home/ec2-user/weather/${TripData.encode(this.city)}.txt`;
 }
 
 // International URL: http://api.wunderground.com/api/16f4fdcdf70aa630/planner_11051110/q/Israel/Jerusalem.json
@@ -39,7 +39,7 @@ WeatherInfoProvider.prototype.getWeather = function(responseCallback) {
       return undefined;
     }
     // file not present. Get it from wunderground.
-    const uri = `http://api.wunderground.com/api/16f4fdcdf70aa630/planner_${this.timeRange}/q/${this.destination}/${this.city}.json`;
+    const uri = `http://api.wunderground.com/api/16f4fdcdf70aa630/planner_${this.timeRange}/q/${this.country}/${this.city}.json`;
     const err = new Error();
     logger.info(`${file} does not exist. Getting it from wunderground with url <${uri}>`);
     request({
@@ -49,12 +49,31 @@ WeatherInfoProvider.prototype.getWeather = function(responseCallback) {
   }
 }
 
+WeatherInfoProvider.prototype.getWeatherStateUri = function(state) {
+  const uri = `http://api.wunderground.com/api/16f4fdcdf70aa630/planner_${this.timeRange}/q/${state}/${this.city}.json`;
+  logger.info(`getWeatherStateUri: Getting weather info from wunderground with url <${uri}>`);
+  request({
+    uri: uri,
+    method: 'GET',
+  }, handleUrlResponse.bind(this));
+}
+
 function handleUrlResponse(error, res, body) {
   const responseCallback = this.wCallback;
   if (!error && res.statusCode == 200) {
     const json = JSON.parse(body);
     if(json.response.error) {
       logger.error(`wunderground returned an error: ${JSON.stringify(json.response.error)}`);
+      return responseCallback(this.city, undefined);
+    }
+    if(!json.trip) {
+      // see if the state is present. If it is, attempt call with different wunderground API
+      if(json.response.results) {
+        const cityDetails = json.response.results[0];
+        const state = cityDetails.state;
+        return this.getWeatherStateUri(state);
+      }
+      logger.error(`wunderground response does not contain key "trip": ${JSON.stringify(json)}`);
       return responseCallback(this.city, undefined);
     }
     const file = weatherFile.call(this);

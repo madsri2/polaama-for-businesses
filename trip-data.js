@@ -19,7 +19,7 @@ function TripData(tripName) {
     this.data.rawName = tripName;
   }
   else {
-    this.country = new Country(this.data.destination);
+    this.country = new Country(this.data.country);
   }
 }
 
@@ -50,7 +50,7 @@ TripData.prototype.getInfoFromTrip = function(tripKey) {
     logger.info(`Could not find ${tripKey} for trip ${this.data.name}. Returning empty object`);
     return {};
   }
-  logger.info(`trip-data.js:getInfoFromTrip Key ${tripKey} has ${trip[tripKey].length} items; Destination is ${trip.destination}`);
+  logger.info(`trip-data.js:getInfoFromTrip Key ${tripKey} has ${trip[tripKey].length} items; Destination is ${trip.country}`);
   return trip[tripKey];
 }
 
@@ -131,8 +131,7 @@ TripData.prototype.addTripDetailsAndPersist = function(tripDetails) {
   this.data = {}; 
   this.data.name = myEncode(this.rawTripName);
   this.data.rawName = this.rawTripName;
-  // rename destination to country.
-  this.data.destination = myEncode(tripDetails.destination);
+  this.data.country = myEncode(tripDetails.destination);
   this.country = new Country(tripDetails.destination);
   this.data.duration = tripDetails.duration;
   // TODO: The date format needs to be identified and converted to the needed format.
@@ -156,13 +155,14 @@ TripData.prototype.addTripDetailsAndPersist = function(tripDetails) {
 }
 
 TripData.prototype.addPortOfEntry = function(portOfEntry) {
-  if(!_.isUndefined(portOfEntry)) {
+  if(portOfEntry) {
     // this is needed for getting flight details.
     this.data.portOfEntry = Encoder.encode(portOfEntry);
   }
   else {
     logger.error("addPortOfEntry: port of entry is undefined");
   }
+	logger.debug(`addPortOfEntry: Adding ${portOfEntry} as port of entry`);
   this.persistUpdatedTrip();
 }
 
@@ -263,7 +263,7 @@ function storeList(senderId, messageText, regex, key, retrieveString) {
   this.data[key] = this.data[key].concat(items);
   // store it locally
   this.persistUpdatedTrip();
-  logger.info("successfully stored item " + items + " in " + key);
+  logger.debug("successfully stored item " + items + " in " + key);
   return `Saved! You can retrieve this by saying "${retrieveString}"`;
 }
 
@@ -345,7 +345,7 @@ TripData.prototype.persistUpdatedTrip = function() {
   }
   try {
     fs.writeFileSync(file, JSON.stringify(this.data));
-    // logger.info("saved trip for ",this.data.name);
+    logger.debug(`persistUpdatedTrip: saved trip for ${this.data.name}`);
     return true;
   }
   catch(err) {
@@ -396,7 +396,7 @@ function createTodoList() {
   this.data.todoList.push("Place to stay");
   this.data.todoList.push("Rental car");
   this.data.todoList.push("[US Citizens only] Enroll in STEP (https://step.state.gov/step/) to get travel alerts and warnings.");
-  this.data.todoList.push(visaRequirements[this.data.destination]);
+  this.data.todoList.push(visaRequirements[this.data.country]);
 }
 
 function tripFile() {

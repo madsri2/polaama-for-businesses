@@ -1,0 +1,77 @@
+
+{
+  "response": {
+  "version":"0.1",
+  "termsofService":"http://www.wunderground.com/weather/api/d/terms.html",
+  "features": {
+  "planner": 1
+  }
+		, "results": [
+		{
+		"name": "Iguacu",
+		"city": "Iguacu",
+		"state": "BA",
+		"country": "BZ",
+		"country_iso3166":"BR",
+		"country_name":"Brazil",
+		"zmw": "00000.77.83242",
+		"l": "/q/zmw:00000.77.83242"
+		}
+		,
+		{
+		"name": "Iguacu",
+		"city": "Iguacu",
+		"state": "CE",
+		"country": "BZ",
+		"country_iso3166":"BR",
+		"country_name":"Brazil",
+		"zmw": "00000.73.82487",
+		"l": "/q/zmw:00000.73.82487"
+		}
+		,
+		{
+		"name": "Iguacu",
+		"city": "Iguacu",
+		"state": "MG",
+		"country": "BZ",
+		"country_iso3166":"BR",
+		"country_name":"Brazil",
+		"zmw": "00000.9.83592",
+		"l": "/q/zmw:00000.9.83592"
+		}
+		,
+		{
+		"name": "Iguacu",
+		"city": "Iguacu",
+		"state": "PR",
+		"country": "BZ",
+		"country_iso3166":"BR",
+		"country_name":"Brazil",
+		"zmw": "00000.14.83864",
+		"l": "/q/zmw:00000.14.83864"
+		}
+		,
+		{
+		"name": "Iguacu",
+		"city": "Iguacu",
+		"state": "RJ",
+		"country": "BZ",
+		"country_iso3166":"BR",
+		"country_name":"Brazil",
+		"zmw": "00000.76.83748",
+		"l": "/q/zmw:00000.76.83748"
+		}
+		,
+		{
+		"name": "Iguacu",
+		"city": "Iguacu",
+		"state": "RN",
+		"country": "BZ",
+		"country_iso3166":"BR",
+		"country_name":"Brazil",
+		"zmw": "00000.17.82596",
+		"l": "/q/zmw:00000.17.82596"
+		}
+		]
+	}
+}

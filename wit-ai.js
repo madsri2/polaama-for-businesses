@@ -61,7 +61,7 @@ WitAi.protototype.actions = {
       const tripName = context.destination + "-" + context.datetime + "-" + context.duration;
       const tripData = new TripData(tripName);
       const trip = tripData.addTripDetailsAndPersist(context);
-      context.firstResponse = "Great! It's going to be " + trip['weather'] + " in " + trip['destination'] + ". I have created your trip plan with pack list, todo lists etc. Check it out at https://polaama.com/trips";
+      context.firstResponse = "Great! It's going to be " + trip['weather'] + " in " + trip['country'] + ". I have created your trip plan with pack list, todo lists etc. Check it out at https://polaama.com/trips";
       context.done = true;
       logger.info("createNewTrip: Updated context: ",JSON.stringify(context));
       return updateHistoryAndCallResolve(resolve, context.firstResponse, context);

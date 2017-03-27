@@ -24,7 +24,7 @@ function WebpageHandler(id, tripName) {
   }
   if(_.isUndefined(tripName)) {
     // some functions below (like sendFriendsList & handleTravelersForNewTrip) don't require trip and formatter
-    logger.info("WebpageHandler: tripName was not passed");
+    logger.info("WebpageHandler: tripName was not passed. Not getting any trip information");
     return;
   }
   this.trip = this.session.getTrip(tripName);
@@ -197,21 +197,22 @@ function formParseCallback(err, fields, files, res, existingTrip) {
   // convert field.cities into an array
   const c = [];
   const cities = c.concat(fields.cities);
-  logger.info(`formParseCallback: The cities chosen for trip ${this.session.tripNameInContext} are: ${JSON.stringify(cities)}. portOfEntry is ${fields.portOfEntry}`);
   this.session.tripData().addCities(cities);
 
+  const portOfEntry = cities[0];
   if(!existingTrip) {
     // new trip. So, add port of entry
-    const portOfEntry = fields.portOfEntry;
-    if(portOfEntry === "Choose one") {
+    if(!portOfEntry) {
       logger.error(`formParseCallback: port of entry is undefined`);
       return res.send(`Required field port of entry is undefined. Cannot proceed!`);
     }
     this.session.tripData().addPortOfEntry(portOfEntry);
   }
+  else {
+    logger.info(`formParseCallback: This is an existing trip. Not adding port of entry`);
+  }
+  logger.info(`formParseCallback: The cities chosen for trip ${this.session.tripNameInContext} are: ${JSON.stringify(cities)}. portOfEntry is ${portOfEntry}`);
   this.canProceed = true;
-  // indicate that the tripData for this trip is stale in the session object.
-  this.session.invalidateTripData();
   return res.send(this.formatter.formatCityChoicePage());
 }
 

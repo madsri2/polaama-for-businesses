@@ -1,6 +1,8 @@
 'use strict';
 const logger = require('../../my-logger');
 const fs = require('fs');
+const WeatherInfoProvider = require('../../weather-info-provider');
+const Promise = require('promise');
 
 const details = {
   india: {
@@ -53,13 +55,66 @@ const details = {
 
 function CreateItinerary(trip) {
   this.trip = trip;
+  this.tripData = trip.data;
   this.tripName = trip.data.name;
   this.itin = {};
-  // console.log(`trip details for ${this.tripName} is ${JSON.stringify(this.trip)}`);
 }  
 
-// {"3":{"name":"lisbon","temp": 70, "rain_chance": "36%", "weather": "sunny", "arrival": "10.00", "hotel": "Taj", "visit":["Torres De Bellem"], "itin": []},"4": {"name": "lisbon", "temp": 70, "weather": "partly cloudy", "rain_chance": "40%", "itin":[]}, "5": {"name": "sintra", "temp": 65, "rain_chance": "20%", "weather": "partly cloudy"}, "6": {"name": "sintra", "temp": 65, "rain_chance": "65%"}, "7": {}, "8": {}, "9": {}, "10": {}, "11": {}, "12": {}, "13": {"leave": "15:00"}, "14": {}} 
 CreateItinerary.prototype.create = function() {
+  // console.log(`trip details for ${this.tripName} is ${JSON.stringify(this.trip)}`);
+	return setTripDetails.call(this);
+}
+
+CreateItinerary.prototype.getDetails = function() {
+	return this.tripDetails;
+}
+
+function setDepartureCityDetails() {
+	const countryDetails = this.tripDetails[this.destinationCountry];
+	// TODO: This needs to be set in webhook-post-handler.js (before calling startPlanningTrip).
+	const departureCity = this.tripData.departureCity; 
+	countryDetails[departureCity] = {};
+	const cityDetails = countryDetails[departureCity];
+	if(this.tripData.departureTime) {
+		cityDetails.departureTime = this.tripData.departureTime;
+	}
+  // setWeatherDetails makes an asynchronous call to get weather information.
+  return Promise.denodeify(setWeatherDetails.bind(this));
+}
+
+// TODO: As we get closer to the travel day, get realtime forecast, rather than historical forecast.
+function setWeatherDetails(callback) {
+  const startDate = this.tripData.startDate;
+  const departureCountry = this.tripData.departureCountry;
+  const departureCity = this.tripData.departureCity; 
+	const countryDetails = this.tripDetails[this.destinationCountry];
+  const cityDetails = countryDetails[departureCity];
+  const wip = new WeatherInfoProvider(departureCountry, departureCity, startDate);
+  wip.getWeather(function(c, weatherDetails) {
+    if(!weatherDetails) {
+      logger.error(`callGetWeather: WeatherInfoProvider.getWeather returned null for weather details`);
+      return callback();
+    }
+    cityDetails.weather = {};
+    cityDetails.weather.min_temp = weatherDetails.min_temp;
+    cityDetails.weather.max_temp = weatherDetails.max_temp;
+    cityDetails.weather.chanceofrain = weatherDetails.chanceofrain;
+    cityDetails.weather.cloud_cover = weatherDetails.cloud_cover;
+    return callback();
+  });
+}
+
+function setTripDetails() {
+	this.tripDetails = {};
+	this.destinationCountry = this.tripData.country;
+	this.tripDetails[this.destinationCountry] = {};
+	return setDepartureCityDetails.call(this);
+}
+
+
+
+// {"3":{"name":"lisbon","temp": 70, "rain_chance": "36%", "weather": "sunny", "arrival": "10.00", "hotel": "Taj", "visit":["Torres De Bellem"], "itin": []},"4": {"name": "lisbon", "temp": 70, "weather": "partly cloudy", "rain_chance": "40%", "itin":[]}, "5": {"name": "sintra", "temp": 65, "rain_chance": "20%", "weather": "partly cloudy"}, "6": {"name": "sintra", "temp": 65, "rain_chance": "65%"}, "7": {}, "8": {}, "9": {}, "10": {}, "11": {}, "12": {}, "13": {"leave": "15:00"}, "14": {}} 
+CreateItinerary.prototype.oldCreate = function() {
   const tripData = this.trip.data;
 
   // assign the first two days to portOfEntry.

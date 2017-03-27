@@ -65,6 +65,7 @@ ExpenseReportWorkflow.prototype.doWork = function(mesgEvent) {
     const names = message.split(",");
     trip.data.travelers[names[0]] = names;
     trip.persistUpdatedTrip();
+		this.session.invalidateTripData();
     if(Object.keys(trip.data.travelers).length < this.familyCount) {
       return textMessageRecord.call(this, this.familyNameMessage);
     }

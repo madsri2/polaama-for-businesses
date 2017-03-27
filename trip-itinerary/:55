@@ -1,0 +1,86 @@
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<style type="text/css">
+  /* Basic settings */
+  .ui-li-static.ui-collapsible {
+      padding: 0;
+  }
+  .ui-li-static.ui-collapsible > .ui-collapsible-content > .ui-listview,
+  .ui-li-static.ui-collapsible > .ui-collapsible-heading {
+      margin: 0;
+  }
+  .ui-li-static.ui-collapsible > .ui-collapsible-content {
+      padding-top: 0;
+      padding-bottom: 0;
+      padding-right: 0;
+      border-bottom-width: 0;
+  }
+  /* collapse vertical borders */
+  .ui-li-static.ui-collapsible > .ui-collapsible-content > .ui-listview > li.ui-last-child,
+  .ui-li-static.ui-collapsible.ui-collapsible-collapsed > .ui-collapsible-heading > a.ui-btn {
+      border-bottom-width: 0;
+  }
+  .ui-li-static.ui-collapsible > .ui-collapsible-content > .ui-listview > li.ui-first-child,
+  .ui-li-static.ui-collapsible > .ui-collapsible-content > .ui-listview > li.ui-first-child > a.ui-btn,
+  .ui-li-static.ui-collapsible > .ui-collapsible-heading > a.ui-btn {
+      border-top-width: 0;
+  }
+  /* Remove right borders */
+  .ui-li-static.ui-collapsible > .ui-collapsible-heading > a.ui-btn,
+  .ui-li-static.ui-collapsible > .ui-collapsible-content > .ui-listview > .ui-li-static,
+  .ui-li-static.ui-collapsible > .ui-collapsible-content > .ui-listview > li > a.ui-btn,
+  .ui-li-static.ui-collapsible > .ui-collapsible-content {
+      border-right-width: 0;
+  }
+  /* Remove left borders */
+  /* Here, we need class ui-listview-outer to identify the outermost listview */
+  .ui-listview-outer > .ui-li-static.ui-collapsible .ui-li-static.ui-collapsible.ui-collapsible,
+  .ui-listview-outer > .ui-li-static.ui-collapsible > .ui-collapsible-heading > a.ui-btn,
+  .ui-li-static.ui-collapsible > .ui-collapsible-content {
+      border-left-width: 0;
+  }
+</style>
+<script>
+( function( $, undefined ) {
+    $(document).bind( "pagecreate", function( e ) {
+      $( "#update", e.target ).on( "click", function( e ) {
+        var textBox = `
+     			<label for="text-1">Text input:</label>
+     			<input type="text" name="text-1" id="text-1" value="">`;
+        var el = $(textBox);
+        $("#my-controlgroup").controlgroup("container")[$(this).attr("id")]($(el));
+        group.controlgroup("refresh");
+      });
+    });
+})( jQuery );
+</script>
+</head>
+<body>
+<div data-role="main" class="ui-content">
+ <ul data-role="listview" class="ui-listview-outer">
+	<li data-role="collapsible" data-iconpos="right" data-inset="false">
+		<h2>Nov 11, Monday</h2>
+    <ul id="list" data-role="listview" data-shadow="false" data-inset="true" data-corners="false">
+      <li>Condor</li>
+      <li>Eagle</li>
+    </ul>
+		<form>
+    	<div data-role="controlgroup" id="my-controlgroup">
+    	</div>	
+		</form>
+    <button id="update" data-mini="true" data-inline="true">Update</button>
+	</li>
+	<li data-role="collapsible" data-iconpos="right" data-inset="false">
+		<h2>2</h2>
+    <ul data-role="listview" data-shadow="false" data-inset="true" data-corners="false">
+      <li>Condor</li>
+      <li>Eagle</li>
+    </ul>
+	</li>
+ </ul> 
+</div>
+</body>

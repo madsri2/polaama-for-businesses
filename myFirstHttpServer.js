@@ -80,7 +80,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 // logger. create a write stream (in append mode) 
 const accessLogStream = fs.createWriteStream('log/access.log', {flags: 'a'})
-app.use(morgan('common', 'immediate', { stream: accessLogStream }));
+app.use(morgan('common', { stream: accessLogStream }));
 // body parser
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
@@ -267,6 +267,9 @@ app.get('/grid', function(req, res) {
   return res.send(fs.readFileSync("/home/ec2-user/html-templates/grid.html",'utf8'));
 });
 
+app.get('/mobile-itin', function(req, res) {
+  return res.send(fs.readFileSync("/home/ec2-user/html-templates/mobile-itinerary-view.html",'utf8'));
+});
 
 app.get('/:id/:tripName/calendar', function(req, res) {
   const handler = new WebpageHandler(req.params.id, req.params.tripName);

@@ -1,0 +1,132 @@
+
+{
+  "response": {
+  "version":"0.1",
+  "termsofService":"http://www.wunderground.com/weather/api/d/terms.html",
+  "features": {
+  "planner": 1
+  }
+		, "results": [
+		{
+		"name": "Sao",
+		"city": "Sao",
+		"state": "",
+		"country": "HV",
+		"country_iso3166":"BF",
+		"country_name":"Burkina Faso",
+		"zmw": "00000.1276.65503",
+		"l": "/q/zmw:00000.1276.65503"
+		}
+		,
+		{
+		"name": "Sao",
+		"city": "Sao",
+		"state": "3",
+		"country": "MI",
+		"country_iso3166":"ML",
+		"country_name":"Mali",
+		"zmw": "00000.417.61293",
+		"l": "/q/zmw:00000.417.61293"
+		}
+		,
+		{
+		"name": "Sao",
+		"city": "Sao",
+		"state": "42",
+		"country": "JP",
+		"country_iso3166":"JP",
+		"country_name":"Japan",
+		"zmw": "00000.49.47843",
+		"l": "/q/zmw:00000.49.47843"
+		}
+		,
+		{
+		"name": "Sao",
+		"city": "Sao",
+		"state": "EN",
+		"country": "CM",
+		"country_iso3166":"CM",
+		"country_name":"Cameroon",
+		"zmw": "00000.1181.64700",
+		"l": "/q/zmw:00000.1181.64700"
+		}
+		,
+		{
+		"name": "Sao",
+		"city": "Sao",
+		"state": "GU",
+		"country": "SO",
+		"country_iso3166":"SB",
+		"country_name":"Solomon Islands",
+		"zmw": "00000.289.91517",
+		"l": "/q/zmw:00000.289.91517"
+		}
+		,
+		{
+		"name": "Sao",
+		"city": "Sao",
+		"state": "LR",
+		"country": "CD",
+		"country_iso3166":"TD",
+		"country_name":"Chad",
+		"zmw": "00000.790.64706",
+		"l": "/q/zmw:00000.790.64706"
+		}
+		,
+		{
+		"name": "Salamo",
+		"city": "Salamo",
+		"state": "MBA",
+		"country": "NG",
+		"country_iso3166":"PG",
+		"country_name":"Papua New Guinea",
+		"zmw": "00000.94.92080",
+		"l": "/q/zmw:00000.94.92080"
+		}
+		,
+		{
+		"name": "Sao",
+		"city": "Sao",
+		"state": "SCO",
+		"country": "PH",
+		"country_iso3166":"PH",
+		"country_name":"Philippines",
+		"zmw": "00000.395.98851",
+		"l": "/q/zmw:00000.395.98851"
+		}
+		,
+		{
+		"name": "Sao",
+		"city": "Sao",
+		"state": "ST",
+		"country": "ID",
+		"country_iso3166":"ID",
+		"country_name":"Indonesia",
+		"zmw": "00000.555.97072",
+		"l": "/q/zmw:00000.555.97072"
+		}
+		,
+		{
+		"name": "Sao",
+		"city": "Sao",
+		"state": "TC",
+		"country": "SG",
+		"country_iso3166":"SN",
+		"country_name":"Senegal",
+		"zmw": "00000.676.61731",
+		"l": "/q/zmw:00000.676.61731"
+		}
+		,
+		{
+		"name": "Sao",
+		"city": "Sao",
+		"state": "TH",
+		"country": "SG",
+		"country_iso3166":"SN",
+		"country_name":"Senegal",
+		"zmw": "00000.504.61641",
+		"l": "/q/zmw:00000.504.61641"
+		}
+		]
+	}
+}

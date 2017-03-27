@@ -13,7 +13,7 @@ function TripDataFormatter(tripData) {
 TripDataFormatter.prototype.formatListResponse = function(headers, key) {
   const tripName = this.trip.data.name;
   const list = this.trip.getInfoFromTrip(key);
-  if(_.isUndefined(list)) {
+  if(!list) {
     return `Could not find ${key} for trip ${tripName}`;
   }
   if(_.isUndefined(headers) || _.isUndefined(headers['user-agent'])) {
@@ -236,7 +236,7 @@ TripDataFormatter.prototype.formatCities = function() {
   return fs.readFileSync("html-templates/cities.html", 'utf8')
     .replace("${cityList}", selection)
     .replace("${portOfEntryList}", selection)
-    .replace("${country}", this.trip.data.destination);
+    .replace("${country}", this.trip.data.country);
 }
 
 // adding cities for existing trip
@@ -253,7 +253,7 @@ TripDataFormatter.prototype.addCitiesExistingTrip = function() {
   });
   return fs.readFileSync("html-templates/add-cities.html", 'utf8')
     .replace("${cityList}", selection)
-    .replace("${country}", this.trip.data.destination);
+    .replace("${country}", this.trip.data.country);
 }
 
 TripDataFormatter.prototype.formatCityChoicePage = function() {
@@ -299,10 +299,32 @@ TripDataFormatter.prototype.displayCalendar = function() {
 function toLink(text) {
   const words = text.split(' ');
   words.forEach((word, i) => {
-      if(/^https?:\/\//.test(word)) {
-      words[i] = `<a href=${word}>${word}</a>`;
+    // handle case where the link is within brackets
+    if(word.startsWith("(")) {
+      const contents = word.match(/\((.*?)\)/);
+      if(contents) {
+        words[i] = `(<a href=${contents[1]}>${contents[1]}</a>)`;
       }
-      });
+      return;
+    }
+    if(word.startsWith("[")) {
+      const contents = word.match(/\[(.*?)\]/);
+      if(contents) {
+        words[i] = `[<a href=${contents[1]}>${contents[1]}</a>]`;
+      }
+      return;
+    }
+    if(word.startsWith("{")) {
+      const contents = word.match(/\{(.*?)\}/);
+      if(contents) {
+        words[i] = `{<a href=${contents[1]}>${contents[1]}</a>}`;
+      }
+      return;
+    }
+    if(/^https:\/\//.test(word)) {
+      words[i] = `<a href=${word}>${word}</a>`;
+    }
+  });
   return words.join(' ');
 }
 
@@ -312,7 +334,9 @@ function listAsHtml(list) {
     return "";
   }
   list.forEach(function(item) {
-    html += "<li>" + toLink(item) + "</li>";
+    if(item) {
+      html += "<li>" + toLink(item) + "</li>";
+    }
   });
   html += "</ol>";
   return html;

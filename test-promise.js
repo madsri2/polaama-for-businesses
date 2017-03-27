@@ -15,11 +15,11 @@ f1P().then(f2P()).done(
 
 function f1(callback) {
   console.log("f1 called");
-  fs.readFile("flights/SEAtoLISon2017-02-03.txt", 'utf8', callback);  
+  fs.readFile("/home/ec2-user/flights/SEAtoLISon2017-02-03.txt", 'utf8', callback);  
 }
 
 
 function f2(callback) {
   console.log("f2 called");
-  fs.readFile("flights/SEAtoLISon2017-02-03.txt", 'utf8', callback);  
+  fs.readFile("/home/ec2-user/flights/SEAtoLISon2017-02-03.txt", 'utf8', callback);  
 }

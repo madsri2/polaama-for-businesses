@@ -76,7 +76,17 @@ const MY_RECIPIENT_ID = "1120615267993271";
 // Static variable
 Session.sessionBaseDir = "sessions";
 
+function guid() {
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+  return s4() + '-' + s4();
+}
+
 function Session(fbid,sessionId) {
+	this.guid = guid();
   this.sessionId = sessionId;
   this.fbid = fbid;
   this.botMesgHistory = [];
@@ -130,7 +140,8 @@ Session.prototype.humanContext = function() {
 // this function can be called to invalidate a trip, forcing a refresh of this trip by calling TripData (which would contain the latest information).
 Session.prototype.invalidateTripData = function() {
   const sessionTrip = this.findTrip();
-  sessionTrip.tripData = undefined;
+	logger.debug(`invalidateTripData: Marking trip ${sessionTrip.tripData.rawTripName} as stale. Session id is ${this.guid}`);
+	sessionTrip.tripData = undefined;
 }
 
 Session.prototype.tripData = function() {
@@ -139,8 +150,8 @@ Session.prototype.tripData = function() {
 
 Session.prototype.allTrips = function() {
   const tripDataList = [];
-  Object.keys(this.trips).forEach(k => {
-    tripDataList.push(this.trips[k].tripData);
+  Object.keys(this.trips).forEach(tripName => {
+    tripDataList.push(this.getTrip(tripName));
   });
   return tripDataList;
 }
@@ -166,7 +177,7 @@ Session.prototype.getCurrentAndFutureTrips = function() {
   let pastTrips = false;
   // Filter past trips
   this.allTrips().forEach(trip => {
-    console.log(`getCurrentAndFutureTrips: trip is ${trip.rawTripName}`);
+    logger.debug(`getCurrentAndFutureTrips: trip is ${trip.rawTripName}`);
     const end = moment(new Date(trip.data.returnDate).toISOString());
     const daysToTrip = end.diff(moment(),'days');
     // if we don't know the start date for whatever reason, include those trips as well

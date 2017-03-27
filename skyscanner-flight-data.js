@@ -4,9 +4,11 @@ const logger = require('./my-logger');
 
 function FlightDataExtractor(json) {
   this.json = json;
-  logger.info(`There are ${this.json.Itineraries.length} itineraries. Json keys are ${Object.keys(json)}`); // Itin keys are ${Object.keys(json.Itineraries[0]};`);
+	const numItin = this.json.Itineraries.length;
+  logger.info(`There are ${numItin} itineraries. Json keys are ${Object.keys(json)}`); // Itin keys are ${Object.keys(json.Itineraries[0]};`);
   this.itin = [];
-  for(let i = 0; i < 5; i++) {
+	const itinLen = (numItin < 5) ? numItin : 5;
+  for(let i = 0; i < itinLen; i++) {
     const itinDetails = this.json.Itineraries[i];
     // console.log(Object.keys(itin.PricingOptions));
     this.itin[i] = {

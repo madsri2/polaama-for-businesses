@@ -1,58 +1,72 @@
-<!DOCTYPE html>
 <html>
+<!-- WORKING Version of a dynamic controlgroup to which we can add a grid of "Cities and number of days". Idea for this is from http://demos.jquerymobile.com/1.4.2/controlgroup-dynamic/ -->
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
 <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
-</head>
-<body>
 
 <script>
-(function(d, s, id){
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) {return;}
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.com/en_US/messenger.Extensions.js";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'Messenger'));
+( function( $, undefined ) {
+    var counter = 0;
+    var grid = `
+        <div class="ui-grid-a"> 
+          <!-- TODO: Consider making this a filterable select by following this: http://demos.jquerymobile.com/1.4.5/selectmenu-custom-filter/#&ui-state=dialog. Or even better, make this an autocomplete text field -->
+          <div class="ui-block-a"><div class="ui-bar ui-bar-a" style="height:40px">
+            <select name="cities" data-native-menu="false">
+              <option data-placeholder="true">Placeholder</option>
+              ${cityList}
+            </select>
+          </div></div>
+          <!-- TODO: Figure out a way to get the entire field to show up on mobile. It shows up correctily in grid.html -->
+          <div class="ui-block-b"><div class="ui-bar ui-bar-a" style="height:40px">
+            <input type="number" data-clear-btn="false" name="numberOfDays" placeholder="Number of days"/>
+          </div></div>
+        </div>`;
+    $( document ).bind( "pagecreate", function( e ) {
+      $( "#append", e.target ).on( "click", function( e ) {
+        var pGrid; 
+        if(counter == 0) {
+          pGrid = grid.replace("Placeholder","Port of entry");
+        }
+        else {
+          pGrid = grid.replace("Placeholder","Select city");
+        }
+        counter++;
+        var group = $("#my-controlgroup");
+        var el = $(pGrid);
+				console.log($(this));
+        $("#my-controlgroup").controlgroup("container")[$(this).attr("id")]($(el));
+        group.controlgroup("refresh");
+      });
+    });
+})( jQuery );
+</script>
 
-MessengerExtensions.requestCloseBrowser(function success() {
-	window.alert("closing browser");
-}, function error(err) {
-	window.alert("error closing browser");
-});
-</script> 
-
-<div data-role="page">
+</head>
+<body>
+<div data-role="main" class="ui-content">
   <div data-role="header">
-  <h1>Cities in ${country}</h1>
+    <h1>Cities in ${country}</h1>
   </div>
-
-  <div data-role="main" class="ui-content">
-    <!-- TODO: Consider using ajax submission. -->
-    <form data-ajax="false" method="post" action="handle-city-choice">
-      <fieldset>
-        <label for="cities">Select cities:</label>
-        <select name="cities" id="cities" multiple="multiple" data-native-menu="false">
-          <option>City</option>
-          ${cityList}
-          <!-- <option value="${city}">${rawCityName}</option> -->
-        </select>
-      </fieldset>
-      <fieldset>
-        <label for="portOfEntry">Select port of entry:</label>
-        <select name="portOfEntry" id="portOfEntry" data-native-menu="false">
-          <option data-placeholder="true">Choose one</option>
-          ${portOfEntryList}
-          <!-- <option value="${city}">${rawCityName}</option> -->
-        </select>
-      </fieldset>
-      <input type="submit" data-inline="true" value="Submit">
-    </form>
+  <form id="add-city-form" data-ajax="false" method="post" action="handle-city-choice"> 
+    <fieldset>
+      <div class="ui-body ui-body-a ui-overlay-shadow ui-corner-all"> <!-- add ui-mini in the class to reduce the padding & proportion -->
+        <div data-role="controlgroup" id="my-controlgroup">
+          <!-- items will be injected here -->
+          <div class="ui-grid-a">
+            <div class="ui-block-a"><div class="ui-bar ui-bar-b" style="height:25px">City</div></div>
+            <div class="ui-block-b"><div class="ui-bar ui-bar-b" style="height:25px">Number of days</div></div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </form>
+  <div class="ui-field-contain">
+    <button id="append" data-mini="true" data-inline="true">Add another city</button> 
+    <!-- Using HTML5's form attribute in submit button to keep the submit button outside the form and still submit form data: https://www.impressivewebs.com/html5-form-attribute/ -->
+    <input type="submit" data-mini="true" data-inline="true" form="add-city-form" value="Done"></input>
   </div>
 </div>
-
 </body>
 </html>
-

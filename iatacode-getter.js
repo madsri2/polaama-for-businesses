@@ -28,6 +28,9 @@ ic.api('autocomplete', {query: 'lisbon'}, function(e, r) {
 */
 
 function IataCodeGetter(city) {
+	if(!city) {
+		throw new Error("Argument city passed to me is not defined");
+	}
   this.city = city;
 }
 

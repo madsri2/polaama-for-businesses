@@ -6,7 +6,7 @@ const _ = require('lodash');
 
 function testGetWeatherInformation() {
   const tripData = new TripData("Test Trip");
-  tripData.data.destination = "India";
+  tripData.data.country = "India";
   tripData.data.startDate = "11/1/17";
   tripData.data.cities = ["Mumbai", "Chennai"];
   const tip = new TripInfoProvider(tripData);
@@ -25,7 +25,7 @@ function testGetWeatherInformation() {
 
 function testGetStoredWeatherDetails() {
   const tripData = new TripData("Test Trip");
-  tripData.data.destination = "India";
+  tripData.data.country = "India";
   tripData.data.startDate = "11/1/17";
   tripData.data.cities = ["Mumbai", "Chennai"];
   const tip = new TripInfoProvider(tripData);
@@ -35,7 +35,7 @@ function testGetStoredWeatherDetails() {
 
 function testGetActivity() {
   const tripData = new TripData("Portugal");
-  tripData.data.destination = "portugal";
+  tripData.data.country = "portugal";
   tripData.data.startDate = "9/12/17";
   tripData.data.cities = ["lisbon"];
   const tip = new TripInfoProvider(tripData);

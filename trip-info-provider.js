@@ -84,7 +84,7 @@ function getWeatherForCity(city, index, callback) {
     }
     return;
   }
-  const wip = new WeatherInfoProvider(tripData.destination, city, tripData.startDate);
+  const wip = new WeatherInfoProvider(tripData.country, city, tripData.startDate);
   const self = this;
   wip.getWeather(function(c, weatherDetails) {
     parseWeatherResponse.call(self, c, weatherDetails);
@@ -113,11 +113,11 @@ TripInfoProvider.prototype.getWeatherInformation = function(callback) {
 }
 
 function encodeForLonelyPlanet() {
-  if(_.isUndefined(this.trip.data.destination)) {
+  if(_.isUndefined(this.trip.data.country)) {
     logger.warn("encodeForLonelyPlanet: No country specified in trip");
     return undefined;
   }
-  return this.trip.data.destination.replace(/ /g,'-').replace(/_/g,'-').toLowerCase();
+  return this.trip.data.country.replace(/ /g,'-').replace(/_/g,'-').toLowerCase();
 }
 
 /***************** Flight Details ***************************/
@@ -172,7 +172,7 @@ function getActivityForCity(city, index, callback) {
     }
     return;
   }
-  const aip = new ActivityInfoProvider(this.trip.data.destination, city, this.trip.data.startDate);
+  const aip = new ActivityInfoProvider(this.trip.data.country, city, this.trip.data.startDate);
   aip.getActivities(function(activityDetails) {
     cityDetails.activities = activityDetails;
     // handle case where we have gathered data for all cities.

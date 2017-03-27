@@ -13,8 +13,8 @@
         <div class="ui-grid-a"> 
           <!-- TODO: Consider making this a filterable select by following this: http://demos.jquerymobile.com/1.4.5/selectmenu-custom-filter/#&ui-state=dialog. Or even better, make this an autocomplete text field -->
           <div class="ui-block-a"><div class="ui-bar ui-bar-a" style="height:40px">
-						<select name="cities" data-native-menu="false">
-                <option>Select a City</option>
+            <select name="cities" data-native-menu="false">
+                <option data-placeholder="true">Placeholder</option>
                 <option>Goa</option>
                 <option>Chennai</option>
                 <option>Bengaluru</option>
@@ -22,19 +22,25 @@
                 <option>Pune</option>
             </select>
           </div></div>
-					<!-- TODO: Figure out a way to get the entire field to show up on mobile. It shows up correctily in grid.html -->
+          <!-- TODO: Figure out a way to get the entire field to show up on mobile. It shows up correctily in grid.html -->
           <div class="ui-block-b"><div class="ui-bar ui-bar-a" style="height:40px">
             <input type="number" data-clear-btn="false" name="numberOfDays" placeholder="Number of days"/>
           </div></div>
         </div>`;
     $( document ).bind( "pagecreate", function( e ) {
       $( "#append", e.target ).on( "click", function( e ) {
-           counter++;
-           var  group = $( "#my-controlgroup" ),
-                $el;
-            $el = $( grid );
-            $( "#my-controlgroup" ).controlgroup( "container" )[ $( this ).attr( "id" ) ]( $el );
-            group.controlgroup( "refresh" );
+        var pGrid; 
+        if(counter == 0) {
+          pGrid = grid.replace("Placeholder","Select port of entry");
+        }
+        else {
+          pGrid = grid.replace("Placeholder","Select a city");
+        }
+        counter++;
+        var group = $("#my-controlgroup");
+        var el = $(pGrid);
+        $("#my-controlgroup").controlgroup("container")[$(this).attr("id")]($(el));
+        group.controlgroup("refresh");
       });
     });
 })( jQuery );
@@ -43,23 +49,23 @@
 </head>
 <body>
 <div data-role="main" class="ui-content">
-<form id="add-city-form" data-ajax="false" method="post" action="handle-controlgroup"> 
-	<fieldset>
-  <div class="ui-body ui-body-a ui-overlay-shadow ui-corner-all"> <!-- add ui-mini in the class to reduce the padding & proportion -->
-      <div data-role="controlgroup" id="my-controlgroup">
-					<!-- items will be injected here -->
+  <form id="add-city-form" data-ajax="false" method="post" action="handle-controlgroup"> 
+    <fieldset>
+      <div class="ui-body ui-body-a ui-overlay-shadow ui-corner-all"> <!-- add ui-mini in the class to reduce the padding & proportion -->
+        <div data-role="controlgroup" id="my-controlgroup">
+          <!-- items will be injected here -->
           <div class="ui-grid-a">
             <div class="ui-block-a"><div class="ui-bar ui-bar-b" style="height:25px">City</div></div>
             <div class="ui-block-b"><div class="ui-bar ui-bar-b" style="height:25px">Number of days</div></div>
           </div>
+        </div>
       </div>
-  </div>
-	</fieldset>
-</form>
+    </fieldset>
+  </form>
   <div class="ui-field-contain">
-    <button id="append" data-mini="true" data-inline="true">Add city</button> 
+    <button id="append" data-mini="true" data-inline="true">Add another city</button> 
     <!-- Using HTML5's form attribute in submit button to keep the submit button outside the form and still submit form data: https://www.impressivewebs.com/html5-form-attribute/ -->
-    <input type="submit" data-inline="true" form="add-city-form" value="Done">
+    <input type="submit" data-mini="true" data-inline="true" form="add-city-form" value="Done"></input>
   </div>
 </div>
 </body>
