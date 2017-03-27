@@ -19,7 +19,7 @@ function WebpageHandler(id, tripName) {
   this.sessions = new Sessions();
   this.session = this.sessions.find(this.fbid);
   if(_.isNull(this.session)) {
-    logger.error(`No session exists for id ${this.fbid}`);
+    logger.warn(`No session exists for id ${this.fbid}`);
     return;
   }
   if(_.isUndefined(tripName)) {
@@ -172,15 +172,23 @@ WebpageHandler.prototype.displayCitiesForExistingTrip = function(res) {
   return res.send(this.formatter.addCitiesExistingTrip());
 }
 
+WebpageHandler.prototype.saveItinUpdate = function(req, res) {
+  const form = new formidable.IncomingForm(); 
+  // All activities need to happen within the the form.parse function
+  form.parse(req, function(err, fields, files) {
+    if(err) {
+      logger.error(`Error from parser: ${JSON.stringify(err)}`);
+      return res.send(`error from parser: ${JSON.stringify(err)}`);
+    }
+   logger.info(`Fields in form are : ${JSON.stringify(fields)}`);
+    return res.send("submitted");
+  });
+}
+
 WebpageHandler.prototype.handleControlGroup = function(req, res) {
   const form = new formidable.IncomingForm(); 
   // All activities need to happen within the the form.parse function
-  const callback = formParseCallback.bind(this);
-  const self = this;
-
-  console.log("handleControlGroup called");
   form.parse(req, function(err, fields, files) {
-    console.log("form.parse called");
     if(err) {
       console.log(`Error from parser: ${JSON.stringify(err)}`);
       return res.send(`error from parser: ${JSON.stringify(err)}`);

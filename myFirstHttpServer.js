@@ -292,6 +292,12 @@ app.post('/:id/:tripName/handle-add-city-choice', function(req, res) {
   return handler.handleAddCityChoice(req, res, myPostHandler, true /* existingTrip */);
 });
 
+app.post('/save-itin-update', function(req, res) {
+  logger.debug(`save-itin-update: Called`);
+  const handler = new WebpageHandler(null, null);
+  return handler.saveItinUpdate(req, res);
+});
+
 
 // handling webhook
 app.get('/webhook', function(req, res) {

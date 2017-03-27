@@ -45,30 +45,64 @@
   }
 </style>
 <script>
-( function( $, undefined ) {
-    $(document).bind( "pagecreate", function( e ) {
-      $( "#update", e.target ).on( "click", function( e ) {
-        var textBox = `
-					<li><form>
-     			<label for="text-1">Text input:</label>
-     			<input type="text" name="text-1" id="text-1" value="">
-					</form></li>`;
-				$("#list").append($(textBox));
-				$("#list").listview("refresh");
-      });
-    });
-})( jQuery );
+
+function show (){
+  $.ajax({        
+    type: "POST",
+    url: "save-itin-update",
+    data: {value : $("#itin").val()},
+    success: function(data) {
+      console.log(`server returned ${data}`);
+      $("#list").append("<li>" + $("#itin").val() + "</li>");
+      $("#hidden-form").addClass("ui-screen-hidden");
+      $("#list").listview("refresh");
+    },
+    statusCode: {
+      503: function() {
+        alert("failed to save!");
+        $("#hidden-form").addClass("ui-screen-hidden");
+        $("#list").listview("refresh");
+      }
+    }
+  }); 
+}
+
+(function($,undefined) {
+  $(document).bind( "pagecreate", function( e ) {
+    $( "#update", e.target ).on( "click", function( e ) {
+      $("#hidden-form").removeClass("ui-screen-hidden");
+      $("#list").listview("refresh");
+    });
+
+    $("#itin-submit", e.target).on("submit", function(e) {
+      e.preventDefault(); //cancel the submission
+      show(); //send the request to server to save it
+    });
+  });
+})(jQuery);
 </script>
 </head>
 <body>
+<div data-role="main" class="ui-content">
  <ul data-role="listview" class="ui-listview-outer">
-	<li data-role="collapsible" data-iconpos="right" data-inset="false">
-		<h2>Nov 11, Monday</h2>
-    <ul id="list" data-role="listview" data-shadow="false" data-inset="true" data-corners="false">
-      <li>Condor</li>
-      <li>Eagle</li>
-			<li><button id="update" data-mini="true" data-inline="true">Update</button></li>
+  <li data-role="collapsible" data-iconpos="right" data-inset="false">
+    <h2>Nov 11, Monday</h2>
+    <ul id="outer-list" data-role="listview" data-shadow="false" data-inset="true" data-corners="false">
+      <li>
+        <ul id="list" data-role="listview" data-shadow="false" data-inset="true" data-corners="false">
+          <li>Condor</li>
+          <li>Eagle</li>
+        </ul>
+      </li>
+      <li class="ui-screen-hidden" id="hidden-form">
+        <form id="itin-submit" method="post">
+          <input type="text" name="itin" id="itin" value="">
+          <button type="submit" name="i-submit">submit</button>
+        </form>
+      </li>
+      <li><button id="update" data-mini="true" data-inline="true">Edit</button></li>
     </ul>
-	</li>
+  </li>
  </ul> 
+</div>
 </body>
