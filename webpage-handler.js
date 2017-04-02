@@ -205,7 +205,7 @@ function formParseCallback(err, fields, files, res, existingTrip) {
   // convert field.cities into an array
   const c = [];
   const cities = c.concat(fields.cities);
-  this.session.tripData().addCities(cities);
+  this.session.tripData().addCityItinerary(cities, fields.numberOfDays);
 
   const portOfEntry = cities[0];
   if(!existingTrip) {

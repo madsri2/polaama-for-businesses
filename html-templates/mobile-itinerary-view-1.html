@@ -1,0 +1,483 @@
+Logger setup: using config file /home/ec2-user/config/logger.conf
+Logger setup: logging to file /home/ec2-user/log/results.log
+Logger setup: log level is debug
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<style type="text/css">
+  /* TODO: Get this working. Currently, the style attribute in the html below is what causes the CSS to work. */
+  /* Basic settings */
+  .ui-li-static.ui-collapsible {
+      padding: 0;
+  }
+  .ui-li-static.ui-collapsible > .ui-collapsible-content > .ui-listview,
+  .ui-li-static.ui-collapsible > .ui-collapsible-heading {
+      margin: 0;
+  }
+  .ui-li-static.ui-collapsible > .ui-collapsible-content {
+      padding-top: 0;
+      padding-bottom: 0;
+      padding-right: 0;
+      border-bottom-width: 0;
+  }
+  /* collapse vertical borders */
+  .ui-li-static.ui-collapsible > .ui-collapsible-content > .ui-listview > li.ui-last-child,
+  .ui-li-static.ui-collapsible.ui-collapsible-collapsed > .ui-collapsible-heading > a.ui-btn {
+      border-bottom-width: 0;
+  }
+  .ui-li-static.ui-collapsible > .ui-collapsible-content > .ui-listview > li.ui-first-child,
+  .ui-li-static.ui-collapsible > .ui-collapsible-content > .ui-listview > li.ui-first-child > a.ui-btn,
+  .ui-li-static.ui-collapsible > .ui-collapsible-heading > a.ui-btn {
+      border-top-width: 0;
+  }
+  /* Remove right borders */
+  .ui-li-static.ui-collapsible > .ui-collapsible-heading > a.ui-btn,
+  .ui-li-static.ui-collapsible > .ui-collapsible-content > .ui-listview > .ui-li-static,
+  .ui-li-static.ui-collapsible > .ui-collapsible-content > .ui-listview > li > a.ui-btn,
+  .ui-li-static.ui-collapsible > .ui-collapsible-content {
+      border-right-width: 0;
+  }
+  /* Remove left borders */
+  /* Here, we need class ui-listview-outer to identify the outermost listview */
+  .ui-listview-outer > .ui-li-static.ui-collapsible .ui-li-static.ui-collapsible.ui-collapsible,
+  .ui-listview-outer > .ui-li-static.ui-collapsible > .ui-collapsible-heading > a.ui-btn,
+  .ui-li-static.ui-collapsible > .ui-collapsible-content {
+      border-left-width: 0;
+  }
+</style>
+<script>
+
+function show (dateVal){
+  itinId = `#itin-${dateVal}`;
+  listId = `#list-${dateVal}`;
+  hiddenFormId = `#hidden-form-${dateVal}`;
+  $.ajax({        
+    type: "POST",
+    url: "save-itin-update",
+    data: {value : $(itinId).val(), 'date': dateVal},
+    success: function(data) {
+      console.log(`server returned ${data}`);
+      $(listId).append("<li>" + $(itinId).val() + "</li>");
+      $(hiddenFormId).addClass("ui-screen-hidden");
+      $(listId).listview("refresh");
+    },
+    statusCode: {
+      503: function() {
+        alert("failed to save!");
+        $(hiddenFormId).addClass("ui-screen-hidden");
+        $(listId).listview("refresh");
+      }
+    }
+  }); 
+}
+
+(function($,undefined) {
+  $(document).bind( "pagecreate", function( e ) {
+    
+        $("#update-11-1", e.target ).on( "click", function( e ) { 
+          $("#hidden-form-11-1").removeClass("ui-screen-hidden"); 
+          $("#list-11-1").listview("refresh"); 
+        }); 
+        $("#itin-submit-11-1", e.target).on("submit", function(e) { 
+          e.preventDefault(); //cancel the submission 
+          show("11-1"); //send the request to server to save it 
+        }); 
+      
+        $("#update-11-2", e.target ).on( "click", function( e ) { 
+          $("#hidden-form-11-2").removeClass("ui-screen-hidden"); 
+          $("#list-11-2").listview("refresh"); 
+        }); 
+        $("#itin-submit-11-2", e.target).on("submit", function(e) { 
+          e.preventDefault(); //cancel the submission 
+          show("11-2"); //send the request to server to save it 
+        }); 
+      
+        $("#update-11-3", e.target ).on( "click", function( e ) { 
+          $("#hidden-form-11-3").removeClass("ui-screen-hidden"); 
+          $("#list-11-3").listview("refresh"); 
+        }); 
+        $("#itin-submit-11-3", e.target).on("submit", function(e) { 
+          e.preventDefault(); //cancel the submission 
+          show("11-3"); //send the request to server to save it 
+        }); 
+      
+        $("#update-11-4", e.target ).on( "click", function( e ) { 
+          $("#hidden-form-11-4").removeClass("ui-screen-hidden"); 
+          $("#list-11-4").listview("refresh"); 
+        }); 
+        $("#itin-submit-11-4", e.target).on("submit", function(e) { 
+          e.preventDefault(); //cancel the submission 
+          show("11-4"); //send the request to server to save it 
+        }); 
+      
+        $("#update-11-5", e.target ).on( "click", function( e ) { 
+          $("#hidden-form-11-5").removeClass("ui-screen-hidden"); 
+          $("#list-11-5").listview("refresh"); 
+        }); 
+        $("#itin-submit-11-5", e.target).on("submit", function(e) { 
+          e.preventDefault(); //cancel the submission 
+          show("11-5"); //send the request to server to save it 
+        }); 
+      
+        $("#update-11-6", e.target ).on( "click", function( e ) { 
+          $("#hidden-form-11-6").removeClass("ui-screen-hidden"); 
+          $("#list-11-6").listview("refresh"); 
+        }); 
+        $("#itin-submit-11-6", e.target).on("submit", function(e) { 
+          e.preventDefault(); //cancel the submission 
+          show("11-6"); //send the request to server to save it 
+        }); 
+      
+        $("#update-11-7", e.target ).on( "click", function( e ) { 
+          $("#hidden-form-11-7").removeClass("ui-screen-hidden"); 
+          $("#list-11-7").listview("refresh"); 
+        }); 
+        $("#itin-submit-11-7", e.target).on("submit", function(e) { 
+          e.preventDefault(); //cancel the submission 
+          show("11-7"); //send the request to server to save it 
+        }); 
+      
+        $("#update-11-8", e.target ).on( "click", function( e ) { 
+          $("#hidden-form-11-8").removeClass("ui-screen-hidden"); 
+          $("#list-11-8").listview("refresh"); 
+        }); 
+        $("#itin-submit-11-8", e.target).on("submit", function(e) { 
+          e.preventDefault(); //cancel the submission 
+          show("11-8"); //send the request to server to save it 
+        }); 
+      
+        $("#update-11-9", e.target ).on( "click", function( e ) { 
+          $("#hidden-form-11-9").removeClass("ui-screen-hidden"); 
+          $("#list-11-9").listview("refresh"); 
+        }); 
+        $("#itin-submit-11-9", e.target).on("submit", function(e) { 
+          e.preventDefault(); //cancel the submission 
+          show("11-9"); //send the request to server to save it 
+        }); 
+      
+        $("#update-11-10", e.target ).on( "click", function( e ) { 
+          $("#hidden-form-11-10").removeClass("ui-screen-hidden"); 
+          $("#list-11-10").listview("refresh"); 
+        }); 
+        $("#itin-submit-11-10", e.target).on("submit", function(e) { 
+          e.preventDefault(); //cancel the submission 
+          show("11-10"); //send the request to server to save it 
+        }); 
+      
+        $("#update-11-11", e.target ).on( "click", function( e ) { 
+          $("#hidden-form-11-11").removeClass("ui-screen-hidden"); 
+          $("#list-11-11").listview("refresh"); 
+        }); 
+        $("#itin-submit-11-11", e.target).on("submit", function(e) { 
+          e.preventDefault(); //cancel the submission 
+          show("11-11"); //send the request to server to save it 
+        }); 
+      
+        $("#update-11-12", e.target ).on( "click", function( e ) { 
+          $("#hidden-form-11-12").removeClass("ui-screen-hidden"); 
+          $("#list-11-12").listview("refresh"); 
+        }); 
+        $("#itin-submit-11-12", e.target).on("submit", function(e) { 
+          e.preventDefault(); //cancel the submission 
+          show("11-12"); //send the request to server to save it 
+        }); 
+      
+        $("#update-11-13", e.target ).on( "click", function( e ) { 
+          $("#hidden-form-11-13").removeClass("ui-screen-hidden"); 
+          $("#list-11-13").listview("refresh"); 
+        }); 
+        $("#itin-submit-11-13", e.target).on("submit", function(e) { 
+          e.preventDefault(); //cancel the submission 
+          show("11-13"); //send the request to server to save it 
+        }); 
+      
+        $("#update-11-14", e.target ).on( "click", function( e ) { 
+          $("#hidden-form-11-14").removeClass("ui-screen-hidden"); 
+          $("#list-11-14").listview("refresh"); 
+        }); 
+        $("#itin-submit-11-14", e.target).on("submit", function(e) { 
+          e.preventDefault(); //cancel the submission 
+          show("11-14"); //send the request to server to save it 
+        }); 
+      
+  });
+})(jQuery);
+</script>
+</head>
+<body>
+<div data-role="main" class="ui-content">
+ <ul data-role="listview" class="ui-listview-outer ui-mini">
+    <li data-role="collapsible" data-inset="false" data-collapsed-icon="carat-r" data-expanded-icon="carat-d" style="margin: 0; padding: 0; border-top-width: 0; border-bottom-width: 0;">
+    <h2>Nov 1, Monday</h2>
+    <ul id="outer-list" data-role="listview" data-shadow="false" data-inset="true" data-corners="false" style="margin: 0; padding: 0;">
+      <li style="padding: 0;">
+        <ul id="list-11-1" data-role="listview" data-shadow="false" data-inset="true" data-corners="false" style="margin: 0;">
+          <li>Vulture</li>
+<li>Eagle</li>
+        </ul>
+      </li>
+      <li class="ui-screen-hidden" id="hidden-form-11-1" style="margin: 0; padding: 0; border-top-width: 0; border-bottom-width: 0; padding-top: 0; padding-bottom: 0;">
+        <form id="itin-submit-11-1" method="post">
+          <input type="text" name="itin" id="itin-11-1" value="">
+          <button type="submit" name="i-submit">submit</button>
+        </form>
+      </li>
+      <li><button id="update-11-1" data-inline="true" data-shadow="true">Edit Itinerary</button></li>
+    </ul>
+  </li>
+
+  <li data-role="collapsible" data-inset="false" data-collapsed-icon="carat-r" data-expanded-icon="carat-d" style="margin: 0; padding: 0; border-top-width: 0; border-bottom-width: 0;">
+    <h2>Nov 2, Monday</h2>
+    <ul id="outer-list" data-role="listview" data-shadow="false" data-inset="true" data-corners="false" style="margin: 0; padding: 0;">
+      <li style="padding: 0;">
+        <ul id="list-11-2" data-role="listview" data-shadow="false" data-inset="true" data-corners="false" style="margin: 0;">
+          <li>Vulture</li>
+<li>Eagle</li>
+        </ul>
+      </li>
+      <li class="ui-screen-hidden" id="hidden-form-11-2" style="margin: 0; padding: 0; border-top-width: 0; border-bottom-width: 0; padding-top: 0; padding-bottom: 0;">
+        <form id="itin-submit-11-2" method="post">
+          <input type="text" name="itin" id="itin-11-2" value="">
+          <button type="submit" name="i-submit">submit</button>
+        </form>
+      </li>
+      <li><button id="update-11-2" data-inline="true" data-shadow="true">Edit Itinerary</button></li>
+    </ul>
+  </li>
+
+  <li data-role="collapsible" data-inset="false" data-collapsed-icon="carat-r" data-expanded-icon="carat-d" style="margin: 0; padding: 0; border-top-width: 0; border-bottom-width: 0;">
+    <h2>Nov 3, Monday</h2>
+    <ul id="outer-list" data-role="listview" data-shadow="false" data-inset="true" data-corners="false" style="margin: 0; padding: 0;">
+      <li style="padding: 0;">
+        <ul id="list-11-3" data-role="listview" data-shadow="false" data-inset="true" data-corners="false" style="margin: 0;">
+          <li>Vulture</li>
+<li>Eagle</li>
+        </ul>
+      </li>
+      <li class="ui-screen-hidden" id="hidden-form-11-3" style="margin: 0; padding: 0; border-top-width: 0; border-bottom-width: 0; padding-top: 0; padding-bottom: 0;">
+        <form id="itin-submit-11-3" method="post">
+          <input type="text" name="itin" id="itin-11-3" value="">
+          <button type="submit" name="i-submit">submit</button>
+        </form>
+      </li>
+      <li><button id="update-11-3" data-inline="true" data-shadow="true">Edit Itinerary</button></li>
+    </ul>
+  </li>
+
+  <li data-role="collapsible" data-inset="false" data-collapsed-icon="carat-r" data-expanded-icon="carat-d" style="margin: 0; padding: 0; border-top-width: 0; border-bottom-width: 0;">
+    <h2>Nov 4, Monday</h2>
+    <ul id="outer-list" data-role="listview" data-shadow="false" data-inset="true" data-corners="false" style="margin: 0; padding: 0;">
+      <li style="padding: 0;">
+        <ul id="list-11-4" data-role="listview" data-shadow="false" data-inset="true" data-corners="false" style="margin: 0;">
+          <li>Vulture</li>
+<li>Eagle</li>
+        </ul>
+      </li>
+      <li class="ui-screen-hidden" id="hidden-form-11-4" style="margin: 0; padding: 0; border-top-width: 0; border-bottom-width: 0; padding-top: 0; padding-bottom: 0;">
+        <form id="itin-submit-11-4" method="post">
+          <input type="text" name="itin" id="itin-11-4" value="">
+          <button type="submit" name="i-submit">submit</button>
+        </form>
+      </li>
+      <li><button id="update-11-4" data-inline="true" data-shadow="true">Edit Itinerary</button></li>
+    </ul>
+  </li>
+
+  <li data-role="collapsible" data-inset="false" data-collapsed-icon="carat-r" data-expanded-icon="carat-d" style="margin: 0; padding: 0; border-top-width: 0; border-bottom-width: 0;">
+    <h2>Nov 5, Monday</h2>
+    <ul id="outer-list" data-role="listview" data-shadow="false" data-inset="true" data-corners="false" style="margin: 0; padding: 0;">
+      <li style="padding: 0;">
+        <ul id="list-11-5" data-role="listview" data-shadow="false" data-inset="true" data-corners="false" style="margin: 0;">
+          <li>Vulture</li>
+<li>Eagle</li>
+        </ul>
+      </li>
+      <li class="ui-screen-hidden" id="hidden-form-11-5" style="margin: 0; padding: 0; border-top-width: 0; border-bottom-width: 0; padding-top: 0; padding-bottom: 0;">
+        <form id="itin-submit-11-5" method="post">
+          <input type="text" name="itin" id="itin-11-5" value="">
+          <button type="submit" name="i-submit">submit</button>
+        </form>
+      </li>
+      <li><button id="update-11-5" data-inline="true" data-shadow="true">Edit Itinerary</button></li>
+    </ul>
+  </li>
+
+  <li data-role="collapsible" data-inset="false" data-collapsed-icon="carat-r" data-expanded-icon="carat-d" style="margin: 0; padding: 0; border-top-width: 0; border-bottom-width: 0;">
+    <h2>Nov 6, Monday</h2>
+    <ul id="outer-list" data-role="listview" data-shadow="false" data-inset="true" data-corners="false" style="margin: 0; padding: 0;">
+      <li style="padding: 0;">
+        <ul id="list-11-6" data-role="listview" data-shadow="false" data-inset="true" data-corners="false" style="margin: 0;">
+          <li>Vulture</li>
+<li>Eagle</li>
+        </ul>
+      </li>
+      <li class="ui-screen-hidden" id="hidden-form-11-6" style="margin: 0; padding: 0; border-top-width: 0; border-bottom-width: 0; padding-top: 0; padding-bottom: 0;">
+        <form id="itin-submit-11-6" method="post">
+          <input type="text" name="itin" id="itin-11-6" value="">
+          <button type="submit" name="i-submit">submit</button>
+        </form>
+      </li>
+      <li><button id="update-11-6" data-inline="true" data-shadow="true">Edit Itinerary</button></li>
+    </ul>
+  </li>
+
+  <li data-role="collapsible" data-inset="false" data-collapsed-icon="carat-r" data-expanded-icon="carat-d" style="margin: 0; padding: 0; border-top-width: 0; border-bottom-width: 0;">
+    <h2>Nov 7, Monday</h2>
+    <ul id="outer-list" data-role="listview" data-shadow="false" data-inset="true" data-corners="false" style="margin: 0; padding: 0;">
+      <li style="padding: 0;">
+        <ul id="list-11-7" data-role="listview" data-shadow="false" data-inset="true" data-corners="false" style="margin: 0;">
+          <li>Vulture</li>
+<li>Eagle</li>
+        </ul>
+      </li>
+      <li class="ui-screen-hidden" id="hidden-form-11-7" style="margin: 0; padding: 0; border-top-width: 0; border-bottom-width: 0; padding-top: 0; padding-bottom: 0;">
+        <form id="itin-submit-11-7" method="post">
+          <input type="text" name="itin" id="itin-11-7" value="">
+          <button type="submit" name="i-submit">submit</button>
+        </form>
+      </li>
+      <li><button id="update-11-7" data-inline="true" data-shadow="true">Edit Itinerary</button></li>
+    </ul>
+  </li>
+
+  <li data-role="collapsible" data-inset="false" data-collapsed-icon="carat-r" data-expanded-icon="carat-d" style="margin: 0; padding: 0; border-top-width: 0; border-bottom-width: 0;">
+    <h2>Nov 8, Monday</h2>
+    <ul id="outer-list" data-role="listview" data-shadow="false" data-inset="true" data-corners="false" style="margin: 0; padding: 0;">
+      <li style="padding: 0;">
+        <ul id="list-11-8" data-role="listview" data-shadow="false" data-inset="true" data-corners="false" style="margin: 0;">
+          <li>Vulture</li>
+<li>Eagle</li>
+        </ul>
+      </li>
+      <li class="ui-screen-hidden" id="hidden-form-11-8" style="margin: 0; padding: 0; border-top-width: 0; border-bottom-width: 0; padding-top: 0; padding-bottom: 0;">
+        <form id="itin-submit-11-8" method="post">
+          <input type="text" name="itin" id="itin-11-8" value="">
+          <button type="submit" name="i-submit">submit</button>
+        </form>
+      </li>
+      <li><button id="update-11-8" data-inline="true" data-shadow="true">Edit Itinerary</button></li>
+    </ul>
+  </li>
+
+  <li data-role="collapsible" data-inset="false" data-collapsed-icon="carat-r" data-expanded-icon="carat-d" style="margin: 0; padding: 0; border-top-width: 0; border-bottom-width: 0;">
+    <h2>Nov 9, Monday</h2>
+    <ul id="outer-list" data-role="listview" data-shadow="false" data-inset="true" data-corners="false" style="margin: 0; padding: 0;">
+      <li style="padding: 0;">
+        <ul id="list-11-9" data-role="listview" data-shadow="false" data-inset="true" data-corners="false" style="margin: 0;">
+          <li>Vulture</li>
+<li>Eagle</li>
+        </ul>
+      </li>
+      <li class="ui-screen-hidden" id="hidden-form-11-9" style="margin: 0; padding: 0; border-top-width: 0; border-bottom-width: 0; padding-top: 0; padding-bottom: 0;">
+        <form id="itin-submit-11-9" method="post">
+          <input type="text" name="itin" id="itin-11-9" value="">
+          <button type="submit" name="i-submit">submit</button>
+        </form>
+      </li>
+      <li><button id="update-11-9" data-inline="true" data-shadow="true">Edit Itinerary</button></li>
+    </ul>
+  </li>
+
+  <li data-role="collapsible" data-inset="false" data-collapsed-icon="carat-r" data-expanded-icon="carat-d" style="margin: 0; padding: 0; border-top-width: 0; border-bottom-width: 0;">
+    <h2>Nov 10, Monday</h2>
+    <ul id="outer-list" data-role="listview" data-shadow="false" data-inset="true" data-corners="false" style="margin: 0; padding: 0;">
+      <li style="padding: 0;">
+        <ul id="list-11-10" data-role="listview" data-shadow="false" data-inset="true" data-corners="false" style="margin: 0;">
+          <li>Vulture</li>
+<li>Eagle</li>
+        </ul>
+      </li>
+      <li class="ui-screen-hidden" id="hidden-form-11-10" style="margin: 0; padding: 0; border-top-width: 0; border-bottom-width: 0; padding-top: 0; padding-bottom: 0;">
+        <form id="itin-submit-11-10" method="post">
+          <input type="text" name="itin" id="itin-11-10" value="">
+          <button type="submit" name="i-submit">submit</button>
+        </form>
+      </li>
+      <li><button id="update-11-10" data-inline="true" data-shadow="true">Edit Itinerary</button></li>
+    </ul>
+  </li>
+
+  <li data-role="collapsible" data-inset="false" data-collapsed-icon="carat-r" data-expanded-icon="carat-d" style="margin: 0; padding: 0; border-top-width: 0; border-bottom-width: 0;">
+    <h2>Nov 11, Monday</h2>
+    <ul id="outer-list" data-role="listview" data-shadow="false" data-inset="true" data-corners="false" style="margin: 0; padding: 0;">
+      <li style="padding: 0;">
+        <ul id="list-11-11" data-role="listview" data-shadow="false" data-inset="true" data-corners="false" style="margin: 0;">
+          <li>Vulture</li>
+<li>Eagle</li>
+        </ul>
+      </li>
+      <li class="ui-screen-hidden" id="hidden-form-11-11" style="margin: 0; padding: 0; border-top-width: 0; border-bottom-width: 0; padding-top: 0; padding-bottom: 0;">
+        <form id="itin-submit-11-11" method="post">
+          <input type="text" name="itin" id="itin-11-11" value="">
+          <button type="submit" name="i-submit">submit</button>
+        </form>
+      </li>
+      <li><button id="update-11-11" data-inline="true" data-shadow="true">Edit Itinerary</button></li>
+    </ul>
+  </li>
+
+  <li data-role="collapsible" data-inset="false" data-collapsed-icon="carat-r" data-expanded-icon="carat-d" style="margin: 0; padding: 0; border-top-width: 0; border-bottom-width: 0;">
+    <h2>Nov 12, Monday</h2>
+    <ul id="outer-list" data-role="listview" data-shadow="false" data-inset="true" data-corners="false" style="margin: 0; padding: 0;">
+      <li style="padding: 0;">
+        <ul id="list-11-12" data-role="listview" data-shadow="false" data-inset="true" data-corners="false" style="margin: 0;">
+          <li>Vulture</li>
+<li>Eagle</li>
+        </ul>
+      </li>
+      <li class="ui-screen-hidden" id="hidden-form-11-12" style="margin: 0; padding: 0; border-top-width: 0; border-bottom-width: 0; padding-top: 0; padding-bottom: 0;">
+        <form id="itin-submit-11-12" method="post">
+          <input type="text" name="itin" id="itin-11-12" value="">
+          <button type="submit" name="i-submit">submit</button>
+        </form>
+      </li>
+      <li><button id="update-11-12" data-inline="true" data-shadow="true">Edit Itinerary</button></li>
+    </ul>
+  </li>
+
+  <li data-role="collapsible" data-inset="false" data-collapsed-icon="carat-r" data-expanded-icon="carat-d" style="margin: 0; padding: 0; border-top-width: 0; border-bottom-width: 0;">
+    <h2>Nov 13, Monday</h2>
+    <ul id="outer-list" data-role="listview" data-shadow="false" data-inset="true" data-corners="false" style="margin: 0; padding: 0;">
+      <li style="padding: 0;">
+        <ul id="list-11-13" data-role="listview" data-shadow="false" data-inset="true" data-corners="false" style="margin: 0;">
+          <li>Vulture</li>
+<li>Eagle</li>
+        </ul>
+      </li>
+      <li class="ui-screen-hidden" id="hidden-form-11-13" style="margin: 0; padding: 0; border-top-width: 0; border-bottom-width: 0; padding-top: 0; padding-bottom: 0;">
+        <form id="itin-submit-11-13" method="post">
+          <input type="text" name="itin" id="itin-11-13" value="">
+          <button type="submit" name="i-submit">submit</button>
+        </form>
+      </li>
+      <li><button id="update-11-13" data-inline="true" data-shadow="true">Edit Itinerary</button></li>
+    </ul>
+  </li>
+
+  <li data-role="collapsible" data-inset="false" data-collapsed-icon="carat-r" data-expanded-icon="carat-d" style="margin: 0; padding: 0; border-top-width: 0; border-bottom-width: 0;">
+    <h2>Nov 14, Monday</h2>
+    <ul id="outer-list" data-role="listview" data-shadow="false" data-inset="true" data-corners="false" style="margin: 0; padding: 0;">
+      <li style="padding: 0;">
+        <ul id="list-11-14" data-role="listview" data-shadow="false" data-inset="true" data-corners="false" style="margin: 0;">
+          <li>Vulture</li>
+<li>Eagle</li>
+        </ul>
+      </li>
+      <li class="ui-screen-hidden" id="hidden-form-11-14" style="margin: 0; padding: 0; border-top-width: 0; border-bottom-width: 0; padding-top: 0; padding-bottom: 0;">
+        <form id="itin-submit-11-14" method="post">
+          <input type="text" name="itin" id="itin-11-14" value="">
+          <button type="submit" name="i-submit">submit</button>
+        </form>
+      </li>
+      <li><button id="update-11-14" data-inline="true" data-shadow="true">Edit Itinerary</button></li>
+    </ul>
+  </li>
+
+
+ </ul> 
+</div>
+</body>
+

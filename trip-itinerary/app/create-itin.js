@@ -69,6 +69,10 @@ CreateItinerary.prototype.getDetails = function() {
 	return this.tripDetails;
 }
 
+// From the list of cities the user is traveling to and the 
+function setTripDetails() {
+}
+
 function setDepartureCityDetails() {
 	const countryDetails = this.tripDetails[this.destinationCountry];
 	// TODO: This needs to be set in webhook-post-handler.js (before calling startPlanningTrip).
@@ -104,14 +108,31 @@ function setWeatherDetails(callback) {
   });
 }
 
+// First day of travel would be port of entry. After that, determine stay in each city by the number of activities in each city, how long it will take etc.
+function setCityForEachDay() {
+  const cities = this.tripData.cities;
+  // remove portOfEntry from cities list
+  // port of entry would be day1 and last day.
+  const tripTime = this.tripData.returnDate - this.tripData.startDate;
+}
+
+// For each day, set the weather, activities and stay information. If there is no activity/stay information, keep it blank. Initially, simply use the information available for a city in activities.
+function setRemainingItinerary() {
+  const startDay=this.tripData.startDate.getDate();
+  setCityForEachDay.call(this);
+  tripDays.forEach(day => {
+    
+  });
+}
+
 function setTripDetails() {
 	this.tripDetails = {};
 	this.destinationCountry = this.tripData.country;
 	this.tripDetails[this.destinationCountry] = {};
-	return setDepartureCityDetails.call(this);
+  const promiseList = [];
+  promiseList.push(setDepartureCityDetails.call(this));
+  setRemainingItinerary.call(this);
 }
-
-
 
 // {"3":{"name":"lisbon","temp": 70, "rain_chance": "36%", "weather": "sunny", "arrival": "10.00", "hotel": "Taj", "visit":["Torres De Bellem"], "itin": []},"4": {"name": "lisbon", "temp": 70, "weather": "partly cloudy", "rain_chance": "40%", "itin":[]}, "5": {"name": "sintra", "temp": 65, "rain_chance": "20%", "weather": "partly cloudy"}, "6": {"name": "sintra", "temp": 65, "rain_chance": "65%"}, "7": {}, "8": {}, "9": {}, "10": {}, "11": {}, "12": {}, "13": {"leave": "15:00"}, "14": {}} 
 CreateItinerary.prototype.oldCreate = function() {

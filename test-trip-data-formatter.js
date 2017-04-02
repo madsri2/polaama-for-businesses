@@ -118,7 +118,14 @@ function testFormatExpensePage() {
   console.log(formatter.formatExpensePage(summary, spendSummary, comments));
 }
 
-testFormatExpensePage();
+function testDisplayCalendar() {
+  const trip = new TripData('Test Trip');
+  const formatter = new TripDataFormatter(trip);
+  console.log(formatter.displayCalendar());
+}
+
+testDisplayCalendar();
+// testFormatExpensePage();
 
 // testFormatFlightDetails();
 // testFormatActivityDetails();

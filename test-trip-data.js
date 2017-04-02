@@ -100,7 +100,15 @@ function testGetExpenseReport() {
   console.log(trip.getExpenseReport());
 }
 
-testGetExpenseReport();
+function testAddCityItinerary() {
+  const trip = new TripData("TestAddingCityItinerary");
+  trip.addCityItinerary(["A","B"],[1,2]);
+  console.log(`Trip details: ${JSON.stringify(trip)}`);
+}
+
+testAddCityItinerary();
+
+// testGetExpenseReport();
 
 // testAddPortOfEntry();
 

@@ -177,6 +177,20 @@ TripData.prototype.addCities = function(cities) {
   this.persistUpdatedTrip();
 }
 
+TripData.prototype.addCityItinerary = function(cities, numOfDays) {
+  if(!this.data.cityItin) {
+    this.data.cityItin = {};
+  }
+  if(cities.length !== numOfDays.length) {
+    throw new Error("cities and numOfDays array lengths are different. cannot persist city itinerary information");
+  }
+  for(let i = 0; i < cities.length; i++) {
+    this.data.cityItin[cities[i]] = numOfDays[i];
+  }
+  logger.debug(`addCityItinerary: City itinerary is ${JSON.stringify(this.data.cityItin)}`);
+  this.persistUpdatedTrip();
+}
+
 TripData.prototype.storeTodoList = function(senderId, messageText) {
   const reg = new RegExp("^todo[:]*[ ]*","i"); // ignore case
   return storeList.call(this, senderId, messageText, reg, "todoList", "get todo");  
@@ -345,7 +359,6 @@ TripData.prototype.persistUpdatedTrip = function() {
   }
   try {
     fs.writeFileSync(file, JSON.stringify(this.data));
-    logger.debug(`persistUpdatedTrip: saved trip for ${this.data.name}`);
     return true;
   }
   catch(err) {

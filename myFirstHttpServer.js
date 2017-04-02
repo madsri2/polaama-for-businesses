@@ -268,7 +268,11 @@ app.get('/grid', function(req, res) {
 });
 
 app.get('/mobile-itin', function(req, res) {
-  return res.send(fs.readFileSync("/home/ec2-user/html-templates/mobile-itinerary-view.html",'utf8'));
+  return res.send(fs.readFileSync("/home/ec2-user/html-templates/mobile-itinerary-view-1.html",'utf8'));
+});
+
+app.get('/jqmobile-itin', function(req, res) {
+  return res.send(fs.readFileSync("/home/ec2-user/html-templates/jqmobile-itin.html",'utf8'));
 });
 
 app.get('/:id/:tripName/calendar', function(req, res) {

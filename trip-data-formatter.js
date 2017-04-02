@@ -290,10 +290,56 @@ TripDataFormatter.prototype.formatExpensePage = function(report) {
              .replace("${expenseReportDetails}", listAsHtml(comments));
 }
 
+function dayItin(search) {
+  let xformedString = fs.readFileSync("html-templates/day-itinerary-view.html", 'utf8');
+  Object.keys(search).forEach(key => {
+    xformedString = xformedString.split(key).join(search[key]);
+  });
+  return xformedString;
+}
+
 TripDataFormatter.prototype.displayCalendar = function() {
-  // return fs.readFileSync("html-templates/trip-calendar-view.html", 'utf8');
-  const calFormatter = new CalendarFormatter(this.trip);
-  return calFormatter.format();
+  /*
+  if(headers['user-agent'].startsWith("Mozilla")) {
+    logger.debug(`displayCalendar: Request from browser. Sending the full calendar view`);
+    const calFormatter = new CalendarFormatter(this.trip);
+    return calFormatter.format();
+  }
+  */
+  try {
+    const html = fs.readFileSync("html-templates/mobile-itinerary-view.html", 'utf8');
+    let i = 1;
+    let itinView = "";
+    let fullJs = "";
+    const itin = "<li>Vulture</li>\n<li>Eagle</li>";
+    const month = 11;
+    for(i = 1; i < 15;i++) {
+      const dayOfMonth = i;
+      itinView = itinView.concat(dayItin({
+        "${dayOfMonth}": dayOfMonth,
+        "${day}": "Monday",
+        "${month}": month,
+        "${existingItinerary}": itin
+      }));
+      let js = `
+        $("#update-${month}-${dayOfMonth}", e.target ).on( "click", function( e ) { 
+          $("#hidden-form-${month}-${dayOfMonth}").removeClass("ui-screen-hidden"); 
+          $("#list-${month}-${dayOfMonth}").listview("refresh"); 
+        }); 
+        $("#itin-submit-${month}-${dayOfMonth}", e.target).on("submit", function(e) { 
+          e.preventDefault(); //cancel the submission 
+          show("${month}-${dayOfMonth}"); //send the request to server to save it 
+        }); 
+      `;
+      fullJs = fullJs.concat(js);
+    }
+    return html.replace("${itinerary}", itinView)
+               .replace("${javascript}", fullJs);
+  }
+  catch(e) {
+    logger.error(`displayCalendar: Could not read file: ${e.mesg}; ${e.stack}`);
+    return res.send(`Even bots need to eat. Back in a bit!`);
+  }
 }
 
 function toLink(text) {

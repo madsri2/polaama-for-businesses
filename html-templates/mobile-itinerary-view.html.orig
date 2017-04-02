@@ -73,7 +73,23 @@ function show (dateVal){
 
 (function($,undefined) {
   $(document).bind( "pagecreate", function( e ) {
-    ${javascript}
+    $( "#update-11-11", e.target ).on( "click", function( e ) {
+      $("#hidden-form-11-11").removeClass("ui-screen-hidden");
+      $("#list-11-11").listview("refresh");
+    });
+    $("#itin-submit-11-11", e.target).on("submit", function(e) {
+      e.preventDefault(); //cancel the submission
+      show("11-11"); //send the request to server to save it
+    });
+
+    $( "#update-11-12", e.target ).on( "click", function( e ) {
+      $("#hidden-form-11-12").removeClass("ui-screen-hidden");
+      $("#list-11-12").listview("refresh");
+    });
+    $("#itin-submit-11-12", e.target).on("submit", function(e) {
+      e.preventDefault(); //cancel the submission
+      show("11-12"); //send the request to server to save it
+    });
   });
 })(jQuery);
 </script>
@@ -81,7 +97,42 @@ function show (dateVal){
 <body>
 <div data-role="main" class="ui-content">
  <ul data-role="listview" class="ui-listview-outer ui-mini">
-  ${itinerary}
+  <li data-role="collapsible" data-inset="false" data-collapsed-icon="carat-r" data-expanded-icon="carat-d" style="margin: 0; padding: 0; border-top-width: 0; border-bottom-width: 0;">
+    <h2>Nov 11, Monday</h2>
+    <ul id="outer-list" data-role="listview" data-shadow="false" data-inset="true" data-corners="false" style="margin: 0; padding: 0;">
+      <li style="padding: 0;">
+        <ul id="list-11-11" data-role="listview" data-shadow="false" data-inset="true" data-corners="false" style="margin: 0;">
+          <li>Condor</li>
+          <li>Eagle</li>
+        </ul>
+      </li>
+      <li class="ui-screen-hidden" id="hidden-form-11-11" style="margin: 0; padding: 0; border-top-width: 0; border-bottom-width: 0; padding-top: 0; padding-bottom: 0;">
+        <form id="itin-submit-11-11" method="post">
+          <input type="text" name="itin" id="itin-11-11" value="">
+          <button type="submit" name="i-submit">submit</button>
+        </form>
+      </li>
+      <li><button id="update-11-11" data-inline="true" data-shadow="true">Edit Itinerary</button></li>
+    </ul>
+  </li>
+  <li data-role="collapsible" data-inset="false" data-collapsed-icon="carat-r" data-expanded-icon="carat-d" style="margin: 0; padding: 0; border-top-width: 0; border-bottom-width: 0;">
+    <h2>Nov 12, Tuesday</h2>
+    <ul id="outer-list" data-role="listview" data-shadow="false" data-inset="true" data-corners="false" style="margin: 0; padding: 0;">
+      <li style="padding: 0">
+        <ul id="list-11-12" data-role="listview" data-shadow="false" data-inset="true" data-corners="false" style="margin: 0;">
+          <li>Condor</li>
+          <li>Eagle</li>
+        </ul>
+      </li>
+      <li class="ui-screen-hidden" id="hidden-form-11-12"; style="margin: 0; padding: 0; border-top-width: 0; border-bottom-width: 0; padding-top: 0; padding-bottom: 0;">
+        <form id="itin-submit-11-12" method="post">
+          <input type="text" name="itin" id="itin-11-12" value="">
+          <button type="submit" name="i-submit">submit</button>
+        </form>
+      </li>
+      <li><button id="update-11-12" data-inline="true" data-shadow="true">Edit Itinerary</button></li>
+    </ul>
+  </li>
  </ul> 
 </div>
 </body>
