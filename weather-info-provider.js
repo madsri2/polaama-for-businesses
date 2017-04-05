@@ -52,6 +52,7 @@ WeatherInfoProvider.prototype.getWeather = function(responseCallback) {
 WeatherInfoProvider.prototype.getWeatherStateUri = function(state) {
   const uri = `http://api.wunderground.com/api/16f4fdcdf70aa630/planner_${this.timeRange}/q/${state}/${this.city}.json`;
   logger.info(`getWeatherStateUri: Getting weather info from wunderground with url <${uri}>`);
+  this.triedWithStateUri = true;
   request({
     uri: uri,
     method: 'GET',
@@ -68,7 +69,7 @@ function handleUrlResponse(error, res, body) {
     }
     if(!json.trip) {
       // see if the state is present. If it is, attempt call with different wunderground API
-      if(json.response.results) {
+      if(json.response.results && !this.triedWithStateUri) {
         const cityDetails = json.response.results[0];
         const state = cityDetails.state;
         return this.getWeatherStateUri(state);

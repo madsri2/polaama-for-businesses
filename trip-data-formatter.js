@@ -231,12 +231,14 @@ TripDataFormatter.prototype.formatCities = function() {
   logger.info(`Found ${cities.length} cities in ${this.trip.data.name}`);
   let selection = "";
   cities.forEach(city => {
-      selection += `<option value="${city}">${city}</option>`;
-      });
+    selection += `<option value="${city}">${city}</option>`;
+  });
+  const sd = new Date(this.trip.data.startDate);
+  const startDate = `${sd.getMonth()+1}/${sd.getDate()}/${sd.getFullYear()}`;
   return fs.readFileSync("html-templates/cities.html", 'utf8')
     .replace("${cityList}", selection)
-    .replace("${portOfEntryList}", selection)
-    .replace("${country}", this.trip.data.country);
+    .replace("${country}", this.trip.data.country)
+    .replace("${startDate}", startDate);
 }
 
 // adding cities for existing trip
@@ -298,18 +300,30 @@ function dayItin(search) {
   return xformedString;
 }
 
-TripDataFormatter.prototype.displayCalendar = function() {
+TripDataFormatter.prototype.displayCalendar = function(hometown) {
   /*
   if(headers['user-agent'].startsWith("Mozilla")) {
     logger.debug(`displayCalendar: Request from browser. Sending the full calendar view`);
-    const calFormatter = new CalendarFormatter(this.trip);
+    const calFormatter = new CalendarFormatter(this.trip, hometown);
     return calFormatter.format();
   }
   */
+  const weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
   try {
     const html = fs.readFileSync("html-templates/mobile-itinerary-view.html", 'utf8');
-    let i = 1;
+    const itin = (new CreateItinerary(this.trip, hometown)).create().getItinerary();  
     let itinView = "";
+    Object.keys(itin).forEach(day => {
+      const thisDate = new Date(day);
+      const itinDetails = "";
+      itinView = itinView.concat(dayItin({
+        "${dayOfMonth}": thisDate.getDate(),
+        "${day}": weekDays[thisDate.getDay()],
+        "${month}": thisDate.getMonth() + 1, // getMonth() starts with 0
+        "${existingItinerary}": itinDetails
+      });
+    });
+    let i = 1;
     let fullJs = "";
     const itin = "<li>Vulture</li>\n<li>Eagle</li>";
     const month = 11;

@@ -4,6 +4,210 @@ const fs = require('fs');
 const WeatherInfoProvider = require('../../weather-info-provider');
 const Promise = require('promise');
 
+function CreateItinerary(trip, departureCity) {
+  this.trip = trip;
+  this.tripData = trip.data;
+  this.tripName = trip.data.name;
+  this.departureCity = departureCity;
+  setDepartureCountry.call(this, departureCity);
+}  
+
+function setDepartureCountry(city) {
+  // TODO: for now, assume that departureCountry is always usa. Change that later.
+  this.departureCountry = "usa";
+}
+
+CreateItinerary.formatDate = function(date) {
+  return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+}
+const formatDate = CreateItinerary.formatDate; // shortcut for use in this file.
+
+/* The itinerary format is 
+  '11/10/2017': {
+    city: "seattle",
+    weather: {
+      temp: 54,
+      rain_chance: "80%",
+      weather: "rainy"
+    },
+    leave: "09:00"
+  },
+  '11/11/2017': {
+    city: "chennai",
+    arrival: "10:00",
+    visit: ["pulicat lake", "marina beach"]
+  },
+  ...
+  '11/12/2017': {
+    city: "chennai",
+    leave: "22:00",
+    visit: ["ranganathan street"]
+  }
+*/
+CreateItinerary.prototype.create = function() {
+  this.itin = {};
+  if(!this.tripData.cityItin) {
+    throw new Error(`CreateItinerary: cityItin not defined in tripData. Nothing to do!`);
+  }
+  // nextDay represents the day for which the itinerary needs to be set. Starts with startDate.
+  if(!this.tripData.startDate) {
+    throw new Error(`CreateItinerary: startDate not defined in tripData. Nothing to do!`);
+  }
+  this.nextDay = new Date(this.tripData.startDate);
+  this.destinationCountry = this.tripData.country;
+  const promiseList = [];
+  promiseList.push(setDepartureCityDetails.call(this));
+  promiseList.push(setItinForPortOfEntry.call(this));
+  promiseList.push(setRemainingItinerary.call(this));
+  promiseList.push(setItinForPortOfDeparture.call(this));
+  return promiseList;
+}
+
+CreateItinerary.prototype.getItinerary = function() {
+  if(!this.itin) {
+    // see if the file exists. If it does, simply read it and return it.
+    try {
+      this.itin = JSON.parse(fs.readFileSync(this.trip.tripItinFile(),'utf8'));
+    }
+    catch(err) {
+      // TODO: Consider calling create here directly..
+      logger.error(`could not read trip itinerary details from file ${this.trip.tripItinFile()}. ${err.message}. Maybe you forgot to call CreateItinerary.create to create and persist the itinerary?`);
+      throw new Error("Could not read itinerary details from file. Maybe you forgot to create the itinerary?");
+    }
+  }
+	return this.itin;
+}
+
+function setDepartureCityDetails() {
+  const results = createCommonItinForEachDay.call(this, this.departureCity, this.departureCountry);
+  if(this.tripData.startTime) {
+    this.itin[results.itinDay].startTime = this.tripData.startTime;
+  }
+  return results.promise;
+}
+
+
+function setItinForPortOfEntry() {
+  if(!this.tripData.portOfEntry) {
+    throw new Error(`setItinForPortOfEntry: port of entry not defined in trip`);
+  }
+  const promises = [];
+  const city = this.tripData.portOfEntry;
+  promises.push((createCommonItinForEachDay.call(this, city, this.tripData.country)).promise);
+  if(!this.tripData.cityItin[city]) {
+    throw new Error(`setItinForPortOfEntry: Don't have information about number of days of stay in port of entry city ${city}`);
+  }
+  // divide the number of days in portOfEntry equally between beginning of trip and end of trip
+  const numDays = parseInt(this.tripData.cityItin[city]) / 2 - 1;
+  for(let i = 0; i < numDays; i++) {
+    promises.push((createCommonItinForEachDay.call(this, city, this.tripData.country)).promise);
+  }
+  return promises;
+}
+
+// For each day, set the weather, activities and stay information. If there is no activity/stay information, keep it blank. Initially, simply use the information available for a city in activities.
+function setRemainingItinerary() {
+  const cityItin = this.tripData.cityItin;
+  const duration = this.tripData.duration;
+  const departureCountry = this.tripData.country;
+  const promises = []; // array of promises that will execute weather setting.
+  Object.keys(cityItin).forEach(city => {
+    // port of entry is special case. So, skip it.
+    if(city === this.tripData.portOfEntry) {
+      return;
+    }
+    let numDays = 0;
+    // use this city for the number of days user is going to stay in this city
+    while(numDays++ != cityItin[city]) {
+      promises.push(createCommonItinForEachDay.call(this, city, departureCountry).promise);
+    }
+  });
+  return promises;
+}
+
+function setItinForPortOfDeparture() {
+  const city = this.tripData.portOfEntry;
+  if(!this.tripData.cityItin[city]) {
+    throw new Error(`setItinForPortOfDeparture: port of entry ${city} does not have any details in trips's itinerary`);
+  }
+  // divide the number of days in portOfEntry equally between beginning of trip and end of trip
+  const numDays = parseInt(this.tripData.cityItin[city]) / 2;
+  const remainingDays = this.tripData.cityItin[city] - numDays;
+  const promises = [];
+  let result = null;
+  for(let i = 0; i < remainingDays; i++) {
+    result = createCommonItinForEachDay.call(this, city, this.tripData.country);
+    logger.debug(`result is ${JSON.stringify(result)}`);
+    promises.push(result.promise);
+  }
+  // TODO: Verify that the departure date matches nextDay!
+  if(this.tripData.departureTime) {
+    logger.debug(`setting departure time for day ${result.itinDay}`);
+    this.itin[result.itinDay].departureTime = this.tripData.departureTime;
+  }
+  return promises;
+}
+
+// TODO: As we get closer to the travel day, get realtime forecast, rather than historical forecast.
+function setWeatherDetails(itinDate, country, city) {
+  const itin = this.itin[formatDate(itinDate)];
+  const self = this;
+  return new Promise(function(fulfil, reject) {
+    const wip = new WeatherInfoProvider(country, city, itinDate);
+    wip.getWeather(function(c, weatherDetails) {
+      if(!weatherDetails) {
+        logger.error(`callGetWeather: WeatherInfoProvider.getWeather returned null for weather details`);
+        return reject(new Error(`Could not get weather for city ${city}`));
+      }
+      itin.weather = {};
+      itin.weather.min_temp = weatherDetails.min_temp;
+      itin.weather.max_temp = weatherDetails.max_temp;
+      itin.weather.chanceofrain = weatherDetails.chanceofrain;
+      itin.weather.cloud_cover = weatherDetails.cloud_cover;
+      persist.call(self); // we call persist here so that the itinerary gets updated incrementally. That way, even if there is no information for one city, we will have part of the itinerary.
+      return fulfil("success");
+    });
+  });
+}
+
+/*
+ Set the city, weather and any other common itinerary items for each day. 
+ Return a promise (among other things) of setting weather details 
+ As a side-effect of calling this function, this.nextDay is advanced to the next day.
+*/
+function createCommonItinForEachDay(city, country) {
+  const nextDayStr = formatDate(this.nextDay);
+  logger.debug(`createSingleDayItinerary: Setting itin value for day ${nextDayStr}`);
+  if(this.itin[nextDayStr]) {
+    // Possible bug
+    throw new Error(`createSingleDayCommonItinerary: Possible BUG! Itinerary for ${nextDayStr} should not be defined, but it is. Value is ${JSON.stringify(this.itin[nextDayStr])}`);
+  }
+  this.itin[nextDayStr] = {};
+  this.itin[nextDayStr].city = city;
+  const nextDayCopy = new Date(this.nextDay); // copy the state of nextDay into another variable so we can change this.nextDay without having to worry about any side effects.
+  const promise = setWeatherDetails.call(this, nextDayCopy, country, city);
+  this.nextDay.setDate(this.nextDay.getDate() + 1); // advance to the next day only if all the itinerary details for today were set correctly.
+  return {
+    'itinDay': nextDayStr,
+    'promise': promise
+  };
+}
+
+function persist() {
+  const file = this.trip.tripItinFile();
+  const itinStr = JSON.stringify(this.itin);
+  try {
+    // console.log(`Itin is ${JSON.stringify(this.itin, null, 2)}`);
+    fs.writeFileSync(file, itinStr);
+  }
+  catch(err) {
+    logger.error(`Error writing to file ${file}: ${err}`);
+    return;
+  }
+  logger.debug(`persist: Wrote ${itinStr.length} bytes to file ${file}`);
+}
+
+/*
 const details = {
   india: {
     cities: {
@@ -52,87 +256,6 @@ const details = {
     }
   }
 };
-
-function CreateItinerary(trip) {
-  this.trip = trip;
-  this.tripData = trip.data;
-  this.tripName = trip.data.name;
-  this.itin = {};
-}  
-
-CreateItinerary.prototype.create = function() {
-  // console.log(`trip details for ${this.tripName} is ${JSON.stringify(this.trip)}`);
-	return setTripDetails.call(this);
-}
-
-CreateItinerary.prototype.getDetails = function() {
-	return this.tripDetails;
-}
-
-// From the list of cities the user is traveling to and the 
-function setTripDetails() {
-}
-
-function setDepartureCityDetails() {
-	const countryDetails = this.tripDetails[this.destinationCountry];
-	// TODO: This needs to be set in webhook-post-handler.js (before calling startPlanningTrip).
-	const departureCity = this.tripData.departureCity; 
-	countryDetails[departureCity] = {};
-	const cityDetails = countryDetails[departureCity];
-	if(this.tripData.departureTime) {
-		cityDetails.departureTime = this.tripData.departureTime;
-	}
-  // setWeatherDetails makes an asynchronous call to get weather information.
-  return Promise.denodeify(setWeatherDetails.bind(this));
-}
-
-// TODO: As we get closer to the travel day, get realtime forecast, rather than historical forecast.
-function setWeatherDetails(callback) {
-  const startDate = this.tripData.startDate;
-  const departureCountry = this.tripData.departureCountry;
-  const departureCity = this.tripData.departureCity; 
-	const countryDetails = this.tripDetails[this.destinationCountry];
-  const cityDetails = countryDetails[departureCity];
-  const wip = new WeatherInfoProvider(departureCountry, departureCity, startDate);
-  wip.getWeather(function(c, weatherDetails) {
-    if(!weatherDetails) {
-      logger.error(`callGetWeather: WeatherInfoProvider.getWeather returned null for weather details`);
-      return callback();
-    }
-    cityDetails.weather = {};
-    cityDetails.weather.min_temp = weatherDetails.min_temp;
-    cityDetails.weather.max_temp = weatherDetails.max_temp;
-    cityDetails.weather.chanceofrain = weatherDetails.chanceofrain;
-    cityDetails.weather.cloud_cover = weatherDetails.cloud_cover;
-    return callback();
-  });
-}
-
-// First day of travel would be port of entry. After that, determine stay in each city by the number of activities in each city, how long it will take etc.
-function setCityForEachDay() {
-  const cities = this.tripData.cities;
-  // remove portOfEntry from cities list
-  // port of entry would be day1 and last day.
-  const tripTime = this.tripData.returnDate - this.tripData.startDate;
-}
-
-// For each day, set the weather, activities and stay information. If there is no activity/stay information, keep it blank. Initially, simply use the information available for a city in activities.
-function setRemainingItinerary() {
-  const startDay=this.tripData.startDate.getDate();
-  setCityForEachDay.call(this);
-  tripDays.forEach(day => {
-    
-  });
-}
-
-function setTripDetails() {
-	this.tripDetails = {};
-	this.destinationCountry = this.tripData.country;
-	this.tripDetails[this.destinationCountry] = {};
-  const promiseList = [];
-  promiseList.push(setDepartureCityDetails.call(this));
-  setRemainingItinerary.call(this);
-}
 
 // {"3":{"name":"lisbon","temp": 70, "rain_chance": "36%", "weather": "sunny", "arrival": "10.00", "hotel": "Taj", "visit":["Torres De Bellem"], "itin": []},"4": {"name": "lisbon", "temp": 70, "weather": "partly cloudy", "rain_chance": "40%", "itin":[]}, "5": {"name": "sintra", "temp": 65, "rain_chance": "20%", "weather": "partly cloudy"}, "6": {"name": "sintra", "temp": 65, "rain_chance": "65%"}, "7": {}, "8": {}, "9": {}, "10": {}, "11": {}, "12": {}, "13": {"leave": "15:00"}, "14": {}} 
 CreateItinerary.prototype.oldCreate = function() {
@@ -236,18 +359,6 @@ function getWeather(day) {
   this.itin[day].rain_chance = details[this.tripName].cities[city].weather.rain_chance;
   this.itin[day].weather = details[this.tripName].cities[city].weather.weather;
 }
-
-function persist() {
-  const file = this.trip.tripItinFile();
-  try {
-    // console.log(`Itin is ${JSON.stringify(this.itin, null, 2)}`);
-    fs.writeFileSync(file, JSON.stringify(this.itin));
-  }
-  catch(err) {
-    logger.error(`Error writing to file ${file}: ${err}`);
-    return;
-  }
-  logger.info(`persist: Wrote ${((this.itin).toString()).length} bytes to file ${file}`);
-}
+*/
 
 module.exports = CreateItinerary;

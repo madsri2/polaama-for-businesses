@@ -1,1 +1,0 @@
-{"name":"a","rawName":"a", "destination": "a", "startDate": "12/1/17", "duration": "2", "packList":{"toPack":[],"done":[]},"todoList":[],"comments":[]}

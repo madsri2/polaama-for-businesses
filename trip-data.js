@@ -187,6 +187,8 @@ TripData.prototype.addCityItinerary = function(cities, numOfDays) {
   for(let i = 0; i < cities.length; i++) {
     this.data.cityItin[cities[i]] = numOfDays[i];
   }
+  // TODO: This is just a convenient hack. In the future, we need to remove addCities completely in favor of addCityItinerary
+  this.addCities(cities);
   logger.debug(`addCityItinerary: City itinerary is ${JSON.stringify(this.data.cityItin)}`);
   this.persistUpdatedTrip();
 }

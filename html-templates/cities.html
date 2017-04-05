@@ -38,13 +38,13 @@ function updateCityDate(counter, cStDate) {
             <input type="number" data-clear-btn="false" name="numberOfDays" placeholder="Number of days" id="number-of-days-#{ctrPh}" onchange="updateCityDate(#{ctrPh}, '#{date}')"/>
           </div></div>
           <div class="ui-block-c"><div class="ui-bar ui-bar-a" style="height:40px">
-            <input type="text" disabled="disabled" name="text-10" id="date-text-#{ctrPh}" value="#{date} - ">
+            <input type="text" disabled="disabled" name="text-10" id="date-text-#{ctrPh}" value="#{monthDate} - ">
           </div></div>
         </div>`;
     $( document ).bind( "pagecreate", function( e ) {
       $( "#append", e.target ).on( "click", function( e ) {
         var pGrid; 
-        var startDate = "11/1/2017"; // Only the format MM/DD/YYYY works. The standard format of YYYY-DD-MM did not work.
+        const startDate = "${startDate}"; // "11/1/2017"; // Only the format MM/DD/YYYY works. The standard format of YYYY-DD-MM did not work.
         if(counter == 0) {
           pGrid = grid.replace("#{Placeholder}","Port of entry");
           cityStartDate = startDate;
@@ -54,6 +54,9 @@ function updateCityDate(counter, cStDate) {
         }
         pGrid = pGrid.split("#{ctrPh}").join(counter); // replace all instances of #{ctrph}
         pGrid = pGrid.split("#{date}").join(cityStartDate); // replace all instances
+        const csDate = new Date(cityStartDate);
+        const monthDate = `${csDate.getMonth()+1}/${csDate.getDate()}`;
+        pGrid = pGrid.replace("#{monthDate}", monthDate);
         counter++;
         var group = $("#my-controlgroup");
         var el = $(pGrid);

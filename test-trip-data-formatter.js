@@ -2,6 +2,7 @@
 const TripDataFormatter = require('./trip-data-formatter');
 const TripData = require('./trip-data');
 const TripInfoProvider = require('./trip-info-provider');
+const Country = require('./country');
 
 function testFormatWeatherDetailsNoCity() {
   const trip = new TripData('Test Trip');
@@ -124,7 +125,17 @@ function testDisplayCalendar() {
   console.log(formatter.displayCalendar());
 }
 
-testDisplayCalendar();
+function testFormatCities() {
+  const trip = new TripData('Test Trip');
+  trip.data.country = "india";
+  trip.country = new Country(trip.data.country);
+  trip.data.startDate = "2017-11-07";
+  const formatter = new TripDataFormatter(trip);
+  console.log(formatter.formatCities());
+}
+
+testFormatCities();
+// testDisplayCalendar();
 // testFormatExpensePage();
 
 // testFormatFlightDetails();

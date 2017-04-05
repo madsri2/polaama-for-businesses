@@ -1,278 +1,365 @@
 'use strict';
-const _=require('lodash');
-const logger = require('./my-logger');
-const TripData = require('./trip-data');
+const logger = require('../../my-logger');
 const fs = require('fs');
-const Encoder = require('./encoder');
-const moment = require('moment');
+const WeatherInfoProvider = require('../../weather-info-provider');
+const Promise = require('promise');
 
-/*
-A session has a 1:1 relationship with a user and their trips. A session represents a user. Each user and their trips will have exactly one session at any given time. Today, the scope of a session is tied to the lifetime of this webserver. At any given time, the session will have one trip context that indicates which trip a user is talking about.
-
-TODO: Re-think this decision when sessions need to be persisted across process restarts.  
-
-Trip data contains both information about a group and user specific information. Group information should be visible to everyone and user specific information should be visible only to the individual.
-
-user: {
-  group: [groupId,],
-  trips: {
-    tripName: TripData,
-    ...
+const details = {
+  india: {
+    cities: {
+      seattle: {
+        leave: "09:00",
+        weather: {
+          temp: 54,
+          rain_chance: "80%",
+          weather: "rainy"
+        }
+      },
+      chennai: {
+        weather: {
+          temp: 87,
+          rain_chance: "36%",
+          weather: "mostly sunny"
+        },
+        'arrival': "10:00",
+        'return': "22:00",
+        'visit': ["Pulicat Lake", "Marina Beach", "Mamallapuram"]
+      },
+      mumbai: {
+        weather: {
+          temp: 90,
+          rain_chance: "3%",
+          weather: "mostly sunny"
+        },
+        'visit': ["Elephanta caves", "Juhu Beach"]
+      },
+      goa: {
+        weather: {
+          temp: 75,
+          rain_chance: "0%",
+          weather: "sunny"
+        },
+        'visit': ["Dudhsagar falls", "Beach", "Mandovi River Cruise"]
+      },
+      bengaluru: {
+        weather: {
+          temp: 72,
+          rain_chance: "0%",
+          weather: "partly cloudy"
+        },
+        'visit': ["Lalbagh Park", "Ulsoor Lake", "National flight museum"]
+      }
+    }
   }
+};
+
+function CreateItinerary(trip, departureCity) {
+  this.trip = trip;
+  this.tripData = trip.data;
+  this.tripName = trip.data.name;
+  this.departureCity = departureCity;
+  if(!this.tripData.cityItin) {
+    throw new Error(`CreateItinerary: cityItin not defined in tripData. Nothing to do!`);
+  }
+  setDepartureCountry.call(this, departureCity);
+  this.itin = {};
+  // nextDay represents the day for which the itinerary needs to be set. Starts with startDate.
+  if(!this.tripData.startDate) {
+    throw new Error(`CreateItinerary: startDate not defined in tripData. Nothing to do!`);
+  }
+  this.nextDay = new Date(this.tripData.startDate);
+}  
+
+function setDepartureCountry(city) {
+  // TODO: for now, assume that departureCountry is always usa. Change that later.
+  this.departureCountry = "usa";
 }
 
-group: {
-  users: [fbid list],
-  trip: {
-    tripData: TripData
-  }
+function formatDate(date) {
+  return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
 }
 
-sessionId -> {
-  tripNameInContext: trip name in context,
-  awaitingNewTripNameInContext: true or false,
-  fbid: facebookUserId, 
-  sessionId: session Id,
-  botMesgHistory: [Array of chat messages],
-  trips: {
-    tripName: {
-      aiContext: {}, 
-      humanContext: {}
-      tripData: tripData, // TripData object
-    }
-    tripName2: {
-      ...
-    }
-  }
+/* The itinerary format is 
+  1: {
+    city: "seattle",
+    weather: {
+      temp: 54,
+      rain_chance: "80%",
+      weather: "rainy"
+    },
+    leave: "09:00"
+  },
+  2: {
+    city: "chennai",
+    arrival: "10:00",
+    visit: ["pulicat lake", "marina beach"]
+  },
   ...
-}
-
-At any given time, a user can be chatting about multiple trips to a human. Ongoing conversation with a user about trips are captured in the tripName json object. The tripNameInContext specifies the trip that a user is talking about at a specific point in time. If this is undefined, we ask the user to choose a trip they want to talk about or create a new trip (see webhook-post-handler.js). 
-
-aiContext contains AI related context (Wit.AI). Most of the keys are story specific entries. See the actions variable for context details in each action. Once a specific story's end is reached (as defined in the wit UI), the done flag is set to true so that this context is deleted. This way, we don't carry context beyond stories, thereby confusing wit
-aiContext -> {
-  sessionId: // session id
-  done: true of false, 
-  ... // list of entries specific to an action
-}
-
-humanContext contains information about a specific trip being discussed with a human. 
-humanContext -> {
-  sessionId: // session id
-  fbid: //facebook user id of the human who is supposed to respond to these conversations
-  conversations: { // set of current ongoing conversations for this trip with this user
-    seq -> { // sequence number of the first message from a user that started this conversation. 
-      awaitingResponse: boolean,
-      messagesSent: [], // a list of messages sent by the human in response to the original message.
-      originalMessage: String // original message sent from the user
-    }
-    ...
+  10: {
+    city: "chennai",
+    leave: "22:00",
+    visit: ["ranganathan street"]
   }
-}
 */
-
-const MY_RECIPIENT_ID = "1120615267993271";
-
-// Static variable
-Session.sessionBaseDir = "sessions";
-
-function Session(fbid,sessionId) {
-  this.sessionId = sessionId;
-  this.fbid = fbid;
-  this.botMesgHistory = [];
-  this.trips  = {};
-  this.tripNameInContext = undefined;
-  this.rawTripNameInContext = undefined;
+CreateItinerary.prototype.create = function() {
+  this.tripDetails = {};
+  this.destinationCountry = this.tripData.country;
+  this.tripDetails[this.destinationCountry] = {};
+  const promiseList = [];
+  promiseList.push(setDepartureCityDetails.call(this));
+  /*
+  promiseList.push(setItinForPortOfEntry.call(this));
+  promiseList.push(setRemainingItinerary.call(this));
+  promiseList.push(setItinForPortOfDeparture.call(this));
+  */
+  persist.call(this); // TODO: This might NOT be the right place because weather info might not be available yet.
+  return promiseList;
 }
 
-Session.prototype.persistSession = function() {
-  const data = {
-    sessionId: this.sessionId,
-    fbid: this.fbid,
-    botMesgHistory: this.botMesgHistory,
-    tripNameInContext: this.tripNameInContext,
-    rawTripNameInContext: this.rawTripNameInContext,
-    trips: {}
-  };
-  if(!_.isUndefined(this.hometown)) {
-    data.hometown = Encoder.encode(this.hometown);
+CreateItinerary.prototype.getItinerary = function() {
+	return this.itin;
+}
+
+function setDepartureCityDetails() {
+  const nextDayStr = formatDate(this.nextDay);
+  logger.debug(`setDepartureCityDetails: Setting itin value for day ${nextDayStr}`);
+  if(this.itin[nextDayStr]) {
+    // Possible bug
+    throw new Error(`setDepartureCityDetails: Possible BUG! Itinerary for ${nextDayStr} should not be defined, but it is. Value is ${JSON.stringify(this.itin[nextDayStr])}`);
   }
-  Object.keys(this.trips).forEach(name => {
-    data.trips[name] = {
-      aiContext: this.trips[name].aiContext,
-      humanContext: this.trips[name].humanContext,
+  this.itin[nextDayStr] = {};
+  this.itin[nextDayStr].city = this.departureCity;
+  this.itin[nextDayStr].departureTime = this.tripData.departureTime;
+  // setWeatherDetails makes an asynchronous call to get weather information.
+  const nextDay = new Date(this.nextDay); // copy the state of nextDay into another variable so we can change this.nextDay without having to worry about any side effects.
+  const promise = Promise.denodeify(setWeatherDetails.bind(this, null, nextDay, this.departureCountry, this.departureCity));
+  this.nextDay.setDate(this.nextDay.getDate() + 1);
+  return promise;
+}
+
+// TODO: As we get closer to the travel day, get realtime forecast, rather than historical forecast.
+function setWeatherDetails(callback, itinDate, country, city) {
+  const itin = this.itin[formatDate(itinDate)];
+  console.log(`setWeatherDetails: itin date is ${itinDate.toString()}; ${formatDate(itinDate)}}`);
+  const wip = new WeatherInfoProvider(country, city, itinDate);
+  wip.getWeather(function(c, weatherDetails) {
+    if(!weatherDetails) {
+      logger.error(`callGetWeather: WeatherInfoProvider.getWeather returned null for weather details`);
+      return callback();
+    }
+    itin.weather = {};
+    itin.weather.min_temp = weatherDetails.min_temp;
+    itin.weather.max_temp = weatherDetails.max_temp;
+    itin.weather.chanceofrain = weatherDetails.chanceofrain;
+    itin.weather.cloud_cover = weatherDetails.cloud_cover;
+    return callback();
+  });
+}
+
+// For each day, set the weather, activities and stay information. If there is no activity/stay information, keep it blank. Initially, simply use the information available for a city in activities.
+function setRemainingItinerary() {
+  const cityItin = this.tripData.cityItin;
+  const duration = this.tripData.duration;
+  const departureCountry = this.tripData.country;
+  const promises = []; // array of promises that will execute weather setting.
+  Object.keys(cityItin).forEach(city => {
+    // port of entry is special case. So, skip it.
+    if(city === this.tripData.portOfEntry) {
+      return;
+    }
+    let numDays = 0;
+    // use this city for the number of days user is going to stay in this city
+    while(numDays++ != cityItin[city]) {
+      const nextDayStr = formatDate(this.nextDay);
+      if(this.itin[nextDayStr]) {
+        // Possible bug
+        throw new Error(`setRemainingItinerary: Possible BUG! Itinerary for ${nextDayStr} should not be defined, but it is. Value is ${JSON.stringify(this.itin[nextDayStr])}`);
+      }
+      this.itin[nextDayStr] = {};
+      const itin = this.itin[nextDayStr];
+      itin.city = city;
+      promises.push(Promise.denodeify(setWeatherDetails.bind(this, this.nextDay, departureCountry, city)));
+      this.nextDay.setDate(this.nextDay.getDate() + 1);
     }
   });
-  const file = `${Session.sessionBaseDir}/${this.fbid}.session`;
+  return promises;
+}
+
+function setItinForPortOfEntry() {
+  if(!this.tripData.portOfEntry) {
+    throw new Error(`setItinForPortOfEntry: port of entry not defined in trip`);
+  }
+  const nextDayStr = formatDate(this.nextDay);
+  if(this.itin[nextDayStr]) {
+    // Possible bug
+    throw new Error(`setItinForPortOfEntry: Possible BUG! Itinerary for ${formatDate(nextDayStr)} should not be defined, but it is. Value is ${JSON.stringify(this.itin[nextDayStr])}`);
+  }
+  this.itin[nextDayStr] = {};
+  const city = this.tripData.portOfEntry;
+  this.itin[nextDayStr].city = city;
+  const promises = [];
+  promises.push(Promise.denodeify(setWeatherDetails.bind(this, this.nextDay, this.tripData.country, city)));
+  if(!this.tripData.cityItin[city]) {
+    throw new Error(`setItinForPortOfEntry: port of entry ${city} does not have any details in trips's itinerary`);
+  }
+  // divide the number of days in portOfEntry equally between beginning of trip and end of trip
+  const numDays = parseInt(this.tripData.cityItin[city]) / 2;
+  this.nextDay.setDate(this.nextDay.getDate() + 1);
+  for(let i = 0; i < numDays; i++) {
+    const nextDayStr = formatDate(this.nextDay);
+    if(this.itin[nextDayStr]) {
+      // Possible bug
+      throw new Error(`setItinForPortOfEntry: Possible BUG! Itinerary for ${formatDate(nextDayStr)} should not be defined, but it is. Value is ${JSON.stringify(this.itin[nextDayStr])}`);
+    }
+    this.itin[nextDayStr] = {};
+    this.itin[nextDayStr].city = city;
+    promises.push(Promise.denodeify(setWeatherDetails.bind(this, this.nextDay, this.tripData.country, city)));
+    this.nextDay.setDate(this.nextDay.getDate() + 1);
+  }
+  return promises;
+}
+
+function setItinForPortOfDeparture() {
+  const city = this.tripData.portOfEntry;
+  if(!this.tripData.cityItin[city]) {
+    throw new Error(`setItinForPortOfDeparture: port of entry ${city} does not have any details in trips's itinerary`);
+  }
+  // divide the number of days in portOfEntry equally between beginning of trip and end of trip
+  const numDays = parseInt(this.tripData.cityItin[city]) / 2;
+  const remainingDays = this.tripData.cityItin[city] - numDays;
+  const promises = [];
+  for(let i = 0; i < remainingDays; i++) {
+    const nextDayStr = formatDate(this.nextDay);
+    const promises = [];
+    if(this.itin[nextDayStr]) {
+      // Possible bug
+      throw new Error(`setItinForPortOfDeparture: Possible BUG! Itinerary for ${formatDate(nextDayStr)} should not be defined, but it is. Value is ${JSON.stringify(this.itin[nextDayStr])}`);
+    }
+    this.itin[nextDayStr] = {};
+    this.itin[nextDayStr].city = city;
+    promises.push(Promise.denodeify(setWeatherDetails.bind(this, this.nextDay, this.tripData.country, city)));
+    this.nextDay.setDate(this.nextDay.getDate() + 1);
+  }
+  return promises;
+}
+
+
+
+function persist() {
+  const file = this.trip.tripItinFile();
   try {
-    fs.writeFileSync(file, JSON.stringify(data));
-    // logger.info(`persisted session in file <${file}>`);
+    // console.log(`Itin is ${JSON.stringify(this.itin, null, 2)}`);
+    fs.writeFileSync(file, JSON.stringify(this.itin));
   }
   catch(err) {
-      logger.error(`error writing to session file: ${file}`, err.stack);
-  }
-}
-
-Session.prototype.persistHometown = function(town) {
-  this.hometown = town;
-  this.persistSession();
-}
-
-// TODO: Implement for the feature that allows user Madhu to use Polaama like another traveler (not a human).
-Session.prototype.nooneAwaitingResponse = function() {
-  return false;
-}
-
-Session.prototype.humanContext = function() {
-  return this.findTrip().humanContext;
-}
-
-// this function can be called to invalidate a trip, forcing a refresh of this trip by calling TripData (which would contain the latest information).
-Session.prototype.invalidateTripData = function() {
-  const sessionTrip = this.findTrip();
-	// Note that this does not remove the trip corresponding to tripInContext from this.trips. This way, there is a placeholder entry in this.trips (which is undefined) for tripInContext.
-  sessionTrip.tripData.invalidate();
-}
-
-Session.prototype.tripData = function() {
-  return this.getTrip(this.tripNameInContext);
-}
-
-Session.prototype.allTrips = function() {
-  const tripDataList = [];
-  Object.keys(this.trips).forEach(tripName => {
-    tripDataList.push(this.getTrip(tripName));
-  });
-  return tripDataList;
-}
-
-Session.prototype.getPastTrips = function() {
-  let trips = [];
-  this.allTrips().forEach(trip => {
-    const start = moment(new Date(trip.data.startDate).toISOString());
-    const daysToTrip = start.diff(moment(),'days');
-    if(!trip.data.startDate || daysToTrip <= 0) {
-      trips.push({
-        name: trip.data.name,
-        rawName: trip.data.rawName,
-        daysToTrip: daysToTrip
-      });
-    }
-  });
-  return trips;
-}
-
-Session.prototype.getCurrentAndFutureTrips = function() {
-  let trips = [];
-  let pastTrips = false;
-  // Filter past trips
-  this.allTrips().forEach(trip => {
-    logger.debug(`getCurrentAndFutureTrips: trip is ${trip.rawTripName}`);
-    const end = moment(new Date(trip.data.returnDate).toISOString());
-    const daysToTrip = end.diff(moment(),'days');
-    // if we don't know the start date for whatever reason, include those trips as well
-    if(!trip.data.startDate || daysToTrip >= 0) {
-      trips.push({
-        name: trip.data.name,
-        rawName: trip.data.rawName,
-        daysToTrip: daysToTrip
-      });
-    }
-    else {
-      pastTrips = true;
-    }
-  });
-  const sortedArr = trips.sort(function(a,b) {
-    return a.daysToTrip - b.daysToTrip;
-  });
-  // Return the trip with the most recent start date first.
-  let names = [];
-  sortedArr.forEach(t => {
-    names.push({
-      name: t.name,
-      rawName: t.rawName
-    });  
-  });
-  return {
-    pastTrips: pastTrips,
-    futureTrips: names
-  };
-}
-
-Session.prototype.addTrip = function(tripName) {
-  const encTripName = TripData.encode(tripName);
-  // typically, when a trip is added to the session, that is also the trip in context that the user wants to discuss.
-  this.tripNameInContext = encTripName;
-  this.rawTripNameInContext = tripName;
-  if(_.isUndefined(this.trips[encTripName])) {
-    // this is only possible in case of a new trip created in this session. 
-    logger.info(`Creating new trip for session ${this.fbid} for trip ${this.tripNameInContext}`);
-    // define a tripName json object.
-    this.trips[encTripName] = { 
-      aiContext: {
-        sessionId: this.sessionId
-      },
-      humanContext: {
-        sessionId: this.sessionId,
-        // TODO: Need a better way to get the human's fbid than using my messenger's senderId.
-        fbid: MY_RECIPIENT_ID,
-        conversations: {}
-      },
-      tripData: new TripData(tripName)
-    };
-  }
-  // Persist the new trip that was added to this session.
-  this.persistSession();
-}
-
-Session.prototype.addNewTrip = function(tripName, trip) {
-  if(_.isUndefined(tripName)) {
-    logger.warn("addNewTrip: undefined tripName. Cannot add new trip to session.");
+    logger.error(`Error writing to file ${file}: ${err}`);
     return;
   }
-  const encTripName = TripData.encode(tripName);
-  this.trips[encTripName] = trip;
-  this.persistSession();
+  logger.info(`persist: Wrote ${((this.itin).toString()).length} bytes to file ${file}`);
 }
 
-Session.prototype.findTrip = function() {
-  return this.trips[this.tripNameInContext];
-}
 
-Session.prototype.deleteAiContext = function() {
-  const trip = this.findTrip();
-  trip.aiContext = {};
-  // TODO: Persist information in this session if needed.
-}
+// {"3":{"name":"lisbon","temp": 70, "rain_chance": "36%", "weather": "sunny", "arrival": "10.00", "hotel": "Taj", "visit":["Torres De Bellem"], "itin": []},"4": {"name": "lisbon", "temp": 70, "weather": "partly cloudy", "rain_chance": "40%", "itin":[]}, "5": {"name": "sintra", "temp": 65, "rain_chance": "20%", "weather": "partly cloudy"}, "6": {"name": "sintra", "temp": 65, "rain_chance": "65%"}, "7": {}, "8": {}, "9": {}, "10": {}, "11": {}, "12": {}, "13": {"leave": "15:00"}, "14": {}} 
+CreateItinerary.prototype.oldCreate = function() {
+  const tripData = this.trip.data;
 
-Session.prototype.updateAiContext = function(context) {
-  const trip = this.findTrip();
-  trip.aiContext = context;
-  // TODO: Persist information
-}
+  // assign the first two days to portOfEntry.
+  createItinForFirstThreeDays.call(this, new Date(tripData.startDate), tripData.portOfEntry);
 
-Session.prototype.getTrip = function(tripName) {
-  if(_.isUndefined(tripName) || _.isUndefined(this.trips[TripData.encode(tripName)])) {
-    return null;
+  // Split the remaining days equally among other cities.
+  const remainingTime = tripData.duration - 5;
+  let ci = 0;
+  const cities = tripData.cities;
+  const numCities = cities.length - 1; // port of entry is present here.
+  const daysPerCity = parseInt(remainingTime / numCities);
+  const sDate = new Date(tripData.startDate);
+  sDate.setDate(sDate.getDate() + 3);
+  const thirdDay = sDate.getDate();
+  const rDate = new Date(tripData.returnDate);
+  rDate.setDate(rDate.getDate() - 2);
+  const twoDaysBeforeLeaving = rDate.getDate();
+  console.log(`startDay: ${tripData.startDate}; thirdDay: ${thirdDay}; last: ${twoDaysBeforeLeaving}; returnDate: ${tripData.returnDate}; daysPerCity: ${daysPerCity}; duration: ${tripData.duration}`);
+  for(let i = thirdDay; i <= twoDaysBeforeLeaving; i++) {
+    if(cities[ci] === tripData.portOfEntry) {
+      ci++;
+    }
+    if(Object.keys(this.itin).length === tripData.duration) {
+      break;
+    }
+    for(let j = 0; j < daysPerCity; j++) {
+      if(Object.keys(this.itin).length === tripData.duration) {
+        break;
+      }
+      console.log(`Adding ${cities[ci]} for day ${i+j}`);
+      this.itin[i+j] = {};
+      this.itin[i+j].name = cities[ci];
+      getWeather.call(this, i+j, cities[ci]);
+      if(!this.itin[i+j].visit) {
+        this.itin[i+j].visit = [];
+      }
+      this.itin[i+j].visit.push(details[this.tripName].cities[cities[ci]].visit[j]);
+    }
+    if(ci < (cities.length - 1)) {
+      ci++;
+    }
   }
-  const trip = this.trips[TripData.encode(tripName)];
-  // see if the tripData was invalidated and refresh it if it was.
-  if(_.isUndefined(trip.tripData)) {
-    trip.tripData = new TripData(tripName);
-    logger.info(`getTrip: tripData was invalidated for trip ${tripName}. Refreshing it by creating new TripData object`);
-  };
-  return trip.tripData;
+
+  // assign the last two days to portofEntry (assuming this is also the portOfExit)
+  createItinForLastTwoDays.call(this, new Date(tripData.returnDate), tripData.portOfEntry);
+
+  persist.call(this);
 }
 
-Session.prototype.clearAllAwaitingStates = function() {
-  this.awaitingComment = false;
-  this.awaitingTodoItem = false;
-  this.awaitingPacklistItem = false;
-  this.awaitingNewTripDetails = false;
-  this.planningNewTrip = false;
-  this.awaitingHometownInfo = false;
-  this.awaitingCitiesForNewTrip = false;
-  this.awaitingExpenseReport = false;
+function createItinForFirstThreeDays(startDate, city) {
+  const origin = "seattle";
+  const day = startDate.getDate();
+  this.itin[day] = {};
+  this.itin[day].name = origin;
+  getWeather.call(this, day, origin);
+  this.itin[day].leave = details[this.tripName].cities[origin].leave;
+
+  // next day
+  const nDate = new Date(startDate.toString());
+  nDate.setDate(startDate.getDate() + 1);
+  const nextDay = nDate.getDate();
+  this.itin[nextDay] = {};
+  this.itin[nextDay].name = city;
+  getWeather.call(this, nextDay, city);
+  this.itin[nextDay].arrival = details[this.tripName].cities[city].arrival;
+
+
+  // day after
+  nDate.setDate(startDate.getDate() + 2);
+  const dayAfter = nDate.getDate();
+  this.itin[dayAfter] = {};
+  this.itin[dayAfter].name = city;
+  getWeather.call(this, dayAfter, city);
+  this.itin[dayAfter].visit = [];
+  this.itin[dayAfter].visit.push(details[this.tripName].cities[city].visit[0]);
 }
 
-module.exports = Session;
+function createItinForLastTwoDays(returnDate, city) {
+  const day = returnDate.getDate();
+  this.itin[day] = {};
+  this.itin[day].name = city;
+  getWeather.call(this, day, city);
+  this.itin[day].visit = [];
+  this.itin[day].visit.push(details[this.tripName].cities[city].visit[1]);
+
+  const pDate = new Date(returnDate.toString());
+  pDate.setDate(returnDate.getDate() - 1);
+  const prevDay = pDate.getDate();
+  this.itin[prevDay] = {};
+  this.itin[prevDay].name = city;
+  getWeather.call(this, prevDay, city);
+  this.itin[day].return = details[this.tripName].cities[city].return;
+}
+
+function getWeather(day) {
+  const city = this.itin[day].name;
+  this.itin[day].temp = details[this.tripName].cities[city].weather.temp;
+  this.itin[day].rain_chance = details[this.tripName].cities[city].weather.rain_chance;
+  this.itin[day].weather = details[this.tripName].cities[city].weather.weather;
+}
+
+module.exports = CreateItinerary;

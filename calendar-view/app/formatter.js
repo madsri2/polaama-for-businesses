@@ -2,18 +2,21 @@
 
 const logger = require('../../my-logger');
 const fs = require('fs');
+const CreateItinerary = require('../../trip-itinerary/app/create-itin'); // TODO: This relative path is ridiculous. Fix me
 
 const alphabet = ['a','b','c','d','e','f','g'];
 const dayString = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const htmlBaseDir = "/home/ec2-user/html-templates"; // TODO: Move this to config.
 
 
 // This class gets data from trips/portugal-itinerary.txt and creates a calendar view from that information.
 
-function FormatCalendar(trip) {
+function FormatCalendar(trip, hometown) {
   this.trip = trip;
   this.tripData = this.trip.data;
   this.tripName = this.trip.rawTripName;
+  this.hometown = hometown;
   fetchItinerary.call(this);
   this.html = "";
 }
@@ -27,6 +30,91 @@ FormatCalendar.prototype.format = function() {
     .replace("${month}", month)
     .replace("${year}", year)
     .replace("${calendar}", calHtml);
+}
+
+FormatCalendar.prototype.formatForMobile = function() {
+  const weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+  try {
+    const html = fs.readFileSync(`${htmlBaseDir}/mobile-itinerary-view.html`, 'utf8');
+    logger.debug(`formatForMobile: There are ${Object.keys(this.itinDetails).length} days in itinerary`);
+    let itinView = "";
+    let fullJs = "";
+    Object.keys(this.itinDetails).forEach(day => {
+      const thisDate = new Date(day);
+      const month = thisDate.getMonth() + 1; // getMonth() starts with 0
+      itinView = itinView.concat(dayItin({
+        "${dayOfMonth}": thisDate.getDate(),
+        "${day}": weekDays[thisDate.getDay()],
+        "${month}": month,
+        "${monthName}": monthNames[month],
+        "${existingItinerary}": getThisDaysItin.call(this, thisDate)
+      }));
+      fullJs = fullJs.concat(getJavascript(month, thisDate.getDate()));
+    });
+    return html.replace("${itinerary}", itinView)
+               .replace("${javascript}", fullJs);
+  }
+  catch(err) {
+    logger.error(`formatForMobile: Error formatting itinerary: ${err.stack}`);
+    throw err;
+  }
+}
+
+function dayItin(search) {
+  try {
+    let xformedString = fs.readFileSync(`${htmlBaseDir}/day-itinerary-view.html`, 'utf8');
+    Object.keys(search).forEach(key => {
+      xformedString = xformedString.split(key).join(search[key]);
+    });
+    return xformedString;
+  }
+  catch(e) {
+    logger.error(`dayItin: Error reading html file: ${e.stack}`);
+    throw e;
+  }
+}
+
+function getThisDaysItin(date) {
+  logger.debug(`getThisDaysItin: getting itinerary for day ${date}`);
+  const details = this.itinDetails[CreateItinerary.formatDate(date)];
+  let contents = `<li>Details for city ${capitalize1stChar(details.city)}</li>`;
+  let weather = details.weather;
+  if(weather) {
+    contents += `<li>Average min temp: ${weather.min_temp}&degF. Max temp: ${weather.max_temp}&degF</li>`;
+    contents += `<li>Chance of rain is ${weather.chanceofrain}%</li>`;
+    contents += `<li>It will be ${weather.cloud_cover} today.</li>`;
+  }
+  if(details.startTime) {
+    contents += `<li>Leaving ${capitalize1stChar(details.city)} at ${details.startTime}.</li>`;
+  }
+  // returning from trip
+  if(details.departureTime) {
+    contents += `<li>Leaving ${capitalize1stChar(details.city)} at ${details.departureTime}.</li>`;
+  }
+  if(details.arrival) {
+    contents += `<li>Arrive in ${capitalize1stChar(details.city)} at ${details.arrival}.</li>`;
+  }
+  if(details.visit) {
+    const visiting = details.visit;
+    visiting.forEach(i => {
+      contents += `<li>Visit ${i}. Get <a href="https://www.google.com/maps/search/${encodeURIComponent(i)}">directions</a></li>`;
+    });
+  }
+  return contents;
+}
+
+function getJavascript(month, dayOfMonth) {
+  let js = `
+    $("#update-${month}-${dayOfMonth}", e.target ).on( "click", function( e ) { 
+      $("#hidden-form-${month}-${dayOfMonth}").removeClass("ui-screen-hidden"); 
+      $("#list-${month}-${dayOfMonth}").listview("refresh"); 
+    }); 
+    $("#itin-submit-${month}-${dayOfMonth}", e.target).on("submit", function(e) { 
+      e.preventDefault(); //cancel the submission 
+      show("${month}-${dayOfMonth}"); //send the request to server to save it 
+    }); 
+  `;
+  return js; 
 }
 
 // Find out the day based on the date of travel. Create the month view from that.
@@ -77,7 +165,7 @@ function capitalize1stChar(str) {
 
 // return weather information, stay details and activities.
 function getPopupContents(day) {
-  // logger.debug(`getPopupContents: Getting details for ${day}`);
+  logger.debug(`getPopupContents: Getting details for ${day}`);
   const cityDetails = this.itinDetails[day];
   if(!cityDetails || Object.keys(cityDetails).length == 0 || !cityDetails.name) {
     logger.info(`getPopupContents: No details present for day ${day}`);
@@ -125,7 +213,7 @@ function getPopupContents(day) {
 }
 
 function fetchCalView() {
-  const html = "/home/ec2-user/html-templates/trip-calendar-view.html";
+  const html = `${htmlBaseDir}/trip-calendar-view.html`;
   try {
     return fs.readFileSync(html, 'utf8');
   }
@@ -135,12 +223,7 @@ function fetchCalView() {
 }
 
 function fetchItinerary() {
-  try {
-    this.itinDetails = JSON.parse(fs.readFileSync(this.trip.tripItinFile(),'utf8'));
-  }
-  catch(err) {
-    logger.info(`could not read trip itinerary details from file ${this.trip.tripItinFile()}. ${err.message}`);
-  }
+  this.itinDetails = (new CreateItinerary(this.trip, this.hometown)).getItinerary();  
 }
 
 module.exports = FormatCalendar;

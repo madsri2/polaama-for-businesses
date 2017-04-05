@@ -89,7 +89,7 @@ WebpageHandler.prototype.displayExpenseReport = function(res) {
 }
 
 WebpageHandler.prototype.displayCalendar = function(res) {
-  return res.send(this.formatter.displayCalendar());
+  return res.send(this.formatter.displayCalendar(this.session.hometown));
 }
 
 /*
