@@ -292,68 +292,14 @@ TripDataFormatter.prototype.formatExpensePage = function(report) {
              .replace("${expenseReportDetails}", listAsHtml(comments));
 }
 
-function dayItin(search) {
-  let xformedString = fs.readFileSync("html-templates/day-itinerary-view.html", 'utf8');
-  Object.keys(search).forEach(key => {
-    xformedString = xformedString.split(key).join(search[key]);
-  });
-  return xformedString;
-}
-
 TripDataFormatter.prototype.displayCalendar = function(hometown) {
-  /*
-  if(headers['user-agent'].startsWith("Mozilla")) {
+  const calFormatter = new CalendarFormatter(this.trip, hometown);
+  // if(headers['user-agent'].startsWith("Mozilla")) {
+  if(0) {
     logger.debug(`displayCalendar: Request from browser. Sending the full calendar view`);
-    const calFormatter = new CalendarFormatter(this.trip, hometown);
     return calFormatter.format();
   }
-  */
-  const weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-  try {
-    const html = fs.readFileSync("html-templates/mobile-itinerary-view.html", 'utf8');
-    const itin = (new CreateItinerary(this.trip, hometown)).create().getItinerary();  
-    let itinView = "";
-    Object.keys(itin).forEach(day => {
-      const thisDate = new Date(day);
-      const itinDetails = "";
-      itinView = itinView.concat(dayItin({
-        "${dayOfMonth}": thisDate.getDate(),
-        "${day}": weekDays[thisDate.getDay()],
-        "${month}": thisDate.getMonth() + 1, // getMonth() starts with 0
-        "${existingItinerary}": itinDetails
-      });
-    });
-    let i = 1;
-    let fullJs = "";
-    const itin = "<li>Vulture</li>\n<li>Eagle</li>";
-    const month = 11;
-    for(i = 1; i < 15;i++) {
-      const dayOfMonth = i;
-      itinView = itinView.concat(dayItin({
-        "${dayOfMonth}": dayOfMonth,
-        "${day}": "Monday",
-        "${month}": month,
-        "${existingItinerary}": itin
-      }));
-      let js = `
-        $("#update-${month}-${dayOfMonth}", e.target ).on( "click", function( e ) { 
-          $("#hidden-form-${month}-${dayOfMonth}").removeClass("ui-screen-hidden"); 
-          $("#list-${month}-${dayOfMonth}").listview("refresh"); 
-        }); 
-        $("#itin-submit-${month}-${dayOfMonth}", e.target).on("submit", function(e) { 
-          e.preventDefault(); //cancel the submission 
-          show("${month}-${dayOfMonth}"); //send the request to server to save it 
-        }); 
-      `;
-      fullJs = fullJs.concat(js);
-    }
-    return html.replace("${itinerary}", itinView)
-               .replace("${javascript}", fullJs);
-  }
-  catch(e) {
-    logger.error(`displayCalendar: Could not read file: ${e.mesg}; ${e.stack}`);
-    return res.send(`Even bots need to eat. Back in a bit!`);
-  }
+  return calFormatter.formatForMobile();
 }
 
 function toLink(text) {

@@ -1,0 +1,744 @@
+{
+ "kind": "customsearch#search",
+ "url": {
+  "type": "application/json",
+  "template": "https://www.googleapis.com/customsearch/v1?q={searchTerms}&num={count?}&start={startIndex?}&lr={language?}&safe={safe?}&cx={cx?}&cref={cref?}&sort={sort?}&filter={filter?}&gl={gl?}&cr={cr?}&googlehost={googleHost?}&c2coff={disableCnTwTranslation?}&hq={hq?}&hl={hl?}&siteSearch={siteSearch?}&siteSearchFilter={siteSearchFilter?}&exactTerms={exactTerms?}&excludeTerms={excludeTerms?}&linkSite={linkSite?}&orTerms={orTerms?}&relatedSite={relatedSite?}&dateRestrict={dateRestrict?}&lowRange={lowRange?}&highRange={highRange?}&searchType={searchType}&fileType={fileType?}&rights={rights?}&imgSize={imgSize?}&imgType={imgType?}&imgColorType={imgColorType?}&imgDominantColor={imgDominantColor?}&alt=json"
+ },
+ "queries": {
+  "request": [
+   {
+    "title": "Google Custom Search - lonely planet utrecht november things to do",
+    "totalResults": "367",
+    "searchTerms": "lonely planet utrecht november things to do",
+    "count": 10,
+    "startIndex": 1,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "utrecht"
+   }
+  ],
+  "nextPage": [
+   {
+    "title": "Google Custom Search - lonely planet utrecht november things to do",
+    "totalResults": "367",
+    "searchTerms": "lonely planet utrecht november things to do",
+    "count": 10,
+    "startIndex": 11,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "utrecht"
+   }
+  ]
+ },
+ "context": {
+  "title": "Polaama"
+ },
+ "searchInformation": {
+  "searchTime": 0.522647,
+  "formattedSearchTime": "0.52",
+  "totalResults": "367",
+  "formattedTotalResults": "367"
+ },
+ "items": [
+  {
+   "kind": "customsearch#result",
+   "title": "Top things to do in Utrecht, The Netherlands - Lonely Planet",
+   "htmlTitle": "Top \u003cb\u003ethings to do\u003c/b\u003e in \u003cb\u003eUtrecht\u003c/b\u003e, The Netherlands - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/the-netherlands/utrecht/top-things-to-do/a/poi/360853",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Discover the best top things to do in Utrecht including Domtoren, Museum \nCatharijneconvent, Centraal Museum.",
+   "htmlSnippet": "Discover the best top \u003cb\u003ethings to do\u003c/b\u003e in \u003cb\u003eUtrecht\u003c/b\u003e including Domtoren, Museum \u003cbr\u003e\nCatharijneconvent, Centraal Museum.",
+   "cacheId": "ckhb9JStfv8J",
+   "formattedUrl": "https://www.lonelyplanet.com/the.../utrecht/top-things-to-do/a/.../360853",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/the.../\u003cb\u003eutrecht\u003c/b\u003e/top-\u003cb\u003ethings-to-do\u003c/b\u003e/a/.../360853",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Europe"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "225",
+      "height": "225",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSciLuHygZTkBwGgjz6bgZ9toERnj0h2xkKRFeis7bzzbvxFb4o7gpU6Mo6"
+     }
+    ],
+    "country": [
+     {
+      "name": "The Netherlands"
+     }
+    ],
+    "city": [
+     {
+      "name": "Utrecht"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Top things to do in Utrecht, The Netherlands",
+      "og:title": "Top things to do in Utrecht, The Netherlands",
+      "og:description": "Discover the best top things to do in Utrecht including Domtoren, Museum Catharijneconvent, Centraal Museum.",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://api.tiles.mapbox.com/v4/lonelyplanet.b963d424/13/4212/2701.png?access_token=pk.eyJ1IjoibG9uZWx5cGxhbmV0IiwiYSI6Imh1ODUtdUEifQ.OLLon0V6rcoTyayXzzUzsg"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "4 nights in Utrecht",
+   "htmlTitle": "4 nights in \u003cb\u003eUtrecht\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/thorntree/forums/europe-western-europe/netherlands/4-nights-in-utrecht",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Oct 16, 2014 ... I will be traveling to Utrecht for Le Guess Who? festival in November - so at least \n... Any suggestions on things to do in the area, sights to see?",
+   "htmlSnippet": "Oct 16, 2014 \u003cb\u003e...\u003c/b\u003e I will be traveling to \u003cb\u003eUtrecht\u003c/b\u003e for Le Guess Who? festival in \u003cb\u003eNovember\u003c/b\u003e - so at least \u003cbr\u003e\n... Any suggestions on \u003cb\u003ethings to do\u003c/b\u003e in the area, sights to see?",
+   "cacheId": "QR56xeMlHr4J",
+   "formattedUrl": "https://www.lonelyplanet.com/thorntree/.../4-nights-in-utrecht",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/thorntree/.../4-nights-in-\u003cb\u003eutrecht\u003c/b\u003e",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "225",
+      "height": "225",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSqRemPSRVtvlwaxn3MfC7zsLjzOoK5uUM0cDjdqchf2Fvexvm4z9sAZObq"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Thorn Tree",
+      "title": "Thorn Tree"
+     },
+     {
+      "url": "Country forums",
+      "title": "Country forums"
+     },
+     {
+      "url": "Western Europe",
+      "title": "Western Europe"
+     },
+     {
+      "url": "Netherlands",
+      "title": "Netherlands"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "4 nights in Utrecht",
+      "og:title": "4 nights in Utrecht",
+      "og:description": "Hello, I will be traveling to Utrecht for Le Guess Who? festival in November - so at least some of my time will be spent attending shows. Any suggestions on…",
+      "og:url": "https://www.lonelyplanet.com/thorntree/forums/europe-western-europe/netherlands/4-nights-in-utrecht",
+      "og:image": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "og:type": "website",
+      "twitter:title": "4 nights in Utrecht",
+      "twitter:description": "Hello, I will be traveling to Utrecht for Le Guess Who? festival in November - so at least some of my time will be spent attending shows. Any suggestions on…",
+      "twitter:image:src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "eNbcYzFLmlwuByUqjUTHj+GNbo564e/4pgayElxQCaS2bcwRjKyM5lR7abegRfPb4DrlvX1iv6/vlJ5u75b8tg=="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Welcome",
+      "name": "Welcome"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Health in The Netherlands - Lonely Planet",
+   "htmlTitle": "Health in The Netherlands - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/the-netherlands/health",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "It is unlikely that you will encounter unusual health problems in the Netherlands, \nand if you do, standards of care are world-class. It is still important to have ...",
+   "htmlSnippet": "It is unlikely that you \u003cb\u003ewill\u003c/b\u003e encounter unusual health problems in the Netherlands, \u003cbr\u003e\nand if you \u003cb\u003edo\u003c/b\u003e, standards of care are world-class. It is still important to have&nbsp;...",
+   "cacheId": "4ugq93eIjhgJ",
+   "formattedUrl": "www.lonelyplanet.com/the-netherlands/health",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/the-netherlands/health",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "310",
+      "height": "163",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSeSeDqVAONCDx_tUhGO1IZzUE7emVIMwWhrd8_Py5hnODEatjRnOVDg98"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Health in The Netherlands - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Health in The Netherlands - Lonely Planet",
+      "twitter:description": "Healthy travel answers. Can I drink the water? Should I get vaccinated for diseases like typhoid or yellow fever? How to prevent malaria and dengue fever?",
+      "twitter:image:src": "https://images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/mastheads/GettyImages-85911204_medium.jpg",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Health in The Netherlands - Lonely Planet",
+      "og:description": "Healthy travel answers. Can I drink the water? Should I get vaccinated for diseases like typhoid or yellow fever? How to prevent malaria and dengue fever?",
+      "og:url": "http://www.lonelyplanet.com/the-netherlands/health",
+      "og:type": "website",
+      "og:image": "//images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/mastheads/GettyImages-85911204_medium.jpg",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "mF+iUq5ij3eJ3v/jlowAVGIioEnL9zdcV7JPFmo5MgA="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "http://images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/mastheads/GettyImages-85911204_medium.jpg"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Weather in The Netherlands - Lonely Planet",
+   "htmlTitle": "Weather in The Netherlands - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/the-netherlands/weather",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "The best time to go to The Netherlands, including current weather conditions, \ntemperatures and rainfall.",
+   "htmlSnippet": "The best time to go to The Netherlands, including current weather conditions, \u003cbr\u003e\ntemperatures and rainfall.",
+   "cacheId": "icS0NmWdqngJ",
+   "formattedUrl": "www.lonelyplanet.com/the-netherlands/weather",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/the-netherlands/weather",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "206",
+      "height": "245",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcT1zWkumR2yG8zPLTT3xJlcPhFFq5NWxKnja8fCkQR6RDi2ntkjI54UZ_w"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Weather in The Netherlands - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Weather in The Netherlands - Lonely Planet",
+      "twitter:description": "The best time to go to The Netherlands, including current weather conditions, temperatures and rainfall",
+      "twitter:image:src": "https://images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/mastheads/GettyImages-85911204_medium.jpg",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Weather in The Netherlands - Lonely Planet",
+      "og:description": "The best time to go to The Netherlands, including current weather conditions, temperatures and rainfall",
+      "og:url": "http://www.lonelyplanet.com/the-netherlands/weather",
+      "og:type": "website",
+      "og:image": "//images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/mastheads/GettyImages-85911204_medium.jpg",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "wUzfAbfidk5JRW2TG6xE9alhaj25/fZuYZBXYgaH9+A="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "http://assets.staticlp.com/country-shapes/NLD.svg"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Netherland trip",
+   "htmlTitle": "Netherland trip",
+   "link": "https://www.lonelyplanet.com/thorntree/forums/europe-western-europe/netherlands/netherland-trip",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Oct 19, 2016 ... ... (except Amsterdam) from 27th afternoon to 2nd of November… ... Leiden and \nUtrecht are a bit similar, I would choose one. ... Look up the things to do there via \ngoogle, there's a lot about WW2. .... About Lonely Planet.",
+   "htmlSnippet": "Oct 19, 2016 \u003cb\u003e...\u003c/b\u003e ... (except Amsterdam) from 27th afternoon to 2nd of \u003cb\u003eNovember\u003c/b\u003e… ... Leiden and \u003cbr\u003e\n\u003cb\u003eUtrecht\u003c/b\u003e are a bit similar, I would choose one. ... Look up the \u003cb\u003ethings to do\u003c/b\u003e there via \u003cbr\u003e\ngoogle, there&#39;s a lot about WW2. .... About \u003cb\u003eLonely Planet\u003c/b\u003e.",
+   "cacheId": "7IaznIMBeZUJ",
+   "formattedUrl": "https://www.lonelyplanet.com/thorntree/forums/.../netherland-trip",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/thorntree/forums/.../netherland-trip",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "225",
+      "height": "225",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSqRemPSRVtvlwaxn3MfC7zsLjzOoK5uUM0cDjdqchf2Fvexvm4z9sAZObq"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Thorn Tree",
+      "title": "Thorn Tree"
+     },
+     {
+      "url": "Country forums",
+      "title": "Country forums"
+     },
+     {
+      "url": "Western Europe",
+      "title": "Western Europe"
+     },
+     {
+      "url": "Netherlands",
+      "title": "Netherlands"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Netherland trip",
+      "og:title": "Netherland trip",
+      "og:description": "Hello everyone!I am having my erasmus in Maastricht and I am planning to visit some other cities in the Netherlands (except Amsterdam) from 27th afternoon to 2nd of November…",
+      "og:url": "https://www.lonelyplanet.com/thorntree/forums/europe-western-europe/netherlands/netherland-trip",
+      "og:image": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "og:type": "website",
+      "twitter:title": "Netherland trip",
+      "twitter:description": "Hello everyone!I am having my erasmus in Maastricht and I am planning to visit some other cities in the Netherlands (except Amsterdam) from 27th afternoon to 2nd of November…",
+      "twitter:image:src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "009kIh263dr4tZlIoOqTgKKdkm9ctw/lSIu/EPlNZSAZYGWc52qlwPqOD3siAnelV0ZcrgYiV+Gew3LWU/QQzw=="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Welcome",
+      "name": "Welcome"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Essential guide to Amsterdam - Lonely Planet",
+   "htmlTitle": "Essential guide to Amsterdam - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/the-netherlands/amsterdam/essential-information",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Things to do ... A direct London–Amsterdam route is slated to launch in late 2016 \nthat will cut ... Bus travel is typically the cheapest way to get to Amsterdam.",
+   "htmlSnippet": "\u003cb\u003eThings to do\u003c/b\u003e ... A direct London–Amsterdam route is slated to launch in late 2016 \u003cbr\u003e\nthat will cut ... Bus travel is typically the cheapest way to get to Amsterdam.",
+   "cacheId": "aYQyi26q2Q8J",
+   "formattedUrl": "www.lonelyplanet.com/the-netherlands/.../essential-information",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/the-netherlands/.../essential-information",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "310",
+      "height": "163",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQJWXJO2D1J_Bqgw8CWap4JCwnNBsJbnJBkuzsf25ZKlzDO55y7ncLfIFos"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Essential guide to Amsterdam - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Essential guide to Amsterdam - Lonely Planet",
+      "twitter:description": "Everything for your trip to Amsterdam - best time to go, weather, daily cost advisor, visas, cheapest flights and transport information",
+      "twitter:image:src": "https://images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/mastheads/GettyImages-541441577_super.jpg",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Essential guide to Amsterdam - Lonely Planet",
+      "og:description": "Everything for your trip to Amsterdam - best time to go, weather, daily cost advisor, visas, cheapest flights and transport information",
+      "og:url": "http://www.lonelyplanet.com/the-netherlands/amsterdam/essential-information",
+      "og:type": "website",
+      "og:image": "//images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/mastheads/GettyImages-541441577_super.jpg",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "ce1FvUP5kcE3mOoJdSP6rJ6uZmZcyXTnyXCY6EsK69Q="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "http://images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/mastheads/GettyImages-541441577_super.jpg"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "HELP! - Europe in November",
+   "htmlTitle": "HELP! - Europe in \u003cb\u003eNovember\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/thorntree/forums/europe-western-europe/topics/help-europe-in-november-eb4e7f76-f55c-4bc0-afc5-7874cd3b62ea",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Sep 18, 2016 ... For example, you could explore in/around Amsterdam, Utrecht, ... I'm thinking the \nfollowing for some initial musts in terms of activities: Van Gogh ...",
+   "htmlSnippet": "Sep 18, 2016 \u003cb\u003e...\u003c/b\u003e For example, you could explore in/around Amsterdam, \u003cb\u003eUtrecht\u003c/b\u003e, ... I&#39;m thinking the \u003cbr\u003e\nfollowing for some initial musts in terms of \u003cb\u003eactivities\u003c/b\u003e: Van Gogh&nbsp;...",
+   "cacheId": "iNB6uPt50gQJ",
+   "formattedUrl": "https://www.lonelyplanet.com/.../help-europe-in-november-eb4e7f76-f55c- 4bc0-afc5-7874cd3b62ea",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../help-europe-in-\u003cb\u003enovember\u003c/b\u003e-eb4e7f76-f55c- 4bc0-afc5-7874cd3b62ea",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "225",
+      "height": "225",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSqRemPSRVtvlwaxn3MfC7zsLjzOoK5uUM0cDjdqchf2Fvexvm4z9sAZObq"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Thorn Tree",
+      "title": "Thorn Tree"
+     },
+     {
+      "url": "Country forums",
+      "title": "Country forums"
+     },
+     {
+      "url": "Western Europe",
+      "title": "Western Europe"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "HELP! - Europe in November",
+      "og:title": "HELP! - Europe in November",
+      "og:description": "Going Nuts Over Here! - Solo Euro Trip: NovemberSep 18, 2016, 10:57 AMSo I've found myself in the simultaneously amazing and slightly less-than-preferable state of having a month…",
+      "og:url": "https://www.lonelyplanet.com/thorntree/forums/europe-western-europe/topics/help-europe-in-november-eb4e7f76-f55c-4bc0-afc5-7874cd3b62ea",
+      "og:image": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "og:type": "website",
+      "twitter:title": "HELP! - Europe in November",
+      "twitter:description": "Going Nuts Over Here! - Solo Euro Trip: NovemberSep 18, 2016, 10:57 AMSo I've found myself in the simultaneously amazing and slightly less-than-preferable state of having a month…",
+      "twitter:image:src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "WOs9ndsiMYN6OEur3awdf1T/Ev3KWSoIA3MeaQl09b3ijrLXcy1CLOHuAyPvhahk2+eY0pfzrUvgOHin7bDKSQ=="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Welcome",
+      "name": "Welcome"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Weather in Northern Netherlands - Lonely Planet",
+   "htmlTitle": "Weather in Northern Netherlands - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/the-netherlands/northern-netherlands/weather",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "... visit smaller towns and villages, which all but hibernate during winter, \nparticularly from November to March, when many sights, activities and attractions \nclose.",
+   "htmlSnippet": "... visit smaller towns and villages, which all but hibernate during winter, \u003cbr\u003e\nparticularly from \u003cb\u003eNovember\u003c/b\u003e to March, when many sights, \u003cb\u003eactivities\u003c/b\u003e and attractions \u003cbr\u003e\nclose.",
+   "cacheId": "Jkvi3MOPLCQJ",
+   "formattedUrl": "www.lonelyplanet.com/the-netherlands/northern.../weather",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/the-netherlands/northern.../weather",
+   "pagemap": {
+    "metatags": [
+     {
+      "title": "Weather in Northern Netherlands - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Weather in Northern Netherlands - Lonely Planet",
+      "twitter:description": "The best time to go to Northern Netherlands, including current weather conditions, temperatures and rainfall",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Weather in Northern Netherlands - Lonely Planet",
+      "og:description": "The best time to go to Northern Netherlands, including current weather conditions, temperatures and rainfall",
+      "og:url": "http://www.lonelyplanet.com/the-netherlands/northern-netherlands/weather",
+      "og:type": "website",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "MopLh7CiN/DFSQPCQZtjj7S/qssTOdvQSuh0p/DwfVI="
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Excellent views, but tricky for those scared of heights - Review of ...",
+   "htmlTitle": "Excellent views, but tricky for those scared of heights - Review of ...",
+   "link": "https://www.tripadvisor.com/ShowUserReviews-g188616-d534409-r183826222-Dom_Tower-Utrecht.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Ranked #2 of 100 things to do in Utrecht. 4.5 of 5 bubbles ... Reviewed \nNovember 6, 2013. Really interesting tour- need to book and ... Loved it! This \ntower is one of the reasons Lonely Planet voted the city as one of the hidden \ngems of Europe.",
+   "htmlSnippet": "Ranked #2 of 100 \u003cb\u003ethings to do\u003c/b\u003e in \u003cb\u003eUtrecht\u003c/b\u003e. 4.5 of 5 bubbles ... Reviewed \u003cbr\u003e\n\u003cb\u003eNovember\u003c/b\u003e 6, 2013. Really interesting tour- need to book and ... Loved it! This \u003cbr\u003e\ntower is one of the reasons \u003cb\u003eLonely Planet\u003c/b\u003e voted the city as one of the hidden \u003cbr\u003e\ngems of Europe.",
+   "cacheId": "7KpUluu3A7sJ",
+   "formattedUrl": "https://www.tripadvisor.com/ShowUserReviews-g188616-d534409- r183826222-Dom_Tower-Utrecht.html",
+   "htmlFormattedUrl": "https://www.tripadvisor.com/ShowUserReviews-g188616-d534409- r183826222-Dom_Tower-\u003cb\u003eUtrecht\u003c/b\u003e.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "275",
+      "height": "183",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQ5k88I8rkUxxKKH40r2jnFRjpOEGuZyawBrTFbL6y7VkpcXlgYLlyd7VQ"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "The Netherlands",
+      "title": "The Netherlands"
+     },
+     {
+      "url": "Utrecht Province",
+      "title": "Utrecht Province"
+     },
+     {
+      "url": "Utrecht",
+      "title": "Utrecht"
+     },
+     {
+      "url": "Utrecht - Things to Do",
+      "title": "Utrecht - Things to Do"
+     },
+     {
+      "url": "Dom Tower",
+      "title": "Dom Tower"
+     }
+    ],
+    "review": [
+     {
+      "reviewer": "a TripAdvisor user",
+      "reviewdate": "2013-11-06",
+      "ratingstars": "4.0",
+      "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/0c/72/47/42/domtoren-domkerk-en-buurkertor.jpg"
+     }
+    ],
+    "hreview": [
+     {
+      "summary": "“Excellent views, but tricky for those scared of heights”",
+      "dtreviewed": "2013-11-06",
+      "description": "Really interesting tour- need to book and pay in advance at tourist information centre across the road. Quite pricey but overall worth it. Tour starts in information centre- our guide spoke..."
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Excellent views, but tricky for those scared of heights - Review of Dom Tower, Utrecht, The Netherlands - TripAdvisor",
+      "og:description": "Dom Tower: Excellent views, but tricky for those scared of heights - See 1,249 traveler reviews, 1,031 candid photos, and great deals for Utrecht, The Netherlands, at TripAdvisor.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/0c/72/47/42/domtoren-domkerk-en-buurkertor.jpg",
+      "og:image:width": "550",
+      "og:image:height": "367",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/ShowUserReviews-g188616-d534409-r183826222-m33762-Dom_Tower-Utrecht.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/ShowUserReviews-g188616-d534409-r183826222-m33762-Dom_Tower-Utrecht.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/ShowUserReviews-g188616-d534409-r183826222-m33762-Dom_Tower-Utrecht.html"
+     }
+    ],
+    "Review": [
+     {
+      "author": "a TripAdvisor user",
+      "name": "“Excellent views, but tricky for those scared of heights”",
+      "datePublished": "2013-11-06",
+      "reviewBody": "Really interesting tour- need to book and pay in advance at tourist information centre across the road. Quite pricey but overall worth it. Tour starts in information centre- our guide spoke..."
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/0c/72/47/42/domtoren-domkerk-en-buurkertor.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "History of Barcelona - Lonely Planet Travel Information",
+   "htmlTitle": "History of Barcelona - \u003cb\u003eLonely Planet\u003c/b\u003e Travel Information",
+   "link": "http://www.lonelyplanet.com/spain/barcelona/history",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "A system of feudal government and law evolved that had little to do with the more \n... Things were going so well that, prodded by the Aragonese, for good .... They \nwere wrong and in 1713 the Treaty of Utrecht left Felipe V in charge in Madrid. ..... \nand formed an unsteady three-party coalition government in November 2003.",
+   "htmlSnippet": "A system of feudal government and law evolved that had little to \u003cb\u003edo\u003c/b\u003e with the more \u003cbr\u003e\n... \u003cb\u003eThings\u003c/b\u003e were going so well that, prodded by the Aragonese, for good .... They \u003cbr\u003e\nwere wrong and in 1713 the Treaty of \u003cb\u003eUtrecht\u003c/b\u003e left Felipe V in charge in Madrid. ..... \u003cbr\u003e\nand formed an unsteady three-party coalition government in \u003cb\u003eNovember\u003c/b\u003e 2003.",
+   "cacheId": "ttq03yP35c8J",
+   "formattedUrl": "www.lonelyplanet.com/spain/barcelona/history",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/spain/barcelona/history",
+   "pagemap": {
+    "breadcrumb": [
+     {
+      "url": "Home"
+     }
+    ],
+    "metatags": [
+     {
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=1024",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "l3rIT98BGfhWymVRs9GajrPlWsU25HkTkldKvte439M="
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  }
+ ]
+}

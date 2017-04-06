@@ -185,7 +185,7 @@ TripData.prototype.addCityItinerary = function(cities, numOfDays) {
     throw new Error("cities and numOfDays array lengths are different. cannot persist city itinerary information");
   }
   for(let i = 0; i < cities.length; i++) {
-    this.data.cityItin[cities[i]] = numOfDays[i];
+    this.data.cityItin[Encoder.encode(cities[i])] = numOfDays[i];
   }
   // TODO: This is just a convenient hack. In the future, we need to remove addCities completely in favor of addCityItinerary
   this.addCities(cities);
@@ -226,6 +226,56 @@ TripData.prototype.storeFreeFormText = function(senderId, messageText) {
 TripData.prototype.storeExpenseEntry = function(senderId, messageText) {
   const regex = new RegExp("^expense(-report)?:?[ ]*","i"); // ignore case
   return storeList.call(this, senderId, messageText, regex, "expenses", "get expense-report, get expenses or get expense details");
+}
+
+TripData.prototype.userInputItinFile = function() {
+  return `${tripBaseDir}/${this.data.name}-user-itinerary.txt`;
+}
+
+
+/*
+  TODO: Since we have are writing to one file, there will be a race condition if two users attempt to update an itinerary. You need a lock to serialize in this case! This is true for any file writing that is done. Or, move to using dynamodb or something which will handle it for you
+*/
+TripData.prototype.updateItinerary = function(incDate, itinDetail){
+  const filename = this.userInputItinFile();
+  const readPromise = new Promise(function(fulfil, reject){
+    const date = incDate.split("/").join("-"); // see calendar-view/app/formatter.js formatForMobile function.
+    let contents = null;
+    fs.readFile(filename, 'utf8', (err, data) => {
+      if(err && err.code != 'ENOENT') {
+        logger.error(`error reading: ${err.stack}`);
+        reject(err);
+      }
+      if(!data) {
+        logger.debug(`readPromise: empty file or no file`);
+        contents = {};
+        contents[date] = [];
+      }
+      else {
+        logger.debug(`readPromise: read ${data.length} bytes from ${filename}`);
+        contents = JSON.parse(data);
+        if(!contents[date]) contents[date] = [];
+      }
+      contents[date].push(itinDetail);
+      fulfil(contents);
+    });
+  });
+  return readPromise.then(
+    function(contents) {
+      const json = JSON.stringify(contents);
+      return new Promise(function(fulfil, reject) {
+        fs.writeFile(filename, json, (err) => { 
+          if(err) return reject(err); 
+          logger.debug(`writePromise: wrote ${json.length} bytes to ${filename}`);
+        });
+        return fulfil("success");
+      });
+    },
+    function(err) {
+      logger.error(`updateItinerary: Error: ${e.stack}`);
+      return e;
+    }
+  );
 }
 
 // TO DEPRECATE!

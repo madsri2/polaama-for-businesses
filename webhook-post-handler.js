@@ -269,9 +269,17 @@ WebhookPostHandler.prototype.startPlanningTrip = function() {
   sendTypingAction.call(this);
 	logger.debug(`startPlanningTrip: This sessions' guid is ${this.session.guid}`);
 
-  // Create the itinerary based on cities and update the tripData.tripItin() file. This will be used to displayCalendar when the "/calendar" page is called
-  // const createItin = new CreateItinerary(this.session.tripData());
-  // createItin.create();
+  const createItin = new CreateItinerary(this.session.tripData(), this.session.hometown);
+  const self = this;
+  Promise.all(createItin.create()).done(
+    function(values) {
+      // nothing to do here if create succeeds. The itinerary will be persisted and can be obtained by reading the file, which is done in trip-data-formatter:displayCalendar when /calendar is called
+      logger.info(`Successfully created itinerary for trip ${self.session.tripNameInContext}`);
+    },
+    function(error) {
+      logger.error(`Error creating itinerary for trip ${self.session.tripNameInContext}: ${error.stack}`);
+    }
+  );
 
   const tip = new TripInfoProvider(this.session.tripData(), this.session.hometown);
   const activities = Promise.denodeify(tip.getActivities.bind(tip));

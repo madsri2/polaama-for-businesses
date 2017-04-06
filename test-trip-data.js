@@ -1,5 +1,6 @@
 'use strict';
 const TripData = require('./trip-data');
+const Promise = require('promise');
 const fs = require('fs');
 const moment = require('moment');
 const _ = require('lodash');
@@ -106,7 +107,22 @@ function testAddCityItinerary() {
   console.log(`Trip details: ${JSON.stringify(trip)}`);
 }
 
-testAddCityItinerary();
+function testUpdateItinerary() {
+  const trip = new TripData("TestUpdatingItinerary");
+  // promise.done does not seem to work here. I get a promise.done not a function error.
+  trip.updateItinerary("11-01-2017", "hello world").then(
+    function(response) {
+      console.log(`promise returned ${response}`);
+    },
+    function(err) {
+      console.log(`updateItinerary: Error: ${e.stack}`);
+    }
+  );
+}
+
+testUpdateItinerary();
+
+// testAddCityItinerary();
 
 // testGetExpenseReport();
 

@@ -2,17 +2,17 @@
     <h2>${monthName} ${dayOfMonth}, ${day}</h2>
     <ul id="outer-list" data-role="listview" data-shadow="false" data-inset="true" data-corners="false" style="margin: 0; padding: 0;">
       <li style="padding: 0;">
-        <ul id="list-${month}-${dayOfMonth}" data-role="listview" data-shadow="false" data-inset="true" data-corners="false" style="margin: 0;">
+        <ul id="list-${dateVal}" data-role="listview" data-shadow="false" data-inset="true" data-corners="false" style="margin: 0;">
           ${existingItinerary}
         </ul>
       </li>
-      <li class="ui-screen-hidden" id="hidden-form-${month}-${dayOfMonth}" style="margin: 0; padding: 0; border-top-width: 0; border-bottom-width: 0; padding-top: 0; padding-bottom: 0;">
-        <form id="itin-submit-${month}-${dayOfMonth}" method="post">
-          <input type="text" name="itin" id="itin-${month}-${dayOfMonth}" value="">
+      <li class="ui-screen-hidden" id="hidden-form-${dateVal}" style="margin: 0; padding: 0; border-top-width: 0; border-bottom-width: 0; padding-top: 0; padding-bottom: 0;">
+        <form id="itin-submit-${dateVal}" method="post">
+          <input type="text" name="itin" id="itin-${dateVal}" value="">
           <button type="submit" name="i-submit">submit</button>
         </form>
       </li>
-      <li><button id="update-${month}-${dayOfMonth}" data-inline="true" data-shadow="true">Edit Itinerary</button></li>
+      <li><button id="update-${dateVal}" data-inline="true" data-shadow="true">Edit Itinerary</button></li>
     </ul>
   </li>
 

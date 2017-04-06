@@ -296,9 +296,9 @@ app.post('/:id/:tripName/handle-add-city-choice', function(req, res) {
   return handler.handleAddCityChoice(req, res, myPostHandler, true /* existingTrip */);
 });
 
-app.post('/save-itin-update', function(req, res) {
+app.post('/:id/:tripName/save-itin-update', function(req, res) {
   logger.debug(`save-itin-update: Called`);
-  const handler = new WebpageHandler(null, null);
+  const handler = new WebpageHandler(req.params.id, req.params.tripName);
   return handler.saveItinUpdate(req, res);
 });
 

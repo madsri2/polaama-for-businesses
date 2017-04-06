@@ -42,14 +42,16 @@ FormatCalendar.prototype.formatForMobile = function() {
     Object.keys(this.itinDetails).forEach(day => {
       const thisDate = new Date(day);
       const month = thisDate.getMonth() + 1; // getMonth() starts with 0
+      // convert "/" to "-" because this id will be used in javascript and a value like "#update-11/01/2017" will result in a syntax error
+      const dateVal = CreateItinerary.formatDate(thisDate).split('/').join('-');
       itinView = itinView.concat(dayItin({
         "${dayOfMonth}": thisDate.getDate(),
         "${day}": weekDays[thisDate.getDay()],
-        "${month}": month,
-        "${monthName}": monthNames[month],
+        "${dateVal}": dateVal,
+        "${monthName}": monthNames[thisDate.getMonth()],
         "${existingItinerary}": getThisDaysItin.call(this, thisDate)
       }));
-      fullJs = fullJs.concat(getJavascript(month, thisDate.getDate()));
+      fullJs = fullJs.concat(getJavascript(dateVal));
     });
     return html.replace("${itinerary}", itinView)
                .replace("${javascript}", fullJs);
@@ -69,7 +71,6 @@ function dayItin(search) {
     return xformedString;
   }
   catch(e) {
-    logger.error(`dayItin: Error reading html file: ${e.stack}`);
     throw e;
   }
 }
@@ -77,7 +78,10 @@ function dayItin(search) {
 function getThisDaysItin(date) {
   logger.debug(`getThisDaysItin: getting itinerary for day ${date}`);
   const details = this.itinDetails[CreateItinerary.formatDate(date)];
-  let contents = `<li>Details for city ${capitalize1stChar(details.city)}</li>`;
+  let contents = "";
+  if(details.city) {
+    contents = `<li><b>${capitalize1stChar(details.city)}</b></li>`;
+  }
   let weather = details.weather;
   if(weather) {
     contents += `<li>Average min temp: ${weather.min_temp}&degF. Max temp: ${weather.max_temp}&degF</li>`;
@@ -103,15 +107,15 @@ function getThisDaysItin(date) {
   return contents;
 }
 
-function getJavascript(month, dayOfMonth) {
+function getJavascript(dateVal) {
   let js = `
-    $("#update-${month}-${dayOfMonth}", e.target ).on( "click", function( e ) { 
-      $("#hidden-form-${month}-${dayOfMonth}").removeClass("ui-screen-hidden"); 
-      $("#list-${month}-${dayOfMonth}").listview("refresh"); 
+    $("#update-${dateVal}", e.target ).on( "click", function( e ) { 
+      $("#hidden-form-${dateVal}").removeClass("ui-screen-hidden"); 
+      $("#list-${dateVal}").listview("refresh"); 
     }); 
-    $("#itin-submit-${month}-${dayOfMonth}", e.target).on("submit", function(e) { 
+    $("#itin-submit-${dateVal}", e.target).on("submit", function(e) { 
       e.preventDefault(); //cancel the submission 
-      show("${month}-${dayOfMonth}"); //send the request to server to save it 
+      show("${dateVal}"); //send the request to server to save it 
     }); 
   `;
   return js; 

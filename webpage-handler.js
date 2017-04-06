@@ -89,7 +89,13 @@ WebpageHandler.prototype.displayExpenseReport = function(res) {
 }
 
 WebpageHandler.prototype.displayCalendar = function(res) {
-  return res.send(this.formatter.displayCalendar(this.session.hometown));
+  try {
+    return res.send(this.formatter.displayCalendar(this.session.hometown));
+  }
+  catch(e) {
+    logger.error(`displayCalendar: Error formatting calendar view; ${e.stack}`);
+    return res.send(`Even bots need to eat. Back in a bit!`);
+  }
 }
 
 /*
@@ -174,14 +180,20 @@ WebpageHandler.prototype.displayCitiesForExistingTrip = function(res) {
 
 WebpageHandler.prototype.saveItinUpdate = function(req, res) {
   const form = new formidable.IncomingForm(); 
+  const self = this;
   // All activities need to happen within the the form.parse function
   form.parse(req, function(err, fields, files) {
     if(err) {
       logger.error(`Error from parser: ${JSON.stringify(err)}`);
       return res.send(`error from parser: ${JSON.stringify(err)}`);
     }
-   logger.info(`Fields in form are : ${JSON.stringify(fields)}`);
-    return res.send("submitted");
+    logger.info(`Fields in form are : ${JSON.stringify(fields)}; The params are ${req.params.tripName}`);
+    // store itinerary in the date corresponding to when it was entered
+    if(!fields.date || !fields.value) {
+      throw new Error(`saveItinUpdate: Either "date or "value" field is missing in form. Cannot proceed`);
+    }
+    return res.send(self.trip.updateItinerary(fields.date, fields.value));
+    // return res.send("submitted");
   });
 }
 
