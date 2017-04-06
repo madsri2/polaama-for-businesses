@@ -110,12 +110,18 @@ function testAddCityItinerary() {
 function testUpdateItinerary() {
   const trip = new TripData("TestUpdatingItinerary");
   // promise.done does not seem to work here. I get a promise.done not a function error.
-  trip.updateItinerary("11-01-2017", "hello world").then(
-    function(response) {
-      console.log(`promise returned ${response}`);
+  trip.updateItinerary("11-1-2017", "hello world").then(
+    function(r) {
+      const content = require('fs').readFileSync(trip.userInputItinFile(),'utf8');
+      if(content.includes("11/1/2017")) {
+        console.log(`test passed`);
+      }
+      else {
+        console.log(`test failed: ${content}`);
+      }
     },
     function(err) {
-      console.log(`updateItinerary: Error: ${e.stack}`);
+      console.log(`test failed: Error: ${e.stack}`);
     }
   );
 }

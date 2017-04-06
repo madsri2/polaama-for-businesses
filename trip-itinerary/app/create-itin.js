@@ -64,16 +64,31 @@ CreateItinerary.prototype.create = function() {
 }
 
 CreateItinerary.prototype.getItinerary = function() {
-  if(!this.itin) {
-    // see if the file exists. If it does, simply read it and return it.
-    try {
-      this.itin = JSON.parse(fs.readFileSync(this.trip.tripItinFile(),'utf8'));
+  // always read from file to get the latest!
+  try {
+    this.itin = JSON.parse(fs.readFileSync(this.trip.tripItinFile(),'utf8'));
+  }
+  catch(err) {
+    // TODO: Consider calling create here directly..
+    logger.error(`getItinerary: could not read trip itinerary details from file ${this.trip.tripItinFile()}. ${err.message}. Maybe you forgot to call CreateItinerary.create to create and persist the itinerary?`);
+    throw new Error("getItinerary: Could not read itinerary details from file. Maybe you forgot to create the itinerary?");
+  }
+  try {
+    const contents = JSON.parse(fs.readFileSync(this.trip.userInputItinFile(), 'utf8'));
+    if(contents) {
+      Object.keys(contents).forEach(key => {
+        if(!this.itin[key]) {
+          throw new Error(`getItinerary: key ${key} is not present in main itinerary file, but is present in user input itinerary file. Possible BUG!`);
+        }
+        this.itin[key].userInputDetails = contents[key];
+      });
     }
-    catch(err) {
-      // TODO: Consider calling create here directly..
-      logger.error(`could not read trip itinerary details from file ${this.trip.tripItinFile()}. ${err.message}. Maybe you forgot to call CreateItinerary.create to create and persist the itinerary?`);
-      throw new Error("Could not read itinerary details from file. Maybe you forgot to create the itinerary?");
+  }
+  catch(e) {
+    if(e.code != 'ENOENT') {
+      throw e;
     }
+    // if code is ENOENT, it just means that the user_input_itin file is not present, which is ok.
   }
 	return this.itin;
 }

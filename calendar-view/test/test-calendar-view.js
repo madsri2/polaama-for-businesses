@@ -1,7 +1,7 @@
 'use strict';
 const fs = require('fs');
 const logger = require('../../my-logger');
-
+const expect = require('chai').expect;
 const CalendarFormatter = require('../app/formatter');
 const TripData = require('../../trip-data');
 
@@ -19,5 +19,6 @@ describe("Calendar view tests", function() {
     const htmlName = "/tmp/mobile-view-test.html";
     fs.writeFileSync(htmlName, html);
     logger.debug(`Wrote ${html.length} bytes into output file ${htmlName}`);
+    expect(html).to.contain("hello world");
   });
 });

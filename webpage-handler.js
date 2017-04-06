@@ -185,15 +185,24 @@ WebpageHandler.prototype.saveItinUpdate = function(req, res) {
   form.parse(req, function(err, fields, files) {
     if(err) {
       logger.error(`Error from parser: ${JSON.stringify(err)}`);
-      return res.send(`error from parser: ${JSON.stringify(err)}`);
+      return res.send(`Error updating itinerary`);
     }
-    logger.info(`Fields in form are : ${JSON.stringify(fields)}; The params are ${req.params.tripName}`);
+    logger.debug(`saveItinUpdate: fields in form: ${JSON.stringify(fields)}; params: ${req.params.tripName}`);
     // store itinerary in the date corresponding to when it was entered
     if(!fields.date || !fields.value) {
-      throw new Error(`saveItinUpdate: Either "date or "value" field is missing in form. Cannot proceed`);
+      logger.error(`saveItinUpdate: Either "date or "value" field is missing in form. Cannot proceed`);
+      return res.send(`Error updating itinerary`);
     }
-    return res.send(self.trip.updateItinerary(fields.date, fields.value));
-    // return res.send("submitted");
+    self.trip.updateItinerary(fields.date, fields.value).then(
+      function(r) {
+        logger.debug(`saveItinUpdate: successfully updated itinerary. return from updateItinerary: ${r}`);
+        return res.send(r);
+      },
+      function(e) {
+        logger.error(`saveItinUpdate: Error calling updateItinerary: ${e.stack}`);
+        return res.send("Error updating itinerary");
+      }
+    );
   });
 }
 

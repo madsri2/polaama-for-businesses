@@ -127,5 +127,38 @@ describe("Test Create Itinerary functionality", function() {
       }
     );
   });
+
+  it("testing presence of user itinerary", function(done) {
+    // set up
+    const cityItin = {
+      'chennai': "2",
+    };
+    const startDate = "2017-10-11";
+    const portOfEntry = "chennai";
+    const tripData = new TripData('full-itin-test');
+    tripData.data.country = "india";
+    tripData.data.startDate = startDate;
+    tripData.data.name = "full-itin-test";
+    tripData.data.portOfEntry = portOfEntry;
+    tripData.data.cityItin = cityItin;
+    tripData.data.returnDate = "2017-10-13";
+    const createItin = new CreateItinerary(tripData, "seattle");
+    const promises = createItin.create();
+    require('fs').writeFileSync(tripData.userInputItinFile(), `{"10/11/2017":["hello world"],"10/12/2017":["h w","h world 1"]}`);
+    Promise.all(promises).done(
+      function(values){
+        const details = createItin.getItinerary();
+        expect(details["10/11/2017"].userInputDetails).to.deep.equal(["hello world"]);
+        expect(details["10/12/2017"].userInputDetails).to.deep.equal(["h w","h world 1"]);
+        // tell mocha that asynchronous work is done;
+        done();
+      },
+      function(err) {
+        logger.error(`Error calling create: ${err.message}. stack: ${err.stack}`);
+        // tell mocha that the asynchronous work is done
+        done(err);
+      }
+    ); 
+  });
 });
 

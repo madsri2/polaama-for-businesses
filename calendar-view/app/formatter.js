@@ -104,6 +104,11 @@ function getThisDaysItin(date) {
       contents += `<li>Visit ${i}. Get <a href="https://www.google.com/maps/search/${encodeURIComponent(i)}">directions</a></li>`;
     });
   }
+  if(details.userInputDetails) {
+    details.userInputDetails.forEach(userInput => {
+      contents += `<li>${userInput}</li>`;
+    });
+  }
   return contents;
 }
 
