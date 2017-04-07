@@ -75,28 +75,59 @@ function dayItin(search) {
   }
 }
 
-function getThisDaysItin(date) {
-  logger.debug(`getThisDaysItin: getting itinerary for day ${date}`);
-  const details = this.itinDetails[CreateItinerary.formatDate(date)];
+function setWeatherContents(details) {
   let contents = "";
-  if(details.city) {
-    contents = `<li><b>${capitalize1stChar(details.city)}</b></li>`;
-  }
-  let weather = details.weather;
-  if(weather) {
+  const weather = details.weather;
+  if(!Array.isArray(weather)) {
     contents += `<li>Average min temp: ${weather.min_temp}&degF. Max temp: ${weather.max_temp}&degF</li>`;
     contents += `<li>Chance of rain is ${weather.chanceofrain}%</li>`;
     contents += `<li>It will be ${weather.cloud_cover} today.</li>`;
+    return contents;
   }
+  const cities = details.city;
+  if(cities.length != weather.length) {
+    throw new Error(`Number of cities is NOT equal to count of weather details. Do not know how to proceed!`);
+  }
+  for(let i = 0; i < cities.length; i++) {
+    const cityWeather = weather[i];
+    contents += `<li>Average min temp at ${cities[i]}: ${cityWeather.min_temp}&degF. Max temp: ${cityWeather.max_temp}&degF</li>`;
+    contents += `<li>Chance of rain is ${cityWeather.chanceofrain}%</li>`;
+    contents += `<li>It will be ${cityWeather.cloud_cover} today.</li>`;
+  }
+  return contents;
+}
+
+function getThisDaysItin(date) {
+  const thisDateStr = CreateItinerary.formatDate(date);
+  logger.debug(`getThisDaysItin: getting itinerary for day ${thisDateStr}`);
+  const details = this.itinDetails[thisDateStr];
+  let contents = "";
+  let departureCity;
+  if(details.city) {
+    if(Array.isArray(details.city)) {
+      let cityStr = "";
+      details.city.forEach((city,index) => {
+        cityStr += capitalize1stChar(city);
+        if(index != (details.city.length - 1)) cityStr += "/";
+      });
+      contents = `<li><b>${cityStr}</b></li>`;  
+      departureCity = details.city[0];
+    }
+    else {
+      contents = `<li><b>${capitalize1stChar(details.city)}</b></li>`;
+      departureCity = details.city;
+    }
+  }
+  contents += setWeatherContents.call(this, details);
   if(details.startTime) {
-    contents += `<li>Leaving ${capitalize1stChar(details.city)} at ${details.startTime}.</li>`;
+    contents += `<li>Leaving ${capitalize1stChar(departureCity)} at ${details.startTime}.</li>`;
   }
   // returning from trip
   if(details.departureTime) {
-    contents += `<li>Leaving ${capitalize1stChar(details.city)} at ${details.departureTime}.</li>`;
+    contents += `<li>Leaving ${capitalize1stChar(departureCity)} at ${details.departureTime}.</li>`;
   }
-  if(details.arrival) {
-    contents += `<li>Arrive in ${capitalize1stChar(details.city)} at ${details.arrival}.</li>`;
+  if(details.arrivalTime) {
+    contents += `<li>Reach ${capitalize1stChar(details.city)} at ${details.arrivalTime}.</li>`;
   }
   if(details.visit) {
     const visiting = details.visit;

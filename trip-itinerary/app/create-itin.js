@@ -102,7 +102,6 @@ function setDepartureCityDetails() {
   return results.promise;
 }
 
-
 function setItinForPortOfEntry() {
   if(!this.tripData.portOfEntry) {
     throw new Error(`setItinForPortOfEntry: port of entry not defined in trip`);
@@ -153,7 +152,6 @@ function setItinForPortOfDeparture() {
   let result = null;
   for(let i = 0; i < remainingDays; i++) {
     result = createCommonItinForEachDay.call(this, city, this.tripData.country);
-    logger.debug(`result is ${JSON.stringify(result)}`);
     promises.push(result.promise);
   }
   // TODO: Verify that the departure date matches nextDay!
@@ -215,6 +213,13 @@ function createCommonItinForEachDay(cityList, country) {
   }
   this.itin[nextDayStr] = {};
   this.itin[nextDayStr].city = cityList;
+  if(this.tripData.arrivalDate && this.tripData.arrivalTime) {
+    const arrivalDate = formatDate(new Date(this.tripData.arrivalDate));
+    if(arrivalDate === nextDayStr) {
+      logger.debug(`createCommonItinForEachDay: setting arrival time ${this.tripData.arrivalTime} for day ${nextDayStr}`);
+      this.itin[nextDayStr].arrivalTime = this.tripData.arrivalTime;
+    }
+  }
   const nextDayCopy = new Date(this.nextDay); // copy the state of nextDay into another variable so we can change this.nextDay without having to worry about any side effects.
   const promiseList = setWeatherDetails.call(this, nextDayCopy, country, cityList);
   this.nextDay.setDate(this.nextDay.getDate() + 1); // advance to the next day only if all the itinerary details for today were set correctly.
