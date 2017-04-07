@@ -14,7 +14,7 @@ logger.stream = {
   }
 }
 
-// Use this if you want to send a different conf file. See ~/test-logger.js for example
+// Use this if you want to send a different conf file. See ~/test-log.js for example
 module.exports.setTestConfig = function() {
   logger = (new Log("test-logger.conf")).init();
 }

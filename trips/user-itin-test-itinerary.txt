@@ -1,0 +1,1 @@
+{"10/11/2017":{"city":["seattle","chennai"],"weather":[{"min_temp":"37","max_temp":"47","chanceofrain":"51","cloud_cover":"mostly cloudy"},{"min_temp":"72","max_temp":"87","chanceofrain":"37","cloud_cover":"mostly sunny"}]},"10/12/2017":{"city":"chennai","weather":{"min_temp":"72","max_temp":"87","chanceofrain":"37","cloud_cover":"mostly sunny"}}}

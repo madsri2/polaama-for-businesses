@@ -60,6 +60,7 @@ CreateItinerary.prototype.create = function() {
   promiseList.push(setItinForPortOfEntry.call(this));
   promiseList.push(setRemainingItinerary.call(this));
   promiseList.push(setItinForPortOfDeparture.call(this));
+  persist.call(this); // persist to store any information that was synchronously written.
   return promiseList;
 }
 
@@ -94,7 +95,7 @@ CreateItinerary.prototype.getItinerary = function() {
 }
 
 function setDepartureCityDetails() {
-  const results = createCommonItinForEachDay.call(this, this.departureCity, this.departureCountry);
+  const results = createCommonItinForEachDay.call(this, [this.departureCity, this.tripData.portOfEntry], this.departureCountry);
   if(this.tripData.startTime) {
     this.itin[results.itinDay].startTime = this.tripData.startTime;
   }
@@ -108,12 +109,12 @@ function setItinForPortOfEntry() {
   }
   const promises = [];
   const city = this.tripData.portOfEntry;
-  promises.push((createCommonItinForEachDay.call(this, city, this.tripData.country)).promise);
+  // promises.push((createCommonItinForEachDay.call(this, city, this.tripData.country)).promise);
   if(!this.tripData.cityItin[city]) {
     throw new Error(`setItinForPortOfEntry: Don't have information about number of days of stay in port of entry city ${city}`);
   }
   // divide the number of days in portOfEntry equally between beginning of trip and end of trip
-  const numDays = parseInt(this.tripData.cityItin[city]) / 2 - 1;
+  const numDays = Math.ceil(parseInt(this.tripData.cityItin[city]) / 2) - 1; // substract one because we have already added port of itinerary to the first day along with departure city in setDepartureCityDetails
   for(let i = 0; i < numDays; i++) {
     promises.push((createCommonItinForEachDay.call(this, city, this.tripData.country)).promise);
   }
@@ -146,7 +147,7 @@ function setItinForPortOfDeparture() {
     throw new Error(`setItinForPortOfDeparture: port of entry ${city} does not have any details in trips's itinerary`);
   }
   // divide the number of days in portOfEntry equally between beginning of trip and end of trip
-  const numDays = parseInt(this.tripData.cityItin[city]) / 2;
+  const numDays = Math.ceil(parseInt(this.tripData.cityItin[city]) / 2);
   const remainingDays = this.tripData.cityItin[city] - numDays;
   const promises = [];
   let result = null;
@@ -164,25 +165,40 @@ function setItinForPortOfDeparture() {
 }
 
 // TODO: As we get closer to the travel day, get realtime forecast, rather than historical forecast.
-function setWeatherDetails(itinDate, country, city) {
+function setWeatherDetails(itinDate, country, cityList) {
   const itin = this.itin[formatDate(itinDate)];
   const self = this;
-  return new Promise(function(fulfil, reject) {
-    const wip = new WeatherInfoProvider(country, city, itinDate);
-    wip.getWeather(function(c, weatherDetails) {
-      if(!weatherDetails) {
-        logger.error(`callGetWeather: WeatherInfoProvider.getWeather returned null for weather details`);
-        return reject(new Error(`Could not get weather for city ${city}`));
-      }
-      itin.weather = {};
-      itin.weather.min_temp = weatherDetails.min_temp;
-      itin.weather.max_temp = weatherDetails.max_temp;
-      itin.weather.chanceofrain = weatherDetails.chanceofrain;
-      itin.weather.cloud_cover = weatherDetails.cloud_cover;
-      persist.call(self); // we call persist here so that the itinerary gets updated incrementally. That way, even if there is no information for one city, we will have part of the itinerary.
-      return fulfil("success");
-    });
+  let cities = []; // convert into an array because cityList could be a single city or a group of cities (see setDepartureCityDetails).
+  cities = cities.concat(cityList);
+  const promiseList = [];
+  cities.forEach(city => {
+    promiseList.push(new Promise(function(fulfil, reject) {
+      const wip = new WeatherInfoProvider(country, city, itinDate);
+      wip.getWeather(function(c, weatherDetails) {
+        if(!weatherDetails) {
+          logger.error(`callGetWeather: WeatherInfoProvider.getWeather returned null for weather details`);
+          return reject(new Error(`Could not get weather for city ${city}`));
+        }
+        const weather = {};
+        weather.min_temp = weatherDetails.min_temp;
+        weather.max_temp = weatherDetails.max_temp;
+        weather.chanceofrain = weatherDetails.chanceofrain;
+        weather.cloud_cover = weatherDetails.cloud_cover;
+        if(cities.length > 1) { // multiple cities
+          if(!itin.weather) {
+            itin.weather = [];
+          }
+          itin.weather.push(weather);
+        }
+        else {
+          itin.weather = weather;
+        }
+        persist.call(self); // we call persist here so that the itinerary gets updated incrementally. That way, even if there is no information for one city, we will have part of the itinerary.
+        return fulfil("success");
+      });
+    }));
   });
+  return promiseList;
 }
 
 /*
@@ -190,7 +206,7 @@ function setWeatherDetails(itinDate, country, city) {
  Return a promise (among other things) of setting weather details 
  As a side-effect of calling this function, this.nextDay is advanced to the next day.
 */
-function createCommonItinForEachDay(city, country) {
+function createCommonItinForEachDay(cityList, country) {
   const nextDayStr = formatDate(this.nextDay);
   logger.debug(`createSingleDayItinerary: Setting itin value for day ${nextDayStr}`);
   if(this.itin[nextDayStr]) {
@@ -198,13 +214,13 @@ function createCommonItinForEachDay(city, country) {
     throw new Error(`createSingleDayCommonItinerary: Possible BUG! Itinerary for ${nextDayStr} should not be defined, but it is. Value is ${JSON.stringify(this.itin[nextDayStr])}`);
   }
   this.itin[nextDayStr] = {};
-  this.itin[nextDayStr].city = city;
+  this.itin[nextDayStr].city = cityList;
   const nextDayCopy = new Date(this.nextDay); // copy the state of nextDay into another variable so we can change this.nextDay without having to worry about any side effects.
-  const promise = setWeatherDetails.call(this, nextDayCopy, country, city);
+  const promiseList = setWeatherDetails.call(this, nextDayCopy, country, cityList);
   this.nextDay.setDate(this.nextDay.getDate() + 1); // advance to the next day only if all the itinerary details for today were set correctly.
   return {
     'itinDay': nextDayStr,
-    'promise': promise
+    'promise': promiseList
   };
 }
 

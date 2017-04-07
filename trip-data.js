@@ -146,7 +146,8 @@ TripData.prototype.addTripDetailsAndPersist = function(tripDetails) {
   }
   const sdIso = new Date(this.data.startDate).toISOString();
   this.data.startDate = moment(sdIso).format("YYYY-MM-DD");
-  this.data.returnDate = moment(sdIso).add(this.data.duration,'days').format("YYYY-MM-DD");
+  // duration includes the start date, so subtract 1
+  this.data.returnDate = moment(sdIso).add(this.data.duration - 1,'days').format("YYYY-MM-DD");
   // TODO: Get this information from weather API or the file persisted.
   this.data.weather = "sunny";
   createPackList.call(this);
