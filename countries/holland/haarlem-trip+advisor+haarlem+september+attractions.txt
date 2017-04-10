@@ -1,0 +1,1136 @@
+{
+ "kind": "customsearch#search",
+ "url": {
+  "type": "application/json",
+  "template": "https://www.googleapis.com/customsearch/v1?q={searchTerms}&num={count?}&start={startIndex?}&lr={language?}&safe={safe?}&cx={cx?}&cref={cref?}&sort={sort?}&filter={filter?}&gl={gl?}&cr={cr?}&googlehost={googleHost?}&c2coff={disableCnTwTranslation?}&hq={hq?}&hl={hl?}&siteSearch={siteSearch?}&siteSearchFilter={siteSearchFilter?}&exactTerms={exactTerms?}&excludeTerms={excludeTerms?}&linkSite={linkSite?}&orTerms={orTerms?}&relatedSite={relatedSite?}&dateRestrict={dateRestrict?}&lowRange={lowRange?}&highRange={highRange?}&searchType={searchType}&fileType={fileType?}&rights={rights?}&imgSize={imgSize?}&imgType={imgType?}&imgColorType={imgColorType?}&imgDominantColor={imgDominantColor?}&alt=json"
+ },
+ "queries": {
+  "request": [
+   {
+    "title": "Google Custom Search - trip advisor haarlem september attractions",
+    "totalResults": "21200",
+    "searchTerms": "trip advisor haarlem september attractions",
+    "count": 10,
+    "startIndex": 1,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "haarlem"
+   }
+  ],
+  "nextPage": [
+   {
+    "title": "Google Custom Search - trip advisor haarlem september attractions",
+    "totalResults": "21200",
+    "searchTerms": "trip advisor haarlem september attractions",
+    "count": 10,
+    "startIndex": 11,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "haarlem"
+   }
+  ]
+ },
+ "context": {
+  "title": "Polaama"
+ },
+ "searchInformation": {
+  "searchTime": 0.701842,
+  "formattedSearchTime": "0.70",
+  "totalResults": "21200",
+  "formattedTotalResults": "21,200"
+ },
+ "items": [
+  {
+   "kind": "customsearch#result",
+   "title": "The Top 10 Things to Do in Haarlem 2017 - TripAdvisor - Haarlem ...",
+   "htmlTitle": "The Top 10 Things to Do in \u003cb\u003eHaarlem\u003c/b\u003e 2017 - \u003cb\u003eTripAdvisor\u003c/b\u003e - \u003cb\u003eHaarlem\u003c/b\u003e ...",
+   "link": "https://www.tripadvisor.com/Attractions-g188593-Activities-Haarlem_North_Holland_Province.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Book your tickets online for the top things to do in Haarlem, The Netherlands on \nTripAdvisor: See 4908 traveler reviews and photos of Haarlem tourist attractions.",
+   "htmlSnippet": "Book your tickets online for the top things to do in \u003cb\u003eHaarlem\u003c/b\u003e, The Netherlands on \u003cbr\u003e\n\u003cb\u003eTripAdvisor\u003c/b\u003e: See 4908 traveler reviews and photos of \u003cb\u003eHaarlem\u003c/b\u003e tourist \u003cb\u003eattractions\u003c/b\u003e.",
+   "cacheId": "oqovc6uNQCwJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attractions-g188593-Activities-Haarlem_North_ Holland_Province.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttractions\u003c/b\u003e-g188593-\u003cb\u003eActivities\u003c/b\u003e-\u003cb\u003eHaarlem\u003c/b\u003e_North_ Holland_Province.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "275",
+      "height": "183",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTYDOL4ZzrRl-PP8y9ehVvd7Rpb2RIsqybQOdreCd9ca5kWUzVU5T4UNOfM"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "The Netherlands",
+      "title": "The Netherlands"
+     },
+     {
+      "url": "North Holland Province",
+      "title": "North Holland Province"
+     },
+     {
+      "url": "Haarlem",
+      "title": "Haarlem"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "The Top 10 Things to Do in Haarlem 2017 - TripAdvisor - Haarlem, The Netherlands Attractions - Find What to Do Today, This Weekend, or in April",
+      "og:description": "Book your tickets online for the top things to do in Haarlem, The Netherlands on TripAdvisor: See 4,908 traveler reviews and photos of Haarlem tourist attractions. Find what to do today, this weekend, or in April. We have reviews of the best places to see in Haarlem. Visit top-rated & must-see attractions.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/01/55/66/ff/canalfest-on-friday.jpg",
+      "og:image:width": "550",
+      "og:image:height": "366",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attractions-g188593-Activities-m33762-Haarlem_North_Holland_Province.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attractions-g188593-Activities-m33762-Haarlem_North_Holland_Province.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attractions-g188593-Activities-m33762-Haarlem_North_Holland_Province.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/01/55/66/ff/canalfest-on-friday.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Haarlem 2017: Best of Haarlem, The Netherlands Tourism ...",
+   "htmlTitle": "\u003cb\u003eHaarlem\u003c/b\u003e 2017: Best of \u003cb\u003eHaarlem\u003c/b\u003e, The Netherlands Tourism ...",
+   "link": "https://www.tripadvisor.com/Tourism-g188593-Haarlem_North_Holland_Province-Vacations.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Haarlem Tourism: TripAdvisor has 22620 reviews of Haarlem Hotels, Attractions, \nand Restaurants making it your best Haarlem resource.",
+   "htmlSnippet": "\u003cb\u003eHaarlem\u003c/b\u003e Tourism: \u003cb\u003eTripAdvisor\u003c/b\u003e has 22620 reviews of \u003cb\u003eHaarlem\u003c/b\u003e Hotels, \u003cb\u003eAttractions\u003c/b\u003e, \u003cbr\u003e\nand Restaurants making it your best \u003cb\u003eHaarlem\u003c/b\u003e resource.",
+   "cacheId": "n5GDyo0-hWMJ",
+   "formattedUrl": "https://www.tripadvisor.com/Tourism-g188593-Haarlem_North_Holland_ Province-Vacations.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/Tourism-g188593-\u003cb\u003eHaarlem\u003c/b\u003e_North_Holland_ Province-Vacations.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "275",
+      "height": "183",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTYDOL4ZzrRl-PP8y9ehVvd7Rpb2RIsqybQOdreCd9ca5kWUzVU5T4UNOfM"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "The Netherlands",
+      "title": "The Netherlands"
+     },
+     {
+      "url": "North Holland Province",
+      "title": "North Holland Province"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Haarlem 2017: Best of Haarlem, The Netherlands Tourism - TripAdvisor",
+      "og:description": "Haarlem Tourism: TripAdvisor has 22,620 reviews of Haarlem Hotels, Attractions, and Restaurants making it your best Haarlem resource.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/01/55/66/ff/canalfest-on-friday.jpg",
+      "og:image:width": "550",
+      "og:image:height": "366",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Tourism-g188593-m33762-Haarlem_North_Holland_Province-Vacations.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Tourism-g188593-m33762-Haarlem_North_Holland_Province-Vacations.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Tourism-g188593-m33762-Haarlem_North_Holland_Province-Vacations.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/01/55/66/ff/canalfest-on-friday.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Museum Haarlem (The Netherlands): Top Tips Before You Go ...",
+   "htmlTitle": "Museum \u003cb\u003eHaarlem\u003c/b\u003e (The Netherlands): Top Tips Before You Go ...",
+   "link": "https://www.tripadvisor.com/Attraction_Review-g188593-d2236281-Reviews-Museum_Haarlem-Haarlem_North_Holland_Province.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Museum Haarlem, Haarlem: See 74 reviews, articles, and 50 photos of Museum \nHaarlem, ranked No.10 on TripAdvisor among 63 attractions in Haarlem. ... \nReviewed September 29, 2015 via mobile. We've lived in the area for the past 15\n ...",
+   "htmlSnippet": "Museum \u003cb\u003eHaarlem\u003c/b\u003e, \u003cb\u003eHaarlem\u003c/b\u003e: See 74 reviews, articles, and 50 photos of Museum \u003cbr\u003e\n\u003cb\u003eHaarlem\u003c/b\u003e, ranked No.10 on \u003cb\u003eTripAdvisor\u003c/b\u003e among 63 \u003cb\u003eattractions\u003c/b\u003e in \u003cb\u003eHaarlem\u003c/b\u003e. ... \u003cbr\u003e\nReviewed \u003cb\u003eSeptember\u003c/b\u003e 29, 2015 via mobile. We&#39;ve lived in the area for the past 15\u003cbr\u003e\n&nbsp;...",
+   "cacheId": "0HY3ldoPrzQJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attraction_Review-g188593-d2236281-Reviews -Museum_Haarlem-Haarlem_North_Holland_Province.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttraction\u003c/b\u003e_Review-g188593-d2236281-Reviews -Museum_\u003cb\u003eHaarlem\u003c/b\u003e-\u003cb\u003eHaarlem\u003c/b\u003e_North_Holland_Province.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "259",
+      "height": "194",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQcOzBMvvSHoJzGs8RWTsVEMfdED09wp6GXATBdOBMg2F4bUd48fKOmU0uX"
+     }
+    ],
+    "LocalBusiness": [
+     {
+      "image": "https://media-cdn.tripadvisor.com/media/photo-s/05/5a/12/4e/historisch-museum-haarlem.jpg",
+      "name": "Museum Haarlem"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "The Netherlands",
+      "title": "The Netherlands"
+     },
+     {
+      "url": "North Holland Province",
+      "title": "North Holland Province"
+     },
+     {
+      "url": "Haarlem",
+      "title": "Haarlem"
+     },
+     {
+      "url": "Things to Do in Haarlem",
+      "title": "Things to Do in Haarlem"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "4.0",
+      "ratingcount": "74",
+      "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/05/5a/12/4e/historisch-museum-haarlem.jpg"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "74"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Museum Haarlem (The Netherlands): Top Tips Before You Go - TripAdvisor",
+      "og:description": "Museum Haarlem, Haarlem: See 74 reviews, articles, and 50 photos of Museum Haarlem, ranked No.10 on TripAdvisor among 63 attractions in Haarlem.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/05/5a/12/4e/historisch-museum-haarlem.jpg",
+      "og:image:width": "550",
+      "og:image:height": "412",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attraction_Review-g188593-d2236281-Reviews-m33762-Museum_Haarlem-Haarlem_North_Holland_Province.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attraction_Review-g188593-d2236281-Reviews-m33762-Museum_Haarlem-Haarlem_North_Holland_Province.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attraction_Review-g188593-d2236281-Reviews-m33762-Museum_Haarlem-Haarlem_North_Holland_Province.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/05/5a/12/4e/historisch-museum-haarlem.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Archeologisch Museum Haarlem (The Netherlands): Top Tips ...",
+   "htmlTitle": "Archeologisch Museum \u003cb\u003eHaarlem\u003c/b\u003e (The Netherlands): Top Tips ...",
+   "link": "https://www.tripadvisor.com/Attraction_Review-g188593-d7395420-Reviews-Archeologisch_Museum_Haarlem-Haarlem_North_Holland_Province.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Archeologisch Museum Haarlem, Haarlem: See 36 reviews, articles, and 8 \nphotos of Archeologisch Museum Haarlem, ranked No.15 on TripAdvisor among \n63 attractions in Haarlem. ... Reviewed September 16, 2015. Small but packed \nwith ...",
+   "htmlSnippet": "Archeologisch Museum \u003cb\u003eHaarlem\u003c/b\u003e, \u003cb\u003eHaarlem\u003c/b\u003e: See 36 reviews, articles, and 8 \u003cbr\u003e\nphotos of Archeologisch Museum \u003cb\u003eHaarlem\u003c/b\u003e, ranked No.15 on \u003cb\u003eTripAdvisor\u003c/b\u003e among \u003cbr\u003e\n63 \u003cb\u003eattractions\u003c/b\u003e in \u003cb\u003eHaarlem\u003c/b\u003e. ... Reviewed \u003cb\u003eSeptember\u003c/b\u003e 16, 2015. Small but packed \u003cbr\u003e\nwith&nbsp;...",
+   "cacheId": "rPvMk6o80doJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attraction_Review-g188593-d7395420-Reviews -Archeologisch_Museum_Haarlem-Haarlem_North_Holland_Provi...",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttraction\u003c/b\u003e_Review-g188593-d7395420-Reviews -Archeologisch_Museum_\u003cb\u003eHaarlem\u003c/b\u003e-\u003cb\u003eHaarlem\u003c/b\u003e_North_Holland_Provi...",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "275",
+      "height": "183",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRsSETrxbjw7WmhIlCsWQ5Phe8Zse9T6XWQdIIQPvph_X3QKjGBuZZAR-Vt"
+     }
+    ],
+    "LocalBusiness": [
+     {
+      "image": "https://media-cdn.tripadvisor.com/media/photo-s/07/33/92/03/archeologisch-museum.jpg",
+      "name": "Archeologisch Museum Haarlem"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "The Netherlands",
+      "title": "The Netherlands"
+     },
+     {
+      "url": "North Holland Province",
+      "title": "North Holland Province"
+     },
+     {
+      "url": "Haarlem",
+      "title": "Haarlem"
+     },
+     {
+      "url": "Things to Do in Haarlem",
+      "title": "Things to Do in Haarlem"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "4.0",
+      "ratingcount": "36",
+      "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/07/33/92/03/archeologisch-museum.jpg"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "36"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Archeologisch Museum Haarlem (The Netherlands): Top Tips Before You Go - TripAdvisor",
+      "og:description": "Archeologisch Museum Haarlem, Haarlem: See 36 reviews, articles, and 8 photos of Archeologisch Museum Haarlem, ranked No.15 on TripAdvisor among 63 attractions in Haarlem.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/07/33/92/03/archeologisch-museum.jpg",
+      "og:image:width": "550",
+      "og:image:height": "366",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attraction_Review-g188593-d7395420-Reviews-m33762-Archeologisch_Museum_Haarlem-Haarlem_North_Holland_Province.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attraction_Review-g188593-d7395420-Reviews-m33762-Archeologisch_Museum_Haarlem-Haarlem_North_Holland_Province.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attraction_Review-g188593-d7395420-Reviews-m33762-Archeologisch_Museum_Haarlem-Haarlem_North_Holland_Province.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/07/33/92/03/archeologisch-museum.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Stayokay Haarlem - UPDATED 2017 Hostel Reviews & Price ...",
+   "htmlTitle": "Stayokay \u003cb\u003eHaarlem\u003c/b\u003e - UPDATED 2017 Hostel Reviews &amp; Price ...",
+   "link": "https://www.tripadvisor.com/Hotel_Review-g188593-d626737-Reviews-Stayokay_Haarlem-Haarlem_North_Holland_Province.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Book Stayokay Haarlem, Haarlem on TripAdvisor: See 46 traveler reviews, 49 \ncandid photos, and great deals for Stayokay Haarlem, ranked #2 of 9 specialty \nlodging in Haarlem and rated 4 of 5 at TripAdvisor. ... Reviewed September 21, \n2016. This is a great ..... Can tickets for local attractions be purchased at the front \ndesk?",
+   "htmlSnippet": "Book Stayokay \u003cb\u003eHaarlem\u003c/b\u003e, \u003cb\u003eHaarlem\u003c/b\u003e on \u003cb\u003eTripAdvisor\u003c/b\u003e: See 46 traveler reviews, 49 \u003cbr\u003e\ncandid photos, and great deals for Stayokay \u003cb\u003eHaarlem\u003c/b\u003e, ranked #2 of 9 specialty \u003cbr\u003e\nlodging in \u003cb\u003eHaarlem\u003c/b\u003e and rated 4 of 5 at \u003cb\u003eTripAdvisor\u003c/b\u003e. ... Reviewed \u003cb\u003eSeptember\u003c/b\u003e 21, \u003cbr\u003e\n2016. This is a great ..... Can tickets for local \u003cb\u003eattractions\u003c/b\u003e be purchased at the front \u003cbr\u003e\ndesk?",
+   "cacheId": "Uh7rBUzFtQ4J",
+   "formattedUrl": "https://www.tripadvisor.com/Hotel_Review-g188593-d626737-Reviews- Stayokay_Haarlem-Haarlem_North_Holland_Province.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/Hotel_Review-g188593-d626737-Reviews- Stayokay_\u003cb\u003eHaarlem\u003c/b\u003e-\u003cb\u003eHaarlem\u003c/b\u003e_North_Holland_Province.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "259",
+      "height": "194",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTOXB_lCnDlPZDqG6WvcCtxx-OeMwC2ksZVTG_J_A7Nqi0g8SVj2mTptrgs"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "The Netherlands",
+      "title": "The Netherlands"
+     },
+     {
+      "url": "North Holland Province",
+      "title": "North Holland Province"
+     },
+     {
+      "url": "Haarlem",
+      "title": "Haarlem"
+     },
+     {
+      "url": "Haarlem Specialty Lodging",
+      "title": "Haarlem Specialty Lodging"
+     },
+     {
+      "url": "Hostels in Haarlem",
+      "title": "Hostels in Haarlem"
+     }
+    ],
+    "LodgingBusiness": [
+     {
+      "image": "https://media-cdn.tripadvisor.com/media/photo-s/05/21/dc/5f/stayokay-haarlem.jpg",
+      "name": "Stayokay Haarlem",
+      "priceRange": "$33 - $114 (Based on Average Rates for a Standard Room)"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "4.0",
+      "ratingcount": "79",
+      "pricerange": "$33 - $114 (Based on Average Rates for a Standard Room)",
+      "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/05/21/dc/5f/stayokay-haarlem.jpg"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "pricerange": "$33 - $114 (Based on Average Rates for a Standard Room)",
+      "count": "79"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Stayokay Haarlem - UPDATED 2017 Hostel Reviews & Price Comparison (The Netherlands) - TripAdvisor",
+      "og:description": "Book Stayokay Haarlem, Haarlem on TripAdvisor: See 46 traveler reviews, 49 candid photos, and great deals for Stayokay Haarlem, ranked #2 of 9 specialty lodging in Haarlem and rated 4 of 5 at TripAdvisor.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/05/21/dc/5f/stayokay-haarlem.jpg",
+      "og:image:width": "550",
+      "og:image:height": "412",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Hotel_Review-g188593-d626737-Reviews-m33762-Stayokay_Haarlem-Haarlem_North_Holland_Province.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Hotel_Review-g188593-d626737-Reviews-m33762-Stayokay_Haarlem-Haarlem_North_Holland_Province.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Hotel_Review-g188593-d626737-Reviews-m33762-Stayokay_Haarlem-Haarlem_North_Holland_Province.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/05/21/dc/5f/stayokay-haarlem.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Coffeeshops - Haarlem Forum - TripAdvisor",
+   "htmlTitle": "Coffeeshops - \u003cb\u003eHaarlem\u003c/b\u003e Forum - \u003cb\u003eTripAdvisor\u003c/b\u003e",
+   "link": "https://www.tripadvisor.com/ShowTopic-g188593-i1826-k9839551-Coffeeshops-Haarlem_North_Holland_Province.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Sep 04, 2016, 10:29 PM. Could I get some recommendations of good \nCoffeeshops in Haarlem? Interested in places that can handle a large-ish group (\n7 people) ...",
+   "htmlSnippet": "\u003cb\u003eSep\u003c/b\u003e 04, 2016, 10:29 PM. Could I get some recommendations of good \u003cbr\u003e\nCoffeeshops in \u003cb\u003eHaarlem\u003c/b\u003e? Interested in \u003cb\u003eplaces\u003c/b\u003e that can handle a large-ish group (\u003cbr\u003e\n7 people)&nbsp;...",
+   "cacheId": "BhZ7FWWBCNEJ",
+   "formattedUrl": "https://www.tripadvisor.com/ShowTopic-g188593-i1826-k9839551- Coffeeshops-Haarlem_North_Holland_Province.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/ShowTopic-g188593-i1826-k9839551- Coffeeshops-\u003cb\u003eHaarlem\u003c/b\u003e_North_Holland_Province.html",
+   "pagemap": {
+    "breadcrumb": [
+     {
+      "url": "Haarlem Travel Forum",
+      "title": "Haarlem Travel Forum"
+     },
+     {
+      "url": "Haarlem",
+      "title": "Haarlem"
+     },
+     {
+      "url": "North Holland Province",
+      "title": "North Holland Province"
+     },
+     {
+      "url": "The Netherlands",
+      "title": "The Netherlands"
+     },
+     {
+      "url": "Europe",
+      "title": "Europe"
+     }
+    ],
+    "metatags": [
+     {
+      "og:image": "//static.tacdn.com/img2/postimg.jpg",
+      "handheldfriendly": "true",
+      "viewport": "initial-scale=1, maximum-scale=1, user-scalable=no",
+      "format-detection": "telephone=no",
+      "theme-color": "#589442"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "//static.tacdn.com/img2/postimg.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Stempels Hotel - UPDATED 2017 Reviews (Haarlem, The ...",
+   "htmlTitle": "Stempels Hotel - UPDATED 2017 Reviews (\u003cb\u003eHaarlem\u003c/b\u003e, The ...",
+   "link": "https://www.tripadvisor.com/Hotel_Review-g188593-d668686-Reviews-Stempels_Hotel-Haarlem_North_Holland_Province.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Stempels Hotel, Haarlem: See 83 traveler reviews, 35 candid photos, and great \ndeals for Stempels Hotel, ranked #5 of 12 hotels in Haarlem and rated 4 of 5 at \nTripAdvisor. ... stay when visiting Haarlem. You can walk it from the station and \nthe hotel is very central for the sights and shopping. ... Reviewed September 17, \n2016.",
+   "htmlSnippet": "Stempels Hotel, \u003cb\u003eHaarlem\u003c/b\u003e: See 83 traveler reviews, 35 candid photos, and great \u003cbr\u003e\ndeals for Stempels Hotel, ranked #5 of 12 hotels in \u003cb\u003eHaarlem\u003c/b\u003e and rated 4 of 5 at \u003cbr\u003e\n\u003cb\u003eTripAdvisor\u003c/b\u003e. ... stay when visiting \u003cb\u003eHaarlem\u003c/b\u003e. You can walk it from the station and \u003cbr\u003e\nthe hotel is very central for the \u003cb\u003esights\u003c/b\u003e and shopping. ... Reviewed \u003cb\u003eSeptember\u003c/b\u003e 17, \u003cbr\u003e\n2016.",
+   "cacheId": "uUJ0XE2Km7wJ",
+   "formattedUrl": "https://www.tripadvisor.com/Hotel_Review-g188593-d668686-Reviews- Stempels_Hotel-Haarlem_North_Holland_Province.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/Hotel_Review-g188593-d668686-Reviews- Stempels_Hotel-\u003cb\u003eHaarlem\u003c/b\u003e_North_Holland_Province.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "276",
+      "height": "183",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTyaLLOr3QsuCoqTPK5WEa3rjP1K-3CKF6TEWEsr4P9gLGNe1qQfZFgNDSA"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "The Netherlands",
+      "title": "The Netherlands"
+     },
+     {
+      "url": "North Holland Province",
+      "title": "North Holland Province"
+     },
+     {
+      "url": "Haarlem",
+      "title": "Haarlem"
+     },
+     {
+      "url": "Haarlem Hotels",
+      "title": "Haarlem Hotels"
+     }
+    ],
+    "LodgingBusiness": [
+     {
+      "image": "https://media-cdn.tripadvisor.com/media/photo-s/03/39/1c/f3/stempels.jpg",
+      "name": "Stempels Hotel",
+      "priceRange": "$95 - $220 (Based on Average Rates for a Standard Room)"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "4.0",
+      "ratingcount": "120",
+      "pricerange": "$95 - $220 (Based on Average Rates for a Standard Room)",
+      "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/03/39/1c/f3/stempels.jpg"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "pricerange": "$95 - $220 (Based on Average Rates for a Standard Room)",
+      "count": "120"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Stempels Hotel - UPDATED 2017  Reviews  (Haarlem, The Netherlands) - TripAdvisor",
+      "og:description": "Stempels Hotel, Haarlem: See 83 traveler reviews, 35 candid photos, and great deals for Stempels Hotel, ranked #5 of 12 hotels in Haarlem and rated 4 of 5 at TripAdvisor.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/03/39/1c/f3/stempels.jpg",
+      "og:image:width": "550",
+      "og:image:height": "365",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Hotel_Review-g188593-d668686-Reviews-m33762-Stempels_Hotel-Haarlem_North_Holland_Province.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Hotel_Review-g188593-d668686-Reviews-m33762-Stempels_Hotel-Haarlem_North_Holland_Province.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Hotel_Review-g188593-d668686-Reviews-m33762-Stempels_Hotel-Haarlem_North_Holland_Province.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/03/39/1c/f3/stempels.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Haarlem Canal Tours TripAdvisor",
+   "htmlTitle": "\u003cb\u003eHaarlem\u003c/b\u003e Canal Tours \u003cb\u003eTripAdvisor\u003c/b\u003e",
+   "link": "https://www.tripadvisor.com/Attraction_Review-g188593-d1881728-Reviews-Haarlem_Canal_Tours-Haarlem_North_Holland_Province.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Haarlem Canal Tours, Haarlem: See 119 reviews, articles, and 48 photos of \nHaarlem Canal Tours, ranked No.1 on TripAdvisor among 16 attractions in \nHaarlem. ... Reviewed September 18, 2016 via mobile. My family and I went on \nthe tour on ...",
+   "htmlSnippet": "\u003cb\u003eHaarlem\u003c/b\u003e Canal Tours, \u003cb\u003eHaarlem\u003c/b\u003e: See 119 reviews, articles, and 48 photos of \u003cbr\u003e\n\u003cb\u003eHaarlem\u003c/b\u003e Canal Tours, ranked No.1 on \u003cb\u003eTripAdvisor\u003c/b\u003e among 16 \u003cb\u003eattractions\u003c/b\u003e in \u003cbr\u003e\n\u003cb\u003eHaarlem\u003c/b\u003e. ... Reviewed \u003cb\u003eSeptember\u003c/b\u003e 18, 2016 via mobile. My family and I went on \u003cbr\u003e\nthe tour on&nbsp;...",
+   "cacheId": "XaSCc3k6BokJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attraction_Review-g188593-d1881728-Reviews -Haarlem_Canal_Tours-Haarlem_North_Holland_Province.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttraction\u003c/b\u003e_Review-g188593-d1881728-Reviews -\u003cb\u003eHaarlem\u003c/b\u003e_Canal_Tours-\u003cb\u003eHaarlem\u003c/b\u003e_North_Holland_Province.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "275",
+      "height": "183",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTyhLZBvziDP97ORJDqmedFJZTI4lltheGMqJOX4xqT3U9VFf_N_l0AdFE"
+     }
+    ],
+    "LocalBusiness": [
+     {
+      "image": "https://media-cdn.tripadvisor.com/media/photo-s/02/79/4c/a4/haarlem-canal-tours.jpg",
+      "name": "Haarlem Canal Tours"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "The Netherlands",
+      "title": "The Netherlands"
+     },
+     {
+      "url": "North Holland Province",
+      "title": "North Holland Province"
+     },
+     {
+      "url": "Haarlem",
+      "title": "Haarlem"
+     },
+     {
+      "url": "Things to Do in Haarlem",
+      "title": "Things to Do in Haarlem"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "5.0",
+      "ratingcount": "119",
+      "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/02/79/4c/a4/haarlem-canal-tours.jpg"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "119"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Haarlem Canal Tours (The Netherlands): Top Tips Before You Go - TripAdvisor",
+      "og:description": "Haarlem Canal Tours, Haarlem: See 119 reviews, articles, and 48 photos of Haarlem Canal Tours, ranked No.1 on TripAdvisor among 16 attractions in Haarlem.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/02/79/4c/a4/haarlem-canal-tours.jpg",
+      "og:image:width": "550",
+      "og:image:height": "366",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attraction_Review-g188593-d1881728-Reviews-m33762-Haarlem_Canal_Tours-Haarlem_North_Holland_Province.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attraction_Review-g188593-d1881728-Reviews-m33762-Haarlem_Canal_Tours-Haarlem_North_Holland_Province.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attraction_Review-g188593-d1881728-Reviews-m33762-Haarlem_Canal_Tours-Haarlem_North_Holland_Province.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/02/79/4c/a4/haarlem-canal-tours.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "10 Best Haarlem Vacation Rentals, Apartments (with Photos ...",
+   "htmlTitle": "10 Best \u003cb\u003eHaarlem\u003c/b\u003e Vacation Rentals, Apartments (with Photos ...",
+   "link": "https://www.tripadvisor.com/VacationRentals-g188593-Reviews-Haarlem_North_Holland_Province-Vacation_Rentals.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Browse and Book from the Best Vacation Rentals in Haarlem: View ... and great \ndeals on 45 vacation rentals, cabins and villas in Haarlem, The Netherlands. ... \nSecure your vacation rental today, and have the perfect trip. ..... List your vacation \nrental where TripAdvisor travelers can find it. ... Reviewed September 13, 2016.",
+   "htmlSnippet": "Browse and Book from the Best Vacation Rentals in \u003cb\u003eHaarlem\u003c/b\u003e: View ... and great \u003cbr\u003e\ndeals on 45 vacation rentals, cabins and villas in \u003cb\u003eHaarlem\u003c/b\u003e, The Netherlands. ... \u003cbr\u003e\nSecure your vacation rental today, and have the perfect trip. ..... List your vacation \u003cbr\u003e\nrental where \u003cb\u003eTripAdvisor\u003c/b\u003e travelers can find it. ... Reviewed \u003cb\u003eSeptember\u003c/b\u003e 13, 2016.",
+   "cacheId": "VsaokHSc2G8J",
+   "formattedUrl": "https://www.tripadvisor.com/VacationRentals-g188593-Reviews-Haarlem_ North_Holland_Province-Vacation_Rentals.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/VacationRentals-g188593-Reviews-\u003cb\u003eHaarlem\u003c/b\u003e_ North_Holland_Province-Vacation_Rentals.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "275",
+      "height": "183",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTYDOL4ZzrRl-PP8y9ehVvd7Rpb2RIsqybQOdreCd9ca5kWUzVU5T4UNOfM"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "10 Best Haarlem Vacation Rentals, Apartments (with Photos) | TripAdvisor - Book Vacation Rentals in Haarlem, The Netherlands",
+      "og:description": "Browse and Book from the Best Vacation Rentals in Haarlem: View TripAdvisor's 1,456 photos and great deals on 45 vacation rentals, cabins and villas in Haarlem, The Netherlands",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/01/55/66/ff/canalfest-on-friday.jpg",
+      "og:image:width": "550",
+      "og:image:height": "366",
+      "og:type": "company",
+      "og:url": "/VacationRentals-g188593-Reviews-Haarlem_North_Holland_Province-Vacation_Rentals.html",
+      "og:site_name": "TripAdvisor",
+      "fb:admins": "100000982334629",
+      "fb:app_id": "162729813767876",
+      "twitter:title": "10 Best Haarlem Vacation Rentals, Apartments (with Photos) | TripAdvisor - Book Vacation Rentals in Haarlem, The Netherlands",
+      "twitter:card": "summary_large_image",
+      "twitter:image:src": "https://media-cdn.tripadvisor.com/media/photo-s/01/7d/3c/3b/just-off-the-grote-markt.jpg",
+      "twitter:site": "@TripAdvisor",
+      "twitter:description": "Browse and Book from the Best Vacation Rentals in Haarlem: View TripAdvisor's 1,456 photos and great deals on 45 vacation rentals, cabins and villas in Haarlem, The Netherlands",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/VacationRentals-g188593-Reviews-m33762-Haarlem_North_Holland_Province-Vacation_Rentals.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/VacationRentals-g188593-Reviews-m33762-Haarlem_North_Holland_Province-Vacation_Rentals.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/VacationRentals-g188593-Reviews-m33762-Haarlem_North_Holland_Province-Vacation_Rentals.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/01/55/66/ff/canalfest-on-friday.jpg"
+     }
+    ],
+    "listitem": [
+     {
+      "item": "Europe",
+      "name": "Europe"
+     },
+     {
+      "item": "The Netherlands",
+      "name": "The Netherlands"
+     },
+     {
+      "item": "North Holland Province",
+      "name": "North Holland Province"
+     },
+     {
+      "item": "Haarlem Apartments",
+      "name": "Haarlem Apartments"
+     },
+     {
+      "position": "1",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/b9/d6/09.jpg",
+      "url": "Vintage Style desig.130m2Apt. Hist. Centre Haarlem",
+      "name": "Vintage Style desig.130m2Apt. Hist. Centre Haarlem",
+      "description": "Located in the populair \" Vijfhoek\" in historical centre of Haarlem. Spacious light living room with huge Amsterdam Style windows. Upstairs you will find 2 big and 1 small bedroom. The Apartment..."
+     },
+     {
+      "position": "2",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/38/74/3e.jpg",
+      "url": "Beautiful luxurious loft in old town center Haarle...",
+      "name": "Beautiful luxurious loft in old town center Haarle...",
+      "description": "This 2-bedroom apartment is located in an old factory which is completely renovated. In the centre of the apartment is a large cube that contains a luxurious bathroom and a separate toilet...."
+     },
+     {
+      "position": "3",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/73/98/40.jpg",
+      "url": "Bolwerk",
+      "name": "Bolwerk",
+      "description": "Spacious family home in the middle of Haarlem's city centre in a lovely neighborhood. Close to Haarlem Central Station and beach. Perfect for a family! Bedroom 1: double bed 160x200 Bedroom..."
+     },
+     {
+      "position": "4",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/04/85/81/fd.jpg",
+      "url": "Charming House in Historic Haarlem",
+      "name": "Charming House in Historic Haarlem",
+      "description": "Located in the centre of old town Haarlem and within walking distance to everything this lovely city has to offer, this charming and quintessentially Dutch townhouse is fully-equipped with..."
+     },
+     {
+      "position": "5",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/b9/0f/df.jpg",
+      "url": "4 bedroom Family House Haarlem with free parking",
+      "name": "4 bedroom Family House Haarlem with free parking",
+      "description": "Nice, light and spacious family home with garden. Perfect for exploring the city, ideal for a family! Close to Amsterdam and the beach. This great family home (MAX 4 ADULTS!) is the perfect..."
+     },
+     {
+      "position": "6",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/35/05/c6.jpg",
+      "url": "Luxury apartment Bakenessergracht",
+      "name": "Luxury apartment Bakenessergracht",
+      "description": "Located on one of Haarlem's canals, this beautiful canal house 2 minutes' walk from the Main Market! The house is luxuriously furnished and has a big garden (35m2). Luxury bathroom with rain..."
+     },
+     {
+      "position": "7",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/aa/a4/64.jpg",
+      "url": "Shortstay De Witte Heren Haarlem",
+      "name": "Shortstay De Witte Heren Haarlem",
+      "description": "Shortstay \"De Witte Heren is a cosy apartment in the historic city in a street with two monumental coourtyards and a Luthers Church. Just around the corner from all the hustle and bustle in..."
+     },
+     {
+      "position": "8",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/04/0f/11.jpg",
+      "url": "Spaarne Luxury Residence Haarlem",
+      "name": "Spaarne Luxury Residence Haarlem",
+      "description": "Luxury 2 floor apartment beautifully located at the Spaarne. The perfect place to have a romantic city trip or family holiday. Well suited for 4 people. Separate entrance / 100 m2 of private..."
+     },
+     {
+      "position": "9",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/4c/34/51.jpg",
+      "url": "Family Home Center Haarlem Prinsen Bolwerk",
+      "name": "Family Home Center Haarlem Prinsen Bolwerk",
+      "description": "Spacious family home close to Haarlem Central Station. Located in the middle of the centre, perfect for a family. You are very welcome! We only offer accommodation to 1 family (with children..."
+     },
+     {
+      "position": "10",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/02/3b/67.jpg",
+      "url": "Romantic Spaarne Apartment (2p)",
+      "name": "Romantic Spaarne Apartment (2p)",
+      "description": "Lovely and spacious two-bedroom apartment in a lovely neighborhood in Haarlem. Close to the city center. A perfect place for exploring the city. Ideal for a couple (30+). Max 2 adults! The..."
+     },
+     {
+      "position": "11",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/04/85/8a/47.jpg",
+      "url": "Charming House in Historic Haarlem",
+      "name": "Charming House in Historic Haarlem",
+      "description": "Charming House, Central Haarlem. Accommodates up to 4 people. Includes WiFi, Modern Appliances, Laundry & Private Garden Courtyard. Haarlem is 15min train to Amsterdam Centraal & Zandvoort..."
+     },
+     {
+      "position": "12",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/b6/8d/fd.jpg",
+      "url": "Lovely, Quiet & Central Koningstraat Haarlem",
+      "name": "Lovely, Quiet & Central Koningstraat Haarlem",
+      "description": "Cosy one bedroom apartment in the center of beautiful Haarlem! The perfect place to explore the city, ideal for a couple. This apartment is the perfect base for your trip to Haarlem. It' is..."
+     },
+     {
+      "position": "13",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/4c/46/9d.jpg",
+      "url": "Romantice Suite at Central spot",
+      "name": "Romantice Suite at Central spot",
+      "description": "This renovated and lovely apartment has lots to offer. The house makes you feel at home. The location is perfect in Central Haarlem and next to the old train station. This makes it a good starting..."
+     },
+     {
+      "position": "14",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/00/38/5e/cc.jpg",
+      "url": "Romantic Riverside View Apartment",
+      "name": "Romantic Riverside View Apartment",
+      "description": "Spaarne Dream Apartment is situated in a 15th-century building which overlooks the scenic Spaarne River in the centre of Haarlem. It offers design décor and free Wi-Fi. The Grote Markt is..."
+     },
+     {
+      "position": "15",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/19/ea/a8.jpg",
+      "url": "Old Church B&B Haarlem (2 persons)",
+      "name": "Old Church B&B Haarlem (2 persons)",
+      "description": "This beautiful house in the historic center of Haarlem is situated in a prime location. It overlooks the square with the 17th-century New Church. With one bedroom living room, bathroom, kitchen..."
+     },
+     {
+      "position": "16",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/f3/f5/87.jpg",
+      "url": "Iorden Familyhouse (6 persons)",
+      "name": "Iorden Familyhouse (6 persons)",
+      "description": "Beautiful luxury house close to the city centre of Haarlem. Perfect starting points for daytrips to Amsterdam and the beaches of Zandvoort. Well suited for large families up to 6 persons. Very..."
+     },
+     {
+      "position": "17",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/7b/f0/af.jpg",
+      "url": "Central and luxurious apartment",
+      "name": "Central and luxurious apartment",
+      "description": "Haarlem is one of Netherlands finest and most charming cities. Every dutchmen would agree. My renovated apartment is located just minutes away from the vibrant an old central square. A diversity..."
+     },
+     {
+      "position": "18",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/2d/8c/ed.jpg",
+      "url": "Haarlem Hotspot & Huge Balcony",
+      "name": "Haarlem Hotspot & Huge Balcony",
+      "description": "This cosy apartment with a huge sunny balcony is situated in the heart of Haarlem. When you step outside you will be stunned by the beautiful St. Bavo church, right in front of you. Excellent..."
+     },
+     {
+      "position": "19",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/e6/b8/3f.jpg",
+      "url": "Modern Apartment Station Haarlem 2p",
+      "name": "Modern Apartment Station Haarlem 2p",
+      "description": "Modern furnished apartment across train station Haarlem. Great connected by public transport. Perfect for a couple! This lovely apartment is the perfect base for your trip to Haarlem. It is..."
+     },
+     {
+      "position": "20",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/4b/0b/c3.jpg",
+      "url": "High Five apartment Haarlem",
+      "name": "High Five apartment Haarlem",
+      "description": "Double house in the most beautiful street in the nicest area in the center (Pentagon) of Haarlem. Recent retaining authenticity completely renovated house from 1897. Comfortable and attractive...."
+     },
+     {
+      "position": "21",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/df/89/9d.jpg",
+      "url": "Charming scandinavian interior design house",
+      "name": "Charming scandinavian interior design house",
+      "description": "Located in the beautiful old part of the city. House Antonio is completely newly furnished with a style of Modern Scandinavian design furniture. The house in a quiet street is close to the..."
+     },
+     {
+      "position": "22",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/4c/1e/13.jpg",
+      "url": "Spacious Apartment Schermerstraat",
+      "name": "Spacious Apartment Schermerstraat",
+      "description": "Spacious and apartment close to the city centre and the beach, perfect for a couple! bedroom: double bed 180x220 This modern decorated apartment is the perfect base for your trip to Haarlem...."
+     },
+     {
+      "position": "23",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/e7/a0/ec.jpg",
+      "url": "Parklaan Family House",
+      "name": "Parklaan Family House",
+      "description": "The house of 200m2 has a great private garden and is the perfect place for a family. Close the central station of Haarlem and a good starting point to excursions to Amsterdam, Keukenhof or..."
+     },
+     {
+      "position": "24",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/e4/f5/ae.jpg",
+      "url": "Apartment Margaretha historic center 100sqm",
+      "name": "Apartment Margaretha historic center 100sqm",
+      "description": "Stylish decorated and spacious 100 sqm apartment with open plan living, kitchen and toilet on first floor.\u003cBR\u003eOn second floor three bedrooms and bath room including bath, shower and toilet.\u003cBR\u003e\u003cBR\u003e..."
+     },
+     {
+      "position": "25",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/2e/ab/23.jpg",
+      "url": "Amsterdam,Haarlem,beach,dunes! in suburb Heemstede",
+      "name": "Amsterdam,Haarlem,beach,dunes! in suburb Heemstede",
+      "description": "Living in the top 3 village of Holland, Heemstede. Feel at home in a relaxed and very quite family environment in this small town near Amsterdam ( 20 minutes by train or car) and the beach..."
+     },
+     {
+      "position": "26",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/e5/4f/d5.jpg",
+      "url": "Relaxed Slapen & Vergaderen - apartment Droste",
+      "name": "Relaxed Slapen & Vergaderen - apartment Droste",
+      "description": "***our rental price is all inclusive (room, breakfast, taxes and parking)*** Newly built apartment in our home out of 1823 with a private entrance. The luxury and comfort of a hotel for the..."
+     },
+     {
+      "position": "27",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/e5/50/eb.jpg",
+      "url": "Relaxed Slapen & Vergaderen apartment Frans Ha...",
+      "name": "Relaxed Slapen & Vergaderen apartment Frans Ha...",
+      "description": "***our rental price is all inclusive (room, breakfast, taxes and parking)*** Newly built apartment in our home out of 1823 with a private entrance. The luxury and comfort of a hotel for the..."
+     },
+     {
+      "position": "28",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/a2/b3/6a.jpg",
+      "url": "Spaarne Riverside Apartment for 3 in Haarlem",
+      "name": "Spaarne Riverside Apartment for 3 in Haarlem",
+      "description": "3rd floor apartment in Haarlem centre with stunning river view. This beautiful and centrally located apartment has 1 bedroom and a sofa bed for 1 in the living room. Lovely and spacious one-bedroom..."
+     },
+     {
+      "position": "29",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/3f/49/ad.jpg",
+      "url": "Indischestraat Family Home",
+      "name": "Indischestraat Family Home",
+      "description": "Beautiful family home with two bedrooms and a garden in Haarlem, close to the city centre and the beach! Free parking. Perfect for a family of 4! You are very welcome! We only offer accommodation..."
+     },
+     {
+      "position": "30",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/01/81/2b/31.jpg",
+      "url": "River view Turfhuys aan het Spaarne",
+      "name": "River view Turfhuys aan het Spaarne",
+      "description": "Our Turfhuys offers modern comfort in a small, quirky 18th-century building, a former peet warehouse. It' s situated in the centre of Haarlem and overlooks the scenic Spaarne river.Sitting..."
+     },
+     {
+      "position": "31",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/38/7e/2d.jpg",
+      "url": "Family Home with Garden Raadhuisplein with cat.",
+      "name": "Family Home with Garden Raadhuisplein with cat.",
+      "description": "Modern and spacious family home with garden in Haarlem. Close to city center, train station and beach. Perfect for a family and cat lovers. bedroom 1: double bed 180x200 bedroom 2: single bed..."
+     },
+     {
+      "position": "32",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/04/a9/75/5a.jpg",
+      "url": "City Attic Haarlem, 4 pers. with roof terrace",
+      "name": "City Attic Haarlem, 4 pers. with roof terrace",
+      "description": "The apartment has two stylish, luxury suites on different floors (1st and 2nd). The first floor has a spacious living room, with a new and modern kitchen. The kitchen contains a refrigerator,..."
+     },
+     {
+      "position": "33",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/0e/54/f0.jpg",
+      "url": "City center apartment with sunny terrace",
+      "name": "City center apartment with sunny terrace",
+      "description": "This apartment is in the very center of Haarlem on the first floor. It's located on the backside of the building and has a quiet terrace on the same floor. The terrace can be accessed through..."
+     },
+     {
+      "position": "34",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/4f/ae/37.jpg",
+      "url": "Family House near Amsterdam & Beach",
+      "name": "Family House near Amsterdam & Beach",
+      "description": "This family home is the perfect base for your trip to Haarlem. Situated close to the train station and the beach. The home is spacious and comfortable and fits all your needs. It features a..."
+     },
+     {
+      "position": "35",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/38/5e/f5.jpg",
+      "url": "Stunning View in Heart of Center",
+      "name": "Stunning View in Heart of Center",
+      "description": "Characteristic accommodation located on the most praised place of Haarlem. Impressive view of St Bavo and just next to the best restaurants and little bars. The beach & Amsterdam are close..."
+     },
+     {
+      "position": "36",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/0e/82/9b.jpg",
+      "url": "Roosveld Residence close to Haarlem centre!",
+      "name": "Roosveld Residence close to Haarlem centre!",
+      "description": "This beautiful house is close to Haarlem centre. It is situated in a very calm neighborhood in an old characteristic street. Central station is at 5 minutes distance. The perfect starting point..."
+     },
+     {
+      "position": "37",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/ce/ce/64.jpg",
+      "url": "Large Studio in Centre for 4 Persons",
+      "name": "Large Studio in Centre for 4 Persons",
+      "description": "Set in the city centre of Haarlem, only 50 metres away from Grote markt. A very spacious 80 sq. meter studio with a big spacious room and a sunny garden. Perfect for a low-budget place for..."
+     },
+     {
+      "position": "38",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/e1/3d/8c.jpg",
+      "url": "Spaarne Droom Apartment",
+      "name": "Spaarne Droom Apartment",
+      "description": "This apartment is built in an magnificent old city villa on the most beautiful spot of the Spaarne river. The entrance is very classical with ornaments on the ceiling and big wooden staircase..."
+     },
+     {
+      "position": "39",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/27/50/a0.jpg",
+      "url": "Family House Atjehstraat nearby Centre and Beach",
+      "name": "Family House Atjehstraat nearby Centre and Beach",
+      "description": "Family House Atjehstraat nearby Centre and Beach Beautiful family house with four bedrooms in Haarlem, close to the beach and the historic center of haarlem. Free parking. Perfect for a family..."
+     },
+     {
+      "position": "40",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/a7/ad/7c.jpg",
+      "url": "Haarlem House Bed and Breakfast",
+      "name": "Haarlem House Bed and Breakfast",
+      "description": "B&B and the Short Stay Haarlem House is situated in the center of Haarlem. The B&B and Short Stay are very central and one of the most beautiful spots in the city of Haarlem. The street is..."
+     },
+     {
+      "position": "41",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-ha-splice-l/04/8b/1a/69.jpg",
+      "url": "Charming 19th century house... House Rental",
+      "name": "Charming 19th century house... House Rental",
+      "description": "View all property information"
+     },
+     {
+      "position": "42",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/f7/90/90.jpg",
+      "url": "Studio Apartment Haarlem Centre 2p.",
+      "name": "Studio Apartment Haarlem Centre 2p.",
+      "description": "Lovely studio apartment in Haarlem’s city center. Perfect for a couple. This lovely studio apartment overlooks a square with a beautiful 17th century Church. Situated in the middle of Haarlems..."
+     },
+     {
+      "position": "43",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/ac/ab/93.jpg",
+      "url": "Aelberts Family Home Haarlem",
+      "name": "Aelberts Family Home Haarlem",
+      "description": "Large and spacious family house (MAX 2 ADULTS) near the city centre of Haarlem. Perfect starting point for day trips to the beach of Zandvoort or the city Amsterdam. You are very welcome! We..."
+     },
+     {
+      "position": "44",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/04/7d/43/21.jpg",
+      "url": "Waltzing Matilda Apartment",
+      "name": "Waltzing Matilda Apartment",
+      "description": "Spacious apartment for 4, in the middle of Haarlem's city centre. Perfect for families! You are very welcome! We offer accommodation to: ★1 family with children of all ages ★ or ★1 couple..."
+     },
+     {
+      "position": "45",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-ha-splice-l/03/aa/25/e1.jpg",
+      "url": "Comfortable apartment in Haarlem 2.5 km from... Ap...",
+      "name": "Comfortable apartment in Haarlem 2.5 km from... Ap...",
+      "description": "View all property information"
+     },
+     {
+      "position": "46",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-ha-splice-l/04/39/2f/c2.jpg",
+      "url": "* Beautiful and big family house near... House Ren...",
+      "name": "* Beautiful and big family house near... House Ren...",
+      "description": "View all property information"
+     },
+     {
+      "position": "47",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-ha-splice-l/03/f1/ea/cd.jpg",
+      "url": "Luxurious & Modern apartment in the middle of...",
+      "name": "Luxurious & Modern apartment in the middle of...",
+      "description": "View all property information"
+     },
+     {
+      "position": "48",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/02/e0/03/0c.jpg",
+      "url": "Vintage City Center House",
+      "name": "Vintage City Center House",
+      "description": "Our house located in beautiful ancient Haarlem is inspired by the interior of the 50s and 60s with a touch of today. The house has a comfortable living with a brand new open plan kitchen and..."
+     },
+     {
+      "position": "49",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-splice-l/03/4c/3a/88.jpg",
+      "url": "Dutch monument in old centre near the water",
+      "name": "Dutch monument in old centre near the water",
+      "description": "Beautiful location and fully equipped house. Situated on the first and second floor. View over the water het Spaarne with sunny terrace in the back of the house. Very nice kitchen and near..."
+     },
+     {
+      "position": "50",
+      "image": "https://media-cdn.tripadvisor.com/media/vr-ha-splice-l/04/39/d8/ce.jpg",
+      "url": "Romantic Stylish Holiday House Central Haarlem...",
+      "name": "Romantic Stylish Holiday House Central Haarlem...",
+      "description": "View all property information"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Post Verkade Cruises - Day Tours (Haarlem, The Netherlands): Top ...",
+   "htmlTitle": "Post Verkade Cruises - Day Tours (\u003cb\u003eHaarlem\u003c/b\u003e, The Netherlands): Top ...",
+   "link": "https://www.tripadvisor.com/Attraction_Review-g188593-d4480907-Reviews-Post_Verkade_Cruises_Day_Tours-Haarlem_North_Holland_Province.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Post Verkade Cruises - Day Tours, Haarlem: See 2 reviews, articles, and 6 \nphotos of Post Verkade Cruises - Day Tours, ranked No.4 on TripAdvisor among \n6 attractions in Haarlem. ... Reviewed September 18, 2015. sookiez. ,. Mountain \nView ...",
+   "htmlSnippet": "Post Verkade Cruises - Day Tours, \u003cb\u003eHaarlem\u003c/b\u003e: See 2 reviews, articles, and 6 \u003cbr\u003e\nphotos of Post Verkade Cruises - Day Tours, ranked No.4 on \u003cb\u003eTripAdvisor\u003c/b\u003e among \u003cbr\u003e\n6 \u003cb\u003eattractions\u003c/b\u003e in \u003cb\u003eHaarlem\u003c/b\u003e. ... Reviewed \u003cb\u003eSeptember\u003c/b\u003e 18, 2015. sookiez. ,. Mountain \u003cbr\u003e\nView&nbsp;...",
+   "cacheId": "01rd2NK0FiMJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attraction_Review-g188593-d4480907-Reviews -Post_Verkade_Cruises_Day_Tours-Haarlem_North_Holland_Provi...",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttraction\u003c/b\u003e_Review-g188593-d4480907-Reviews -Post_Verkade_Cruises_Day_Tours-\u003cb\u003eHaarlem\u003c/b\u003e_North_Holland_Provi...",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "259",
+      "height": "194",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSaKkg9XQFzAMKum_yCv8AbpLQv9ud012JytURl9Yo0DFdfLU751VJxplYZ"
+     }
+    ],
+    "LocalBusiness": [
+     {
+      "image": "https://media-cdn.tripadvisor.com/media/photo-s/06/3b/3d/3a/haarlem-canal-tours.jpg",
+      "name": "Post Verkade Cruises - Day Tours"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Europe",
+      "title": "Europe"
+     },
+     {
+      "url": "The Netherlands",
+      "title": "The Netherlands"
+     },
+     {
+      "url": "North Holland Province",
+      "title": "North Holland Province"
+     },
+     {
+      "url": "Haarlem",
+      "title": "Haarlem"
+     },
+     {
+      "url": "Things to Do in Haarlem",
+      "title": "Things to Do in Haarlem"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "5.0",
+      "ratingcount": "2",
+      "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/06/3b/3d/3a/haarlem-canal-tours.jpg"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "2"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Post Verkade Cruises - Day Tours (Haarlem, The Netherlands): Top Tips Before You Go - TripAdvisor",
+      "og:description": "Post Verkade Cruises - Day Tours, Haarlem: See 2 reviews, articles, and 6 photos of Post Verkade Cruises - Day Tours, ranked No.4 on TripAdvisor among 6 attractions in Haarlem.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/06/3b/3d/3a/haarlem-canal-tours.jpg",
+      "og:image:width": "550",
+      "og:image:height": "412",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attraction_Review-g188593-d4480907-Reviews-m33762-Post_Verkade_Cruises_Day_Tours-Haarlem_North_Holland_Province.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attraction_Review-g188593-d4480907-Reviews-m33762-Post_Verkade_Cruises_Day_Tours-Haarlem_North_Holland_Province.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attraction_Review-g188593-d4480907-Reviews-m33762-Post_Verkade_Cruises_Day_Tours-Haarlem_North_Holland_Province.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/06/3b/3d/3a/haarlem-canal-tours.jpg"
+     }
+    ]
+   }
+  }
+ ]
+}

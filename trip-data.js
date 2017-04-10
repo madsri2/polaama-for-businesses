@@ -75,13 +75,6 @@ TripData.prototype.retrieveTripData = function() {
     fs.accessSync(file, fs.F_OK);
     try {
       this.data = JSON.parse(fs.readFileSync(file, 'utf8')); 
-      if(this.data.cities) {
-        this.citySet = new Set();
-        this.data.cities.forEach(city => {
-          this.citySet.add(city);
-        }, this);
-      }
-      // console.log(`raw name from file ${file} is ${this.data.rawName}`);
     }
     catch(err) {
       logger.error(`error reading from file ${file}: ${err.stack}`);
@@ -167,18 +160,25 @@ TripData.prototype.addPortOfEntry = function(portOfEntry) {
   this.persistUpdatedTrip();
 }
 
-TripData.prototype.addCities = function(cities) {
-  // TODO: Make this a set
-  if(_.isUndefined(this.citySet)) {
-    this.citySet = new Set();
+// This function resets the city itinerary object and cities object.
+TripData.prototype.addCityItinerary = function(cities, numOfDays) {
+  if(cities.length !== numOfDays.length) {
+    throw new Error("cities and numOfDays array lengths are different. cannot persist city itinerary information");
   }
-  cities.forEach(city => {
-    this.citySet.add(Encoder.encode(city));
-  }, this);
+  this.data.cityItin = {};
+  this.data.cityItin.cities = [];
+  this.data.cities = [];
+  for(let i = 0; i < cities.length; i++) {
+    this.data.cityItin.cities.push(Encoder.encode(cities[i]));
+    this.data.cities.push(Encoder.encode(cities[i]));
+  }
+  this.data.cityItin.numOfDays = numOfDays;
+  logger.debug(`addCityItinerary: City itinerary is ${JSON.stringify(this.data.cityItin)}`);
   this.persistUpdatedTrip();
 }
 
-TripData.prototype.addCityItinerary = function(cities, numOfDays) {
+/*
+TripData.prototype.addCityItineraryOld = function(cities, numOfDays) {
   if(!this.data.cityItin) {
     this.data.cityItin = {};
   }
@@ -193,6 +193,7 @@ TripData.prototype.addCityItinerary = function(cities, numOfDays) {
   logger.debug(`addCityItinerary: City itinerary is ${JSON.stringify(this.data.cityItin)}`);
   this.persistUpdatedTrip();
 }
+*/
 
 TripData.prototype.storeTodoList = function(senderId, messageText) {
   const reg = new RegExp("^todo[:]*[ ]*","i"); // ignore case
@@ -237,6 +238,7 @@ TripData.prototype.userInputItinFile = function() {
 /*
   TODO: Since we have are writing to one file, there will be a race condition if two users attempt to update an itinerary. You need a lock to serialize in this case! This is true for any file writing that is done. Or, move to using dynamodb or something which will handle it for you
 */
+// TODO: Fix ME! The returned value is a promise but promise.done does not work. This means that we CANNOT schedule any activity that depends on updateItinerary to complete.
 TripData.prototype.updateItinerary = function(incDate, itinDetail){
   const filename = this.userInputItinFile();
   const readPromise = new Promise(function(fulfil, reject){
@@ -404,12 +406,6 @@ TripData.prototype.parseComments = function() {
 
 TripData.prototype.persistUpdatedTrip = function() {
   const file = tripFile.call(this);
-  if(this.citySet) {
-    this.data.cities = [];
-    this.citySet.forEach(city => {
-      this.data.cities.push(city);
-    }, this);
-  }
   try {
     fs.writeFileSync(file, JSON.stringify(this.data));
     return true;

@@ -140,6 +140,9 @@ Session.prototype.humanContext = function() {
 // this function can be called to invalidate a trip, forcing a refresh of this trip by calling TripData (which would contain the latest information).
 Session.prototype.invalidateTripData = function() {
   const sessionTrip = this.findTrip();
+  if(!sessionTrip || !sessionTrip.tripData) {
+    return;
+  }
 	logger.debug(`invalidateTripData: Marking trip ${sessionTrip.tripData.rawTripName} as stale. Session id is ${this.guid}`);
 	sessionTrip.tripData = undefined;
 }

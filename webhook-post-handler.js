@@ -141,7 +141,6 @@ function sendUrlButton(title, urlPath) {
     }
   };
   const tripData = this.session.tripData();
-  const rawName = tripData.rawTripName;
   messageData.message = {
     attachment: {
       type: "template",
@@ -173,7 +172,7 @@ function displayTripDetails() {
     }
   };
   const tripData = this.session.tripData();
-  const rawName = tripData.rawTripName;
+  const tripName = tripData.data.name;
   messageData.message = {
     attachment: {
       type: "template",
@@ -218,19 +217,19 @@ function displayTripDetails() {
           title: "Get",
           buttons: [{
             type: "web_url",
-            url:sendUrl.call(this, `${rawName}/comments`),
+            url:sendUrl.call(this, `${tripName}/comments`),
             title: "Comments",
             webview_height_ratio: "compact",
             messenger_extensions: true
           }, {
             type: "web_url",
-            url:sendUrl.call(this, `${rawName}/todo`),
+            url:sendUrl.call(this, `${tripName}/todo`),
             title: "Tasks",
             webview_height_ratio: "compact",
             messenger_extensions: true
           }, {
             type: "web_url",
-            url:sendUrl.call(this, `${rawName}/pack-list`),
+            url:sendUrl.call(this, `${tripName}/pack-list`),
             title: "Pack list",
             webview_height_ratio: "compact",
             messenger_extensions: true
@@ -239,13 +238,13 @@ function displayTripDetails() {
           title: "Get",
           buttons: [{
             type: "web_url",
-            url:sendUrl.call(this, `${rawName}/expense-report`),
+            url:sendUrl.call(this, `${tripName}/expense-report`),
             title: "Expense report",
             webview_height_ratio: "compact",
             messenger_extensions: true
           }, {
             type: "web_url",
-            url:sendUrl.call(this, `${rawName}/calendar`),
+            url:sendUrl.call(this, `${tripName}/calendar`),
             title: "Calendar",
             webview_height_ratio: "compact",
             messenger_extensions: true
@@ -456,7 +455,7 @@ function sendPastTrips() {
       title: t.rawName,
       buttons: [{
         type: "web_url",
-        url:sendUrl.call(this, `${t.rawName}`),
+        url:sendUrl.call(this, `${t.name}`),
         title: t.name,
         webview_height_ratio: "compact",
         messenger_extensions: true
@@ -591,7 +590,7 @@ function sendAllTripsButtons() {
       title: t.rawName,
       buttons: [{
         type: "web_url",
-        url:sendUrl.call(this, `${t.rawName}/expense-report`),
+        url:sendUrl.call(this, `${t.name}/expense-report`),
         title: t.name,
         webview_height_ratio: "compact",
         messenger_extensions: true
@@ -603,7 +602,7 @@ function sendAllTripsButtons() {
       title: t.rawName,
       buttons: [{
         type: "web_url",
-        url:sendUrl.call(this, `${t.rawName}/expense-report`),
+        url:sendUrl.call(this, `${t.name}/expense-report`),
         title: t.name,
         webview_height_ratio: "compact",
         messenger_extensions: true
@@ -1286,7 +1285,7 @@ function determineCities(existingTrip) {
             title: "Select cities",
             buttons: [{
               type:"web_url",
-              url: sendUrl.call(this, `${trip.rawTripName}/${uri}`),
+              url: sendUrl.call(this, `${trip.data.name}/${uri}`),
               title:"Cities",
               webview_height_ratio: "compact",
               messenger_extensions: true,

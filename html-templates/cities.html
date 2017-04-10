@@ -11,7 +11,8 @@ var cityStartDate;
 function updateCityDate(counter, cStDate) {
   const textId = `date-text-${counter}`;
   const numDaysId = `number-of-days-${counter}`;
-  const numDays = parseInt(document.getElementById(numDaysId).value);
+  let numDays = parseInt(document.getElementById(numDaysId).value);
+  if(counter === 0) numDays -= 1; // For port of entry, the first day counts towards number of days
   const startDate = new Date(cStDate);
   const cityLeaveDate = new Date(cStDate);
   cityLeaveDate.setDate(cityLeaveDate.getDate() + numDays);
@@ -35,7 +36,7 @@ function updateCityDate(counter, cStDate) {
           </div></div>
           <!-- TODO: Figure out a way to get the entire field to show up on mobile. It shows up correctily in grid.html -->
           <div class="ui-block-b"><div class="ui-bar ui-bar-a" style="height:40px">
-            <input type="number" data-clear-btn="false" name="numberOfDays" placeholder="Number of days" id="number-of-days-#{ctrPh}" onchange="updateCityDate(#{ctrPh}, '#{date}')"/>
+            <input type="number" data-clear-btn="false" name="numberOfDays" placeholder="Duration" id="number-of-days-#{ctrPh}" onchange="updateCityDate(#{ctrPh}, '#{date}')"/>
           </div></div>
           <div class="ui-block-c"><div class="ui-bar ui-bar-a" style="height:40px">
             <input type="text" disabled="disabled" name="text-10" id="date-text-#{ctrPh}" value="#{monthDate} - ">
@@ -46,11 +47,11 @@ function updateCityDate(counter, cStDate) {
         var pGrid; 
         const startDate = "${startDate}"; // "11/1/2017"; // Only the format MM/DD/YYYY works. The standard format of YYYY-DD-MM did not work.
         if(counter == 0) {
-          pGrid = grid.replace("#{Placeholder}","Port of entry");
+          pGrid = grid.replace("#{Placeholder}","Cities");
           cityStartDate = startDate;
         }
         else {
-          pGrid = grid.replace("#{Placeholder}","Select city");
+          pGrid = grid.replace("#{Placeholder}","Cities");
         }
         pGrid = pGrid.split("#{ctrPh}").join(counter); // replace all instances of #{ctrph}
         pGrid = pGrid.split("#{date}").join(cityStartDate); // replace all instances

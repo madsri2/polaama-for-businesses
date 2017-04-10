@@ -78,22 +78,21 @@ function dayItin(search) {
 function setWeatherContents(details) {
   let contents = "";
   const weather = details.weather;
+  if(!weather) {
+    return contents;
+  }
   if(!Array.isArray(weather)) {
     contents += `<li>Average min temp: ${weather.min_temp}&degF. Max temp: ${weather.max_temp}&degF</li>`;
     contents += `<li>Chance of rain is ${weather.chanceofrain}%</li>`;
     contents += `<li>It will be ${weather.cloud_cover} today.</li>`;
     return contents;
   }
-  const cities = details.city;
-  if(cities.length != weather.length) {
-    throw new Error(`Number of cities is NOT equal to count of weather details. Do not know how to proceed!`);
-  }
-  for(let i = 0; i < cities.length; i++) {
-    const cityWeather = weather[i];
-    contents += `<li>Average min temp at ${cities[i]}: ${cityWeather.min_temp}&degF. Max temp: ${cityWeather.max_temp}&degF</li>`;
+  // we have been sent an array of weather. That means there are multiple cities on the same day in the itinerary.
+  weather.forEach(cityWeather => {
+    contents += `<li>Average min temp at ${cityWeather.city}: ${cityWeather.min_temp}&degF. Max temp: ${cityWeather.max_temp}&degF</li>`;
     contents += `<li>Chance of rain is ${cityWeather.chanceofrain}%</li>`;
     contents += `<li>It will be ${cityWeather.cloud_cover} today.</li>`;
-  }
+  });
   return contents;
 }
 

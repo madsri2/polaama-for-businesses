@@ -61,9 +61,11 @@ foreach my $t (@options)
   }
   
   # Finally, delete the trip file from "trips" directory
-  print "Removing trip file trips/$trip.txt and trips/$trip-data.txt\n";
   my $tripDir = "$baseDir/trips";
-  `mv $tripDir/$trip.txt $tripDir/.$trip.txt.orig` if -e "$tripDir/$trip.txt";
-  `mv $tripDir/$trip-data.txt $tripDir/.$trip-data.txt.orig` if -e "$tripDir/$trip-data.txt";
-  `mv $tripDir/$trip-itinerary.txt $tripDir/.$trip-itinerary.txt.orig` if -e "$tripDir/$trip-itinerary.txt";
+  my @tripFiles = `ls $tripDir/$trip*`;
+  for my $tripFile (@tripFiles) {
+    chomp $tripFile;
+    print "Removing file $tripFile\n";
+    `mv $tripFile $tripDir/oldFiles` if -e "$tripFile";
+  }
 }

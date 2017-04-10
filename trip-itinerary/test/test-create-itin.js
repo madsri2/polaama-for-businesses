@@ -10,17 +10,23 @@ logger.setTestConfig(); // indicate that we are logging for a test
 describe("Test Create Itinerary functionality", function() {
   it("basic test", function() {
     const tripData = new TripData('india');
-    tripData.startDate = "1/1/2018";
+    tripData.data.startDate = "1/1/2018";
+    tripData.data.cityItin = {
+      'cities': ['delhi'],
+      'numOfDays': ['3']
+    };
+    tripData.data.portOfEntry = "delhi";
     const createItin = new CreateItinerary(tripData, "seattle");
     createItin.create();
   });
 
   function verifyItinExpectations(dayItin, city) {
-    expect(dayItin.city).to.deep.equal(city);
+    expect(city).to.deep.equal(dayItin.city);
     expect(dayItin).to.include.keys('weather');
     const weather = dayItin.weather;
     if(Array.isArray(weather)) {
       weather.forEach(w => {
+        expect(city).to.include(w.city);
         expect(w).to.include.keys('min_temp');
         expect(w).to.include.keys('max_temp');
         expect(w).to.include.keys('chanceofrain');
@@ -39,9 +45,8 @@ describe("Test Create Itinerary functionality", function() {
   it("testing entire itinerary", function(done) {
     // set up
     const cityItin = {
-      'chennai': "5",
-      'mumbai': "3",
-      'goa': "2"
+      'cities': ['chennai','mumbai','goa','chennai'],
+      'numOfDays': ['3','3','2','2']
     };
     const startDate = "2017-11-1";
     const startTime = "09:00";
@@ -71,21 +76,16 @@ describe("Test Create Itinerary functionality", function() {
         let nextDay = new Date(startDate);
         nextDay.setDate(nextDay.getDate() + 1);
         // verify port of entry & remaining itinerary
-        let numDays = 0;
-        Object.keys(cityItin).forEach(city => {
-          if(city === tripData.data.portOfEntry) {
-            numDays = Math.ceil(parseInt(cityItin[city]) / 2) - 1; // subtracting 1 because the first day will include port of entry (see above)
-          }
-          else {
-            numDays = parseInt(cityItin[city]);
-          }
-          logger.debug(`Staying for ${numDays} days in city ${city}`);
+        cityItin.cities.forEach((city, idx) => {
+          let numDays = parseInt(cityItin.numOfDays[idx]);
+          if(idx === 0) numDays -= 1; // For port of entry, the first day is already accounted for.
           for(let i = 0; i < numDays; i++) {
             const nextDayStr = CreateItinerary.formatDate(nextDay);
-            verifyItinExpectations(details[nextDayStr], city);
+            logger.debug(`Now verifying day ${nextDayStr}`);
             nextDay.setDate(nextDay.getDate() + 1);
           }
         });
+        /*
         // verify port of departure
         const remainingDays = parseInt(cityItin[portOfEntry]) - Math.ceil(parseInt(cityItin[portOfEntry])/2);
         for(let i = 0; i < remainingDays; i++) {
@@ -94,6 +94,7 @@ describe("Test Create Itinerary functionality", function() {
           verifyItinExpectations(details[nextDayStr], portOfEntry);
           nextDay.setDate(nextDay.getDate() + 1);
         }
+        */
         // nextDay has advanced beyond the return date, so get it back.
         nextDay.setDate(nextDay.getDate() - 1);
         const nextDayStr = CreateItinerary.formatDate(nextDay);
@@ -114,7 +115,8 @@ describe("Test Create Itinerary functionality", function() {
   it("testing presence of user itinerary", function(done) {
     // set up
     const cityItin = {
-      'chennai': "2",
+      'cities': ['chennai'],
+      'numOfDays': ['2']
     };
     const startDate = "2017-10-11";
     const portOfEntry = "chennai";
@@ -145,18 +147,28 @@ describe("Test Create Itinerary functionality", function() {
   });
 
   function getCityCount(details,cityItin) {
-    const citiesInItin = {};
-    Object.keys(cityItin).forEach(city => {
-      citiesInItin[city] = 0;
+    const citiesInItin = {
+      'cities': [],
+      'numOfDays': []
+    };
+    cityItin.cities.forEach(city => {
+      citiesInItin.cities.push(city);
     });
+    let idx = 0;
     Object.keys(details).forEach(thisDate => {
       const cityList = details[thisDate].city;
       if(Array.isArray(cityList)) {
         cityList.forEach(city => {
-          citiesInItin[city]++;
+          if(city != citiesInItin.cities[idx]) idx += 1;
+          if(!citiesInItin.numOfDays[idx]) citiesInItin.numOfDays[idx] = 0;
+          citiesInItin.numOfDays[idx] += 1;
         });
       }
-      citiesInItin[cityList]++;
+      else {
+        if(cityList != citiesInItin.cities[idx]) idx += 1;
+        if(!citiesInItin.numOfDays[idx]) citiesInItin.numOfDays[idx] = 0;
+        citiesInItin.numOfDays[idx] += 1;
+      }
     });
     return citiesInItin;
   }
@@ -164,9 +176,8 @@ describe("Test Create Itinerary functionality", function() {
   // test that the duration of each city matches the number of days for that particular city in the created itinerary
   it("test city duration in itinerary", function(done) {
     const cityItin = {
-      'chennai': "5",
-      'mumbai': "3",
-      'goa': "2"
+      'cities': ['chennai', 'mumbai', 'goa', 'chennai'],
+      'numOfDays': ['3', '3', '2', '2']
     };
     const startDate = "2017-11-1";
     const startTime = "09:00";
@@ -187,11 +198,14 @@ describe("Test Create Itinerary functionality", function() {
     Promise.all(promises).done(
       function(values) {
         const details = createItin.getItinerary();
+        cityItin.cities.unshift("seattle"); // add port of departure to city check list
+        cityItin.numOfDays.unshift("1");
         logger.debug(`Itinerary details: ${JSON.stringify(details)}`);
-        cityItin["seattle"] = 1;
+        // cityItin["seattle"] = 1;
         const citiesInItin = getCityCount(details, cityItin);
-        Object.keys(cityItin).forEach(city => {
-          expect(parseInt(cityItin[city])).to.equal(citiesInItin[city]);  
+        logger.debug(`City count details: ${JSON.stringify(citiesInItin)}`);
+        cityItin.cities.forEach((city,idx) => {
+          expect(parseInt(cityItin.numOfDays[idx])).to.equal(citiesInItin.numOfDays[idx]);  
         });
         // ensure that the number of entries in itinerary match the duration.
         expect(Object.keys(details).length).to.equal(tripData.data.duration);

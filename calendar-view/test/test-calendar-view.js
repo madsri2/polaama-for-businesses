@@ -8,7 +8,7 @@ const TripData = require('../../trip-data');
 const CreateItinerary = require('../../trip-itinerary/app/create-itin');
 const Promise = require('promise');
 
-describe("Calendar view tests", function() {
+describe("Calendar tests", function() {
   // TODO: Fix ME! Add 
   it("Test getting calendar view", function() {
     const tripData = new TripData('india');
@@ -20,9 +20,8 @@ describe("Calendar view tests", function() {
   it("mobile view test", function(done) {
     // set up
     const cityItin = {
-      'chennai': "5",
-      'mumbai': "3",
-      'goa': "2"
+      'cities': ['chennai', 'mumbai', 'goa', 'chennai'],
+      'numOfDays': ['3', '3', '2', '2']
     };
     const startDate = "2017-11-1";
     const startTime = "09:00";

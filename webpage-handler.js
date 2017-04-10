@@ -226,7 +226,8 @@ function formParseCallback(err, fields, files, res, existingTrip) {
   // convert field.cities into an array
   const c = [];
   const cities = c.concat(fields.cities);
-  this.session.tripData().addCityItinerary(cities, fields.numberOfDays);
+  // this.session.tripData().addCityItinerary(cities, fields.numberOfDays);
+  this.session.tripData().addCityItinerary(fields.cities, fields.numberOfDays);
 
   const portOfEntry = cities[0];
   if(!existingTrip) {
@@ -257,6 +258,7 @@ WebpageHandler.prototype.handleAddCityChoice = function(req, res, postHandler, e
   const self = this;
 
   form.parse(req, function(err, fields, files) {
+    logger.debug(`handleAddCityChoice cities: ${JSON.stringify(fields)}`);
     callback(err, fields, files, res, existingTrip);
     if(self.canProceed) {
       postHandler.startPlanningTrip();

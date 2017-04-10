@@ -126,9 +126,9 @@ function testUpdateItinerary() {
   );
 }
 
-testUpdateItinerary();
+// testUpdateItinerary();
 
-// testAddCityItinerary();
+testAddCityItinerary();
 
 // testGetExpenseReport();
 
