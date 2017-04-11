@@ -1,4 +1,7 @@
 'use strict';
+const Notifier = require('notifications/app/notifier');
+
+const baseDir = '/home/ec2-user';
 const logger = require('./my-logger');
 const Sessions = require('./sessions');
 const FbidHandler = require('./fbid-handler');
@@ -9,7 +12,7 @@ const CreateItinerary = require('./trip-itinerary/app/create-itin');
 
 const _ = require('lodash');
 const request = require('request');
-const moment = require('moment');
+const moment = require('moment-timezone');
 const formidable = require('formidable');
 const Promise = require('promise');
 const validator = require('node-validator');
@@ -23,6 +26,7 @@ function WebhookPostHandler(session) {
     this.passedSession = session;
     this.session = session;
   }
+  this.notifier = new Notifier(this.sessions);
 }
 
 function handleMessagingEvent(messagingEvent) {
@@ -659,7 +663,7 @@ function handleQuickReplies(quick_reply) {
 }
 
 function validateStartDate(value, onError) {
-  const now = moment();
+  const now = moment().tz("Etc/UTC");
   
   const check = validator.isObject()
     .withRequired('startDate', validator.isDate());
@@ -673,9 +677,10 @@ function validateStartDate(value, onError) {
   if(errCount > 0) {
     return onError(error[0].message, error.parameter, error.value);
   }
-
-  if(now.diff(moment(new Date(value).toISOString()),'days') >= 0) {
-    return onError("Provided start date is in the past","",value);
+  const startDate = moment.tz(value, "Etc/UTC");
+  logger.debug(`Time now is ${now}; Passed value is ${new Date(value).toISOString()}. Difference is ${now.diff(startDate, 'days')}`);
+  if(now.diff(startDate,'days') >= 0) {
+    return onError("Provided start date is in the past", "", value);
   }
   return null;
 }
@@ -690,7 +695,7 @@ function createNewTrip(tripDetails) {
   this.session.addTrip(tripDetails.destination);
   const tripData = this.session.tripData();
   tripData.addTripDetailsAndPersist(tripDetails);
-  logger.info(`extractNewTripDetails: This session's trip name in context is ${tripDetails.country}`);
+  logger.info(`createNewTrip: This session's trip name in context is ${tripDetails.country}`);
   this.session.awaitingNewTripDetails = false;
   // this new trip will also be the context for this session;
   this.session.noTripContext = false;
@@ -704,6 +709,14 @@ function extractNewTripDetails(messageText) {
 		return;
 	}
   const td = messageText.split(',');
+  if(td.length != 3) {
+    logger.error(`extractNewTripDetails: Expected 3 items in tripDetails, but only found ${td.length}: [${td}]. Message text: ${messageText}`);
+    const error = [];
+    error.push({
+      message: "invalid separator. Please enter a comma separated list of destination country, start date and duration (in days)"
+    });
+    return error;
+  }
   if(td[1].match(/^ *\d+\/\d+$/)) { // if date is of the form "1/1", "10/10" or " 1/10", append year
     td[1] = td[1].concat(`/${new Date().getFullYear()}`);
   }
@@ -841,7 +854,8 @@ function determineResponseType(event) {
 			try {
       	const err = extractNewTripDetails.call(this, messageText);
       	if(err) {
-        	sendTextMessage(this.session.fbid, `Input error: parameter ${err[0].parameter}:${err[0].message}`);
+          const param = (err[0].parameter) ? `parameter ${err[0].parameter}`: "";
+        	sendTextMessage(this.session.fbid, `Input error: ${param}:${err[0].message}`);
         	return;
       	}
 			}
@@ -1091,22 +1105,31 @@ WebhookPostHandler.prototype.sendReminderNotification = function() {
       if(!todoList.length) {
         return;
       }
-      const now = moment();
-      const tripEnd = trip.data.returnDate;
+      const now = moment().tz("Etc/UTC");
+      const tripEnd = moment.tz(trip.data.returnDate, "Etc/UTC");
       if(now.diff(tripEnd,'days') >= 0) {
-        logger.info(`Trip ${trip.data.name} started on ${trip.data.startDate} and has a duration of ${trip.data.duration} days. No longer sending reminder because the trip is over (difference is ${now.diff(tripEnd,'days')} days).`);
+        logger.debug(`Trip ${trip.data.name} started on ${trip.data.startDate} and has a duration of ${trip.data.duration} days. No longer sending reminder because the trip is over (difference is ${now.diff(tripEnd,'days')} days).`);
         return;
       }
       // only send reminder if we are within 45 days of the trip.
-      const startDate = moment(new Date(trip.data.startDate).toISOString());
+      const startDate = moment.tz(trip.data.startDate, "Etc/UTC");
       const daysToTrip = startDate.diff(now, 'days');
       if(daysToTrip <= 45) {
         sendTextMessage(sessions[id].fbid, `Reminder: You still have ${todoList.length} items to do for your trip to ${trip.data.name}`);
+        // TODO: Add a button for user to get the list of todo items.
       }
       else {
         logger.info(`Not sending reminder because there are ${daysToTrip} days to the trip ${trip.data.name}`);
       }
     });
+  });
+}
+
+WebhookPostHandler.prototype.pushTripDetailsJustBeforeTrip = function() {
+  // logger.debug(`Type of this is ${this.constructor.name}`);
+  const sessions = this.sessions.allSessions();
+  this.notifier.tripDetailsJustBeforeTrip().forEach(message => {
+    callSendAPI(message);
   });
 }
 

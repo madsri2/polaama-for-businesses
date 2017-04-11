@@ -234,11 +234,14 @@ TripDataFormatter.prototype.formatCities = function() {
     selection += `<option value="${city}">${city}</option>`;
   });
   const sd = new Date(this.trip.data.startDate);
-  const startDate = `${sd.getMonth()+1}/${sd.getDate()}/${sd.getFullYear()}`;
+  const startDate = `${sd.getMonth()+1}/${sd.getDate()}/${sd.getFullYear()-2000}`;
+  const rd = new Date(this.trip.data.returnDate);
+  const returnDate = `${rd.getMonth()+1}/${rd.getDate()}/${rd.getFullYear()-2000}`;
   return fs.readFileSync("html-templates/cities.html", 'utf8')
     .replace("${cityList}", selection)
     .replace("${country}", this.trip.data.country)
-    .replace("${startDate}", startDate);
+    .replace("${returnDate}", returnDate)
+    .split("${startDate}").join(startDate);
 }
 
 // adding cities for existing trip

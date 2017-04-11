@@ -85,16 +85,6 @@ describe("Test Create Itinerary functionality", function() {
             nextDay.setDate(nextDay.getDate() + 1);
           }
         });
-        /*
-        // verify port of departure
-        const remainingDays = parseInt(cityItin[portOfEntry]) - Math.ceil(parseInt(cityItin[portOfEntry])/2);
-        for(let i = 0; i < remainingDays; i++) {
-          const nextDayStr = CreateItinerary.formatDate(nextDay);
-          logger.debug(`port of departure: Verifying day ${nextDayStr}. Remaining days: ${remainingDays}`);
-          verifyItinExpectations(details[nextDayStr], portOfEntry);
-          nextDay.setDate(nextDay.getDate() + 1);
-        }
-        */
         // nextDay has advanced beyond the return date, so get it back.
         nextDay.setDate(nextDay.getDate() - 1);
         const nextDayStr = CreateItinerary.formatDate(nextDay);
@@ -201,7 +191,6 @@ describe("Test Create Itinerary functionality", function() {
         cityItin.cities.unshift("seattle"); // add port of departure to city check list
         cityItin.numOfDays.unshift("1");
         logger.debug(`Itinerary details: ${JSON.stringify(details)}`);
-        // cityItin["seattle"] = 1;
         const citiesInItin = getCityCount(details, cityItin);
         logger.debug(`City count details: ${JSON.stringify(citiesInItin)}`);
         cityItin.cities.forEach((city,idx) => {

@@ -38,7 +38,7 @@ Sessions.prototype.allSessions = function() {
   if(!Object.keys(this.sessions).length) {
     // load the sessions and then send the reminder notification.
     fs.readdirSync(Session.sessionBaseDir).forEach(file => {
-      if(!file.startsWith(".")) {
+      if(!file.startsWith(".") && file.endsWith(".session")) {
         // extract fbid. The file is of the format <fbid.session>
         const fbid = file.substr(0,file.length - ".session".length);
         const session = Sessions.retrieveSession(fbid);

@@ -1,1 +1,1 @@
-{"sessionId":"2017-03-08T23:21:00.828Z-2","trips":{},"botMesgHistory":[],"fbid":"1111111111111111"}
+{"sessionId":"2017-03-08T23:21:00.828Z-2","fbid":"1111111111111111","botMesgHistory":[],"tripNameInContext":"testsendingtripdetails","rawTripNameInContext":"TestSendingTripDetails","trips":{"testsendingtripdetails":{"aiContext":{"sessionId":"2017-03-08T23:21:00.828Z-2"},"humanContext":{"sessionId":"2017-03-08T23:21:00.828Z-2","fbid":"1120615267993271","conversations":{}}}}}

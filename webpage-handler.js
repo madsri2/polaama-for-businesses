@@ -103,7 +103,7 @@ This function serves as the entry point for all other functions. Callback will b
 */ 
 WebpageHandler.prototype.handleWebpage = function(res, callback, args) {
   if(_.isNull(this.session)) {
-    logger.error("handleWebPage: No session exists");
+    logger.error(`handleWebPage: No session exists ${(new Error()).stack}`);
     return res.send("Invalid request.");
   }
   if(_.isNull(this.trip)) {
@@ -226,7 +226,6 @@ function formParseCallback(err, fields, files, res, existingTrip) {
   // convert field.cities into an array
   const c = [];
   const cities = c.concat(fields.cities);
-  // this.session.tripData().addCityItinerary(cities, fields.numberOfDays);
   this.session.tripData().addCityItinerary(fields.cities, fields.numberOfDays);
 
   const portOfEntry = cities[0];

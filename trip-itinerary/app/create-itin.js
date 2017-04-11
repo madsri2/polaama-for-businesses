@@ -57,9 +57,7 @@ CreateItinerary.prototype.create = function() {
   this.destinationCountry = this.tripData.country;
   const promiseList = [];
   promiseList.push(setDepartureCityDetails.call(this));
-  // promiseList.push(setItinForPortOfEntry.call(this));
   promiseList.push(setRemainingItinerary.call(this));
-  // promiseList.push(setItinForPortOfDeparture.call(this));
   persist.call(this); // persist to store any information that was synchronously written.
   return promiseList;
 }
@@ -102,41 +100,14 @@ function setDepartureCityDetails() {
   return results.promise;
 }
 
-/*
-function setItinForPortOfEntry() {
-  if(!this.tripData.portOfEntry) {
-    throw new Error(`setItinForPortOfEntry: port of entry not defined in trip`);
-  }
-  const promises = [];
-  const city = this.tripData.portOfEntry;
-  // promises.push((createCommonItinForEachDay.call(this, city, this.tripData.country)).promise);
-  if(!this.tripData.cityItin[city]) {
-    throw new Error(`setItinForPortOfEntry: Don't have information about number of days of stay in port of entry city ${city}`);
-  }
-  // divide the number of days in portOfEntry equally between beginning of trip and end of trip
-  const numDays = Math.ceil(parseInt(this.tripData.cityItin[city]) / 2) - 1; // substract one because we have already added port of itinerary to the first day along with departure city in setDepartureCityDetails
-  for(let i = 0; i < numDays; i++) {
-    promises.push((createCommonItinForEachDay.call(this, city, this.tripData.country)).promise);
-  }
-  return promises;
-}
-*/
-
 // For each day, set the weather, activities and stay information. If there is no activity/stay information, keep it blank. Initially, simply use the information available for a city in activities.
 function setRemainingItinerary() {
   const cityItin = this.tripData.cityItin;
   const duration = this.tripData.duration;
   const departureCountry = this.tripData.country;
   const promises = []; // array of promises that will execute weather setting.
-  // Object.keys(cityItin).forEach(city => {
   cityItin.cities.forEach((city,i) => {
     logger.debug(`setRemainingItinerary: setting itinerary for city ${city}`);
-    /*
-    // port of entry is special case. So, skip it.
-    if(city === this.tripData.portOfEntry) {
-      return;
-    }
-    */
     let numDays = 0;
     let cityNumDays = cityItin.numOfDays[i];
     if(i === 0) cityNumDays -= 1; // we assume the first day would be at the port of entry, so we create the itin for one fewer day.
@@ -147,30 +118,6 @@ function setRemainingItinerary() {
   });
   return promises;
 }
-
-/*
-function setItinForPortOfDeparture() {
-  const city = this.tripData.portOfEntry;
-  if(!this.tripData.cityItin[city]) {
-    throw new Error(`setItinForPortOfDeparture: port of entry ${city} does not have any details in trips's itinerary`);
-  }
-  // divide the number of days in portOfEntry equally between beginning of trip and end of trip
-  const numDays = Math.ceil(parseInt(this.tripData.cityItin[city]) / 2);
-  const remainingDays = this.tripData.cityItin[city] - numDays;
-  const promises = [];
-  let result = null;
-  for(let i = 0; i < remainingDays; i++) {
-    result = createCommonItinForEachDay.call(this, city, this.tripData.country);
-    promises.push(result.promise);
-  }
-  // TODO: Verify that the departure date matches nextDay!
-  if(this.tripData.departureTime) {
-    logger.debug(`setting departure time for day ${result.itinDay}`);
-    this.itin[result.itinDay].departureTime = this.tripData.departureTime;
-  }
-  return promises;
-}
-*/
 
 // TODO: As we get closer to the travel day, get realtime forecast, rather than historical forecast.
 function setWeatherDetails(itinDate, country, cityList) {
@@ -260,159 +207,5 @@ function persist() {
   }
   logger.debug(`persist: Wrote ${itinStr.length} bytes to file ${file}`);
 }
-
-/*
-const details = {
-  india: {
-    cities: {
-      seattle: {
-        leave: "09:00",
-        weather: {
-          temp: 54,
-          rain_chance: "80%",
-          weather: "rainy"
-        }
-      },
-      chennai: {
-        weather: {
-          temp: 87,
-          rain_chance: "36%",
-          weather: "mostly sunny"
-        },
-        'arrival': "10:00",
-        'return': "22:00",
-        'visit': ["Pulicat Lake", "Marina Beach", "Mamallapuram"]
-      },
-      mumbai: {
-        weather: {
-          temp: 90,
-          rain_chance: "3%",
-          weather: "mostly sunny"
-        },
-        'visit': ["Elephanta caves", "Juhu Beach"]
-      },
-      goa: {
-        weather: {
-          temp: 75,
-          rain_chance: "0%",
-          weather: "sunny"
-        },
-        'visit': ["Dudhsagar falls", "Beach", "Mandovi River Cruise"]
-      },
-      bengaluru: {
-        weather: {
-          temp: 72,
-          rain_chance: "0%",
-          weather: "partly cloudy"
-        },
-        'visit': ["Lalbagh Park", "Ulsoor Lake", "National flight museum"]
-      }
-    }
-  }
-};
-
-// {"3":{"name":"lisbon","temp": 70, "rain_chance": "36%", "weather": "sunny", "arrival": "10.00", "hotel": "Taj", "visit":["Torres De Bellem"], "itin": []},"4": {"name": "lisbon", "temp": 70, "weather": "partly cloudy", "rain_chance": "40%", "itin":[]}, "5": {"name": "sintra", "temp": 65, "rain_chance": "20%", "weather": "partly cloudy"}, "6": {"name": "sintra", "temp": 65, "rain_chance": "65%"}, "7": {}, "8": {}, "9": {}, "10": {}, "11": {}, "12": {}, "13": {"leave": "15:00"}, "14": {}} 
-CreateItinerary.prototype.oldCreate = function() {
-  const tripData = this.trip.data;
-
-  // assign the first two days to portOfEntry.
-  createItinForFirstThreeDays.call(this, new Date(tripData.startDate), tripData.portOfEntry);
-
-  // Split the remaining days equally among other cities.
-  const remainingTime = tripData.duration - 5;
-  let ci = 0;
-  const cities = tripData.cities;
-  const numCities = cities.length - 1; // port of entry is present here.
-  const daysPerCity = parseInt(remainingTime / numCities);
-  const sDate = new Date(tripData.startDate);
-  sDate.setDate(sDate.getDate() + 3);
-  const thirdDay = sDate.getDate();
-  const rDate = new Date(tripData.returnDate);
-  rDate.setDate(rDate.getDate() - 2);
-  const twoDaysBeforeLeaving = rDate.getDate();
-  console.log(`startDay: ${tripData.startDate}; thirdDay: ${thirdDay}; last: ${twoDaysBeforeLeaving}; returnDate: ${tripData.returnDate}; daysPerCity: ${daysPerCity}; duration: ${tripData.duration}`);
-  for(let i = thirdDay; i <= twoDaysBeforeLeaving; i++) {
-    if(cities[ci] === tripData.portOfEntry) {
-      ci++;
-    }
-    if(Object.keys(this.itin).length === tripData.duration) {
-      break;
-    }
-    for(let j = 0; j < daysPerCity; j++) {
-      if(Object.keys(this.itin).length === tripData.duration) {
-        break;
-      }
-      console.log(`Adding ${cities[ci]} for day ${i+j}`);
-      this.itin[i+j] = {};
-      this.itin[i+j].name = cities[ci];
-      getWeather.call(this, i+j, cities[ci]);
-      if(!this.itin[i+j].visit) {
-        this.itin[i+j].visit = [];
-      }
-      this.itin[i+j].visit.push(details[this.tripName].cities[cities[ci]].visit[j]);
-    }
-    if(ci < (cities.length - 1)) {
-      ci++;
-    }
-  }
-
-  // assign the last two days to portofEntry (assuming this is also the portOfExit)
-  createItinForLastTwoDays.call(this, new Date(tripData.returnDate), tripData.portOfEntry);
-
-  persist.call(this);
-}
-
-function createItinForFirstThreeDays(startDate, city) {
-  const origin = "seattle";
-  const day = startDate.getDate();
-  this.itin[day] = {};
-  this.itin[day].name = origin;
-  getWeather.call(this, day, origin);
-  this.itin[day].leave = details[this.tripName].cities[origin].leave;
-
-  // next day
-  const nDate = new Date(startDate.toString());
-  nDate.setDate(startDate.getDate() + 1);
-  const nextDay = nDate.getDate();
-  this.itin[nextDay] = {};
-  this.itin[nextDay].name = city;
-  getWeather.call(this, nextDay, city);
-  this.itin[nextDay].arrival = details[this.tripName].cities[city].arrival;
-
-
-  // day after
-  nDate.setDate(startDate.getDate() + 2);
-  const dayAfter = nDate.getDate();
-  this.itin[dayAfter] = {};
-  this.itin[dayAfter].name = city;
-  getWeather.call(this, dayAfter, city);
-  this.itin[dayAfter].visit = [];
-  this.itin[dayAfter].visit.push(details[this.tripName].cities[city].visit[0]);
-}
-
-function createItinForLastTwoDays(returnDate, city) {
-  const day = returnDate.getDate();
-  this.itin[day] = {};
-  this.itin[day].name = city;
-  getWeather.call(this, day, city);
-  this.itin[day].visit = [];
-  this.itin[day].visit.push(details[this.tripName].cities[city].visit[1]);
-
-  const pDate = new Date(returnDate.toString());
-  pDate.setDate(returnDate.getDate() - 1);
-  const prevDay = pDate.getDate();
-  this.itin[prevDay] = {};
-  this.itin[prevDay].name = city;
-  getWeather.call(this, prevDay, city);
-  this.itin[day].return = details[this.tripName].cities[city].return;
-}
-
-function getWeather(day) {
-  const city = this.itin[day].name;
-  this.itin[day].temp = details[this.tripName].cities[city].weather.temp;
-  this.itin[day].rain_chance = details[this.tripName].cities[city].weather.rain_chance;
-  this.itin[day].weather = details[this.tripName].cities[city].weather.weather;
-}
-*/
 
 module.exports = CreateItinerary;

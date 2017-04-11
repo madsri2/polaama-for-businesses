@@ -82,16 +82,14 @@ function setWeatherContents(details) {
     return contents;
   }
   if(!Array.isArray(weather)) {
-    contents += `<li>Average min temp: ${weather.min_temp}&degF. Max temp: ${weather.max_temp}&degF</li>`;
-    contents += `<li>Chance of rain is ${weather.chanceofrain}%</li>`;
-    contents += `<li>It will be ${weather.cloud_cover} today.</li>`;
+    contents += `<li>Avg min temp: ${weather.min_temp}&degF; Max temp: ${weather.max_temp}&degF</li>`;
+    contents += `<li>Chance of rain: ${weather.chanceofrain}%; It will be ${weather.cloud_cover} today.</li>`;
     return contents;
   }
   // we have been sent an array of weather. That means there are multiple cities on the same day in the itinerary.
   weather.forEach(cityWeather => {
-    contents += `<li>Average min temp at ${cityWeather.city}: ${cityWeather.min_temp}&degF. Max temp: ${cityWeather.max_temp}&degF</li>`;
-    contents += `<li>Chance of rain is ${cityWeather.chanceofrain}%</li>`;
-    contents += `<li>It will be ${cityWeather.cloud_cover} today.</li>`;
+    contents += `<li>Average min temp at ${cityWeather.city}: ${cityWeather.min_temp}&degF; Max temp: ${cityWeather.max_temp}&degF</li>`;
+    contents += `<li>Chance of rain: ${cityWeather.chanceofrain}%; It will be ${cityWeather.cloud_cover} today.</li>`;
   });
   return contents;
 }
@@ -213,7 +211,6 @@ function getPopupContents(day) {
   const popupId = `${cityDetails.name}-${day}`;
   let contents = `<a href="#${popupId}" data-rel="popup" data-transition="pop" class="ui-btn ui-corner-all ui-btn-inline ui-mini ui-shadow" title="Plan Details">${capitalize1stChar(cityDetails.name)}</a>`;
   contents += `<div data-role="popup" id="${popupId}" class="ui-content" data-theme="a" style="max-width:350px;" data-arrow="true">`;
-  // logger.info(`details for ${cityDetails.name}: ${JSON.stringify(cityDetails)}`);
   if(cityDetails.temp) {
     contents += `<p>Average Temperature is ${cityDetails.temp}&degF</p>`;
   }

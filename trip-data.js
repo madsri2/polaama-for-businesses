@@ -177,24 +177,6 @@ TripData.prototype.addCityItinerary = function(cities, numOfDays) {
   this.persistUpdatedTrip();
 }
 
-/*
-TripData.prototype.addCityItineraryOld = function(cities, numOfDays) {
-  if(!this.data.cityItin) {
-    this.data.cityItin = {};
-  }
-  if(cities.length !== numOfDays.length) {
-    throw new Error("cities and numOfDays array lengths are different. cannot persist city itinerary information");
-  }
-  for(let i = 0; i < cities.length; i++) {
-    this.data.cityItin[Encoder.encode(cities[i])] = numOfDays[i];
-  }
-  // TODO: This is just a convenient hack. In the future, we need to remove addCities completely in favor of addCityItinerary
-  this.addCities(cities);
-  logger.debug(`addCityItinerary: City itinerary is ${JSON.stringify(this.data.cityItin)}`);
-  this.persistUpdatedTrip();
-}
-*/
-
 TripData.prototype.storeTodoList = function(senderId, messageText) {
   const reg = new RegExp("^todo[:]*[ ]*","i"); // ignore case
   return storeList.call(this, senderId, messageText, reg, "todoList", "get todo");  

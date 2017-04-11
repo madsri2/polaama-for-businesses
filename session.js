@@ -1,12 +1,14 @@
 'use strict';
 const _=require('lodash');
-const logger = require('./my-logger');
-const TripData = require('./trip-data');
 const fs = require('fs');
 const Encoder = require('./encoder');
 const moment = require('moment');
 
+const baseDir = "/home/ec2-user";
+const logger = require(`${baseDir}/my-logger`);
+const TripData = require(`${baseDir}/trip-data`);
 /*
+TODO: Fix ME. This class represents a user profile and a session. Fix that!
 A session has a 1:1 relationship with a user and their trips. A session represents a user. Each user and their trips will have exactly one session at any given time. Today, the scope of a session is tied to the lifetime of this webserver. At any given time, the session will have one trip context that indicates which trip a user is talking about.
 
 TODO: Re-think this decision when sessions need to be persisted across process restarts.  
@@ -74,7 +76,7 @@ humanContext -> {
 const MY_RECIPIENT_ID = "1120615267993271";
 
 // Static variable
-Session.sessionBaseDir = "sessions";
+Session.sessionBaseDir = "/home/ec2-user/sessions";
 
 function guid() {
   function s4() {
@@ -286,6 +288,12 @@ Session.prototype.clearAllAwaitingStates = function() {
   this.awaitingHometownInfo = false;
   this.awaitingCitiesForNewTrip = false;
   this.awaitingExpenseReport = false;
+  this.awaitingUserConfirmation = false;
+}
+
+// TODO: Fix ME. this always return PST/PDT now. Obtain the timezone from the hometown.
+Session.prototype.getTimezone = function() {
+  return "America/Los_Angeles"; // Using the timezone understood by moment-timezone
 }
 
 module.exports = Session;

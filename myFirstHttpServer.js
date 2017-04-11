@@ -135,9 +135,16 @@ function verifyRequestSignature(req, res, buf) {
 const server = https.createServer(options, app);  
 server.listen(port, function() {
   logger.info("Listening on port " + port);
-  const twoDaysInMsec = 1000*60*60*24*2; // 2 days
+  const twoDaysInMsec = 1000*60*60*24*2;
   const tenSeconds = 1000*10; 
+  // set a timer that will send reminder notifications about todo list every 2 days
   const intervalId = setInterval(sendTodoReminders, twoDaysInMsec);
+
+  // set a timer that will send boarding pass and other details the day before a trip
+  const oneDayInMsec = 1000*60*60*24*1;
+  const thirtySeconds = 1000*60;
+  setInterval(pushTripDetailsJustBeforeTrip, oneDayInMsec);
+  
 }); 
 
 app.get('/index', function(req, res) {
@@ -284,6 +291,11 @@ app.get('/handle-controlgroup', function(req, res) {
   return res.send("Successfully called handle-contrologroup");
 });
 
+// The filler "-" is needed here to disambiguate this route from "/:id/:tripName". If we don't use the filler here, that route will be chosen. TODO: FIX ME by chaining (see https://expressjs.com/en/guide/routing.html "Route handlers")
+app.get('/-/images/boarding-pass', function(req, res) {
+  return res.sendFile('/home/ec2-user/boardingPass.png');
+});
+
 app.post('/handle-controlgroup', function(req, res) {
   const handler = new WebpageHandler(null, null);
   return handler.handleControlGroup(req, res);
@@ -297,7 +309,6 @@ app.post('/:id/:tripName/handle-add-city-choice', function(req, res) {
 });
 
 app.post('/:id/:tripName/save-itin-update', function(req, res) {
-  logger.debug(`save-itin-update: Called`);
   const handler = new WebpageHandler(req.params.id, req.params.tripName);
   return handler.saveItinUpdate(req, res);
 });
@@ -320,7 +331,11 @@ app.post('/webhook', jsonParser, function(req, res) {
   postHandler.handle(req, res);
 });
 
-// set a timer that will send reminder notifications about todo list every 2 days
 function sendTodoReminders() {
   postHandler.sendReminderNotification();
 }
+
+function pushTripDetailsJustBeforeTrip() {
+  postHandler.pushTripDetailsJustBeforeTrip();
+}
+
