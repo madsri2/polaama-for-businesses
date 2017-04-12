@@ -4,6 +4,7 @@ const Notifier = require('notifications/app/notifier');
 const baseDir = '/home/ec2-user';
 const logger = require('./my-logger');
 const Sessions = require('./sessions');
+const Session = require('./session');
 const FbidHandler = require('./fbid-handler');
 const TripInfoProvider = require('./trip-info-provider');
 const CommentParser = require('./expense-report/app/comment-parser');
@@ -1129,6 +1130,12 @@ WebhookPostHandler.prototype.sendReminderNotification = function() {
       }
     });
   });
+}
+
+WebhookPostHandler.prototype.sendEmailNotification = function(emailId) {
+  const fbid = Session.adminId;
+  logger.debug(`sendEmailNotification: fbid is ${fbid}, email is ${emailId}`);
+  return sendTextMessage(fbid, `Heads up: You got email from ${emailId}`);
 }
 
 WebhookPostHandler.prototype.pushTripDetailsJustBeforeTrip = function() {

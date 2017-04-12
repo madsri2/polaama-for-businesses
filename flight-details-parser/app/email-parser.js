@@ -8,16 +8,17 @@ const fs = require('fs');
 
 const baseDir = "/home/ec2-user";
 const logger = require(`${baseDir}/my-logger`);
+const WebhookPostHandler = require(`${baseDir}/webhook-post-handler`);
 
 function EmailParser(req, res) {
   this.request = req;
   this.response = res;
 }
 
-EmailParser.prototype.parse = function(req, res) {
+EmailParser.prototype.parse = function(req, res, callback) {
     /* Parse the multipart form. The attachments are parsed into fields and can
      * be huge, so set the maxFieldsSize accordingly. */
-    var form = new multiparty.Form({
+    const form = new multiparty.Form({
       maxFieldsSize: 2*1024*1024 // 2 MB
     });
 
@@ -27,31 +28,37 @@ EmailParser.prototype.parse = function(req, res) {
         };
     }());
 
+    let emailId;
     form.parse(req, function (err, fields) {
-      logger.debug(`parse: from mailin: ${fields.mailinMsg.text}`);
-      logger.debug(`Parsed fields: ${Object.keys(fields)}`);
-
-        /* Write down the payload for ulterior inspection. */
-        async.auto({
-            writeParsedMessage: function (cbAuto) {
-                fs.writeFile('/tmp/payload.json', fields.mailinMsg, cbAuto);
-            },
-            writeAttachments: function (cbAuto) {
-                var msg = JSON.parse(fields.mailinMsg);
-                async.eachLimit(msg.attachments, 3, function (attachment, cbEach) {
-                    fs.writeFile(attachment.generatedFileName, fields[attachment.generatedFileName], 'base64', cbEach);
-                }, cbAuto);
-            }
-        }, function (err) {
-            if (err) {
-                logger.error(`parse: Error in getting mail payload: ${err.stack}`);
-                res.send(500, 'Unable to write payload');
-            } else {
-                logger.debug('Webhook payload written.');
-                res.sendStatus(200);
-            }
-        });
+      const msg = JSON.parse(fields.mailinMsg);
+      logger.debug(`Parsed form. The json object has ${Object.keys(msg).length} keys in field.mailinMsg`); 
+      /* Write down the payload for ulterior inspection. */
+      async.auto({
+        writeParsedMessage: function (cbAuto) {
+          emailId = msg.from[0].address;
+          const fileName =  `${baseDir}/emails/message-${emailId}.json`;
+          logger.debug(`writeParsedMessage: Writing message to file ${fileName}`);
+          fs.writeFile(fileName, fields.mailinMsg, cbAuto);
+        },
+        writeAttachments: function (cbAuto) {
+          async.eachLimit(msg.attachments, 3, function (attachment, cbEach) {
+            const attachFile = `${baseDir}/emails/message-${emailId}-${attachment.generatedFileName}`;
+            logger.debug(`writeAttachments: Writing attachment to file ${attachFile}`);
+            fs.writeFile(attachFile, fields[attachment.generatedFileName], 'base64', cbEach);
+          }, cbAuto);
+        }
+      }, function (err) {
+        if (err) {
+            logger.error(`parse: Error in getting mail payload: ${err.stack}`);
+            res.sendStatus(500, 'Unable to write payload');
+        } else {
+            res.sendStatus(200);
+            (new WebhookPostHandler()).sendEmailNotification(emailId);
+            logger.debug('Webhook payload written and sent notification');
+        }
+      });
     });
+    return emailId;
 }
 
 EmailParser.prototype.oldParse = function() {

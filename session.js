@@ -78,6 +78,8 @@ const MY_RECIPIENT_ID = "1120615267993271";
 // Static variable
 Session.sessionBaseDir = "/home/ec2-user/sessions";
 
+Session.adminId = MY_RECIPIENT_ID;
+
 function guid() {
   function s4() {
     return Math.floor((1 + Math.random()) * 0x10000)
