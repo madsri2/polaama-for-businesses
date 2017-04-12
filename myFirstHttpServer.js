@@ -11,6 +11,7 @@ const TripDataFormatter = require('./trip-data-formatter.js');
 const passport = require('passport');
 const fbStrategy = require('passport-facebook').Strategy;
 const session = require('express-session');
+const EmailParser = require('flight-details-parser/app/email-parser');
 // ----------------------------------------------------------------------------
 // Set up a webserver
 
@@ -329,6 +330,22 @@ app.get('/webhook', function(req, res) {
 
 app.post('/webhook', jsonParser, function(req, res) {
   postHandler.handle(req, res);
+});
+
+app.head('/emails', function(req, res) {
+  logger.debug(`emails: head was called`);
+  res.sendStatus(200);
+});
+
+app.post('/emails', function(req, res) {
+  logger.debug("emails: post /emails was called");
+  const emailParser = new EmailParser(req, res);
+  emailParser.parse(req, res);
+});
+
+app.get('/emails', function(req, res) {
+  logger.debug(`emails: get /emails was called`);
+  res.send("get: ack receiving email");
 });
 
 function sendTodoReminders() {

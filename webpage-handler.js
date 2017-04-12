@@ -160,7 +160,7 @@ WebpageHandler.prototype.handleTravelersForNewTrip = function(req, res) {
           // add new trip to friends' session, but do not change context of that session
           s.addNewTrip(localSession.tripNameInContext, localSession.findTrip());
           }
-          });
+      });
       if(noSessionForFriend) {
       return res.send("Could not add this trip to some of your friend's travel list because Polaama does not know about them yet.");
       }

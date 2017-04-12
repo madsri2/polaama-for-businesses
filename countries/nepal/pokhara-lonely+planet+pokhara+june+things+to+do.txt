@@ -1,0 +1,768 @@
+{
+ "kind": "customsearch#search",
+ "url": {
+  "type": "application/json",
+  "template": "https://www.googleapis.com/customsearch/v1?q={searchTerms}&num={count?}&start={startIndex?}&lr={language?}&safe={safe?}&cx={cx?}&cref={cref?}&sort={sort?}&filter={filter?}&gl={gl?}&cr={cr?}&googlehost={googleHost?}&c2coff={disableCnTwTranslation?}&hq={hq?}&hl={hl?}&siteSearch={siteSearch?}&siteSearchFilter={siteSearchFilter?}&exactTerms={exactTerms?}&excludeTerms={excludeTerms?}&linkSite={linkSite?}&orTerms={orTerms?}&relatedSite={relatedSite?}&dateRestrict={dateRestrict?}&lowRange={lowRange?}&highRange={highRange?}&searchType={searchType}&fileType={fileType?}&rights={rights?}&imgSize={imgSize?}&imgType={imgType?}&imgColorType={imgColorType?}&imgDominantColor={imgDominantColor?}&alt=json"
+ },
+ "queries": {
+  "request": [
+   {
+    "title": "Google Custom Search - lonely planet pokhara june things to do",
+    "totalResults": "569",
+    "searchTerms": "lonely planet pokhara june things to do",
+    "count": 10,
+    "startIndex": 1,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "pokhara"
+   }
+  ],
+  "nextPage": [
+   {
+    "title": "Google Custom Search - lonely planet pokhara june things to do",
+    "totalResults": "569",
+    "searchTerms": "lonely planet pokhara june things to do",
+    "count": 10,
+    "startIndex": 11,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "pokhara"
+   }
+  ]
+ },
+ "context": {
+  "title": "Polaama"
+ },
+ "searchInformation": {
+  "searchTime": 0.422233,
+  "formattedSearchTime": "0.42",
+  "totalResults": "569",
+  "formattedTotalResults": "569"
+ },
+ "items": [
+  {
+   "kind": "customsearch#result",
+   "title": "Top things to do in Pokhara, Nepal - Lonely Planet",
+   "htmlTitle": "Top \u003cb\u003ethings to do\u003c/b\u003e in \u003cb\u003ePokhara\u003c/b\u003e, Nepal - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/nepal/pokhara/top-things-to-do/a/poi/1327551",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Discover the best top things to do in Pokhara including Krishna's Kitchen, Caffe \nConcerto, Moondance Restaurant.",
+   "htmlSnippet": "Discover the best top \u003cb\u003ethings to do\u003c/b\u003e in \u003cb\u003ePokhara\u003c/b\u003e including Krishna&#39;s Kitchen, Caffe \u003cbr\u003e\nConcerto, Moondance Restaurant.",
+   "cacheId": "w5w983S3oaEJ",
+   "formattedUrl": "https://www.lonelyplanet.com/nepal/pokhara/...things-to-do/.../1327551",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/nepal/\u003cb\u003epokhara\u003c/b\u003e/...\u003cb\u003ethings-to-do\u003c/b\u003e/.../1327551",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Asia"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "225",
+      "height": "225",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSIhFTBxrq8JtmdW-SeSuCNLV8uPp8tA8GsXAnK9mpXk3pmsboU_DGiJw"
+     }
+    ],
+    "country": [
+     {
+      "name": "Nepal"
+     }
+    ],
+    "city": [
+     {
+      "name": "Pokhara"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Top things to do in Pokhara, Nepal",
+      "og:title": "Top things to do in Pokhara, Nepal",
+      "og:description": "Discover the best top things to do in Pokhara including Krishna’s Kitchen, Caffe Concerto, Moondance Restaurant.",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://api.tiles.mapbox.com/v4/lonelyplanet.b963d424/12/3002/1711.png?access_token=pk.eyJ1IjoibG9uZWx5cGxhbmV0IiwiYSI6Imh1ODUtdUEifQ.OLLon0V6rcoTyayXzzUzsg"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Pokhara - Lonely Planet",
+   "htmlTitle": "\u003cb\u003ePokhara\u003c/b\u003e - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/nepal/pokhara",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Far from the earthquake epicenter, and almost unaffected by the disaster, \nPokhara ticks all the right boxes, with spectacular scenery, adventure...",
+   "htmlSnippet": "Far from the earthquake epicenter, and almost unaffected by the disaster, \u003cbr\u003e\n\u003cb\u003ePokhara\u003c/b\u003e ticks all the right boxes, with spectacular scenery, adventure...",
+   "cacheId": "u-6PhCGwV9kJ",
+   "formattedUrl": "https://www.lonelyplanet.com/nepal/pokhara",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/nepal/\u003cb\u003epokhara\u003c/b\u003e",
+   "pagemap": {
+    "offer": [
+     {
+      "category": "Thai"
+     },
+     {
+      "category": "Italian"
+     },
+     {
+      "category": "International"
+     },
+     {
+      "category": "Tibetan"
+     },
+     {
+      "category": "Crêpes"
+     },
+     {
+      "category": "Korean"
+     },
+     {
+      "category": "Japanese"
+     },
+     {
+      "category": "Indian"
+     },
+     {
+      "category": "Cafe"
+     },
+     {
+      "category": "Steak"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "275",
+      "height": "183",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQ6ytsTwHgn2VbLjG8NqmlTQoxSDjlNzwreq8cWxDpR0B5Tgox2H3Lx67o"
+     }
+    ],
+    "foodestablishment": [
+     {
+      "name": "Krishna’s Kitchen"
+     },
+     {
+      "name": "Caffe Concerto"
+     },
+     {
+      "name": "Moondance Restaurant"
+     },
+     {
+      "name": "Potala Tibetan Restaurant"
+     },
+     {
+      "name": "Metro"
+     },
+     {
+      "name": "Natssul"
+     },
+     {
+      "name": "AoZoRa"
+     },
+     {
+      "name": "Marwadi Restaurant"
+     },
+     {
+      "name": "Maya Devi Village"
+     },
+     {
+      "name": "New Everest Steak House"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Pokhara - Lonely Planet",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Pokhara - Lonely Planet",
+      "twitter:image:src": "https://lonelyplanetimages.imgix.net/mastheads/53693064.jpg?sharp=10&vib=20&w=1200",
+      "og:site_name": "Lonely Planet",
+      "og:type": "website",
+      "og:title": "Pokhara - Lonely Planet",
+      "og:url": "http://www.lonelyplanet.com/nepal/pokhara",
+      "og:description": "Far from the earthquake epicenter, and almost unaffected by the disaster, Pokhara ticks all the right boxes, with spectacular scenery, adventure...",
+      "og:image": "https://lonelyplanetimages.imgix.net/mastheads/53693064.jpg?sharp=10&vib=20&w=1200"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://lonelyplanetimages.imgix.net/mastheads/53693064.jpg?sharp=10&vib=20&w=1200"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Kathmandu, Pokhara weather first 2 weeks of June",
+   "htmlTitle": "Kathmandu, \u003cb\u003ePokhara\u003c/b\u003e weather first 2 weeks of \u003cb\u003eJune\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/thorntree/forums/asia-indian-subcontinent/nepal/kathmandu-pokhara-weather-first-2-weeks-of-june",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "May 13, 2008 ... How is the weather like in Kathmandu and Pokhara at this time? ... good places \nto eat, things to see and do and transportation ideas in Nepal ...",
+   "htmlSnippet": "May 13, 2008 \u003cb\u003e...\u003c/b\u003e How is the weather like in Kathmandu and \u003cb\u003ePokhara\u003c/b\u003e at this time? ... good places \u003cbr\u003e\nto eat, \u003cb\u003ethings\u003c/b\u003e to see and \u003cb\u003edo\u003c/b\u003e and transportation ideas in Nepal&nbsp;...",
+   "cacheId": "7A74j3YziYEJ",
+   "formattedUrl": "https://www.lonelyplanet.com/.../kathmandu-pokhara-weather-first-2-weeks- of-june",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../kathmandu-\u003cb\u003epokhara\u003c/b\u003e-weather-first-2-weeks- of-\u003cb\u003ejune\u003c/b\u003e",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "225",
+      "height": "225",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSqRemPSRVtvlwaxn3MfC7zsLjzOoK5uUM0cDjdqchf2Fvexvm4z9sAZObq"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Thorn Tree",
+      "title": "Thorn Tree"
+     },
+     {
+      "url": "Country forums",
+      "title": "Country forums"
+     },
+     {
+      "url": "Indian Subcontinent",
+      "title": "Indian Subcontinent"
+     },
+     {
+      "url": "Nepal",
+      "title": "Nepal"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Kathmandu, Pokhara weather first 2 weeks of June",
+      "og:title": "Kathmandu, Pokhara weather first 2 weeks of June",
+      "og:description": "Hi,I am planning a trip to Nepal for the first 2 weeks of June. How is the weather like in Kathmandu and Pokhara at this time? If you are…",
+      "og:url": "https://www.lonelyplanet.com/thorntree/forums/asia-indian-subcontinent/nepal/kathmandu-pokhara-weather-first-2-weeks-of-june",
+      "og:image": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "og:type": "website",
+      "twitter:title": "Kathmandu, Pokhara weather first 2 weeks of June",
+      "twitter:description": "Hi,I am planning a trip to Nepal for the first 2 weeks of June. How is the weather like in Kathmandu and Pokhara at this time? If you are…",
+      "twitter:image:src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "5OTgcP+4l9g7h4nZ2zsJMKTC4DxqQRkixIHljZ1oGgIpJqvS3rhbgWX8UxWLBLIPISgXErZGmX3qKZSE801GUw=="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Welcome",
+      "name": "Welcome"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "The Top 10 Things to Do in Pokhara 2017 - TripAdvisor - Pokhara ...",
+   "htmlTitle": "The Top 10 \u003cb\u003eThings to Do\u003c/b\u003e in \u003cb\u003ePokhara\u003c/b\u003e 2017 - TripAdvisor - \u003cb\u003ePokhara\u003c/b\u003e ...",
+   "link": "https://www.tripadvisor.com/Attractions-g293891-Activities-Pokhara_Gandaki_Zone_Western_Region.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Book your tickets online for the top things to do in Pokhara, Nepal on TripAdvisor: \nSee 14364 traveler reviews and photos of Pokhara tourist attractions.",
+   "htmlSnippet": "Book your tickets online for the top \u003cb\u003ethings to do\u003c/b\u003e in \u003cb\u003ePokhara\u003c/b\u003e, Nepal on TripAdvisor: \u003cbr\u003e\nSee 14364 traveler reviews and photos of \u003cb\u003ePokhara\u003c/b\u003e tourist \u003cb\u003eattractions\u003c/b\u003e.",
+   "cacheId": "n5M2JdiCm84J",
+   "formattedUrl": "https://www.tripadvisor.com/Attractions-g293891-Activities-Pokhara_ Gandaki_Zone_Western_Region.html",
+   "htmlFormattedUrl": "https://www.tripadvisor.com/\u003cb\u003eAttractions\u003c/b\u003e-g293891-\u003cb\u003eActivities\u003c/b\u003e-\u003cb\u003ePokhara\u003c/b\u003e_ Gandaki_Zone_Western_Region.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "259",
+      "height": "194",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsk0lW4pyhB9u2T8YKXN7miXLzLDIJYSW9dn3VxmeZ60KPUmdQrRnhLrI"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "Nepal",
+      "title": "Nepal"
+     },
+     {
+      "url": "Western Region",
+      "title": "Western Region"
+     },
+     {
+      "url": "Gandaki Zone",
+      "title": "Gandaki Zone"
+     },
+     {
+      "url": "Pokhara",
+      "title": "Pokhara"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "The Top 10 Things to Do in Pokhara 2017 - TripAdvisor - Pokhara, Nepal Attractions - Find What to Do Today, This Weekend, or in April",
+      "og:description": "Book your tickets online for the top things to do in Pokhara, Nepal on TripAdvisor: See 14,364 traveler reviews and photos of Pokhara tourist attractions. Find what to do today, this weekend, or in April. We have reviews of the best places to see in Pokhara. Visit top-rated & must-see attractions.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/01/45/3e/49/pokhara.jpg",
+      "og:image:width": "550",
+      "og:image:height": "412",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attractions-g293891-Activities-m33762-Pokhara_Gandaki_Zone_Western_Region.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attractions-g293891-Activities-m33762-Pokhara_Gandaki_Zone_Western_Region.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attractions-g293891-Activities-m33762-Pokhara_Gandaki_Zone_Western_Region.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/01/45/3e/49/pokhara.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Weather in Pokhara - Lonely Planet",
+   "htmlTitle": "Weather in \u003cb\u003ePokhara\u003c/b\u003e - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/nepal/pokhara/weather",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "The best time to go to Pokhara, including current weather conditions, \ntemperatures and rainfall. ... Things to do · Activities · Restaurants · Sights ... 28 \nDec–1 Jan Enjoy food and cultural shows at the Pokhara Street festival. Apr \nTourists and ...",
+   "htmlSnippet": "The best time to go to \u003cb\u003ePokhara\u003c/b\u003e, including current weather conditions, \u003cbr\u003e\ntemperatures and rainfall. ... \u003cb\u003eThings to do\u003c/b\u003e &middot; \u003cb\u003eActivities\u003c/b\u003e &middot; Restaurants &middot; Sights ... 28 \u003cbr\u003e\nDec–1 Jan Enjoy food and cultural shows at the \u003cb\u003ePokhara\u003c/b\u003e Street festival. Apr \u003cbr\u003e\nTourists and&nbsp;...",
+   "cacheId": "rIpf2JulfbAJ",
+   "formattedUrl": "www.lonelyplanet.com/nepal/pokhara/weather",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/nepal/\u003cb\u003epokhara\u003c/b\u003e/weather",
+   "pagemap": {
+    "metatags": [
+     {
+      "title": "Weather in Pokhara - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Weather in Pokhara - Lonely Planet",
+      "twitter:description": "The best time to go to Pokhara, including current weather conditions, temperatures and rainfall",
+      "twitter:image:src": "https://images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/assets/image/b8d63bec4741e9a18d0bc89375f4b817be72735b97d4be20bb222ff25430f20f/38dd4314586547390b56b85c0d92e1d812fe0317ba8c80ef6263cf36e81bff1f.jpg",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Weather in Pokhara - Lonely Planet",
+      "og:description": "The best time to go to Pokhara, including current weather conditions, temperatures and rainfall",
+      "og:url": "http://www.lonelyplanet.com/nepal/pokhara/weather",
+      "og:type": "website",
+      "og:image": "//images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/assets/image/b8d63bec4741e9a18d0bc89375f4b817be72735b97d4be20bb222ff25430f20f/38dd4314586547390b56b85c0d92e1d812fe0317ba8c80ef6263cf36e81bff1f.jpg",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "wjbikcKKyAGhnZQHWxhBmBzen7mWrMqSSmAXYNKizWA="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "//images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/assets/image/b8d63bec4741e9a18d0bc89375f4b817be72735b97d4be20bb222ff25430f20f/38dd4314586547390b56b85c0d92e1d812fe0317ba8c80ef6263cf36e81bff1f.jpg"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Weather in Nepal - Lonely Planet",
+   "htmlTitle": "Weather in Nepal - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/nepal/weather",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Category navigation. Highlights · Places · Things to do · Sights · Activities ... Send \nthis. Print. Email. °C°F. mmin. NPL. Kathmandu to Pokhara. Go Nov–Feb. J. F.",
+   "htmlSnippet": "Category navigation. Highlights &middot; Places &middot; \u003cb\u003eThings to do\u003c/b\u003e &middot; Sights &middot; \u003cb\u003eActivities\u003c/b\u003e ... Send \u003cbr\u003e\nthis. Print. Email. °C°F. mmin. NPL. Kathmandu to \u003cb\u003ePokhara\u003c/b\u003e. Go Nov–Feb. J. F.",
+   "cacheId": "SNQFPjSb3JwJ",
+   "formattedUrl": "www.lonelyplanet.com/nepal/weather",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/nepal/weather",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "298",
+      "height": "169",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQMlpm2T4jYp4PL6OKtM1yBWYokmDCuMLUQGXjZaWnUzkp94RpNxse6F8Tm"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Weather in Nepal - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Weather in Nepal - Lonely Planet",
+      "twitter:description": "The best time to go to Nepal, including current weather conditions, temperatures and rainfall",
+      "twitter:image:src": "https://images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/assets/image/b1b4c06a4ac47c728da846bbf3715c301e912f74661fe3b419853ac84b67bfde/363cb647c268488ea99e7a9526872f02d7e44e4486cbfd2a9cc9d95f1f1d9de9.jpg",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Weather in Nepal - Lonely Planet",
+      "og:description": "The best time to go to Nepal, including current weather conditions, temperatures and rainfall",
+      "og:url": "http://www.lonelyplanet.com/nepal/weather",
+      "og:type": "website",
+      "og:image": "//images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/assets/image/b1b4c06a4ac47c728da846bbf3715c301e912f74661fe3b419853ac84b67bfde/363cb647c268488ea99e7a9526872f02d7e44e4486cbfd2a9cc9d95f1f1d9de9.jpg",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "4F8yyr9jm59uCTlD4UV0vd4lO9B9QgToqvrlmGpjtPY="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "http://assets.staticlp.com/country-shapes/NPL.svg"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Pokhara in May and EBC in June??",
+   "htmlTitle": "\u003cb\u003ePokhara\u003c/b\u003e in May and EBC in \u003cb\u003eJune\u003c/b\u003e??",
+   "link": "https://www.lonelyplanet.com/thorntree/forums/16/topics/pokhara-in-may-and-ebc-in-june",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Feb 27, 2010 ... How difficult is it going to be to get to Jiri in early June? ... After your trek, check \nout the forecast for Pokhara, and then decide if you ... where to stay, eat, things to \nsee and do + some tips on transport on .... About Lonely Planet.",
+   "htmlSnippet": "Feb 27, 2010 \u003cb\u003e...\u003c/b\u003e How difficult is it going to be to \u003cb\u003eget\u003c/b\u003e to Jiri in early \u003cb\u003eJune\u003c/b\u003e? ... After your trek, check \u003cbr\u003e\nout the forecast for \u003cb\u003ePokhara\u003c/b\u003e, and then decide if you ... where to stay, eat, \u003cb\u003ethings\u003c/b\u003e to \u003cbr\u003e\nsee and \u003cb\u003edo\u003c/b\u003e + some tips on transport on .... About \u003cb\u003eLonely Planet\u003c/b\u003e.",
+   "cacheId": "4AMUuPJXd6kJ",
+   "formattedUrl": "https://www.lonelyplanet.com/.../pokhara-in-may-and-ebc-in-june",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../\u003cb\u003epokhara\u003c/b\u003e-in-may-and-ebc-in-\u003cb\u003ejune\u003c/b\u003e",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "225",
+      "height": "225",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSqRemPSRVtvlwaxn3MfC7zsLjzOoK5uUM0cDjdqchf2Fvexvm4z9sAZObq"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Thorn Tree",
+      "title": "Thorn Tree"
+     },
+     {
+      "url": "Country forums",
+      "title": "Country forums"
+     },
+     {
+      "url": "Indian Subcontinent",
+      "title": "Indian Subcontinent"
+     },
+     {
+      "url": "Nepal",
+      "title": "Nepal"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Pokhara in May and EBC in June??",
+      "og:title": "Pokhara in May and EBC in June??",
+      "og:description": "Hi everyone! Been lurking and searching previous threads for the answers but still have a couple of questions. A few of you really seem in the know, so I thank…",
+      "og:url": "https://www.lonelyplanet.com/thorntree/forums/16/topics/pokhara-in-may-and-ebc-in-june",
+      "og:image": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "og:type": "website",
+      "twitter:title": "Pokhara in May and EBC in June??",
+      "twitter:description": "Hi everyone! Been lurking and searching previous threads for the answers but still have a couple of questions. A few of you really seem in the know, so I thank…",
+      "twitter:image:src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "K2mO6QFsfkCbKwcYfCOaupM1kzdErAkGBtwGltUimdaf8/yFu3qZo2NzW22deVttd4V1leWGnpw+bH+GIJRT5w=="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Welcome",
+      "name": "Welcome"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Hotels in Nepal - Lonely Planet",
+   "htmlTitle": "Hotels in Nepal - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/nepal/hotels/a/lod/357105",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Top Choice guest accommodation in Begnas Tal & Rupa Tal. Begnas Coffee \nHouse. Lonely Planet reviewed. Show price. Top Choice resort in Pokhara ...",
+   "htmlSnippet": "Top Choice guest accommodation in Begnas Tal &amp; Rupa Tal. Begnas Coffee \u003cbr\u003e\nHouse. \u003cb\u003eLonely Planet\u003c/b\u003e reviewed. Show price. Top Choice resort in \u003cb\u003ePokhara\u003c/b\u003e&nbsp;...",
+   "formattedUrl": "https://www.lonelyplanet.com/nepal/hotels/a/lod/357105",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/nepal/hotels/a/lod/357105",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Asia"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "204",
+      "height": "204",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQfit9DJ4lgeKpQEtikB3Cz7H9bDiPB71x3Gkn43JBwHDt7PYKOxIq7Dlk"
+     }
+    ],
+    "country": [
+     {
+      "name": "Nepal"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Hotels in Nepal",
+      "og:title": "Hotels in Nepal",
+      "og:description": "Discover the best hotels in Nepal including The Dwarika’s Hotel, Dhulikhel Lodge Resort, Hotel Tibet.",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://api.tiles.mapbox.com/v4/lonelyplanet.b963d424/6/46/25.png?access_token=pk.eyJ1IjoibG9uZWx5cGxhbmV0IiwiYSI6Imh1ODUtdUEifQ.OLLon0V6rcoTyayXzzUzsg"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Indian Subcontinent forum at Lonely Planet",
+   "htmlTitle": "Indian Subcontinent forum at \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/nepal/forum",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "2 days ago ... Day 1 – Leave Pokhara in a jeep for the roadhead near Lhandruk as ... We were \njust wondering when the best time to go was for things to do, ...",
+   "htmlSnippet": "2 days ago \u003cb\u003e...\u003c/b\u003e Day 1 – Leave \u003cb\u003ePokhara\u003c/b\u003e in a jeep for the roadhead near Lhandruk as ... We were \u003cbr\u003e\njust wondering when the best time to go was for \u003cb\u003ethings to do\u003c/b\u003e,&nbsp;...",
+   "cacheId": "AmyK-Q5JJasJ",
+   "formattedUrl": "www.lonelyplanet.com/nepal/forum",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/nepal/forum",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "225",
+      "height": "225",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSqRemPSRVtvlwaxn3MfC7zsLjzOoK5uUM0cDjdqchf2Fvexvm4z9sAZObq"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Indian Subcontinent forum at Lonely Planet",
+      "og:title": "Indian Subcontinent forum at Lonely Planet",
+      "og:description": "Advice from travellers about Indian Subcontinent",
+      "og:url": "http://www.lonelyplanet.com/thorntree/nepal/forum",
+      "og:image": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "og:type": "website",
+      "twitter:title": "Indian Subcontinent forum at Lonely Planet",
+      "twitter:description": "Advice from travellers about Indian Subcontinent",
+      "twitter:image:src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "f+1vTdhKbGoZdlhBVc1oXCOacYmFDqRIqU0yAHGtwZ8fagVXZkaqUINw2zR/j6GDVE4iF1vYj18tXi6n4hKOKw=="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Welcome",
+      "name": "Welcome"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Essential guide to Kathmandu to Pokhara - Lonely Planet",
+   "htmlTitle": "Essential guide to Kathmandu to \u003cb\u003ePokhara\u003c/b\u003e - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/nepal/kathmandu-to-pokhara/essential-information",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Everything for your trip to Kathmandu to Pokhara - best time to go, weather, daily \n... arrange tandem paraglide flights in Bandipur between September and June. ... \nSome policies specifically exclude dangerous activities such as scuba diving, ...",
+   "htmlSnippet": "Everything for your trip to Kathmandu to \u003cb\u003ePokhara\u003c/b\u003e - best time to go, weather, daily \u003cbr\u003e\n... arrange tandem paraglide flights in Bandipur between September and \u003cb\u003eJune\u003c/b\u003e. ... \u003cbr\u003e\nSome policies specifically exclude dangerous \u003cb\u003eactivities\u003c/b\u003e such as scuba diving,&nbsp;...",
+   "cacheId": "oMGKaMHYFh4J",
+   "formattedUrl": "https://www.lonelyplanet.com/nepal/...pokhara/essential-information",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/nepal/...\u003cb\u003epokhara\u003c/b\u003e/essential-information",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "310",
+      "height": "163",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF6wS2PwHPin2LU1ypKfXg58Ewa1knsAXo6NPUncOERo6C-C5IT1NMs8E"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Essential guide to Kathmandu to Pokhara - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Essential guide to Kathmandu to Pokhara - Lonely Planet",
+      "twitter:description": "Everything for your trip to Kathmandu to Pokhara - best time to go, weather, daily cost advisor, visas, cheapest flights and transport information",
+      "twitter:image:src": "https://images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/a/g/hi/t/85f655ce679adad7e8d080574f096fc9-gorkha-durbar.jpg",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Essential guide to Kathmandu to Pokhara - Lonely Planet",
+      "og:description": "Everything for your trip to Kathmandu to Pokhara - best time to go, weather, daily cost advisor, visas, cheapest flights and transport information",
+      "og:url": "http://www.lonelyplanet.com/nepal/kathmandu-to-pokhara/essential-information",
+      "og:type": "website",
+      "og:image": "//images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/a/g/hi/t/85f655ce679adad7e8d080574f096fc9-gorkha-durbar.jpg",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "N6a4hIuAeP7TFL5FY+HbcMt8YDuWpYHRuXjrhr9BKME="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/a/g/hi/t/85f655ce679adad7e8d080574f096fc9-gorkha-durbar.jpg"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  }
+ ]
+}

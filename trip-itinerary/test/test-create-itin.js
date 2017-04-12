@@ -51,7 +51,7 @@ describe("Test Create Itinerary functionality", function() {
     const startDate = "2017-11-1";
     const startTime = "09:00";
     const portOfEntry = "chennai";
-    const tripData = new TripData('full-itin-test');
+    const tripData = new TripData('test-full-itin');
     tripData.data.country = "india";
     tripData.data.startDate = startDate;
     tripData.data.startTime = startTime;
@@ -110,7 +110,7 @@ describe("Test Create Itinerary functionality", function() {
     };
     const startDate = "2017-10-11";
     const portOfEntry = "chennai";
-    const tripData = new TripData('user-itin-test');
+    const tripData = new TripData('test-user-itin');
     tripData.data.country = "india";
     tripData.data.startDate = startDate;
     tripData.data.name = "user-itin-test";
@@ -172,7 +172,7 @@ describe("Test Create Itinerary functionality", function() {
     const startDate = "2017-11-1";
     const startTime = "09:00";
     const portOfEntry = "chennai";
-    const tripData = new TripData('full-itin-test');
+    const tripData = new TripData('test-full-itin');
     tripData.data.country = "india";
     tripData.data.startDate = startDate;
     tripData.data.startTime = startTime;

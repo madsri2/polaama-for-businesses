@@ -37,7 +37,7 @@ Notifier.prototype.tripDetailsJustBeforeTrip = function() {
       if(daysToTrip >= 0 && daysToTrip <= 2 && !this.sentList[getSentListKey.call(this, fbid, name)]) {
         logger.debug(`tripDetailsJustBeforeTrip: Sending boarding pass for ${name}, which is ${daysToTrip} days away`);
         this.sentList[getSentListKey.call(this, fbid, name)] = true;
-        sendList.push(getBoardingPass(fbid));
+        sendList.push(getBoardingPass(trip, fbid));
       }
     });
   });
@@ -48,12 +48,40 @@ function getSentListKey(fbid, name) {
   return `${fbid}-${name}`;
 }
 
-function getBoardingPass(fbid) {
+function getBoardingPass(trip, fbid) {
   const boardingPass = [];
+  try {
+    const bpDetails = fs.readFileSync(trip.boardingPassFile(), 'utf8');
+  }
+  catch(e) {
+    logger.error(`getBoardingPass: could not read boarding pass details from file ${file}: ${e.stack}`);
+    return boardingPass;
+  }
   boardingPass.push({
-    "passenger_name": "SMITH\/NICOLAS",
-    "pnr_number": "CG4X7U",
-    "travel_class": "business",
+    'passenger_name': bpDetails.full_name,
+    'pnr_number': bpDetails.pnr_number,
+    'logo_image_url': `https://www.example.com/en/logo.png`, 
+    'barcode_image_url': `https://polaama.com/-/images/boarding-pass`, 
+    'above_bar_code_image_url': `https://www.example.com/en/PLAT.png`, 
+    'flight_info': {
+      'flight_number': bpDetails.flight_number,
+      'departure_airport': {
+        'airport_code': bpDetails.departure_airport.airport_code,
+        'city': bpDetails.departure_airport.city
+      },
+      'arrival_airport': {
+        'airport_code': bpDetails.arrival_airport.airport_code,
+        'city': bpDetails.arrival_airport.city
+      },
+      'flight_schedule': {
+        'departure_time': bpDetails.flight_schedule.departure_time
+      }
+    }
+  });
+
+  boardingPass.push({
+    "passenger_name": "SMITH\/NICOLAS", // required
+    "pnr_number": "CG4X7U", // required
     "seat": "74J",
     "auxiliary_fields": [
       {
@@ -83,26 +111,26 @@ function getBoardingPass(fbid) {
         "value": "003"
       }
     ],
-    "logo_image_url": "https:\/\/www.example.com\/en\/logo.png",
+    "logo_image_url": "https:\/\/www.example.com\/en\/logo.png", // required
     "header_image_url": "https:\/\/www.example.com\/en\/fb\/header.png",
     // "qr_code": "M1SMITH\/NICOLAS  CG4X7U nawouehgawgnapwi3jfa0wfh",
-    "barcode_image_url": "https://polaama.com/-/images/boarding-pass",
-    "above_bar_code_image_url": "https:\/\/www.example.com\/en\/PLAT.png",
-    "flight_info": {
-      "flight_number": "KL0642",
-      "departure_airport": {
-        "airport_code": "JFK",
-        "city": "New York",
+    "barcode_image_url": "https://polaama.com/-/images/boarding-pass", // required (or qr_code)
+    "above_bar_code_image_url": "https:\/\/www.example.com\/en\/PLAT.png", // required
+    "flight_info": { 
+      "flight_number": "KL0642", // required
+      "departure_airport": { // required
+        "airport_code": "JFK", // required
+        "city": "New York", // required
         "terminal": "T1",
         "gate": "D57"
       },
-      "arrival_airport": {
-        "airport_code": "AMS",
-        "city": "Amsterdam"
+      "arrival_airport": { // required
+        "airport_code": "AMS", // required
+        "city": "Amsterdam" // required
       },
       "flight_schedule": {
-        "departure_time": "2016-01-02T19:05",
-        "arrival_time": "2016-01-05T17:30"
+        "departure_time": "2016-01-02T19:05", // required
+        "arrival_time": "2016-01-05T17:30" 
       }
     }
   });
@@ -114,10 +142,10 @@ function getBoardingPass(fbid) {
       attachment: {
         type: "template",
         payload: {
-          template_type: "airline_boardingpass",
-          "intro_message": "You are checked in.",
-          "locale": "en_US",
-          "boarding_pass": boardingPass
+          template_type: "airline_boardingpass", // required
+          "intro_message": "You are checked in.", // required
+          "locale": "en_US", // required
+          "boarding_pass": boardingPass // required
         }
       }
     }

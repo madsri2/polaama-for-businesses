@@ -1,1 +1,0 @@
-{"name":"testaddingcityitinerary","rawName":"TestAddingCityItinerary","cityItin":{"cities":["a","b"],"numOfDays":[1,2]},"cities":["a","b"]}

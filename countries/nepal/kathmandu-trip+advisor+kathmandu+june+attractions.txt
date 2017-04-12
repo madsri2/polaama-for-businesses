@@ -1,0 +1,803 @@
+{
+ "kind": "customsearch#search",
+ "url": {
+  "type": "application/json",
+  "template": "https://www.googleapis.com/customsearch/v1?q={searchTerms}&num={count?}&start={startIndex?}&lr={language?}&safe={safe?}&cx={cx?}&cref={cref?}&sort={sort?}&filter={filter?}&gl={gl?}&cr={cr?}&googlehost={googleHost?}&c2coff={disableCnTwTranslation?}&hq={hq?}&hl={hl?}&siteSearch={siteSearch?}&siteSearchFilter={siteSearchFilter?}&exactTerms={exactTerms?}&excludeTerms={excludeTerms?}&linkSite={linkSite?}&orTerms={orTerms?}&relatedSite={relatedSite?}&dateRestrict={dateRestrict?}&lowRange={lowRange?}&highRange={highRange?}&searchType={searchType}&fileType={fileType?}&rights={rights?}&imgSize={imgSize?}&imgType={imgType?}&imgColorType={imgColorType?}&imgDominantColor={imgDominantColor?}&alt=json"
+ },
+ "queries": {
+  "request": [
+   {
+    "title": "Google Custom Search - trip advisor kathmandu june attractions",
+    "totalResults": "74900",
+    "searchTerms": "trip advisor kathmandu june attractions",
+    "count": 10,
+    "startIndex": 1,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "kathmandu"
+   }
+  ],
+  "nextPage": [
+   {
+    "title": "Google Custom Search - trip advisor kathmandu june attractions",
+    "totalResults": "74900",
+    "searchTerms": "trip advisor kathmandu june attractions",
+    "count": 10,
+    "startIndex": 11,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "kathmandu"
+   }
+  ]
+ },
+ "context": {
+  "title": "Polaama"
+ },
+ "searchInformation": {
+  "searchTime": 0.377217,
+  "formattedSearchTime": "0.38",
+  "totalResults": "74900",
+  "formattedTotalResults": "74,900"
+ },
+ "items": [
+  {
+   "kind": "customsearch#result",
+   "title": "The Top 10 Things to Do in Kathmandu 2017 - TripAdvisor ...",
+   "htmlTitle": "The Top 10 Things to Do in \u003cb\u003eKathmandu\u003c/b\u003e 2017 - \u003cb\u003eTripAdvisor\u003c/b\u003e ...",
+   "link": "https://www.tripadvisor.com/Attractions-g293890-Activities-Kathmandu_Kathmandu_Valley_Bagmati_Zone_Central_Region.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Book your tickets online for the top things to do in Kathmandu, Nepal on \nTripAdvisor: See 51608 traveler reviews and photos of Kathmandu tourist \nattractions.",
+   "htmlSnippet": "Book your tickets online for the top things to do in \u003cb\u003eKathmandu\u003c/b\u003e, Nepal on \u003cbr\u003e\n\u003cb\u003eTripAdvisor\u003c/b\u003e: See 51608 traveler reviews and photos of \u003cb\u003eKathmandu\u003c/b\u003e tourist \u003cbr\u003e\n\u003cb\u003eattractions\u003c/b\u003e.",
+   "cacheId": "J7MuaasatL0J",
+   "formattedUrl": "https://www.tripadvisor.com/Attractions-g293890-Activities-Kathmandu_ Kathmandu_Valley_Bagmati_Zone_Central_Region.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttractions\u003c/b\u003e-g293890-Activities-\u003cb\u003eKathmandu\u003c/b\u003e_ \u003cb\u003eKathmandu\u003c/b\u003e_Valley_Bagmati_Zone_Central_Region.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "290",
+      "height": "174",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTRcEhDwR61nPpVx55M7NV3TxJiV1xqAH6rF51qtp6h-COsqyMI3WLIhUc"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "Nepal",
+      "title": "Nepal"
+     },
+     {
+      "url": "Central Region",
+      "title": "Central Region"
+     },
+     {
+      "url": "Bagmati Zone",
+      "title": "Bagmati Zone"
+     },
+     {
+      "url": "Kathmandu Valley",
+      "title": "Kathmandu Valley"
+     },
+     {
+      "url": "Kathmandu",
+      "title": "Kathmandu"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "The Top 10 Things to Do in Kathmandu 2017 - TripAdvisor - Kathmandu, Nepal Attractions - Find What to Do Today, This Weekend, or in April",
+      "og:description": "Book your tickets online for the top things to do in Kathmandu, Nepal on TripAdvisor: See 51,608 traveler reviews and photos of Kathmandu tourist attractions. Find what to do today, this weekend, or in April. We have reviews of the best places to see in Kathmandu. Visit top-rated & must-see attractions.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/03/9b/2f/af/kathmandu.jpg",
+      "og:image:width": "550",
+      "og:image:height": "331",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attractions-g293890-Activities-m33762-Kathmandu_Kathmandu_Valley_Bagmati_Zone_Central_Region.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attractions-g293890-Activities-m33762-Kathmandu_Kathmandu_Valley_Bagmati_Zone_Central_Region.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attractions-g293890-Activities-m33762-Kathmandu_Kathmandu_Valley_Bagmati_Zone_Central_Region.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/03/9b/2f/af/kathmandu.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Kathmandu 2017: Best of Kathmandu, Nepal Tourism - TripAdvisor",
+   "htmlTitle": "\u003cb\u003eKathmandu\u003c/b\u003e 2017: Best of \u003cb\u003eKathmandu\u003c/b\u003e, Nepal Tourism - \u003cb\u003eTripAdvisor\u003c/b\u003e",
+   "link": "https://www.tripadvisor.com/Tourism-g293890-Kathmandu_Kathmandu_Valley_Bagmati_Zone_Central_Region-Vacations.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Kathmandu Tourism: TripAdvisor has 133474 reviews of Kathmandu Hotels, \nAttractions, and Restaurants making it your best Kathmandu resource.",
+   "htmlSnippet": "\u003cb\u003eKathmandu\u003c/b\u003e Tourism: \u003cb\u003eTripAdvisor\u003c/b\u003e has 133474 reviews of \u003cb\u003eKathmandu\u003c/b\u003e Hotels, \u003cbr\u003e\n\u003cb\u003eAttractions\u003c/b\u003e, and Restaurants making it your best \u003cb\u003eKathmandu\u003c/b\u003e resource.",
+   "cacheId": "XU3PTgVEbNkJ",
+   "formattedUrl": "https://www.tripadvisor.com/Tourism-g293890-Kathmandu_Kathmandu_ Valley_Bagmati_Zone_Central_Region-Vacations.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eTour\u003c/b\u003eism-g293890-\u003cb\u003eKathmandu\u003c/b\u003e_\u003cb\u003eKathmandu\u003c/b\u003e_ Valley_Bagmati_Zone_Central_Region-Vacations.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "290",
+      "height": "174",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTRcEhDwR61nPpVx55M7NV3TxJiV1xqAH6rF51qtp6h-COsqyMI3WLIhUc"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "Nepal",
+      "title": "Nepal"
+     },
+     {
+      "url": "Central Region",
+      "title": "Central Region"
+     },
+     {
+      "url": "Bagmati Zone",
+      "title": "Bagmati Zone"
+     },
+     {
+      "url": "Kathmandu Valley",
+      "title": "Kathmandu Valley"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Kathmandu 2017: Best of Kathmandu, Nepal Tourism - TripAdvisor",
+      "og:description": "Kathmandu Tourism: TripAdvisor has 133,474 reviews of Kathmandu Hotels, Attractions, and Restaurants making it your best Kathmandu resource.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/03/9b/2f/af/kathmandu.jpg",
+      "og:image:width": "550",
+      "og:image:height": "331",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Tourism-g293890-m33762-Kathmandu_Kathmandu_Valley_Bagmati_Zone_Central_Region-Vacations.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Tourism-g293890-m33762-Kathmandu_Kathmandu_Valley_Bagmati_Zone_Central_Region-Vacations.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Tourism-g293890-m33762-Kathmandu_Kathmandu_Valley_Bagmati_Zone_Central_Region-Vacations.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/03/9b/2f/af/kathmandu.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "The 10 Best Kathmandu Restaurants 2017 - TripAdvisor",
+   "htmlTitle": "The 10 Best \u003cb\u003eKathmandu\u003c/b\u003e Restaurants 2017 - \u003cb\u003eTripAdvisor\u003c/b\u003e",
+   "link": "https://www.tripadvisor.com/Restaurants-g293890-Kathmandu_Kathmandu_Valley_Bagmati_Zone_Central_Region.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Best Dining in Kathmandu, Kathmandu Valley: See 29659 TripAdvisor traveler \nreviews of 707 Kathmandu restaurants and search by cuisine, price, location, and \nmore. ... “Seriously, DELICIOUS” 04/06/2017; “Cozy place to eat” 04/02/2017 ...",
+   "htmlSnippet": "Best Dining in \u003cb\u003eKathmandu\u003c/b\u003e, \u003cb\u003eKathmandu\u003c/b\u003e Valley: See 29659 \u003cb\u003eTripAdvisor\u003c/b\u003e traveler \u003cbr\u003e\nreviews of 707 \u003cb\u003eKathmandu\u003c/b\u003e restaurants and search by cuisine, price, location, and \u003cbr\u003e\nmore. ... “Seriously, DELICIOUS” 04/06/2017; “Cozy \u003cb\u003eplace\u003c/b\u003e to eat” 04/02/2017&nbsp;...",
+   "cacheId": "H1gI5cXoMM8J",
+   "formattedUrl": "https://www.tripadvisor.com/Restaurants-g293890-Kathmandu_Kathmandu_ Valley_Bagmati_Zone_Central_Region.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/Restaurants-g293890-\u003cb\u003eKathmandu\u003c/b\u003e_\u003cb\u003eKathmandu\u003c/b\u003e_ Valley_Bagmati_Zone_Central_Region.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "290",
+      "height": "174",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTRcEhDwR61nPpVx55M7NV3TxJiV1xqAH6rF51qtp6h-COsqyMI3WLIhUc"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "Nepal",
+      "title": "Nepal"
+     },
+     {
+      "url": "Central Region",
+      "title": "Central Region"
+     },
+     {
+      "url": "Bagmati Zone",
+      "title": "Bagmati Zone"
+     },
+     {
+      "url": "Kathmandu Valley",
+      "title": "Kathmandu Valley"
+     },
+     {
+      "url": "Kathmandu",
+      "title": "Kathmandu"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "The 10 Best Kathmandu Restaurants 2017 - TripAdvisor",
+      "og:description": "Best Dining in Kathmandu, Kathmandu Valley: See 29,659 TripAdvisor traveler reviews of 707 Kathmandu restaurants and search by cuisine, price, location, and more.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/03/9b/2f/af/kathmandu.jpg",
+      "og:image:width": "550",
+      "og:image:height": "331",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Restaurants-g293890-m33762-Kathmandu_Kathmandu_Valley_Bagmati_Zone_Central_Region.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Restaurants-g293890-m33762-Kathmandu_Kathmandu_Valley_Bagmati_Zone_Central_Region.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Restaurants-g293890-m33762-Kathmandu_Kathmandu_Valley_Bagmati_Zone_Central_Region.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/03/9b/2f/af/kathmandu.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "The 10 Best Outdoor Activities in Kathmandu - TripAdvisor",
+   "htmlTitle": "The 10 Best Outdoor Activities in \u003cb\u003eKathmandu\u003c/b\u003e - \u003cb\u003eTripAdvisor\u003c/b\u003e",
+   "link": "https://www.tripadvisor.com/Attractions-g293890-Activities-c61-Kathmandu_Kathmandu_Valley_Bagmati_Zone_Central_Region.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Top Outdoor Activities in Kathmandu: See reviews and photos of outdoor \nactivities in ... See More Top Selling Tours & Activities ... Top Attractions in \nKathmandu.",
+   "htmlSnippet": "Top Outdoor Activities in \u003cb\u003eKathmandu\u003c/b\u003e: See reviews and photos of outdoor \u003cbr\u003e\nactivities in ... See More Top Selling \u003cb\u003eTours\u003c/b\u003e &amp; Activities ... Top \u003cb\u003eAttractions\u003c/b\u003e in \u003cbr\u003e\n\u003cb\u003eKathmandu\u003c/b\u003e.",
+   "cacheId": "qJROqn8LIDgJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attractions-g293890-Activities-c61-Kathmandu _Kathmandu_Valley_Bagmati_Zone_Central_Region.html",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttractions\u003c/b\u003e-g293890-Activities-c61-\u003cb\u003eKathmandu\u003c/b\u003e _\u003cb\u003eKathmandu\u003c/b\u003e_Valley_Bagmati_Zone_Central_Region.html",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "290",
+      "height": "174",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTRcEhDwR61nPpVx55M7NV3TxJiV1xqAH6rF51qtp6h-COsqyMI3WLIhUc"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "Nepal",
+      "title": "Nepal"
+     },
+     {
+      "url": "Central Region",
+      "title": "Central Region"
+     },
+     {
+      "url": "Bagmati Zone",
+      "title": "Bagmati Zone"
+     },
+     {
+      "url": "Kathmandu Valley",
+      "title": "Kathmandu Valley"
+     },
+     {
+      "url": "Kathmandu",
+      "title": "Kathmandu"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "The 10  Best Outdoor Activities in Kathmandu - TripAdvisor",
+      "og:description": "Top Outdoor Activities in Kathmandu: See reviews and photos of outdoor activities in Kathmandu, Nepal on TripAdvisor.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/03/9b/2f/af/kathmandu.jpg",
+      "og:image:width": "550",
+      "og:image:height": "331"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/03/9b/2f/af/kathmandu.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Ace the Himalaya - Private Day Tours (Kathmandu, Nepal): Top Tips ...",
+   "htmlTitle": "Ace the Himalaya - Private Day \u003cb\u003eTours\u003c/b\u003e (\u003cb\u003eKathmandu\u003c/b\u003e, Nepal): Top Tips ...",
+   "link": "https://www.tripadvisor.com/Attraction_Review-g293890-d1957215-Reviews-Ace_the_Himalaya_Private_Day_Tours-Kathmandu_Kathmandu_Valley_Bagmati_Zone_Centra.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Ace the Himalaya - Private Day Tours, Kathmandu: See 441 reviews, articles, \nand ... Day Tours, ranked No.1 on TripAdvisor among 410 attractions in \nKathmandu.",
+   "htmlSnippet": "Ace the Himalaya - Private Day Tours, \u003cb\u003eKathmandu\u003c/b\u003e: See 441 reviews, articles, \u003cbr\u003e\nand ... Day Tours, ranked No.1 on \u003cb\u003eTripAdvisor\u003c/b\u003e among 410 \u003cb\u003eattractions\u003c/b\u003e in \u003cbr\u003e\n\u003cb\u003eKathmandu\u003c/b\u003e.",
+   "cacheId": "hUTN1SJd8pEJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attraction_Review-g293890-d1957215-Reviews -Ace_the_Himalaya_Private_Day_Tours-Kathmandu_Kathmandu_...",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttraction\u003c/b\u003e_Review-g293890-d1957215-Reviews -Ace_the_Himalaya_Private_Day_\u003cb\u003eTours\u003c/b\u003e-\u003cb\u003eKathmandu\u003c/b\u003e_\u003cb\u003eKathmandu\u003c/b\u003e_...",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "259",
+      "height": "194",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRPYp1yV4I_fqSinKcixf7ejkQGChzbdb7T3lI9YhQ2gBwyYDMPSwuZxu5u"
+     }
+    ],
+    "LocalBusiness": [
+     {
+      "image": "https://media-cdn.tripadvisor.com/media/photo-s/03/a6/a8/5f/ace-the-himalaya-private.jpg",
+      "name": "Ace the Himalaya - Private Day Tours"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "Nepal",
+      "title": "Nepal"
+     },
+     {
+      "url": "Central Region",
+      "title": "Central Region"
+     },
+     {
+      "url": "Bagmati Zone",
+      "title": "Bagmati Zone"
+     },
+     {
+      "url": "Kathmandu Valley",
+      "title": "Kathmandu Valley"
+     },
+     {
+      "url": "Kathmandu",
+      "title": "Kathmandu"
+     },
+     {
+      "url": "Things to Do in Kathmandu",
+      "title": "Things to Do in Kathmandu"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "5.0",
+      "ratingcount": "441",
+      "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/03/a6/a8/5f/ace-the-himalaya-private.jpg"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "441"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Ace the Himalaya - Private Day Tours (Kathmandu, Nepal): Top Tips Before You Go - TripAdvisor",
+      "og:description": "Ace the Himalaya - Private Day Tours, Kathmandu: See 441 reviews, articles, and 405 photos of Ace the Himalaya - Private Day Tours, ranked No.1 on TripAdvisor among 410 attractions in Kathmandu.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/03/a6/a8/5f/ace-the-himalaya-private.jpg",
+      "og:image:width": "550",
+      "og:image:height": "412",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attraction_Review-g293890-d1957215-Reviews-m33762-Ace_the_Himalaya_Private_Day_Tours-Kathmandu_Kathmandu_Valley_Bagmati_Zone.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attraction_Review-g293890-d1957215-Reviews-m33762-Ace_the_Himalaya_Private_Day_Tours-Kathmandu_Kathmandu_Valley_Bagmati_Zone.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attraction_Review-g293890-d1957215-Reviews-m33762-Ace_the_Himalaya_Private_Day_Tours-Kathmandu_Kathmandu_Valley_Bagmati_Zone.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/03/a6/a8/5f/ace-the-himalaya-private.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Is Air Condition needed in Kathmandu in June? - Kathmandu Forum ...",
+   "htmlTitle": "Is Air Condition needed in \u003cb\u003eKathmandu\u003c/b\u003e in \u003cb\u003eJune\u003c/b\u003e? - \u003cb\u003eKathmandu\u003c/b\u003e Forum ...",
+   "link": "https://www.tripadvisor.com/ShowTopic-g293890-i9244-k10379829-Is_Air_Condition_needed_in_Kathmandu_in_June-Kathmandu_Kathmandu_Valley_Bagmati_Zone_Centr.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "1 day ago ... We are taking our first trip to Nepal and looking at places to stay. Has anyone \ntravelled there in mis June that could tell us if we should definitely ...",
+   "htmlSnippet": "1 day ago \u003cb\u003e...\u003c/b\u003e We are taking our first \u003cb\u003etrip\u003c/b\u003e to Nepal and looking at \u003cb\u003eplaces\u003c/b\u003e to stay. Has anyone \u003cbr\u003e\ntravelled there in mis \u003cb\u003eJune\u003c/b\u003e that could tell us if we should definitely&nbsp;...",
+   "cacheId": "J26_mGotUhAJ",
+   "formattedUrl": "https://www.tripadvisor.com/ShowTopic-g293890-i9244-k10379829-Is_Air _Condition_needed_in_Kathmandu_in_June-Kathmandu_Kathman...",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/ShowTopic-g293890-i9244-k10379829-Is_Air _Condition_needed_in_\u003cb\u003eKathmandu\u003c/b\u003e_in_\u003cb\u003eJune\u003c/b\u003e-\u003cb\u003eKathmandu\u003c/b\u003e_\u003cb\u003eKathman\u003c/b\u003e...",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "80",
+      "height": "80",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTVQflH0VqVMp6PDcRILO5PBISjTfAm4CWJ85aFIrZtIGOJanUlknhw"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "Nepal",
+      "title": "Nepal"
+     },
+     {
+      "url": "Central Region",
+      "title": "Central Region"
+     },
+     {
+      "url": "Bagmati Zone",
+      "title": "Bagmati Zone"
+     },
+     {
+      "url": "Kathmandu Valley",
+      "title": "Kathmandu Valley"
+     },
+     {
+      "url": "Kathmandu",
+      "title": "Kathmandu"
+     },
+     {
+      "url": "Kathmandu Travel Forum",
+      "title": "Kathmandu Travel Forum"
+     }
+    ],
+    "metatags": [
+     {
+      "og:image": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Karnali Excursions - Day Tours (Kathmandu, Nepal): Top Tips ...",
+   "htmlTitle": "Karnali Excursions - Day \u003cb\u003eTours\u003c/b\u003e (\u003cb\u003eKathmandu\u003c/b\u003e, Nepal): Top Tips ...",
+   "link": "https://www.tripadvisor.com/Attraction_Review-g293890-d1911374-Reviews-Karnali_Excursions_Day_Tours-Kathmandu_Kathmandu_Valley_Bagmati_Zone_Central_Regi.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Karnali Excursions - Day Tours, Kathmandu: See 150 reviews, articles, and 90 \nphotos of ... Day Tours, ranked No.96 on TripAdvisor among 595 attractions in \nKathmandu. ... “Mount Kailash trip with Karnali Tours in Kathmandu - June 2016”.",
+   "htmlSnippet": "Karnali Excursions - Day Tours, \u003cb\u003eKathmandu\u003c/b\u003e: See 150 reviews, articles, and 90 \u003cbr\u003e\nphotos of ... Day Tours, ranked No.96 on \u003cb\u003eTripAdvisor\u003c/b\u003e among 595 \u003cb\u003eattractions\u003c/b\u003e in \u003cbr\u003e\n\u003cb\u003eKathmandu\u003c/b\u003e. ... “Mount Kailash trip with Karnali Tours in \u003cb\u003eKathmandu\u003c/b\u003e - \u003cb\u003eJune\u003c/b\u003e 2016”.",
+   "cacheId": "5tBz7RTsvuYJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attraction_Review-g293890-d1911374-Reviews -Karnali_Excursions_Day_Tours-Kathmandu_Kathmandu_Valley_...",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttraction\u003c/b\u003e_Review-g293890-d1911374-Reviews -Karnali_Excursions_Day_\u003cb\u003eTours\u003c/b\u003e-\u003cb\u003eKathmandu\u003c/b\u003e_\u003cb\u003eKathmandu\u003c/b\u003e_Valley_...",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "306",
+      "height": "165",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTYKlywQX8ObaV8GIzuzPWs53YQBJupmCufF0eWWrrZap1GG24VU9Y9471"
+     }
+    ],
+    "LocalBusiness": [
+     {
+      "image": "https://media-cdn.tripadvisor.com/media/photo-s/07/10/97/32/upper-mustang-photo-by.jpg",
+      "name": "Karnali Excursions - Day Tours"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "Nepal",
+      "title": "Nepal"
+     },
+     {
+      "url": "Central Region",
+      "title": "Central Region"
+     },
+     {
+      "url": "Bagmati Zone",
+      "title": "Bagmati Zone"
+     },
+     {
+      "url": "Kathmandu Valley",
+      "title": "Kathmandu Valley"
+     },
+     {
+      "url": "Kathmandu",
+      "title": "Kathmandu"
+     },
+     {
+      "url": "Things to Do in Kathmandu",
+      "title": "Things to Do in Kathmandu"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "5.0",
+      "ratingcount": "150",
+      "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/07/10/97/32/upper-mustang-photo-by.jpg"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "150"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Karnali Excursions - Day Tours (Kathmandu, Nepal): Top Tips Before You Go - TripAdvisor",
+      "og:description": "Karnali Excursions - Day Tours, Kathmandu: See 150 reviews, articles, and 90 photos of Karnali Excursions - Day Tours, ranked No.96 on TripAdvisor among 595 attractions in Kathmandu.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/07/10/97/32/upper-mustang-photo-by.jpg",
+      "og:image:width": "550",
+      "og:image:height": "296",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attraction_Review-g293890-d1911374-Reviews-m33762-Karnali_Excursions_Day_Tours-Kathmandu_Kathmandu_Valley_Bagmati_Zone_Centr.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attraction_Review-g293890-d1911374-Reviews-m33762-Karnali_Excursions_Day_Tours-Kathmandu_Kathmandu_Valley_Bagmati_Zone_Centr.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attraction_Review-g293890-d1911374-Reviews-m33762-Karnali_Excursions_Day_Tours-Kathmandu_Kathmandu_Valley_Bagmati_Zone_Centr.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/07/10/97/32/upper-mustang-photo-by.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "5 Cheap Flights to Kathmandu, Nepal (KTM) from $533 - TripAdvisor",
+   "htmlTitle": "5 Cheap Flights to \u003cb\u003eKathmandu\u003c/b\u003e, Nepal (KTM) from $533 - \u003cb\u003eTripAdvisor\u003c/b\u003e",
+   "link": "https://www.tripadvisor.com/Flights-g293890-Kathmandu_Kathmandu_Valley_Bagmati_Zone_Central_Region-Cheap_Discount_Airfares.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Cheap Flights to Kathmandu: Enter your dates once and have TripAdvisor search \nmultiple sites to find the best prices on Kathmandu flights. ... Great place to stay -..\n. October 31, 2016. Show Prices. Spa · Hotel Family Home · 4.5 of 5 bubbles.",
+   "htmlSnippet": "Cheap Flights to \u003cb\u003eKathmandu\u003c/b\u003e: Enter your dates once and have \u003cb\u003eTripAdvisor\u003c/b\u003e search \u003cbr\u003e\nmultiple sites to find the best prices on \u003cb\u003eKathmandu\u003c/b\u003e flights. ... Great \u003cb\u003eplace\u003c/b\u003e to stay -..\u003cbr\u003e\n. October 31, 2016. Show Prices. Spa &middot; Hotel Family Home &middot; 4.5 of 5 bubbles.",
+   "cacheId": "5_ns6JxLYb8J",
+   "formattedUrl": "https://www.tripadvisor.com/Flights-g293890-Kathmandu_Kathmandu_ Valley_Bagmati_Zone_Central_Region-Cheap_Discount_Airfares.ht...",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/Flights-g293890-\u003cb\u003eKathmandu\u003c/b\u003e_\u003cb\u003eKathmandu\u003c/b\u003e_ Valley_Bagmati_Zone_Central_Region-Cheap_Discount_Airfares.ht...",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "80",
+      "height": "80",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTVQflH0VqVMp6PDcRILO5PBISjTfAm4CWJ85aFIrZtIGOJanUlknhw"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "Nepal",
+      "title": "Nepal"
+     },
+     {
+      "url": "Central Region",
+      "title": "Central Region"
+     },
+     {
+      "url": "Bagmati Zone",
+      "title": "Bagmati Zone"
+     },
+     {
+      "url": "Kathmandu Valley",
+      "title": "Kathmandu Valley"
+     },
+     {
+      "url": "Kathmandu",
+      "title": "Kathmandu"
+     },
+     {
+      "url": "Kathmandu Flights",
+      "title": "Kathmandu Flights"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "5 Cheap Flights to Kathmandu, Nepal (KTM) from $533 - TripAdvisor",
+      "og:image": "https://static.tacdn.com/img2/postimg.jpg",
+      "viewport": "width=1040,user-scalable=no"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://static.tacdn.com/img2/postimg.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Monterosa Treks and Expedition - Day Heli Tours (Kathmandu ...",
+   "htmlTitle": "Monterosa Treks and Expedition - Day Heli \u003cb\u003eTours\u003c/b\u003e (\u003cb\u003eKathmandu\u003c/b\u003e ...",
+   "link": "https://www.tripadvisor.com/Attraction_Review-g293890-d3159816-Reviews-Monterosa_Treks_and_Expedition_Day_Heli_Tours-Kathmandu_Kathmandu_Valley_Bagmati_.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Monterosa Treks and Expedition - Day Heli Tours, Kathmandu: See 133 ... Day \nHeli Tours, ranked No.43 on TripAdvisor among 596 attractions in Kathmandu. ... \nWe are group of 21 peoples visited kailash Manasarovar tour June 2016 and it ...",
+   "htmlSnippet": "Monterosa Treks and Expedition - Day Heli Tours, \u003cb\u003eKathmandu\u003c/b\u003e: See 133 ... Day \u003cbr\u003e\nHeli Tours, ranked No.43 on \u003cb\u003eTripAdvisor\u003c/b\u003e among 596 \u003cb\u003eattractions\u003c/b\u003e in \u003cb\u003eKathmandu\u003c/b\u003e. ... \u003cbr\u003e\nWe are group of 21 peoples visited kailash Manasarovar tour \u003cb\u003eJune\u003c/b\u003e 2016 and it&nbsp;...",
+   "cacheId": "tme3hDQiPcgJ",
+   "formattedUrl": "https://www.tripadvisor.com/Attraction_Review-g293890-d3159816-Reviews -Monterosa_Treks_and_Expedition_Day_Heli_Tours-Kathmandu_ ...",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/\u003cb\u003eAttraction\u003c/b\u003e_Review-g293890-d3159816-Reviews -Monterosa_Treks_and_Expedition_Day_Heli_\u003cb\u003eTours\u003c/b\u003e-\u003cb\u003eKathmandu\u003c/b\u003e_ ...",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "282",
+      "height": "179",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSw9RCBb5gYY7k3TFgCxRHoU-tHrK6HjrOUmGEaCdpnn7JlQkzTLWGuotNO"
+     }
+    ],
+    "LocalBusiness": [
+     {
+      "image": "https://media-cdn.tripadvisor.com/media/photo-s/02/7b/ef/16/heli-tour-in-everest.jpg",
+      "name": "Monterosa Treks and Expedition - Day Heli Tours"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "Nepal",
+      "title": "Nepal"
+     },
+     {
+      "url": "Central Region",
+      "title": "Central Region"
+     },
+     {
+      "url": "Bagmati Zone",
+      "title": "Bagmati Zone"
+     },
+     {
+      "url": "Kathmandu Valley",
+      "title": "Kathmandu Valley"
+     },
+     {
+      "url": "Kathmandu",
+      "title": "Kathmandu"
+     },
+     {
+      "url": "Things to Do in Kathmandu",
+      "title": "Things to Do in Kathmandu"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "5.0",
+      "ratingcount": "133",
+      "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/02/7b/ef/16/heli-tour-in-everest.jpg"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "133"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Monterosa Treks and Expedition - Day Heli Tours (Kathmandu, Nepal): Top Tips Before You Go - TripAdvisor",
+      "og:description": "Monterosa Treks and Expedition - Day Heli Tours, Kathmandu: See 133 reviews, articles, and 157 photos of Monterosa Treks and Expedition - Day Heli Tours, ranked No.43 on TripAdvisor among 596 attractions in Kathmandu.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/02/7b/ef/16/heli-tour-in-everest.jpg",
+      "og:image:width": "550",
+      "og:image:height": "350",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Attraction_Review-g293890-d3159816-Reviews-m33762-Monterosa_Treks_and_Expedition_Day_Heli_Tours-Kathmandu_Kathmandu_Valley_B.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Attraction_Review-g293890-d3159816-Reviews-m33762-Monterosa_Treks_and_Expedition_Day_Heli_Tours-Kathmandu_Kathmandu_Valley_B.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Attraction_Review-g293890-d3159816-Reviews-m33762-Monterosa_Treks_and_Expedition_Day_Heli_Tours-Kathmandu_Kathmandu_Valley_B.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/02/7b/ef/16/heli-tour-in-everest.jpg"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Andes House - UPDATED 2017 Hostel Reviews & Price ...",
+   "htmlTitle": "Andes House - UPDATED 2017 Hostel Reviews &amp; Price ...",
+   "link": "https://www.tripadvisor.com/Hotel_Review-g293890-d7396003-Reviews-Andes_House-Kathmandu_Kathmandu_Valley_Bagmati_Zone_Central_Region.html",
+   "displayLink": "www.tripadvisor.com",
+   "snippet": "Book Andes House, Kathmandu on TripAdvisor: See 131 traveler reviews, 64 \ncandid photos, and great deals for Andes House, ranked #1 of 117 specialty \nlodging in Kathmandu and rated 5 of 5 at TripAdvisor. ... Together with my \nhusband, we spent couple of days here - it's nice place with a garden .... June 11, \n2016|.",
+   "htmlSnippet": "Book Andes House, \u003cb\u003eKathmandu\u003c/b\u003e on \u003cb\u003eTripAdvisor\u003c/b\u003e: See 131 traveler reviews, 64 \u003cbr\u003e\ncandid photos, and great deals for Andes House, ranked #1 of 117 specialty \u003cbr\u003e\nlodging in \u003cb\u003eKathmandu\u003c/b\u003e and rated 5 of 5 at \u003cb\u003eTripAdvisor\u003c/b\u003e. ... Together with my \u003cbr\u003e\nhusband, we spent couple of days here - it&#39;s nice \u003cb\u003eplace\u003c/b\u003e with a garden .... \u003cb\u003eJune\u003c/b\u003e 11, \u003cbr\u003e\n2016|.",
+   "cacheId": "ndNPeXBs4YsJ",
+   "formattedUrl": "https://www.tripadvisor.com/Hotel_Review-g293890-d7396003-Reviews- Andes_House-Kathmandu_Kathmandu_Valley_Bagmati_Zone_Cen...",
+   "htmlFormattedUrl": "https://www.\u003cb\u003etripadvisor\u003c/b\u003e.com/Hotel_Review-g293890-d7396003-Reviews- Andes_House-\u003cb\u003eKathmandu\u003c/b\u003e_\u003cb\u003eKathmandu\u003c/b\u003e_Valley_Bagmati_Zone_Cen...",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "259",
+      "height": "194",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkCkUu_2BJrG6jAL4wuRLZKkLhYzylQJOugGG66rO_5PETkunrmScM5h0"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Asia",
+      "title": "Asia"
+     },
+     {
+      "url": "Nepal",
+      "title": "Nepal"
+     },
+     {
+      "url": "Central Region",
+      "title": "Central Region"
+     },
+     {
+      "url": "Bagmati Zone",
+      "title": "Bagmati Zone"
+     },
+     {
+      "url": "Kathmandu Valley",
+      "title": "Kathmandu Valley"
+     },
+     {
+      "url": "Kathmandu",
+      "title": "Kathmandu"
+     },
+     {
+      "url": "Kathmandu Specialty Lodging",
+      "title": "Kathmandu Specialty Lodging"
+     },
+     {
+      "url": "Hostels in Kathmandu",
+      "title": "Hostels in Kathmandu"
+     }
+    ],
+    "LodgingBusiness": [
+     {
+      "image": "https://media-cdn.tripadvisor.com/media/photo-s/07/52/24/2f/andes-house.jpg",
+      "name": "Andes House",
+      "streetAddress": "Ga-Hiti Marg, Thamel - 29, Kathmandu",
+      "addressLocality": "Kathmandu",
+      "postalCode": "00977",
+      "addressCountry": "Nepal",
+      "addressRegion": "Central Region",
+      "ratingValue": "5"
+     }
+    ],
+    "review": [
+     {
+      "ratingstars": "5.0",
+      "ratingcount": "182",
+      "image_url": "https://media-cdn.tripadvisor.com/media/photo-s/07/52/24/2f/andes-house.jpg"
+     }
+    ],
+    "hreviewaggregate": [
+     {
+      "count": "182"
+     }
+    ],
+    "metatags": [
+     {
+      "og:title": "Andes House - UPDATED 2017  Hostel Reviews & Price Comparison (Kathmandu, Nepal) - TripAdvisor",
+      "og:description": "Book Andes House, Kathmandu on TripAdvisor: See 131 traveler reviews, 64 candid photos, and great deals for Andes House, ranked #1 of 117 specialty lodging in Kathmandu and rated 5 of 5 at TripAdvisor.",
+      "og:image": "https://media-cdn.tripadvisor.com/media/photo-s/07/52/24/2f/andes-house.jpg",
+      "og:image:width": "550",
+      "og:image:height": "413",
+      "al:ios:app_name": "TripAdvisor",
+      "al:ios:app_store_id": "284876795",
+      "twitter:app:id:ipad": "284876795",
+      "twitter:app:id:iphone": "284876795",
+      "al:ios:url": "tripadvisor://www.tripadvisor.com/Hotel_Review-g293890-d7396003-Reviews-m33762-Andes_House-Kathmandu_Kathmandu_Valley_Bagmati_Zone_Central_Region.html",
+      "twitter:app:url:ipad": "tripadvisor://www.tripadvisor.com/Hotel_Review-g293890-d7396003-Reviews-m33762-Andes_House-Kathmandu_Kathmandu_Valley_Bagmati_Zone_Central_Region.html",
+      "twitter:app:url:iphone": "tripadvisor://www.tripadvisor.com/Hotel_Review-g293890-d7396003-Reviews-m33762-Andes_House-Kathmandu_Kathmandu_Valley_Bagmati_Zone_Central_Region.html"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media-cdn.tripadvisor.com/media/photo-s/07/52/24/2f/andes-house.jpg"
+     }
+    ]
+   }
+  }
+ ]
+}

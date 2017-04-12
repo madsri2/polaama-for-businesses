@@ -280,15 +280,12 @@ Session.prototype.getTrip = function(tripName) {
 }
 
 Session.prototype.clearAllAwaitingStates = function() {
-  this.awaitingComment = false;
-  this.awaitingTodoItem = false;
-  this.awaitingPacklistItem = false;
-  this.awaitingNewTripDetails = false;
+  Object.keys(this).forEach(key => {
+    if(key.startsWith("awaiting")) {
+      this[key] = false;
+    }
+  });
   this.planningNewTrip = false;
-  this.awaitingHometownInfo = false;
-  this.awaitingCitiesForNewTrip = false;
-  this.awaitingExpenseReport = false;
-  this.awaitingUserConfirmation = false;
 }
 
 // TODO: Fix ME. this always return PST/PDT now. Obtain the timezone from the hometown.

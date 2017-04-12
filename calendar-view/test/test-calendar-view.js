@@ -26,7 +26,7 @@ describe("Calendar tests", function() {
     const startDate = "2017-11-1";
     const startTime = "09:00";
     const portOfEntry = "chennai";
-    const tripData = new TripData('mobile-view-test');
+    const tripData = new TripData('test-mobile-view');
     tripData.data.country = "india";
     tripData.data.startDate = startDate;
     tripData.data.startTime = startTime;

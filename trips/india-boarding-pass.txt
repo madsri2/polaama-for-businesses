@@ -1,0 +1,1 @@
+{"full_name":"Madhu Partha","pnr_number":"XEGSWP","flight_number":"AL520","departure_airport":{"airport_code":"SEA","city":"Seattle"},"arrival_airport":{"airport_code":"JFK","city":"New York"},"flight_schedule":{"departure_time":"12:00"}}

@@ -274,15 +274,21 @@ WebhookPostHandler.prototype.startPlanningTrip = function() {
 
   const createItin = new CreateItinerary(this.session.tripData(), this.session.hometown);
   const self = this;
-  Promise.all(createItin.create()).done(
-    function(values) {
-      // nothing to do here if create succeeds. The itinerary will be persisted and can be obtained by reading the file, which is done in trip-data-formatter:displayCalendar when /calendar is called
-      logger.info(`Successfully created itinerary for trip ${self.session.tripNameInContext}`);
-    },
-    function(error) {
-      logger.error(`Error creating itinerary for trip ${self.session.tripNameInContext}: ${error.stack}`);
-    }
-  );
+  try {
+    Promise.all(createItin.create()).done(
+      function(values) {
+        // nothing to do here if create succeeds. The itinerary will be persisted and can be obtained by reading the file, which is done in trip-data-formatter:displayCalendar when /calendar is called
+        logger.info(`Successfully created itinerary for trip ${self.session.tripNameInContext}`);
+      },
+      function(error) {
+        logger.error(`Error creating itinerary for trip ${self.session.tripNameInContext}: ${error.stack}`);
+      }
+    );
+  }
+  catch(e) {
+    logger.error(`Error creating itinerary for trip ${self.session.tripNameInContext}: ${e.stack}`);
+    // proceed to continue with other aspects of trip planning
+  }
 
   const tip = new TripInfoProvider(this.session.tripData(), this.session.hometown);
   const activities = Promise.denodeify(tip.getActivities.bind(tip));

@@ -1,0 +1,672 @@
+{
+ "kind": "customsearch#search",
+ "url": {
+  "type": "application/json",
+  "template": "https://www.googleapis.com/customsearch/v1?q={searchTerms}&num={count?}&start={startIndex?}&lr={language?}&safe={safe?}&cx={cx?}&cref={cref?}&sort={sort?}&filter={filter?}&gl={gl?}&cr={cr?}&googlehost={googleHost?}&c2coff={disableCnTwTranslation?}&hq={hq?}&hl={hl?}&siteSearch={siteSearch?}&siteSearchFilter={siteSearchFilter?}&exactTerms={exactTerms?}&excludeTerms={excludeTerms?}&linkSite={linkSite?}&orTerms={orTerms?}&relatedSite={relatedSite?}&dateRestrict={dateRestrict?}&lowRange={lowRange?}&highRange={highRange?}&searchType={searchType}&fileType={fileType?}&rights={rights?}&imgSize={imgSize?}&imgType={imgType?}&imgColorType={imgColorType?}&imgDominantColor={imgDominantColor?}&alt=json"
+ },
+ "queries": {
+  "request": [
+   {
+    "title": "Google Custom Search - lonely planet kathmandu june things to do",
+    "totalResults": "1460",
+    "searchTerms": "lonely planet kathmandu june things to do",
+    "count": 10,
+    "startIndex": 1,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "kathmandu"
+   }
+  ],
+  "nextPage": [
+   {
+    "title": "Google Custom Search - lonely planet kathmandu june things to do",
+    "totalResults": "1460",
+    "searchTerms": "lonely planet kathmandu june things to do",
+    "count": 10,
+    "startIndex": 11,
+    "inputEncoding": "utf8",
+    "outputEncoding": "utf8",
+    "safe": "off",
+    "cx": "016727128883863036563:zuqchmgec0u",
+    "exactTerms": "kathmandu"
+   }
+  ]
+ },
+ "context": {
+  "title": "Polaama"
+ },
+ "searchInformation": {
+  "searchTime": 0.455617,
+  "formattedSearchTime": "0.46",
+  "totalResults": "1460",
+  "formattedTotalResults": "1,460"
+ },
+ "items": [
+  {
+   "kind": "customsearch#result",
+   "title": "Top things to do in Kathmandu, Nepal - Lonely Planet",
+   "htmlTitle": "Top \u003cb\u003ethings to do\u003c/b\u003e in \u003cb\u003eKathmandu\u003c/b\u003e, Nepal - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/nepal/kathmandu/top-things-to-do/a/poi/357144",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Discover the best top things to do in Kathmandu including Hanuman Dhoka, Seto \nMachhendranath Temple (Jan Bahal), Itum Bahal.",
+   "htmlSnippet": "Discover the best top \u003cb\u003ethings to do\u003c/b\u003e in \u003cb\u003eKathmandu\u003c/b\u003e including Hanuman Dhoka, Seto \u003cbr\u003e\nMachhendranath Temple (Jan Bahal), Itum Bahal.",
+   "cacheId": "vHqYQIg8ZbkJ",
+   "formattedUrl": "https://www.lonelyplanet.com/.../kathmandu/top-things-to-do/.../357144",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../\u003cb\u003ekathmandu\u003c/b\u003e/top-\u003cb\u003ethings-to-do\u003c/b\u003e/.../357144",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Asia"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "225",
+      "height": "225",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRdRCfr0UW-Noh6DGFLLGeouaqUmFMDj_N2EYy8B6Dlgg0pfGWCRE28ZwQv"
+     }
+    ],
+    "country": [
+     {
+      "name": "Nepal"
+     }
+    ],
+    "city": [
+     {
+      "name": "Kathmandu"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Top things to do in Kathmandu, Nepal",
+      "og:title": "Top things to do in Kathmandu, Nepal",
+      "og:description": "Discover the best top things to do in Kathmandu including Hanuman Dhoka, Seto Machhendranath Temple (Jan Bahal), Itum Bahal.",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://api.tiles.mapbox.com/v4/lonelyplanet.b963d424/14/12074/6878.png?access_token=pk.eyJ1IjoibG9uZWx5cGxhbmV0IiwiYSI6Imh1ODUtdUEifQ.OLLon0V6rcoTyayXzzUzsg"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Weather in Nepal - Lonely Planet",
+   "htmlTitle": "Weather in Nepal - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/nepal/weather",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Things to do ... Kathmandu ... of people hit the trails in the Everest and \nAnnapurna regions, accommodation in Kathmandu gets booked up and prices \npeak.",
+   "htmlSnippet": "\u003cb\u003eThings to do\u003c/b\u003e ... \u003cb\u003eKathmandu\u003c/b\u003e ... of people hit the trails in the Everest and \u003cbr\u003e\nAnnapurna regions, accommodation in \u003cb\u003eKathmandu\u003c/b\u003e gets booked up and prices \u003cbr\u003e\npeak.",
+   "cacheId": "SNQFPjSb3JwJ",
+   "formattedUrl": "www.lonelyplanet.com/nepal/weather",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/nepal/weather",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "298",
+      "height": "169",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQMlpm2T4jYp4PL6OKtM1yBWYokmDCuMLUQGXjZaWnUzkp94RpNxse6F8Tm"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Weather in Nepal - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Weather in Nepal - Lonely Planet",
+      "twitter:description": "The best time to go to Nepal, including current weather conditions, temperatures and rainfall",
+      "twitter:image:src": "https://images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/assets/image/b1b4c06a4ac47c728da846bbf3715c301e912f74661fe3b419853ac84b67bfde/363cb647c268488ea99e7a9526872f02d7e44e4486cbfd2a9cc9d95f1f1d9de9.jpg",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Weather in Nepal - Lonely Planet",
+      "og:description": "The best time to go to Nepal, including current weather conditions, temperatures and rainfall",
+      "og:url": "http://www.lonelyplanet.com/nepal/weather",
+      "og:type": "website",
+      "og:image": "//images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/assets/image/b1b4c06a4ac47c728da846bbf3715c301e912f74661fe3b419853ac84b67bfde/363cb647c268488ea99e7a9526872f02d7e44e4486cbfd2a9cc9d95f1f1d9de9.jpg",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "4F8yyr9jm59uCTlD4UV0vd4lO9B9QgToqvrlmGpjtPY="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "http://assets.staticlp.com/country-shapes/NPL.svg"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Nepal - Lonely Planet",
+   "htmlTitle": "Nepal - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/nepal",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Reconstruction work is underway following the earthquakes that hit Nepal in \n2015 and most of the country is fully open for tourism, including most trekking \nroutes ...",
+   "htmlSnippet": "Reconstruction work is underway following the earthquakes that hit Nepal in \u003cbr\u003e\n2015 and most of the country is fully open for tourism, including most trekking \u003cbr\u003e\nroutes&nbsp;...",
+   "cacheId": "Vd-QcqgGvg8J",
+   "formattedUrl": "https://www.lonelyplanet.com/nepal",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/nepal",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "275",
+      "height": "184",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTuVcJeiJORNL06SXQqwLB8jIMRntM4W5tSuHC19EfYUKS_-BGfos2rGXp5"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Nepal - Lonely Planet",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Nepal - Lonely Planet",
+      "twitter:image:src": "https://lonelyplanetimages.imgix.net/mastheads/104733483%20.jpg?sharp=10&vib=20&w=1200",
+      "og:site_name": "Lonely Planet",
+      "og:type": "website",
+      "og:title": "Nepal - Lonely Planet",
+      "og:url": "http://www.lonelyplanet.com/nepal",
+      "og:description": "Wedged between the high Himalaya and the steamy Indian plains, Nepal is a land of snow peaks and Sherpas, yaks and yetis, monasteries and mantras.",
+      "og:image": "https://lonelyplanetimages.imgix.net/mastheads/104733483%20.jpg?sharp=10&vib=20&w=1200"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://lonelyplanetimages.imgix.net/mastheads/104733483%20.jpg?sharp=10&vib=20&w=1200"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Planning your dream Himalayan trip - Lonely Planet",
+   "htmlTitle": "Planning your dream Himalayan trip - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/asia/travel-tips-and-articles/77626",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Mar 15, 2013 ... When to go June to September ... Getting there Flights to Lhasa from Kathmandu, \nChengdu, Beijing and many ... The best way to experience the mountains is on \nfoot, and Himalayan treks just don't get any more spectacular or ...",
+   "htmlSnippet": "Mar 15, 2013 \u003cb\u003e...\u003c/b\u003e When to go \u003cb\u003eJune\u003c/b\u003e to September ... Getting there Flights to Lhasa from \u003cb\u003eKathmandu\u003c/b\u003e, \u003cbr\u003e\nChengdu, Beijing and many ... The best way to experience the mountains is on \u003cbr\u003e\nfoot, and Himalayan treks just don&#39;t \u003cb\u003eget\u003c/b\u003e any more spectacular or&nbsp;...",
+   "cacheId": "6bABnQCGIP4J",
+   "formattedUrl": "www.lonelyplanet.com/asia/travel-tips-and-articles/77626",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/asia/travel-tips-and-articles/77626",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "259",
+      "height": "194",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzX7qPcwKQta7V6jYjYzJl_ChcLkDN8lYoUPDfRFxU7xk3AwHkhERINo0l"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Planning your dream Himalayan trip - Lonely Planet",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article",
+      "og:title": "Planning your dream Himalayan trip - Lonely Planet",
+      "og:url": "http://www.lonelyplanet.com/asia/travel-tips-and-articles/77626",
+      "og:description": "Read Planning your dream Himalayan trip",
+      "og:image": "https://lonelyplanetwp.imgix.net/2013/04/GettyImages-450207051_cs.jpg?sharp=10&vib=20&w=748",
+      "article:tag": "Adventure travel, Wildlife and nature, Heritage and history, Walking and trekking",
+      "article:published_time": "2013-04-01T04:34:36+00:00",
+      "article:author": "Bradley Mayhew"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://lonelyplanetwp.imgix.net/2013/04/GettyImages-450207051_cs.jpg?sharp=10&vib=20&w=748"
+     }
+    ],
+    "article": [
+     {
+      "headline": "Planning your dream Himalayan trip",
+      "alternativeheadline": "Planning your dream Himalayan trip",
+      "datepublished": "2013-04-01T04:34:36+00:00",
+      "articlebody": "For mountain lovers and the vertically inclined the Himalayas represent nothing less than the crowning apex of nature's grandeur. Here dramatic forested gorges rise to skylines of snow-capped..."
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Top things to do in Nepal - Lonely Planet",
+   "htmlTitle": "Top \u003cb\u003ethings to do\u003c/b\u003e in Nepal - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/nepal/top-things-to-do/a/poi/357105",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Kathmandu's royal palace, known as the Hanuman Dhoka, was originally \nfounded during the Licchavi period (4th to 8th centuries AD) but the compound \nwas ...",
+   "htmlSnippet": "\u003cb\u003eKathmandu&#39;s\u003c/b\u003e royal palace, known as the Hanuman Dhoka, was originally \u003cbr\u003e\nfounded during the Licchavi period (4th to 8th centuries AD) but the compound \u003cbr\u003e\nwas&nbsp;...",
+   "cacheId": "UBZgMR4bpWsJ",
+   "formattedUrl": "https://www.lonelyplanet.com/nepal/top-things-to-do/a/poi/357105",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/nepal/top-\u003cb\u003ethings-to-do\u003c/b\u003e/a/poi/357105",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Asia"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "204",
+      "height": "204",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIPNYeoXiGzc5l4O1Xrw775fpEt7r1johNAjEHNjxi_nVjcMIjqKEg8fgp"
+     }
+    ],
+    "country": [
+     {
+      "name": "Nepal"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Top things to do in Nepal",
+      "og:title": "Top things to do in Nepal",
+      "og:description": "Discover the best top things to do in Nepal including Hanuman Dhoka, Golden Temple (Kwa Bahal), Golden Gate.",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://api.tiles.mapbox.com/v4/lonelyplanet.b963d424/11/1505/863.png?access_token=pk.eyJ1IjoibG9uZWx5cGxhbmV0IiwiYSI6Imh1ODUtdUEifQ.OLLon0V6rcoTyayXzzUzsg"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Annapurna Circuit Trek in Kathmandu, Nepal - Lonely Planet",
+   "htmlTitle": "Annapurna Circuit Trek in \u003cb\u003eKathmandu\u003c/b\u003e, Nepal - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/nepal/kathmandu/tours/annapurna-circuit-trek/a/pa-tou/g-ANTA/357144",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Day 2 Kathmandu/Jagat. Travel to Besi Sahar before heading out on a short trek \nto Jagat. Take in the beautiful hot springs along the way. Included Activities: ...",
+   "htmlSnippet": "Day 2 \u003cb\u003eKathmandu\u003c/b\u003e/Jagat. Travel to Besi Sahar before heading out on a short trek \u003cbr\u003e\nto Jagat. Take in the beautiful hot springs along the way. Included \u003cb\u003eActivities\u003c/b\u003e:&nbsp;...",
+   "cacheId": "QMa4RT2g6r8J",
+   "formattedUrl": "https://www.lonelyplanet.com/nepal/kathmandu/tours/.../357144",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/nepal/\u003cb\u003ekathmandu\u003c/b\u003e/tours/.../357144",
+   "pagemap": {
+    "continent": [
+     {
+      "name": "Asia"
+     }
+    ],
+    "cse_thumbnail": [
+     {
+      "width": "225",
+      "height": "225",
+      "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbLBVqD4pS4vQp6YKfDrD3FMBFOh88BDh2wSKznb_sRjomEkgMZyXRda0"
+     }
+    ],
+    "country": [
+     {
+      "name": "Nepal"
+     }
+    ],
+    "city": [
+     {
+      "name": "Kathmandu"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "Annapurna Circuit Trek in Kathmandu, Nepal",
+      "og:title": "Annapurna Circuit Trek in Kathmandu, Nepal",
+      "og:description": "On this incredible trekking adventure, spend 13 challenging days traversing rhododendron forests, isolated hamlets, and mountain villages. For six to seven hour…",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://media.gadventures.com/media-server/dynamic/admin/maps/2015/ANTA.png"
+     }
+    ],
+    "thing": [
+     {
+      "name": "Tours"
+     }
+    ],
+    "listitem": [
+     {
+      "position": "1"
+     },
+     {
+      "position": "2"
+     },
+     {
+      "position": "3"
+     },
+     {
+      "position": "4"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "How to trek to Everest Base Camp - Lonely Planet",
+   "htmlTitle": "How to trek to Everest Base Camp - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/asia/travel-tips-and-articles/77621",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "Jan 14, 2013 ... ... and the death of a Belgian trekker in the Langtang region in June 2012. ... less \nby booking in Kathmandu – ensure they're registered with the Trekking ... But don\n't be put off – people with average fitness can do this trek.",
+   "htmlSnippet": "Jan 14, 2013 \u003cb\u003e...\u003c/b\u003e ... and the death of a Belgian trekker in the Langtang region in \u003cb\u003eJune\u003c/b\u003e 2012. ... less \u003cbr\u003e\nby booking in \u003cb\u003eKathmandu\u003c/b\u003e – ensure they&#39;re registered with the Trekking ... But don\u003cbr\u003e\n&#39;t be put off – people with average fitness can \u003cb\u003edo\u003c/b\u003e this trek.",
+   "cacheId": "2dFBcsB5_poJ",
+   "formattedUrl": "www.lonelyplanet.com/asia/travel-tips-and-articles/77621",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/asia/travel-tips-and-articles/77621",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "275",
+      "height": "183",
+      "src": "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSxkBeieO_RcVqCq6V-VBlKRd08xgrj-_PYz2l2Dk35weBL5XVCItEFw-eF"
+     }
+    ],
+    "metatags": [
+     {
+      "viewport": "width=device-width, initial-scale=1",
+      "title": "How to trek to Everest Base Camp - Lonely Planet",
+      "author": "Lonely Planet",
+      "theme-color": "#1d508d",
+      "fb:app_id": "111537044496",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "og:site_name": "Lonely Planet",
+      "og:type": "article",
+      "og:title": "How to trek to Everest Base Camp - Lonely Planet",
+      "og:url": "http://www.lonelyplanet.com/asia/travel-tips-and-articles/77621",
+      "og:description": "Read How to trek to Everest Base Camp",
+      "og:image": "https://lonelyplanetwp.imgix.net/2013/01/GettyImages_73265303-cs.jpg?sharp=10&vib=20&w=748",
+      "article:tag": "Adventure travel, Winter travel, Walking and trekking",
+      "article:published_time": "2013-01-14T15:24:36+00:00",
+      "article:author": "Jenny Ling"
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://lonelyplanetwp.imgix.net/2013/01/GettyImages_73265303-cs.jpg?sharp=10&vib=20&w=748"
+     }
+    ],
+    "article": [
+     {
+      "headline": "How to trek to Everest Base Camp",
+      "alternativeheadline": "How to trek to Everest Base Camp",
+      "datepublished": "2013-01-14T15:24:36+00:00",
+      "articlebody": "Mount Everest has captivated intrepid men and women since the 1920s. The exploits of legends such as George Mallory, Sir Edmund Hillary and Tenzing Norgay put the mighty mountain on the map;..."
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Bhutan flights - Lonely Planet",
+   "htmlTitle": "Bhutan flights - \u003cb\u003eLonely Planet\u003c/b\u003e",
+   "link": "http://www.lonelyplanet.com/bhutan/transport/getting-there-away/flights",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "You will need to reclaim your baggage and recheck it at the Druk Air counter. ... \nThe flight from Kathmandu to Paro provides the most dramatic view of Himalayan\n ...",
+   "htmlSnippet": "You \u003cb\u003ewill\u003c/b\u003e need to reclaim your baggage and recheck it at the Druk Air counter. ... \u003cbr\u003e\nThe flight from \u003cb\u003eKathmandu\u003c/b\u003e to Paro provides the most dramatic view of Himalayan\u003cbr\u003e\n&nbsp;...",
+   "cacheId": "1fPWARyAwE0J",
+   "formattedUrl": "www.lonelyplanet.com/bhutan/transport/getting-there-away/flights",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/bhutan/transport/\u003cb\u003eget\u003c/b\u003eting-there-away/flights",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "310",
+      "height": "163",
+      "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTlLUX7DwE8xu0Tq3WtKILfnlDLxlqMz1bNtwi_fUX6QJD0tRO0aG_4LQE"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Bhutan flights - Lonely Planet",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "twitter:title": "Bhutan flights - Lonely Planet",
+      "twitter:description": "Cheapest flight to Bhutan - search and compare Bhutan flights and expert trip advice",
+      "twitter:image:src": "https://images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/assets/image/dac5537fd05b15752ebccf3f2888fb68e12246aa8ec46a035e612cd6b639305e/08064090d46cd2c8ee82aacccc85f291c687fa3f0454d5cb1111edbaf11f90d8.jpg",
+      "og:site_name": "Lonely Planet",
+      "og:title": "Bhutan flights - Lonely Planet",
+      "og:description": "Cheapest flight to Bhutan - search and compare Bhutan flights and expert trip advice",
+      "og:url": "http://www.lonelyplanet.com/bhutan/transport/getting-there-away/flights",
+      "og:type": "website",
+      "og:image": "//images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/assets/image/dac5537fd05b15752ebccf3f2888fb68e12246aa8ec46a035e612cd6b639305e/08064090d46cd2c8ee82aacccc85f291c687fa3f0454d5cb1111edbaf11f90d8.jpg",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "f5ttZXch9mlxoKBN3dW9nNzVckvfM2MUboqnjWSktCU="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "http://images-resrc.staticlp.com/C=AR1200x630/S=W1200,U/O=85/http://media.lonelyplanet.com/assets/image/dac5537fd05b15752ebccf3f2888fb68e12246aa8ec46a035e612cd6b639305e/08064090d46cd2c8ee82aacccc85f291c687fa3f0454d5cb1111edbaf11f90d8.jpg"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Highlights",
+      "name": "Highlights"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "Kathmandu, Pokhara weather first 2 weeks of June",
+   "htmlTitle": "\u003cb\u003eKathmandu\u003c/b\u003e, Pokhara weather first 2 weeks of \u003cb\u003eJune\u003c/b\u003e",
+   "link": "https://www.lonelyplanet.com/thorntree/forums/asia-indian-subcontinent/nepal/kathmandu-pokhara-weather-first-2-weeks-of-june",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "May 13, 2008 ... How is the weather like in Kathmandu and Pokhara at this time? ... good places \nto eat, things to see and do and transportation ideas in Nepal ...",
+   "htmlSnippet": "May 13, 2008 \u003cb\u003e...\u003c/b\u003e How is the weather like in \u003cb\u003eKathmandu\u003c/b\u003e and Pokhara at this time? ... good places \u003cbr\u003e\nto eat, \u003cb\u003ethings\u003c/b\u003e to see and \u003cb\u003edo\u003c/b\u003e and transportation ideas in Nepal&nbsp;...",
+   "cacheId": "7A74j3YziYEJ",
+   "formattedUrl": "https://www.lonelyplanet.com/.../kathmandu-pokhara-weather-first-2-weeks- of-june",
+   "htmlFormattedUrl": "https://www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/.../\u003cb\u003ekathmandu\u003c/b\u003e-pokhara-weather-first-2-weeks- of-\u003cb\u003ejune\u003c/b\u003e",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "225",
+      "height": "225",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSqRemPSRVtvlwaxn3MfC7zsLjzOoK5uUM0cDjdqchf2Fvexvm4z9sAZObq"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Thorn Tree",
+      "title": "Thorn Tree"
+     },
+     {
+      "url": "Country forums",
+      "title": "Country forums"
+     },
+     {
+      "url": "Indian Subcontinent",
+      "title": "Indian Subcontinent"
+     },
+     {
+      "url": "Nepal",
+      "title": "Nepal"
+     }
+    ],
+    "metatags": [
+     {
+      "title": "Kathmandu, Pokhara weather first 2 weeks of June",
+      "og:title": "Kathmandu, Pokhara weather first 2 weeks of June",
+      "og:description": "Hi,I am planning a trip to Nepal for the first 2 weeks of June. How is the weather like in Kathmandu and Pokhara at this time? If you are…",
+      "og:url": "https://www.lonelyplanet.com/thorntree/forums/asia-indian-subcontinent/nepal/kathmandu-pokhara-weather-first-2-weeks-of-june",
+      "og:image": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "og:type": "website",
+      "twitter:title": "Kathmandu, Pokhara weather first 2 weeks of June",
+      "twitter:description": "Hi,I am planning a trip to Nepal for the first 2 weeks of June. How is the weather like in Kathmandu and Pokhara at this time? If you are…",
+      "twitter:image:src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png",
+      "twitter:card": "summary_large_image",
+      "twitter:site": "@lonelyplanet",
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=device-width, initial-scale=1",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "5OTgcP+4l9g7h4nZ2zsJMKTC4DxqQRkixIHljZ1oGgIpJqvS3rhbgWX8UxWLBLIPISgXErZGmX3qKZSE801GUw=="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "https://assets.staticlp.com/assets/logo_lp-0b13591f9316dd8b9c1275ed8ffd279b7270e2c052726a53a6faac2e626d1d0d.png"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Welcome",
+      "name": "Welcome"
+     },
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "customsearch#result",
+   "title": "History of Nepal - Lonely Planet Travel Information",
+   "htmlTitle": "History of Nepal - \u003cb\u003eLonely Planet\u003c/b\u003e Travel Information",
+   "link": "http://www.lonelyplanet.com/nepal/history",
+   "displayLink": "www.lonelyplanet.com",
+   "snippet": "The history of Nepal began in, and centres on, the Kathmandu Valley. .... A British \nresident was sent to Kathmandu to keep an eye on things but the Raj knew .... his \nceremonial role for real control (much as King Gyanendra would do 46 years \nlater). ... On 1 June 2001 the Nepali psyche was dealt a huge blow when Crown ...",
+   "htmlSnippet": "The history of Nepal began in, and centres on, the \u003cb\u003eKathmandu\u003c/b\u003e Valley. .... A British \u003cbr\u003e\nresident was sent to \u003cb\u003eKathmandu\u003c/b\u003e to keep an eye on \u003cb\u003ethings\u003c/b\u003e but the Raj knew .... his \u003cbr\u003e\nceremonial role for real control (much as King Gyanendra would \u003cb\u003edo\u003c/b\u003e 46 years \u003cbr\u003e\nlater). ... On 1 \u003cb\u003eJune\u003c/b\u003e 2001 the Nepali psyche was dealt a huge blow when Crown&nbsp;...",
+   "cacheId": "6yN4eQVJnIUJ",
+   "formattedUrl": "www.lonelyplanet.com/nepal/history",
+   "htmlFormattedUrl": "www.\u003cb\u003elonelyplanet\u003c/b\u003e.com/nepal/history",
+   "pagemap": {
+    "cse_thumbnail": [
+     {
+      "width": "57",
+      "height": "96",
+      "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTw0q8lypySh0X5CJrVuG9JFMGQkpEc5XVPuEJXkYXzUddwrF355iGe2Q"
+     }
+    ],
+    "breadcrumb": [
+     {
+      "url": "Home"
+     }
+    ],
+    "metatags": [
+     {
+      "author": "Lonely Planet",
+      "theme-color": "#1D508D",
+      "fb:app_id": "111537044496",
+      "viewport": "width=1024",
+      "csrf-param": "authenticity_token",
+      "csrf-token": "l3rIT98BGfhWymVRs9GajrPlWsU25HkTkldKvte439M="
+     }
+    ],
+    "cse_image": [
+     {
+      "src": "http://media.lonelyplanet.com/shop/images/Trekking_in_the_Nepal_Himalaya_travel_guide_-_10th_edition_Small.png"
+     }
+    ],
+    "sitenavigationelement": [
+     {
+      "url": "Newsletter sign up",
+      "name": "Newsletter sign up"
+     },
+     {
+      "url": "About us",
+      "name": "About us"
+     },
+     {
+      "url": "Twitter",
+      "name": "Twitter"
+     }
+    ]
+   }
+  }
+ ]
+}

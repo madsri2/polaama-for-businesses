@@ -9,7 +9,7 @@ describe("Test Notifications", function() {
   it("test sending trip details just before trip", function() {
     // set up, modeled after webhook-post-handler:createNewTrip
     const tripDetails = {
-      destination: "TestSendingTripDetails",
+      destination: "test-sending-TripDetails",
       startDate: "4/11/2017"
     };
     const sessions = new Sessions();

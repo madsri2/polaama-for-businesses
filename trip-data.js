@@ -11,6 +11,9 @@ const Encoder = require('./encoder');
 TripData.todo = "todoList";
 
 function TripData(tripName) {
+  if(!tripName) {
+    throw new Error("TripData: Required parameter tripName is undefined");
+  }
   this.rawTripName = tripName;
   this.retrieveTripData();
   if(!Object.keys(this.data).length) {
@@ -157,6 +160,14 @@ TripData.prototype.addPortOfEntry = function(portOfEntry) {
     logger.error("addPortOfEntry: port of entry is undefined");
   }
 	logger.debug(`addPortOfEntry: Adding ${portOfEntry} as port of entry`);
+  this.persistUpdatedTrip();
+}
+
+TripData.prototype.addCities = function(cities) {
+  this.data.cities = [];
+  for(let i = 0; i < cities.length; i++) {
+    this.data.cities.push(Encoder.encode(cities[i]));
+  }
   this.persistUpdatedTrip();
 }
 
@@ -455,6 +466,10 @@ TripData.prototype.tripDataFile = function() {
 
 TripData.prototype.tripItinFile = function() {
   return `${tripBaseDir}/${this.data.name}-itinerary.txt`;
+}
+
+TripData.prototype.boardingPassFile = function() {
+  return `${tripBaseDir}/${this.data.name}-boarding-pass.txt`;
 }
 
 module.exports = TripData;

@@ -1,0 +1,225 @@
+
+{
+  "response": {
+  "version":"0.1",
+  "termsofService":"http://www.wunderground.com/weather/api/d/terms.html",
+  "features": {
+  "planner": 1
+  }
+	}
+		,
+	"trip": {
+		"title": "Historical Summary for June 01 - June 30",
+		"airport_code": "VNKT",
+		"error": "",
+		"period_of_record": {
+		"date_start": {
+		"date":{
+	"epoch":"1338531300",
+	"pretty":"12:00 PM +0545 on June 01, 2012",
+	"day":1,
+	"month":6,
+	"year":2012,
+	"yday":152,
+	"hour":12,
+	"min":"00",
+	"sec":0,
+	"isdst":"0",
+	"monthname":"June",
+	"monthname_short":"Jun",
+	"weekday_short":"Fri",
+	"weekday":"Friday",
+	"ampm":"PM",
+	"tz_short":"+0545",
+	"tz_long":"Asia/Katmandu"
+}
+		},
+		"date_end": {
+		"date":{
+	"epoch":"1467267300",
+	"pretty":"12:00 PM +0545 on June 30, 2016",
+	"day":30,
+	"month":6,
+	"year":2016,
+	"yday":181,
+	"hour":12,
+	"min":"00",
+	"sec":0,
+	"isdst":"0",
+	"monthname":"June",
+	"monthname_short":"Jun",
+	"weekday_short":"Thu",
+	"weekday":"Thursday",
+	"ampm":"PM",
+	"tz_short":"+0545",
+	"tz_long":"Asia/Katmandu"
+}
+		}
+		},
+		"temp_high": {
+		"min": {
+		"F": "71",
+		"C": "22"
+		},
+		"avg": {
+		"F": "86",
+		"C": "30"
+		},
+		"max": {
+		"F": "102",
+		"C": "39"
+		}
+		},
+		"temp_low": {
+		"min": {
+		"F": "56",
+		"C": "13"
+		},
+		"avg": {
+		"F": "68",
+		"C": "20"
+		},
+		"max": {
+		"F": "73",
+		"C": "23"
+		}
+		},
+		"precip": {
+		"min": {
+		"in": "0.00",
+		"cm": "0.0"
+		},
+		"avg": {
+		"in": "0.15",
+		"cm": "3.8"
+		},
+		"max": {
+		"in": "3.90",
+		"cm": "99.1"
+		}
+		},
+		"dewpoint_high": {
+		"min": {
+		"F": "62",
+		"C": "17"
+		},
+		"avg": {
+		"F": "71",
+		"C": "21"
+		},
+		"max": {
+		"F": "80",
+		"C": "27"
+		}
+		},
+		"dewpoint_low": {
+		"min": {
+		"F": "36",
+		"C": "2"
+		},
+		"avg": {
+		"F": "61",
+		"C": "16"
+		},
+		"max": {
+		"F": "68",
+		"C": "20"
+		}
+		},
+		"cloud_cover": {
+		"cond": "partly cloudy"
+		},
+		"chance_of": {
+		"chanceofhumidday": {
+		"name": "Humid",
+		"description": "dew point over 60&deg;F / 16&deg;C",
+		"percentage": "100"
+		},
+		"tempoversixty": {
+		"name": "Warm",
+		"description": "temperature over 60&deg;F / 16&deg;C and below 90&deg;F / 32&deg;C",
+		"percentage": "91"
+		},
+		"chanceofprecip": {
+		"name": "Precipitation",
+		"description": "",
+		"percentage": "62"
+		},
+		"chanceofrainday": {
+		"name": "Rain",
+		"description": "",
+		"percentage": "62"
+		},
+		"chanceofsultryday": {
+		"name": "Sweltering",
+		"description": "dew point over 70&deg;F / 21&deg;C",
+		"percentage": "59"
+		},
+		"chanceofpartlycloudyday": {
+		"name": "Partly Cloudy",
+		"description": "",
+		"percentage": "56"
+		},
+		"chanceofthunderday": {
+		"name": "Thunderstorms",
+		"description": "",
+		"percentage": "52"
+		},
+		"chanceofcloudyday": {
+		"name": "Cloudy",
+		"description": "",
+		"percentage": "31"
+		},
+		"chanceofsunnycloudyday": {
+		"name": "Sunny",
+		"description": "",
+		"percentage": "13"
+		},
+		"tempoverninety": {
+		"name": "Hot",
+		"description": "temperature over 90&deg;F / 32&deg;C",
+		"percentage": "9"
+		},
+		"chanceofhailday": {
+		"name": "Hail",
+		"description": "",
+		"percentage": "4"
+		},
+		"chanceofsnowonground": {
+		"name": "Ground Snow",
+		"description": "",
+		"percentage": "0"
+		},
+		"chanceoftornadoday": {
+		"name": "Tornado",
+		"description": "",
+		"percentage": "0"
+		},
+		"chanceofwindyday": {
+		"name": "Windy",
+		"description": "average wind over 10 mph / 15km/h",
+		"percentage": "0"
+		},
+		"tempbelowfreezing": {
+		"name": "Freezing",
+		"description": "temperature below 32&deg;F / 0&deg;C",
+		"percentage": "0"
+		},
+		"tempoverfreezing": {
+		"name": "Cool",
+		"description": "temperature between 32&deg;F / 0&deg;C and 60&deg;F / 16&deg; C",
+		"percentage": "0"
+		},
+		"chanceofsnowday": {
+		"name": "Snow",
+		"description": "",
+		"percentage": "0"
+		},
+		"chanceoffogday": {
+		"name": "Fog",
+		"description": "",
+		"percentage": "0"
+		}
+		}
+	}
+}
