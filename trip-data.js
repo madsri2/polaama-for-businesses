@@ -239,11 +239,11 @@ TripData.prototype.updateItinerary = function(incDate, itinDetail){
     let contents = null;
     fs.readFile(filename, 'utf8', (err, data) => {
       if(err && err.code != 'ENOENT') {
-        logger.error(`error reading: ${err.stack}`);
+        logger.error(`error reading file ${filename}: ${err.stack}`);
         reject(err);
       }
       if(!data) {
-        logger.debug(`readPromise: empty file or no file`);
+        logger.debug(`readPromise: empty file or file not present`);
         contents = {};
         contents[date] = [];
       }
@@ -267,7 +267,7 @@ TripData.prototype.updateItinerary = function(incDate, itinDetail){
         return fulfil("success");
       });
     },
-    function(err) {
+    function(e) {
       logger.error(`updateItinerary: Error: ${e.stack}`);
       return e;
     }

@@ -38,6 +38,10 @@ const details = {
   }
 };
 
+/* We need a way to map the details of this boarding pass with a user profile (session) and an associated trip. The current way to do this is a little clunky:
+1) Get the name of the passenger from boarding pass and see if you can find it in fbid-handler.js. If we cannot find it, then simply fail. The email has been stored, so it's not lost. The first time Polaama gets a message from a user, fbid-handler is updated with the corresponding fbid and the name associated with the facebook id.
+2) From the destination of the boarding pass, guess the trip (look for any trip with the name that maps the destination and the start date that maps the one found in the boarding pass). If we don't find a trip, see if the destination city maps to a country and the associated start date. If we don't find a trip, then create a new trip.
+
 const trip = new TripData(options.trip);
 if(!trip.data.startDate) {
   throw new Error(`Trip ${trip.data.name} does not have startDate. Polaama does not know about this trip`);

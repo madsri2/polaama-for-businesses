@@ -5,7 +5,7 @@ const baseDir = '/home/ec2-user';
 const logger = require('./my-logger');
 const Sessions = require('./sessions');
 const Session = require('./session');
-const FbidHandler = require('./fbid-handler');
+const FbidHandler = require('fbid-handler/app/handler');
 const TripInfoProvider = require('./trip-info-provider');
 const CommentParser = require('./expense-report/app/comment-parser');
 const ExpenseReportWorkflow = require('./expense-report/app/workflow');
@@ -20,6 +20,7 @@ const validator = require('node-validator');
 
 // NOTE: WebhookPostHandler is a singleton, so all state will need to be maintained in this.session object. fbidHandler is also a singleton, so that will be part of the WebhookPostHandler object.
 function WebhookPostHandler(session) {
+  logger.debug(`New webhook-post-handler constructed`);
   this.sessions = new Sessions();
   this.fbidHandler = new FbidHandler();
   if(!_.isUndefined(session)) {
@@ -39,6 +40,24 @@ function handleMessagingEvent(messagingEvent) {
   else {
     this.session = this.passedSession;
   }
+  const fbid = messagingEvent.sender.id;
+  const promise = this.fbidHandler.add(fbid);
+  if(promise) {
+    promise.then(
+      function(status) {
+        if(status) {
+          logger.info(`handleMessagingEvent: added new fbid ${fbid} to fbidHandler`);
+        }
+        else {
+          logger.warn(`handleMessagingEvent: adding new fbid ${fbid} to fbidHandler. Expected status to be true but it was ${status}`);
+        }
+      },
+      function(err) {
+        logger.error(`handleMessagingEvent: error adding fbid ${fbid} to fbidHandler: ${err.stack}`);
+      }
+    );
+  }
+  // if promise was null, it means this fbid already exists in the fbidHandler file. So, nothing to do
 
   try {
     if (messagingEvent.optin) {
@@ -398,11 +417,12 @@ function receivedPostback(event) {
   }
   if(payload === "add_travelers") {
     determineTravelCompanions.call(this);
+    return;
   }
 
   // When an unknown postback is called, we'll send a message back to the sender to 
   // let them know it was successful
-  sendTextMessage(senderID, "Unhandled Postback called");
+  sendTextMessage(senderID, `Unhandled Postback ${payload} called `);
 }
 
 /*

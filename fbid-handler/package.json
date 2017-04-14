@@ -1,0 +1,19 @@
+{
+  "name": "fbid-handler",
+  "version": "1.0.0",
+  "description": "Handle mappings between fbid and profiles (names, location etc.)",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --reporter spec"
+  },
+  "author": "Madhu Parthasarathy",
+  "license": "GPL-2.0",
+  "dependencies": {
+    "chai": "^3.5.0",
+    "lodash": "^4.17.4",
+    "mocha": "^3.2.0",
+    "promise": "^7.1.1",
+    "randomstring": "^1.1.5",
+    "request": "^2.81.0"
+  }
+}

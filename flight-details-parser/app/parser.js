@@ -22,9 +22,6 @@ Parser.prototype.parse = function(details) {
   return true;
 }
 
-Parser.prototype.parseMail = function() {
-}
-
 // ensure that required fields are present. If they are not present, throw an exception
 function validateFields(details) {
   const requiredFields = ['full_name', 'pnr_number', 'flight_number', 'departure_airport', 'arrival_airport', 'flight_schedule'];

@@ -1,0 +1,17 @@
+{
+  "name": "secret-manager",
+  "version": "1.0.0",
+  "description": "Manage secrets for polaama",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --reporter spec"
+  },
+  "author": "Madhu Parthasarathy",
+  "license": "GPL-2.0",
+  "dependencies": {
+    "chai": "^3.5.0",
+    "crypto": "0.0.3",
+    "fs": "0.0.1-security",
+    "mocha": "^3.2.0"
+  }
+}

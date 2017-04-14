@@ -330,7 +330,8 @@ function toLink(text) {
       }
       return;
     }
-    if(/^https:\/\//.test(word)) {
+    // match http or https
+    if(/^https?:\/\//.test(word)) {
       words[i] = `<a href=${word}>${word}</a>`;
     }
   });

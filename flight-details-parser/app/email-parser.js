@@ -15,6 +15,7 @@ function EmailParser(req, res) {
   this.response = res;
 }
 
+// Obtained async code & multiparty code from https://github.com/Flolagale/mailin/blob/master/samples/server.js
 EmailParser.prototype.parse = function(req, res, callback) {
     /* Parse the multipart form. The attachments are parsed into fields and can
      * be huge, so set the maxFieldsSize accordingly. */
@@ -46,6 +47,13 @@ EmailParser.prototype.parse = function(req, res, callback) {
             logger.debug(`writeAttachments: Writing attachment to file ${attachFile}`);
             fs.writeFile(attachFile, fields[attachment.generatedFileName], 'base64', cbEach);
           }, cbAuto);
+        },
+        writeText: function(cbAuto) {
+          if(!msg.text) return cbAuto("Error: email message does not contain text key");
+          const textFileName =  `${baseDir}/emails/text-${emailId}.json`;
+          const text = msg.text.split("\\n").join("\n");
+          logger.debug(`writeText: Writing text to file ${textFileName}`);
+          fs.writeFile(textFileName, text, cbAuto);
         }
       }, function (err) {
         if (err) {
