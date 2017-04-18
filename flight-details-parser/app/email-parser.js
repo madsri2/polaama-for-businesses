@@ -32,7 +32,13 @@ EmailParser.prototype.parse = function(req, res, callback) {
     let emailId;
     form.parse(req, function (err, fields) {
       const msg = JSON.parse(fields.mailinMsg);
-      logger.debug(`Parsed form. The json object has ${Object.keys(msg).length} keys in field.mailinMsg`); 
+      if(msg.spamScore && msg.spamScore > 5) {
+        logger.debug(`spammed by ${msg.from[0].address}. dropping message`);
+        res.sendStatus(200);
+        return null;
+      }
+
+      logger.debug(`Parsed email message has ${Object.keys(msg).length} keys in field.mailinMsg`); 
       /* Write down the payload for ulterior inspection. */
       async.auto({
         writeParsedMessage: function (cbAuto) {

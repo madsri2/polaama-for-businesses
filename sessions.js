@@ -73,13 +73,10 @@ Sessions.retrieveSession = function(fbid) {
     }
     catch(err) {
       logger.error("error reading from ", file, err.stack);
-      return undefined;
     }
   }
-  catch(err) {
-    logger.info(`file <${file}> does not exist for session ${fbid}: ${err.stack}`);
-    return undefined;
-  }
+  catch(err) {}
+  return undefined;
 }
 
 function findSessionId(fbid) {

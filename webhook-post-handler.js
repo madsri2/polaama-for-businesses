@@ -6,6 +6,7 @@ const logger = require('./my-logger');
 const Sessions = require('./sessions');
 const Session = require('./session');
 const FbidHandler = require('fbid-handler/app/handler');
+const SecretManager = require('secret-manager/app/manager');
 const TripInfoProvider = require('./trip-info-provider');
 const CommentParser = require('./expense-report/app/comment-parser');
 const ExpenseReportWorkflow = require('./expense-report/app/workflow');
@@ -514,8 +515,7 @@ function sendPastTrips() {
 function sendTripButtons(addNewTrip) {
 	// Anytime we send trips for users to choose from, invalidate the session's tripData so it can be re-read from file. This way, any information that was added to the trip (by other session instances like the one in webpage-handler.js) will be re-read.
 	this.session.invalidateTripData();
-  const tripDetails = this.session.getCurrentAndFutureTrips();
-  const tripNames = tripDetails.futureTrips;
+  const tripNames = this.session.getCurrentAndFutureTrips().futureTrips;
   logger.info(`sendTripButtons: trip length for fbid ${this.session.fbid} is ${tripNames.length}`);
   if(tripNames.length == 0) {
     const messageData = {
@@ -610,52 +610,6 @@ function sendTripButtons(addNewTrip) {
     }
   };
   callSendAPI(messageData);
-}
-
-function sendAllTripsButtons() {
-  const elements = [];
-  const futureTrips = this.session.getCurrentAndFutureTrips();
-  const pastTrips = this.session.getPastTrips();
-  pastTrips.forEach(t => {
-    elements.push({
-      title: t.rawName,
-      buttons: [{
-        type: "web_url",
-        url:sendUrl.call(this, `${t.name}/expense-report`),
-        title: t.name,
-        webview_height_ratio: "compact",
-        messenger_extensions: true
-      }]
-    })
-  });
-  futureTrips.forEach(t => {
-    elements.push({
-      title: t.rawName,
-      buttons: [{
-        type: "web_url",
-        url:sendUrl.call(this, `${t.name}/expense-report`),
-        title: t.name,
-        webview_height_ratio: "compact",
-        messenger_extensions: true
-      }]
-    })
-  });
-  const messageData = {
-    recipient: {
-      id: this.session.fbid
-    },
-    message: {
-      attachment: {
-        type: "template",
-        payload: {
-          template_type: "generic",
-          elements: elements
-        }
-      }
-    }
-  };
-  callSendAPI(messageData);
-  return;
 }
 
 function handleQuickReplies(quick_reply) {
@@ -1596,12 +1550,11 @@ function sendTextMessage(recipientId, messageText) {
   callSendAPI(messageData);
 }
 
-const PAGE_ACCESS_TOKEN = "EAAXu91clmx0BAONN06z8f5Nna6XnCH3oWJChlbooiZCaYbKOUccVsfvrbY0nCZBXmZCQmZCzPEvkcJrBZAHbVEZANKe46D9AaxOhNPqwqZAGZC5ZCQCK4dpxtvgsPGmsQNzKhNv5OdNkizC9NfrzUQ9s8FwXa7GK3EAkOWpDHjZAiGZAgZDZD";
-
+const encryptedPat = "GDppF8QSELN0ycFlaDahtM34V1EDoZX8JRtoem2wSXpkl0pWmNhYZGbYnV0HfjdGQcKs9plL8+ityQl/DXN8WcN/rod11yN7/8tmWcyJK5NpF/YwPeF4pFuVzfroPxuzU4ckUDDbtKE6MPyiySsx9L0+GLswJsV92+HCSY0uvlc6v0hiirqg/KO9ebTv+Na+Q0fs8s0aziYAvo5f3pgIPxyhrUQW3ENzKZ/aEbLL8a5wXiXR6qq9b28lW1eu8E6S";
 function callSendAPI(messageData) {
   request({
     uri: 'https://graph.facebook.com/v2.6/me/messages',
-    qs: { access_token: PAGE_ACCESS_TOKEN },
+    qs: { access_token: (new SecretManager()).decrypt(encryptedPat) },
     method: 'POST',
     json: messageData
   }, function (error, response, body) {

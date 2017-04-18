@@ -22,7 +22,7 @@ function TripData(tripName) {
     this.data.rawName = tripName;
   }
   else {
-    this.country = new Country(this.data.country);
+    if(this.data.country) this.country = new Country(this.data.country);
   }
 }
 
@@ -127,8 +127,10 @@ TripData.prototype.addTripDetailsAndPersist = function(tripDetails) {
   this.data = {}; 
   this.data.name = myEncode(this.rawTripName);
   this.data.rawName = this.rawTripName;
-  this.data.country = myEncode(tripDetails.destination);
-  this.country = new Country(tripDetails.destination);
+  if(tripDetails.destination) {
+    this.data.country = myEncode(tripDetails.destination);
+    this.country = new Country(tripDetails.destination);
+  }
   this.data.duration = tripDetails.duration;
   // TODO: The date format needs to be identified and converted to the needed format.
   if(tripDetails.datetime) {
@@ -154,7 +156,7 @@ TripData.prototype.addTripDetailsAndPersist = function(tripDetails) {
 TripData.prototype.addPortOfEntry = function(portOfEntry) {
   if(portOfEntry) {
     // this is needed for getting flight details.
-    this.data.portOfEntry = Encoder.encode(portOfEntry);
+    this.data.portOfEntry = myEncode(portOfEntry);
   }
   else {
     logger.error("addPortOfEntry: port of entry is undefined");
@@ -163,10 +165,16 @@ TripData.prototype.addPortOfEntry = function(portOfEntry) {
   this.persistUpdatedTrip();
 }
 
+// compare the port of entry with the passed city. This is a separate function to ensure that the encoding of portOfEntry does not leak outside this file.
+TripData.prototype.comparePortOfEntry = function(city) {
+  if(this.data.portOfEntry && (this.data.portOfEntry === myEncode(city))) return true;
+  return false;
+}
+
 TripData.prototype.addCities = function(cities) {
   this.data.cities = [];
   for(let i = 0; i < cities.length; i++) {
-    this.data.cities.push(Encoder.encode(cities[i]));
+    this.data.cities.push(myEncode(cities[i]));
   }
   this.persistUpdatedTrip();
 }
@@ -180,8 +188,8 @@ TripData.prototype.addCityItinerary = function(cities, numOfDays) {
   this.data.cityItin.cities = [];
   this.data.cities = [];
   for(let i = 0; i < cities.length; i++) {
-    this.data.cityItin.cities.push(Encoder.encode(cities[i]));
-    this.data.cities.push(Encoder.encode(cities[i]));
+    this.data.cityItin.cities.push(myEncode(cities[i]));
+    this.data.cities.push(myEncode(cities[i]));
   }
   this.data.cityItin.numOfDays = numOfDays;
   logger.debug(`addCityItinerary: City itinerary is ${JSON.stringify(this.data.cityItin)}`);
@@ -399,6 +407,7 @@ TripData.prototype.parseComments = function() {
 
 TripData.prototype.persistUpdatedTrip = function() {
   const file = tripFile.call(this);
+  logger.debug(`persisting trip to file ${file}`);
   try {
     fs.writeFileSync(file, JSON.stringify(this.data));
     return true;
@@ -410,9 +419,9 @@ TripData.prototype.persistUpdatedTrip = function() {
 }
 
 // ======== Encode =======
-// TODO: Make this private by removing/refactoring other references
+// TODO: Figure out a way to get rid of the use of this function by other files (session.js, weather-info-provider.js)
 TripData.encode = function(name) {
-  return Encoder.encode(name);
+  return myEncode(name);
 }
 
 function myEncode(name) {
@@ -457,7 +466,23 @@ function createTodoList() {
 function tripFile() {
   // TODO: check parameters
   // can't use this.data because it is populated with the file contents, which might not exist yet.
-  return `${tripBaseDir}/${myEncode(this.rawTripName)}.txt`;
+  return `${tripBaseDir}/${filename.call(this)}`;
+}
+
+TripData.prototype.markTodoItemDone = function(doneItem) {
+  const doneItemLc = doneItem.toLowerCase();
+  if(!this.data.todoList) return;
+  if(!this.data.todoList.done) this.data.todoList.done = [];
+  for(let i = 0; i < this.data.todoList.length; i++) {
+    if(this.data.todoList[i].toLowerCase() === doneItemLc)  {
+      this.data.todoList.done.push(doneItem);
+      const idx = this.data.todoList.indexOf(doneItem);
+      this.data.todoList.splice(idx, 1);
+      return;
+    }
+  }
+  logger.warn(`markTodoItemDone: Could not find item ${doneItem} in todo list`);
+  return;
 }
 
 TripData.prototype.tripDataFile = function() {
@@ -471,5 +496,16 @@ TripData.prototype.tripItinFile = function() {
 TripData.prototype.boardingPassFile = function() {
   return `${tripBaseDir}/${this.data.name}-boarding-pass.txt`;
 }
+
+function filename() {
+  return `${myEncode(this.rawTripName)}.txt`;
+}
+
+/**************** TESTING APIs ********************/
+TripData.prototype.testing_delete = function() {
+  const newfile = `${tripBaseDir}/oldFiles/${filename.call(this)}`;
+  fs.renameSync(tripFile.call(this), newfile);
+}
+/**************** TESTING APIs ********************/
 
 module.exports = TripData;

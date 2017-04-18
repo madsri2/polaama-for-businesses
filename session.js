@@ -117,14 +117,26 @@ Session.prototype.persistSession = function() {
       humanContext: this.trips[name].humanContext,
     }
   });
-  const file = `${Session.sessionBaseDir}/${this.fbid}.session`;
   try {
-    fs.writeFileSync(file, JSON.stringify(data));
-    // logger.info(`persisted session in file <${file}>`);
+    const fileName = file.call(this);
+    fs.writeFileSync(fileName, JSON.stringify(data));
   }
   catch(err) {
       logger.error(`error writing to session file: ${file}`, err.stack);
   }
+}
+
+Session.prototype.testing_delete = function() {
+  const newfile = `${Session.sessionBaseDir}/oldFiles/${filename.call(this)}`;
+  fs.renameSync(file.call(this), newfile);
+}
+
+function file() {
+  return `${Session.sessionBaseDir}/${filename.call(this)}`;
+}
+
+function filename() {
+  return `${this.fbid}.session`;
 }
 
 Session.prototype.persistHometown = function(town) {
@@ -237,9 +249,11 @@ Session.prototype.addTrip = function(tripName) {
       },
       tripData: new TripData(tripName)
     };
+    this.trips[encTripName].tripData.persistUpdatedTrip();
   }
   // Persist the new trip that was added to this session.
   this.persistSession();
+  return this.trips[encTripName].tripData;
 }
 
 Session.prototype.addNewTrip = function(tripName, trip) {

@@ -1,11 +1,14 @@
 'use strict';
-const IataCode = require('iatacodes');
-const logger = require('./my-logger');
 const fs = require('fs');
 const _ = require('lodash');
 const walkSync = require('walk-sync');
+const IataCode = require('iatacodes');
 const ic = new IataCode('4a8368c8-4369-4ed3-90ab-f5c46ce34e54');
-const Encoder = require('./encoder');
+const Promise = require('promise');
+
+const baseDir = "/home/ec2-user";
+const logger = require(`${baseDir}/my-logger`);
+const Encoder = require(`${baseDir}/encoder`);
 
 /* 
 ic.api('autocomplete', {query: 'lisbon'}, function(e, r) {
@@ -28,10 +31,7 @@ ic.api('autocomplete', {query: 'lisbon'}, function(e, r) {
 */
 
 function IataCodeGetter(city) {
-	if(!city) {
-		throw new Error("Argument city passed to me is not defined");
-	}
-  this.city = city;
+	if(city) this.city = city;
 }
 
 IataCodeGetter.prototype.getCodeSync = function() {
@@ -66,7 +66,7 @@ IataCodeGetter.prototype.getCode = function(callback) {
   logger.info(`getCode: Getting code for city ${this.city} from iatacode.org. file does not exist`);
   const self = this;
   ic.api('autocomplete', {query: `${this.city}`}, function(err, response) {
-    if(!_.isUndefined(err)) {
+    if(!err) {
       logger.error(`getIataCode: Error getting ${self.city}'s code from iatacode.org: ${err}`);
       return;
     }
@@ -93,16 +93,31 @@ IataCodeGetter.prototype.getCode = function(callback) {
   return callback(iatacode);
 }
 
+/*
+IataCodeGetter.prototype.getCity = function(code) {
+  return new Promise(function(fulfil, reject) {
+    ic.api('cities', {code: `${code}`}, function(err, response) {
+      if(err) {
+        logger.error(`getCity: error: ${err.stack}`);
+        return reject(err);
+      }
+      logger.debug(`response from iatacode: ${response}`);
+      return fulfil(response);
+    });
+  });
+}
+*/
+
 function cityFileExists() {
   if(_.isUndefined(this.fileList)) {
     logger.info(`cityFileExists: Walking the countries directory in search of file for city ${this.city}`);
-    this.fileList = walkSync("countries", {directories: true});
+    this.fileList = walkSync(`${baseDir}/countries`, {directories: true});
   }
   let absFileName;
   const fName = `${Encoder.encode(this.city)}`;
   this.fileList.forEach(file => {
     if(file.includes(`/${fName}/iatacode.txt`)) {
-      absFileName = `countries/${file}`;
+      absFileName = `${baseDir}/countries/${file}`;
       return;
     }
   });
@@ -114,7 +129,7 @@ function persistCode(city, body, callback) {
     logger.error(`persistCode: iatacode for city ${city} is undefined. Doing nothing`);
     return;
   }
-  const dir = `countries/${Encoder.encode(body.country)}`;
+  const dir = `${baseDir}/countries/${Encoder.encode(body.country)}`;
   const cityDir = `${dir}/${Encoder.encode(city)}`;
   const file = `${cityDir}/iatacode.txt`;
   try {

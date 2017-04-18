@@ -54,7 +54,7 @@ function getBoardingPass(trip, fbid) {
     const bpDetails = fs.readFileSync(trip.boardingPassFile(), 'utf8');
   }
   catch(e) {
-    logger.error(`getBoardingPass: could not read boarding pass details from file ${file}: ${e.stack}`);
+    logger.warn(`getBoardingPass: could not read boarding pass details from file ${file}: ${e.stack}`);
     return boardingPass;
   }
   boardingPass.push({
