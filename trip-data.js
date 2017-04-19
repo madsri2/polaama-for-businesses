@@ -171,6 +171,10 @@ TripData.prototype.comparePortOfEntry = function(city) {
   return false;
 }
 
+TripData.prototype.getPortOfEntry = function() {
+  return this.data.portOfEntry;
+}
+
 TripData.prototype.addCities = function(cities) {
   this.data.cities = [];
   for(let i = 0; i < cities.length; i++) {
@@ -460,7 +464,7 @@ function createTodoList() {
   this.data.todoList.push("Place to stay");
   this.data.todoList.push("Rental car");
   this.data.todoList.push("[US Citizens only] Enroll in STEP (https://step.state.gov/step/) to get travel alerts and warnings.");
-  this.data.todoList.push(visaRequirements[this.data.country]);
+  if(visaRequirements[this.data.country]) this.data.todoList.push(visaRequirements[this.data.country]);
 }
 
 function tripFile() {
@@ -471,18 +475,26 @@ function tripFile() {
 
 TripData.prototype.markTodoItemDone = function(doneItem) {
   const doneItemLc = doneItem.toLowerCase();
-  if(!this.data.todoList) return;
-  if(!this.data.todoList.done) this.data.todoList.done = [];
-  for(let i = 0; i < this.data.todoList.length; i++) {
-    if(this.data.todoList[i].toLowerCase() === doneItemLc)  {
-      this.data.todoList.done.push(doneItem);
-      const idx = this.data.todoList.indexOf(doneItem);
+  if(!this.data.todoList) return; 
+  if(!this.data.todoDoneList) this.data.todoDoneList = [];
+  for(let idx = 0; idx < this.data.todoList.length; idx++) {
+    if(this.data.todoList[idx].toLowerCase() === doneItemLc)  {
+      this.data.todoDoneList.push(doneItem);
       this.data.todoList.splice(idx, 1);
+      this.persistUpdatedTrip();
       return;
     }
   }
   logger.warn(`markTodoItemDone: Could not find item ${doneItem} in todo list`);
   return;
+}
+
+TripData.prototype.getTodoList = function() {
+  return this.data.todoList;
+}
+
+TripData.prototype.getTodoDoneList = function() {
+  return this.data.todoDoneList;
 }
 
 TripData.prototype.tripDataFile = function() {
@@ -495,6 +507,10 @@ TripData.prototype.tripItinFile = function() {
 
 TripData.prototype.boardingPassFile = function() {
   return `${tripBaseDir}/${this.data.name}-boarding-pass.txt`;
+}
+
+TripData.prototype.boardingPassImage = function() {
+  return `${tripBaseDir}/${this.data.name}-boarding-pass-image.png`;
 }
 
 function filename() {

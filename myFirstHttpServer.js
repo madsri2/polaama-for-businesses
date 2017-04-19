@@ -36,9 +36,6 @@ const options = {
   cert: fs.readFileSync(sslPath + 'fullchain.pem')
 };
 
-
-let u;
-
 // authentication
 passport.use(new fbStrategy({
     clientID: FB_APP_ID,
@@ -144,9 +141,8 @@ server.listen(port, function() {
 
   // set a timer that will send boarding pass and other details the day before a trip
   const oneDayInMsec = 1000*60*60*24*1;
-  const thirtySeconds = 1000*60;
+  const tenSeconds = 1000*10;
   setInterval(pushTripDetailsJustBeforeTrip, oneDayInMsec);
-  
 }); 
 
 app.get('/index', function(req, res) {
@@ -296,6 +292,10 @@ app.get('/handle-controlgroup', function(req, res) {
 // The filler "-" is needed here to disambiguate this route from "/:id/:tripName". If we don't use the filler here, that route will be chosen. TODO: FIX ME by chaining (see https://expressjs.com/en/guide/routing.html "Route handlers")
 app.get('/-/images/boarding-pass', function(req, res) {
   return res.sendFile('/home/ec2-user/boardingPass.png');
+});
+
+app.get('/:id/:tripName/boarding-pass-image', function(req, res) {
+  return (new WebpageHandler(req.params.id, req.params.tripName)).getBoardingPass(req, res);
 });
 
 app.post('/handle-controlgroup', function(req, res) {

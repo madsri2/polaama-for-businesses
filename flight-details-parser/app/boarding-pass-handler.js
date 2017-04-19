@@ -3,17 +3,20 @@ const fs = require('fs');
 const FbidHandler = require('fbid-handler/app/handler');
 const airportCodes = require('airport-codes');
 const moment = require('moment');
-
+const cpx = require('cpx');
 const baseDir = `/home/ec2-user`;
 const logger = require(`${baseDir}/my-logger`);
 const Sessions = require(`${baseDir}/sessions`);
 const TripData = require(`${baseDir}/trip-data`);
+const WebhookPostHandler = require(`${baseDir}/webhook-post-handler`);
+const EmailParser = require('./email-parser');
 
 // use a mailparser like https://www.npmjs.com/package/mailparser to parse email
 function BoardingPassHandler(options) {
-  // TODO: Confirm that dep_date is of the form YYYY-MM-HH
-  options.departureTime = `${options.dep_date}T${options.dep_time}`;
-  this.dep_date = options.dep_date;
+  const dd = new Date(options.dep_date);
+  const formattedDate = `${dd.getFullYear()}-${dd.getMonth()+1}-${dd.getDate()}`;
+  options.departureTime = `${formattedDate}T${options.dep_time}`;
+  this.dep_date = formattedDate;
   this.dep_time = options.dep_time;
   this.details = {
     full_name: options.name,
@@ -31,6 +34,8 @@ function BoardingPassHandler(options) {
       departure_time: options.departureTime
     }
   };
+  this.email = options.email;
+  if(!this.email) throw new Error("required value email is missing");
   validateFields.call(this);
 }
 
@@ -46,6 +51,7 @@ We need a way to map the details of this boarding pass with a user profile (sess
 BoardingPassHandler.prototype.handle = function() {
   // 1) Get the fbid and session corresponding to the name
   this.session = getSession.call(this);
+  this.postHandler = new WebhookPostHandler(this.session);
 
   // get city corresponding to destination airport code
   const airportCode = this.details.arrival_airport.airport_code;
@@ -59,7 +65,8 @@ BoardingPassHandler.prototype.handle = function() {
   for(let idx = 0; idx < tripCount; idx++) {
     const trip = trips[idx];
     const tripData = trip.data;
-    if(moment(this.dep_date).isSame(tripData.startDate)) {
+    const tripStartDate = moment(new Date(tripData.startDate).toISOString());
+    if(moment(new Date(this.dep_date).toISOString()).isSame(tripStartDate)) {
       logger.debug(`handle: departure date from boarding pass matches trip ${tripData.rawName}'s startDates`);
       if(trip.comparePortOfEntry(destCity)) {
         logger.debug(`handle: Found trip ${tripData.name} that matches port of entry of boarding pass`);
@@ -73,21 +80,26 @@ BoardingPassHandler.prototype.handle = function() {
     this.trip = this.session.addTrip(destCity);
     const tripDetails = {
       startDate: this.dep_date,
-      portOfEntry: destCity,
       destination: destCity // if the user is traveling to only one city, the destination & port of entry will be the same
     };
     this.trip.addTripDetailsAndPersist(tripDetails);
+    this.trip.addPortOfEntry(destCity);
+    // TODO: Trigger an event so webhook-post-handler can start planning for the new trip.
+    // this.postHandler.startPlanningTrip();
   }
+  this.details.boardingPassImageUrl = boardingPassImage.call(this); // Do this before writing boarding pass details into the file
 
   // 3) Store itinerary + boarding pass information
   try {
     const file = this.trip.boardingPassFile();
     logger.debug(`handle: Writing to file ${file}`);
-    fs.writeFileSync(file, JSON.stringify(this.details));
+    fs.writeFileSync(file, JSON.stringify(this.details), 'utf8');
     // send a notification to the user that we have their details and will send them the boarding pass the day before the flight.
-    this.trip.markTodoItemDone("flight tickets");
+    this.trip.markTodoItemDone("Flight tickets");
     // notify user that we have received a boarding pass.
-    // callSendAPI(`Received boarding pass for your trip to ${this.trip.destination}. Will automatically send you the boarding pass two days before the trip`);
+    const message = `Received boarding pass for your trip to ${this.trip.getPortOfEntry()}. Polaama will send you the boarding pass two days before your trip`;
+    logger.debug(`handle: About to send message to user: ${message}`);
+    this.postHandler.notifyUser(message);
   }
   catch(e) {
     logger.error(`parse: Error writing to file ${this.trip.boardingPassFile()}. ${e.stack}`);
@@ -95,6 +107,23 @@ BoardingPassHandler.prototype.handle = function() {
   }
   logger.debug(`handle: Stored flight details, marked todo item as done and pushed notification`);
   return true;
+}
+
+function boardingPassImage() {
+  let foundImage = false;
+  fs.readdirSync(EmailParser.dir).forEach(file => {
+    if(file.includes(this.email) && file.includes("attachment.png") && !file.includes("mime")) {
+      // copy this attachment into the trips directory
+      const tripBpImage = this.trip.boardingPassImage();
+      logger.debug(`boardingPassImage: copying email image from file ${file} to ${tripBpImage}`);
+      foundImage = true;
+      cpx.copySync(file, `${baseDir}/trips`);
+      fs.renameSync(`${baseDir}/trips/${file}`, tripBpImage);
+    }
+  });
+  // TODO: Send a notification asking the user to send a boarding pass (or) make this an itinerary
+  if(!foundImage) throw new Error(`boardingPassImage: Could not find boarding pass image in email. Cannot proceed`);
+  return this.postHandler.createUrl(`${this.trip.data.name}/boarding-pass-image`);
 }
 
 function getSession() {
@@ -109,7 +138,7 @@ function getSession() {
   const session = sessions.find(fbid);
   if(!session) throw new Error(`Could not find session for fbid ${fbid}. Maybe user never initiated a chat conversation with polaama?`);
 
-  logger.debug(`getSession: Found session ${JSON.stringify(session)}`);
+  logger.debug(`getSession: Found session ${session.sessionId}`);
   return session;
 }
 

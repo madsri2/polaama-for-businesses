@@ -12,6 +12,7 @@
     "async": "^2.3.0",
     "chai": "^3.5.0",
     "command-line-args": "^4.0.2",
+    "cpx": "^1.5.0",
     "fs": "0.0.1-security",
     "mailin": "^3.0.4",
     "mocha": "^3.2.0",

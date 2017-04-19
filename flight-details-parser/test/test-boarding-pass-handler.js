@@ -25,6 +25,19 @@ describe('Testing flight details boarding-pass', function() {
     (new Sessions()).find(fbid).testing_delete();
     (new TripData(tripName)).testing_delete();
   }
+
+  function verifyExpectations(tripName) {
+    const trip = new TripData(tripName);
+    // verify that boarding pass file actually was written
+    const boardingPass = JSON.parse(fs.readFileSync(trip.boardingPassFile(), 'utf8'));
+    expect(boardingPass.flight_schedule.departure_time).to.equal("2017-5-1T09:00");
+    expect(boardingPass.full_name).to.equal("TestFirstName LastName");
+    expect(boardingPass.pnr_number).to.equal("XWERGX");
+    // verify that "flight ticket" todo item was marked done
+    expect(trip.getTodoDoneList()).to.include("Flight tickets");
+    expect(boardingPass.boardingPassImageUrl).to.include("boarding-pass-image");
+    fs.accessSync(trip.boardingPassImage());
+  }
   
   it('Testing handle new trip', function() {
     setup(); 
@@ -37,11 +50,13 @@ describe('Testing flight details boarding-pass', function() {
       dep_city: "Seattle",
       arr_code: "JFK",
       arr_city: "New York",
-      dep_date: "2017-05-01",
+      dep_date: "5/1/17",
       dep_time: "09:00"
     };
+    options.email = "madsri2@gmail.com";
     // call & verify
     expect((new BoardingPassHandler(options)).handle()).to.be.ok;
+    verifyExpectations("New York");
     // delete all relevant files
     cleanup("12345","New York");
   });
@@ -49,7 +64,7 @@ describe('Testing flight details boarding-pass', function() {
   // TODO: Figure out a way to verify that a new trip was not created and an existing trip was used. Right now, we rely on a log statement in boarding-pass-handler.js
   it('Testing existing trip', function() {
     const trip = setup().addTrip("New York");
-    trip.addTripDetailsAndPersist({startDate: "2017-05-01", destination: 'New York'});
+    trip.addTripDetailsAndPersist({startDate: "5/1/17", destination: 'New York'});
     trip.addPortOfEntry("New York");
     // The trip "new_york" should already exist.
 
@@ -61,11 +76,13 @@ describe('Testing flight details boarding-pass', function() {
       dep_city: "Seattle",
       arr_code: "JFK",
       arr_city: "New York",
-      dep_date: "2017-05-01",
+      dep_date: "5/1/17",
       dep_time: "09:00"
     };
+    options.email = "madsri2@gmail.com";
     // call
     expect((new BoardingPassHandler(options)).handle()).to.be.ok;
+    verifyExpectations("New York");
     // delete all relevant files
     cleanup("12345","New York");
   });

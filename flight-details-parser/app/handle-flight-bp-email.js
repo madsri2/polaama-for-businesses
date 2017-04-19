@@ -11,8 +11,9 @@ const optionsDefn = [
   {name: 'dep_city', alias: 'e'},
   {name: 'arr_code', alias: 'a'},
   {name: 'arr_city', alias: 'b'},
-  {name: 'dep_time', alias: 't'}
-  {name: 'dep_date', alias: 'u'}
+  {name: 'dep_time', alias: 't'},
+  {name: 'dep_date', alias: 'u'},
+  {name: 'email'}
 ];
 
 // TODO: Start here and add departure time

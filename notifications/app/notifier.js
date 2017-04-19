@@ -6,9 +6,9 @@ const logger = require(`${baseDir}/my-logger`);
 
 /* 
   Schedule notifications to user about a particular trip.
-        sendTextMessage(sessions[id].fbid, `[Trip flight details] flight #: XEVFSG; : 
-        sendTextMessage(sessions[id].fbid, `[Trip Car details] confirmation #: XEVFSG; Hotel confirmation code: 
-        sendTextMessage(sessions[id].fbid, `[Trip Hotel details] confirmation #: XEVFSG; Hotel confirmation code: 
+    sendTextMessage(sessions[id].fbid, `[Trip flight details] flight #: XEVFSG; : 
+    sendTextMessage(sessions[id].fbid, `[Trip Car details] confirmation #: XEVFSG; Hotel confirmation code: 
+    sendTextMessage(sessions[id].fbid, `[Trip Hotel details] confirmation #: XEVFSG; Hotel confirmation code: 
 */
 function Notifier(sessions) {
   this.sessions = sessions.allSessions();
@@ -29,7 +29,7 @@ Notifier.prototype.tripDetailsJustBeforeTrip = function() {
     this.sessions[id].allTrips().forEach(trip => {
       if(!trip.data.startDate) return;
       const now = moment().tz("Etc/UTC"); 
-      const startDate = moment.tz(trip.data.startDate, "Etc/UTC");
+      const startDate = moment.tz((new Date(trip.data.startDate)).toISOString(), "Etc/UTC");
       const daysToTrip = startDate.diff(now, 'days');
       const name = trip.data.name;
       logger.debug(`tripDetailsJustBeforeTrip: Trip ${name} from session ${id} starting on ${trip.data.startDate}; daysToTrip: ${daysToTrip}`);
@@ -37,7 +37,8 @@ Notifier.prototype.tripDetailsJustBeforeTrip = function() {
       if(daysToTrip >= 0 && daysToTrip <= 2 && !this.sentList[getSentListKey.call(this, fbid, name)]) {
         logger.debug(`tripDetailsJustBeforeTrip: Sending boarding pass for ${name}, which is ${daysToTrip} days away`);
         this.sentList[getSentListKey.call(this, fbid, name)] = true;
-        sendList.push(getBoardingPass(trip, fbid));
+        const boardingPass = getBoardingPass(trip, fbid);
+        if(boardingPass) sendList.push(boardingPass);
       }
     });
   });
@@ -50,35 +51,38 @@ function getSentListKey(fbid, name) {
 
 function getBoardingPass(trip, fbid) {
   const boardingPass = [];
+  const file = trip.boardingPassFile();
   try {
-    const bpDetails = fs.readFileSync(trip.boardingPassFile(), 'utf8');
+    const bpDetails = JSON.parse(require('fs').readFileSync(file, 'utf8'));
+    boardingPass.push({
+      'passenger_name': bpDetails.full_name,
+      'pnr_number': bpDetails.pnr_number,
+      'logo_image_url': `https://www.example.com/en/logo.png`, 
+      'barcode_image_url': bpDetails.boardingPassImageUrl,
+      // 'barcode_image_url': `https://polaama.com/-/images/boarding-pass`, 
+      'above_bar_code_image_url': `https://www.example.com/en/PLAT.png`, 
+      'flight_info': {
+        'flight_number': bpDetails.flight_number,
+        'departure_airport': {
+          'airport_code': bpDetails.departure_airport.airport_code,
+          'city': bpDetails.departure_airport.city
+        },
+        'arrival_airport': {
+          'airport_code': bpDetails.arrival_airport.airport_code,
+          'city': bpDetails.arrival_airport.city
+        },
+        'flight_schedule': {
+          'departure_time': bpDetails.flight_schedule.departure_time
+        }
+      }
+    });
   }
   catch(e) {
     logger.warn(`getBoardingPass: could not read boarding pass details from file ${file}: ${e.stack}`);
-    return boardingPass;
+    return undefined;
   }
-  boardingPass.push({
-    'passenger_name': bpDetails.full_name,
-    'pnr_number': bpDetails.pnr_number,
-    'logo_image_url': `https://www.example.com/en/logo.png`, 
-    'barcode_image_url': `https://polaama.com/-/images/boarding-pass`, 
-    'above_bar_code_image_url': `https://www.example.com/en/PLAT.png`, 
-    'flight_info': {
-      'flight_number': bpDetails.flight_number,
-      'departure_airport': {
-        'airport_code': bpDetails.departure_airport.airport_code,
-        'city': bpDetails.departure_airport.city
-      },
-      'arrival_airport': {
-        'airport_code': bpDetails.arrival_airport.airport_code,
-        'city': bpDetails.arrival_airport.city
-      },
-      'flight_schedule': {
-        'departure_time': bpDetails.flight_schedule.departure_time
-      }
-    }
-  });
 
+  /*
   boardingPass.push({
     "passenger_name": "SMITH\/NICOLAS", // required
     "pnr_number": "CG4X7U", // required
@@ -134,6 +138,8 @@ function getBoardingPass(trip, fbid) {
       }
     }
   });
+  */
+
   return {
     recipient: {
       id: fbid

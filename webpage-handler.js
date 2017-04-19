@@ -265,4 +265,16 @@ WebpageHandler.prototype.handleAddCityChoice = function(req, res, postHandler, e
   });
 }
 
+WebpageHandler.prototype.getBoardingPass = function(req, res) {
+  const file = this.trip.boardingPassImage();
+  try {
+    fs.accessSync(file);
+  }
+  catch(e) {
+    logger.error(`getBoardingPass: error accessing file ${file}: ${e.stack}`);
+    return res.sendStatus(404);
+  }
+  return res.sendFile(file);
+}
+
 module.exports = WebpageHandler;

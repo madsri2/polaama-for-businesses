@@ -472,9 +472,13 @@ function receivedMessage(event) {
     }
 }
 
-function sendUrl(urlPath) {
+WebhookPostHandler.prototype.createUrl = function(urlPath) {
   const encodedId = this.fbidHandler.encode(this.session.fbid);
   return `https://polaama.com/${encodedId}/${urlPath}`;
+}
+
+function sendUrl(urlPath) {
+  return this.createUrl(urlPath);
 }
 
 function sendPastTrips() {
@@ -1081,7 +1085,7 @@ WebhookPostHandler.prototype.sendReminderNotification = function() {
   const sessions = this.sessions.allSessions();
   Object.keys(sessions).forEach(id => {
     sessions[id].allTrips().forEach(trip => {
-      const todoList = trip.data.todoList;
+      const todoList = trip.getTodoList();
       logger.info(`sendReminderNotification: Trip ${trip.data.name} from session ${id} has ${todoList.length} todo items.`);
       if(!todoList.length) {
         return;
@@ -1106,10 +1110,14 @@ WebhookPostHandler.prototype.sendReminderNotification = function() {
   });
 }
 
-WebhookPostHandler.prototype.sendEmailNotification = function(emailId) {
+WebhookPostHandler.prototype.notifyAdmin = function(emailId) {
   const fbid = Session.adminId;
-  logger.debug(`sendEmailNotification: fbid is ${fbid}, email is ${emailId}`);
-  return sendTextMessage(fbid, `Heads up: You got email from ${emailId}`);
+  logger.debug(`notifyAdmin: fbid is ${fbid}, email is ${emailId}`);
+  return sendTextMessage(fbid, `[ACTION REQD]: You got email from ${emailId}`);
+}
+
+WebhookPostHandler.prototype.notifyUser = function(message) {
+	sendTextMessage(this.session.fbid, message);
 }
 
 WebhookPostHandler.prototype.pushTripDetailsJustBeforeTrip = function() {
