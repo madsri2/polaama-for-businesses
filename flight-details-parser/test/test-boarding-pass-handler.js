@@ -11,22 +11,41 @@ const logger = require(`${baseDir}/my-logger`);
 logger.setTestConfig(); // indicate that we are logging for a test
 
 
-describe('Testing flight details boarding-pass', function() {
+describe('BoardingPass handler', function() {
+  let fbid = "12345";
+  let tripName = "New York";
+  const sessions = new Sessions();
+  const options = {
+    name: "TestFirstName LastName",
+    pnr: "XWERGX",
+    flight_num: "UA500",
+    dep_code: "SEA",
+    dep_city: "Seattle",
+    arr_code: "JFK",
+    arr_city: tripName,
+    dep_date: "5/1/17",
+    dep_time: "09:00",
+    email: "madsri2@gmail.com",
+    attachment: "2017-04-20T08:18/attachment.png"
+  };
 
-  function setup() {
+  // set up
+  beforeEach(function() {
     // create a test file and pass that to fbid-handler
-    const fbid = "12345";
+    logger.debug("Setting up before test");
     (new FbidHandler()).testing_add(fbid,{"first_name": "TestFirstname", "last_name": "Lastname"});
-    return (new Sessions()).findOrCreate(fbid);
-  }
+    sessions.findOrCreate(fbid);
+  });
 
-  function cleanup(fbid, tripName) {
+  // clean up
+  afterEach(function() {
+    logger.debug("Cleaning up after test");
     (new FbidHandler()).testing_delete(fbid);
-    (new Sessions()).find(fbid).testing_delete();
+    sessions.testing_delete(fbid);
     (new TripData(tripName)).testing_delete();
-  }
+  });
 
-  function verifyExpectations(tripName) {
+  function verifyExpectations() {
     const trip = new TripData(tripName);
     // verify that boarding pass file actually was written
     const boardingPass = JSON.parse(fs.readFileSync(trip.boardingPassFile(), 'utf8'));
@@ -40,51 +59,29 @@ describe('Testing flight details boarding-pass', function() {
   }
   
   it('Testing handle new trip', function() {
-    setup(); 
-
-    const options = {
-      name: "TestFirstName LastName",
-      pnr: "XWERGX",
-      flight_num: "UA500",
-      dep_code: "SEA",
-      dep_city: "Seattle",
-      arr_code: "JFK",
-      arr_city: "New York",
-      dep_date: "5/1/17",
-      dep_time: "09:00"
-    };
-    options.email = "madsri2@gmail.com";
-    // call & verify
     expect((new BoardingPassHandler(options)).handle()).to.be.ok;
-    verifyExpectations("New York");
-    // delete all relevant files
-    cleanup("12345","New York");
+    verifyExpectations();
   });
 
   // TODO: Figure out a way to verify that a new trip was not created and an existing trip was used. Right now, we rely on a log statement in boarding-pass-handler.js
   it('Testing existing trip', function() {
-    const trip = setup().addTrip("New York");
-    trip.addTripDetailsAndPersist({startDate: "5/1/17", destination: 'New York'});
-    trip.addPortOfEntry("New York");
+    const trip = sessions.find(fbid).addTrip(tripName);
+    trip.addTripDetailsAndPersist({startDate: "5/1/17", destination: tripName});
+    trip.addPortOfEntry(tripName);
     // The trip "new_york" should already exist.
 
-    const options = {
-      name: "TestFirstName LastName",
-      pnr: "XWERGX",
-      flight_num: "UA500",
-      dep_code: "SEA",
-      dep_city: "Seattle",
-      arr_code: "JFK",
-      arr_city: "New York",
-      dep_date: "5/1/17",
-      dep_time: "09:00"
-    };
-    options.email = "madsri2@gmail.com";
     // call
     expect((new BoardingPassHandler(options)).handle()).to.be.ok;
-    verifyExpectations("New York");
-    // delete all relevant files
-    cleanup("12345","New York");
+    verifyExpectations();
+  });
+
+  it("Test presence of boarding pass image", function() {
+    const session = (new Sessions()).find(fbid);
+    if(!session) { throw new Error(`no session found for ${fbid}`); }
+    else { logger.debug(`Session from test is ${session.sessionId}`); }
+    logger.warn(`session list: ${fs.readdirSync("/home/ec2-user/sessions")}`);
+    expect((new BoardingPassHandler(options)).handle()).to.be.ok;
+    expect(fs.existsSync((new TripData(tripName)).boardingPassImage())).to.be.ok;
   });
 });
 

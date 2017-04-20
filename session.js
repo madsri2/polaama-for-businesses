@@ -118,17 +118,13 @@ Session.prototype.persistSession = function() {
     }
   });
   try {
-    const fileName = file.call(this);
-    fs.writeFileSync(fileName, JSON.stringify(data));
+    const filename = file.call(this);
+    fs.writeFileSync(filename, JSON.stringify(data));
+    console.log(`persistSession: wrote ${(JSON.stringify(data)).length} bytes to file ${filename}`);
   }
   catch(err) {
       logger.error(`error writing to session file: ${file}`, err.stack);
   }
-}
-
-Session.prototype.testing_delete = function() {
-  const newfile = `${Session.sessionBaseDir}/oldFiles/${filename.call(this)}`;
-  fs.renameSync(file.call(this), newfile);
 }
 
 function file() {
@@ -308,5 +304,15 @@ Session.prototype.clearAllAwaitingStates = function() {
 Session.prototype.getTimezone = function() {
   return "America/Los_Angeles"; // Using the timezone understood by moment-timezone
 }
+
+/********************* TESTING APIs ****************/
+
+Session.prototype.testing_delete = function() {
+  const newfile = `${Session.sessionBaseDir}/oldFiles/${filename.call(this)}`;
+  fs.renameSync(file.call(this), newfile);
+}
+
+/********************* TESTING APIs ****************/
+
 
 module.exports = Session;

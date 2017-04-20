@@ -13,7 +13,8 @@ const optionsDefn = [
   {name: 'arr_city', alias: 'b'},
   {name: 'dep_time', alias: 't'},
   {name: 'dep_date', alias: 'u'},
-  {name: 'email'}
+  {name: 'email'},
+  {name: 'attachment'}
 ];
 
 // TODO: Start here and add departure time

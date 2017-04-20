@@ -1,1 +1,0 @@
-{"full_name":"TestFirstName LastName","pnr_number":"XWERGX","flight_number":"UA500","departure_airport":{"airport_code":"SEA","city":"Seattle"},"arrival_airport":{"airport_code":"JFK","city":"New York"},"flight_schedule":{"departure_time":"2017-5-1T09:00"},"boardingPassImageUrl":"https://polaama.com/ebPp/new_york/boarding-pass-image"}

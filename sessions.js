@@ -50,7 +50,7 @@ Sessions.prototype.allSessions = function() {
   return this.sessions;
 }
 
-// This needs to be a function of the object and not be accessed using an instance of the object.
+// This is a class method, not an instance method
 Sessions.retrieveSession = function(fbid) {
   const file = `${Session.sessionBaseDir}/${fbid}.session`;
   try {
@@ -108,5 +108,16 @@ function findSessionId(fbid) {
   }
   return sessionId;
 };
+
+/********************* TESTING APIs ****************/
+
+Sessions.prototype.testing_delete = function(fbid) {
+  const session = this.find(fbid);
+  session.testing_delete();
+  delete this.sessions[session.sessionId];
+}
+
+/********************* TESTING APIs ****************/
+
 
 module.exports = Sessions;

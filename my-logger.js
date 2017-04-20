@@ -4,6 +4,8 @@
 const path = require('path')
 const PROJECT_ROOT = path.join(__dirname, '..')
 
+const fs = require('fs');
+
 const Log = require('./logger');
 let logger = (new Log("logger.conf")).init();
 
@@ -16,7 +18,9 @@ logger.stream = {
 
 // Use this if you want to send a different conf file. See ~/test-log.js for example
 module.exports.setTestConfig = function() {
-  logger = (new Log("test-logger.conf")).init();
+  const log = new Log("test-logger.conf");
+  logger = log.init();
+  if(fs.existsSync(log.fileName)) fs.renameSync(log.fileName, "/tmp/test-error.log.orig");
 }
 
 // A custom logger interface that wraps winston, making it easy to instrument

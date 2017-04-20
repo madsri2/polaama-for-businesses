@@ -141,7 +141,6 @@ server.listen(port, function() {
 
   // set a timer that will send boarding pass and other details the day before a trip
   const oneDayInMsec = 1000*60*60*24*1;
-  const tenSeconds = 1000*10;
   setInterval(pushTripDetailsJustBeforeTrip, oneDayInMsec);
 }); 
 

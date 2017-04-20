@@ -3,7 +3,6 @@ const fs = require('fs');
 const FbidHandler = require('fbid-handler/app/handler');
 const airportCodes = require('airport-codes');
 const moment = require('moment');
-const cpx = require('cpx');
 const baseDir = `/home/ec2-user`;
 const logger = require(`${baseDir}/my-logger`);
 const Sessions = require(`${baseDir}/sessions`);
@@ -36,6 +35,9 @@ function BoardingPassHandler(options) {
   };
   this.email = options.email;
   if(!this.email) throw new Error("required value email is missing");
+  this.boardingPassImage = `${EmailParser.dir}/${this.email}/${options.attachment}`;
+  // TODO: Send a notification asking the user to send a boarding pass (or) make this an itinerary
+  if(!fs.existsSync(this.boardingPassImage)) throw new Error(`BoardingPassHandler: Boarding pass image does not exist at location ${this.boardingPassImage}. Cannot proceed`);
   validateFields.call(this);
 }
 
@@ -87,7 +89,7 @@ BoardingPassHandler.prototype.handle = function() {
     // TODO: Trigger an event so webhook-post-handler can start planning for the new trip.
     // this.postHandler.startPlanningTrip();
   }
-  this.details.boardingPassImageUrl = boardingPassImage.call(this); // Do this before writing boarding pass details into the file
+  this.details.boardingPassImageUrl = getBoardingPassImage.call(this); // Do this before writing boarding pass details into the boardingPass file so that the image url will be captured in the file.
 
   // 3) Store itinerary + boarding pass information
   try {
@@ -109,20 +111,11 @@ BoardingPassHandler.prototype.handle = function() {
   return true;
 }
 
-function boardingPassImage() {
-  let foundImage = false;
-  fs.readdirSync(EmailParser.dir).forEach(file => {
-    if(file.includes(this.email) && file.includes("attachment.png") && !file.includes("mime")) {
-      // copy this attachment into the trips directory
-      const tripBpImage = this.trip.boardingPassImage();
-      logger.debug(`boardingPassImage: copying email image from file ${file} to ${tripBpImage}`);
-      foundImage = true;
-      cpx.copySync(file, `${baseDir}/trips`);
-      fs.renameSync(`${baseDir}/trips/${file}`, tripBpImage);
-    }
-  });
-  // TODO: Send a notification asking the user to send a boarding pass (or) make this an itinerary
-  if(!foundImage) throw new Error(`boardingPassImage: Could not find boarding pass image in email. Cannot proceed`);
+function getBoardingPassImage() {
+  // copy this attachment into the trips directory
+  const tripBpImage = this.trip.boardingPassImage();
+  logger.debug(`boardingPassImage: copying email image from file ${this.boardingPassImage} to ${tripBpImage}`);
+  fs.createReadStream(this.boardingPassImage).pipe(fs.createWriteStream(tripBpImage));
   return this.postHandler.createUrl(`${this.trip.data.name}/boarding-pass-image`);
 }
 
@@ -136,7 +129,9 @@ function getSession() {
   logger.debug(`getSession: fbid for this handler is ${fbid}`);
   const sessions = new Sessions();
   const session = sessions.find(fbid);
-  if(!session) throw new Error(`Could not find session for fbid ${fbid}. Maybe user never initiated a chat conversation with polaama?`);
+  if(!session) {
+    throw new Error(`Could not find session for fbid ${fbid}. Maybe user never initiated a chat conversation with polaama?`);
+  }
 
   logger.debug(`getSession: Found session ${session.sessionId}`);
   return session;
@@ -166,8 +161,6 @@ function validateFields() {
     if(!this.details.flight_schedule[field]) {
       throw new Error(`Required field ${field} missing in details.flight_schedule`);
     }
-    // TODO: validate that the departure_time is in the ISO 8601-based format (YYYY-MM-DDThh:mm)
-    // https://developers.facebook.com/docs/messenger-platform/send-api-reference/airline-boardingpass-template
   });
 }
 

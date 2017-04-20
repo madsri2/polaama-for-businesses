@@ -5,6 +5,7 @@ const util = require('util');
 const async = require('async');
 const multiparty = require('multiparty');
 const fs = require('fs');
+const moment = require('moment');
 
 const baseDir = "/home/ec2-user";
 const logger = require(`${baseDir}/my-logger`);
@@ -33,7 +34,7 @@ EmailParser.prototype.parse = function(req, res, callback) {
   let emailId;
   form.parse(req, function (err, fields) {
     const msg = JSON.parse(fields.mailinMsg);
-    if(msg.spamScore && msg.spamScore > 5) {
+    if(spam(msg)) {
       logger.debug(`spammed by ${msg.from[0].address}. dropping message`);
       res.sendStatus(200);
       return null;
@@ -44,23 +45,23 @@ EmailParser.prototype.parse = function(req, res, callback) {
     async.auto({
       writeParsedMessage: function (cbAuto) {
         emailId = msg.from[0].address;
-        const fileName =  `${EmailParser.dir}/message-${emailId}.json`;
-        logger.debug(`writeParsedMessage: Writing message to file ${fileName}`);
-        fs.writeFile(fileName, fields.mailinMsg, cbAuto);
+        const filename = getFileName(emailId, "message.json");
+        logger.debug(`writeParsedMessage: Writing message to file ${filename}`);
+        fs.writeFile(filename, fields.mailinMsg, cbAuto);
       },
       writeAttachments: function (cbAuto) {
         async.eachLimit(msg.attachments, 3, function (attachment, cbEach) {
-          EmailParser.attachmentFile = `${EmailParser.dir}/message-${emailId}-${attachment.generatedFileName}`;
+          const attachFile = getFileName(emailId, `${attachment.generatedFileName}`);
           logger.debug(`writeAttachments: Writing attachment to file ${attachFile}`);
           fs.writeFile(attachFile, fields[attachment.generatedFileName], 'base64', cbEach);
         }, cbAuto);
       },
       writeText: function(cbAuto) {
         if(!msg.text) return cbAuto("Error: email message does not contain text key");
-        const textFileName =  `${EmailParser.dir}/text-${emailId}.json`;
+        const textFile = getFileName(emailId, "text.txt");
         const text = msg.text.split("\\n").join("\n");
-        logger.debug(`writeText: Writing text to file ${textFileName}`);
-        fs.writeFile(textFileName, text, cbAuto);
+        logger.debug(`writeText: Writing text to file ${textFile}`);
+        fs.writeFile(textFile, text, cbAuto);
       }
     }, function (err) {
       if (err) {
@@ -77,40 +78,39 @@ EmailParser.prototype.parse = function(req, res, callback) {
   return emailId;
 }
 
-EmailParser.prototype.oldParse = function() {
-  logger.debug(`email parse called`);
-  const form = new formidable.IncomingForm(); 
-  form.type = 'multipart';
-  const self = this;
-  form.on('progress', function(recvd, expected) {
-    logger.debug(`progress: received ${recvd} bytes. expected ${expected} bytes`);
+function spam(msg) {
+  const blacklist = ["spameri@tiscali.it"];
+  if(msg.spamScore && msg.spamScore > 5) {
+    logger.debug("spam score greater than 5. Marking message as spam");
+    return true;
+  }
+  const origin = msg.from[0].address;
+  let emailBlacklisted = false;
+  blacklist.forEach(email => {
+    if(email === origin) {
+      logger.debug(`${origin} email is blacklisted. Marking message as spam`);
+      emailBlacklisted = true;
+    }
   });
-  form.on('file', function(name, file) {
-    logger.debug(`file: received name ${name} and file ${file}`);
-  });
-  form.on('error', function(err) {
-    logger.debug(`error: received error ${err}`);
-  });
-  form.on('field', function(name, value) {
-    logger.debug(`field: received name ${name} and value ${value}`);
-  });
-  form.on('aborted', function() {
-    logger.debug(`aborted`);
-  });
-  form.on('end', function() {
-    logger.debug(`entire request has been received`);
-  });
-  form.on('fileBegin', function(name, file) {
-    logger.debug(`file: received name ${name} and file ${file}`);
-  });
-  form.parse(this.request, function(err, fields, files) {
-    console.log(`form.parse called`);
-    logger.debug(`parse: from mailin ${util.inspect(fields.mailInMsg, {depth: 5})}`);
-    logger.debug(`Parsed fields: ${Object.keys(fields)}`);
-    self.response.sendStatus(200);
-  });
-  this.response.sendStatus(200);
-  return;
+  return emailBlacklisted;
 }
+
+function getFileName(emailId, suffix) {
+  let dir = EmailParser.dir;
+  if(!fs.existsSync(dir)) fs.mkdirSync(dir);
+  dir += `/${emailId}`;
+  if(!fs.existsSync(dir)) fs.mkdirSync(dir);
+  dir += `/${moment().format("YYYY-MM-DDTHH:mm")}`;
+  if(!fs.existsSync(dir)) fs.mkdirSync(dir);
+  if(suffix) return dir.concat(`/${suffix}`);
+  return dir;
+}
+
+/****** Testing purposes *******/
+
+EmailParser.testingGetFileName = getFileName; 
+EmailParser.testingSpam = spam; 
+
+/****** Testing purposes *******/
 
 module.exports = EmailParser;

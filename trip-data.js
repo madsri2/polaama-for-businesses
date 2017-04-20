@@ -519,8 +519,11 @@ function filename() {
 
 /**************** TESTING APIs ********************/
 TripData.prototype.testing_delete = function() {
-  const newfile = `${tripBaseDir}/oldFiles/${filename.call(this)}`;
-  fs.renameSync(tripFile.call(this), newfile);
+  fs.readdirSync(tripBaseDir).forEach(file => {
+    if(!file.includes(this.data.name)) return;
+    logger.debug(`moving file ${file} to oldFiles`);
+    fs.renameSync(`${tripBaseDir}/${file}`, `${tripBaseDir}/oldFiles/${file}`);
+  });
 }
 /**************** TESTING APIs ********************/
 

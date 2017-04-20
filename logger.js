@@ -6,8 +6,8 @@ const winston = require('winston');
 const logDir = '/home/ec2-user/log';
 const traceback = require('traceback');
 
-function Logger(fileName) {
-  const config = `/home/ec2-user/config/${fileName}`;
+function Logger(configFile) {
+  const config = `/home/ec2-user/config/${configFile}`;
   console.log(`Logger setup: using config file ${config}`);
   try {
     const json = JSON.parse(fs.readFileSync(config, 'utf8'));

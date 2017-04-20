@@ -42,6 +42,16 @@ const customCheck = validator.isObject()
   .withRequired('startDate', customValidator)
   .withRequired('destination', validator.isString({regex: /^[A-Za-z]+$/}));
 
-validator.run(customCheck, sd, function(ec, e) {
-  console.log(`error count: ${ec}, error: ${JSON.stringify(e)}`);
-});
+function testValidator() {
+  validator.run(customCheck, sd, function(ec, e) {
+    console.log(`error count: ${ec}, error: ${JSON.stringify(e)}`);
+  });
+}
+
+function testFormatting() {
+  console.log(moment().format("YYYY-MM-DDTHH:mm"));
+  console.log(`${moment("11/1/17","MM/D/YY")}`);
+}
+
+testFormatting();
+
