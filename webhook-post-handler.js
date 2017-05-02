@@ -36,7 +36,7 @@ function handleMessagingEvent(messagingEvent) {
   // find or create the session here so it can be used elsewhere. Only do this if a session was NOT passed in the constructor.
   if(_.isUndefined(this.passedSession)) {
     this.session = this.sessions.findOrCreate(messagingEvent.sender.id);
-    logger.debug(`handleMessagingEvent: This chat's session id is ${this.session.sessionId}`);
+    logger.debug(`handleMessagingEvent: First log message for this conversation. This chat's session id is ${this.session.sessionId}`);
   }
   else {
     this.session = this.passedSession;
@@ -76,7 +76,7 @@ function handleMessagingEvent(messagingEvent) {
   }
   catch(err) {
     logger.error("an exception was thrown: " + err.stack);
-		sendTextMessage(messagingEvent.sender.id,"Even bots need to eat! Be back in a bit (after fixing an internal server error)");
+		sendTextMessage(messagingEvent.sender.id,"Even bots need to eat! Be back in a bit");
   }
 }
 
@@ -198,6 +198,27 @@ function displayTripDetails() {
   };
   const tripData = this.session.tripData();
   const tripName = tripData.data.name;
+  const lastThreeButtons = [];
+  lastThreeButtons.push({
+    type: "web_url",
+    url:sendUrl.call(this, `${tripName}/expense-report`),
+    title: "Expense report",
+    webview_height_ratio: "compact",
+    messenger_extensions: true
+  },{
+    type: "web_url",
+    url:sendUrl.call(this, `${tripName}/calendar`),
+    title: "Calendar",
+    webview_height_ratio: "compact",
+    messenger_extensions: true
+  });
+  if(require('fs').existsSync(tripData.boardingPassFile())) {
+    lastThreeButtons.push({
+      type: "postback",
+      title: "Boarding pass",
+      payload: "boarding_pass"
+    });
+  }
   messageData.message = {
     attachment: {
       type: "template",
@@ -261,25 +282,7 @@ function displayTripDetails() {
          }]
         }, {
           title: "Get",
-          buttons: [{
-            type: "web_url",
-            url:sendUrl.call(this, `${tripName}/expense-report`),
-            title: "Expense report",
-            webview_height_ratio: "compact",
-            messenger_extensions: true
-          }, {
-            type: "web_url",
-            url:sendUrl.call(this, `${tripName}/calendar`),
-            title: "Calendar",
-            webview_height_ratio: "compact",
-            messenger_extensions: true
-          }, {
-            type: "web_url",
-            url: `https://polaama.com/mobile-itin`,
-            title: "-",
-            webview_height_ratio: "compact",
-            messenger_extensions: true
-          }]
+          buttons: lastThreeButtons
         }]
       }
     }
@@ -293,23 +296,6 @@ WebhookPostHandler.prototype.startPlanningTrip = function() {
   sendTypingAction.call(this);
 	logger.debug(`startPlanningTrip: This sessions' guid is ${this.session.guid}`);
 
-  const createItin = new CreateItinerary(this.session.tripData(), this.session.hometown);
-  const self = this;
-  try {
-    Promise.all(createItin.create()).done(
-      function(values) {
-        // nothing to do here if create succeeds. The itinerary will be persisted and can be obtained by reading the file, which is done in trip-data-formatter:displayCalendar when /calendar is called
-        logger.info(`Successfully created itinerary for trip ${self.session.tripNameInContext}`);
-      },
-      function(error) {
-        logger.error(`Error creating itinerary for trip ${self.session.tripNameInContext}: ${error.stack}`);
-      }
-    );
-  }
-  catch(e) {
-    logger.error(`Error creating itinerary for trip ${self.session.tripNameInContext}: ${e.stack}`);
-    // proceed to continue with other aspects of trip planning
-  }
 
   const tip = new TripInfoProvider(this.session.tripData(), this.session.hometown);
   const activities = Promise.denodeify(tip.getActivities.bind(tip));
@@ -318,22 +304,77 @@ WebhookPostHandler.prototype.startPlanningTrip = function() {
   const dtdCallback = displayTripDetails.bind(this);
 
   // TODO: If this is a beach destinataion, use http://www.blueflag.global/beaches2 to determine the swimmability. Also use http://www.myweather2.com/swimming-and-water-temp-index.aspx to determine if water conditions are swimmable
+  const self = this;
   activities()
     .then(flightDetails())
     .then(weatherDetails())
     .done(
-      dtdCallback(), 
+      function(response) {
+        const createItin = new CreateItinerary(self.session.tripData(), self.session.hometown);
+        const tripNameInContext = self.session.tripNameInContext;
+        try {
+          Promise.all(createItin.create()).done(
+            function(values) {
+              // nothing to do here if create succeeds. The itinerary will be persisted and can be obtained by reading the file, which is done in trip-data-formatter:displayCalendar when /calendar is called
+              logger.info(`Successfully created itinerary for trip ${tripNameInContext}`);
+            },
+            function(error) {
+              logger.error(`Error creating itinerary for trip ${tripNameInContext}: ${error.stack}`);
+            }
+          );
+        }
+        catch(e) {
+          logger.error(`Error creating itinerary for trip ${tripNameInContext}: ${e.stack}`);
+          // proceed to continue with other aspects of trip planning
+        }
+        dtdCallback();
+      },
       function(err) {
-        logger.error(`error in gathering data for trip ${this.session.tripNameInContext}: ${err.stack}`);
-    });
+        logger.error(`error in gathering data for trip ${tripNameInContext}: ${err.stack}`);
+      }
+    );
 }
 
-function planNewTrip() {
+function emailOrEnterDetails() {
+  const quickReplies = [{
+    content_type: "text",
+    title: "Enter details",
+    payload: "qr_enter_details"
+  }, {
+    content_type: "text",
+    title: "Email",
+    payload: "qr_email"
+  }];
+
+  const messages = [];
+  messages.push(getTextMessageData(this.session.fbid, "Great! Let's plan your trip together."));
+  messages.push({
+    recipient: {
+      id: this.session.fbid
+    },
+    message: {
+      text: `You can choose to enter your details or simply email your flight itinerary (or boarding pass) and I will automatically create your trip`,
+      quick_replies: quickReplies
+    }
+  });
+  sendMultipleMessages(this.session.fbid, messages);
+}
+
+function planNewTrip(userChoice) {
+  if(!userChoice) {
+    // this will result in quick_replies that will be handled by handleQuickReplies
+    emailOrEnterDetails.call(this); 
+    return;
+  }
   logger.info("User wants to plan a new trip");
-  sendTextMessage(this.session.fbid, "Can you provide details about your trip: destination country, start date, duration (in days) as a comma separated list?"); 
-  sendTextMessage(this.session.fbid, "Example: India,11/01,20 or India,11/01/17,20");
-	this.session.awaitingNewTripDetails = true;
-  this.session.planningNewTrip = true;
+  if(userChoice.enter_details) {
+    sendTextMessage(this.session.fbid, "Can you provide details about your trip: destination country, start date, duration (in days) as a comma separated list?"); 
+    sendTextMessage(this.session.fbid, "Example: India,11/01,20 or India,11/01/17,20");
+	  this.session.awaitingNewTripDetails = true;
+    this.session.planningNewTrip = true;
+    return;
+  }
+  if(userChoice.email) sendTextMessage(this.session.fbid, "Send your flight itinerary or boarding pass to TRIPS@MAIL.POLAAMA.COM. I will notify you as soon as your itinerary is ready");
 }
 
 function receivedPostback(event) {
@@ -346,9 +387,7 @@ function receivedPostback(event) {
 
   logger.info("Received postback for user %d, page %d, session %d at timestamp: %d. Payload: %s", senderID, recipientID, this.session.fbid, timeOfPostback, payload);
 
-  if(payload === "GET_STARTED_PAYLOAD") {
-    return sendHelpMessage.call(this); 
-  }
+  if(payload === "GET_STARTED_PAYLOAD") return sendWelcomeMessage.call(this, senderID); 
 
   // A pmenu, past_trips or a postback starting with "trip_in_context" is indicative of the beginning of a new state in the state machine. So, clear the session's "awaiting" states to indicate the beginning of a new state.
   this.session.clearAllAwaitingStates();
@@ -362,7 +401,6 @@ function receivedPostback(event) {
   // existing trip
   if(payload.startsWith("trip_in_context")) {
     getTripInContext.call(this, payload);
-    this.session.noTripContext = false;
     if(this.session.previousPayload) {
       // use the payload that the user chose before getting the trip in context
       payload = this.session.previousPayload;
@@ -386,8 +424,7 @@ function receivedPostback(event) {
   }
 	
 	// In order to add travelers to a trip, we need to know the trip in context.
-  if((!this.session.tripNameInContext || this.session.tripNameInContext === "") && 
-      !this.session.noTripContext) {
+  if(!this.session.doesTripContextExist()) { 
     logger.info("receivedPostback: no trip name in context. Asking user!");
     // store the current payload so it can be handled once we have the tripInContext.
     this.session.previousPayload = payload; 
@@ -418,6 +455,12 @@ function receivedPostback(event) {
   }
   if(payload === "add_travelers") {
     determineTravelCompanions.call(this);
+    return;
+  }
+
+  if(payload === "boarding_pass") {
+    const boardingPass = (new Notifier(this.sessions)).getBoardingPass(this.session.tripData(), this.session.fbid);
+    callSendAPI(boardingPass);
     return;
   }
 
@@ -483,7 +526,7 @@ function sendUrl(urlPath) {
 
 function sendPastTrips() {
   // reset this sessions' context
-  this.session.noTripContext = true;
+  this.session.resetTripContext();
   const elements = [];
   const tripNames = this.session.getPastTrips();
   tripNames.forEach(t => {
@@ -519,7 +562,8 @@ function sendPastTrips() {
 function sendTripButtons(addNewTrip) {
 	// Anytime we send trips for users to choose from, invalidate the session's tripData so it can be re-read from file. This way, any information that was added to the trip (by other session instances like the one in webpage-handler.js) will be re-read.
 	this.session.invalidateTripData();
-  const tripNames = this.session.getCurrentAndFutureTrips().futureTrips;
+  const tripDetails = this.session.getCurrentAndFutureTrips();
+  const tripNames = tripDetails.futureTrips;
   logger.info(`sendTripButtons: trip length for fbid ${this.session.fbid} is ${tripNames.length}`);
   if(tripNames.length == 0) {
     const messageData = {
@@ -542,7 +586,7 @@ function sendTripButtons(addNewTrip) {
   }
     
   // reset this sessions' context
-  this.session.noTripContext = true;
+  this.session.resetTripContext();
   sendTextMessage(this.session.fbid, "Hi, which trip are we discussing?");
   const elements = [];
   const buttons = [];
@@ -616,28 +660,43 @@ function sendTripButtons(addNewTrip) {
   callSendAPI(messageData);
 }
 
-function handleQuickReplies(quick_reply) {
+function handleQuickRepliesToPlanNewTrip(quick_reply) {
   const payload = quick_reply.payload;
-  if(!payload) {
-    logger.error(`handleQuickReplies: Payload is undefined in quick_reply.`);
+  if(!payload) throw new Error(`handleQuickRepliesToPlanNewTrip: payload is undefined in passed quick_reply: ${JSON.stringify(quick_reply)}`);
+  // This quick reply came from the user typing "help" (see getHelpMessage)
+  if(payload === "qr_new_trip") {
+    planNewTrip.call(this);
     return true;
   }
+
+  // this quick reply came in response to emailOrEnterDetails
+  if(payload === "qr_email") {
+    planNewTrip.call(this, { email: true });
+    return true;
+  }
+  if(payload === "qr_enter_details") {
+    planNewTrip.call(this, { enter_details: true });
+    return true;
+  }
+
+  return false;
+}
+
+function handleQuickReplies(quick_reply) {
+  const payload = quick_reply.payload;
+  if(!payload) throw new Error(`handleQuickReplies: payload is undefined in passed quick_reply: ${JSON.stringify(quick_reply)}`);
+
   // User clicked on "Add ..." or "Get ..." in help message or after choosing a trip under "Existing trips"
   if(payload === "qr_add_") {
     sendAddButtons.call(this);
     return true;
   }
-
   if(payload === "qr_get_") {
     displayTripDetails.call(this);
     return true;
   }
 
-  // This quick reply came from the user typing "help" (see sendHelpMessage)
-  if(payload === "qr_new_trip") {
-    planNewTrip.call(this);
-    return true;
-  }
+  // This quick reply came from the user typing "help" (see getHelpMessage)
   if(payload === "qr_existing_trips") {
 		sendTripButtons.call(this);
     return true;
@@ -680,10 +739,8 @@ function createNewTrip(tripDetails) {
   this.session.addTrip(tripDetails.destination);
   const tripData = this.session.tripData();
   tripData.addTripDetailsAndPersist(tripDetails);
-  logger.info(`createNewTrip: This session's trip name in context is ${tripDetails.country}`);
+  logger.info(`createNewTrip: This session's trip name in context is ${tripDetails.destination}`);
   this.session.awaitingNewTripDetails = false;
-  // this new trip will also be the context for this session;
-  this.session.noTripContext = false;
 }
 
 function extractNewTripDetails(messageText) {
@@ -792,22 +849,29 @@ function determineResponseType(event) {
   const mesg = messageText.toLowerCase();
 
   // Before doing anything, if the user types help, send the help message!
-  if(mesg.startsWith("help ") || mesg === "help") {
-    // clear all states so that we can start on a clean state.
-    this.session.clearAllAwaitingStates();
-    if(this.session.tripNameInContext) {
-      return sendAddOrGetOptions.call(this);
+  const tripCount = this.session.getCurrentAndFutureTrips().futureTrips.length;
+  if(mesg === "hello" || mesg === "hi" || mesg === "howdy" || mesg === "hiya" || mesg.startsWith("help ") || mesg === "help") {
+    if(mesg.startsWith("help ") || mesg === "help") {
+      // clear all states 
+      this.session.clearAllAwaitingStates();
+      if(this.session.doesTripContextExist()) return sendAddOrGetOptions.call(this);
     }
-    else {
-      return sendHelpMessage.call(this); 
+    if(tripCount) {
+      const messages = [];
+      messages.push(getTextMessageData(senderID, "Hi! Welcome back to Polaama. How can I help you today?"));
+      messages.push(getHelpMessageData.call(this, senderID, "Choose from the options below."));
+      return sendMultipleMessages(senderID, messages);
     }
+    return sendWelcomeMessage.call(this, senderID);
   }
 
+  if(event.message.quick_reply && handleQuickRepliesToPlanNewTrip.call(this, event.message.quick_reply)) return;
+
+  // At this point, if no trip exists and it's not being planned, the user has entered something we don't understand. Simply send them the Welcome message.
+  if(!tripCount && !this.session.planningNewTrip) return callSendAPI(getHelpMessageData.call(this, senderID, "Hi, I am your new personal travel assistant. Would you like to create a new trip to get started?"));
+
   // if we don't know what trip is being discussed, ask the user for this, unless the user is adding details about a new trip.
-  if((_.isNull(this.session.tripNameInContext) 
-			|| _.isUndefined(this.session.tripNameInContext) 
-			|| this.session.tripNameInContext === "") 
-			&& !this.session.planningNewTrip) {
+  if(!this.session.doesTripContextExist() && !this.session.planningNewTrip) {
     logger.info("determineResponseType: no trip name in context. Asking user!");
     sendTripButtons.call(this, true);
     return;
@@ -832,7 +896,7 @@ function determineResponseType(event) {
 				}		
 				else {
 					logger.error(`determineResponseType: BUG! Session is in state awaitingUserConfirmation  but the mesg is not qr_yes or qr_no. It is ${userResponse}. This is unexpected`);
-					sendTextMessage(messagingEvent.sender.id,"Even bots need to eat! Be back in a bit (after fixing an internal server error)");
+					sendTextMessage(messagingEvent.sender.id,"Even bots need to eat! Be back in a bit..");
 					return;
 				}
 			}
@@ -916,14 +980,13 @@ function determineResponseType(event) {
     }
     catch(e) {
       logger.error(`determineResponseType: Error from expense report workflow: ${e}`);
-      sendTextMessage(senderID,"Even bots need to eat. Out for lunch! Be back in a bit(after fixing the internal server error)");
+      sendTextMessage(senderID,"Even bots need to eat. Out for lunch! Be back in a bit..");
     }
     return;
   }
 
   if(event.message.quick_reply) { 
-    handleQuickReplies.call(this, event.message.quick_reply);
-    return;
+    if(handleQuickReplies.call(this, event.message.quick_reply)) return;
     // if it was not handled, it's possible that the quick_reply is meant for some other step below. continue on.
   }
 
@@ -974,6 +1037,11 @@ function determineResponseType(event) {
     sendOtherActivities.call(this, messageText);
     return;
   }
+
+  // We don't understand the text sent. Simply present the options we present on "getting started".
+  return callSendAPI(getHelpMessageData.call(this, senderID, "Hi, I did not understand what you said. I can help you with the following."));
+  
+  // ****** INTENTIONALLY UNREACHABLE CODE 
   const humanContext = this.session.humanContext();
   logger.info("determineResponseType: human context: ",JSON.stringify(humanContext));
   if(senderID != humanContext.fbid) {
@@ -1120,12 +1188,16 @@ WebhookPostHandler.prototype.notifyUser = function(message) {
 	sendTextMessage(this.session.fbid, message);
 }
 
+WebhookPostHandler.prototype.sendBoardingPass = function(message) {
+  callSendAPI(message);
+}
+
 WebhookPostHandler.prototype.pushTripDetailsJustBeforeTrip = function() {
   // logger.debug(`Type of this is ${this.constructor.name}`);
   const sessions = this.sessions.allSessions();
-  this.notifier.tripDetailsJustBeforeTrip().forEach(message => {
-    callSendAPI(message);
-  });
+  this.notifier.imminentTripsList().forEach(message => {
+    this.sendBoardingPass(message);
+  }, this);
 }
 
 // This message was sent by the human. Figure out if it was sent in response to a previous question by one of our users. If so, identify the user and send response back to the right user.
@@ -1273,7 +1345,7 @@ function sendResponseFromWitBot(senderID, messageText) {
   })
   .catch((err) => {
     logger.error('Oops! Got an error from Wit: ', err.stack || err);
-    sendTextMessage(senderID,"Even bots need to eat. Out for lunch! Be back in a bit(after fixing the internal server error)");
+    sendTextMessage(senderID,"Even bots need to eat. Out for lunch! Be back in a bit..");
   })
 }
 
@@ -1346,17 +1418,15 @@ function determineTravelCompanions() {
   callSendAPI(messageData);
 }
 
+// only call this method if there is a trip name in context
 function sendAddOrGetOptions() {
-  let msgSuffix = "";
-  if(this.session.tripNameInContext) {
-    msgSuffix = ` for your ${this.session.tripNameInContext} trip`;
-  }
+  if(!this.session.tripNameInContext) throw new Error(`sendAddOrGetOptions: I was called even though there is not trip in context in session ${this.session.sessionId}. Potential BUG!`);
   const messageData = {
     recipient: {
       id: this.session.fbid
     },
     message: {
-      text: `What would you like to do${msgSuffix}?`,
+      text: `What would you like to do for your ${this.session.tripNameInContext} trip?`,
       quick_replies:[
         {
           content_type: "text",
@@ -1377,29 +1447,37 @@ function sendAddOrGetOptions() {
 /*
  * Typically, this should match the top level entries in Persistent Menu.
  */
-function sendHelpMessage() {
-  const messageData = {
+function getHelpMessageData(senderID, message) {
+  const tripCount = this.session.getCurrentAndFutureTrips().futureTrips.length;
+  if(!message) message = "What would you like to do?";
+  const quickReplies = [{
+    content_type: "text",
+    title: "New trip",
+    payload: "qr_new_trip"
+  }];
+  if(tripCount) quickReplies.push({
+      content_type: "text",
+      title: "Existing trips",
+      payload: "qr_existing_trips"
+  });
+  return {
     recipient: {
-      id: this.session.fbid
+      id: senderID
     },
     message: {
-      text: `What would you like to do?`,
-      quick_replies:[
-        {
-          content_type: "text",
-          title: "Create new trip",
-          payload: "qr_new_trip"
-        },
-        {
-          content_type: "text",
-          title: "Get Existing trips",
-          payload: "qr_existing_trips"
-        }
-      ]
+      text: `${message}`,
+      quick_replies: quickReplies
     }
   };
-  callSendAPI(messageData);
 }
+
+function sendWelcomeMessage(senderID) {
+  const messages = [];
+  messages.push(getTextMessageData(senderID, "Hi there! Welcome to Polaama, your personal travel assistant!"));
+  messages.push(getHelpMessageData.call(this, senderID, "Create a new trip to see how I can help you simplify your travel planning process."));
+  return sendMultipleMessages(senderID, messages);
+}
+
 
 // used by workflow for planningNewTrip
 function sendYesNoButtons(message) {
@@ -1540,40 +1618,63 @@ function sendTypingAction() {
   callSendAPI(messageData);
 }
 
+function getTextMessageData(senderID, text) {
+  return {
+    recipient: {
+      id: senderID
+    },
+    message: {
+      text: text,
+      metadata: "DEVELOPER_DEFINED_METADATA"
+    }
+  };
+}
+
 /*
  * Send a text message using the Send API.
  *
  */
-function sendTextMessage(recipientId, messageText) {
-  const messageData = {
-    recipient: {
-      id: recipientId
-    },
-    message: {
-      text: messageText,
-      metadata: "DEVELOPER_DEFINED_METADATA"
-    }
-  };
-
-  callSendAPI(messageData);
+function sendTextMessage(senderID, messageText) {
+  callSendAPI(getTextMessageData(senderID, messageText));
 }
 
-const encryptedPat = "GDppF8QSELN0ycFlaDahtM34V1EDoZX8JRtoem2wSXpkl0pWmNhYZGbYnV0HfjdGQcKs9plL8+ityQl/DXN8WcN/rod11yN7/8tmWcyJK5NpF/YwPeF4pFuVzfroPxuzU4ckUDDbtKE6MPyiySsx9L0+GLswJsV92+HCSY0uvlc6v0hiirqg/KO9ebTv+Na+Q0fs8s0aziYAvo5f3pgIPxyhrUQW3ENzKZ/aEbLL8a5wXiXR6qq9b28lW1eu8E6S";
+// send messages strictly one after another
+function sendMultipleMessages(recipientId, messages) {
+  // as a precaution, don't send more than 3 messages at once.
+  if(messages.length > 3) {
+    logger.warn(`sendMultipleMessages: The current implementation does not allow sending more than 3 messages in sequence. Not sending any message`);
+    return;
+  }
+  if(messages.length === 0) return;
+  request({
+    uri: 'https://graph.facebook.com/v2.6/me/messages',
+    qs: { access_token: (new SecretManager()).getPageAccessToken() },
+    method: 'POST',
+    json: messages[0]
+  }, function (error, response, body) {
+    if (response.statusCode == 200) {
+      // recursively call, but remove the first element from the array
+      sendMultipleMessages(recipientId, messages.slice(1, messages.length));
+      return;
+    }
+    if(error) {
+      logger.error(`sendMultipleMessages: Error sending message: ${error}`);
+      return;
+    }
+    logger.error(`Unable to send message to recipient ${recipientId}. status code is ${response.statusCode}. Message from FB is <${response.body.error.message}>; Error type: ${response.body.error.type}`);
+  });  
+}
+
 function callSendAPI(messageData) {
   request({
     uri: 'https://graph.facebook.com/v2.6/me/messages',
-    qs: { access_token: (new SecretManager()).decrypt(encryptedPat) },
+    qs: { access_token: (new SecretManager()).getPageAccessToken() },
     method: 'POST',
     json: messageData
   }, function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-      var recipientId = body.recipient_id;
-      var messageId = body.message_id;
-      // logger.info("Successfully sent generic message with id %s to recipient %s", messageId, recipientId);
-    } else {
-      // TODO: If there was an error in sending an intercept message to a human, then send a push notification to the original sender that we are having some technical difficulty and will respond to them shortly.
-      logger.error(`Unable to send message to recipient ${recipientId}. status code is ${response.statusCode}. Message from FB is <${response.body.error.message}>; Error type: ${response.body.error.type}`);
-    }
+    if(error) return logger.error(`callSendAPI: Unable to send message ${JSON.stringify(messageData)}: ${error}`);
+     // TODO: If there was an error in sending an intercept message to a human, then send a push notification to the original sender that we are having some technical difficulty and will respond to them shortly.
+    if(response.statusCode != 200) logger.error(`Unable to send message ${JSON.stringify(messageData)}. status code is ${response.statusCode}. Message from FB is <${response.body.error.message}>; Error type: ${response.body.error.type}`);
   });  
 }
 

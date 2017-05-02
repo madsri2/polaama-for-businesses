@@ -28,9 +28,9 @@ function parseWeatherResponse(city, weatherDetails) {
     return;
   }
   const text = [];
-  text.push(`The average weather when you are traveling is a max of ${weatherDetails.max_temp}F and a min of ${weatherDetails.min_temp}F`);
+  text.push(`The average weather when you are traveling is a max of ${weatherDetails.max_temp}&degF and a min of ${weatherDetails.min_temp}&degF`);
   text.push(`It will be ${weatherDetails.cloud_cover} in ${city}`);
-  text.push(`There's a ${weatherDetails.tempoversixty} % chance of temperature over 60F`);
+  text.push(`There's a ${weatherDetails.tempoversixty} % chance of temperature over 60&degF`);
   text.push(`There's a ${weatherDetails.chanceofrain} % chance of rain`);
   this.tripInfoDetails.cities[city].weather = text;
   // need to persist the weather information for every city individually because the weather URL for each city will return independently.
@@ -162,31 +162,41 @@ function getActivityForCity(city, index, callback) {
   // nothing to do if activity details are already present for this city
   const details = this.tripInfoDetails;
   const cityDetails = details.cities[city];
-  const cities = this.trip.data.cities;
+  const cities = _.uniq(this.trip.data.cities);
   const dataFile = this.trip.tripDataFile();
-  if(!_.isUndefined(cityDetails.activities)) {
-    // handle case where we have gathered data for all cities.
-    if(index == (cities.length-1)) {
-      logger.info("Invoking callback");
+  if(cityDetails.activities) {
+    // handle case where we have gathered data for all cities. TODO: Do we need this check in both places (here and in the callback function below)?
+    if(citiesWithActivities(details.cities) === cities.length) {
+      logger.info("getActivityForCity: obtained activities for all cities. invoking callback");
       return callback();
     }
     return;
   }
   const aip = new ActivityInfoProvider(this.trip.data.country, city, this.trip.data.startDate);
   aip.getActivities(function(activityDetails) {
-    cityDetails.activities = activityDetails;
+    if(activityDetails) cityDetails.activities = activityDetails;
     // handle case where we have gathered data for all cities.
-    if(index == (cities.length-1)) {
-      // logger.info("getActivities: Gathered activities for all cities. Persisting data and calling callback");
+    const numCitiesWithActivities = citiesWithActivities(details.cities);
+    if(numCitiesWithActivities === cities.length) {
+      logger.info(`getActivities: gathered activities for all ${numCitiesWithActivities} cities. Persisting data to file ${dataFile} and invoking callback`);
       try {
         fs.writeFileSync(dataFile, JSON.stringify(details));
       }
       catch(e) {
-        logger.error(`Cannot write tripData details to file ${dataFile}. Error is ${err.stack}`);
+        logger.error(`Cannot write tripData details to file ${dataFile}. Error is ${e.stack}`);
       }
       return callback();
     }
   });
+}
+
+// return a count of cities with activities defined
+function citiesWithActivities(cities) {
+  let count = 0;
+  Object.keys(cities).forEach(city => {
+    if(cities[city].activities) count++;
+  });
+  return count;
 }
 
 TripInfoProvider.prototype.getActivities = function(callback) {

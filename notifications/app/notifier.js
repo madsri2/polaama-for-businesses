@@ -11,7 +11,7 @@ const logger = require(`${baseDir}/my-logger`);
     sendTextMessage(sessions[id].fbid, `[Trip Hotel details] confirmation #: XEVFSG; Hotel confirmation code: 
 */
 function Notifier(sessions) {
-  this.sessions = sessions.allSessions();
+  if(sessions) this.sessions = sessions.allSessions();
   this.sentList = {};
 }
 
@@ -23,31 +23,42 @@ Day before:
 Day of:
   Boarding pass: 
 */
-Notifier.prototype.tripDetailsJustBeforeTrip = function() {
-  const sendList = [];
+Notifier.prototype.imminentTripsList = function() {
+  const sendList = []; // reset for every call to this method
   Object.keys(this.sessions).forEach(id => {
     this.sessions[id].allTrips().forEach(trip => {
-      if(!trip.data.startDate) return;
-      const now = moment().tz("Etc/UTC"); 
-      const startDate = moment.tz((new Date(trip.data.startDate)).toISOString(), "Etc/UTC");
-      const daysToTrip = startDate.diff(now, 'days');
-      const name = trip.data.name;
-      logger.debug(`tripDetailsJustBeforeTrip: Trip ${name} from session ${id} starting on ${trip.data.startDate}; daysToTrip: ${daysToTrip}`);
-      const fbid = this.sessions[id].fbid;
-      if(daysToTrip >= 0 && daysToTrip <= 2 && !this.sentList[getSentListKey.call(this, fbid, name)]) {
-        logger.debug(`tripDetailsJustBeforeTrip: Sending boarding pass for ${name}, which is ${daysToTrip} days away`);
-        this.sentList[getSentListKey.call(this, fbid, name)] = true;
-        const boardingPass = getBoardingPass(trip, fbid);
-        if(boardingPass) sendList.push(boardingPass);
+      const boardingPass = this.getImminentTripBoardingPass(trip, this.sessions[id]);
+      if(boardingPass) {
+        sendList.push(boardingPass);
+        this.sentList[getSentListKey.call(this, this.sessions[id].fbid, trip.data.name)] = true;
       }
-    });
-  });
+    }, this);
+  }, this);
   return sendList;
+}
+
+Notifier.prototype.getImminentTripBoardingPass = function(trip, session) {
+  const sessionId = session.sessionId;
+  if(!trip.data.startDate) return;
+  const now = moment().tz("Etc/UTC"); 
+  const startDate = moment.tz((new Date(trip.data.startDate)).toISOString(), "Etc/UTC");
+  const daysToTrip = startDate.diff(now, 'days');
+  const name = trip.data.name;
+  logger.debug(`getImminentTripBoardingPass: Trip ${name} from session ${sessionId} starting on ${trip.data.startDate}; daysToTrip: ${daysToTrip}`);
+  const fbid = session.fbid;
+  if(daysToTrip >= 0 && daysToTrip <= 2 && !this.sentList[getSentListKey.call(this, fbid, name)]) {
+    logger.debug(`getImminentTripBoardingPass: user ${fbid}'s trip ${name} is ${daysToTrip} days away. sending boarding pass`);
+    return getBoardingPass(trip, fbid);
+  }
+  logger.debug(`getImminentTripBoardingPass: user ${fbid}'s trip ${name} is ${daysToTrip} days away`);
+  return null;
 }
 
 function getSentListKey(fbid, name) {
   return `${fbid}-${name}`;
 }
+
+Notifier.prototype.getBoardingPass = getBoardingPass;
 
 function getBoardingPass(trip, fbid) {
   const boardingPass = [];
@@ -81,6 +92,24 @@ function getBoardingPass(trip, fbid) {
     logger.warn(`getBoardingPass: could not read boarding pass details from file ${file}: ${e.stack}`);
     return undefined;
   }
+
+  return {
+    recipient: {
+      id: fbid
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "airline_boardingpass", // required
+          "intro_message": "You are checked in.", // required
+          "locale": "en_US", // required
+          "boarding_pass": boardingPass // required
+        }
+      }
+    }
+  };
+}
 
   /*
   boardingPass.push({
@@ -139,23 +168,5 @@ function getBoardingPass(trip, fbid) {
     }
   });
   */
-
-  return {
-    recipient: {
-      id: fbid
-    },
-    message: {
-      attachment: {
-        type: "template",
-        payload: {
-          template_type: "airline_boardingpass", // required
-          "intro_message": "You are checked in.", // required
-          "locale": "en_US", // required
-          "boarding_pass": boardingPass // required
-        }
-      }
-    }
-  };
-}
 
 module.exports = Notifier;

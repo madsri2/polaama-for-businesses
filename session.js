@@ -97,6 +97,7 @@ function Session(fbid,sessionId) {
   this.trips  = {};
   this.tripNameInContext = undefined;
   this.rawTripNameInContext = undefined;
+  this.noTripContext = true; // by default, there will be no trip context
 }
 
 Session.prototype.persistSession = function() {
@@ -104,13 +105,15 @@ Session.prototype.persistSession = function() {
     sessionId: this.sessionId,
     fbid: this.fbid,
     botMesgHistory: this.botMesgHistory,
-    tripNameInContext: this.tripNameInContext,
-    rawTripNameInContext: this.rawTripNameInContext,
     trips: {}
   };
-  if(!_.isUndefined(this.hometown)) {
-    data.hometown = Encoder.encode(this.hometown);
+  if(this.tripNameInContext) {
+    data.tripNameInContext = this.tripNameInContext;
+    if(!this.rawTripNameInContext) throw new Error(`persistSession: tripNameInContext is present, but rawTripNameInContext is null. Potential BUG!`);
+    data.rawTripNameInContext = this.rawTripNameInContext;
+    this.noTripContext = false;
   }
+  if(this.hometown) data.hometown = Encoder.encode(this.hometown);
   Object.keys(this.trips).forEach(name => {
     data.trips[name] = {
       aiContext: this.trips[name].aiContext,
@@ -125,6 +128,21 @@ Session.prototype.persistSession = function() {
   catch(err) {
       logger.error(`error writing to session file: ${file}`, err.stack);
   }
+}
+
+Session.prototype.resetTripContext = function() {
+  this.noTripContext = true;
+  this.tripNameInContext = null;
+  this.rawTripNameInContext = null;
+  this.persistSession();
+}
+
+Session.prototype.doesTripContextExist = function() {
+  if(this.noTripContext) {
+    if(this.tripNameInContext) throw new Error(`doesTripContextExist: noTripContext is set to true. But tripNameInContext has value ${this.tripNameInContext}. Potential bug!`);
+    if(this.rawTripNameInContext) throw new Error(`doesTripContextExist: noTripContext is set to true. But rawTripNameInContext has value ${this.rawTripNameInContext}. Potential bug!`);
+  }
+  return !this.noTripContext;
 }
 
 function file() {

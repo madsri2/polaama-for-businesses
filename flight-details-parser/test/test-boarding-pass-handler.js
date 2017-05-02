@@ -83,5 +83,8 @@ describe('BoardingPass handler', function() {
     expect((new BoardingPassHandler(options)).handle()).to.be.ok;
     expect(fs.existsSync((new TripData(tripName)).boardingPassImage())).to.be.ok;
   });
+  
+  it("test handling itinerary, not boarding pass", function() {
+  });
 });
 

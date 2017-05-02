@@ -12,13 +12,14 @@ const passport = require('passport');
 const fbStrategy = require('passport-facebook').Strategy;
 const session = require('express-session');
 const EmailParser = require('flight-details-parser/app/email-parser');
+const SecretManager = require('secret-manager/app/manager');
 // ----------------------------------------------------------------------------
 // Set up a webserver
 
 // For validation with facebook & verifying signature
 const VALIDATION_TOKEN = "go-for-lake-powell";
-const FB_APP_SECRET = "a26c4ad2358b5b61942227574532d174";
-const FB_APP_ID = "1670120969968413";
+const FB_APP_SECRET = (new SecretManager()).getFBAppId();
+const FB_APP_ID = (new SecretManager()).getFBAppSecret();
 
 // Polaama related handler
 const postHandler = new WebhookPostHandler();
@@ -36,6 +37,7 @@ const options = {
   cert: fs.readFileSync(sslPath + 'fullchain.pem')
 };
 
+let u;
 // authentication
 passport.use(new fbStrategy({
     clientID: FB_APP_ID,
@@ -125,7 +127,11 @@ function verifyRequestSignature(req, res, buf) {
                         .update(buf)
                         .digest('hex');
 
+    let prototypeExpectedHash = crypto.createHmac('sha1', "a26c4ad2358b5b61942227574532d174")
+                        .update(buf)
+                        .digest('hex');
     if (signatureHash != expectedHash) {
+      logger.error(`Could not validate request signature. signatureHash: <${signatureHash}>; expectedHash: <${expectedHash}>; prototype_expected_hash: <${prototypeExpectedHash}>`);
       throw new Error("Couldn't validate the request signature.");
     }
   }
@@ -346,6 +352,14 @@ app.post('/emails', function(req, res) {
 app.get('/emails', function(req, res) {
   logger.debug(`emails: get /emails was called`);
   res.send("get: ack receiving email");
+});
+
+app.get('/privacy-policy', function(req, res) {
+  return res.sendFile('/home/ec2-user/html-templates/privacy-policy.html');
+});
+
+app.get('/terms-of-service', function(req, res) {
+  return res.sendFile('/home/ec2-user/html-templates/terms-of-service.html');
 });
 
 function sendTodoReminders() {

@@ -94,7 +94,6 @@ FbidHandler.prototype.encode = function(fbid) {
   return null;
 }
 
-const encryptedPat = "GDppF8QSELN0ycFlaDahtM34V1EDoZX8JRtoem2wSXpkl0pWmNhYZGbYnV0HfjdGQcKs9plL8+ityQl/DXN8WcN/rod11yN7/8tmWcyJK5NpF/YwPeF4pFuVzfroPxuzU4ckUDDbtKE6MPyiySsx9L0+GLswJsV92+HCSY0uvlc6v0hiirqg/KO9ebTv+Na+Q0fs8s0aziYAvo5f3pgIPxyhrUQW3ENzKZ/aEbLL8a5wXiXR6qq9b28lW1eu8E6S";
 
 function updateFbidDetails(fbid, json) {
   this.fbidDetails[fbid] = {
@@ -113,8 +112,7 @@ curl -X GET "https://graph.facebook.com/v2.8/1120615267993271?fields=hometown&ac
 */
 FbidHandler.prototype.add = function(fbid) {
   // try to obtain name from fbid and then store it here.
-  const manager = new SecretManager();
-  const accessToken = manager.decrypt(encryptedPat);
+  const accessToken = (new SecretManager()).getPageAccessToken();
   // nothing to do if the fbid already exists
   if(this.fbidDetails[fbid] && this.fbidDetails[fbid].name) return null;
   const self = this;

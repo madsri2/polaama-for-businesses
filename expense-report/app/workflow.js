@@ -32,7 +32,7 @@ ExpenseReportWorkflow.prototype.startWork = function() {
       payload: "qr_>4",
     });
     */
-    logger.info(`doWork: Sending quick_reply to find out family count`);
+    logger.info(`startWork: Sending quick_reply to find out family count`);
     return {
       recipient: {
         id: this.session.fbid

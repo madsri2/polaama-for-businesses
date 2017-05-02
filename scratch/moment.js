@@ -49,8 +49,8 @@ function testValidator() {
 }
 
 function testFormatting() {
-  console.log(moment().format("YYYY-MM-DDTHH:mm"));
-  console.log(`${moment("11/1/17","MM/D/YY")}`);
+  console.log(moment().add(2, 'days').format("YYYY-MM-DDTHH:mm"));
+  // console.log(`${moment("11/1/17","MM/D/YY")}`);
 }
 
 testFormatting();

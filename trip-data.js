@@ -509,6 +509,10 @@ TripData.prototype.boardingPassFile = function() {
   return `${tripBaseDir}/${this.data.name}-boarding-pass.txt`;
 }
 
+TripData.prototype.archiveBoardingPassFile = function() {
+  return `${tripBaseDir}/oldFiles/${this.data.name}-boarding-pass.txt`;
+}
+
 TripData.prototype.boardingPassImage = function() {
   return `${tripBaseDir}/${this.data.name}-boarding-pass-image.png`;
 }

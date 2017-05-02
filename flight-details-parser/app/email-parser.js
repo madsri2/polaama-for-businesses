@@ -79,7 +79,7 @@ EmailParser.prototype.parse = function(req, res, callback) {
 }
 
 function spam(msg) {
-  const blacklist = ["spameri@tiscali.it"];
+  const blacklist = ["spameri@tiscali.it","postmaster@office.com","postmaster@outlook.com","mysterryshop@gmail.com"];
   if(msg.spamScore && msg.spamScore > 5) {
     logger.debug("spam score greater than 5. Marking message as spam");
     return true;

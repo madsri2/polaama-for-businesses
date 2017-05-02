@@ -9,6 +9,7 @@ const Sessions = require(`${baseDir}/sessions`);
 const TripData = require(`${baseDir}/trip-data`);
 const WebhookPostHandler = require(`${baseDir}/webhook-post-handler`);
 const EmailParser = require('./email-parser');
+const Notifier = require('notifications/app/notifier');
 
 // use a mailparser like https://www.npmjs.com/package/mailparser to parse email
 function BoardingPassHandler(options) {
@@ -94,22 +95,78 @@ BoardingPassHandler.prototype.handle = function() {
   // 3) Store itinerary + boarding pass information
   try {
     const file = this.trip.boardingPassFile();
-    logger.debug(`handle: Writing to file ${file}`);
     fs.writeFileSync(file, JSON.stringify(this.details), 'utf8');
     // send a notification to the user that we have their details and will send them the boarding pass the day before the flight.
     this.trip.markTodoItemDone("Flight tickets");
-    // notify user that we have received a boarding pass.
-    const message = `Received boarding pass for your trip to ${this.trip.getPortOfEntry()}. Polaama will send you the boarding pass two days before your trip`;
-    logger.debug(`handle: About to send message to user: ${message}`);
-    this.postHandler.notifyUser(message);
+    // if it's time to send boarding pass, send it.
+    const boardingPass = (new Notifier()).getImminentTripBoardingPass(this.trip, this.session);
+    if(boardingPass) {
+      this.postHandler.sendBoardingPass(boardingPass);
+    }
+    else {
+      // notify user that we have received a boarding pass.
+      const message = `Received boarding pass for your trip to ${this.trip.getPortOfEntry()}. Polaama will send you the boarding pass two days before your trip`;
+      logger.debug(`handle: About to send message to user: ${message}`);
+      this.postHandler.notifyUser(message);
+    }
   }
   catch(e) {
     logger.error(`parse: Error writing to file ${this.trip.boardingPassFile()}. ${e.stack}`);
     throw e;
   }
+  // trigger a notification for this trip.
   logger.debug(`handle: Stored flight details, marked todo item as done and pushed notification`);
   return true;
 }
+
+/*
+function getItinerary() {
+  const itinerary = [];
+  const file = trip.boardingPassFile();
+  try {
+    const bpDetails = JSON.parse(require('fs').readFileSync(file, 'utf8'));
+    itinerary.push({
+      'passenger_name': bpDetails.full_name,
+      'pnr_number': bpDetails.pnr_number,
+      'flight_info': {
+        'flight_number': bpDetails.flight_number,
+        'departure_airport': {
+          'airport_code': bpDetails.departure_airport.airport_code,
+          'city': bpDetails.departure_airport.city
+        },
+        'arrival_airport': {
+          'airport_code': bpDetails.arrival_airport.airport_code,
+          'city': bpDetails.arrival_airport.city
+        },
+        'flight_schedule': {
+          'departure_time': bpDetails.flight_schedule.departure_time
+        }
+      }
+    });
+  }
+  catch(e) {
+    logger.warn(`getBoardingPass: could not read boarding pass details from file ${file}: ${e.stack}`);
+    return undefined;
+  }
+  return {
+    recipient: {
+      id: this.session.fbid
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "airline_itinerary", // required
+          "intro_message": "Your itinerary", // required
+          "locale": "en_US", // required
+          'pnr_number': bpDetails.pnr_number,
+          'passenger_info': 
+        }
+      }
+    }
+  };
+}
+*/
 
 function getBoardingPassImage() {
   // copy this attachment into the trips directory

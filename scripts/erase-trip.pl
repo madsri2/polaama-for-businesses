@@ -65,7 +65,7 @@ foreach my $t (@options)
   my @tripFiles = `ls $tripDir/$trip*`;
   for my $tripFile (@tripFiles) {
     chomp $tripFile;
-    print "Removing file $tripFile\n";
-    `mv $tripFile $tripDir/oldFiles` if -e "$tripFile";
+    print "moving file $tripFile to oldFiles (mv -f)\n";
+    `mv -f $tripFile $tripDir/oldFiles` if -e "$tripFile";
   }
 }

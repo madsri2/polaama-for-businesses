@@ -1,15 +1,17 @@
 'use strict';
-const IataCodeGetter = require('./iatacode-getter.js');
 const request = require('request');
 const fs = require('fs');
 const _ = require('lodash');
 const moment = require('moment');
-const logger = require('./my-logger');
 const sleep = require('sleep');
-const FlightDataExtractor = require('./skyscanner-flight-data.js');
 
-const apiKey = "prtl6749387986743898559646983194";
-// const apiKey = "ma592384304502739139844422016106";
+const baseDir = "/home/ec2-user";
+const IataCodeGetter = require('./iatacode-getter.js');
+const logger = require('./my-logger');
+const FlightDataExtractor = require('./skyscanner-flight-data.js');
+const SecretManager = require(`${baseDir}/secret-manager/app/manager`);
+
+const apiKey = new SecretManager().getSkyscannerApiKey();
 
 function FlightInfoProvider(origCity, destCity, startDate, returnDate) {
   this.origCity = origCity;
@@ -18,7 +20,6 @@ function FlightInfoProvider(origCity, destCity, startDate, returnDate) {
   this.returnDate = returnDate;
 }
 
-// http://partners.api.skyscanner.net/apiservices/pricing/uk1/v1.0/47f84618953245ab86105b0062c5d9ea_ecilpojl_F86CEB22248C4E68C7C54A17455C84BE
 FlightInfoProvider.prototype.getFlightDetails = function(callback) {
   const self = this;
   (new IataCodeGetter(this.origCity)).getCode(function(code) { self.origCode = code;});
@@ -148,7 +149,6 @@ function _getFlightDetails(location, callback) {
         self.locationUrlRetry++;
         logger.info(`_getFlightDetails: Retrying location url: ${location}`);
         setTimeout(getFlightDetailsHandle, 4 * self.locationUrlRetry * 1000, location, callback);
-        // return _getFlightDetails.call(self, location, callback);
       }
       else {
         logger.error("_getFlightDetails: Retried the skyscanner location url 5 times, but status is stuck at UpdatesPending. Giving up");

@@ -1,11 +1,18 @@
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name='B-verify' content='ee02308f7491f4aef923b2d1184072ccd1f6367a'/>
-<body>
+<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<style> .ui-listview > li p { white-space: normal !important; }</style>
+
 <script>
   window.fbAsyncInit = function() {
     FB.init({
-      appId      : '1670120969968413',
+      appId      : '182232535630097',
       xfbml      : true,
-      version    : 'v2.8'
+      version    : 'v2.9'
     });
     FB.AppEvents.logPageView();
   };
@@ -18,17 +25,41 @@
       js.src = "//connect.facebook.net/en_US/sdk.js";
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
-
 </script>
+</head>
 
-<p>Hello secure world!</p>
+<body>
+<!-- TODO: http://stackoverflow.com/questions/25084059/ui-page-background-image-jquery-mobile-1-4-3 -->
+<!-- http://jsfiddle.net/ezanker/6xCc9/ -->
+<div data-role="page" id="pageone">
+  <div data-role="header">
+    <h1>Welcome to Polaama</h1>
+  </div>
 
-<div class="fb-messengermessageus" 
-  messenger_app_id="1670120969968413"
-  page_id="322170138147525"
-  color="blue"
-  size="large">
+  <div data-role="main" class="ui-content">
+    <p>Polaama is your personal trip planner. The Polaama bot can help you plan your trip by automating manual tasks and keep all your travel information in one, easily accessible place. Want to try it out? Just click on the "message us" button below.</p>
+  
+    <div class="fb-messengermessageus" 
+      messenger_app_id="182232535630097"
+      page_id="322170138147525"
+      color="blue"
+      size="xlarge">
+    </div>
+  </div>
+
+<!--
+<div
+  class="fb-like"
+  data-share="true"
+  data-width="450"
+  data-show-faces="true">
 </div>
+-->
+
+  <div data-role="footer">
+    <h1>2017 Polaama. All rights reserved.</h1>
+  </div>
+
 <!-- Used to trigger an authentication event to webhook: https://developers.facebook.com/docs/messenger-platform/plugin-reference/send-to-messenger
 <div class="fb-send-to-messenger" 
 	messenger_app_id="1670120969968413"
@@ -37,4 +68,6 @@
   color="blue" 
   size="standard"></div>
 -->
+</div>
 </body>
+</html>

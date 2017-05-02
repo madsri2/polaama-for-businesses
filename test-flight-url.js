@@ -1,6 +1,8 @@
 const request = require('request');
 const fs = require('fs');
 
+const API_KEY = new SecretManager().getSkyscannerApiKey();
+
 // https://support.business.skyscanner.net/hc/en-us/articles/211308489-Flights-Live-Pricing?_ga=1.158124153.234443051.1483127005
 function skyScanner() {
   const uri = `http://partners.api.skyscanner.net/apiservices/pricing/v1.0`;
@@ -10,8 +12,7 @@ function skyScanner() {
       Accept: "application/json"
     },
     form: {
-      apiKey: "prtl6749387986743898559646983194",
-      // apiKey: "ma592384304502739139844422016106",
+      apiKey: API_KEY,
       country: "US",
       currency: "USD",
       locale: "en-US",
@@ -33,7 +34,7 @@ function skyScanner() {
 
 // http://business.skyscanner.net/portal/en-GB/Documentation/FlightsBrowseCacheRoutes
 function browseRouteService() {
-  const uri = `http://partners.api.skyscanner.net/apiservices/browseroutes/v1.0/US/USD/en-US/SEA-sky/LIS-sky/2017-03-03/2017-03-17?apiKey=prtl6749387986743898559646983194`;
+  const uri = `http://partners.api.skyscanner.net/apiservices/browseroutes/v1.0/US/USD/en-US/SEA-sky/LIS-sky/2017-03-03/2017-03-17?apiKey=${API_KEY}`;
   request({
     uri: uri,
     method: 'GET'

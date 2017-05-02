@@ -121,7 +121,6 @@ function setRemainingItinerary() {
 
 // TODO: As we get closer to the travel day, get realtime forecast, rather than historical forecast.
 function setWeatherDetails(itinDate, country, cityList) {
-  const itin = this.itin[formatDate(itinDate)];
   const self = this;
   let cities = []; // convert into an array because cityList could be a single city or a group of cities (see setDepartureCityDetails).
   cities = cities.concat(cityList);
@@ -129,16 +128,21 @@ function setWeatherDetails(itinDate, country, cityList) {
   cities.forEach(city => {
     promiseList.push(new Promise(function(fulfil, reject) {
       const wip = new WeatherInfoProvider(country, city, itinDate);
-      wip.getWeather(function(c, weatherDetails) {
+      // Call the function that simply gets data from stored file and does not call a URI to do that. The URI calling will be done by calling trip-info-provider:getWeatherInformation in webhook-post-handler.startPlanningTrip before the itinerary is created.
+      wip.getStoredWeather(function(c, weatherDetails) {
+      // wip.getWeather(function(c, weatherDetails) {
         if(!weatherDetails) {
-          logger.error(`callGetWeather: WeatherInfoProvider.getWeather returned null for weather details`);
-          return reject(new Error(`Could not get weather for city ${city}`));
+          logger.error(`callGetWeather: WeatherInfoProvider.getStoredWeather returned null for weather details`);
+          // return reject(new Error(`Could not get weather for city ${city}`));
+          // we don't want to reject here because if the caller uses Promise.all, the first reject will short-circuit other requests. So, simply use fulfil and move on.
+          return fulfil('did not get weather for city ${city}');
         }
         const weather = {};
         weather.min_temp = weatherDetails.min_temp;
         weather.max_temp = weatherDetails.max_temp;
         weather.chanceofrain = weatherDetails.chanceofrain;
         weather.cloud_cover = weatherDetails.cloud_cover;
+        const itin = self.itin[formatDate(itinDate)];
         if(cities.length > 1) { // multiple cities
           if(!itin.weather) {
             itin.weather = [];
@@ -167,7 +171,7 @@ function createCommonItinForEachDay(cityList, country) {
   logger.debug(`createSingleDayItinerary: Setting itin value for day ${nextDayStr}`);
   if(this.itin[nextDayStr]) {
     // Possible bug
-    throw new Error(`createSingleDayCommonItinerary: Possible BUG! Itinerary for ${nextDayStr} should not be defined, but it is. Value is ${JSON.stringify(this.itin[nextDayStr])}`);
+    throw new Error(`createCommonItinForEachDay: Possible BUG! Itinerary for ${nextDayStr} should not be defined, but it is. Value is ${JSON.stringify(this.itin[nextDayStr])}`);
   }
   this.itin[nextDayStr] = {};
   this.itin[nextDayStr].city = cityList;
@@ -198,14 +202,12 @@ function persist() {
   const file = this.trip.tripItinFile();
   const itinStr = JSON.stringify(this.itin);
   try {
-    // console.log(`Itin is ${JSON.stringify(this.itin, null, 2)}`);
     fs.writeFileSync(file, itinStr);
   }
   catch(err) {
     logger.error(`Error writing to file ${file}: ${err}`);
     return;
   }
-  logger.debug(`persist: Wrote ${itinStr.length} bytes to file ${file}`);
 }
 
 module.exports = CreateItinerary;

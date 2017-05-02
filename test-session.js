@@ -35,11 +35,15 @@ function testPersistAndRetrieve() {
   const s3 = Sessions.retrieveSession("2");
   // console.log(s2);
   // console.log(s3);
+  delete s2.guid;
+  delete s3.guid;
   if(JSON.stringify(s2) === JSON.stringify(s3)) {
     console.log("match");
   }
   else {
-    console.log("no match");
+    console.log(`no match`);
+    console.log(`s2: ${JSON.stringify(s2)}`);
+    console.log(`s3: ${JSON.stringify(s3)}`);
   }
 }  
 
@@ -63,7 +67,7 @@ function testGetFutureTrips() {
   addNewTrip("10", "ft3", "ft3", "5/1/17", "10");
   addNewTrip("10", "ft4", "ft4", "3/1/17", "12");
   const s = addNewTrip("10", "ft5", "ft5", "4/1/17", "15");
-  console.log(`testGetFutureTrips trip names: ${JSON.stringify(s.getFutureTrips())}`);
+  console.log(`testGetFutureTrips trip names: ${JSON.stringify(s.getCurrentAndFutureTrips())}`);
 }
 
 function testGetPastTrips() {
@@ -73,14 +77,14 @@ function testGetPastTrips() {
   addNewTrip("10", "ft3", "ft3", "5/1/17", "10");
   addNewTrip("10", "ft4", "ft4", "3/10/17", "12");
   const s = addNewTrip("10", "ft5", "ft5", "4/1/17", "15");
-  console.log(`testGetFutureTrips trip names: ${JSON.stringify(s.getPastTrips())}`);
+  console.log(`testGetPastTrips trip names: ${JSON.stringify(s.getPastTrips())}`);
 }
 
 function testSessions() {
   console.log(ss.findOrCreate("2"));
 }
 
-// testPersistAndRetrieve();
+testPersistAndRetrieve();
 // testSessions();
 // testGetFutureTrips();
-testGetPastTrips();
+// testGetPastTrips();

@@ -1,23 +1,38 @@
 'use strict';
 
 const expect = require('chai').expect;
-const CreateItinerary = require('../app/create-itin');
-const TripData = require('../../trip-data');
+const sleep = require('sleep');
 const Promise = require('promise');
-const logger = require('../../my-logger');
+const fs = require('fs');
+
+const CreateItinerary = require('trip-itinerary/app/create-itin');
+const baseDir = "/home/ec2-user";
+const TripData = require(`${baseDir}/trip-data`);
+const WeatherInfoProvider = require(`${baseDir}/weather-info-provider`);
+const logger = require(`${baseDir}/my-logger`);
 logger.setTestConfig(); // indicate that we are logging for a test
 
 describe("Test Create Itinerary functionality", function() {
   it("basic test", function() {
     const tripData = new TripData('india');
-    tripData.data.startDate = "1/1/2018";
+    tripData.data.startDate = "2018-01-01";
     tripData.data.cityItin = {
       'cities': ['delhi'],
       'numOfDays': ['3']
     };
     tripData.data.portOfEntry = "delhi";
-    const createItin = new CreateItinerary(tripData, "seattle");
-    createItin.create();
+    const promise = populateWeatherFile(tripData.data.startDate, "india", "delhi");
+    promise.done( 
+      function(response) {
+        const createItin = new CreateItinerary(tripData, "seattle");
+        createItin.create();
+        done();
+      },
+      function(err) {
+        logger.error(`error: ${err.stack}`);
+        done(err);
+      }
+    );
   });
 
   function verifyItinExpectations(dayItin, city) {
@@ -41,6 +56,49 @@ describe("Test Create Itinerary functionality", function() {
     }
   }
 
+  function populateWeatherFile(itinDate, country, city) {
+    return new Promise(function(fulfil, reject) {
+      const wip = new WeatherInfoProvider(country, city, itinDate);
+      wip.getWeather(function(c, weatherDetails) {
+        if(weatherDetails) {
+          logger.debug(`populateWeatherFile: Successfully obtained weather details ${JSON.stringify(weatherDetails)}`);
+          fulfil(weatherDetails);
+        }
+        else {
+          console.log(`Error getting weather details`);
+          const e = new Error('error');
+          reject(e);
+        }
+      });
+    });
+  }
+
+  function poll(file) {
+    if(!fs.existsSync(file)) {
+      console.log("polling..");
+      setTimeout(poll, 500);
+    }
+    else {
+     return fs.readFileSync(file);
+    }
+  }
+
+  it("test weather file", function(done) {
+    const promise = populateWeatherFile("2017-11-1", "india", "chennai", done);
+    promise.done(
+      function(response) {
+        console.log("success");
+        done();
+      },
+      function(err) {
+        console.log(`Error: ${err.stack}`);
+        done(err);
+      }
+    );
+    const readValues = poll("/home/ec2-user/weather/chennai-11011130.txt");
+    console.log(`Weather details: ${readValues}`);
+  });
+
   // TODO: This test, while comprehensive has too many implementation details (like calculation numDays and remaining days for portOfEntry. Fix ME! The next test is better.
   it("testing entire itinerary", function(done) {
     // set up
@@ -61,43 +119,57 @@ describe("Test Create Itinerary functionality", function() {
     tripData.data.returnDate = "2017-11-10";
     tripData.data.duration = 10;
     tripData.data.departureTime = "11:00";
-    // call
+    const weatherPromises = [];
+    cityItin.cities.forEach(city => {
+      weatherPromises.push(populateWeatherFile(startDate, tripData.data.country, city));
+    });
+    weatherPromises.push(populateWeatherFile(startDate, "usa", "seattle"));
     const createItin = new CreateItinerary(tripData, "seattle");
     const promises = createItin.create();
-    Promise.all(promises).done(
-      function(values){
-        const details = createItin.getItinerary();
-        logger.debug(`Itinerary details: ${JSON.stringify(details)}`);
-        // verify departure date
-        const stDateStr = CreateItinerary.formatDate(new Date(startDate));
-        expect(details).to.include.keys(stDateStr);
-        verifyItinExpectations(details[stDateStr], ['seattle','chennai']);
-        expect(details[stDateStr].startTime).to.equal(startTime);
-        let nextDay = new Date(startDate);
-        nextDay.setDate(nextDay.getDate() + 1);
-        // verify port of entry & remaining itinerary
-        cityItin.cities.forEach((city, idx) => {
-          let numDays = parseInt(cityItin.numOfDays[idx]);
-          if(idx === 0) numDays -= 1; // For port of entry, the first day is already accounted for.
-          for(let i = 0; i < numDays; i++) {
-            const nextDayStr = CreateItinerary.formatDate(nextDay);
-            logger.debug(`Now verifying day ${nextDayStr}`);
+        
+    Promise.all(weatherPromises).done(
+      // perform actual tests here
+      function(response) {
+        const createItin = new CreateItinerary(tripData, "seattle");
+        const promises = createItin.create();
+        Promise.all(promises).done(
+          function(values){
+            const details = createItin.getItinerary();
+            // verify departure date
+            const stDateStr = CreateItinerary.formatDate(new Date(startDate));
+            expect(details).to.include.keys(stDateStr);
+            verifyItinExpectations(details[stDateStr], ['seattle','chennai']);
+            expect(details[stDateStr].startTime).to.equal(startTime);
+            let nextDay = new Date(startDate);
             nextDay.setDate(nextDay.getDate() + 1);
-          }
-        });
-        // nextDay has advanced beyond the return date, so get it back.
-        nextDay.setDate(nextDay.getDate() - 1);
-        const nextDayStr = CreateItinerary.formatDate(nextDay);
-        expect(nextDayStr).to.equal(CreateItinerary.formatDate(new Date(tripData.data.returnDate)));
-        expect(details[nextDayStr].departureTime).to.equal(tripData.data.departureTime);
+            // verify port of entry & remaining itinerary
+            cityItin.cities.forEach((city, idx) => {
+              let numDays = parseInt(cityItin.numOfDays[idx]);
+              if(idx === 0) numDays -= 1; // For port of entry, the first day is already accounted for.
+              for(let i = 0; i < numDays; i++) {
+                const nextDayStr = CreateItinerary.formatDate(nextDay);
+                logger.debug(`Now verifying day ${nextDayStr}`);
+                nextDay.setDate(nextDay.getDate() + 1);
+              }
+            });
+            // nextDay has advanced beyond the return date, so get it back.
+            nextDay.setDate(nextDay.getDate() - 1);
+            const nextDayStr = CreateItinerary.formatDate(nextDay);
+            expect(nextDayStr).to.equal(CreateItinerary.formatDate(new Date(tripData.data.returnDate)));
+            expect(details[nextDayStr].departureTime).to.equal(tripData.data.departureTime);
 
-        // tell mocha that the asynchronous work is done
-        done();
+            // tell mocha that the asynchronous work is done
+            done();
+          },
+          function(err) {
+            logger.error(`Error calling create: ${err.message}. stack: ${err.stack}`);
+            // tell mocha that the asynchronous work is done
+            done(err);
+          }
+        );
       },
       function(err) {
-        logger.error(`Error calling create: ${err.message}. stack: ${err.stack}`);
-        // tell mocha that the asynchronous work is done
-        done(err);
+        logger.error(`entire itinerary test: error populating weather: ${err.stack}`);
       }
     );
   });

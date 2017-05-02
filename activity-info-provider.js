@@ -66,12 +66,12 @@ ActivityInfoProvider.prototype.getActivities = function(responseCallback) {
           return extractActivityDetails.call(self, key);
         }
         catch(e) {
-          logger.error(`getActivities: could not write data from custom search to file: ${e.stack}`);
+          logger.error(`getActivities: could not write data from custom search for key ${key} to file ${srFile}: ${e.stack}`);
           return extractActivityDetails.call(self, key);
         }
       }
       else {
-        logger.error(`getActivities: Unable to send request to google: Response: ${res}, Error: ${error}`);
+        logger.error(`getActivities: Unable to send request to google for key ${key}: Response: ${res}, Error: ${error}`);
         return extractActivityDetails.call(self, key);
       }
     });
@@ -88,6 +88,7 @@ function srFileName(key) {
   return `${dir}/${this.city}-${this.activities[key]["search-term"]}.txt`;
 }
 
+// if the call was successful, srFileName would have the details of the search results. Obtain the links from there and determine if we have obtained links from all the search sites listed in this.activities. If we are, call the callback and we are done. Note that we will always call the callback (even on error from google or the search site) as long as we reach this function from getActivities (see above).
 function extractActivityDetails(key) {
   this.count++;
   const srFile = srFileName.call(this, key);
@@ -114,7 +115,7 @@ function extractActivityDetails(key) {
   return determineResponse.call(this);
 }
 
-// determine if we need to call the callback
+// determine if we need to call the callback. If we have obtained links from all the search sites defined in this.activities, we are ready to call the callback.
 function determineResponse() {
   if(this.count == Object.keys(this.activities).length) {
     if(this.links.length == 0) {
