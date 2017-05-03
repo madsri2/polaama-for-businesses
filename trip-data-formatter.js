@@ -1,4 +1,6 @@
 'use strict';
+
+const baseDir = "/home/ec2-user";
 const fs = require('fs');
 const _ = require('lodash');
 const TripData = require('./trip-data');
@@ -217,8 +219,25 @@ function _itinDetailsHtml(title, details) {
   return html;
 }
 
+TripDataFormatter.prototype.formatFlightQuotes = function(flightDetails) {
+  const html = fs.readFileSync(`${baseDir}/html-templates/flight-quote-details.html`,'utf-8');
+  let flightDetailsHtml = "";
+  for(let i = 0; i < flightDetails.length; i++) {
+    const thisQuote = flightDetails[i];
+    let thisHtml = `<div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d">\n`;
+    thisHtml += `<h1>Price: $$${thisQuote.price}</h1>\n`;
+    thisHtml += `<p>Onward Carrier: <b>${thisQuote.originCarrier[0]}</b>; Nonstop: <b>${thisQuote.originDirect}</b></p>\n`;
+    thisHtml += `<p>Return Carrier: <b>${thisQuote.returnCarrier[0]}</b>; Nonstop: <b>${thisQuote.returnDirect}</p></b>\n`;
+    thisHtml += `</div>\n`;
+    flightDetailsHtml += thisHtml;
+  }
+  return html.replace("${startDate}", flightDetails.departureDate)
+             .replace("${returnDate}", flightDetails.returnDate)
+             .replace("${flightDetails}", flightDetailsHtml);
+}
+
 TripDataFormatter.prototype.formatHandleTravelersPage = function() {
-  return fs.readFileSync("html-templates/new-trip-handle-travelers.html", 'utf8');
+  return fs.readFileSync(`${baseDir}/html-templates/new-trip-handle-travelers.html`, 'utf8');
 }
 
 // choosing cities for a new trip. This will include selecting a port of entry as well.

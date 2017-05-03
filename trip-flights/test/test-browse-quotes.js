@@ -3,20 +3,56 @@ const baseDir = "/home/ec2-user";
 const logger = require(`${baseDir}/my-logger`);
 logger.setTestConfig();
 
+const fs = require('fs');
 const expect = require('chai').expect;
 const BrowseQuotes = require('trip-flights/app/browse-quotes');
 const Promise = require('promise');
 
+const cachedFile = "/home/ec2-user/flights/SFOtoAUSon2017-08-01-cached.txt";
+
 describe("Browse Quotes tests", function() {
+
   it("testing cached quotes", function(done) {
+    // delete file to force a skyscaner uri call
+    if(fs.existsSync(cachedFile)) fs.unlinkSync(cachedFile);
     this.timeout(5000); // mocha's timeout
     const promise = (new BrowseQuotes("san francisco", "austin", "2017-08-01", "2017-08-08")).getCachedQuotes();
     promise.then(
       function(result) { 
         logger.debug(`Result from browse quotes: ${result}`); 
+        expect(result).to.be.ok;
+        expect(fs.existsSync(cachedFile)).to.be.ok;
         done();
       },
       function(err) {
+        done(err);
+      }
+    );
+  });
+
+  // simply verify that you are able to read from the file created in test above and return contents in the expected format
+  it("get stored quotes", function(done) {
+    const promise = new BrowseQuotes("san francisco", "austin", "2017-08-01", "2017-08-08").getStoredQuotes();
+    promise.done(
+      function(contents) {
+        const quotes = contents;
+        console.log(`received ${quotes.length} quotes`);
+        expect(quotes.length).to.be.above(0);
+        for(let i = 0; i < quotes.length; i++) {
+          logger.debug(`${JSON.stringify(quotes[i])}`);
+          expect(quotes[i].price).to.be.above(0);
+          expect(quotes[i].id).to.be.above(0);
+          expect(quotes[i].originCarrier).to.be.instanceOf(Array);
+          expect(quotes[i].originCarrier.length).to.be.above(0);
+          expect(quotes[i].returnCarrier).to.be.instanceOf(Array);
+          expect(quotes[i].returnCarrier.length).to.be.above(0);
+          expect(quotes[i].originDirect).to.be.a('boolean');
+          expect(quotes[i].returnDirect).to.be.a('boolean');
+        }
+        done();
+      },
+      function(err) {
+        logger.error(`testing err: ${err}`);
         done(err);
       }
     );
@@ -141,20 +177,80 @@ describe("Browse Quotes tests", function() {
     };
     const quotes = (new BrowseQuotes("seattle", "san francisco", "2017-05-14", "2017-05-19")).testing_parseQuoteContents(contents);
     logger.debug(`received ${quotes.length} quotes`);
-    expect(quotes.length).to.equal(5);
-    const priceList = [647, 754, 647, 754, 345];
+    const priceList = [345, 647, 754];
+    expect(quotes.length).to.equal(priceList.length);
     for(let i = 0; i < priceList.length; i++) {
       expect(quotes[i].price).to.equal(priceList[i]);
       // logger.debug(`id: ${q.QuoteId}; price: ${q.MinPrice}; cacheDate: ${q.QuoteDateTime}; departureDate: ${q.OutboundLeg.DepartureDate}; returnDate: ${q.InboundLeg.DepartureDate}`);
     }
   });
 
+
   it("testing real quotes", function() {
-    const json = JSON.parse(require('fs').readFileSync("/tmp/austin.browsequotes"));
-    const quotes = (new BrowseQuotes("seattle", "san francisco", "2017-05-14", "2017-05-19")).testing_parseQuoteContents(json);
+    const json = JSON.parse(fs.readFileSync(`${baseDir}/trip-flights/austin.browsequotes`));
+    const quotes = new BrowseQuotes("san francisco", "austin", "2017-05-14", "2017-05-19").testing_parseQuoteContents(json);
     console.log(`received ${quotes.length} quotes`);
-    quotes.forEach(q => {
-      logger.debug(`${JSON.stringify(q)}`);
-    });
+    const priceList = [425, 500, 521];
+    expect(quotes.length).to.equal(priceList.length);
+    for(let i = 0; i < priceList.length; i++) {
+      expect(quotes[i].price).to.equal(priceList[i]);
+    }
+  });
+
+  it("resolve duplicates", function() {
+    const quotes = [{
+      id: "1",
+      price: 345,
+      originCarrier: ["Virgin America"],
+      returnCarrier: ["Virgin America"]
+    },
+    {
+      id: "2",
+      price: 345,
+      originCarrier: ["Virgin America"],
+      returnCarrier: ["Virgin America"]
+    },
+    {
+      id: "3",
+      price: 369,
+      originCarrier: ["Alaska"],
+      returnCarrier: ["Alaska"],
+    },
+    {
+      id: "4",
+      price: 420,
+      originCarrier: ["A", "B"],
+      returnCarrier: ["A", "B"]
+    },
+    {
+      id: "5",
+      price: 420,
+      originCarrier: ["A", "B"],
+      returnCarrier: ["A", "B"]
+    },
+    {
+      id: "6",
+      price: 500,
+      originCarrier: ["A", "B", "C"],
+      returnCarrier: ["A", "B", "D"]
+    }];
+    let expectedQuotes = [];
+    expectedQuotes = expectedQuotes.concat(quotes.slice(0,1)).concat(quotes.slice(2,4)).concat(quotes.slice(5,6));
+    logger.debug(`expected quotes is ${JSON.stringify(expectedQuotes)}`);
+    const browseQuotes = new BrowseQuotes("san francisco", "austin", "2017-05-14", "2017-05-19");
+    expect(browseQuotes.testing_resolveDuplicates(quotes)).to.deep.equal(expectedQuotes);
+  });
+
+  it("increase quote count", function() { 
+    let json = JSON.parse(fs.readFileSync(`${baseDir}/trip-flights/austin.browsequotes`));
+    let quotes = new BrowseQuotes("san francisco", "austin", "2017-05-14", "2017-05-19").testing_parseQuoteContents(json);
+    logger.debug(`quotes: ${JSON.stringify(quotes)}`);
+    json = JSON.parse(fs.readFileSync(`${baseDir}/trip-flights/austin.browsedates`));
+    quotes = new BrowseQuotes("san francisco", "austin", "2017-05-14", "2017-05-19").testing_parseQuoteContents(json);
+    logger.debug(`dates: ${JSON.stringify(quotes)}`);
+    json = JSON.parse(fs.readFileSync(`${baseDir}/trip-flights/austin.browseroutes`));
+    quotes = new BrowseQuotes("san francisco", "austin", "2017-05-14", "2017-05-19").testing_parseQuoteContents(json);
+    logger.debug(`routes: ${JSON.stringify(quotes)}`);
   });
 });
+

@@ -27,10 +27,17 @@ function makeRequest(uri)
   });
 }
 
+if(process.argv.length < 3) {
+  console.log(`usage: node skyscanner-samples.js [quotes|dates|routes]`);
+  return;
+}
+const type = process.argv[2];
+
+const uri = `http://partners.api.skyscanner.net/apiservices/browse${type}/v1.0/US/USD/en-US/SFO/AUS/2017-05-14/2017-05-19`;
+
 // browsequote
 // const uri = "http://partners.api.skyscanner.net/apiservices/browsequotes/v1.0/US/USD/en-US/SFO/AUS/2017-05-14/2017-05-19";
 // browseroute
-const uri = "http://partners.api.skyscanner.net/apiservices/browseroutes/v1.0/US/USD/en-US/SFO/AUS/2017-05-14/2017-05-19";
 // browsedate
 // const uri = "http://partners.api.skyscanner.net/apiservices/browsedates/v1.0/US/USD/en-US/SFO/AUS/2017-05-14/2017-05-19";
 // browse redirect

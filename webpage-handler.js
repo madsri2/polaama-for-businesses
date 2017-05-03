@@ -11,6 +11,7 @@ const FbidHandler = require('fbid-handler/app/handler');
 const fs = require('fs');
 const formidable = require('formidable');
 const ExpenseReportFetcher = require('./expense-report/app/report-fetcher');
+const BrowseQuotes = require('trip-flights/app/browse-quotes');
 
 function WebpageHandler(id, tripName) {
   this.fbidHandler = new FbidHandler();
@@ -77,6 +78,20 @@ WebpageHandler.prototype.displayFlightDetails = function(res) {
   const tip = new TripInfoProvider(this.trip, this.session.hometown);
   const flightDetails = tip.getStoredFlightDetails();
   return res.send(this.formatter.formatFlightDetails(flightDetails));
+}
+
+WebpageHandler.prototype.displayFlightQuotes = function(req, res) {
+  const trip = this.trip.data;
+  const promise = new BrowseQuotes(this.session.hometown, trip.portOfEntry, trip.startDate, trip.returnDate).getStoredQuotes();
+  const self = this;
+  promise.done(
+    function(contents) {
+      return res.send(self.formatter.formatFlightQuotes(contents));
+    },
+    function(err) {
+      throw new Error(err);
+    }
+  );
 }
 
 WebpageHandler.prototype.displayExpenseReport = function(res) {

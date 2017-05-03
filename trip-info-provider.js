@@ -142,6 +142,17 @@ TripInfoProvider.prototype.getFlightDetails = function(callback) {
   }
 }
 
+TripInfoProvider.prototype.getFlightQuoteDetails = function() {
+  const tripData = this.trip.data;
+  // TODO: Putting this logic here is a hack. Ideally it would be in webhook-post-handler:startPlanningTrip. But because we are using promise there and I don't know of a clean way to NOT call getFlightDetails if the trip has started, I am placing this code here.
+  if(tripData.tripStarted) {
+    logger.info(`getFlightQuoteDetails: Trip ${tripData.rawTripName} has already started. Not getting flight details. Simply returning!`);
+    return Promise.resolve(true);
+  }
+  const browseQuotes = new BroweQuotes(this.hometown, tripData.portOfEntry, tripData.startDate, tripData.returnDate);
+  return fip.getCachedQuotes();
+}
+
 TripInfoProvider.prototype.getStoredFlightDetails = function() {
   const tripData = this.trip.data;
   if(tripData.tripStarted) {

@@ -10,16 +10,15 @@ const request = require('request');
 const SecretManager = require('secret-manager/app/manager');
 const _ = require('lodash');
 const fs = require('fs');
-/*
 require('promise/lib/rejection-tracking').enable(
   {allRejections: true}
 );
-*/
-
 
 function BrowseQuotes(origCity, destCity, startDate, returnDate) {
   this.origCity = origCity;
   this.destCity = destCity;
+  this.origCode = new IataCodeGetter(origCity).getCodeSync();
+  this.destCode = new IataCodeGetter(destCity).getCodeSync();
   this.startDate = startDate;
   this.returnDate = returnDate;
 }
@@ -85,7 +84,7 @@ BrowseQuotes.prototype.getCachedQuotes = function() {
 function getQuotesFromSkyscanner() {
   const self = this;
   return new Promise(function(fulfil, reject) {
-    const uri = "http://partners.api.skyscanner.net/apiservices/browseroutes/v1.0/US/USD/en-US"
+    const uri = "http://partners.api.skyscanner.net/apiservices/browsequotes/v1.0/US/USD/en-US"
               .concat(`/${self.origCode}`)
               .concat(`/${self.destCode}`)
               .concat(`/${self.startDate}`)
@@ -109,7 +108,6 @@ function getQuotesFromSkyscanner() {
     function(contents) {
       if(!contents) throw new Error(`getQuotesFromSkyscanner: response body is undefined`);
       return new Promise(function(fulfil, reject) {
-        logger.debug(`getQuotesFromSkyscanner: second promise: writing to file`);
         fs.writeFile(getFileName.call(self), contents, 
           function(err, res) {
             if(err) return reject(new Error(err));
@@ -131,15 +129,16 @@ BrowseQuotes.prototype.getStoredQuotes = function() {
   return new Promise(
     function(fulfil, reject) {
       fs.readFile(file, (err, contents) => {
-        if(err) return reject(err);
-        fulfil(contents);
+        if(err) { 
+          logger.error(`getStoredQuotes: Error from response: ${err}`); 
+          return reject(err);
+        }
+        fulfil(JSON.parse(contents));
       });
     }
   ).then(
-    parseQuoteContents.call(self),
-    function(err) {
-      throw new Error(err);
-    }
+    function(contents) { return parseQuoteContents.call(self, contents); },
+    function(err) { throw new Error(err); }
   );
 }
 
@@ -177,30 +176,62 @@ function updateContents(rawContents) {
   return contents;
 }
 
-// approach: Look for the cheapest 10 flights. Note that a quote can have both inbound & outbound or just one-way. Look for the most recent cached item. Look for direct flights. In the future, look for preferred airlines.
+// approach: First sort by Direct vs. Non-direct. Then sort by cached time. Then sort by price. Finally, massage the quotes in the required format and resolve duplicates.
 function parseQuoteContents(rawContents) {
   this.rawQuoteDetails = rawContents;
   const contents = updateContents.call(this, rawContents.Quotes);
-  const priceSorted = contents.sort(
-    function(a,b) {
-      return a.MinPrice - b.MinPrice;
-    }
-  );
-  const dateSorted = priceSorted.sort(
-    // we want the later date object in the lower index.
-    function(a,b) {
-      if(moment(a.QuoteDateTime).isBefore(b.QuoteDateTime)) return 1;
-      return -1;
-    }
-  );
-  const directFlights = dateSorted.sort(
-    function(a,b) {
+  const sortedQuotes = contents.sort(function(a,b) {
       if(a.Direct && !b.Direct) return -1;
       if(b.Direct && !a.Direct) return 1;
       return 0;
+  }).sort(function(a,b) {
+    // we want the later date object in the lower index.
+      if(moment(a.QuoteDateTime).isBefore(b.QuoteDateTime)) return 1;
+      return -1;
+  }).sort(function(a,b) {
+      return a.MinPrice - b.MinPrice;
+  });
+  return resolveDuplicates(getFinalQuotesList.call(this, sortedQuotes));
+}
+
+/*
+[1,1,2,3,2]
+[1,2,3]
+
+duplicateIndices: [1,4]
+slice(0,1) -> [1]
+concat slice(2,4) -> [1,2,3]
+*/
+// TODO: In the future, compare quotes whose carriers match and choose the one that was cached later.
+function resolveDuplicates(quotes) {
+  const duplicateIndices = [];
+  for(let i = 0; i < quotes.length; i++) {
+    const quote = quotes[i];
+    for(let j = i+1; j < quotes.length; j++) {
+      // if the price and ongoing & return carriers match, mark this entry for removal
+      if(quote.price === quotes[j].price &&
+         match(quote.originCarrier, quotes[j].originCarrier) &&
+         match(quote.returnCarrier, quotes[j].returnCarrier)) {
+        duplicateIndices.push(j);
+        logger.debug(`skipping quote at index ${j} (quote id: ${quotes[j].id}) which is same as quote at index ${i} (quote id: ${quotes[i].id})`);
+      }
     }
-  );
-  return getFinalQuotesList.call(this, directFlights);
+  }
+  let start = 0;
+  let finalList = [];
+  for(let i = 0; i < duplicateIndices.length; i++) {
+    finalList = finalList.concat(quotes.slice(start, duplicateIndices[i]));
+    start = duplicateIndices[i] + 1;
+  }
+  finalList = finalList.concat(quotes.slice(start, quotes.length));
+  return finalList;
+}
+
+// compare equality of two arrays
+function match(array1, array2) {
+  return (array1.length === array2.length) && array1.every((element, index) => {
+    return element === array2[index];
+  });
 }
 
 function getFinalQuotesList(flightQuotes) {
@@ -243,5 +274,6 @@ function getFileName() {
 
 /***** TESTING ****/
 BrowseQuotes.prototype.testing_parseQuoteContents = parseQuoteContents;
+BrowseQuotes.prototype.testing_resolveDuplicates = resolveDuplicates;
 
 module.exports = BrowseQuotes;

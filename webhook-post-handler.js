@@ -241,7 +241,8 @@ function displayTripDetails() {
             webview_height_ratio: "compact",
             messenger_extensions: true,
             fallback_url: sendUrl.call(this, tripData.flightUrlPath())
-          }, /*{ // NOT supported yet!
+          }, 
+          /*{ // NOT supported yet!
           title: "Get Stay details",
           buttons: [{
             type:"web_url",
@@ -251,7 +252,8 @@ function displayTripDetails() {
             messenger_extensions: true,
             fallback_url: sendUrl.call(this, tripData.stayUrlPath())
           }]
-          },*/ {
+          },*/ 
+          {
             type:"web_url",
             url: sendUrl.call(this, tripData.activitiesUrlPath()),
             title:"Activities",

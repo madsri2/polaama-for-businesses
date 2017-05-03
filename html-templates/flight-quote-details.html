@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<!-- Need the css line below to wrap paragraphs in mobile so the entire line shows up -->
+<style> .ui-listview > li p { white-space: normal !important; }</style>
+</head>
+<body>
+
+<div data-role="page" id="pageone">
+  <div data-role="header">
+    <h1>Leaving on ${startDate} and returning on ${returnDate}</h1>
+  </div>
+
+  <div data-role="main" class="ui-content">
+    <div data-role="collapsibleset">
+      ${flightDetails}
+      <!--
+      <div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d">
+        <h1>Blah to Blee roundtrip</h1>
+        <p>Price per person: $100/-; </p>
+        <p>Onward Carrier: Alaska; Nonstop: Yes</p>
+        <p>Return Carrier: Frontier; Nonstop: No</p>
+        <p><a href=www.google.com>Book it</a></p>
+      </div>
+      <div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d">
+        <h1>Blah to Blee roundtrip</h1>
+        <p>Price per person: $100/-; </p>
+        <p>Onward Carrier: Alaska; Nonstop: Yes</p>
+        <p>Return Carrier: Frontier; Nonstop: No</p>
+        <p><a href=www.google.com>Book it</a></p>
+      </div>
+      -->
+    </div>
+  </div>
+
+  <div data-role="footer">
+    <h1>2017 Polaama, Inc. All rights reserved.</h1>
+  </div>
+</div> 
+
+<!--
+<ul data-role="listview">
+  <li><p>Cheapest flight on Kayak: one stop; $1154/-; 21 hours to Tel Aviv; 30 hours to Seattle on 2/17/17. [Book It]</p></li>
+  <li><p>Shorter flying time on Kayak: one stop; $1382/-; 15 hours to Tel Aviv; 18 hours to Seattle on 2/17/17. [Book It]</p></li>
+  <li><p>Miles + cash: On United; two stops; 100K miles + $300/- roundtrip; 22 hours to Tel Aviv; 32 hours to Seattle</p></li>
+  <li><p>Prices are predicted to go high [20% confidence]. Book quickly</p></li>
+  <li><p>Flying with a kid less than 2 years old: $250/- charge</p></li>
+</ul>
+-->
+
+</body>
+</html>

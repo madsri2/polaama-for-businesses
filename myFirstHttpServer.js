@@ -320,6 +320,11 @@ app.post('/:id/:tripName/save-itin-update', function(req, res) {
   return handler.saveItinUpdate(req, res);
 });
 
+app.get('/:id/:tripName/flight-quotes', function(req, res) {
+  const handler = new WebpageHandler(req.params.id, req.params.tripName);
+  return handler.displayFlightQuotes(req, res);
+});
+
 
 // handling webhook
 app.get('/webhook', function(req, res) {
