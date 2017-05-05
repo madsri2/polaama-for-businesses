@@ -89,6 +89,8 @@ BoardingPassHandler.prototype.handle = function() {
     this.trip.addPortOfEntry(destCity);
     // TODO: Trigger an event so webhook-post-handler can start planning for the new trip.
     // this.postHandler.startPlanningTrip();
+    // load the session from file so that other classes (like webhook-post-handler) can get this information.
+    this.session = this.sessions.reloadSession(this.session.sessionId);
   }
   this.details.boardingPassImageUrl = getBoardingPassImage.call(this); // Do this before writing boarding pass details into the boardingPass file so that the image url will be captured in the file.
 
@@ -105,7 +107,7 @@ BoardingPassHandler.prototype.handle = function() {
     }
     else {
       // notify user that we have received a boarding pass.
-      const message = `Received boarding pass for your trip to ${this.trip.getPortOfEntry()}. Polaama will send you the boarding pass two days before your trip`;
+      const message = `Received boarding pass for your trip to ${this.trip.getPortOfEntry()}. I will send it to you a few hours before the trip, so it will be available offline`;
       logger.debug(`handle: About to send message to user: ${message}`);
       this.postHandler.notifyUser(message);
     }
@@ -184,8 +186,8 @@ function getSession() {
 
   this.fbid = fbid;
   logger.debug(`getSession: fbid for this handler is ${fbid}`);
-  const sessions = new Sessions();
-  const session = sessions.find(fbid);
+  this.sessions = Sessions.get();
+  const session = this.sessions.find(fbid);
   if(!session) {
     throw new Error(`Could not find session for fbid ${fbid}. Maybe user never initiated a chat conversation with polaama?`);
   }

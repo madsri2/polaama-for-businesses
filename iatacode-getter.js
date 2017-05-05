@@ -41,10 +41,8 @@ IataCodeGetter.prototype.getCodeSync = function() {
   if(file) {
     try {
       const body = JSON.parse(fs.readFileSync(file, 'utf8'));
-      logger.debug(`getCodeSync: Obtained body ${JSON.stringify(body)} from file ${file}`);
-      if(body.iatacode) {    
-        return body.iatacode;
-      }
+      // logger.debug(`getCodeSync: Obtained body ${JSON.stringify(body)} from file ${file}`);
+      if(body.iatacode) return body.iatacode;
     }
     catch(e) {
       logger.error(`getIataCode: could not read data from file ${file}. Error : ${e.message}`);

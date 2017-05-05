@@ -102,7 +102,7 @@ function extractActivityDetails(key) {
   }
   const json = JSON.parse(body);
   if(_.isUndefined(json.items)) {
-    logger.error("extractActivityDetails: Custom search results does not contain items property.");
+    logger.error("extractActivityDetails: Custom search results from file ${srFile} does not contain items property.");
     return determineResponse.call(this);
   }
   json.items.forEach(item => {
@@ -120,7 +120,7 @@ function determineResponse() {
   if(this.count == Object.keys(this.activities).length) {
     if(this.links.length == 0) {
       logger.warn("determineResponse: No links found from any of the files");
-      return this.callback(undefined);
+      return this.callback([`No activity information available for ${this.city}`]);
     }
     return this.callback(this.links);
   }

@@ -114,6 +114,10 @@ TripData.prototype.flightUrlPath = function() {
   return `${this.data.name}/comments/flight`;
 }
 
+TripData.prototype.flightQuoteUrlPath = function() {
+  return `${this.data.name}/flight-quotes`;
+}
+
 TripData.prototype.stayUrlPath = function() {
   return `${this.data.name}/comments/stay`;
 }
@@ -131,7 +135,6 @@ TripData.prototype.addTripDetailsAndPersist = function(tripDetails) {
     this.data.country = myEncode(tripDetails.destination);
     this.country = new Country(tripDetails.destination);
   }
-  this.data.duration = tripDetails.duration;
   // TODO: The date format needs to be identified and converted to the needed format.
   if(tripDetails.datetime) {
     this.data.startDate = tripDetails.datetime;
@@ -145,7 +148,13 @@ TripData.prototype.addTripDetailsAndPersist = function(tripDetails) {
   const sdIso = new Date(this.data.startDate).toISOString();
   this.data.startDate = moment(sdIso).format("YYYY-MM-DD");
   // duration includes the start date, so subtract 1
-  this.data.returnDate = moment(sdIso).add(this.data.duration - 1,'days').format("YYYY-MM-DD");
+  if(tripDetails.duration) {
+    this.data.duration = tripDetails.duration;
+    this.data.returnDate = moment(sdIso).add(this.data.duration - 1,'days').format("YYYY-MM-DD");
+  }
+  else {
+    this.data.returnDate = "unknown";
+  }
   // TODO: Get this information from weather API or the file persisted.
   this.data.weather = "sunny";
   createPackList.call(this);

@@ -14,7 +14,7 @@ logger.setTestConfig(); // indicate that we are logging for a test
 describe('BoardingPass handler', function() {
   let fbid = "12345";
   let tripName = "New York";
-  const sessions = new Sessions();
+  const sessions = Sessions.get();
   const options = {
     name: "TestFirstName LastName",
     pnr: "XWERGX",

@@ -53,6 +53,66 @@ function testGetActivity() {
   });
 }
 
+function testGetFlightQuoteDetails() {
+  const tripData = new TripData("test-austin");
+  const tripDetails = {
+    destination: "usa",
+    startDate: "6/1/17",
+    duration: 5,
+  };
+  tripData.addTripDetailsAndPersist(tripDetails);
+  tripData.addCities(["austin"]);
+  tripData.addPortOfEntry("austin");
+  const tip = new TripInfoProvider(tripData, "san francisco");
+  tip.getFlightQuotes().then(
+    function(result) {
+      return tip.getStoredFlightQuotes();
+    },
+    function(err) {
+      console.log(`error thrown when trying to get flight quotes: ${err.stack}`);
+      throw new Error(err);
+    }
+  ).done(
+    function(result) {
+      console.log(`quotes: ${JSON.stringify(result)}`);
+    },
+    function(err) {
+      console.log(`error thrown when trying to read stored flight quotes: ${err.stack}`);
+    }
+  );
+}
+
+function testGetFlightQuoteDetailsTripStarted() {
+  const tripData = new TripData("test-austin");
+  tripData.addTripDetailsAndPersist({
+    destination: "usa",
+    startDate: "5/1/17",
+    tripStarted: true,
+    duration: 6
+  });
+  const tip = new TripInfoProvider(tripData, "san francisco");
+  tip.getFlightQuotes().then(
+    function(result) {
+      console.log(`Expected result is true. Actual result is ${result}`);
+    },
+    function(err) {
+      console.log(`Error when testing trip started: ${err.stack}`);
+      throw err;
+    }
+  );
+  tip.getStoredFlightQuotes().then(
+    function(result) {
+      console.log(`Expected noflight key to exist. Actual noflight key value: ${result.noflight}`);
+    },
+    function(err) {
+      console.log(`Error when testing trip started: ${err.stack}`);
+    }
+  );
+}
+
+// testGetFlightQuoteDetails();
+testGetFlightQuoteDetailsTripStarted();
+
 // testGetActivity();
-testGetWeatherInformation();
+// testGetWeatherInformation();
 // testGetStoredWeatherDetails();

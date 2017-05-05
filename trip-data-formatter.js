@@ -58,7 +58,7 @@ TripDataFormatter.prototype.formatTripDetails = function(weatherDetails, activit
   // TODO: Do this for weather, flight and other details..
   return html.replace("${tripName}",this.trip.rawTripName)
     .replace("${activityDetails}",activities)
-    .replace("${weatherDetails}", formatWeatherDetails.call(this, weatherDetails))
+    .replace("${weatherDetails}", _formatWeatherDetails.call(this, weatherDetails))
     .replace("${stayDetails}",listAsHtml(comments.stay))
     .replace("${flightDetails}",listAsHtml(comments.flight))
     .replace("${carDetails}",listAsHtml(comments.car))
@@ -90,7 +90,7 @@ TripDataFormatter.prototype.formatPackList = function(headers) {
   return packList.toPack;
 }
 
-function formatWeatherDetails(weatherDetails) {
+function _formatWeatherDetails(weatherDetails) {
   const keys = Object.keys(weatherDetails);
   if(keys.indexOf("nocity") > -1) {
     // no weather details available since the trip does not have any city information
@@ -114,7 +114,7 @@ function formatWeatherDetails(weatherDetails) {
 
 TripDataFormatter.prototype.formatWeatherDetails = function(weatherDetails, addlWeatherDetails) {
   const html = fs.readFileSync("html-templates/weather-details.html", 'utf8');
-  const formattedWeatherDetails = formatWeatherDetails.call(this, weatherDetails);
+  const formattedWeatherDetails = _formatWeatherDetails.call(this, weatherDetails);
   return html.replace("${citiesWeatherDetails}", formattedWeatherDetails)
              .replace("${additionalWeatherDetails}", toLink(addlWeatherDetails));
 }
@@ -221,6 +221,10 @@ function _itinDetailsHtml(title, details) {
 
 TripDataFormatter.prototype.formatFlightQuotes = function(flightDetails) {
   const html = fs.readFileSync(`${baseDir}/html-templates/flight-quote-details.html`,'utf-8');
+  const keys = Object.keys(flightDetails);
+  if(keys.indexOf("noflight") > -1) {
+    return html.replace("${flightDetails}", flightDetails.noflight);
+  }
   let flightDetailsHtml = "";
   for(let i = 0; i < flightDetails.length; i++) {
     const thisQuote = flightDetails[i];

@@ -1,7 +1,7 @@
 'use strict';
 const WebpageHandler = require('./webpage-handler');
 const Sessions = require('./sessions');
-const ss = new Sessions();
+const ss = Sessions.get();
 
 function Response() {
 }

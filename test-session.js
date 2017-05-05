@@ -1,7 +1,7 @@
 'use strict';
 
 const Sessions = require('./sessions');
-const ss = new Sessions();
+const ss = Sessions.get();
 
 function testFindOrCreateAndContextUpdates() {
   const s1 = ss.findOrCreate("1");

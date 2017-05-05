@@ -38,6 +38,8 @@ describe("Browse Quotes tests", function() {
         const quotes = contents;
         console.log(`received ${quotes.length} quotes`);
         expect(quotes.length).to.be.above(0);
+        expect(quotes.departureDate).to.be.a('string');
+        expect(quotes.returnDate).to.be.a('string');
         for(let i = 0; i < quotes.length; i++) {
           logger.debug(`${JSON.stringify(quotes[i])}`);
           expect(quotes[i].price).to.be.above(0);
@@ -234,11 +236,17 @@ describe("Browse Quotes tests", function() {
       originCarrier: ["A", "B", "C"],
       returnCarrier: ["A", "B", "D"]
     }];
+    const startDate = "2017-05-14";
+    const returnDate = "2017-05-19";
+    quotes.departureDate = startDate;
+    quotes.returnDate = returnDate;
     let expectedQuotes = [];
     expectedQuotes = expectedQuotes.concat(quotes.slice(0,1)).concat(quotes.slice(2,4)).concat(quotes.slice(5,6));
+    expectedQuotes.departureDate = startDate;
+    expectedQuotes.returnDate = returnDate;
     logger.debug(`expected quotes is ${JSON.stringify(expectedQuotes)}`);
-    const browseQuotes = new BrowseQuotes("san francisco", "austin", "2017-05-14", "2017-05-19");
-    expect(browseQuotes.testing_resolveDuplicates(quotes)).to.deep.equal(expectedQuotes);
+    const actualQuotes = new BrowseQuotes("san francisco", "austin", startDate, returnDate).testing_resolveDuplicates(quotes);
+    expect(actualQuotes).to.deep.equal(expectedQuotes);
   });
 
   it("increase quote count", function() { 

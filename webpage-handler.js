@@ -17,7 +17,7 @@ function WebpageHandler(id, tripName) {
   this.fbidHandler = new FbidHandler();
   this.fbid = this.fbidHandler.decode(id);
   this.tripName = tripName;
-  this.sessions = new Sessions();
+  this.sessions = Sessions.get();
   this.session = this.sessions.find(this.fbid);
   if(_.isNull(this.session)) {
     logger.warn(`No session exists for id ${this.fbid}`);
@@ -82,14 +82,17 @@ WebpageHandler.prototype.displayFlightDetails = function(res) {
 
 WebpageHandler.prototype.displayFlightQuotes = function(req, res) {
   const trip = this.trip.data;
-  const promise = new BrowseQuotes(this.session.hometown, trip.portOfEntry, trip.startDate, trip.returnDate).getStoredQuotes();
+  const tip = new TripInfoProvider(this.trip, this.session.hometown);
+  const promise = tip.getStoredFlightQuotes();
   const self = this;
   promise.done(
     function(contents) {
+      if(contents.length === 0) return res.send(self.formatted.formatFlightQuotes("{noflight: 'No information yet for this segment'}"));
       return res.send(self.formatter.formatFlightQuotes(contents));
     },
     function(err) {
-      throw new Error(err);
+      logger.error(`Error getting flight quotes: ${err.stack}`);
+      return res.send(self.formatted.formatFlightQuotes("{noflight: 'No information yet for this segment'}"));
     }
   );
 }
@@ -255,7 +258,7 @@ function formParseCallback(err, fields, files, res, existingTrip) {
   else {
     logger.info(`formParseCallback: This is an existing trip. Not adding port of entry`);
   }
-  logger.info(`formParseCallback: The cities chosen for trip ${this.session.tripNameInContext} are: ${JSON.stringify(cities)}. portOfEntry is ${portOfEntry}`);
+  logger.debug(`formParseCallback: The cities chosen for trip ${this.session.tripNameInContext} are: ${JSON.stringify(cities)}. portOfEntry is ${portOfEntry}`);
   this.canProceed = true;
   return res.send(this.formatter.formatCityChoicePage());
 }

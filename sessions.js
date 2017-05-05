@@ -7,9 +7,17 @@ const TripData = require('./trip-data');
 
 const MY_RECIPIENT_ID = "1120615267993271";
 
+let sessions;
+
 // This will contain all user sessions. See session.js for additional details about a session.
+// For PRIVATE USE ONLY. Use Sessions.get instead
 function Sessions() {
   this.sessions = {};
+}
+
+Sessions.get = function() {
+  if(!sessions) sessions = new Sessions();
+  return sessions;
 }
 
 Sessions.prototype.findOrCreate = function(fbid) {
@@ -50,6 +58,13 @@ Sessions.prototype.allSessions = function() {
   return this.sessions;
 }
 
+Sessions.prototype.reloadSession = function(sessionId) {
+  if(!this.sessions[sessionId]) return;
+  const fbid = this.sessions[sessionId].fbid;
+  this.sessions[sessionId] = Sessions.retrieveSession.call(this, fbid);
+  return this.sessions[sessionId];
+}
+
 // This is a class method, not an instance method
 Sessions.retrieveSession = function(fbid) {
   const file = `${Session.sessionBaseDir}/${fbid}.session`;
@@ -60,6 +75,10 @@ Sessions.retrieveSession = function(fbid) {
       const session = new Session(data.fbid,data.sessionId);
       session.tripNameInContext = data.tripNameInContext;
       session.rawTripNameInContext = data.rawTripNameInContext;
+      if(session.tripNameInContext) {
+        session.noTripContext = false;
+        if(!session.rawTripNameInContext) throw new Error(`session has tripNameInContext ${session.tripNameInContext} but no rawTripNameInContext. Possible BUG!`);
+      }
       session.hometown = data.hometown;
       Object.keys(data.trips).forEach(name => {
         // we know that the name of the trip that was persisted is encoded.
@@ -113,11 +132,11 @@ function findSessionId(fbid) {
 
 Sessions.prototype.testing_delete = function(fbid) {
   const session = this.find(fbid);
+  if(!session) return;
   session.testing_delete();
   delete this.sessions[session.sessionId];
 }
 
 /********************* TESTING APIs ****************/
-
 
 module.exports = Sessions;

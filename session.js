@@ -123,7 +123,7 @@ Session.prototype.persistSession = function() {
   try {
     const filename = file.call(this);
     fs.writeFileSync(filename, JSON.stringify(data));
-    console.log(`persistSession: wrote ${(JSON.stringify(data)).length} bytes to file ${filename}`);
+    logger.debug(`persistSession: wrote ${(JSON.stringify(data)).length} bytes to file ${filename}`);
   }
   catch(err) {
       logger.error(`error writing to session file: ${file}`, err.stack);
@@ -209,16 +209,19 @@ Session.prototype.getCurrentAndFutureTrips = function() {
   let trips = [];
   let pastTrips = false;
   // Filter past trips
+  let daysToEndOfTrip = -1;
   this.allTrips().forEach(trip => {
-    logger.debug(`getCurrentAndFutureTrips: trip is ${trip.rawTripName}`);
-    const end = moment(new Date(trip.data.returnDate).toISOString());
-    const daysToTrip = end.diff(moment(),'days');
+    // logger.debug(`getCurrentAndFutureTrips: trip is ${trip.rawTripName}`);
+    if(trip.data.returnDate != "unknown") {
+      const end = moment(new Date(trip.data.returnDate).toISOString());
+      daysToEndOfTrip = end.diff(moment(),'days');
+    }
     // if we don't know the start date for whatever reason, include those trips as well
-    if(!trip.data.startDate || daysToTrip >= 0) {
+    if(!trip.data.startDate || daysToEndOfTrip >= 0 || daysToEndOfTrip <= 0) {
       trips.push({
         name: trip.data.name,
         rawName: trip.data.rawName,
-        daysToTrip: daysToTrip
+        daysToTrip: daysToEndOfTrip
       });
     }
     else {

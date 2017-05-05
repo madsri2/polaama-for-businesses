@@ -45,7 +45,7 @@ describe("Test Notifications", function() {
       destination: tripName,
       startDate: tripStartDate
     };
-    const sessions = new Sessions();
+    const sessions = Sessions.get();
     const session = sessions.find("1111111111111111");
     // set up, modeled after webhook-post-handler:createNewTrip
     session.addTrip(tripDetails.destination);
@@ -62,7 +62,7 @@ describe("Test Notifications", function() {
   });
 
   it("test get boarding pass", function() {
-    const sessions = new Sessions();
+    const sessions = Sessions.get();
     const session = sessions.find("1111111111111111");
     const notifier = new Notifier (sessions);
     const boardingPass = notifier.getBoardingPass(session.tripData(), session.fbid);

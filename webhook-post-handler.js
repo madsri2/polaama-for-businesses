@@ -20,9 +20,10 @@ const Promise = require('promise');
 const validator = require('node-validator');
 
 // NOTE: WebhookPostHandler is a singleton, so all state will need to be maintained in this.session object. fbidHandler is also a singleton, so that will be part of the WebhookPostHandler object.
-function WebhookPostHandler(session) {
-  logger.debug(`New webhook-post-handler constructed`);
-  this.sessions = new Sessions();
+let TEST_MODE = false;
+function WebhookPostHandler(session, testing) {
+  if(testing) TEST_MODE = true; // Use sparingly. Currently, only used in callSendAPI
+  this.sessions = Sessions.get();
   this.fbidHandler = new FbidHandler();
   if(!_.isUndefined(session)) {
     logger.info(`WebhookPostHandler: A session with id ${session.sessionId} was passed. Using that in the post hook handler`);
@@ -240,7 +241,8 @@ function displayTripDetails() {
             title:"Flight",
             webview_height_ratio: "compact",
             messenger_extensions: true,
-            fallback_url: sendUrl.call(this, tripData.flightUrlPath())
+            // fallback_url: sendUrl.call(this, tripData.flightUrlPath())
+            fallback_url: sendUrl.call(this, tripData.flightQuoteUrlPath())
           }, 
           /*{ // NOT supported yet!
           title: "Get Stay details",
@@ -301,15 +303,17 @@ WebhookPostHandler.prototype.startPlanningTrip = function() {
 
   const tip = new TripInfoProvider(this.session.tripData(), this.session.hometown);
   const activities = Promise.denodeify(tip.getActivities.bind(tip));
-  const flightDetails = Promise.denodeify(tip.getFlightDetails.bind(tip));
+  // const flightDetails = Promise.denodeify(tip.getFlightDetails.bind(tip));
+  const flightQuotes = tip.getFlightQuotes();
   const weatherDetails = Promise.denodeify(tip.getWeatherInformation.bind(tip));
   const dtdCallback = displayTripDetails.bind(this);
 
   // TODO: If this is a beach destinataion, use http://www.blueflag.global/beaches2 to determine the swimmability. Also use http://www.myweather2.com/swimming-and-water-temp-index.aspx to determine if water conditions are swimmable
   const self = this;
   activities()
-    .then(flightDetails())
+    // .then(flightDetails())
     .then(weatherDetails())
+    .then(flightQuotes)
     .done(
       function(response) {
         const createItin = new CreateItinerary(self.session.tripData(), self.session.hometown);
@@ -355,7 +359,7 @@ function emailOrEnterDetails() {
       id: this.session.fbid
     },
     message: {
-      text: `You can choose to enter your details or simply email your flight itinerary (or boarding pass) and I will automatically create your trip`,
+      text: `Enter your details or simply email your flight itinerary (or boarding pass) and I will automatically create your trip`,
       quick_replies: quickReplies
     }
   });
@@ -370,8 +374,11 @@ function planNewTrip(userChoice) {
   }
   logger.info("User wants to plan a new trip");
   if(userChoice.enter_details) {
-    sendTextMessage(this.session.fbid, "Can you provide details about your trip: destination country, start date, duration (in days) as a comma separated list?"); 
-    sendTextMessage(this.session.fbid, "Example: India,11/01,20 or India,11/01/17,20");
+    const messages = [
+      "Can you provide details about your trip: destination country, start date, duration (in days) as a comma separated list?",
+      "Example: India,11/01,20 or India,11/01/17,20"
+    ];
+    sendMultipleMessages(this.session.fbid, textMessages.call(this, messages));
 	  this.session.awaitingNewTripDetails = true;
     this.session.planningNewTrip = true;
     return;
@@ -562,6 +569,8 @@ function sendPastTrips() {
 }
 
 function sendTripButtons(addNewTrip) {
+  // reload session to get any new trips that were created by boarding-pass-handler.js
+  this.session = this.sessions.reloadSession(this.session.sessionId);
 	// Anytime we send trips for users to choose from, invalidate the session's tripData so it can be re-read from file. This way, any information that was added to the trip (by other session instances like the one in webpage-handler.js) will be re-read.
 	this.session.invalidateTripData();
   const tripDetails = this.session.getCurrentAndFutureTrips();
@@ -724,7 +733,7 @@ function validateStartDate(value, onError) {
     return onError(error[0].message, error.parameter, error.value);
   }
   const startDate = moment.tz(value, "Etc/UTC");
-  logger.debug(`Time now is ${now}; Passed value is ${new Date(value).toISOString()}. Difference is ${now.diff(startDate, 'days')}`);
+  // logger.debug(`Time now is ${now}; Passed value is ${new Date(value).toISOString()}. Difference is ${now.diff(startDate, 'days')}`);
   if(now.diff(startDate,'days') >= 0) {
     return onError("Provided start date is in the past", "", value);
   }
@@ -777,7 +786,7 @@ function extractNewTripDetails(messageText) {
   const check = validator.isObject()
     .withRequired('duration', validator.isInteger({min: 1, max: 200}))
     .withRequired('startDate', customValidator)
-    .withRequired('destination', validator.isString({regex: /^[A-Za-z]+$/}));
+    .withRequired('destination', validator.isString({regex: /^[A-Z a-z]+$/}));
   
   var error = null;
   validator.run(check, tripDetails, function(ec, e) {
@@ -799,11 +808,27 @@ function extractNewTripDetails(messageText) {
 	createNewTrip.call(this, tripDetails);
 }
 
+// TODO: this duplicates functionality in webpage-handler.formParseCallback. Fix it. 
 function extractCityDetails(messageText) {
-  const cities = messageText.split(',');
-  // TODO: Validate city
+  const input = messageText.split(',');
+  const regex = /^[A-Z a-z]+\((\d+)\)/;
+  const check = validator.isArray(validator.isString({'regex': regex, message: "It should be of the form 'city(2)'"}), {min: 1});
+  let error = null;
+  validator.run(check, input, function(ec, e) {
+    if(ec > 0) error = new Error(`Invalid input value "${e[0].value}": ${e[0].message}`);
+  });
+  if(error) throw error;
+  let cities = [];
+  let numberOfDays = [];
+  input.forEach(item => {
+    cities.push(item.split('(')[0]);
+    numberOfDays.push(item.match(regex)[1]);
+  });
+  
+  // TODO: Validate city is valid by comparing against list of known cities
   this.session.tripData().addCities(cities);
   this.session.tripData().addPortOfEntry(cities[0]); // assume that the first city is port of entry. See determineResponseType 3rd step in new trip workflow
+  this.session.tripData().addCityItinerary(cities, numberOfDays);
   // indicate that tripData for this trip is stale in the session object.
   this.session.invalidateTripData();
   this.session.awaitingCitiesForNewTrip = false;
@@ -814,7 +839,11 @@ function addCitiesToExistingTrip() {
     const tripData = this.session.tripData();
     if(!determineCities.call(this, true /* existingTrip */)) {
       if(!this.session.awaitingCitiesForExistingTrip) {
-        sendTextMessage(this.session.fbid, `What cities in ${tripData.data.country} are you traveling to (comma separated list)?`);
+        const messages = [
+          `For your trip to ${tripData.data.country}, add cities and number of days in each city in the following format`,
+          `seattle(3),portland(4),sfo(5)` 
+        ];
+        sendMultipleMessages(this.session.fbid, textMessages.call(this, messages));
         this.session.awaitingCitiesForExistingTrip = true;
         return;
       }
@@ -938,7 +967,14 @@ function determineResponseType(event) {
     // 3) Get cities for the trip.
     // TODO: Handle case where user does not yet know which cities they are going to!
     if(this.session.awaitingCitiesForNewTrip) {
-      extractCityDetails.call(this, messageText);
+      try {
+        extractCityDetails.call(this, messageText);
+      }
+      catch(e) {
+        logger.error(`determineResponseType: exception calling extractCityDetails: ${e.stack}`);
+        sendTextMessage(this.session.fbid, e.message);
+        return;
+      }
       const tripData = this.session.tripData();
       if(tripData.data.cities) {
         logger.info(`determineResponseType: Start planning trip for customer`);
@@ -955,8 +991,12 @@ function determineResponseType(event) {
     const tripData = this.session.tripData();
     if(!determineCities.call(this)) {
       // ask user to enter cities and port of entry because we don't have that data yet.
-      sendTextMessage(this.session.fbid, `What cities in ${tripData.data.country} are you traveling to (comma separated list)?`);
-      sendTextMessage(this.session.fbid, `The first city in your list will be used as your port of entry`);
+      const messages = [
+        `For your trip to ${tripData.data.country}, add cities and number of days in each city in the following format`,
+        `seattle(3),portland(4),sfo(5)`,
+        `The first city in your list will be the port of entry` 
+      ];
+      sendMultipleMessages(this.session.fbid, textMessages.call(this, messages));
       this.session.awaitingCitiesForNewTrip = true;
       return;
     }
@@ -1640,6 +1680,14 @@ function sendTextMessage(senderID, messageText) {
   callSendAPI(getTextMessageData(senderID, messageText));
 }
 
+function textMessages(messages) {
+  const fbMessages = [];
+  messages.forEach(msg => {
+    fbMessages.push(getTextMessageData(this.session.fbid, msg));
+  });
+  return fbMessages;
+}
+
 // send messages strictly one after another
 function sendMultipleMessages(recipientId, messages) {
   // as a precaution, don't send more than 3 messages at once.
@@ -1663,11 +1711,12 @@ function sendMultipleMessages(recipientId, messages) {
       logger.error(`sendMultipleMessages: Error sending message: ${error}`);
       return;
     }
-    logger.error(`Unable to send message to recipient ${recipientId}. status code is ${response.statusCode}. Message from FB is <${response.body.error.message}>; Error type: ${response.body.error.type}`);
+    logger.error(`Unable to send message <${JSON.stringify(messages[0])}> to recipient ${recipientId}. status code is ${response.statusCode}. Message from FB is <${response.body.error.message}>; Error type: ${response.body.error.type}`);
   });  
 }
 
 function callSendAPI(messageData) {
+  if(TEST_MODE) return console.log(`MESSAGE TO CHAT: ${JSON.stringify(messageData)}`);
   request({
     uri: 'https://graph.facebook.com/v2.6/me/messages',
     qs: { access_token: (new SecretManager()).getPageAccessToken() },
@@ -1679,5 +1728,11 @@ function callSendAPI(messageData) {
     if(response.statusCode != 200) logger.error(`Unable to send message ${JSON.stringify(messageData)}. status code is ${response.statusCode}. Message from FB is <${response.body.error.message}>; Error type: ${response.body.error.type}`);
   });  
 }
+
+// ********************************* TESTING *************************************
+WebhookPostHandler.prototype.testing_determineResponseType = determineResponseType;
+WebhookPostHandler.prototype.testing_createNewTrip = createNewTrip;
+
+// ********************************* TESTING *************************************
 
 module.exports = WebhookPostHandler;

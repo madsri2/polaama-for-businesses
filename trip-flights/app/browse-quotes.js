@@ -36,7 +36,6 @@ BrowseQuotes.prototype.getCachedQuotes = function() {
     }
   ).then(
     function(result) {
-      logger.info(`second promise: entering`);
       return new Promise(
         function(fulfil, reject) {
           (new IataCodeGetter(self.destCity)).getCode(
@@ -224,6 +223,9 @@ function resolveDuplicates(quotes) {
     start = duplicateIndices[i] + 1;
   }
   finalList = finalList.concat(quotes.slice(start, quotes.length));
+  // piggyback on Array being an object and update some fields
+  finalList.departureDate = quotes.departureDate;
+  finalList.returnDate = quotes.returnDate;
   return finalList;
 }
 

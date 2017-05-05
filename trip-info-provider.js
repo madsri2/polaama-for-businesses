@@ -1,6 +1,9 @@
 'use strict';
 const fs = require('fs');
 const _ = require('lodash');
+// My npm linked packages
+const BrowseQuotes = require('trip-flights/app/browse-quotes');
+// My packages
 const WeatherInfoProvider = require('./weather-info-provider');
 const ActivityInfoProvider = require('./activity-info-provider');
 const logger = require('./my-logger');
@@ -129,7 +132,7 @@ TripInfoProvider.prototype.getFlightDetails = function(callback) {
   const tripData = this.trip.data;
   // TODO: Putting this logic here is a hack. Ideally it would be in webhook-post-handler:startPlanningTrip. But because we are using promise there and I don't know of a clean way to NOT call getFlightDetails if the trip has started, I am placing this code here.
   if(tripData.tripStarted) {
-    logger.info(`Trip ${tripData.rawTripName} has already started. Not getting flight details. Simply returning!`);
+    logger.info(`Trip ${tripData.rawName} has already started. Not getting flight details. Simply returning!`);
     return callback();
   }
   const fip = new FlightInfoProvider(this.hometown, tripData.portOfEntry, tripData.startDate, tripData.returnDate);
@@ -142,15 +145,26 @@ TripInfoProvider.prototype.getFlightDetails = function(callback) {
   }
 }
 
-TripInfoProvider.prototype.getFlightQuoteDetails = function() {
+TripInfoProvider.prototype.getFlightQuotes = function() {
   const tripData = this.trip.data;
   // TODO: Putting this logic here is a hack. Ideally it would be in webhook-post-handler:startPlanningTrip. But because we are using promise there and I don't know of a clean way to NOT call getFlightDetails if the trip has started, I am placing this code here.
   if(tripData.tripStarted) {
-    logger.info(`getFlightQuoteDetails: Trip ${tripData.rawTripName} has already started. Not getting flight details. Simply returning!`);
+    logger.warn(`getFlightQuoteDetails: Trip ${tripData.rawName} has already started. Not getting flight details. Simply returning!`);
     return Promise.resolve(true);
   }
-  const browseQuotes = new BroweQuotes(this.hometown, tripData.portOfEntry, tripData.startDate, tripData.returnDate);
-  return fip.getCachedQuotes();
+  const browseQuotes = new BrowseQuotes(this.hometown, tripData.portOfEntry, tripData.startDate, tripData.returnDate);
+  return browseQuotes.getCachedQuotes();
+}
+
+TripInfoProvider.prototype.getStoredFlightQuotes = function() {
+  const tripData = this.trip.data;
+  if(tripData.tripStarted) {
+    return Promise.resolve({
+      noflight: "Since the trip has already started, no flight information is available.<br>Support for intracity flights will be available soon."
+    });
+  }
+  const browseQuotes = new BrowseQuotes(this.hometown, tripData.portOfEntry, tripData.startDate, tripData.returnDate);
+  return browseQuotes.getStoredQuotes();
 }
 
 TripInfoProvider.prototype.getStoredFlightDetails = function() {
