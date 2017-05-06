@@ -184,28 +184,24 @@ TripData.prototype.getPortOfEntry = function() {
   return this.data.portOfEntry;
 }
 
-TripData.prototype.addCities = function(cities) {
-  this.data.cities = [];
-  for(let i = 0; i < cities.length; i++) {
-    this.data.cities.push(myEncode(cities[i]));
-  }
-  this.persistUpdatedTrip();
-}
-
 // This function resets the city itinerary object and cities object.
 TripData.prototype.addCityItinerary = function(cities, numOfDays) {
-  if(cities.length !== numOfDays.length) {
-    throw new Error("cities and numOfDays array lengths are different. cannot persist city itinerary information");
+  // read the data from file to make sure we don't miss anything.
+  this.retrieveTripData();
+  if(cities.length !== numOfDays.length) throw new Error("cities and numOfDays array lengths are different. cannot persist city itinerary information");
+  if(!this.data.cityItin) {
+    this.data.cityItin = {};
+    this.data.cityItin.cities = [];
+    this.data.cityItin.numOfDays = [];
   }
-  this.data.cityItin = {};
-  this.data.cityItin.cities = [];
-  this.data.cities = [];
+  if(!this.data.cities) this.data.cities = [];
   for(let i = 0; i < cities.length; i++) {
     this.data.cityItin.cities.push(myEncode(cities[i]));
     this.data.cities.push(myEncode(cities[i]));
   }
-  this.data.cityItin.numOfDays = numOfDays;
+  this.data.cityItin.numOfDays = this.data.cityItin.numOfDays.concat(numOfDays);
   logger.debug(`addCityItinerary: City itinerary is ${JSON.stringify(this.data.cityItin)}`);
+  logger.debug(`addCityItinerary: City list is ${this.data.cities}`);
   this.persistUpdatedTrip();
 }
 

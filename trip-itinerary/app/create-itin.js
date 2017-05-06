@@ -168,7 +168,6 @@ function setWeatherDetails(itinDate, country, cityList) {
 */
 function createCommonItinForEachDay(cityList, country) {
   const nextDayStr = formatDate(this.nextDay);
-  logger.debug(`createSingleDayItinerary: Setting itin value for day ${nextDayStr}`);
   if(this.itin[nextDayStr]) {
     // Possible bug
     throw new Error(`createCommonItinForEachDay: Possible BUG! Itinerary for ${nextDayStr} should not be defined, but it is. Value is ${JSON.stringify(this.itin[nextDayStr])}`);
@@ -178,14 +177,12 @@ function createCommonItinForEachDay(cityList, country) {
   if(this.tripData.arrivalDate && this.tripData.arrivalTime) {
     const arrivalDate = formatDate(new Date(this.tripData.arrivalDate));
     if(arrivalDate === nextDayStr) {
-      logger.debug(`createCommonItinForEachDay: setting arrival time ${this.tripData.arrivalTime} for day ${nextDayStr}`);
       this.itin[nextDayStr].arrivalTime = this.tripData.arrivalTime;
     }
   }
   if(this.tripData.returnDate && this.tripData.departureTime) {
     const departureDate = formatDate(new Date(this.tripData.returnDate));
     if(departureDate === nextDayStr) {
-      logger.debug(`createCommonItinForEachDay: setting departure time ${this.tripData.departureTime} for day ${nextDayStr}`);
       this.itin[nextDayStr].departureTime = this.tripData.departureTime;
     }
   }

@@ -102,7 +102,7 @@ function extractActivityDetails(key) {
   }
   const json = JSON.parse(body);
   if(_.isUndefined(json.items)) {
-    logger.error("extractActivityDetails: Custom search results from file ${srFile} does not contain items property.");
+    logger.error(`extractActivityDetails: Custom search results from file ${srFile} does not contain items property.`);
     return determineResponse.call(this);
   }
   json.items.forEach(item => {

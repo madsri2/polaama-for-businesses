@@ -62,7 +62,7 @@ Logger.prototype.init = function() {
     ],
     exceptionHandlers: [
       new (winston.transports.Console)({ json: false, timestamp: true }),
-      new winston.transports.File({ filename: `${logDir}/exceptions.log`, json: false })
+      new winston.transports.File({ filename: `${this.fileName}`, json: false })
     ],
     exitOnError: false
   });

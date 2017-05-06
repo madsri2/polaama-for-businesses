@@ -1,1 +1,0 @@
-{"full_name":"Madhuvanesh Parthasarathy","pnr_number":"AGUPED","flight_number":"VX222","departure_airport":{"airport_code":"SFO","city":"San Francisco"},"arrival_airport":{"airport_code":"AUS","city":"Austin"},"flight_schedule":{"departure_time":"2017-5-19T17:15"},"boardingPassImageUrl":"https://polaama.com/aeXf/austin/boarding-pass-image"}

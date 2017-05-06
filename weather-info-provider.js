@@ -70,7 +70,7 @@ WeatherInfoProvider.prototype.getWeather = function(responseCallback) {
 
 WeatherInfoProvider.prototype.getWeatherStateUri = function(state) {
   const uri = `http://api.wunderground.com/api/16f4fdcdf70aa630/planner_${this.timeRange}/q/${state}/${this.city}.json`;
-  logger.info(`getWeatherStateUri: Getting weather info from wunderground with url <${uri}>`);
+  logger.info(`getWeatherStateUri: Getting weather info for city ${this.city} from wunderground with url <${uri}>`);
   this.triedWithStateUri = true;
   request({
     uri: uri,
@@ -83,7 +83,7 @@ function handleUrlResponse(error, res, body) {
   if (!error && res.statusCode == 200) {
     const json = JSON.parse(body);
     if(json.response.error) {
-      logger.error(`wunderground returned an error: ${JSON.stringify(json.response.error)}`);
+      logger.error(`wunderground returned an error for city ${this.city}: ${JSON.stringify(json.response.error)}`);
       return responseCallback(this.city, undefined);
     }
     if(!json.trip) {
@@ -93,26 +93,26 @@ function handleUrlResponse(error, res, body) {
         const state = cityDetails.state;
         return this.getWeatherStateUri(state);
       }
-      logger.error(`wunderground response does not contain key "trip": ${JSON.stringify(json)}`);
+      logger.error(`wunderground response does not contain key "trip" for city ${this.city}: ${JSON.stringify(json)}`);
       return responseCallback(this.city, undefined);
     }
     const file = weatherFile.call(this);
-    logger.info(`Writing ${body.length} bytes into file ${file}`);
+    logger.info(`Writing ${body.length} bytes into file ${file} for city ${this.city}`);
     try {
       fs.writeFileSync(file, body);
     }
     catch(err) {
-     logger.error(`could not write data from wunderground into ${file}: ${err.stack}`);
+     logger.error(`could not write data from wunderground into ${file} for city ${this.city}: ${err.stack}`);
      return responseCallback(this.city, undefined);
     } 
     return responseCallback(this.city, extractWeatherDetails.call(this)); 
   } else {
-    logger.error(`Unable to send message: Response: ${res.statusCode}; Error: ${error}`);
+    logger.error(`Unable to send message for city ${this.city}: Response: ${res.statusCode}; Error: ${error}`);
     // retry 3 times.
     if(this.retry++ < 3) {
       // be careful of retrying because wundeground docks you for making more than 10 calls in a 1 minute period (https://www.wunderground.com/weather/api/d/16f4fdcdf70aa630/edit.html). Using 25 seconds so we don't retry more than twice in 1 minute.
       const sleepSec = 25 * this.retry;
-      logger.warn(`weather condition undefined. retrying after sleep for ${sleepSec} seconds`);
+      logger.warn(`weather condition undefined for city ${this.city}. retrying after sleep for ${sleepSec} seconds`);
       const timeout = setTimeout(this.getWeather.bind(this), sleepSec * 1000, responseCallback);
       return;
     }

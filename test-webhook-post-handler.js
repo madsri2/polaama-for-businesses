@@ -14,13 +14,6 @@ function testGatheringDetailsForNewTrip() {
   const dtdCallback = function() { 
     console.log("All callbacks successfully called");
   }
-  /* 
-  // Portugal
-  const td = new TripData("portugal");
-  td.addCities(["lisbon", "obidos", "lagos"]);
-  td.addPortOfEntry("lisbon");
-  const tip = new TripInfoProvider(td, "seattle");
-  */
   // Iceland
   const td = new TripData("iceland");
   td.addTripDetailsAndPersist({
@@ -28,7 +21,7 @@ function testGatheringDetailsForNewTrip() {
     destination: "iceland",
     duration: 8,
   });
-  td.addCities(["landmannalaugar","reykjavik"]);
+  td.addCityItinerary(["landmannalaugar","reykjavik"],[4,4]);
   td.addPortOfEntry("reykjavik");
   const tip = new TripInfoProvider(td, "seattle");
   
@@ -48,19 +41,16 @@ function testGatheringDetailsForNewTrip() {
     });
 }
 
-function testExtractingCityDetails() {
+function setup() {
   // set up
-  const event = {
-    message: {
-      text: "city(1),cityx(2),city y(3)"
-    }
-  };
   const myFbid = "123";
   const tripName = "test-extractCityDetails";
   const sessions = Sessions.get();
+  // first clean up previous test state
   sessions.testing_delete(myFbid);
   new TripData(tripName).testing_delete();
   const session = sessions.findOrCreate(myFbid);
+  // create new trip
   const handler = new WebhookPostHandler(session, true /* testing */);
   handler.testing_createNewTrip({
     destination: tripName,
@@ -68,11 +58,41 @@ function testExtractingCityDetails() {
     duration: 10
   });
   session.persistHometown("san francisco");
+  return handler;
+}
+
+function testExtractingCityDetails() {
+  const handler = setup();
+  const session = handler.session;
+  // setup state
   session.planningNewTrip = true;
   session.awaitingCitiesForNewTrip = true;
+  // test
+  const event = { message: { text: "city(1),cityx(2),city y(3)" } };
   handler.testing_determineResponseType(event);
 }
 
-testExtractingCityDetails();
+function testAddingCityToExistingTrip() {
+  const handler = setup();
+  const session = handler.session;
+  // first add three cities.
+  // setup state
+  session.planningNewTrip = true;
+  session.awaitingCitiesForNewTrip = true;
+  // test
+  {
+    const event = { message: { text: "city(1),cityx(2),city y(3)" } };
+    handler.testing_determineResponseType(event);
+  }
+  logger.debug(`*************** Existing Trip *****************`);
+  // setup state
+  session.awaitingCitiesForExistingTrip = true;
+  // now test adding 4th city
+  const event = { message: { text: "another city(6)" } };
+  handler.testing_determineResponseType(event);
+}
+
+testAddingCityToExistingTrip();
+// testExtractingCityDetails();
 
 // testGatheringDetailsForNewTrip();

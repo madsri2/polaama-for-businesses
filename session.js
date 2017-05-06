@@ -1,5 +1,4 @@
 'use strict';
-const _=require('lodash');
 const fs = require('fs');
 const Encoder = require('./encoder');
 const moment = require('moment');
@@ -95,8 +94,8 @@ function Session(fbid,sessionId) {
   this.fbid = fbid;
   this.botMesgHistory = [];
   this.trips  = {};
-  this.tripNameInContext = undefined;
-  this.rawTripNameInContext = undefined;
+  this.tripNameInContext = null;
+  this.rawTripNameInContext = null;
   this.noTripContext = true; // by default, there will be no trip context
 }
 
@@ -174,7 +173,7 @@ Session.prototype.invalidateTripData = function() {
     return;
   }
 	logger.debug(`invalidateTripData: Marking trip ${sessionTrip.tripData.rawTripName} as stale. Session id is ${this.guid}`);
-	sessionTrip.tripData = undefined;
+	sessionTrip.tripData = null;
 }
 
 Session.prototype.tripData = function() {
@@ -250,7 +249,7 @@ Session.prototype.addTrip = function(tripName) {
   // typically, when a trip is added to the session, that is also the trip in context that the user wants to discuss.
   this.tripNameInContext = encTripName;
   this.rawTripNameInContext = tripName;
-  if(_.isUndefined(this.trips[encTripName])) {
+  if(!this.trips[encTripName]) {
     // this is only possible in case of a new trip created in this session. 
     logger.info(`Creating new trip for session ${this.fbid} for trip ${this.tripNameInContext}`);
     // define a tripName json object.
@@ -274,8 +273,8 @@ Session.prototype.addTrip = function(tripName) {
 }
 
 Session.prototype.addNewTrip = function(tripName, trip) {
-  if(_.isUndefined(tripName)) {
-    logger.warn("addNewTrip: undefined tripName. Cannot add new trip to session.");
+  if(!tripName) {
+    logger.warn("addNewTrip: undefined or null tripName. Cannot add new trip to session.");
     return;
   }
   const encTripName = TripData.encode(tripName);
@@ -300,12 +299,14 @@ Session.prototype.updateAiContext = function(context) {
 }
 
 Session.prototype.getTrip = function(tripName) {
-  if(_.isUndefined(tripName) || _.isUndefined(this.trips[TripData.encode(tripName)])) {
+  if(!tripName || !this.trips[TripData.encode(tripName)]) {
+    const errString = (tripName) ? `could not find trip ${TripData.encode(tripName)} in this.trips` : `passed tripName was null or undefined`;
+    logger.error(errString);
     return null;
   }
   const trip = this.trips[TripData.encode(tripName)];
   // see if the tripData was invalidated and refresh it if it was.
-  if(_.isUndefined(trip.tripData)) {
+  if(!trip.tripData) {
     trip.tripData = new TripData(tripName);
     logger.info(`getTrip: tripData was invalidated for trip ${tripName}. Refreshing it by creating new TripData object`);
   };
@@ -324,6 +325,14 @@ Session.prototype.clearAllAwaitingStates = function() {
 // TODO: Fix ME. this always return PST/PDT now. Obtain the timezone from the hometown.
 Session.prototype.getTimezone = function() {
   return "America/Los_Angeles"; // Using the timezone understood by moment-timezone
+}
+
+Session.prototype.dumpState = function() {
+  let dump = "";
+  Object.keys(this).forEach(key => {
+    if(key.startsWith("awaiting")) dump = dump.concat(`${key}: ${this[key]}; `);
+  });
+  return dump.concat(`planningNewTrip: ${this.planningNewTrip}`);
 }
 
 /********************* TESTING APIs ****************/

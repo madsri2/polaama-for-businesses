@@ -15,6 +15,7 @@ require('promise/lib/rejection-tracking').enable(
 );
 
 function BrowseQuotes(origCity, destCity, startDate, returnDate) {
+  if(!origCity || !destCity || !startDate || !returnDate) throw new Error(`BrowseQuotes: One or more of required arguments origCity, destCity, startDate, returnDate missing. cannot proceed.`);
   this.origCity = origCity;
   this.destCity = destCity;
   this.origCode = new IataCodeGetter(origCity).getCodeSync();
@@ -157,10 +158,9 @@ function updateContents(rawContents) {
     if(item.OutboundLeg && !item.InboundLeg && moment(new Date(item.OutboundLeg.DepartureDate).toISOString()).isSame(moment(this.startDate))) return xclusiveOutboundList.push(item);
     if(item.InboundLeg && !item.OutboundLeg && moment(new Date(item.InboundLeg.DepartureDate).toISOString()).isSame(moment(this.returnDate))) return xclusiveInboundList.push(item);
   }, this);
-  const contents = roundtripList;
-  logger.debug(`roundtrip list: ${roundtripList.length} items`);
-  logger.debug(`outbound: ${xclusiveOutboundList.length} items`);
-  logger.debug(`inbound: ${xclusiveInboundList.length} items`);
+  let contents = [];
+  contents = contents.concat(roundtripList);
+  logger.debug(`roundtrip list: ${roundtripList.length} items; outbound: ${xclusiveOutboundList.length} items; inbound: ${xclusiveInboundList.length} items`);
   xclusiveOutboundList.forEach(item => {
     xclusiveInboundList.forEach(inbound => {
       const oblistItem = JSON.parse(JSON.stringify(item));
@@ -172,6 +172,13 @@ function updateContents(rawContents) {
       contents.push(oblistItem);
     });
   });
+  let value = "";
+  if(contents.length != 0) {
+    contents.forEach((c,index) => {
+      value = value.concat(JSON.stringify(c));
+    });
+  }
+  logger.debug(`updateContents: contents count: ${contents.length}; value: ${value}`);
   return contents;
 }
 

@@ -32,7 +32,13 @@ ic.api('autocomplete', {query: 'lisbon'}, function(e, r) {
 */
 
 function IataCodeGetter(city) {
-	if(city) this.city = city;
+	if(city) { 
+    this.city = city;
+  }
+  else {
+    if(arguments.length) throw new Error(`IataCodeGetter: null or undefined passed for argument city`);
+    throw new Error(`IataCodeGetter: expected argument city was not passed`);
+  }
 }
 
 IataCodeGetter.prototype.getCodeSync = function() {

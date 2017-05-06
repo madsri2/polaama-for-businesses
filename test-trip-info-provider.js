@@ -61,7 +61,7 @@ function testGetFlightQuoteDetails() {
     duration: 5,
   };
   tripData.addTripDetailsAndPersist(tripDetails);
-  tripData.addCities(["austin"]);
+  tripData.addCityItinerary(["austin"],[5]);
   tripData.addPortOfEntry("austin");
   const tip = new TripInfoProvider(tripData, "san francisco");
   tip.getFlightQuotes().then(

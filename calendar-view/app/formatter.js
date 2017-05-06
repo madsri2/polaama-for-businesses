@@ -96,7 +96,6 @@ function setWeatherContents(details) {
 
 function getThisDaysItin(date) {
   const thisDateStr = CreateItinerary.formatDate(date);
-  logger.debug(`getThisDaysItin: getting itinerary for day ${thisDateStr}`);
   const details = this.itinDetails[thisDateStr];
   let contents = "";
   let departureCity;

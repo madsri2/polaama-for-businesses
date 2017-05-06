@@ -18,16 +18,18 @@ function TripInfoProvider(tripData, hometown) {
     this.tripInfoDetails = JSON.parse(fs.readFileSync(this.trip.tripDataFile(),'utf8'));
   }
   catch(err) {
-    logger.info(`could not read trip details from file ${this.trip.tripDataFile()}. ${err.message}`);
+    logger.info(`could not read trip details from file ${this.trip.tripDataFile()}. ${err.message}. This might just mean that we have not done any planning for this trip yet.`);
     this.tripInfoDetails = {};
     this.tripInfoDetails.cities = {};
   }
 }
 
+/******************************** Weather information ***********************************/
+
 // callback function meant to be called by WeatherInfoProvider.getWeather 
 function parseWeatherResponse(city, weatherDetails) {
   if(!weatherDetails) {
-    logger.error(`could not get weather information for city ${city}`);
+    logger.error(`parseWeatherResponse: could not get weather for city: ${city}`);
     return;
   }
   const text = [];
@@ -100,19 +102,24 @@ function getWeatherForCity(city, index, callback) {
 }
 
 TripInfoProvider.prototype.getWeatherInformation = function(callback) {
-  logger.info(`getWeatherInformation: Callback is ${callback.toString()}`);
-  if(_.isUndefined(this.trip.data.cities)) {
-    logger.error(`getWeatherInformation: No city defined in trip ${this.trip.data.name}. Doing nothing!`);
+  try {
+    if(_.isUndefined(this.trip.data.cities)) {
+      logger.error(`getWeatherInformation: No city defined in trip ${this.trip.data.name}. Doing nothing!`);
+      return callback();
+    }
+    const lpEncodedCountry = encodeForLonelyPlanet.call(this);
+    if(!_.isUndefined(lpEncodedCountry)) {
+      // TODO: Extract this information and present it to the user rather than just show url
+      this.tripInfoDetails.weather = `Check https://www.lonelyplanet.com/${lpEncodedCountry}/weather to see if you are traveling in the low, shoulder or high season`; 
+    }
+    this.trip.data.cities.forEach((city,index,a) => {
+      getWeatherForCity.call(this, city, index, callback);
+    }, this);
+  }
+  catch(e) {
+    logger.error(`getWeatherInformation: cannot get weather information for one or all of cities: ${this.tripdata.cities}: ${e.stack}`);
     return callback();
   }
-  const lpEncodedCountry = encodeForLonelyPlanet.call(this);
-  if(!_.isUndefined(lpEncodedCountry)) {
-    // TODO: Extract this information and present it to the user rather than just show url
-    this.tripInfoDetails.weather = `Check https://www.lonelyplanet.com/${lpEncodedCountry}/weather to see if you are traveling in the low, shoulder or high season`; 
-  }
-  this.trip.data.cities.forEach((city,index,a) => {
-    getWeatherForCity.call(this, city, index, callback);
-  }, this);
 }
 
 function encodeForLonelyPlanet() {
@@ -127,6 +134,7 @@ function encodeForLonelyPlanet() {
 
 // cx code for flight custom search engine: '016727128883863036563:3i1x6jmqmwu';
 // https://developers.google.com/qpx-express/v1/prereqs
+/*
 TripInfoProvider.prototype.getFlightDetails = function(callback) {
   logger.info(`getFlightDetails: Callback is ${callback.toString()}`);
   const tripData = this.trip.data;
@@ -144,16 +152,24 @@ TripInfoProvider.prototype.getFlightDetails = function(callback) {
     return callback();
   }
 }
+*/
 
 TripInfoProvider.prototype.getFlightQuotes = function() {
   const tripData = this.trip.data;
-  // TODO: Putting this logic here is a hack. Ideally it would be in webhook-post-handler:startPlanningTrip. But because we are using promise there and I don't know of a clean way to NOT call getFlightDetails if the trip has started, I am placing this code here.
-  if(tripData.tripStarted) {
-    logger.warn(`getFlightQuoteDetails: Trip ${tripData.rawName} has already started. Not getting flight details. Simply returning!`);
+  try {
+    // TODO: Putting this logic here is a hack. Ideally it would be in webhook-post-handler:startPlanningTrip. But because we are using promise there and I don't know of a clean way to NOT call getFlightDetails if the trip has started, I am placing this code here.
+    if(tripData.tripStarted) {
+      logger.warn(`getFlightQuoteDetails: Trip ${tripData.rawName} has already started. Not getting flight details. Simply returning!`);
+      return Promise.resolve(true);
+    }
+    const browseQuotes = new BrowseQuotes(this.hometown, tripData.portOfEntry, tripData.startDate, tripData.returnDate);
+    return browseQuotes.getCachedQuotes();
+  }
+  catch(e) {
+    logger.error(`getFlightQuote: cannot get flight quotes for trip ${tripData.rawName}: ${e.stack}`);
+    // resolve instead of rejecting because we want other parts of the trip planning to proceed.
     return Promise.resolve(true);
   }
-  const browseQuotes = new BrowseQuotes(this.hometown, tripData.portOfEntry, tripData.startDate, tripData.returnDate);
-  return browseQuotes.getCachedQuotes();
 }
 
 TripInfoProvider.prototype.getStoredFlightQuotes = function() {
@@ -190,6 +206,7 @@ function getActivityForCity(city, index, callback) {
   const cities = _.uniq(this.trip.data.cities);
   const dataFile = this.trip.tripDataFile();
   if(cityDetails.activities) {
+    logger.debug(`getActivityForCity: Activities available for city ${city}. Doing nothing more for this city`);
     // handle case where we have gathered data for all cities. TODO: Do we need this check in both places (here and in the callback function below)?
     if(citiesWithActivities(details.cities) === cities.length) {
       logger.info("getActivityForCity: obtained activities for all cities. invoking callback");
@@ -198,6 +215,7 @@ function getActivityForCity(city, index, callback) {
     return;
   }
   const aip = new ActivityInfoProvider(this.trip.data.country, city, this.trip.data.startDate);
+  logger.debug(`getActivityForCity: About to call ActivityInfoProvider to get activities for city ${city}`);
   aip.getActivities(function(activityDetails) {
     if(activityDetails) cityDetails.activities = activityDetails;
     // handle case where we have gathered data for all cities.
@@ -225,14 +243,19 @@ function citiesWithActivities(cities) {
 }
 
 TripInfoProvider.prototype.getActivities = function(callback) {
-  logger.info(`getActivities: Callback is ${callback.toString()}`);
-  if(_.isUndefined(this.trip.data.cities)) {
-    logger.error(`getActivities: No city defined in trip ${this.trip.data.name}. Doing nothing!`);
+  try {
+    if(_.isUndefined(this.trip.data.cities)) {
+      logger.error(`getActivities: No city defined in trip ${this.trip.data.name}. Doing nothing!`);
+      return callback();
+    }
+    this.trip.data.cities.forEach((city, index, a) => {
+      getActivityForCity.call(this, city, index, callback);
+    }, this);
+  }
+  catch(e) {
+    logger.error(`getActivities: Could not get activities for one or all cities (${this.trip.data.cities}) in trip ${this.trip.data.name}: ${e.stack}`);
     return callback();
   }
-  this.trip.data.cities.forEach((city, index, a) => {
-    getActivityForCity.call(this, city, index, callback);
-  }, this);
 }
 
 TripInfoProvider.prototype.getStoredActivityDetails = function() {

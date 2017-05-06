@@ -80,13 +80,6 @@ function testingElements() {
   console.log(JSON.stringify(elements));
 }
 
-function testAddCities() {
-  // remove previous file entry
-  const trip = new TripData("Testing");
-  trip.addCities(["a","b"]);
-  const updatedTrip = new TripData("Testing");
-  console.log(JSON.stringify(updatedTrip));
-}
 
 function testAddPortOfEntry() {
   // remove previous file entry
@@ -133,8 +126,6 @@ testAddCityItinerary();
 // testGetExpenseReport();
 
 // testAddPortOfEntry();
-
-// testAddCities();
 
 // testingGetInfoFromTrip();
 

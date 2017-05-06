@@ -87,12 +87,12 @@ WebpageHandler.prototype.displayFlightQuotes = function(req, res) {
   const self = this;
   promise.done(
     function(contents) {
-      if(contents.length === 0) return res.send(self.formatted.formatFlightQuotes("{noflight: 'No information yet for this segment'}"));
+      if(contents.length === 0) return res.send(self.formatter.formatFlightQuotes({noflight: 'No information yet for this segment'}));
       return res.send(self.formatter.formatFlightQuotes(contents));
     },
     function(err) {
       logger.error(`Error getting flight quotes: ${err.stack}`);
-      return res.send(self.formatted.formatFlightQuotes("{noflight: 'No information yet for this segment'}"));
+      return res.send(self.formatted.formatFlightQuotes({noflight: 'No information yet for this segment'}));
     }
   );
 }

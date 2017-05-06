@@ -31,18 +31,23 @@ function WebhookPostHandler(session, testing) {
     this.session = session;
   }
   this.notifier = new Notifier(this.sessions);
+  this.logOnce = {};
 }
 
+// called to handle every message from the customer.
 function handleMessagingEvent(messagingEvent) {
+  const fbid = messagingEvent.sender.id;
   // find or create the session here so it can be used elsewhere. Only do this if a session was NOT passed in the constructor.
   if(_.isUndefined(this.passedSession)) {
-    this.session = this.sessions.findOrCreate(messagingEvent.sender.id);
-    logger.debug(`handleMessagingEvent: First log message for this conversation. This chat's session id is ${this.session.sessionId}`);
+    this.session = this.sessions.findOrCreate(fbid);
   }
   else {
     this.session = this.passedSession;
   }
-  const fbid = messagingEvent.sender.id;
+  if(!this.logOnce[this.session.sessionId]) {
+    logger.debug(`handleMessagingEvent: First message from user ${this.session.fbid} with session ${this.session.sessionId} since this process started}`);
+    this.logOnce[this.session.sessionId] = true;
+  }
   const promise = this.fbidHandler.add(fbid);
   if(promise) {
     promise.then(
@@ -300,7 +305,6 @@ WebhookPostHandler.prototype.startPlanningTrip = function() {
   sendTypingAction.call(this);
 	logger.debug(`startPlanningTrip: This sessions' guid is ${this.session.guid}`);
 
-
   const tip = new TripInfoProvider(this.session.tripData(), this.session.hometown);
   const activities = Promise.denodeify(tip.getActivities.bind(tip));
   // const flightDetails = Promise.denodeify(tip.getFlightDetails.bind(tip));
@@ -316,9 +320,9 @@ WebhookPostHandler.prototype.startPlanningTrip = function() {
     .then(flightQuotes)
     .done(
       function(response) {
-        const createItin = new CreateItinerary(self.session.tripData(), self.session.hometown);
-        const tripNameInContext = self.session.tripNameInContext;
         try {
+          const createItin = new CreateItinerary(self.session.tripData(), self.session.hometown);
+          const tripNameInContext = self.session.tripNameInContext;
           Promise.all(createItin.create()).done(
             function(values) {
               // nothing to do here if create succeeds. The itinerary will be persisted and can be obtained by reading the file, which is done in trip-data-formatter:displayCalendar when /calendar is called
@@ -337,6 +341,8 @@ WebhookPostHandler.prototype.startPlanningTrip = function() {
       },
       function(err) {
         logger.error(`error in gathering data for trip ${tripNameInContext}: ${err.stack}`);
+        // even if one of the previous promises were rejected, call the dtdCallback since some of them might have succeeded.
+        dtdCallback();
       }
     );
 }
@@ -809,55 +815,65 @@ function extractNewTripDetails(messageText) {
 }
 
 // TODO: this duplicates functionality in webpage-handler.formParseCallback. Fix it. 
-function extractCityDetails(messageText) {
-  const input = messageText.split(',');
-  const regex = /^[A-Z a-z]+\((\d+)\)/;
-  const check = validator.isArray(validator.isString({'regex': regex, message: "It should be of the form 'city(2)'"}), {min: 1});
-  let error = null;
-  validator.run(check, input, function(ec, e) {
-    if(ec > 0) error = new Error(`Invalid input value "${e[0].value}": ${e[0].message}`);
-  });
-  if(error) throw error;
-  let cities = [];
-  let numberOfDays = [];
-  input.forEach(item => {
-    cities.push(item.split('(')[0]);
-    numberOfDays.push(item.match(regex)[1]);
-  });
-  
-  // TODO: Validate city is valid by comparing against list of known cities
-  this.session.tripData().addCities(cities);
-  this.session.tripData().addPortOfEntry(cities[0]); // assume that the first city is port of entry. See determineResponseType 3rd step in new trip workflow
-  this.session.tripData().addCityItinerary(cities, numberOfDays);
-  // indicate that tripData for this trip is stale in the session object.
-  this.session.invalidateTripData();
-  this.session.awaitingCitiesForNewTrip = false;
+function getCityDetailsAndStartPlanningTrip(messageText, existingTrip) {
+  try {
+    const input = messageText.split(',');
+    const regex = /^[A-Z a-z]+\((\d+)\)/;
+    const check = validator.isArray(validator.isString({'regex': regex, message: "It should be of the form 'city(2)'"}), {min: 1});
+    let error = null;
+    validator.run(check, input, function(ec, e) {
+      if(ec > 0) error = new Error(`Invalid input value "${e[0].value}": ${e[0].message}`);
+    });
+    if(error) throw error;
+    let cities = [];
+    let numberOfDays = [];
+    input.forEach(item => {
+      cities.push(item.split('(')[0]);
+      numberOfDays.push(item.match(regex)[1]);
+    });
+    
+    if(existingTrip) {
+      this.session.awaitingCitiesForExistingTrip = false;
+    }
+    else {
+      this.session.tripData().addPortOfEntry(cities[0]); // assume that the first city is port of entry. See determineResponseType 3rd step in new trip workflow
+      this.session.awaitingCitiesForNewTrip = false;
+    }
+    // TODO: Validate city is valid by comparing against list of known cities
+    this.session.tripData().addCityItinerary(cities, numberOfDays);
+    // indicate that tripData for this trip is stale in the session object so that trip data will be read from the file
+    this.session.invalidateTripData();
+  }
+  catch(e) {
+    logger.error(`getCityDetailsAndStartPlanningTrip: exception calling getCityDetailsAndStartPlanningTrip: ${e.stack}`);
+    sendTextMessage(this.session.fbid, e.message);
+    return;
+  }
+  const tripData = this.session.tripData();
+  if(tripData.data.cities) {
+    logger.debug(`getCityDetailsAndStartPlanningTrip: cities available for trip ${tripData.rawTripName}. Start planning trip for customer ${this.session.fbid}`);
+    this.session.planningNewTrip = false;
+    this.startPlanningTrip();
+  }
+  else {
+    logger.error(`getCityDetailsAndStartPlanningTrip: Session ${this.session.sessionId}: Cannot determine cities for trip ${tripData.data.country} even after getting cities from customer. Possible BUG!`);
+    sendTextMessage(this.session.fbid,"Even bots need to eat! Be back in a bit..");
+  }
 }
 
 // TODO: This code duplicates some aspects of "getting cities for the trip" in determineResponseType. Fix that.
 function addCitiesToExistingTrip() {
-    const tripData = this.session.tripData();
-    if(!determineCities.call(this, true /* existingTrip */)) {
-      if(!this.session.awaitingCitiesForExistingTrip) {
-        const messages = [
-          `For your trip to ${tripData.data.country}, add cities and number of days in each city in the following format`,
-          `seattle(3),portland(4),sfo(5)` 
-        ];
-        sendMultipleMessages(this.session.fbid, textMessages.call(this, messages));
-        this.session.awaitingCitiesForExistingTrip = true;
-        return;
-      }
-      else {
-        if(tripData.data.cities) {
-          logger.info(`addCitiesForExistingTrip: Start planning trip for customer`);
-          this.startPlanningTrip();
-        }
-        else {
-          logger.error(`addCitiesForExistingTrip: Session ${this.session.sessionId}: Cannot determine cities for trip ${tripData.data.country} even after getting cities from customer. Possible BUG!`);
-          sendTextMessage(this.session.fbid,"Even bots need to eat! Be back in a bit..");
-        }
-      }
-    }
+  const tripData = this.session.tripData();
+  if(determineCities.call(this, true /* existingTrip */)) return;
+  if(!this.session.awaitingCitiesForExistingTrip) {
+    const messages = [
+      `For your trip to ${tripData.data.country}, add cities and number of days in each city in the following format`,
+      `seattle(3),portland(4),sfo(5)` 
+    ];
+    sendMultipleMessages(this.session.fbid, textMessages.call(this, messages));
+    this.session.awaitingCitiesForExistingTrip = true;
+    // After user enters the additional cities, determineResponseType will be called and the code block that checks for awaitingCitiesForExistingTrip and takes action
+  }
 }
 
 /*
@@ -964,29 +980,9 @@ function determineResponseType(event) {
       }
     }
   
-    // 3) Get cities for the trip.
+    // 3) If we already asked for cities, handle that and start planning. Else, get cities for the trip.
     // TODO: Handle case where user does not yet know which cities they are going to!
-    if(this.session.awaitingCitiesForNewTrip) {
-      try {
-        extractCityDetails.call(this, messageText);
-      }
-      catch(e) {
-        logger.error(`determineResponseType: exception calling extractCityDetails: ${e.stack}`);
-        sendTextMessage(this.session.fbid, e.message);
-        return;
-      }
-      const tripData = this.session.tripData();
-      if(tripData.data.cities) {
-        logger.info(`determineResponseType: Start planning trip for customer`);
-        this.session.planningNewTrip = false;
-        this.startPlanningTrip();
-      }
-      else {
-        logger.error(`determineResponseType: Session ${this.session.sessionId}: Cannot determine cities for trip ${tripData.data.country} even after getting cities from customer. Possible BUG!`);
-        sendTextMessage(this.session.fbid,"Even bots need to eat! Be back in a bit..");
-      }
-      return;
-    }
+    if(this.session.awaitingCitiesForNewTrip) return getCityDetailsAndStartPlanningTrip.call(this, messageText);
 
     const tripData = this.session.tripData();
     if(!determineCities.call(this)) {
@@ -1011,6 +1007,8 @@ function determineResponseType(event) {
     }
     return;
   }
+
+  if(this.session.awaitingCitiesForExistingTrip) return getCityDetailsAndStartPlanningTrip.call(this, messageText, true /* existing trip */);
 
   if(this.session.expenseReportWorkflow) {
     const workflow = this.session.expenseReportWorkflow;
@@ -1080,6 +1078,7 @@ function determineResponseType(event) {
     return;
   }
 
+  logger.debug(`determineResponseType: Did not understand the context of message <${mesg}>. Dump of session states: ${this.session.dumpState()}`);
   // We don't understand the text sent. Simply present the options we present on "getting started".
   return callSendAPI(getHelpMessageData.call(this, senderID, "Hi, I did not understand what you said. I can help you with the following."));
   
@@ -1696,6 +1695,7 @@ function sendMultipleMessages(recipientId, messages) {
     return;
   }
   if(messages.length === 0) return;
+  if(TEST_MODE) return logger.debug(`MESSAGE TO CHAT: ${JSON.stringify(messageData)}`);
   request({
     uri: 'https://graph.facebook.com/v2.6/me/messages',
     qs: { access_token: (new SecretManager()).getPageAccessToken() },
@@ -1716,7 +1716,7 @@ function sendMultipleMessages(recipientId, messages) {
 }
 
 function callSendAPI(messageData) {
-  if(TEST_MODE) return console.log(`MESSAGE TO CHAT: ${JSON.stringify(messageData)}`);
+  if(TEST_MODE) return logger.debug(`MESSAGE TO CHAT: ${JSON.stringify(messageData)}`);
   request({
     uri: 'https://graph.facebook.com/v2.6/me/messages',
     qs: { access_token: (new SecretManager()).getPageAccessToken() },
