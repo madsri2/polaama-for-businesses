@@ -1,1 +1,0 @@
-{"full_name":"Hu Tha","pnr_number":"VPWMFR","flight_number":"VX222","departure_airport":{"airport_code":"SFO","city":"San Francisco"},"arrival_airport":{"airport_code":"SJC","city":"San Jose"},"flight_schedule":{"departure_time":"2017-5-10T15:15"},"boardingPassImageUrl":"https://polaama.com/uDWX/san_jose/boarding-pass-image"}

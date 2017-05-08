@@ -213,8 +213,8 @@ function displayTripDetails() {
     messenger_extensions: true
   },{
     type: "web_url",
-    url:sendUrl.call(this, `${tripName}/calendar`),
-    title: "Calendar",
+    url: sendUrl.call(this, tripData.flightQuoteUrlPath()),
+    title:"Flight",
     webview_height_ratio: "compact",
     messenger_extensions: true
   });
@@ -234,39 +234,24 @@ function displayTripDetails() {
           title: "Get", 
           buttons: [{
             type: "web_url",
+            url:sendUrl.call(this, `${tripName}/calendar`),
+            title: "Trip calendar",
+            webview_height_ratio: "compact",
+            messenger_extensions: true,
+          },
+          {
+            type:"web_url",
             url: sendUrl.call(this, tripData.weatherUrlPath()),
             title: "Weather",
             webview_height_ratio: "compact",
             messenger_extensions: true,
-            fallback_url: sendUrl.call(this, tripData.weatherUrlPath()),
-          },
-          {
-            type:"web_url",
-            url: sendUrl.call(this, tripData.flightUrlPath()),
-            title:"Flight",
-            webview_height_ratio: "compact",
-            messenger_extensions: true,
-            // fallback_url: sendUrl.call(this, tripData.flightUrlPath())
-            fallback_url: sendUrl.call(this, tripData.flightQuoteUrlPath())
           }, 
-          /*{ // NOT supported yet!
-          title: "Get Stay details",
-          buttons: [{
-            type:"web_url",
-            url: sendUrl.call(this, tripData.stayUrlPath()),
-            title:"Stay",
-            webview_height_ratio: "compact",
-            messenger_extensions: true,
-            fallback_url: sendUrl.call(this, tripData.stayUrlPath())
-          }]
-          },*/ 
           {
             type:"web_url",
             url: sendUrl.call(this, tripData.activitiesUrlPath()),
             title:"Activities",
             webview_height_ratio: "compact",
             messenger_extensions: true,
-            fallback_url: sendUrl.call(this, tripData.activitiesUrlPath())
           }]
         }, {
           title: "Get",
@@ -279,7 +264,7 @@ function displayTripDetails() {
           }, {
             type: "web_url",
             url:sendUrl.call(this, `${tripName}/todo`),
-            title: "Tasks",
+            title: "Todo list",
             webview_height_ratio: "compact",
             messenger_extensions: true
           }, {
@@ -1031,7 +1016,7 @@ function determineResponseType(event) {
   }
 
   const tripData = this.session.tripData();
-  if(mesg.startsWith("save") || this.session.awaitingComment) {
+  if(mesg.startsWith("save") || mesg.startsWith("comment") || this.session.awaitingComment) {
     const returnString = tripData.storeFreeFormText(senderID, messageText);
     sendTextMessage(senderID, returnString);
     this.session.awaitingComment = false;

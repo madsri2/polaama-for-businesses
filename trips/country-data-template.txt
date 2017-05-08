@@ -1,1 +1,0 @@
-{"details": ["detail 1"], "cities": {"city1": {"weather": ["detail 1", "detail 2"], "activities": [], "details": ["detail 1", "detail 2"]}}}

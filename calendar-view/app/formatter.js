@@ -98,6 +98,10 @@ function getThisDaysItin(date) {
   const thisDateStr = CreateItinerary.formatDate(date);
   const details = this.itinDetails[thisDateStr];
   let contents = "";
+  if(!details) {
+    logger.info(`getThisDaysItin: this.itinDetails does not contain any information for date ${thisDateStr}`);
+    return "<li>No details available</li>";
+  }
   let departureCity;
   if(details.city) {
     if(Array.isArray(details.city)) {

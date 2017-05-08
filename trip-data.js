@@ -312,7 +312,7 @@ function getExpenseDetailsFromComments() {
 function commentIsReportingExpense(comment) {
   const item = comment.toLowerCase();
   if((item.indexOf("paid for") > -1) ||
-     (item.indexOf("owes") > -1) || 
+     (item.indexOf(" owes ") > -1) || 
       item.toLowerCase().match(/.*paid \$?\d+/)) {
     return true;
   }
@@ -346,7 +346,28 @@ function storeList(senderId, messageText, regex, key, retrieveString) {
   return `Saved! You can retrieve this by saying "${retrieveString}"`;
 }
 
-function getActivitiesFromComments(comments) {
+// return 0 if there is a match of different positions of mtchString, -1 otherwise.
+function match(item, mtchString) {
+  const arr = [];
+  arr.push(`${mtchString} `);
+  arr.push(` ${mtchString} `);
+  arr.push(` ${mtchString}.`);
+  arr.push(` ${mtchString}-`);
+  arr.push(`${mtchString}- `);
+  arr.push(`-${mtchString} `);
+  arr.push(`-${mtchString}`);
+  arr.push(`-${mtchString}.`);
+  arr.push(`${mtchString}:`);
+  arr.push(` ${mtchString}:`);
+
+  for(let i = 0; i < arr.length; i++) {
+    if(item.indexOf(arr[i]) > -1) return 0; 
+  }
+
+  return -1;
+}
+
+function categorizeComments(comments) {
   const taggedComments = {
     activities: [],
     stay: [],
@@ -361,40 +382,41 @@ function getActivitiesFromComments(comments) {
       taggedComments.expenses.push(i);
     }
     // activities
-    else if((item.indexOf("beach") > -1) || 
-       (item.indexOf("garden") > -1) || 
-       (item.indexOf("market") > -1) || 
-       (item.indexOf("activity") > -1) || 
-       (item.indexOf("tower") > -1) || 
-       (item.indexOf("castelo") > -1) || 
-       (item.indexOf("wine tour") > -1) || 
-       (item.indexOf("activities") > -1)) {
+    else if((match(item,"beach") > -1) || 
+       (match(item,"garden") > -1) || 
+       (match(item,"market") > -1) || 
+       (match(item,"activity") > -1) || 
+       (match(item,"tower") > -1) || 
+       (match(item,"castelo") > -1) || 
+       (match(item,"wine tour") > -1) || 
+       (match(item,"activities") > -1)) {
       taggedComments.activities.push(i);
     }
     // stay
-    else if((item.indexOf("hotel") > -1) || 
-            (item.indexOf("condo") > -1) || 
-            (item.indexOf("airbnb") > -1) || 
-            (item.indexOf("stay") > -1)) {
+    else if((match(item,"hotel") > -1) || 
+            (match(item,"condo") > -1) || 
+            (match(item,"airbnb") > -1) || 
+            (match(item,"stay") > -1)) {
       taggedComments.stay.push(i);
     }
     // flight
-    else if((item.indexOf("flight") > -1) || 
-            (item.indexOf("air") > -1) || 
-            (item.indexOf("alaska") > -1) || 
-            (item.indexOf("united") > -1) || 
-            (item.indexOf("southwest") > -1) || 
-            (item.indexOf("arrive at") > -1) || 
-            (item.indexOf("arrives at") > -1) || 
-            (item.indexOf("leave on") > -1) || 
-            (item.indexOf("depart") > -1) || 
-            (item.indexOf("delta") > -1)) {
+    else if((match(item,"flight") > -1) || 
+            (match(item,"flights") > -1) || 
+            (match(item,"air") > -1) || 
+            (match(item,"alaska") > -1) || 
+            (match(item,"united") > -1) || 
+            (match(item,"southwest") > -1) || 
+            (match(item,"arrive at") > -1) || 
+            (match(item,"arrives at") > -1) || 
+            (match(item,"leave on") > -1) || 
+            (match(item,"depart") > -1) || 
+            (match(item,"delta") > -1)) {
       taggedComments.flight.push(i);
     }
     // car
-    else if((item.indexOf("car") > -1) || 
-            (item.indexOf("uber") > -1) || 
-            (item.indexOf("suv") > -1)) {
+    else if((match(item,"car") > -1) || 
+            (match(item,"uber") > -1) || 
+            (match(item,"suv") > -1)) {
       taggedComments.car.push(i);
     }
     // everything else
@@ -411,7 +433,7 @@ TripData.prototype.parseComments = function() {
   if(!Object.keys(comments).length) {
     return {};
   }
-  return getActivitiesFromComments(comments);
+  return categorizeComments(comments);
 }
 
 TripData.prototype.persistUpdatedTrip = function() {
@@ -534,6 +556,9 @@ TripData.prototype.testing_delete = function() {
     fs.renameSync(`${tripBaseDir}/${file}`, `${tripBaseDir}/oldFiles/${file}`);
   });
 }
+
+TripData.prototype.testing_categorizeComments = categorizeComments;
+
 /**************** TESTING APIs ********************/
 
 module.exports = TripData;

@@ -5,6 +5,9 @@ const fs = require('fs');
 const moment = require('moment');
 const _ = require('lodash');
 const tripBaseDir = "trips";
+const baseDir = "/home/ec2-user";
+const logger = require(`${baseDir}/my-logger`);
+logger.setTestConfig(); // indicate that we are logging for a test
 
 const tripData = new TripData("Israel");
 
@@ -119,9 +122,25 @@ function testUpdateItinerary() {
   );
 }
 
+function testCategorizingComments(comments, expected) {
+  const taggedComments = new TripData("test-categorizing-comments").testing_categorizeComments(comments);
+  let actual = "";
+  Object.keys(taggedComments).forEach(key => {
+    const items = taggedComments[key];
+    if(items.length > 0) actual = actual.concat(`${items.length} ${key}; `);
+  });
+  console.log(`EXPECTED: ${expected}. ACTUAL: ${actual}`);
+}
+
+
+testCategorizingComments(["beach activity","a beach worth visiting", "a beach.", "somethingwithbeachinmiddle", "gardentostart", "a garden.", ": garden."], "5 activities; 2 others");
+testCategorizingComments(["hotel ","airbnb: ", "somethinghotelairbnb", "an ok condo."], "3 stay; 1 others");
+testCategorizingComments(["consumeraffairs","flight plan", "air tickets."], "2 flights; 1 others");
+testCategorizingComments(["http://www.travelweekly.com/Cruise/Carnival-Cruise-Line/Carnival-Conquest/Cruise-p51209461","july 13th is royal caribbean and july 14th is carnival"], "2 others");
+
 // testUpdateItinerary();
 
-testAddCityItinerary();
+// testAddCityItinerary();
 
 // testGetExpenseReport();
 

@@ -210,8 +210,11 @@ Session.prototype.getCurrentAndFutureTrips = function() {
   // Filter past trips
   let daysToEndOfTrip = -1;
   this.allTrips().forEach(trip => {
-    // logger.debug(`getCurrentAndFutureTrips: trip is ${trip.rawTripName}`);
-    if(trip.data.returnDate != "unknown") {
+    logger.debug(`getCurrentAndFutureTrips: trip is ${trip.rawTripName}; returnDate is ${trip.data.returnDate}`);
+    if(!trip.data) { logger.error(`getCurrentAndFutureTrips: trip.data is undefined for trip ${trip.rawTripName}. Possible BUG since session ${this.fbid} still contains this trip`);
+      return;
+    }
+    if(!trip.data.returnDate || trip.data.returnDate != "unknown") {
       const end = moment(new Date(trip.data.returnDate).toISOString());
       daysToEndOfTrip = end.diff(moment(),'days');
     }
@@ -226,7 +229,7 @@ Session.prototype.getCurrentAndFutureTrips = function() {
     else {
       pastTrips = true;
     }
-  });
+  }, this);
   const sortedArr = trips.sort(function(a,b) {
     return a.daysToTrip - b.daysToTrip;
   });

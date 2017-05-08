@@ -223,7 +223,9 @@ TripDataFormatter.prototype.formatFlightQuotes = function(flightDetails) {
   const html = fs.readFileSync(`${baseDir}/html-templates/flight-quote-details.html`,'utf-8');
   const keys = Object.keys(flightDetails);
   if(keys.indexOf("noflight") > -1) {
-    return html.replace("${flightDetails}", flightDetails.noflight);
+    return html.replace("${flightDetails}", flightDetails.noflight)
+               .replace("${startDate}", this.trip.data.startDate)
+               .replace("${returnDate}", this.trip.data.returnDate);
   }
   let flightDetailsHtml = "";
   for(let i = 0; i < flightDetails.length; i++) {

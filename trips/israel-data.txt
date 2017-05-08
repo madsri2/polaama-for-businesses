@@ -1,1 +1,0 @@
-{"cities":{"Tel Aviv":{},"Jerusalem":{"weather":["The average weather when you are traveling is a max of 81F and a min of 45F","It will be partly cloudy in Jerusalem","There's a 81 % chance of temperature over 60F"]}}}
