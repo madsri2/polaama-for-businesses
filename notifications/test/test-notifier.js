@@ -11,7 +11,7 @@ const fs = require('fs');
 
 describe("Test Notifications", function() {
   const tripName = "test-sending-TripDetails";
-  const tmpTrip = new TripData(tripName);
+  const tmpTrip = new TripData(tripName, "1111111111111111");
   const boardingPassFile = tmpTrip.boardingPassFile();
   const tripStartDate = moment().add(2, 'days').format("M/D/YYYY");
   

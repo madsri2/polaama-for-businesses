@@ -5,7 +5,7 @@ const TripInfoProvider = require('./trip-info-provider');
 const Country = require('./country');
 
 function testFormatWeatherDetailsNoCity() {
-  const trip = new TripData('Test Trip');
+  const trip = new TripData('Test Trip',"1234");
   const formatter = new TripDataFormatter(trip);
   const weatherDetails = {
     nocity: "No city present in trip test-trip"
@@ -14,7 +14,7 @@ function testFormatWeatherDetailsNoCity() {
 }
 
 function testFormatWeatherDetails() {
-  const trip = new TripData('Test Trip');
+  const trip = new TripData('Test Trip',"1234");
   const formatter = new TripDataFormatter(trip);
   const weatherDetails = {
     "city1": ["Weather https://secure.polaama.com comment 1", "Weather comment 2"],
@@ -24,7 +24,7 @@ function testFormatWeatherDetails() {
 }
 
 function testFormatActivityDetails() {
-  const trip = new TripData("Test Trip");
+  const trip = new TripData("Test Trip", "1234");
   const formatter = new TripDataFormatter(trip);
   const activityDetails = {
     "city1": ["link 1", "link 2"],
@@ -34,7 +34,7 @@ function testFormatActivityDetails() {
 }
 
 function testFormatFlightDetails() {
-  const trip = new TripData("Test Trip");
+  const trip = new TripData("Test Trip", "1234");
   const formatter = new TripDataFormatter(trip);
   /*
   const flightDetails = {
@@ -97,13 +97,13 @@ function testFormatFlightDetails() {
     }
   };
   */
-  const tip = new TripInfoProvider(new TripData("portugal"), "seattle");
+  const tip = new TripInfoProvider(new TripData("portugal", "1234"), "seattle");
   const flightDetails = tip.getStoredFlightDetails();
   console.log(formatter.formatFlightDetails(flightDetails));
 }
 
 function testFormatExpensePage() {
-  const trip = new TripData('Test Trip');
+  const trip = new TripData('Test Trip', "1234");
   const formatter = new TripDataFormatter(trip);
   const summary = {
     'famA': [{
@@ -120,13 +120,13 @@ function testFormatExpensePage() {
 }
 
 function testDisplayCalendar() {
-  const trip = new TripData('Test Trip');
+  const trip = new TripData('Test Trip', "1234");
   const formatter = new TripDataFormatter(trip);
   console.log(formatter.displayCalendar());
 }
 
 function testFormatCities() {
-  const trip = new TripData('Test Trip');
+  const trip = new TripData('Test Trip', "1234");
   trip.data.country = "india";
   trip.country = new Country(trip.data.country);
   trip.data.startDate = "2017-11-07";

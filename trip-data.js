@@ -3,17 +3,20 @@ const fs = require('fs');
 const _ = require('lodash');
 const moment = require('moment');
 const logger = require('./my-logger');
-const tripBaseDir = "/home/ec2-user/trips";
 const Country = require('./country');
 const Encoder = require('./encoder');
+const FbidHandler = require('fbid-handler/app/handler');
+const baseDir = "/home/ec2-user/trips";
 
 // TODO: This is leaking data model to other classes. Fix this by moving all functionality that require this variable into a function in this class.
 TripData.todo = "todoList";
 
-function TripData(tripName) {
-  if(!tripName) {
-    throw new Error("TripData: Required parameter tripName is undefined");
-  }
+function TripData(tripName, fbid) {
+  if(!tripName) throw new Error("TripData: Required parameter tripName is undefined");
+  if(!fbid) throw new Error(`required field fbid is missing`);
+  const encodedFbid = new FbidHandler().encode(fbid);
+  this.tripBaseDir = `${baseDir}/${encodedFbid}`;
+  if(!fs.existsSync(this.tripBaseDir)) fs.mkdirSync(this.tripBaseDir);
   this.rawTripName = tripName;
   this.retrieveTripData();
   if(!Object.keys(this.data).length) {
@@ -28,11 +31,12 @@ function TripData(tripName) {
 
 // return the list of raw names for each trip.
 // TODO: Figure out who is using this and reconcile with the use of session.getFutureTrips
+/*
 TripData.getTrips = function() {
   let tripList = [];
-  fs.readdirSync(tripBaseDir).forEach(name => {
+  fs.readdirSync(this.tripBaseDir).forEach(name => {
     if(!name.startsWith(".")) {
-      const tripData = JSON.parse(fs.readFileSync(`${tripBaseDir}/${name}`,'utf8'));
+      const tripData = JSON.parse(fs.readFileSync(`${this.tripBaseDir}/${name}`,'utf8'));
       // only add those trips whose start date is after today or we don't know the start date
       if(_.isUndefined(tripData.startDate) || 
          moment(tripData.startDate).diff(moment(),'days') >= 0) { 
@@ -45,6 +49,7 @@ TripData.getTrips = function() {
   });
   return tripList;
 }
+*/
 
 // ======== Retrieve from trip =======
 TripData.prototype.getInfoFromTrip = function(tripKey) {
@@ -241,7 +246,7 @@ TripData.prototype.storeExpenseEntry = function(senderId, messageText) {
 }
 
 TripData.prototype.userInputItinFile = function() {
-  return `${tripBaseDir}/${this.data.name}-user-itinerary.txt`;
+  return `${this.tripBaseDir}/${this.data.name}-user-itinerary.txt`;
 }
 
 
@@ -497,7 +502,7 @@ function createTodoList() {
 function tripFile() {
   // TODO: check parameters
   // can't use this.data because it is populated with the file contents, which might not exist yet.
-  return `${tripBaseDir}/${filename.call(this)}`;
+  return `${this.tripBaseDir}/${filename.call(this)}`;
 }
 
 TripData.prototype.markTodoItemDone = function(doneItem) {
@@ -525,23 +530,35 @@ TripData.prototype.getTodoDoneList = function() {
 }
 
 TripData.prototype.tripDataFile = function() {
-  return `${tripBaseDir}/${this.data.name}-data.txt`;
+  return `${this.tripBaseDir}/${this.data.name}-data.txt`;
 }
 
 TripData.prototype.tripItinFile = function() {
-  return `${tripBaseDir}/${this.data.name}-itinerary.txt`;
+  return `${this.tripBaseDir}/${this.data.name}-itinerary.txt`;
 }
 
 TripData.prototype.boardingPassFile = function() {
-  return `${tripBaseDir}/${this.data.name}-boarding-pass.txt`;
+  return `${this.tripBaseDir}/${this.data.name}-boarding-pass.txt`;
 }
 
 TripData.prototype.archiveBoardingPassFile = function() {
-  return `${tripBaseDir}/oldFiles/${this.data.name}-boarding-pass.txt`;
+  const dir = `${this.tripBaseDir}/oldFiles`;
+  if(!fs.existsSync(dir)) fs.mkdirSync(dir);
+  return `${dir}/${this.data.name}-boarding-pass.txt`;
 }
 
 TripData.prototype.boardingPassImage = function() {
-  return `${tripBaseDir}/${this.data.name}-boarding-pass-image.png`;
+  return `${this.tripBaseDir}/${this.data.name}-boarding-pass-image.png`;
+}
+
+TripData.prototype.copyFrom = function(trip) {
+  logger.debug(`copyFrom: trip dump ${JSON.stringify(trip)}`);
+  const file = tripFile.call(trip);
+  if(fs.existsSync(file)) fs.createReadStream(file).pipe(fs.createWriteStream(tripFile.call(this)));
+  const dataFile = trip.tripDataFile();
+  if(fs.existsSync(dataFile)) fs.createReadStream(dataFile).pipe(fs.createWriteStream(this.tripDataFile));
+  const itinFile = trip.tripItinFile();
+  if(fs.existsSync(itinFile)) fs.createReadStream(itinFile).pipe(fs.createWriteStream(this.tripItinFile));
 }
 
 function filename() {
@@ -550,10 +567,12 @@ function filename() {
 
 /**************** TESTING APIs ********************/
 TripData.prototype.testing_delete = function() {
-  fs.readdirSync(tripBaseDir).forEach(file => {
+  fs.readdirSync(this.tripBaseDir).forEach(file => {
     if(!file.includes(this.data.name)) return;
     logger.debug(`moving file ${file} to oldFiles`);
-    fs.renameSync(`${tripBaseDir}/${file}`, `${tripBaseDir}/oldFiles/${file}`);
+    const targetDir = `${this.tripBaseDir}/oldFiles`;
+    if(!fs.existsSync(targetDir)) fs.mkdirSync(targetDir);
+    fs.renameSync(`${this.tripBaseDir}/${file}`, `${targetDir}/${file}`);
   });
 }
 

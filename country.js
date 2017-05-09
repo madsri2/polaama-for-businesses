@@ -1,8 +1,9 @@
 'use strict';
 const _=require('lodash');
 const fs = require('fs');
-const logger = require('./my-logger');
-const Encoder = require('./encoder');
+const baseDir = "/home/ec2-user/";
+const logger = require(`${baseDir}/my-logger`);
+const Encoder = require(`${baseDir}/encoder`);
 
 function Country(country) {
   if(!country) {
@@ -10,7 +11,8 @@ function Country(country) {
     return undefined;
   }
   try {
-    const file = `countries/${Encoder.encode(country)}.txt`;
+    const file = `${baseDir}countries/${Encoder.encode(country)}.txt`;
+    logger.debug(`Country: Looking at file ${file}`);
     fs.accessSync(file, fs.F_OK);
     try {
       this.data = JSON.parse(fs.readFileSync(file, 'utf8'));
@@ -24,7 +26,7 @@ function Country(country) {
     return;
   }
   catch(err) {
-    // logger.info(`file for country ${country} does not exist`);
+    logger.warn(`file for country ${country} does not exist`);
   }
   return undefined;
 }

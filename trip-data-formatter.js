@@ -281,7 +281,7 @@ TripDataFormatter.prototype.addCitiesExistingTrip = function() {
   cities.forEach(city => {
       selection += `<option value="${city}">${city}</option>`;
   });
-  return fs.readFileSync("html-templates/add-cities.html", 'utf8')
+  return fs.readFileSync(`${baseDir}/html-templates/add-cities.html`, 'utf8')
     .replace("${cityList}", selection)
     .replace("${country}", this.trip.data.country);
 }

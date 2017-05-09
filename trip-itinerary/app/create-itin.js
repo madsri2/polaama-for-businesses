@@ -64,13 +64,14 @@ CreateItinerary.prototype.create = function() {
 
 CreateItinerary.prototype.getItinerary = function() {
   // always read from file to get the latest!
+  const file = this.trip.tripItinFile();
   try {
-    this.itin = JSON.parse(fs.readFileSync(this.trip.tripItinFile(),'utf8'));
+    this.itin = JSON.parse(fs.readFileSync(file,'utf8'));
   }
   catch(err) {
     // TODO: Consider calling create here directly..
-    logger.error(`getItinerary: could not read trip itinerary details from file ${this.trip.tripItinFile()}. ${err.message}. Maybe you forgot to call CreateItinerary.create to create and persist the itinerary?`);
-    throw new Error("getItinerary: Could not read itinerary details from file. Maybe you forgot to create the itinerary?");
+    logger.error(`getItinerary: could not read trip itinerary details from file ${file}. ${err.message}. Maybe you forgot to call CreateItinerary.create to create and persist the itinerary?`);
+    throw new Error(`getItinerary: Could not read itinerary details from file ${file}. Maybe you forgot to create the itinerary?`);
   }
   try {
     const contents = JSON.parse(fs.readFileSync(this.trip.userInputItinFile(), 'utf8'));
@@ -199,6 +200,7 @@ function persist() {
   const file = this.trip.tripItinFile();
   const itinStr = JSON.stringify(this.itin);
   try {
+    logger.debug(`persist: Called persist. About to write ${itinStr.length} to file ${file}`);
     fs.writeFileSync(file, itinStr);
   }
   catch(err) {

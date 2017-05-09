@@ -15,7 +15,7 @@ function testGatheringDetailsForNewTrip() {
     console.log("All callbacks successfully called");
   }
   // Iceland
-  const td = new TripData("iceland");
+  const td = new TripData("iceland", "1234");
   td.addTripDetailsAndPersist({
     startDate: "5/10/2017",
     destination: "iceland",
@@ -43,12 +43,12 @@ function testGatheringDetailsForNewTrip() {
 
 function setup() {
   // set up
-  const myFbid = "123";
+  const myFbid = "1234";
   const tripName = "test-extractCityDetails";
   const sessions = Sessions.get();
   // first clean up previous test state
   sessions.testing_delete(myFbid);
-  new TripData(tripName).testing_delete();
+  new TripData(tripName, myFbid).testing_delete();
   const session = sessions.findOrCreate(myFbid);
   // create new trip
   const handler = new WebhookPostHandler(session, true /* testing */);
@@ -68,7 +68,7 @@ function testExtractingCityDetails() {
   session.planningNewTrip = true;
   session.awaitingCitiesForNewTrip = true;
   // test
-  const event = { message: { text: "city(1),cityx(2),city y(3)" } };
+  const event = { message: { text: "city(1)" } };
   handler.testing_determineResponseType(event);
 }
 
@@ -93,6 +93,7 @@ function testAddingCityToExistingTrip() {
 }
 
 testAddingCityToExistingTrip();
+
 // testExtractingCityDetails();
 
 // testGatheringDetailsForNewTrip();

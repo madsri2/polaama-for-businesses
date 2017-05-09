@@ -42,11 +42,11 @@ describe('BoardingPass handler', function() {
     logger.debug("Cleaning up after test");
     (new FbidHandler()).testing_delete(fbid);
     sessions.testing_delete(fbid);
-    (new TripData(tripName)).testing_delete();
+    (new TripData(tripName, fbid)).testing_delete();
   });
 
   function verifyExpectations() {
-    const trip = new TripData(tripName);
+    const trip = new TripData(tripName, fbid);
     // verify that boarding pass file actually was written
     const boardingPass = JSON.parse(fs.readFileSync(trip.boardingPassFile(), 'utf8'));
     expect(boardingPass.flight_schedule.departure_time).to.equal("2017-5-1T09:00");
@@ -81,7 +81,7 @@ describe('BoardingPass handler', function() {
     else { logger.debug(`Session from test is ${session.sessionId}`); }
     logger.warn(`session list: ${fs.readdirSync("/home/ec2-user/sessions")}`);
     expect((new BoardingPassHandler(options)).handle()).to.be.ok;
-    expect(fs.existsSync((new TripData(tripName)).boardingPassImage())).to.be.ok;
+    expect(fs.existsSync((new TripData(tripName, fbid)).boardingPassImage())).to.be.ok;
   });
   
   it("test handling itinerary, not boarding pass", function() {

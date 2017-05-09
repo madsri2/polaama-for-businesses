@@ -248,7 +248,8 @@ Session.prototype.getCurrentAndFutureTrips = function() {
 }
 
 Session.prototype.addTrip = function(tripName) {
-  const encTripName = TripData.encode(tripName);
+  const trip = new TripData(tripName, this.fbid);
+  const encTripName = trip.data.name;
   // typically, when a trip is added to the session, that is also the trip in context that the user wants to discuss.
   this.tripNameInContext = encTripName;
   this.rawTripNameInContext = tripName;
@@ -266,7 +267,7 @@ Session.prototype.addTrip = function(tripName) {
         fbid: MY_RECIPIENT_ID,
         conversations: {}
       },
-      tripData: new TripData(tripName)
+      tripData: trip
     };
     this.trips[encTripName].tripData.persistUpdatedTrip();
   }
@@ -280,6 +281,9 @@ Session.prototype.addNewTrip = function(tripName, trip) {
     logger.warn("addNewTrip: undefined or null tripName. Cannot add new trip to session.");
     return;
   }
+  // copy the trip into this user's trips
+  new TripData(trip.rawTripName, this.fbid).copyFrom(trip);
+  // finally, update session and persist
   const encTripName = TripData.encode(tripName);
   this.trips[encTripName] = trip;
   this.persistSession();
@@ -310,7 +314,7 @@ Session.prototype.getTrip = function(tripName) {
   const trip = this.trips[TripData.encode(tripName)];
   // see if the tripData was invalidated and refresh it if it was.
   if(!trip.tripData) {
-    trip.tripData = new TripData(tripName);
+    trip.tripData = new TripData(tripName, this.fbid);
     logger.info(`getTrip: tripData was invalidated for trip ${tripName}. Refreshing it by creating new TripData object`);
   };
   return trip.tripData;

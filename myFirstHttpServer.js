@@ -181,7 +181,7 @@ function ensureAuthenticated(req, res, next) {
 }
 
 // var json2html = require('node-json2html');
-app.get('/trips', ensureAuthenticated, function(req, res) {
+app.get('/:id/trips', ensureAuthenticated, function(req, res) {
   return res.send("This will eventually return a list of trips planned for this user.");
 });
 
@@ -191,13 +191,13 @@ app.get('/favicon.ico', function(req, res) {
   return res.end();
 });
 
-app.get('/:id/friends', function(req, res) {
-  const handler = new WebpageHandler(req.params.id);
+app.get('/:id/:tripName/friends', function(req, res) {
+  const handler = new WebpageHandler(req.params.id, req.params.tripName);
   return handler.sendFriendsList(res);
 });
 
-app.post('/:id/handle_trip_friends', function(req, res) {
-  const handler = new WebpageHandler(req.params.id);
+app.post('/:id/:tripName/handle_trip_friends', function(req, res) {
+  const handler = new WebpageHandler(req.params.id, req.params.tripName);
   return handler.handleTravelersForNewTrip(req, res);
 	// TODO: close this page and then send the "help" message to the session in order to make forward progress.
 });

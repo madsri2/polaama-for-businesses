@@ -85,7 +85,7 @@ Sessions.retrieveSession = function(fbid) {
         session.trips[name] = {
           aiContext: data.trips[name].aiContext,
           humanContext: data.trips[name].humanContext,
-          tripData: new TripData(name)
+          tripData: new TripData(name, session.fbid)
         };
       });
       return session;

@@ -5,7 +5,7 @@ const fs = require('fs');
 const _ = require('lodash');
 
 function testGetWeatherInformation() {
-  const tripData = new TripData("Test Trip");
+  const tripData = new TripData("Test Trip", "1234");
   tripData.data.country = "India";
   tripData.data.startDate = "11/1/17";
   tripData.data.cities = ["Mumbai", "Chennai"];
@@ -24,7 +24,7 @@ function testGetWeatherInformation() {
 }
 
 function testGetStoredWeatherDetails() {
-  const tripData = new TripData("Test Trip");
+  const tripData = new TripData("Test Trip", "1234");
   tripData.data.country = "India";
   tripData.data.startDate = "11/1/17";
   tripData.data.cities = ["Mumbai", "Chennai"];
@@ -34,7 +34,7 @@ function testGetStoredWeatherDetails() {
 }
 
 function testGetActivity() {
-  const tripData = new TripData("Portugal");
+  const tripData = new TripData("Portugal", "1234");
   tripData.data.country = "portugal";
   tripData.data.startDate = "9/12/17";
   tripData.data.cities = ["lisbon"];
@@ -54,7 +54,7 @@ function testGetActivity() {
 }
 
 function testGetFlightQuoteDetails() {
-  const tripData = new TripData("test-austin");
+  const tripData = new TripData("test-austin", "1234");
   const tripDetails = {
     destination: "usa",
     startDate: "6/1/17",
@@ -83,7 +83,7 @@ function testGetFlightQuoteDetails() {
 }
 
 function testGetFlightQuoteDetailsTripStarted() {
-  const tripData = new TripData("test-austin");
+  const tripData = new TripData("test-austin", "1234");
   tripData.addTripDetailsAndPersist({
     destination: "usa",
     startDate: "5/1/17",

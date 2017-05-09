@@ -9,14 +9,6 @@ const CreateItinerary = require('../../trip-itinerary/app/create-itin');
 const Promise = require('promise');
 
 describe("Calendar tests", function() {
-  // TODO: Fix ME! Add 
-  it("Test getting calendar view", function() {
-    const tripData = new TripData('india');
-    const formatter = new CalendarFormatter(tripData);
-    const html = formatter.format();
-    logger.debug(`formatter returned ${html.length} bytes`);
-  });
-
   it("mobile view test", function(done) {
     // set up
     const cityItin = {
@@ -26,13 +18,13 @@ describe("Calendar tests", function() {
     const startDate = "2017-11-1";
     const startTime = "09:00";
     const portOfEntry = "chennai";
-    const tripData = new TripData('test-mobile-view');
+    const tripData = new TripData('test-mobile-view', "1234");
     tripData.data.country = "india";
     tripData.data.startDate = startDate;
     tripData.data.startTime = startTime;
     tripData.data.arrivalDate = "2017-11-2";
     tripData.data.arrivalTime = "11:00";
-    tripData.data.name = "mobile-view-test";
+    tripData.data.name = "test-mobile-view";
     tripData.data.portOfEntry = portOfEntry;
     tripData.data.cityItin = cityItin;
     tripData.data.returnDate = "2017-11-10";
@@ -64,4 +56,12 @@ describe("Calendar tests", function() {
      }
     );
   });
+
+  it("Test getting non-mobile calendar view", function() {
+    const tripData = new TripData('test-mobile-view', "1234");
+    const formatter = new CalendarFormatter(tripData);
+    const html = formatter.format();
+    logger.debug(`formatter returned ${html.length} bytes`);
+  });
+
 });

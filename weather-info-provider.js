@@ -29,7 +29,7 @@ WeatherInfoProvider.prototype.getStoredWeather = function(responseCallback) {
   // TODO: Attempted to make this asynchronous, but the callback was not invoked in time from create-itin.js. Fix the issue before making it asynchronous.
   try {
     const data = fs.readFileSync(file, 'utf8');
-    return responseCallback(this.city, weatherSummary(data));
+    return responseCallback(this.city, weatherSummary.call(this, data));
   }
   catch(err) {
     if(err.code === 'ENOENT') {
@@ -78,13 +78,26 @@ WeatherInfoProvider.prototype.getWeatherStateUri = function(state) {
   }, handleUrlResponse.bind(this));
 }
 
+function writeToFile(body) {
+  const file = weatherFile.call(this);
+  logger.info(`Writing ${body.length} bytes into file ${file} for city ${this.city}`);
+  try {
+    fs.writeFileSync(file, body);
+  }
+  catch(err) {
+   logger.error(`could not write data from wunderground into ${file} for city ${this.city}: ${err.stack}`);
+   return false;
+  } 
+  return true;
+}
+
 function handleUrlResponse(error, res, body) {
   const responseCallback = this.wCallback;
   if (!error && res.statusCode == 200) {
     const json = JSON.parse(body);
     if(json.response.error) {
       logger.error(`wunderground returned an error for city ${this.city}: ${JSON.stringify(json.response.error)}`);
-      return responseCallback(this.city, undefined);
+      return responseCallback(this.city, null);
     }
     if(!json.trip) {
       // see if the state is present. If it is, attempt call with different wunderground API
@@ -94,17 +107,9 @@ function handleUrlResponse(error, res, body) {
         return this.getWeatherStateUri(state);
       }
       logger.error(`wunderground response does not contain key "trip" for city ${this.city}: ${JSON.stringify(json)}`);
-      return responseCallback(this.city, undefined);
+      // Asking wunderground with the same request fields will always yield the same result. So, let's short-circuit that and simply cache the failure.
     }
-    const file = weatherFile.call(this);
-    logger.info(`Writing ${body.length} bytes into file ${file} for city ${this.city}`);
-    try {
-      fs.writeFileSync(file, body);
-    }
-    catch(err) {
-     logger.error(`could not write data from wunderground into ${file} for city ${this.city}: ${err.stack}`);
-     return responseCallback(this.city, undefined);
-    } 
+    if(!writeToFile.call(this, body) || !json.trip) return responseCallback(this.city, null);
     return responseCallback(this.city, extractWeatherDetails.call(this)); 
   } else {
     logger.error(`Unable to send message for city ${this.city}: Response: ${res.statusCode}; Error: ${error}`);
@@ -120,23 +125,27 @@ function handleUrlResponse(error, res, body) {
       logger.error(`3 retries to wunderground API failed. cannot obtain weather condition for ${this.city} and time range ${this.timeRange}`);
     }
   }
-  return responseCallback(this.city, undefined);
+  return responseCallback(this.city, null);
 }
 
 function extractWeatherDetails() {
   const file = weatherFile.call(this);
   try {
-    return weatherSummary(fs.readFileSync(file));
+    return weatherSummary.call(this, fs.readFileSync(file));
   }
   catch(err) {
     logger.error(`could not read ${file}. Unable to get weather information: ${err.stack}`);
   }
-  return undefined;
+  return null;
 }
 
 function weatherSummary(contents) {
   if(!contents) return null;
   const weather = JSON.parse(contents);
+  if(!weather.trip) {
+    logger.warn(`weatherSummary: contents of file does not contain key "trip". A failed response to get weather for city ${this.city} has been cached`);
+    return null;
+  }
   const myWeather = {
     max_temp: weather.trip.temp_high.avg.F,
     min_temp: weather.trip.temp_low.avg.F,

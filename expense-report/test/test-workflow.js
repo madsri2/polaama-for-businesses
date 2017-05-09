@@ -12,6 +12,7 @@ describe("Testing workflow", function() {
   const session = sinon.mock(emptySession);
   it('testing doWork', function() {
     session.tripData = session.expects('tripData').atLeast(1).returns(trip);
+    session.invalidateTripData = session.expects('invalidateTripData').atLeast(1);
     session.fbid = "12234";
     const workflow = new Workflow(session);
     trip.data = {};

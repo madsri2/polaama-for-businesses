@@ -10,7 +10,7 @@ const moment = require('moment');
 const FbidHandler = require('fbid-handler/app/handler');
 const fs = require('fs');
 const formidable = require('formidable');
-const ExpenseReportFetcher = require('./expense-report/app/report-fetcher');
+const ExpenseReportFetcher = require('expense-report/app/report-fetcher');
 const BrowseQuotes = require('trip-flights/app/browse-quotes');
 
 function WebpageHandler(id, tripName) {
@@ -29,7 +29,7 @@ function WebpageHandler(id, tripName) {
     return;
   }
   this.trip = this.session.getTrip(tripName);
-  if(_.isNull(this.trip)) {
+  if(!this.trip) {
     logger.error(`No trip named ${tripName} exists in session ${this.session.sessionId}`);
     return;
   }
@@ -98,7 +98,7 @@ WebpageHandler.prototype.displayFlightQuotes = function(req, res) {
 }
 
 WebpageHandler.prototype.displayExpenseReport = function(res) {
-  const reporter = new ExpenseReportFetcher(this.tripName);
+  const reporter = new ExpenseReportFetcher(this.trip);
   const report = reporter.getReport();
   if(report.noreport) {
     return res.send(report.noreport);
@@ -147,6 +147,38 @@ WebpageHandler.prototype.sendFriendsList = function(res) {
   return res.send(html);
 }
 
+function addTravelers(err, fields) {
+  if(err) {
+    logger.error(`Error from form parser: ${JSON.stringify(err)}`);
+    return "rror updating itinerary";
+  }
+  logger.info("handleTravelersForNewTrip: The friends chosen are: " + JSON.stringify(fields));
+  let noSessionForFriend = false;
+  let addingToSessionFailed = false;
+  // For each friend who is traveling, add this trip in their session.
+  Object.keys(fields).forEach(name => {
+    const friendFbid = this.fbidHandler.fbid(name);
+    logger.info(`Obtained id ${friendFbid} for friend ${name}`);
+    const friendSession = this.sessions.find(friendFbid);
+    if(!friendSession) {
+      logger.error(`addTravelers: Could not find session for id ${friendFbid}, friend ${name}`);
+      noSessionForFriend = true;
+      return;
+    }
+    // add new trip to friends' session, but do not change context of that session
+    try {
+      friendSession.addNewTrip(this.session.tripNameInContext, this.trip);
+    }
+    catch(err) {
+      logger.error(`addTravelers: error adding new trip ${this.trip.rawTripName} to session ${friendSession.sessionId} from localSession ${this.session.sessionId}: ${err.stack}`);
+      addingToSessionFailed = true;
+    }
+  });
+  if(noSessionForFriend) return "Could not add this trip to some of your friend's travel list because Polaama does not know about them yet.";
+  if(addingToSessionFailed) return "Could not add this trip to your friend's travel list. Please try again later";
+  return "saved trips to friends' list";
+}
+
 WebpageHandler.prototype.handleTravelersForNewTrip = function(req, res) {
   // logger.info(`body: ${JSON.stringify(req.body)}; params: ${JSON.stringify(req.params)}, query-string: ${JSON.stringify(req.query)} headers: ${JSON.stringify(req.headers)}`);
   // logger.info("req value is " + util.inspect(req, {showHidden: true, color: true, depth: 5}));
@@ -155,36 +187,12 @@ WebpageHandler.prototype.handleTravelersForNewTrip = function(req, res) {
     return res.send("Cannot add trip to your friend travel list because Polaama does not know about them yet.");
   }
   const form = new formidable.IncomingForm(); 
-  const localFbidHandler = this.fbidHandler;
-  const localSessions = this.sessions;
-  const localSession = this.session;
-  const localFormatter = this.formatter;
+  const self = this;
   if(_.isUndefined(localSession.tripNameInContext)) {
     return res.send(`Could not add trip to friends' list because there is no trip in context for ${this.session.fbid}.`);
   }
-  let noSessionForFriend = false;
   form.parse(req, function (err, fields, files) {
-      logger.info("handleTravelersForNewTrip: The friends chosen are: " + JSON.stringify(fields));
-      // For each friend who is traveling, add this trip in their session.
-      Object.keys(fields).forEach(name => {
-          const friendFbid = localFbidHandler.fbid(name);
-          logger.info(`Obtained id ${friendFbid} for friend ${name}`);
-          const s = localSessions.find(friendFbid);
-          if(_.isNull(s) || _.isUndefined(s)) {
-          logger.error(`handleTravelersForNewTrip: Could not find session for id ${friendFbid}, friend ${name}`);
-          noSessionForFriend = true;
-          }
-          else {
-          // add new trip to friends' session, but do not change context of that session
-          s.addNewTrip(localSession.tripNameInContext, localSession.findTrip());
-          }
-      });
-      if(noSessionForFriend) {
-      return res.send("Could not add this trip to some of your friend's travel list because Polaama does not know about them yet.");
-      }
-      else {
-        return res.send("saved trips to friends' list");
-      }
+    return res.send(addTravelers.call(self, err, fields));
   }); 
 }
 
@@ -294,5 +302,7 @@ WebpageHandler.prototype.getBoardingPass = function(req, res) {
   }
   return res.sendFile(file);
 }
+
+WebpageHandler.prototype.testing_addTravelers = addTravelers;
 
 module.exports = WebpageHandler;

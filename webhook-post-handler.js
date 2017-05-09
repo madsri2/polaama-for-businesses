@@ -1416,6 +1416,8 @@ function determineCities(existingTrip) {
 }
 
 function determineTravelCompanions() {
+  const trip = this.session.findTrip();
+  if(!trip) throw new Error(`Expected trip context to be present for fbid ${this.session.fbid}. Possible BUG!`);
   sendTextMessage(this.session.fbid, `Choose your travel companions`);
   const messageData = {
     recipient: {
@@ -1434,7 +1436,7 @@ function determineTravelCompanions() {
               title:"Choose Friends",
               webview_height_ratio: "compact",
               messenger_extensions: true,
-              fallback_url: sendUrl.call(this, "friends")
+              fallback_url: sendUrl.call(this, `${trip.data.name}/friends`)
             }]
           }]
         }

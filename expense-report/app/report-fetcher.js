@@ -1,16 +1,16 @@
 'use strict';
 
-const Calculator = require('./calculator');
-const TripData = require('../../trip-data');
-const logger = require('../../my-logger');
+const baseDir = "/home/ec2-user";
+const Calculator = require('expense-report/app/calculator');
+const TripData = require(`${baseDir}/trip-data`);
+const logger = require(`${baseDir}/my-logger`);
 
-function ReportFetcher(tripName) {
-  this.trip = new TripData(tripName);
-  this.tripName = tripName;
+function ReportFetcher(trip) {
+  this.trip = trip;
+  this.tripName = trip.rawTripName;
 }
 
 ReportFetcher.prototype.getReport = function() {
-  // const families = getFamilyDetails.call(this);
   const families = this.trip.getTravelers();
   if(!families) {
     logger.warn(`getReport: No traveler information available for trip ${this.trip.rawTripName}. This is only possible if the user tried to get expense reports without adding any details or if we lost the data!`);

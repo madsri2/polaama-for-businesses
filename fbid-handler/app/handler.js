@@ -13,8 +13,8 @@ const logger = require(`${baseDir}/my-logger`);
 // 322170138147525: 'Polaama', // GoForLakePowell page
 
 // list of all fbids that Polaama knows about.
-function FbidHandler(fbidFile) {
-  if(fbidFile) this.fbidFile = fbidFile; // this functionality is currently used by test-handler.js to store test data in a different file.
+function FbidHandler(testFbidFile) {
+  if(testFbidFile) this.fbidFile = testFbidFile; // this functionality is currently used by test-handler.js to store test data in a different file.
   this.fbidDetails = {};
   this.nameFbidMap = new Map(); // using a map so that it's easy to add friends.
   this.idFbidMap = new Map();
@@ -88,17 +88,18 @@ FbidHandler.prototype.decode = function(encodedId) {
 
 // given an fbid, return corresponding id
 FbidHandler.prototype.encode = function(fbid) {
-  if(this.fbidDetails[fbid]) {
-    return this.fbidDetails[fbid].id;
-  }
+  if(this.fbidDetails[fbid]) return this.fbidDetails[fbid].id;
   return null;
 }
 
 
 function updateFbidDetails(fbid, json) {
+  const encodedId = randomstring.generate({ length: 4, charset: 'alphabetic' });
+  // if an id already exists, this is a bug. Throw EXCEPTION.
+  if(this.idFbidMap.get(encodedId)) throw new Error(`encodedId ${encodedId} already exists as id for fbid ${this.idFbidMap.get(encodedId)}. This can only mean that randomstring generated a duplicate id. POSSIBLE BUG!!`);
   this.fbidDetails[fbid] = {
     name: `${json.first_name} ${json.last_name}`,
-    id: randomstring.generate({ length: 4, charset: 'alphabetic' })
+    id: encodedId
   };
   // update the maps!
   this.idFbidMap.set(this.fbidDetails[fbid].id, fbid);

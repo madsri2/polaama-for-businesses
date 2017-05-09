@@ -1,13 +1,16 @@
 'use strict';
-const WebpageHandler = require('./webpage-handler');
-const Sessions = require('./sessions');
-const ss = Sessions.get();
+const baseDir = "/home/ec2-user";
+const WebpageHandler = require(`${baseDir}/webpage-handler`);
+const ss = require(`${baseDir}/sessions`).get();
+const TripData = require(`${baseDir}/trip-data`);
+const logger = require(`${baseDir}/my-logger`);
+logger.setTestConfig(); // indicate that we are logging for a test
 
 function Response() {
 }
 
 Response.prototype.send = function(html) {
-  console.log(html);
+  this.html = html;
 }
 
 const headers = {
@@ -45,10 +48,15 @@ function testSendFriendsList() {
 // testSendFriendsList();
 
 function addTripForSession() {
-  const s2 = ss.findOrCreate("2");
-  s2.addTrip("b");
+  const myFbid = "2";
+  const tripName = "b";
+  // first clean up previous test state
+  ss.testing_delete(myFbid);
+  new TripData(tripName, myFbid).testing_delete();
+  const s2 = ss.findOrCreate(myFbid);
+  s2.addTrip(tripName);
   const tripDetails = {
-    destination: "b",
+    destination: tripName,
     startDate: "11/1/17",
     duration: 10
   };
@@ -71,6 +79,8 @@ function testAddCitiesExistingTrip() {
   const handler = new WebpageHandler(id, tripName);
   const res = new Response();
   handler.displayCitiesForExistingTrip(res);
+  const expectedStr = '<option value="Bb">Bb</option><option value="Bbb">Bbb</option><option value="Bbbb">Bbbb</option>';
+  logger.debug(`EXPECTATION: >0; ACTUAL: ${res.html.indexOf(expectedStr)}`);
 }
 
 function testHandleAddCityChoice() {
@@ -83,6 +93,17 @@ function testHandleAddCityChoice() {
   return handler.handleAddCityChoice(req, res, myPostHandler, true /* existingTrip */);
 }
 
+function testAddingNewTraveler() {
+  // we need sessions for friends and ourselves
+  ss.findOrCreate("2");
+  ss.findOrCreate("1234");
+  const handler = new WebpageHandler("aaaa", "b");
+  const str = handler.testing_addTravelers(null, {"Testing Testing":"Testing Testing", "Hu Tha": "Hu Tha"});
+  
+  logger.debug(`EXPECTATION: 0; ACTUAL: ${str.indexOf("saved trips to friends' list")}`);
+}
+
 // testAddCitiesNewTrip();
 testAddCitiesExistingTrip();
+testAddingNewTraveler();
 

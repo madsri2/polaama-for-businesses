@@ -14,7 +14,7 @@ logger.setTestConfig(); // indicate that we are logging for a test
 
 describe("Test Create Itinerary functionality", function() {
   it("basic test", function() {
-    const tripData = new TripData('india');
+    const tripData = new TripData('india', "1234");
     tripData.data.startDate = "2018-01-01";
     tripData.data.cityItin = {
       'cities': ['delhi'],
@@ -109,7 +109,7 @@ describe("Test Create Itinerary functionality", function() {
     const startDate = "2017-11-1";
     const startTime = "09:00";
     const portOfEntry = "chennai";
-    const tripData = new TripData('test-full-itin');
+    const tripData = new TripData('test-full-itin', "1234");
     tripData.data.country = "india";
     tripData.data.startDate = startDate;
     tripData.data.startTime = startTime;
@@ -182,7 +182,7 @@ describe("Test Create Itinerary functionality", function() {
     };
     const startDate = "2017-10-11";
     const portOfEntry = "chennai";
-    const tripData = new TripData('test-user-itin');
+    const tripData = new TripData('test-user-itin', "1234");
     tripData.data.country = "india";
     tripData.data.startDate = startDate;
     tripData.data.name = "user-itin-test";
@@ -244,7 +244,7 @@ describe("Test Create Itinerary functionality", function() {
     const startDate = "2017-11-1";
     const startTime = "09:00";
     const portOfEntry = "chennai";
-    const tripData = new TripData('test-full-itin');
+    const tripData = new TripData('test-full-itin', "1234");
     tripData.data.country = "india";
     tripData.data.startDate = startDate;
     tripData.data.startTime = startTime;

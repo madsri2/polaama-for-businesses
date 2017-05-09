@@ -9,7 +9,7 @@ const baseDir = "/home/ec2-user";
 const logger = require(`${baseDir}/my-logger`);
 logger.setTestConfig(); // indicate that we are logging for a test
 
-const tripData = new TripData("Israel");
+const tripData = new TripData("Israel", "1234");
 
 function testingGetInfoFromTrip() {
   console.log("testing getInfoFromTrip trip details: ",JSON.stringify(tripData.getInfoFromTrip("comments")));
@@ -38,7 +38,7 @@ function testPackListPath() {
 }
 
 function testConstructor() {
-  const b = new TripData("b",true);
+  const b = new TripData("b","1234");
   console.log(b.rawTripName);
 }
 
@@ -60,6 +60,7 @@ function testFileList() {
   return tripList;
 }
 
+/*
 function testingElements() {
   const elements = [];
   elements.push({
@@ -82,29 +83,24 @@ function testingElements() {
   });
   console.log(JSON.stringify(elements));
 }
-
+*/
 
 function testAddPortOfEntry() {
   // remove previous file entry
-  const trip = new TripData("Testing");
+  const trip = new TripData("Testing", "1234");
   trip.addPortOfEntry("b");
-  const updatedTrip = new TripData("Testing");
+  const updatedTrip = new TripData("Testing", "1234");
   console.log(JSON.stringify(updatedTrip));
 }
 
-function testGetExpenseReport() {
-  const trip = new TripData("portugal");
-  console.log(trip.getExpenseReport());
-}
-
 function testAddCityItinerary() {
-  const trip = new TripData("TestAddingCityItinerary");
+  const trip = new TripData("TestAddingCityItinerary", "1234");
   trip.addCityItinerary(["A","B"],[1,2]);
   console.log(`Trip details: ${JSON.stringify(trip)}`);
 }
 
 function testUpdateItinerary() {
-  const trip = new TripData("TestUpdatingItinerary");
+  const trip = new TripData("TestUpdatingItinerary", "1234");
   // promise.done does not seem to work here. I get a promise.done not a function error.
   trip.updateItinerary("11-1-2017", "hello world").then(
     function(r) {
@@ -123,7 +119,7 @@ function testUpdateItinerary() {
 }
 
 function testCategorizingComments(comments, expected) {
-  const taggedComments = new TripData("test-categorizing-comments").testing_categorizeComments(comments);
+  const taggedComments = new TripData("test-categorizing-comments", "1234").testing_categorizeComments(comments);
   let actual = "";
   Object.keys(taggedComments).forEach(key => {
     const items = taggedComments[key];
@@ -132,21 +128,23 @@ function testCategorizingComments(comments, expected) {
   console.log(`EXPECTED: ${expected}. ACTUAL: ${actual}`);
 }
 
-
+/*
 testCategorizingComments(["beach activity","a beach worth visiting", "a beach.", "somethingwithbeachinmiddle", "gardentostart", "a garden.", ": garden."], "5 activities; 2 others");
 testCategorizingComments(["hotel ","airbnb: ", "somethinghotelairbnb", "an ok condo."], "3 stay; 1 others");
 testCategorizingComments(["consumeraffairs","flight plan", "air tickets."], "2 flights; 1 others");
 testCategorizingComments(["http://www.travelweekly.com/Cruise/Carnival-Cruise-Line/Carnival-Conquest/Cruise-p51209461","july 13th is royal caribbean and july 14th is carnival"], "2 others");
+*/
 
-// testUpdateItinerary();
+/*
+tripData.storeFreeFormText("1234", "comment 1");
+testingGetInfoFromTrip();
+*/
 
 // testAddCityItinerary();
-
-// testGetExpenseReport();
+// testUpdateItinerary();
 
 // testAddPortOfEntry();
 
-// testingGetInfoFromTrip();
 
 // testConstructor();
 /*
