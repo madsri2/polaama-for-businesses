@@ -1,7 +1,9 @@
 'use strict';
 
-const Sessions = require('./sessions');
+const baseDir = "/home/ec2-user";
+const Sessions = require(`${baseDir}/sessions`);
 const ss = Sessions.get();
+const Session = require(`${baseDir}/session`);
 
 function testFindOrCreateAndContextUpdates() {
   const s1 = ss.findOrCreate("1");
@@ -32,7 +34,7 @@ function testPersistAndRetrieve() {
   const s2 = ss.findOrCreate("2");
   s2.addTrip("a");
 
-  const s3 = Sessions.retrieveSession("2");
+  const s3 = new Session("2");
   // console.log(s2);
   // console.log(s3);
   delete s2.guid;

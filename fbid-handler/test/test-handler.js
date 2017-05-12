@@ -11,6 +11,7 @@ logger.setTestConfig(); // indicate that we are logging for a test
 describe("FbidHandler Tests: ", function() {
   function verifyExpectations(handler, myFbid) {
     expect(handler.getName(myFbid)).to.equal("Madhuvanesh Parthasarathy");
+    expect(handler.getName("1326674134041820")).to.equal("Pol Aama");
     expect(handler.encode(myFbid)).to.be.a('string');
     // adding the same fbid second time will simply fetch it from cache, forcing a null return
     expect(handler.add(myFbid)).to.be.null; 
@@ -35,7 +36,7 @@ describe("FbidHandler Tests: ", function() {
     }
     const myFbid = "1120615267993271";
     const promises = [];
-    const handler = new FbidHandler("fbid-test.txt");
+    const handler = FbidHandler.get("fbid-test.txt");
     const promise = handler.add("1280537748676473"); // Adhu Artha
     if(!promise) {
       // this means that Adhu Artha is already there, which means we are using the cache (see useCache above). Simply perform the checks and move on.
@@ -69,7 +70,8 @@ describe("FbidHandler Tests: ", function() {
       done(err);
     }).done(res => {
       logger.debug(`final result: ${res}`);
-      verifyExpectations(handler, myFbid);
+      // test that FbidHandler.get reloads from persistent store.
+      verifyExpectations(FbidHandler.get(), myFbid);
       done();
     }, err => {
       logger.error(`final error: ${err.stack}`);
@@ -78,14 +80,14 @@ describe("FbidHandler Tests: ", function() {
   });
 
   it("test friends list", function() {
-    const handler = new FbidHandler("fbid-test.txt");
+    const handler = FbidHandler.get("fbid-test.txt");
     const friends = handler.getFriends("1120615267993271"); // Madhu
     expect(friends.length).to.be.at.least(4);
   });
 
   it("test encode & decode", function() {
     const polFbid = "1326674134041820";
-    const handler = new FbidHandler("fbid-test.txt");
+    const handler = FbidHandler.get("fbid-test.txt");
     const polId = handler.encode(polFbid);
     expect(polId).to.be.a('string');
     expect(handler.decode(polId)).to.equal(polFbid);
@@ -93,7 +95,7 @@ describe("FbidHandler Tests: ", function() {
 
   it("test fbid", function() {
     const myFbid = "1120615267993271";
-    expect(new FbidHandler("fbid-test.txt").fbid("Madhuvanesh Parthasarathy")).to.equal(myFbid);
+    expect(FbidHandler.get("fbid-test.txt").fbid("Madhuvanesh Parthasarathy")).to.equal(myFbid);
   });
 });
 

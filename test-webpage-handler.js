@@ -70,6 +70,8 @@ function testAddCitiesNewTrip() {
   const handler = new WebpageHandler(id, tripName);
   const res = new Response();
   handler.displayCities(res);
+  const expectedStr = '<option value="Bb">Bb</option><option value="Bbb">Bbb</option><option value="Bbbb">Bbbb</option>';
+  logger.debug(`EXPECTATION: >0; ACTUAL: ${res.html.indexOf(expectedStr)}`);
 }
 
 function testAddCitiesExistingTrip() {
@@ -103,7 +105,7 @@ function testAddingNewTraveler() {
   logger.debug(`EXPECTATION: 0; ACTUAL: ${str.indexOf("saved trips to friends' list")}`);
 }
 
-// testAddCitiesNewTrip();
+testAddCitiesNewTrip();
 testAddCitiesExistingTrip();
 testAddingNewTraveler();
 

@@ -12,7 +12,6 @@ function Country(country) {
   }
   try {
     const file = `${baseDir}countries/${Encoder.encode(country)}.txt`;
-    logger.debug(`Country: Looking at file ${file}`);
     fs.accessSync(file, fs.F_OK);
     try {
       this.data = JSON.parse(fs.readFileSync(file, 'utf8'));

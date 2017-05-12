@@ -24,7 +24,7 @@ let TEST_MODE = false;
 function WebhookPostHandler(session, testing) {
   if(testing) TEST_MODE = true; // Use sparingly. Currently, only used in callSendAPI
   this.sessions = Sessions.get();
-  this.fbidHandler = new FbidHandler();
+  this.fbidHandler = FbidHandler.get();
   if(!_.isUndefined(session)) {
     logger.info(`WebhookPostHandler: A session with id ${session.sessionId} was passed. Using that in the post hook handler`);
     this.passedSession = session;
@@ -374,7 +374,9 @@ function planNewTrip(userChoice) {
     this.session.planningNewTrip = true;
     return;
   }
-  if(userChoice.email) sendTextMessage(this.session.fbid, "Send your flight itinerary or boarding pass to TRIPS@MAIL.POLAAMA.COM. I will notify you as soon as your itinerary is ready");
+  if(userChoice.email) sendMultipleMessages(this.session.fbid, textMessages.call(this, [
+    'Send your flight itinerary or boarding pass to TRIPS@MAIL.POLAAMA.COM. As soon as we receive it, we will send you an "ack" message',
+    'If your trip is starting within 24 hours, we will send you the boarding pass']));
 }
 
 function receivedPostback(event) {
@@ -1502,7 +1504,7 @@ function getHelpMessageData(senderID, message) {
 function sendWelcomeMessage(senderID) {
   const messages = [];
   messages.push(getTextMessageData(senderID, "Hi there! Welcome to Polaama, your personal travel assistant!"));
-  messages.push(getHelpMessageData.call(this, senderID, "Create a new trip to see how I can help you simplify your travel planning process."));
+  messages.push(getHelpMessageData.call(this, senderID, "Create a new trip to see how we can simplify travel planning for you."));
   return sendMultipleMessages(senderID, messages);
 }
 

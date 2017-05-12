@@ -112,7 +112,8 @@ WebpageHandler.prototype.displayCalendar = function(res) {
   }
   catch(e) {
     logger.error(`displayCalendar: Error formatting calendar view; ${e.stack}`);
-    return res.send(`Even bots need to eat. Back in a bit!`);
+    // return res.send(`Even bots need to eat. Back in a bit!`);
+    return res.send(`Unable to show itinerary for trip ${this.tripName} at this time`);
   }
 }
 

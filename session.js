@@ -89,14 +89,48 @@ function guid() {
 }
 
 function Session(fbid,sessionId) {
+  if(!fbid) throw new Error(`Session: required field fbid is missing`);
+  this.fbid = fbid;
 	this.guid = guid();
   this.sessionId = sessionId;
-  this.fbid = fbid;
   this.botMesgHistory = [];
   this.trips  = {};
   this.tripNameInContext = null;
   this.rawTripNameInContext = null;
   this.noTripContext = true; // by default, there will be no trip context
+  this.synced = false;
+  sync.call(this); // sync from persistent store
+}
+
+function sync() {
+  const file = `${Session.sessionBaseDir}/${this.fbid}.session`;
+  try {
+    fs.accessSync(file, fs.F_OK);
+    try {
+      const data = JSON.parse(fs.readFileSync(file, 'utf8'));
+      this.sessionId = data.sessionId; // there's a possibility that the constructor was only called with fbid, in which case sessionId will be null. Fix that here.
+      this.tripNameInContext = data.tripNameInContext;
+      this.rawTripNameInContext = data.rawTripNameInContext;
+      if(this.tripNameInContext) {
+        this.noTripContext = false;
+        if(!this.rawTripNameInContext) throw new Error(`session has tripNameInContext ${this.tripNameInContext} but no rawTripNameInContext. Possible BUG!`);
+      }
+      this.hometown = data.hometown;
+      Object.keys(data.trips).forEach(name => {
+        // we know that the name of the trip that was persisted is encoded.
+        this.trips[name] = {
+          aiContext: data.trips[name].aiContext,
+          humanContext: data.trips[name].humanContext,
+          tripData: new TripData(name, this.fbid)
+        };
+      });
+      this.synced = true;
+    }
+    catch(err) {
+      logger.error("error reading from ", file, err.stack);
+    }
+  }
+  catch(err) { logger.warn(`sync: file ${file} cannot be accessed (it is possible that this session never existed): ${err.stack}`); }
 }
 
 Session.prototype.persistSession = function() {
@@ -176,8 +210,9 @@ Session.prototype.invalidateTripData = function() {
 	sessionTrip.tripData = null;
 }
 
+// TODO: Find instances where the trip is used and replace with findTrip. Then remove this function
 Session.prototype.tripData = function() {
-  return this.getTrip(this.tripNameInContext);
+  return this.findTrip();
 }
 
 Session.prototype.allTrips = function() {
@@ -290,7 +325,11 @@ Session.prototype.addNewTrip = function(tripName, trip) {
 }
 
 Session.prototype.findTrip = function() {
-  return this.trips[this.tripNameInContext];
+  if(!this.tripNameInContext) {
+    logger.error(`findTrip: No tripNameInContext session ${this.sessionId} and fbid ${this.fbid}`);
+    return null;
+  }
+  return this.getTrip(this.tripNameInContext);
 }
 
 Session.prototype.deleteAiContext = function() {
@@ -306,10 +345,17 @@ Session.prototype.updateAiContext = function(context) {
 }
 
 Session.prototype.getTrip = function(tripName) {
-  if(!tripName || !this.trips[TripData.encode(tripName)]) {
-    const errString = (tripName) ? `could not find trip ${TripData.encode(tripName)} in this.trips` : `passed tripName was null or undefined`;
-    logger.error(errString);
+  if(!tripName) {
+    logger(`getTrip: null or undefined tripName was passed`);
     return null;
+  }
+  if(!this.trips[TripData.encode(tripName)]) {
+    // there is a possibility that the trip was added by a different process (Example: boarding-pass-handler.js). sync from persistent store to see if that's the case
+    sync.call(this);
+    if(!this.trips[TripData.encode(tripName)]) {
+      logger.error(`getTrip: could not find trip ${TripData.encode(tripName)} in this.trips in session ${this.sessionId} with fbid ${this.fbid}. The trip is not present even in persistent store!`);
+      return null;
+    }
   }
   const trip = this.trips[TripData.encode(tripName)];
   // see if the tripData was invalidated and refresh it if it was.

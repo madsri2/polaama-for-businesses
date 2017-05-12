@@ -12,6 +12,14 @@ const logger = require(`${baseDir}/my-logger`);
 // curl -X GET "https://graph.facebook.com/v2.6/1041923339269341?access_token=$PAGE_ACCESS_TOKEN"
 // 322170138147525: 'Polaama', // GoForLakePowell page
 
+let globalFbidHandler = null;
+
+FbidHandler.get = function(testFbidFile) {
+  if(!globalFbidHandler) globalFbidHandler = new FbidHandler(testFbidFile); 
+  if(globalFbidHandler.reload) globalFbidHandler = new FbidHandler(testFbidFile);
+  return globalFbidHandler;
+}
+
 // list of all fbids that Polaama knows about.
 function FbidHandler(testFbidFile) {
   if(testFbidFile) this.fbidFile = testFbidFile; // this functionality is currently used by test-handler.js to store test data in a different file.
@@ -142,6 +150,8 @@ FbidHandler.prototype.add = function(fbid) {
         logger.debug(`second promise: writing to file`);
         fs.writeFile(file.call(self), JSON.stringify(self.fbidDetails), function(err, res) {
           if(err) return reject(err);
+          // mark that the next time FbidHandler.get gets called, we need to read from persistent store
+          globalFbidHandler.reload = true; 
           fulfil(true);
         });
       });

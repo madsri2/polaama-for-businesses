@@ -84,6 +84,12 @@ function spam(msg) {
     logger.debug("spam score greater than 5. Marking message as spam");
     return true;
   }
+  if(!msg.from) {
+    const file = `${EmailParser.dir}/mail.${moment().format("YYYY-MM-DDTHH:mm")}`;
+    logger.error(`spam: unable to identify sender's email. Dropping message. json dump of mail message in ${file}`);
+    fs.writeFileSync(file, JSON.stringify(msg));
+    return true;
+  }
   const origin = msg.from[0].address;
   let emailBlacklisted = false;
   blacklist.forEach(email => {

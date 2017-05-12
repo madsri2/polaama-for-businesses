@@ -13,8 +13,8 @@ TripData.todo = "todoList";
 
 function TripData(tripName, fbid) {
   if(!tripName) throw new Error("TripData: Required parameter tripName is undefined");
-  if(!fbid) throw new Error(`required field fbid is missing`);
-  const encodedFbid = new FbidHandler().encode(fbid);
+  if(!fbid) throw new Error("required field fbid is missing");
+  const encodedFbid = FbidHandler.get().encode(fbid);
   this.tripBaseDir = `${baseDir}/${encodedFbid}`;
   if(!fs.existsSync(this.tripBaseDir)) fs.mkdirSync(this.tripBaseDir);
   this.rawTripName = tripName;
@@ -28,28 +28,6 @@ function TripData(tripName, fbid) {
     if(this.data.country) this.country = new Country(this.data.country);
   }
 }
-
-// return the list of raw names for each trip.
-// TODO: Figure out who is using this and reconcile with the use of session.getFutureTrips
-/*
-TripData.getTrips = function() {
-  let tripList = [];
-  fs.readdirSync(this.tripBaseDir).forEach(name => {
-    if(!name.startsWith(".")) {
-      const tripData = JSON.parse(fs.readFileSync(`${this.tripBaseDir}/${name}`,'utf8'));
-      // only add those trips whose start date is after today or we don't know the start date
-      if(_.isUndefined(tripData.startDate) || 
-         moment(tripData.startDate).diff(moment(),'days') >= 0) { 
-        tripList.push({
-          name: tripData.name,
-          rawName: tripData.rawName
-        });
-      }
-    }
-  });
-  return tripList;
-}
-*/
 
 // ======== Retrieve from trip =======
 TripData.prototype.getInfoFromTrip = function(tripKey) {

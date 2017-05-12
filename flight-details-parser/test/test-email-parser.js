@@ -49,6 +49,14 @@ describe('Spam tests', function() {
     expect(spam(msg)).to.not.be.ok;
   });
 
+  it('spam drop message without source email', function() {
+    const msg = {
+      spamScore: 4,
+      randomDetails: "blah"
+    };
+    expect(spam(msg)).to.be.ok;
+  });
+
   it('blacklisted email', function() {
     const msg = {
       from: [{ 

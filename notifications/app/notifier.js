@@ -46,11 +46,11 @@ Notifier.prototype.getImminentTripBoardingPass = function(trip, session) {
   const name = trip.data.name;
   logger.debug(`getImminentTripBoardingPass: Trip ${name} from session ${sessionId} starting on ${trip.data.startDate}; daysToTrip: ${daysToTrip}`);
   const fbid = session.fbid;
-  if(daysToTrip >= 0 && daysToTrip <= 2 && !this.sentList[getSentListKey.call(this, fbid, name)]) {
+  if(daysToTrip >= 0 && daysToTrip <= 1 && !this.sentList[getSentListKey.call(this, fbid, name)]) {
     logger.debug(`getImminentTripBoardingPass: user ${fbid}'s trip ${name} is ${daysToTrip} days away. sending boarding pass`);
     return getBoardingPass(trip, fbid);
   }
-  logger.debug(`getImminentTripBoardingPass: user ${fbid}'s trip ${name} is ${daysToTrip} days away`);
+  logger.debug(`getImminentTripBoardingPass: user ${fbid}'s trip ${name} is ${daysToTrip} days away. NOT sending boarding pass`);
   return null;
 }
 

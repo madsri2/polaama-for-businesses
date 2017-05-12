@@ -107,7 +107,7 @@ BoardingPassHandler.prototype.handle = function() {
     }
     else {
       // notify user that we have received a boarding pass.
-      const message = `Received boarding pass for your trip to ${this.trip.getPortOfEntry()}. I will send it to you a few hours before the trip, so it will be available offline`;
+      const message = `Received boarding pass for your trip to ${this.trip.getPortOfEntry()}. We will send it to you a few hours before the trip, so it will be available offline`;
       logger.debug(`handle: About to send message to user: ${message}`);
       this.postHandler.notifyUser(message);
     }

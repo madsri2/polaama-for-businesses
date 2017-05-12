@@ -49,7 +49,8 @@ Sessions.prototype.allSessions = function() {
       if(!file.startsWith(".") && file.endsWith(".session")) {
         // extract fbid. The file is of the format <fbid.session>
         const fbid = file.substr(0,file.length - ".session".length);
-        const session = Sessions.retrieveSession(fbid);
+        // const session = Sessions.retrieveSession(fbid);
+        const session = new Session(fbid); // we don't have the session id. Hopefully, it will be obtained from the persistent store in the constructor
         this.sessions[session.sessionId] = session;
       } 
     }, this);
@@ -61,10 +62,12 @@ Sessions.prototype.allSessions = function() {
 Sessions.prototype.reloadSession = function(sessionId) {
   if(!this.sessions[sessionId]) return;
   const fbid = this.sessions[sessionId].fbid;
-  this.sessions[sessionId] = Sessions.retrieveSession.call(this, fbid);
+  // this.sessions[sessionId] = Sessions.retrieveSession.call(this, fbid);
+  this.sessions[sessionId] = new Session(fbid, sessionId);
   return this.sessions[sessionId];
 }
 
+/*
 // This is a class method, not an instance method
 Sessions.retrieveSession = function(fbid) {
   const file = `${Session.sessionBaseDir}/${fbid}.session`;
@@ -94,9 +97,10 @@ Sessions.retrieveSession = function(fbid) {
       logger.error("error reading from ", file, err.stack);
     }
   }
-  catch(err) {}
+  catch(err) { logger.warn(`retrieveSession: file ${file} cannot be accessed: ${err.stack}`); }
   return undefined;
 }
+*/
 
 function findSessionId(fbid) {
   if(_.isUndefined(fbid)) {
@@ -114,8 +118,9 @@ function findSessionId(fbid) {
   });
   if(_.isUndefined(sessionId)) {
     // try to retrieve it from the file.
-    const session = Sessions.retrieveSession(fbid);
-    if(_.isUndefined(session)) {
+    // const session = Sessions.retrieveSession(fbid);
+    const session = new Session(fbid); // see if the sessionId can be obtained from persistent store
+    if(!session.synced) {
       logger.warn(`session for ${fbid} does not exist in sessions object and in file.`);
       return null;
     }

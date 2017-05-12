@@ -60,31 +60,6 @@ function testFileList() {
   return tripList;
 }
 
-/*
-function testingElements() {
-  const elements = [];
-  elements.push({
-    title: "Create new trip",
-    buttons: [{
-    type: "postback",
-    title: "New Trip",
-    payload: `trip_in_context ${TripData.encode("New Trip")}`
-  }]
-  });
-  TripData.getTrips().forEach(k => {
-    elements.push({
-      title: k.rawName,
-      buttons: [{
-        type: "postback",
-        title: k.name,
-        payload: `trip_in_context ${k.name}`
-      }]
-    })
-  });
-  console.log(JSON.stringify(elements));
-}
-*/
-
 function testAddPortOfEntry() {
   // remove previous file entry
   const trip = new TripData("Testing", "1234");

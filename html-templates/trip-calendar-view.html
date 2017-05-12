@@ -46,8 +46,12 @@
 </head>
 <body>
 
-<p><b>${month} ${year}</b></p>
-<div class="ui-grid-f">
+<div data-role="page">
+  <div data-role="header">
+    <h1>Your itinerary</h1>
+  </div>
+  <p><b>${month} ${year}</b></p>
+  <div class="ui-grid-f">
     <div class="ui-block-a"><div class="ui-bar ui-bar-b" style="height:30px"><b>Sun</b></div></div>
     <div class="ui-block-b"><div class="ui-bar ui-bar-c" style="height:30px"><b>Mon</b></div></div>
     <div class="ui-block-c"><div class="ui-bar ui-bar-b" style="height:30px"><B>Tue</B></div></div>
@@ -56,4 +60,15 @@
     <div class="ui-block-f"><div class="ui-bar ui-bar-c" style="height:30px"><B>Fri</B></div></div>
     <div class="ui-block-g"><div class="ui-bar ui-bar-b" style="height:30px"><B>Sat</B></div></div>
     ${calendar}
-</div><!-- /grid-f -->
+  </div><!-- /grid-f -->
+
+  <div data-role="footer">
+    <h3>
+      2017 Polaama. All rights reserved.
+      <a href="https://polaama.com/privacy-policy" data-ajax="false" target="blank">Privacy</a>
+      <a href="https://polaama.com/terms-of-service" data-ajax="false" target="blank">Terms</a>
+    </h3>
+  </div>
+
+</div> <!-- page -->
+</html>

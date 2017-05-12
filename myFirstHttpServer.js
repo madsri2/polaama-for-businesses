@@ -31,7 +31,7 @@ const morgan = require('morgan');
 const app = express();
 const https = require('https');
 const sslPath = '/etc/letsencrypt/live/polaama.com/';
-const port = 443
+const port = 1443;
 const options = {  
   key: fs.readFileSync(sslPath + 'privkey.pem'),
   cert: fs.readFileSync(sslPath + 'fullchain.pem')
@@ -265,10 +265,6 @@ app.get('/:id/:tripName/add-cities', function(req, res) {
   return handler.handleWebpage(res, handler.displayCitiesForExistingTrip);
 });
 
-app.get('/dynamic-city', function(req, res) {
-  return res.send(fs.readFileSync("/home/ec2-user/html-templates/dynamic-cities.html",'utf8'));
-});
-
 app.get('/controlgroup', function(req, res) {
   return res.send(fs.readFileSync("/home/ec2-user/html-templates/controlgroup.html",'utf8'));
 });
@@ -290,8 +286,8 @@ app.get('/:id/:tripName/calendar', function(req, res) {
   return handler.handleWebpage(res, handler.displayCalendar);
 });
 
-app.get('/handle-controlgroup', function(req, res) {
-  return res.send("Successfully called handle-contrologroup");
+app.get('/todo', function(req, res) {
+  return res.sendFile("/home/ec2-user/html-templates/todo-list.html");
 });
 
 // The filler "-" is needed here to disambiguate this route from "/:id/:tripName". If we don't use the filler here, that route will be chosen. TODO: FIX ME by chaining (see https://expressjs.com/en/guide/routing.html "Route handlers")
@@ -360,11 +356,11 @@ app.get('/emails', function(req, res) {
 });
 
 app.get('/privacy-policy', function(req, res) {
-  return res.sendFile('/home/ec2-user/html-templates/privacy-policy.html');
+  return res.sendFile('/home/ec2-user/html-templates/privacy-policy.html', 'utf8');
 });
 
 app.get('/terms-of-service', function(req, res) {
-  return res.sendFile('/home/ec2-user/html-templates/terms-of-service.html');
+  return res.send(fs.readFileSync('/home/ec2-user/html-templates/terms-of-service.html', 'utf8'));
 });
 
 function sendTodoReminders() {

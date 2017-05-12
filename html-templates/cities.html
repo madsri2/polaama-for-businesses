@@ -28,17 +28,17 @@ function updateCityDate(counter, cStDate) {
     var grid = `
         <div class="ui-grid-b"> 
           <!-- TODO: Consider making this a filterable select by following this: http://demos.jquerymobile.com/1.4.5/selectmenu-custom-filter/#&ui-state=dialog. Or even better, make this an autocomplete text field -->
-          <div class="ui-block-a"><div class="ui-bar ui-bar-a" style="height:40px">
+          <div class="ui-block-a"><div class="ui-bar ui-bar-a" style="height:40px" data-mini="true">
             <select name="cities" data-native-menu="false">
               <option data-placeholder="true">#{Placeholder}</option>
               ${cityList}
             </select>
           </div></div>
           <!-- TODO: Figure out a way to get the entire field to show up on mobile. It shows up correctily in grid.html -->
-          <div class="ui-block-b"><div class="ui-bar ui-bar-a" style="height:40px">
+          <div class="ui-block-b"><div class="ui-bar ui-bar-a" style="height:40px" data-mini="true">
             <input type="number" data-clear-btn="false" name="numberOfDays" placeholder="Duration" id="number-of-days-#{ctrPh}" onchange="updateCityDate(#{ctrPh}, '#{date}')"/>
           </div></div>
-          <div class="ui-block-c"><div class="ui-bar ui-bar-a" style="height:40px">
+          <div class="ui-block-c"><div class="ui-bar ui-bar-a" style="height:40px" data-mini="true">
             <input type="text" disabled="disabled" name="text-10" id="date-text-#{ctrPh}" value="#{monthDate} - ">
           </div></div>
         </div>`;
@@ -93,6 +93,13 @@ function updateCityDate(counter, cStDate) {
     <!-- Using HTML5's form attribute in submit button to keep the submit button outside the form and still submit form data: https://www.impressivewebs.com/html5-form-attribute/ -->
     <input type="submit" data-mini="true" data-inline="true" form="add-city-form" value="Done"></input>
   </div>
-</div>
+   <p class="ui-btn ui-icon-info ui-btn-icon-left">See page in landscape mode (horizontal view) for a better viewing experience on mobile devices</p>
+  <div data-role="footer">
+  <h3>
+    2017 Polaama. All rights reserved.
+    <a href="https://polaama.com/privacy-policy" data-ajax="false" target="blank">Privacy</a>
+    <a href="https://polaama.com/terms-of-service" data-ajax="false" target="blank">Terms</a>
+  </h3>
+  </div>
 </body>
 </html>

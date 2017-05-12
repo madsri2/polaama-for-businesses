@@ -63,7 +63,6 @@ TODO: This is not perfect. Skyscanner does not support city codes (eg. it suppor
 IataCodeGetter.prototype.getCode = function(callback) {
   // TODO: Move the functionality of getting details from file into constructor
   let iatacode = this.getCodeSync();
-  let country;
   if(iatacode) return callback(iatacode);
   logger.info(`getCode: file does not exist. Getting code for city ${this.city} from iatacode.org`);
   const self = this;
