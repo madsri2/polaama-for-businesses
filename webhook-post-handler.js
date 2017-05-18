@@ -7,6 +7,8 @@ const Sessions = require('./sessions');
 const Session = require('./session');
 const FbidHandler = require('fbid-handler/app/handler');
 const SecretManager = require('secret-manager/app/manager');
+const ButtonsPlacement = require('get-buttons-placer/app/buttons-placement');
+
 const TripInfoProvider = require('./trip-info-provider');
 const CommentParser = require('./expense-report/app/comment-parser');
 const ExpenseReportWorkflow = require('./expense-report/app/workflow');
@@ -25,7 +27,7 @@ function WebhookPostHandler(session, testing) {
   if(testing) TEST_MODE = true; // Use sparingly. Currently, only used in callSendAPI
   this.sessions = Sessions.get();
   this.fbidHandler = FbidHandler.get();
-  if(!_.isUndefined(session)) {
+  if(session) {
     logger.info(`WebhookPostHandler: A session with id ${session.sessionId} was passed. Using that in the post hook handler`);
     this.passedSession = session;
     this.session = session;
@@ -204,27 +206,7 @@ function displayTripDetails() {
   };
   const tripData = this.session.tripData();
   const tripName = tripData.data.name;
-  const lastThreeButtons = [];
-  lastThreeButtons.push({
-    type: "web_url",
-    url:sendUrl.call(this, `${tripName}/expense-report`),
-    title: "Expense report",
-    webview_height_ratio: "compact",
-    messenger_extensions: true
-  },{
-    type: "web_url",
-    url: sendUrl.call(this, tripData.flightQuoteUrlPath()),
-    title:"Flight",
-    webview_height_ratio: "compact",
-    messenger_extensions: true
-  });
-  if(require('fs').existsSync(tripData.boardingPassFile())) {
-    lastThreeButtons.push({
-      type: "postback",
-      title: "Boarding pass",
-      payload: "boarding_pass"
-    });
-  }
+  const buttons = new ButtonsPlacement(this.urlPrefix(), tripData).getPlacement();
   messageData.message = {
     attachment: {
       type: "template",
@@ -232,51 +214,13 @@ function displayTripDetails() {
         template_type: "generic",
         elements: [{
           title: "Get", 
-          buttons: [{
-            type: "web_url",
-            url:sendUrl.call(this, `${tripName}/calendar`),
-            title: "Trip calendar",
-            webview_height_ratio: "compact",
-            messenger_extensions: true,
-          },
-          {
-            type:"web_url",
-            url: sendUrl.call(this, tripData.weatherUrlPath()),
-            title: "Weather",
-            webview_height_ratio: "compact",
-            messenger_extensions: true,
-          }, 
-          {
-            type:"web_url",
-            url: sendUrl.call(this, tripData.activitiesUrlPath()),
-            title:"Activities",
-            webview_height_ratio: "compact",
-            messenger_extensions: true,
-          }]
+          buttons: buttons.firstSet
+        }, {
+          title: "Get", 
+          buttons: buttons.secondSet
         }, {
           title: "Get",
-          buttons: [{
-            type: "web_url",
-            url:sendUrl.call(this, `${tripName}/comments`),
-            title: "Comments",
-            webview_height_ratio: "compact",
-            messenger_extensions: true
-          }, {
-            type: "web_url",
-            url:sendUrl.call(this, `${tripName}/todo`),
-            title: "Todo list",
-            webview_height_ratio: "compact",
-            messenger_extensions: true
-          }, {
-            type: "web_url",
-            url:sendUrl.call(this, `${tripName}/pack-list`),
-            title: "Pack list",
-            webview_height_ratio: "compact",
-            messenger_extensions: true
-         }]
-        }, {
-          title: "Get",
-          buttons: lastThreeButtons
+          buttons: buttons.thirdSet
         }]
       }
     }
@@ -459,16 +403,34 @@ function receivedPostback(event) {
     determineTravelCompanions.call(this);
     return;
   }
-
-  if(payload === "boarding_pass") {
-    const boardingPass = (new Notifier(this.sessions)).getBoardingPass(this.session.tripData(), this.session.fbid);
-    callSendAPI(boardingPass);
-    return;
-  }
+  if(payload === "boarding_pass") return sendBoardingPass.call(this);
+  if(payload === "itinerary") return sendFlightItinerary.call(this);
 
   // When an unknown postback is called, we'll send a message back to the sender to 
   // let them know it was successful
   sendTextMessage(senderID, `Unhandled Postback ${payload} called `);
+}
+
+function sendBoardingPass() {
+    const boardingPass = (new Notifier(this.sessions)).getBoardingPass(this.session.tripData(), this.session.fbid);
+    callSendAPI(boardingPass);
+    return;
+}
+
+function sendFlightItinerary() {
+    const trip = this.session.tripData();
+    const fbid = this.session.fbid;
+    callSendAPI({
+      recipient: {
+        id: fbid
+      },
+      message: {
+        attachment: {
+          type: "template",
+          payload: JSON.parse(require('fs').readFileSync(trip.itineraryFile(), 'utf8'))
+        }
+      }
+    });
 }
 
 /*
@@ -517,9 +479,13 @@ function receivedMessage(event) {
     }
 }
 
-WebhookPostHandler.prototype.createUrl = function(urlPath) {
+WebhookPostHandler.prototype.urlPrefix = function() {
   const encodedId = this.fbidHandler.encode(this.session.fbid);
-  return `https://polaama.com/${encodedId}/${urlPath}`;
+  return `https://polaama.com/${encodedId}`;
+}
+
+WebhookPostHandler.prototype.createUrl = function(urlPath) {
+  return `${this.urlPrefix()}/${urlPath}`;
 }
 
 function sendUrl(urlPath) {
@@ -1064,6 +1030,8 @@ function determineResponseType(event) {
     sendOtherActivities.call(this, messageText);
     return;
   }
+  if(mesg.startsWith("get boarding pass")) return sendBoardingPass.call(this);
+  if(mesg.startsWith("get itinerary")) return sendFlightItinerary.call(this);
 
   logger.debug(`determineResponseType: Did not understand the context of message <${mesg}>. Dump of session states: ${this.session.dumpState()}`);
   // We don't understand the text sent. Simply present the options we present on "getting started".
@@ -1721,6 +1689,7 @@ function callSendAPI(messageData) {
 // ********************************* TESTING *************************************
 WebhookPostHandler.prototype.testing_determineResponseType = determineResponseType;
 WebhookPostHandler.prototype.testing_createNewTrip = createNewTrip;
+WebhookPostHandler.prototype.testing_displayTripDetails = displayTripDetails;
 
 // ********************************* TESTING *************************************
 

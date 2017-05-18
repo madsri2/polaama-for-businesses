@@ -16,7 +16,10 @@ let globalFbidHandler = null;
 
 FbidHandler.get = function(testFbidFile) {
   if(!globalFbidHandler) globalFbidHandler = new FbidHandler(testFbidFile); 
-  if(globalFbidHandler.reload) globalFbidHandler = new FbidHandler(testFbidFile);
+  if(globalFbidHandler.reload) {
+    logger.debug(`get: The reload flag is set. Reloading fbid handler from persistent store`);
+    globalFbidHandler = new FbidHandler(testFbidFile);
+  }
   return globalFbidHandler;
 }
 
@@ -74,6 +77,7 @@ function addFriends() {
 }
 
 FbidHandler.prototype.fbid = function(name) {
+  if(!name) throw new Error(`fbid: required parameter name is missing`);
   const fbid = this.nameFbidMap.get(name.toLowerCase());
   if(!fbid) logger.warn(`get fbid: could not find id for name: <${name}> in this.nameFbidMap. Maybe you forgot to add it?`);
   return fbid;
@@ -99,7 +103,6 @@ FbidHandler.prototype.encode = function(fbid) {
   if(this.fbidDetails[fbid]) return this.fbidDetails[fbid].id;
   return null;
 }
-
 
 function updateFbidDetails(fbid, json) {
   const encodedId = randomstring.generate({ length: 4, charset: 'alphabetic' });
@@ -171,6 +174,7 @@ function file() {
 
 /************ TESTING APIS ************************/
 FbidHandler.prototype.testing_add = function(fbid, entry) {
+  if(this.fbidDetails[fbid] && this.fbidDetails[fbid].name) return null;
   updateFbidDetails.call(this, fbid, entry);
   fs.writeFileSync(file.call(this), JSON.stringify(this.fbidDetails));
 }

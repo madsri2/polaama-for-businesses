@@ -2,22 +2,25 @@
 const fs = require('fs');
 const _ = require('lodash');
 const moment = require('moment');
-const logger = require('./my-logger');
-const Country = require('./country');
-const Encoder = require('./encoder');
 const FbidHandler = require('fbid-handler/app/handler');
-const baseDir = "/home/ec2-user/trips";
+const baseDir = "/home/ec2-user";
+const logger = require(`${baseDir}/my-logger`);
+const Country = require(`${baseDir}/country`);
+const Encoder = require(`${baseDir}/encoder`);
+
 
 // TODO: This is leaking data model to other classes. Fix this by moving all functionality that require this variable into a function in this class.
 TripData.todo = "todoList";
 
-function TripData(tripName, fbid) {
+function TripData(tripName, fbid, testFbidFile) {
   if(!tripName) throw new Error("TripData: Required parameter tripName is undefined");
   if(!fbid) throw new Error("required field fbid is missing");
-  const encodedFbid = FbidHandler.get().encode(fbid);
-  this.tripBaseDir = `${baseDir}/${encodedFbid}`;
+  const encodedFbid = FbidHandler.get(testFbidFile).encode(fbid);
+  if(!encodedFbid) throw new Error(`could not find encoded id for fbid ${fbid}. passed test file is ${testFbidFile}`);
+  this.tripBaseDir = `${baseDir}/trips/${encodedFbid}`;
   if(!fs.existsSync(this.tripBaseDir)) fs.mkdirSync(this.tripBaseDir);
   this.rawTripName = tripName;
+  this.tripName = myEncode(tripName);
   this.retrieveTripData();
   if(!Object.keys(this.data).length) {
     // New trip: update trip with information to be persisted later
@@ -61,13 +64,14 @@ TripData.prototype.retrieveTripData = function() {
     fs.accessSync(file, fs.F_OK);
     try {
       this.data = JSON.parse(fs.readFileSync(file, 'utf8')); 
+      this.tripFilePresent = true;
     }
     catch(err) {
       logger.error(`error reading from file ${file}: ${err.stack}`);
     }
   }
   catch(err) {
-      // logger.info(`File ${file} does not exist. Creating empty this.data object so it can be filled elsewhere`);
+      logger.info(`File ${file} does not exist for trip ${this.tripName}. Creating empty this.data object so it can be filled elsewhere`);
       this.data = {};
   }
 }
@@ -112,7 +116,7 @@ TripData.prototype.activitiesUrlPath = function() {
 // ======= Store data =======
 TripData.prototype.addTripDetailsAndPersist = function(tripDetails) {
   this.data = {}; 
-  this.data.name = myEncode(this.rawTripName);
+  this.data.name = this.tripName;
   this.data.rawName = this.rawTripName;
   if(tripDetails.destination) {
     this.data.country = myEncode(tripDetails.destination);
@@ -159,7 +163,9 @@ TripData.prototype.addPortOfEntry = function(portOfEntry) {
 
 // compare the port of entry with the passed city. This is a separate function to ensure that the encoding of portOfEntry does not leak outside this file.
 TripData.prototype.comparePortOfEntry = function(city) {
+  logger.debug(`comparePortOfEntry: comparing ${this.data.portOfEntry} with ${myEncode(city)}`);
   if(this.data.portOfEntry && (this.data.portOfEntry === myEncode(city))) return true;
+  logger.debug(`comparePortOfEntry: No match`);
   return false;
 }
 
@@ -279,7 +285,7 @@ function getExpenseDetailsFromComments() {
   const comments = this.getInfoFromTrip("comments"); 
   let report = [];
   if(!Object.keys(comments).length) {
-    logger.warn(`No comments found for trip ${this.rawTripName}. Returning empty list`);
+    logger.warn(`No comments found for trip ${this.tripName}. Returning empty list`);
     return report;
   }
   comments.forEach(item => {
@@ -517,6 +523,10 @@ TripData.prototype.tripItinFile = function() {
 
 TripData.prototype.boardingPassFile = function() {
   return `${this.tripBaseDir}/${this.data.name}-boarding-pass.txt`;
+}
+
+TripData.prototype.itineraryFile = function() {
+  return `${this.tripBaseDir}/${this.data.name}-flight-itinerary.txt`;
 }
 
 TripData.prototype.archiveBoardingPassFile = function() {

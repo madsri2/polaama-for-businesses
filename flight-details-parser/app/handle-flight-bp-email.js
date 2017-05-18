@@ -13,6 +13,9 @@ const optionsDefn = [
   {name: 'arr_city', alias: 'b'},
   {name: 'dep_time', alias: 't'},
   {name: 'dep_date', alias: 'u'},
+  {name: 'seat', alias: 's'},
+  {name: 'boarding_time'},
+  {name: 'arr_time'},
   {name: 'email'},
   {name: 'attachment'}
 ];

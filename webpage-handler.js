@@ -14,7 +14,7 @@ const ExpenseReportFetcher = require('expense-report/app/report-fetcher');
 const BrowseQuotes = require('trip-flights/app/browse-quotes');
 
 function WebpageHandler(id, tripName) {
-  this.fbidHandler = new FbidHandler();
+  this.fbidHandler = FbidHandler.get();
   this.fbid = this.fbidHandler.decode(id);
   this.tripName = tripName;
   this.sessions = Sessions.get();
@@ -92,7 +92,7 @@ WebpageHandler.prototype.displayFlightQuotes = function(req, res) {
     },
     function(err) {
       logger.error(`Error getting flight quotes: ${err.stack}`);
-      return res.send(self.formatted.formatFlightQuotes({noflight: 'No information yet for this segment'}));
+      return res.send(self.formatter.formatFlightQuotes({noflight: 'No information yet for this segment'}));
     }
   );
 }

@@ -130,7 +130,7 @@ function sync() {
       logger.error("error reading from ", file, err.stack);
     }
   }
-  catch(err) { logger.warn(`sync: file ${file} cannot be accessed (it is possible that this session never existed): ${err.stack}`); }
+  catch(err) { logger.warn(`sync: file ${file} cannot be accessed (it is possible that this session never existed): ${err.message}`); }
 }
 
 Session.prototype.persistSession = function() {
@@ -245,25 +245,35 @@ Session.prototype.getCurrentAndFutureTrips = function() {
   // Filter past trips
   let daysToEndOfTrip = -1;
   this.allTrips().forEach(trip => {
-    logger.debug(`getCurrentAndFutureTrips: trip is ${trip.rawTripName}; returnDate is ${trip.data.returnDate}`);
-    if(!trip.data) { logger.error(`getCurrentAndFutureTrips: trip.data is undefined for trip ${trip.rawTripName}. Possible BUG since session ${this.fbid} still contains this trip`);
+    if(!trip.tripFilePresent || !trip.data) { 
+      logger.error(`getCurrentAndFutureTrips: trip.data not present for trip ${trip.rawTripName}. Possible BUG since session ${this.fbid} still contains this trip. In the interests of not letting the user continue, we are ignoring this and proceeding (instead of throwing an error). This would be a throwable error in testing, but not production.`);
       return;
     }
-    if(!trip.data.returnDate || trip.data.returnDate != "unknown") {
+    if(trip.data.returnDate && trip.data.returnDate != "unknown") {
       const end = moment(new Date(trip.data.returnDate).toISOString());
       daysToEndOfTrip = end.diff(moment(),'days');
     }
+    else {
+      logger.debug(`getCurrentAndFutureTrips: considering trip ${trip.rawTripName} with startDate ${trip.data.startDate} and unknown return date`);
+      trips.push({
+        name: trip.data.name,
+        rawName: trip.data.rawName,
+        daysToTrip: 0
+      });
+      return;
+    }
     // if we don't know the start date for whatever reason, include those trips as well
-    if(!trip.data.startDate || daysToEndOfTrip >= 0 || daysToEndOfTrip <= 0) {
+    if(!trip.data.startDate || daysToEndOfTrip >= 0) {
+      logger.debug(`getCurrentAndFutureTrips: considering trip ${trip.rawTripName} with startDate ${trip.data.startDate} and days to end of trip ${daysToEndOfTrip}`);
       trips.push({
         name: trip.data.name,
         rawName: trip.data.rawName,
         daysToTrip: daysToEndOfTrip
       });
+      return;
     }
-    else {
-      pastTrips = true;
-    }
+    logger.debug(`getCurrentAndFutureTrips: ignoring trip ${trip.rawTripName} which happened in the past: ${trip.data.startDate}`);
+    pastTrips = true;
   }, this);
   const sortedArr = trips.sort(function(a,b) {
     return a.daysToTrip - b.daysToTrip;

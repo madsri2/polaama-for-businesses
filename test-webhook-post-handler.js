@@ -92,7 +92,18 @@ function testAddingCityToExistingTrip() {
   handler.testing_determineResponseType(event);
 }
 
-testAddingCityToExistingTrip();
+function testDisplayTripDetails() {
+  // create new trip
+  const handler = setup();
+  handler.testing_displayTripDetails();
+  // create a fake boarding pass file
+  require('fs').writeFileSync(handler.session.findTrip().boardingPassFile(), "empty"); 
+  handler.testing_displayTripDetails();
+}
+
+testDisplayTripDetails();
+
+// testAddingCityToExistingTrip();
 
 // testExtractingCityDetails();
 

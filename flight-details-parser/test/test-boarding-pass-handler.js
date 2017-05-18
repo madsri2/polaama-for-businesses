@@ -10,7 +10,6 @@ const Sessions = require(`${baseDir}/sessions`);
 const logger = require(`${baseDir}/my-logger`);
 logger.setTestConfig(); // indicate that we are logging for a test
 
-
 describe('BoardingPass handler', function() {
   let fbid = "12345";
   let tripName = "New York";
@@ -33,33 +32,33 @@ describe('BoardingPass handler', function() {
   beforeEach(function() {
     // create a test file and pass that to fbid-handler
     logger.debug("Setting up before test");
-    (new FbidHandler()).testing_add(fbid,{"first_name": "TestFirstname", "last_name": "Lastname"});
+    FbidHandler.get('fbid-test.txt').testing_add(fbid,{"first_name": "TestFirstname", "last_name": "Lastname"});
     sessions.findOrCreate(fbid);
   });
 
   // clean up
   afterEach(function() {
     logger.debug("Cleaning up after test");
-    (new FbidHandler()).testing_delete(fbid);
-    sessions.testing_delete(fbid);
     (new TripData(tripName, fbid)).testing_delete();
+    (FbidHandler.get('fbid-test.txt')).testing_delete(fbid);
+    sessions.testing_delete(fbid);
   });
 
   function verifyExpectations() {
     const trip = new TripData(tripName, fbid);
     // verify that boarding pass file actually was written
     const boardingPass = JSON.parse(fs.readFileSync(trip.boardingPassFile(), 'utf8'));
-    expect(boardingPass.flight_schedule.departure_time).to.equal("2017-5-1T09:00");
-    expect(boardingPass.full_name).to.equal("TestFirstName LastName");
+    expect(boardingPass.flight_info.flight_schedule.departure_time).to.equal("2017-5-1T09:00");
+    expect(boardingPass.passenger_name).to.equal("TestFirstName LastName");
     expect(boardingPass.pnr_number).to.equal("XWERGX");
     // verify that "flight ticket" todo item was marked done
     expect(trip.getTodoDoneList()).to.include("Flight tickets");
-    expect(boardingPass.boardingPassImageUrl).to.include("boarding-pass-image");
+    expect(boardingPass.barcode_image_url).to.include("boarding-pass-image");
     fs.accessSync(trip.boardingPassImage());
   }
   
   it('Testing handle new trip', function() {
-    expect((new BoardingPassHandler(options)).handle()).to.be.ok;
+    expect((new BoardingPassHandler(options, true /* testing */)).handle()).to.be.ok;
     verifyExpectations();
   });
 
@@ -71,7 +70,7 @@ describe('BoardingPass handler', function() {
     // The trip "new_york" should already exist.
 
     // call
-    expect((new BoardingPassHandler(options)).handle()).to.be.ok;
+    expect((new BoardingPassHandler(options, true /* testing */)).handle()).to.be.ok;
     verifyExpectations();
   });
 
@@ -79,8 +78,7 @@ describe('BoardingPass handler', function() {
     const session = (new Sessions()).find(fbid);
     if(!session) { throw new Error(`no session found for ${fbid}`); }
     else { logger.debug(`Session from test is ${session.sessionId}`); }
-    logger.warn(`session list: ${fs.readdirSync("/home/ec2-user/sessions")}`);
-    expect((new BoardingPassHandler(options)).handle()).to.be.ok;
+    expect((new BoardingPassHandler(options, true /* testing */)).handle()).to.be.ok;
     expect(fs.existsSync((new TripData(tripName, fbid)).boardingPassImage())).to.be.ok;
   });
   
