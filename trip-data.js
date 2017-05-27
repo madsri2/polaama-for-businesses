@@ -129,11 +129,14 @@ TripData.prototype.addTripDetailsAndPersist = function(tripDetails) {
   else if(tripDetails.startDate) {
     this.data.startDate = tripDetails.startDate;
   }
-  if(tripDetails.tripStarted) {
-    this.data.tripStarted = tripDetails.tripStarted;
+  if(this.data.startDate) {
+    const sdIso = new Date(this.data.startDate).toISOString();
+    this.data.startDate = moment(sdIso).format("YYYY-MM-DD");
   }
-  const sdIso = new Date(this.data.startDate).toISOString();
-  this.data.startDate = moment(sdIso).format("YYYY-MM-DD");
+  else this.data.startDate = "unknown";
+  
+  if(tripDetails.tripStarted) this.data.tripStarted = tripDetails.tripStarted;
+  if(tripDetails.portOfEntry) this.data.portOfEntry = myEncode(tripDetails.portOfEntry);
   // duration includes the start date, so subtract 1
   if(tripDetails.duration) {
     this.data.duration = tripDetails.duration;
@@ -527,6 +530,10 @@ TripData.prototype.boardingPassFile = function() {
 
 TripData.prototype.itineraryFile = function() {
   return `${this.tripBaseDir}/${this.data.name}-flight-itinerary.txt`;
+}
+
+TripData.prototype.rentalCarReceiptFile = function() {
+  return `${this.tripBaseDir}/${this.data.name}-rental-car-receipt.txt`;
 }
 
 TripData.prototype.archiveBoardingPassFile = function() {

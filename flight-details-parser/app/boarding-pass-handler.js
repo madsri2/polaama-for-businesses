@@ -13,6 +13,13 @@ const WebhookPostHandler = require(`${baseDir}/webhook-post-handler`);
 // use a mailparser like https://www.npmjs.com/package/mailparser to parse email
 function BoardingPassHandler(options, testing) {
   if(testing) this.testing = testing;
+  // fail fast if required fields or files are missing
+  this.email = options.email;
+  if(!this.email) throw new Error("required value email is missing");
+  this.boardingPassImage = `${EmailParser.dir}/${this.email}/${options.attachment}`;
+  // TODO: Send a notification asking the user to send a boarding pass (or) make this an itinerary
+  if(!fs.existsSync(this.boardingPassImage)) throw new Error(`BoardingPassHandler: Boarding pass image does not exist at location ${this.boardingPassImage}. Cannot proceed`);
+  // do some work
   const flightInfo = new FlightInfo(options);
   const dd = new Date(options.dep_date);
   this.dep_date = `${dd.getFullYear()}-${dd.getMonth()+1}-${dd.getDate()}`;
@@ -25,13 +32,28 @@ function BoardingPassHandler(options, testing) {
     'logo_image_url': `https://www.example.com/en/logo.png`, 
     'above_bar_code_image_url': `https://www.example.com/en/PLAT.png`, 
   };
-  if(options.seat) this.details.seat = options.seat;
-  if(!options.seat) logger.warn(`BoardingPassHandler: No seat number present for trip to city ${options.dep_city} by ${options.name} flying on flight ${options.flight_num}`);
-  this.email = options.email;
-  if(!this.email) throw new Error("required value email is missing");
-  this.boardingPassImage = `${EmailParser.dir}/${this.email}/${options.attachment}`;
-  // TODO: Send a notification asking the user to send a boarding pass (or) make this an itinerary
-  if(!fs.existsSync(this.boardingPassImage)) throw new Error(`BoardingPassHandler: Boarding pass image does not exist at location ${this.boardingPassImage}. Cannot proceed`);
+  if(options.seat) 
+    this.details.seat = options.seat;
+  else 
+    logger.warn(`BoardingPassHandler: No seat number present for trip to city ${options.dep_city} by ${options.name} flying on flight ${options.flight_num}`);
+  if(options.terminal) {
+    this.details.auxiliary_fields = [];
+    this.details.auxiliary_fields.push({
+      label: "Terminal",
+      value: options.terminal
+    });
+  }
+  if(options.gate || options.group) {
+    this.details.secondary_fields = [];
+    if(options.gate) this.details.secondary_fields.push({
+      label: "Gate",
+      value: options.gate
+    });
+    if(options.group) this.details.secondary_fields.push({
+      label: "Zone",
+      value: options.group
+    });
+  }
   validateFields.call(this);
 }
 

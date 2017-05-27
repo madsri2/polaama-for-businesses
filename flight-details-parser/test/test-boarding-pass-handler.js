@@ -82,7 +82,41 @@ describe('BoardingPass handler', function() {
     expect(fs.existsSync((new TripData(tripName, fbid)).boardingPassImage())).to.be.ok;
   });
   
-  it("test handling itinerary, not boarding pass", function() {
+  it("test multiple boarding passes", function() {
+    const firstPass = {
+      name: "TestFirstName LastName",
+      pnr: "XWERGX",
+      flight_num: "UA500",
+      dep_code: "SEA",
+      dep_city: "Seattle",
+      arr_code: "JFK",
+      arr_city: tripName,
+      dep_date: "5/1/17",
+      dep_time: "09:00",
+      email: "madsri2@gmail.com",
+      attachment: "2017-04-20T08:18/attachment.png",
+      seats: "21B",
+      gate: "51B",
+      terminal: "2",
+      zone: "B"
+    };
+    const secondPass = {
+      name: "first last",
+      pnr: "XWERGX",
+      flight_num: "UA500",
+      dep_code: "SEA",
+      dep_city: "Seattle",
+      arr_code: "JFK",
+      arr_city: tripName,
+      dep_date: "5/1/17",
+      dep_time: "09:00",
+      email: "madsri2@gmail.com",
+      attachment: "2017-04-20T08:18/attachment-1.png",
+      seats: "21C",
+      gate: "51B",
+      terminal: "2",
+      zone: "B"
+    };
   });
 });
 

@@ -292,15 +292,22 @@ Session.prototype.getCurrentAndFutureTrips = function() {
   };
 }
 
+Session.prototype.setTripContextAndPersist = function(tripName) {
+  const trip = this.getTrip(tripName);
+  if(!trip) throw new Error(`setTripContextAndPersist: cannot find trip ${trip.tripName} in session ${this.sessionId}, fbid ${this.fbid}`);
+  this.tripNameInContext = trip.tripName;
+  this.rawTripNameInContext = trip.rawTripName;
+  // Persist the new trip that was added to this session.
+  logger.debug(`setTripContextAndPersist: set trip context for this session as ${this.tripNameInContext}. persisting session`);
+  this.persistSession();
+}
+
 Session.prototype.addTrip = function(tripName) {
   const trip = new TripData(tripName, this.fbid);
-  const encTripName = trip.data.name;
-  // typically, when a trip is added to the session, that is also the trip in context that the user wants to discuss.
-  this.tripNameInContext = encTripName;
-  this.rawTripNameInContext = tripName;
+  const encTripName = trip.tripName;
   if(!this.trips[encTripName]) {
     // this is only possible in case of a new trip created in this session. 
-    logger.info(`Creating new trip for session ${this.fbid} for trip ${this.tripNameInContext}`);
+    logger.info(`Creating new trip for session ${this.fbid} for trip ${encTripName}`);
     // define a tripName json object.
     this.trips[encTripName] = { 
       aiContext: {
@@ -314,10 +321,10 @@ Session.prototype.addTrip = function(tripName) {
       },
       tripData: trip
     };
+    // typically, when a trip is added to the session, that is also the trip in context that the user wants to discuss.
+    this.setTripContextAndPersist(encTripName); 
     this.trips[encTripName].tripData.persistUpdatedTrip();
   }
-  // Persist the new trip that was added to this session.
-  this.persistSession();
   return this.trips[encTripName].tripData;
 }
 
@@ -356,7 +363,7 @@ Session.prototype.updateAiContext = function(context) {
 
 Session.prototype.getTrip = function(tripName) {
   if(!tripName) {
-    logger(`getTrip: null or undefined tripName was passed`);
+    logger.debug(`getTrip: null or undefined tripName was passed`);
     return null;
   }
   if(!this.trips[TripData.encode(tripName)]) {

@@ -86,6 +86,12 @@ describe('ItineraryHandler tests', function() {
     expect(passengerInfo.name).to.equal("TestFirstName LastName");
     expect(passengerInfo.passenger_id).to.equal("p001");
   }
+
+  function verifyTripInContext() {
+    const session = sessions.find(fbid);
+    const trip = getItinerary().trip;
+    expect(session.tripNameInContext).to.equal(trip.data.name);
+  }
   
   it('single itinerary', function() {
     const options = {
@@ -107,10 +113,11 @@ describe('ItineraryHandler tests', function() {
     };
     expect(new ItineraryHandler(options, true /* testing */).handle()).to.be.ok; 
     verifyFirstConnection();
+    verifyTripInContext();
   });
 
   it.skip('single passenger multiple itineraries', function() {
-    tripName = 'Amsterdam';
+    const tName = 'Amsterdam';
     const options = {
       dep_date: '5/1/17',
       names: ["TestFirstName LastName", "first last"],
@@ -122,7 +129,7 @@ describe('ItineraryHandler tests', function() {
       dep_code: ['SEA', 'JFK'],
       dep_city: ['Seattle', 'New York'],
       arr_code: ['JFK', 'AMS'],
-      arr_city: ['New York', tripName],
+      arr_city: ['New York', tName], // not using tripName because we are using a different name
       arrival_time: ['14:15', '23:00'],
       UA123_seats: ['35J', '4A'],
       total_price: "1700.56",
@@ -136,6 +143,34 @@ describe('ItineraryHandler tests', function() {
   it.skip('multiple passengers multiple itineraries', function() {
   });
 
-  it.skip('itinerary for existing trip', function() {
+  it('verify that itinerary is tripInContext', function() {
+    const session = sessions.find(fbid);
+    session.addTrip(tripName);
+    const trip = session.getTrip(tripName);
+    const startDate = "5/1/17";
+    trip.addTripDetailsAndPersist({ startDate: startDate, portOfEntry: tripName });
+    // now add another trip to session to change trip name in context
+    session.addTrip("anotherTrip");
+    expect(session.tripNameInContext).to.equal("anothertrip");
+    const options = {
+      dep_date: startDate,
+      names: ["TestFirstName LastName"],
+      flight_num: ['UA123'],
+      pnr: ['CA242V'],
+      travel_class: ['economy'],
+      boarding_time: ['09:15'],
+      dep_time: ['10:10'],
+      dep_code: ['SEA'],
+      dep_city: ['Seattle'],
+      arr_code: ['JFK'],
+      arr_city: [tripName],
+      arrival_time: ['14:15'],
+      UA123_seats: ['35J'],
+      total_price: "1700.56",
+      currency: "USD"
+    };
+    expect(new ItineraryHandler(options, true /* testing */).handle()).to.be.ok; 
+    verifyFirstConnection();
+    verifyTripInContext();
   });
 });

@@ -20,6 +20,10 @@ Sessions.get = function() {
   return sessions;
 }
 
+Sessions.path = function() {
+  return "/home/ec2-user/sessions";
+}
+
 Sessions.prototype.findOrCreate = function(fbid) {
   let sessionId = findSessionId.call(this,fbid);
   if (_.isNull(sessionId)) {
@@ -62,45 +66,9 @@ Sessions.prototype.allSessions = function() {
 Sessions.prototype.reloadSession = function(sessionId) {
   if(!this.sessions[sessionId]) return;
   const fbid = this.sessions[sessionId].fbid;
-  // this.sessions[sessionId] = Sessions.retrieveSession.call(this, fbid);
   this.sessions[sessionId] = new Session(fbid, sessionId);
   return this.sessions[sessionId];
 }
-
-/*
-// This is a class method, not an instance method
-Sessions.retrieveSession = function(fbid) {
-  const file = `${Session.sessionBaseDir}/${fbid}.session`;
-  try {
-    fs.accessSync(file, fs.F_OK);
-    try {
-      const data = JSON.parse(fs.readFileSync(file, 'utf8'));
-      const session = new Session(data.fbid,data.sessionId);
-      session.tripNameInContext = data.tripNameInContext;
-      session.rawTripNameInContext = data.rawTripNameInContext;
-      if(session.tripNameInContext) {
-        session.noTripContext = false;
-        if(!session.rawTripNameInContext) throw new Error(`session has tripNameInContext ${session.tripNameInContext} but no rawTripNameInContext. Possible BUG!`);
-      }
-      session.hometown = data.hometown;
-      Object.keys(data.trips).forEach(name => {
-        // we know that the name of the trip that was persisted is encoded.
-        session.trips[name] = {
-          aiContext: data.trips[name].aiContext,
-          humanContext: data.trips[name].humanContext,
-          tripData: new TripData(name, session.fbid)
-        };
-      });
-      return session;
-    }
-    catch(err) {
-      logger.error("error reading from ", file, err.stack);
-    }
-  }
-  catch(err) { logger.warn(`retrieveSession: file ${file} cannot be accessed: ${err.stack}`); }
-  return undefined;
-}
-*/
 
 function findSessionId(fbid) {
   if(_.isUndefined(fbid)) {

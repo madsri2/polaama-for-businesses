@@ -8,6 +8,8 @@ const Session = require('./session');
 const FbidHandler = require('fbid-handler/app/handler');
 const SecretManager = require('secret-manager/app/manager');
 const ButtonsPlacement = require('get-buttons-placer/app/buttons-placement');
+const watch = require('watch');
+const fs = require('fs');
 
 const TripInfoProvider = require('./trip-info-provider');
 const CommentParser = require('./expense-report/app/comment-parser');
@@ -34,6 +36,14 @@ function WebhookPostHandler(session, testing) {
   }
   this.notifier = new Notifier(this.sessions);
   this.logOnce = {};
+  const self = this;
+  watch.createMonitor(Sessions.path(), { ignoreDotFiles: true }, function(monitor) {
+    monitor.on('changed', function(f) {
+      logger.debug(`file ${f} changed. reloading it`);
+      const s = JSON.parse(fs.readFileSync(f, 'utf8'));
+      self.sessions.reloadSession(s.sessionId);
+    });
+  });
 }
 
 // called to handle every message from the customer.
@@ -145,26 +155,21 @@ function enterCommentAsMessage() {
   // update this session that we are awaiting response for comments postback
   this.session.awaitingComment = true;
   sendTextMessage(this.session.fbid, "Enter your free-form text");
-  return;
 }
 
 function enterTodoItemAsMessage() {
   this.session.awaitingTodoItem = true;
   sendTextMessage(this.session.fbid, "Enter a todo item");
-  return;
 }
 
 function enterPackItemAsMessage() {
   this.session.awaitingPacklistItem = true;
   sendTextMessage(this.session.fbid, "Enter a pack-list item");
-  return;
 }
 
-function getTripInContext(payload) {
+function setTripInContext(payload) {
   const tripName = payload.substring("trip_in_context ".length);
-  logger.info(`Setting the trip name for this session's context to ${tripName}. User assumes this is an existing trip.`);
-  this.session.addTrip(tripName);
-  return;
+  this.session.setTripContextAndPersist(tripName);
 }
 
 function sendUrlButton(title, urlPath) {
@@ -346,7 +351,7 @@ function receivedPostback(event) {
 
   // existing trip
   if(payload.startsWith("trip_in_context")) {
-    getTripInContext.call(this, payload);
+    setTripInContext.call(this, payload);
     if(this.session.previousPayload) {
       // use the payload that the user chose before getting the trip in context
       payload = this.session.previousPayload;
@@ -418,19 +423,88 @@ function sendBoardingPass() {
 }
 
 function sendFlightItinerary() {
-    const trip = this.session.tripData();
-    const fbid = this.session.fbid;
-    callSendAPI({
-      recipient: {
-        id: fbid
-      },
-      message: {
-        attachment: {
-          type: "template",
-          payload: JSON.parse(require('fs').readFileSync(trip.itineraryFile(), 'utf8'))
-        }
+  const trip = this.session.tripData();
+  const fbid = this.session.fbid;
+  callSendAPI({
+    recipient: {
+      id: fbid
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: JSON.parse(fs.readFileSync(trip.itineraryFile(), 'utf8'))
       }
-    });
+    }
+  });
+}
+
+function sendCarReceipt() {
+  const fbid = this.session.fbid;
+  const trip = this.session.tripData();
+  const details = JSON.parse(fs.readFileSync(trip.rentalCarReceiptFile(), 'utf8'));
+	const messages = [];
+  messages.push({
+    recipient: {
+      id: fbid
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: details.receipt
+      }
+    }
+  });
+  messages.push({
+    recipient: {
+      id: fbid
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: details.receipt_ext
+      }
+    }
+  });
+  sendMultipleMessages(this.session.fbid, messages);
+}
+
+function sendHotelItinerary() {
+  const fbid = this.session.fbid;
+	const messages = [];
+  messages.push({
+    recipient: {
+      id: fbid
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: JSON.parse(fs.readFileSync('/tmp/hotel-receipt.txt', 'utf8'))
+      }
+    }
+  });
+  messages.push({
+    recipient: {
+      id: fbid
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+					template_type: "generic",
+					elements: [{
+						title: "Phone: 56 (61) 295000",
+						buttons: [{
+							type: "web_url",
+							url: "http://click.expediamail.com/?qs=105f88ab54fd8686d9295fab692d1410ad4e7b90fd6c16a7e1a0f582df8cb08e22dfacddf07393c2041daca53a17ee6b",
+							title: "Hotel rental"
+						}],
+						subtitle: "CHECK-IN: 01/13/13, 3:00 PM, CHECK-OUT: 01/14/13 12:00 PM"
+					}]
+				}
+      }
+    }
+  });
+  sendMultipleMessages(this.session.fbid, messages);
 }
 
 /*
@@ -1032,6 +1106,8 @@ function determineResponseType(event) {
   }
   if(mesg.startsWith("get boarding pass")) return sendBoardingPass.call(this);
   if(mesg.startsWith("get itinerary")) return sendFlightItinerary.call(this);
+  if(mesg.startsWith("get car details")) return sendCarReceipt.call(this);
+  if(mesg.startsWith("get hotel details")) return sendHotelItinerary.call(this);
 
   logger.debug(`determineResponseType: Did not understand the context of message <${mesg}>. Dump of session states: ${this.session.dumpState()}`);
   // We don't understand the text sent. Simply present the options we present on "getting started".
@@ -1418,7 +1494,7 @@ function determineTravelCompanions() {
 
 // only call this method if there is a trip name in context
 function sendAddOrGetOptions() {
-  if(!this.session.tripNameInContext) throw new Error(`sendAddOrGetOptions: I was called even though there is not trip in context in session ${this.session.sessionId}. Potential BUG!`);
+  if(!this.session.tripNameInContext) throw new Error(`sendAddOrGetOptions: I was called even though there is no trip in context in session ${this.session.sessionId}. Potential BUG!`);
   const messageData = {
     recipient: {
       id: this.session.fbid

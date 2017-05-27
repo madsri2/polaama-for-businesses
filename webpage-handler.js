@@ -301,6 +301,7 @@ WebpageHandler.prototype.getBoardingPass = function(req, res) {
     logger.error(`getBoardingPass: error accessing file ${file}: ${e.stack}`);
     return res.sendStatus(404);
   }
+  logger.debug(`getBoardingPass: returning file ${file}`);
   return res.sendFile(file);
 }
 

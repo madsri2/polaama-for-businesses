@@ -2,6 +2,8 @@
 // https://www.npmjs.com/package/command-line-args
 const cmdLineArgs = require('command-line-args');
 const BoardingPassHandler = require('flight-details-parser/app/boarding-pass-handler');
+const watch = require('watch');
+const baseDir = "/home/ec2-user";
 
 const optionsDefn = [
   {name: 'name', alias: 'n'}, // default type: String
@@ -17,10 +19,15 @@ const optionsDefn = [
   {name: 'boarding_time'},
   {name: 'arr_time'},
   {name: 'email'},
-  {name: 'attachment'}
+  {name: 'attachment'},
+  {name: 'terminal'},
+  {name: 'gate'},
+  {name: 'group'}
 ];
 
 // TODO: Start here and add departure time
 const options = cmdLineArgs(optionsDefn);
 const bpHandler = new BoardingPassHandler(options);
 bpHandler.handle();
+// unwatch the sessions director which we watched in ~/webhook-post-handler
+watch.unwatchTree(require(`${baseDir}/sessions`).path());
