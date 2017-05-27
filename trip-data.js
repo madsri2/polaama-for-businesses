@@ -533,6 +533,10 @@ TripData.prototype.itineraryFile = function() {
 }
 
 TripData.prototype.rentalCarReceiptFile = function() {
+  return `${this.tripBaseDir}/${this.data.name}-hotel-rental-receipt.txt`;
+}
+
+TripData.prototype.hotelRentalReceiptFile = function() {
   return `${this.tripBaseDir}/${this.data.name}-rental-car-receipt.txt`;
 }
 

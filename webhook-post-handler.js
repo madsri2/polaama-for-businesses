@@ -470,7 +470,9 @@ function sendCarReceipt() {
 
 function sendHotelItinerary() {
   const fbid = this.session.fbid;
+  const trip = this.session.tripData();
 	const messages = [];
+  const details = JSON.parse(fs.readFileSync(trip.hotelRentalReceiptFile(), 'utf8'));
   messages.push({
     recipient: {
       id: fbid
@@ -478,7 +480,7 @@ function sendHotelItinerary() {
     message: {
       attachment: {
         type: "template",
-        payload: JSON.parse(fs.readFileSync('/tmp/hotel-receipt.txt', 'utf8'))
+        payload: details.receipt
       }
     }
   });
@@ -489,18 +491,7 @@ function sendHotelItinerary() {
     message: {
       attachment: {
         type: "template",
-        payload: {
-					template_type: "generic",
-					elements: [{
-						title: "Phone: 56 (61) 295000",
-						buttons: [{
-							type: "web_url",
-							url: "http://click.expediamail.com/?qs=105f88ab54fd8686d9295fab692d1410ad4e7b90fd6c16a7e1a0f582df8cb08e22dfacddf07393c2041daca53a17ee6b",
-							title: "Hotel rental"
-						}],
-						subtitle: "CHECK-IN: 01/13/13, 3:00 PM, CHECK-OUT: 01/14/13 12:00 PM"
-					}]
-				}
+        payload: details.receipt_ext
       }
     }
   });

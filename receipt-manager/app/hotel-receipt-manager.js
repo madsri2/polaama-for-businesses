@@ -55,7 +55,7 @@ function HotelReceiptManager(options, testing) {
 }
 
 function validate(options) {
-  const requiredFields = ['recipient_name', 'order_number', 'merchant_name', 'payment_method', 'currency', 'order_url', 'check_in_date', 'check_out_date', 'phone', 'car_type', 'total_price', 'street_1', 'city', 'state', 'country', 'postal_code'];
+  const requiredFields = ['recipient_name', 'order_number', 'merchant_name', 'payment_method', 'currency', 'order_url', 'check_in_date', 'check_out_date', 'phone', 'hotel_type', 'total_price', 'street_1', 'city', 'state', 'country', 'postal_code'];
   requiredFields.forEach(field => {
     if(!options[field]) throw new Error(`Required field ${field} missing in options`);
   });
@@ -65,7 +65,7 @@ HotelReceiptManager.prototype.handle = function() {
   const tripFinder = new TripFinder(this.receipt.recipient_name);
   this.trip = tripFinder.getTripForReceipt(this.check_in_date, this.receipt.address.city);
   this.postHandler = new WebhookPostHandler(tripFinder.getSession(), this.testing);
-  const file = this.trip.rentalCarReceiptFile();
+  const file = this.trip.hotelRentalReceiptFile();
   try {
     this.details.receipt = this.receipt;
     this.details.receipt_ext = this.receipt_ext;
@@ -74,7 +74,7 @@ HotelReceiptManager.prototype.handle = function() {
     // send a notification to the user that we have their details and will send them the boarding pass the day before the flight.
     logger.debug(`handle: wrote ${json.length} bytes to file ${file}`);
     // notify user that we have received a boarding pass.
-    const message = `Received rental car receipt for your trip to ${this.trip.getPortOfEntry()}. Type 'get car details' to see details`;
+    const message = `Received hotel rental receipt for your trip to ${this.trip.getPortOfEntry()}. Type 'get hotel details' to see details`;
     logger.debug(`handle: About to send message to user: ${message}`);
     this.postHandler.notifyUser(message);
   }
@@ -82,7 +82,7 @@ HotelReceiptManager.prototype.handle = function() {
     logger.error(`parse: Error writing to file ${file}. ${e.stack}`);
     throw e;
   }
-  logger.debug(`handle: Stored rental car details and pushed notification`);
+  logger.debug(`handle: Stored rental hotel details and pushed notification`);
   return true;
 }
 
