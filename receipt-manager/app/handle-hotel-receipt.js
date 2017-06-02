@@ -22,7 +22,6 @@ const optionsDefn = [
   {name: 'check_out_date'},
 ];
 
-
 // TODO: Start here and add departure time
 const options = cmdLineArgs(optionsDefn);
 console.log(`options: ${JSON.stringify(options)}`);

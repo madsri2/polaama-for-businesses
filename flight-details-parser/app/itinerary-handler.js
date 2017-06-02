@@ -10,7 +10,7 @@ const logger = require(`${baseDir}/my-logger`);
 
 function ItineraryHandler(options, testing) {
   // uses the format expected by facebook. Details of the data structure are at: https://developers.facebook.com/docs/messenger-platform/send-api-reference/airline-boardingpass-template
-  const dd = new Date(options.dep_date);
+  const dd = new Date((options.dep_date instanceof Array) ? options.dep_date[0] : options.dep_date); // we care about the first departure_date
   this.departure_date = `${dd.getFullYear()}-${dd.getMonth()+1}-${dd.getDate()}`;
   this.details = {
     template_type: 'airline_itinerary',
@@ -33,25 +33,34 @@ ItineraryHandler.prototype.handle = function() {
   // we want the final destination, which is the arrival_city of the last element in flightInfo
   const lastFlightIdx = this.details.flight_info.length - 1;
   const destCity = this.details.flight_info[lastFlightIdx].arrival_airport.city;
+  const leavingFrom = this.details.flight_info[0].departure_airport.city;
 
   // for each passenger, find the trip, store itinerary and send notification
   this.details.passenger_info.forEach(info => {
     const tripFinder = new TripFinder(info.name);
-    this.trip = tripFinder.getTrip(this.departure_date, destCity);
-    this.postHandler = new WebhookPostHandler(tripFinder.getSession(), this.testing);
+    logger.debug(`handle: Finding trip with start date ${this.departure_date} and city ${destCity}`);
+    this.trip = tripFinder.getTrip(this.departure_date, destCity, leavingFrom);
+    let file;
+    let message;
     try {
-      const file = this.trip.itineraryFile();
+      if(tripFinder.returnFlightItinerary) {
+        file = this.trip.returnFlightFile();
+        message = `Received return flight itinerary for your trip to ${this.trip.getPortOfEntry()}. Type 'get return flight details' to see your itinerary`;
+      }
+      else {
+        file = this.trip.itineraryFile();
+        this.trip.markTodoItemDone("Flight tickets");
+        // send a notification to the user that we have their details and will send them the boarding pass the day before the flight.
+        message = `Received itinerary for your trip to ${this.trip.getPortOfEntry()}. Type 'get itinerary' to see your itinerary`;
+      }
       fs.writeFileSync(file, JSON.stringify(this.details), 'utf8');
-      // send a notification to the user that we have their details and will send them the boarding pass the day before the flight.
-      this.trip.markTodoItemDone("Flight tickets");
       logger.debug(`handle: wrote ${JSON.stringify(this.details)} to file ${file}`);
-      // notify user that we have received a boarding pass.
-      const message = `Received itinerary for your trip to ${this.trip.getPortOfEntry()}. Type 'get itinerary' to see your itinerary`;
       logger.debug(`handle: About to send message to user: ${message}`);
+      this.postHandler = new WebhookPostHandler(tripFinder.getSession(), this.testing);
       this.postHandler.notifyUser(message);
     }
     catch(e) {
-      logger.error(`parse: Error writing to file ${this.trip.boardingPassFile()}. ${e.stack}`);
+      logger.error(`parse: Error writing to file ${file}. ${e.stack}`);
       throw e;
     }
     logger.debug(`handle: Stored flight details, marked todo item as done and pushed notification`);

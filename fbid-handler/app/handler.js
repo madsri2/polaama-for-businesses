@@ -174,7 +174,8 @@ function file() {
 
 /************ TESTING APIS ************************/
 FbidHandler.prototype.testing_add = function(fbid, entry) {
-  if(this.fbidDetails[fbid] && this.fbidDetails[fbid].name) return null;
+  if(this.fbidDetails[fbid] && this.fbidDetails[fbid].name) return;
+  logger.debug(`testing_add: creating a 4 letter id for ${fbid}. fbid details: ${JSON.stringify(this.fbidDetails)}`);
   updateFbidDetails.call(this, fbid, entry);
   fs.writeFileSync(file.call(this), JSON.stringify(this.fbidDetails));
 }

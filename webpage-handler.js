@@ -12,6 +12,7 @@ const fs = require('fs');
 const formidable = require('formidable');
 const ExpenseReportFetcher = require('expense-report/app/report-fetcher');
 const BrowseQuotes = require('trip-flights/app/browse-quotes');
+const PlansForTomorrow = require('trip-itinerary/app/plans-for-tomorrow');
 
 function WebpageHandler(id, tripName) {
   this.fbidHandler = FbidHandler.get();
@@ -112,8 +113,18 @@ WebpageHandler.prototype.displayCalendar = function(res) {
   }
   catch(e) {
     logger.error(`displayCalendar: Error formatting calendar view; ${e.stack}`);
-    // return res.send(`Even bots need to eat. Back in a bit!`);
     return res.send(`Unable to show itinerary for trip ${this.tripName} at this time`);
+  }
+}
+
+WebpageHandler.prototype.dayPlans = function(res) {
+  try {
+		const plansForTomorrow = new PlansForTomorrow(this.trip, this.session.hometown);
+    return res.send(plansForTomorrow.get());
+  }
+  catch(e) {
+    logger.error(`dayPlans: Error planning for tomorrow; ${e.stack}`);
+    return res.send(`Unable to show day plan for trip ${this.tripName} at this time`);
   }
 }
 
@@ -178,6 +189,98 @@ function addTravelers(err, fields) {
   if(noSessionForFriend) return "Could not add this trip to some of your friend's travel list because Polaama does not know about them yet.";
   if(addingToSessionFailed) return "Could not add this trip to your friend's travel list. Please try again later";
   return "saved trips to friends' list";
+}
+
+WebpageHandler.prototype.handleCarReceipt = function(req, res) {
+	try {
+    const form = new formidable.IncomingForm(); 
+    const self = this;
+    form.parse(req, function (err, fields, files) {
+  		const values = fields['text-basic'].split(',');
+  		let options = {};
+  		values.forEach(v => {
+  			const arr = v.split('=');
+  			const key = arr[0].replace(/\s+/g, '');
+  			options[key] = arr[1];
+  		});
+      logger.debug(`passed fields are ${JSON.stringify(options)}`);
+			const CarRentalManager = require('car-rental-details/app/itinerary-handler');
+  		const crm = new CarRentalManager(options);
+  		crm.handle();
+      return res.send("Successfully handled car receipt email and sent notification to user");
+    }); 
+	}
+	catch(e) {
+		logger.error(`handleCarReceipt: error in parsing form: ${e.stack}`);
+		return res.send(`handleCarReceipt: error in parsing form: ${e.stack}. passed options ${JSON.stringify(options)}`);
+	}
+}
+
+WebpageHandler.prototype.handleHotelReceipt = function(req, res) {
+	try {
+    const form = new formidable.IncomingForm(); 
+    const self = this;
+    form.parse(req, function (err, fields, files) {
+  		const values = fields['text-basic'].split(',');
+  		let options = {};
+  		values.forEach(v => {
+  			const arr = v.split('=');
+  			const key = arr[0].replace(/\s+/g, '');
+  			options[key] = arr[1];
+  		});
+      logger.debug(`passed fields are ${JSON.stringify(options)}`);
+			const HotelReceiptManager = require('receipt-manager/app/hotel-receipt-manager');
+  		const crm = new HotelReceiptManager(options);
+  		crm.handle();
+      return res.send("Successfully handled hotel receipt email and sent notification to user");
+    }); 
+	}
+	catch(e) {
+		logger.error(`handleHotelReceipt: error in parsing form: ${e.stack}`);
+		return res.send(`handleHotelReceipt: error in parsing form: ${e.stack}. passed options ${JSON.stringify(options)}`);
+	}
+}
+
+WebpageHandler.prototype.handleFlightItinerary = function(req, res) {
+  if(_.isNull(this.session)) {
+    logger.error("There is no session corresponding to this request.");
+    return res.send("Error handling flight itinerary without session");
+  }
+	try {
+  const form = new formidable.IncomingForm(); 
+  const self = this;
+  form.parse(req, function (err, fields, files) {
+		const values = fields['text-basic'].split(',');
+		let options = {};
+		values.forEach(v => {
+			const arr = v.split('=');
+			const key = arr[0].replace(/\s+/g, '');
+			if(key === 'names' || key === 'flight_num') {
+				options[key] = []; options[key].push(arr[1]);	
+			}
+			else options[key] = arr[1];
+		});
+    logger.debug(`passed fields are ${JSON.stringify(options)}`);
+		// set the flightNum_seats option
+		options.names.forEach((name, pIdx) => {
+			options.flight_num.forEach((num,idx) => {
+				const key = `${num}_seats`;
+				if(!options[key]) options[key] = [];
+				options[key].push(options.seats[pIdx]);
+			});
+		});
+		delete options.seats;
+		console.log(`options: ${JSON.stringify(options)}`);
+		const ItineraryHandler = require('flight-details-parser/app/itinerary-handler');
+		const itinHandler = new ItineraryHandler(options);
+		itinHandler.handle();
+    return res.send("Successfully handled itinerary email and sent notification to user");
+  }); 
+	}
+	catch(e) {
+		logger.error(`handleFlightItinerary: error in parsing form: ${e.stack}`);
+		return res.send(`handleFlightItinerary: error in parsing form: ${e.stack}. passed options ${JSON.stringify(options)}`);
+	}
 }
 
 WebpageHandler.prototype.handleTravelersForNewTrip = function(req, res) {

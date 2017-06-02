@@ -11,6 +11,7 @@ const baseDir = "/home/ec2-user";
 const logger = require(`${baseDir}/my-logger`);
 const WebhookPostHandler = require(`${baseDir}/webhook-post-handler`);
 EmailParser.dir = `${baseDir}/emails`;
+const EmailSender = require('flight-details-parser/app/email-sender');
 
 function EmailParser(req, res) {
   this.request = req;
@@ -42,6 +43,7 @@ EmailParser.prototype.parse = function(req, res, callback) {
 
     logger.debug(`Parsed email message has ${Object.keys(msg).length} keys in field.mailinMsg`); 
     /* Write down the payload for ulterior inspection. */
+		let attachments = [];
     async.auto({
       writeParsedMessage: function (cbAuto) {
         emailId = msg.from[0].address;
@@ -53,6 +55,7 @@ EmailParser.prototype.parse = function(req, res, callback) {
         async.eachLimit(msg.attachments, 3, function (attachment, cbEach) {
           const attachFile = getFileName(emailId, `${attachment.generatedFileName}`);
           logger.debug(`writeAttachments: Writing attachment to file ${attachFile}`);
+					attachments.push(attachFile);
           fs.writeFile(attachFile, fields[attachment.generatedFileName], 'base64', cbEach);
         }, cbAuto);
       },
@@ -61,6 +64,7 @@ EmailParser.prototype.parse = function(req, res, callback) {
         const textFile = getFileName(emailId, "text.txt");
         const text = msg.text.split("\\n").join("\n");
         logger.debug(`writeText: Writing text to file ${textFile}`);
+				attachments.push(textFile);
         fs.writeFile(textFile, text, cbAuto);
       }
     }, function (err) {
@@ -71,7 +75,8 @@ EmailParser.prototype.parse = function(req, res, callback) {
           res.sendStatus(200);
           // notify the admin that an email was sent so they can persist the itinerary and notify the customer
           (new WebhookPostHandler()).notifyAdmin(emailId);
-          logger.debug('Webhook payload written and sent notification');
+          logger.debug('Webhook payload written and sent notification. Attempting to send email to admin');
+					new EmailSender().send(emailId, attachments);
       }
     });
   });

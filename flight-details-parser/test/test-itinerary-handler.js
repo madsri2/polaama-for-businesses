@@ -140,6 +140,39 @@ describe('ItineraryHandler tests', function() {
     // verifySecondConnection();
   });
 
+  it("return flight itinerary for existing trip", function() {
+    const session = sessions.find(fbid);
+    session.addTrip(tripName);
+    const trip = session.getTrip(tripName);
+    const startDate = "5/1/17";
+    trip.addTripDetailsAndPersist({ startDate: startDate, portOfEntry: tripName, leavingFrom: "San Francisco"});
+    const options = {
+      dep_date: '5/10/17',
+      names: ["TestFirstName LastName"],
+      flight_num: ['UA123'],
+      pnr: ['CA242V'],
+      travel_class: ['economy'],
+      boarding_time: ['09:15'],
+      dep_time: ['10:10'],
+      dep_code: ['JFK'],
+      dep_city: [tripName],
+      arr_code: ['SFO'],
+      arr_city: ['San Francisco'],
+      arrival_time: ['14:15'],
+      UA123_seats: ['35J'],
+      total_price: "400.56",
+      currency: "USD"
+    };
+    expect(new ItineraryHandler(options, true /* testing */).handle()).to.be.ok; 
+    const returnTrip = new TripData(tripName, fbid);
+    expect(fs.existsSync(returnTrip.returnFlightFile())).to.be.ok;
+    const itin = JSON.parse(fs.readFileSync(trip.returnFlightFile(), 'utf8'));
+    const flightInfo = itin.flight_info[0];
+    expect(flightInfo.departure_airport.airport_code).to.equal("JFK");
+    expect(flightInfo.arrival_airport.airport_code).to.equal("SFO");
+    expect(flightInfo.flight_schedule.departure_time).to.equal("2017-5-10T10:10");
+  });
+
   it.skip('multiple passengers multiple itineraries', function() {
   });
 
@@ -173,4 +206,5 @@ describe('ItineraryHandler tests', function() {
     verifyFirstConnection();
     verifyTripInContext();
   });
+
 });

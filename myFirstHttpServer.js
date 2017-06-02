@@ -286,6 +286,11 @@ app.get('/:id/:tripName/calendar', function(req, res) {
   return handler.handleWebpage(res, handler.displayCalendar);
 });
 
+app.get('/:id/:tripName/day-plan', function(req, res) {
+  const handler = new WebpageHandler(req.params.id, req.params.tripName);
+  return handler.handleWebpage(res, handler.dayPlans);
+});
+
 app.get('/todo', function(req, res) {
   return res.sendFile("/home/ec2-user/html-templates/todo-list.html");
 });
@@ -321,6 +326,35 @@ app.get('/:id/:tripName/flight-quotes', function(req, res) {
   return handler.displayFlightQuotes(req, res);
 });
 
+// tripName is the arrival city for this flight
+app.post('/:id/:tripName/handle-flight-itinerary', function(req, res) {
+  const handler = new WebpageHandler(req.params.id, req.params.tripName);
+  return handler.handleFlightItinerary(req, res);
+});
+
+app.get('/:id/:tripName/flight-itinerary', function(req, res) {
+  return res.sendFile('/home/ec2-user/html-templates/flight-itinerary.html', 'utf8');
+});
+
+// tripName is the place where the car receipt is provided
+app.post('/:id/:tripName/handle-car-receipt', function(req, res) {
+  const handler = new WebpageHandler(req.params.id, req.params.tripName);
+  return handler.handleCarReceipt(req, res);
+});
+
+app.get('/:id/:tripName/car-receipt', function(req, res) {
+  return res.sendFile('/home/ec2-user/html-templates/car-receipt.html', 'utf8');
+});
+
+// tripName is the place where the hotel receipt is provided
+app.post('/:id/:tripName/handle-hotel-receipt', function(req, res) {
+  const handler = new WebpageHandler(req.params.id, req.params.tripName);
+  return handler.handleHotelReceipt(req, res);
+});
+
+app.get('/:id/:tripName/hotel-receipt', function(req, res) {
+  return res.sendFile('/home/ec2-user/html-templates/hotel-receipt.html', 'utf8');
+});
 
 // handling webhook
 app.get('/webhook', function(req, res) {

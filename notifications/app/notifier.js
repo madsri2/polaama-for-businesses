@@ -39,7 +39,7 @@ Notifier.prototype.imminentTripsList = function() {
 
 Notifier.prototype.getImminentTripBoardingPass = function(trip, session) {
   const sessionId = session.sessionId;
-  if(!trip.data.startDate) return;
+  if(!trip.data.startDate || (trip.data.startDate === "unknown")) return;
   const now = moment().tz("Etc/UTC"); 
   const startDate = moment.tz((new Date(trip.data.startDate)).toISOString(), "Etc/UTC");
   const daysToTrip = startDate.diff(now, 'days');

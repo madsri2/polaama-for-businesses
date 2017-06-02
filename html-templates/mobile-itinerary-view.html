@@ -3,6 +3,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
 <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script>
+	$(document).bind("mobileinit", function(){
+		$.mobile.ignoreContentEnabled = true;
+	});
+
+</script>
 <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 <style type="text/css">
   /* TODO: Get this working. Currently, the style attribute in the html below is what causes the CSS to work. */
@@ -46,7 +52,6 @@
   }
 </style>
 <script>
-
 function show (dateVal){
   itinId = `#itin-${dateVal}`;
   listId = `#list-${dateVal}`;
@@ -81,10 +86,12 @@ function show (dateVal){
 <body>
 <div data-role="main" class="ui-content">
  <div data-role="header">
-   <h1>Your itinerary</h1>
+   <h1>Your itinerary</h1> 
  </div>
  <ul data-role="listview" class="ui-listview-outer ui-mini">
+	<li>Landscape mode provides a better mobile viewing experience</li>
   ${itinerary}
+	<li></li>
  </ul> 
  <div data-role="footer">
    <h3>

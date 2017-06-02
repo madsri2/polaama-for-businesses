@@ -190,7 +190,7 @@ function sendUrlButton(title, urlPath) {
             type: "web_url",
             url: sendUrl.call(this, urlPath),
             title: title,
-            webview_height_ratio: "compact",
+            webview_height_ratio: "full",
             messenger_extensions: true,
             fallback_url: sendUrl.call(this, urlPath)
           }]
@@ -409,7 +409,10 @@ function receivedPostback(event) {
     return;
   }
   if(payload === "boarding_pass") return sendBoardingPass.call(this);
-  if(payload === "itinerary") return sendFlightItinerary.call(this);
+  if(payload === "flight itinerary") return sendFlightItinerary.call(this);
+  if(payload === "return flight") return sendReturnFlightDetails.call(this);
+  if(payload === "hotel details") return sendHotelItinerary.call(this);
+  if(payload === "car details") return sendCarReceipt.call(this);
 
   // When an unknown postback is called, we'll send a message back to the sender to 
   // let them know it was successful
@@ -422,6 +425,21 @@ function sendBoardingPass() {
     return;
 }
 
+function sendReturnFlightDetails() {
+  const trip = this.session.tripData();
+  const fbid = this.session.fbid;
+  callSendAPI({
+    recipient: {
+      id: fbid
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: JSON.parse(fs.readFileSync(trip.returnFlightFile(), 'utf8'))
+      }
+    }
+  });
+}
 function sendFlightItinerary() {
   const trip = this.session.tripData();
   const fbid = this.session.fbid;
@@ -465,6 +483,25 @@ function sendCarReceipt() {
       }
     }
   });
+  sendMultipleMessages(this.session.fbid, messages);
+}
+
+function sendTourDetails() {
+	const TripReceiptManager = require('receipt-manager/app/trip-receipt-manager');
+	const messages = [];
+	messages.push({
+		recipient: {
+			id: this.session.fbid
+		},
+		message: {
+			attachment: {
+				type: "template",
+				payload: new TripReceiptManager().handle()
+			}
+		}
+	});
+  messages.push(getTextMessageData(this.session.fbid, "See you at our place at 9 AM"));
+  messages.push(getTextMessageData(this.session.fbid, "It will be 80˚F and clear skies. The water will be calm and visibility is 100 feet, perfect for diving!"));
   sendMultipleMessages(this.session.fbid, messages);
 }
 
@@ -1083,10 +1120,10 @@ function determineResponseType(event) {
     sendUrlButton.call(this, "Get pack-list", tripData.packListPath());
     return;
   }
-  if(mesg.startsWith("deals")) {
-    retrieveDeals(senderID, messageText);
-    return;
-  }
+	if(mesg.startsWith("get trip details") || mesg.startsWith("trip details") || mesg.startsWith("trip calendar") || mesg.startsWith("get trip calendar")) return sendUrlButton.call(this, `${tripData.data.rawName} Trip calendar`, `${tripData.data.name}/calendar`);
+	if(mesg.startsWith("tomorrow's plans") || mesg.startsWith("plans for tomorrow") || mesg.startsWith("get plans for tomorrow")) return sendUrlButton.call(this, `Day plan`, `${tripData.data.rawName}/day-plan`);
+
+  if(mesg.startsWith("deals")) return retrieveDeals(senderID, messageText);
   if(mesg.startsWith("top activity list") || mesg.startsWith("top activities") || mesg.startsWith("get top activities")) {
     sendActivityList.call(this, messageText);
     return;
@@ -1099,6 +1136,8 @@ function determineResponseType(event) {
   if(mesg.startsWith("get itinerary")) return sendFlightItinerary.call(this);
   if(mesg.startsWith("get car details")) return sendCarReceipt.call(this);
   if(mesg.startsWith("get hotel details")) return sendHotelItinerary.call(this);
+	if(mesg.startsWith("get tour details")) return sendTourDetails.call(this);
+  if(mesg.startsWith("get return flight details")) return sendReturnFlightDetails.call(this);
 
   logger.debug(`determineResponseType: Did not understand the context of message <${mesg}>. Dump of session states: ${this.session.dumpState()}`);
   // We don't understand the text sent. Simply present the options we present on "getting started".

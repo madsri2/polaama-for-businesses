@@ -118,6 +118,7 @@ TripData.prototype.addTripDetailsAndPersist = function(tripDetails) {
   this.data = {}; 
   this.data.name = this.tripName;
   this.data.rawName = this.rawTripName;
+  if(tripDetails.leavingFrom) this.data.leavingFrom = myEncode(tripDetails.leavingFrom);
   if(tripDetails.destination) {
     this.data.country = myEncode(tripDetails.destination);
     this.country = new Country(tripDetails.destination);
@@ -170,6 +171,12 @@ TripData.prototype.comparePortOfEntry = function(city) {
   if(this.data.portOfEntry && (this.data.portOfEntry === myEncode(city))) return true;
   logger.debug(`comparePortOfEntry: No match`);
   return false;
+}
+
+TripData.prototype.isLeavingFrom = function(city) {
+  const encCity = myEncode(city);
+  logger.debug(`isLeavingFrom: comparing ${this.data.leavingFrom} with ${encCity}`);
+  return (this.data.leavingFrom && (this.data.leavingFrom === encCity));
 }
 
 TripData.prototype.getPortOfEntry = function() {
@@ -530,6 +537,10 @@ TripData.prototype.boardingPassFile = function() {
 
 TripData.prototype.itineraryFile = function() {
   return `${this.tripBaseDir}/${this.data.name}-flight-itinerary.txt`;
+}
+
+TripData.prototype.returnFlightFile = function() {
+  return `${this.tripBaseDir}/${this.data.name}-return-flight.txt`;
 }
 
 TripData.prototype.rentalCarReceiptFile = function() {

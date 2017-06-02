@@ -20,7 +20,7 @@ ButtonsPlacement.prototype.getPlacement = function() {
   	type: "web_url",
   	url: url(this.urlPrefix, `${this.tripName}/calendar`),
   	title: "Trip calendar",
-  	webview_height_ratio: "compact",
+  	webview_height_ratio: "full",
   	messenger_extensions: true,
 	};
 	const weather = {
@@ -37,13 +37,32 @@ ButtonsPlacement.prototype.getPlacement = function() {
   };
   const itinButton = {
 	  type: "postback",
-	  title: "Itinerary",
-	  payload: "itinerary"
+	  title: "Flight Itinerary",
+	  payload: "flight itinerary"
+  };
+  const returnItinButton = {
+	  type: "postback",
+	  title: "Return flight Itinerary",
+	  payload: "return flight"
+  };
+  const hotelDetailsButton = {
+	  type: "postback",
+	  title: "Hotel details",
+	  payload: "hotel details"
+  };
+  const carDetailsButton = {
+	  type: "postback",
+	  title: "Car details",
+	  payload: "car details"
   };
   const buttons = [];
   const fs = require('fs');
 	if(fs.existsSync(this.trip.boardingPassFile())) buttons.push(bpButton);
 	if(fs.existsSync(this.trip.itineraryFile())) buttons.push(itinButton);
+	if(fs.existsSync(this.trip.returnFlightFile())) buttons.push(returnItinButton);
+  if(fs.existsSync(this.trip.hotelRentalReceiptFile())) buttons.push(hotelDetailsButton);
+  if(fs.existsSync(this.trip.rentalCarReceiptFile())) buttons.push(carDetailsButton);
+
   buttons.push(tripCalendar);
 	buttons.push(weather);
   buttons.push({

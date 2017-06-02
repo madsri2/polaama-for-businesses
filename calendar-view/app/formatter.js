@@ -9,7 +9,6 @@ const dayString = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const htmlBaseDir = "/home/ec2-user/html-templates"; // TODO: Move this to config.
 
-
 // This class gets data from trips/portugal-itinerary.txt and creates a calendar view from that information.
 
 function FormatCalendar(trip, hometown) {
@@ -137,7 +136,8 @@ function getThisDaysItin(date) {
   }
   if(details.userInputDetails) {
     details.userInputDetails.forEach(userInput => {
-      contents += `<li>${userInput}</li>`;
+			// if(userInput.includes("href")) contents += `<div data-role="content"><li>${userInput}</li></div>`;
+			contents += `<li>${userInput}</li>`;
     });
   }
   return contents;

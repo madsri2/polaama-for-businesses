@@ -40,7 +40,7 @@ We need a way to map the details of this boarding pass with a user profile (sess
 1) Get the name of the passenger from boarding pass and see if you can find it in fbid-handler.js. If we cannot find it, then simply fail. The email has been stored, so it's not lost. The first time Polaama gets a message from a user, fbid-handler is updated with the corresponding fbid and the name associated with the facebook id.
 2) From the destination of the boarding pass and the departure date (which would be start date), guess the trip by comparing this information with all trips for the session. If we don't find it, then create a new trip.
 */
-TripFinder.prototype.getTrip = function(departureDate, destCity) {
+TripFinder.prototype.getTrip = function(departureDate, destCity, leavingFrom) {
   const trips = this.trips;
   const tripCount = this.tripCount;
 
@@ -49,7 +49,7 @@ TripFinder.prototype.getTrip = function(departureDate, destCity) {
     const trip = trips[idx];
     const tripData = trip.data;
     logger.debug(`getTrip: found trip ${trip.tripName}. checking to see if it matches itinerary.`);
-    if(!tripData.startDate) {
+    if(!tripData.startDate || tripData.startDate === "unknown") {
       logger.debug(`getTrip: No start date for trip ${trip.tripName} for fbid ${this.fbid}. skipping this trip.`);
       continue;
     }
@@ -57,16 +57,25 @@ TripFinder.prototype.getTrip = function(departureDate, destCity) {
     if(moment(new Date(departureDate).toISOString()).isSame(tripStartDate) && trip.comparePortOfEntry(destCity)) {
       logger.debug(`getTrip: found trip ${tripData.name} that matches port of entry ${destCity} and departure date ${tripStartDate} of boarding pass`);
       myTrip = trip;
-      this.session.setTripContextAndPersist(trip.tripName);
       break;
     } 
+    // if the itinerary that was passed in is leaving from portOfEntry and returning to the home town of this trip, then this is the trip.
+    if(trip.comparePortOfEntry(leavingFrom) && trip.isLeavingFrom(destCity)) {
+      myTrip = trip;
+      this.returnFlightItinerary = true;
+      break;
+    }
   }
-  if(!myTrip) {
+  if(myTrip) {
+    this.session.setTripContextAndPersist(myTrip.tripName);
+    return myTrip;
+  }
     logger.debug(`getTrip: could not find an existing trip that matches startDate and port of entry. Creating new trip for destCity ${destCity}`);
     myTrip = this.session.addTrip(destCity);
     const tripDetails = {
       startDate: departureDate,
-      destination: destCity // if the user is traveling to only one city, the destination & port of entry will be the same
+      destination: destCity, // if the user is traveling to only one city, the destination & port of entry will be the same
+      leavingFrom: leavingFrom
     };
     myTrip.addTripDetailsAndPersist(tripDetails);
     myTrip.addPortOfEntry(destCity);
@@ -74,7 +83,6 @@ TripFinder.prototype.getTrip = function(departureDate, destCity) {
     // this.postHandler.startPlanningTrip();
     // load the session from file so that other classes (like webhook-post-handler) can get this information.
     this.session = this.sessions.reloadSession(this.session.sessionId);
-  }
 
   return myTrip;
 }
@@ -107,6 +115,7 @@ TripFinder.prototype.getTripForReceipt = function(receiptDate, destCity) {
       }
       else continue; // this is not the trip.
     }
+		logger.debug(`comparing <${receiptDate}>, ${new Date(receiptDate)} and ${tripStartDate}`);
     // if receipt date is after start date and there is no return date, this is the trip
     if(moment(new Date(receiptDate).toISOString()).isAfter(tripStartDate)) {
       logger.debug(`getTrip: found trip ${tripData.name} that matches port of entry ${destCity} and departure date ${tripStartDate} of boarding pass`);

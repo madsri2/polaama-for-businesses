@@ -1,0 +1,20 @@
+<html>
+<!-- WORKING Version of a dynamic controlgroup to which we can add a grid of "Cities and number of days". Idea for this is from http://demos.jquerymobile.com/1.4.2/controlgroup-dynamic/ -->
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+</head>
+
+<body>
+
+<form action="handle-car-receipt" data-ajax="false" method="post"> 
+  <label for="text-basic">car receipt details</label>
+  <input type="text" name="text-basic" id="text-basic" value="recipient_name=, order_number=, merchant_name=Thrifty, payment_method=Due at payment time, order_url=, car_type=, total_price=108.25, street_1=,city=Santa Fe, postal_code=95110, state=NM, country=USA, phone=, pick_up_date=May 31 2017 09.00 PM, drop_off_date=June 4 2017 08.00 PM, currency=USD">
+  <input type="submit" data-mini="true" data-inline="true" value="Done"></input>
+</form>
+
+</body>
+
+</html>
