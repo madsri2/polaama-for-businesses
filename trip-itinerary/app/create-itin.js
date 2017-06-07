@@ -1,14 +1,18 @@
 'use strict';
-const logger = require('../../my-logger');
 const fs = require('fs');
-const WeatherInfoProvider = require('../../weather-info-provider');
 const Promise = require('promise');
+
+const baseDir = "/home/ec2-user";
+const Country = require(`${baseDir}/country`);
+const logger = require(`${baseDir}/my-logger`);
+const WeatherInfoProvider = require(`${baseDir}/weather-info-provider`);
 
 function CreateItinerary(trip, departureCity) {
   this.trip = trip;
   this.tripData = trip.data;
   this.tripName = trip.data.name;
   this.departureCity = departureCity;
+	this.country = new Country();
   setDepartureCountry.call(this, departureCity);
 }  
 
@@ -46,20 +50,40 @@ const formatDate = CreateItinerary.formatDate; // shortcut for use in this file.
 */
 CreateItinerary.prototype.create = function() {
   this.itin = {};
-  if(!this.tripData.cityItin) {
-    throw new Error(`CreateItinerary: cityItin not defined in tripData. Nothing to do!`);
-  }
   // nextDay represents the day for which the itinerary needs to be set. Starts with startDate.
   if(!this.tripData.startDate) {
     throw new Error(`CreateItinerary: startDate not defined in tripData. Nothing to do!`);
   }
   this.nextDay = new Date(this.tripData.startDate);
-  this.destinationCountry = this.tripData.country;
   const promiseList = [];
   promiseList.push(setDepartureCityDetails.call(this));
   promiseList.push(setRemainingItinerary.call(this));
+	const lastDayPromise = setLastDayDetails.call(this);
+	if(lastDayPromise) promiseList.push(lastDayPromise);
   persist.call(this); // persist to store any information that was synchronously written.
   return promiseList;
+}
+
+function setLastDayDetails() {
+	if(!this.trip.returnFlightItin) return null;
+	const firstLeg = this.trip.returnFlightItin[0];
+	const city = firstLeg.departure_airport.city;
+	const lastDay = new Date(this.tripData.returnDate);
+	const lastDayStr = formatDate(lastDay);
+	if(this.itin[lastDayStr]) throw new Error(`setLastDayDetails: last days' itin already set with value: ${this.itin[dayStr]}`);
+	this.itin[lastDayStr] = {};
+	this.itin[lastDayStr].city = city;
+	// for departure time, we only care about the first leg of the flight
+	const depDate = new Date(firstLeg.flight_schedule.departure_time);
+	this.itin[lastDayStr].startTime = getTime(depDate);
+	// for arrival time, we only care about the last leg of the flight.
+	const lastLeg = this.trip.returnFlightItin[this.trip.flightItin.length - 1];
+	const arrivalDate = new Date(lastLeg.flight_schedule.arrival_time);
+	this.itin[lastDayStr].arrivalTime = getTime(arrivalDate);
+	logger.debug(`setDepartureCityDetails: flightItin present. departure date is ${depDate}; arrival date is ${arrivalDate}`);
+	// returns a promise list
+	const country = this.country.getCountry(city);
+  return setWeatherDetails.call(this, lastDay, country, city);
 }
 
 CreateItinerary.prototype.getItinerary = function() {
@@ -95,18 +119,33 @@ CreateItinerary.prototype.getItinerary = function() {
 
 function setDepartureCityDetails() {
   const results = createCommonItinForEachDay.call(this, [this.departureCity, this.tripData.portOfEntry], this.departureCountry);
-  if(this.tripData.startTime) {
-    this.itin[results.itinDay].startTime = this.tripData.startTime;
-  }
+	const nextDayStr = results.itinDay;
+  logger.debug(`setDepartureCityDetails: setting itinerary for first day: Departure city: ${this.departureCity}; port of entry: ${this.tripData.portOfEntry}`);
+	if(this.trip.flightItin) {
+		// for departure time, we only care about the first leg of the flight
+		const firstLeg = this.trip.flightItin[0];
+		const depDate = new Date(firstLeg.flight_schedule.departure_time);
+		if(formatDate(depDate) === nextDayStr) this.itin[nextDayStr].startTime = getTime(depDate);
+		// for arrival time, we only care about the last leg of the flight.
+		const lastLeg = this.trip.flightItin[this.trip.flightItin.length - 1];
+		const arrivalDate = new Date(lastLeg.flight_schedule.arrival_time);
+		if(formatDate(arrivalDate) === nextDayStr) this.itin[nextDayStr].arrivalTime = getTime(arrivalDate);
+		logger.debug(`setDepartureCityDetails: flightItin present. departure date is ${depDate}; arrival date is ${arrivalDate}`);
+	}
+	else logger.debug(`setDepartureCityDetails: this.trip.flightItin not present. Not setting flight details`);
   return results.promise;
 }
 
 // For each day, set the weather, activities and stay information. If there is no activity/stay information, keep it blank. Initially, simply use the information available for a city in activities.
 function setRemainingItinerary() {
+	const promises = []; // array of promises that will execute weather setting.
+	if(!this.tripData.cityItin) {
+		logger.warn(`setRemainingItinerary: cityItin not defined in tripData. Nothing to do!`);
+		return promises;
+	}
   const cityItin = this.tripData.cityItin;
   const duration = this.tripData.duration;
   const departureCountry = this.tripData.country;
-  const promises = []; // array of promises that will execute weather setting.
   cityItin.cities.forEach((city,i) => {
     logger.debug(`setRemainingItinerary: setting itinerary for city ${city}`);
     let numDays = 0;
@@ -114,6 +153,10 @@ function setRemainingItinerary() {
     if(i === 0) cityNumDays -= 1; // we assume the first day would be at the port of entry, so we create the itin for one fewer day.
     // use this city for the number of days user is going to stay in this city
     while(numDays++ != cityNumDays) {
+			if(formatDate(this.nextDay) === formatDate(new Date(this.tripData.returnDate))) {
+				logger.info(`setRemainingItinerary: Not setting itin for last day: ${this.tripData.returnDate}. will be set by setLastDayDetails method`);
+				return;
+			}
       promises.push(createCommonItinForEachDay.call(this, city, departureCountry).promise);
     }
   });
@@ -162,6 +205,13 @@ function setWeatherDetails(itinDate, country, cityList) {
   return promiseList;
 }
 
+function getTime(date) {
+	if(!date) return null;
+	const m = date.getMinutes();
+	const h = date.getHours();
+	return (m > 9 ? `${h}:${m}` : `${h}:0${m}`);
+}
+
 /*
  Set the city, weather and any other common itinerary items for each day. 
  Return a promise (among other things) of setting weather details 
@@ -175,18 +225,6 @@ function createCommonItinForEachDay(cityList, country) {
   }
   this.itin[nextDayStr] = {};
   this.itin[nextDayStr].city = cityList;
-  if(this.tripData.arrivalDate && this.tripData.arrivalTime) {
-    const arrivalDate = formatDate(new Date(this.tripData.arrivalDate));
-    if(arrivalDate === nextDayStr) {
-      this.itin[nextDayStr].arrivalTime = this.tripData.arrivalTime;
-    }
-  }
-  if(this.tripData.returnDate && this.tripData.departureTime) {
-    const departureDate = formatDate(new Date(this.tripData.returnDate));
-    if(departureDate === nextDayStr) {
-      this.itin[nextDayStr].departureTime = this.tripData.departureTime;
-    }
-  }
   const nextDayCopy = new Date(this.nextDay); // copy the state of nextDay into another variable so we can change this.nextDay without having to worry about any side effects.
   const promiseList = setWeatherDetails.call(this, nextDayCopy, country, cityList);
   this.nextDay.setDate(this.nextDay.getDate() + 1); // advance to the next day only if all the itinerary details for today were set correctly.
@@ -200,7 +238,7 @@ function persist() {
   const file = this.trip.tripItinFile();
   const itinStr = JSON.stringify(this.itin);
   try {
-    logger.debug(`persist: Called persist. About to write ${itinStr.length} to file ${file}`);
+    // logger.debug(`persist: Called persist. About to write ${itinStr.length} to file ${file}`);
     fs.writeFileSync(file, itinStr);
   }
   catch(err) {

@@ -1,4 +1,4 @@
 #!/bin/sh
 
 cd /home/ec2-user/flight-details-parser/;
-node app/handle-flight-itinerary.js --names "Madhuvanesh Parthasarathy" --pnr "JJXWQ8" --flight_num "DL 4499" --dep_code "SEA" --dep_city "Seattle" --arr_code "SLC" --arr_city "Salt Lake City" --dep_time "18:05" --dep_date "05/30/2017" -seats "08D" --total_price "537.60" --arrival_time "19:45" --travel_class "economy" --flight_num "DL 916" --dep_code "SLC" --dep_city "Salt Lake City" --arr_code "ABQ" --arr_city "Albuquerque" --dep_time "22:05" --dep_date "05/30/2017" -seats "13F" --arrival_time "23:10" --travel_class "economy"
+node app/handle-flight-itinerary.js --names "Madhuvanesh Parthasarathy" --pnr "XXXXX" --flight_num "UA90" --dep_code "EWR" --dep_city "Newark" --arr_code "TLV" --arr_city "Tel Aviv" --dep_time "23:10" --departure_time "2017-06-10T22:45" -seats "XX" --total_price "XXX.XX" --arrival_time "2017-06-11T04:20" --travel_class "economy" 

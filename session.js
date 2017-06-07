@@ -123,7 +123,7 @@ function sync() {
           humanContext: data.trips[name].humanContext,
           tripData: new TripData(name, this.fbid)
         };
-      });
+      }, this);
       this.synced = true;
     }
     catch(err) {
@@ -305,6 +305,8 @@ Session.prototype.setTripContextAndPersist = function(tripName) {
 Session.prototype.addTrip = function(tripName) {
   const trip = new TripData(tripName, this.fbid);
   const encTripName = trip.tripName;
+	// TODO: this is data leak. fix it by calling TripData.addTripDetailsAndPersist after making sure that it does not cause any side effects.
+	if(this.hometown) trip.data.leavingFrom = TripData.encode(this.hometown);
   if(!this.trips[encTripName]) {
     // this is only possible in case of a new trip created in this session. 
     logger.info(`Creating new trip for session ${this.fbid} for trip ${encTripName}`);
@@ -328,6 +330,7 @@ Session.prototype.addTrip = function(tripName) {
   return this.trips[encTripName].tripData;
 }
 
+// called from webpage-handler.js.addTravelers to add a new trip to friends' session. TODO: Figure out if this is working as expected. Also, see if this duplicates addTrip function above.
 Session.prototype.addNewTrip = function(tripName, trip) {
   if(!tripName) {
     logger.warn("addNewTrip: undefined or null tripName. Cannot add new trip to session.");

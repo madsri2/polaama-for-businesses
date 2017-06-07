@@ -11,7 +11,7 @@ logger.setTestConfig(); // indicate that we are logging for a test
 const CarRentalManager = require('car-rental-details/app/itinerary-handler');
 const FbidHandler = require('fbid-handler/app/handler');
 
-describe('CarRentalDetails tests', function() {
+describe('CarRentalDetails tests: ', function() {
   let fbid = "12345";
   let tripName = "San Jose";
 

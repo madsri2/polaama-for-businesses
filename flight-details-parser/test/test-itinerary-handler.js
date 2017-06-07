@@ -4,6 +4,7 @@ const expect = require('chai').expect;
 const fs = require('fs');
 const ItineraryHandler = require('flight-details-parser/app/itinerary-handler');
 const FbidHandler = require('fbid-handler/app/handler');
+const moment = require('moment');
 
 const baseDir = "/home/ec2-user";
 const logger = require(`${baseDir}/my-logger`);
@@ -79,7 +80,7 @@ describe('ItineraryHandler tests', function() {
     expect(flightInfo.travel_class).to.equal("economy");
     expect(flightInfo.departure_airport.airport_code).to.equal("SEA");
     expect(flightInfo.arrival_airport.airport_code).to.equal("JFK");
-    expect(flightInfo.flight_schedule.departure_time).to.equal("2017-5-1T10:10");
+    expect(flightInfo.flight_schedule.departure_time).to.equal(moment("2017-05-01T10:10").format("YYYY-MM-DDTHH:mm"));
   }
 
   function verifyPassengerInfo(itin, passengerInfo) {
@@ -93,7 +94,7 @@ describe('ItineraryHandler tests', function() {
     expect(session.tripNameInContext).to.equal(trip.data.name);
   }
   
-  it('single itinerary', function() {
+  it('single itinerary', function(done) {
     const options = {
       dep_date: '5/1/17',
       names: ["TestFirstName LastName"],
@@ -111,7 +112,20 @@ describe('ItineraryHandler tests', function() {
       total_price: "1700.56",
       currency: "USD"
     };
-    expect(new ItineraryHandler(options, true /* testing */).handle()).to.be.ok; 
+		const promise = new ItineraryHandler(options, true /* testing */).handle();
+		promise.done(
+			function(response) {
+				const trip = getItinerary().trip;
+				const itin = JSON.parse(fs.readFileSync(trip.tripItinFile(), 'utf8'));
+				const dayItin = itin["5/1/2017"];
+				expect(dayItin.startTime).to.equal("10:10");
+				expect(dayItin.arrivalTime).to.equal("14:15");
+				done();
+			},
+			function(err) {
+				done(err);	
+			}
+		);
     verifyFirstConnection();
     verifyTripInContext();
   });
@@ -135,17 +149,17 @@ describe('ItineraryHandler tests', function() {
       total_price: "1700.56",
       currency: "USD"
     };
-    expect(new ItineraryHandler(options, true /* testing */).handle()).to.be.ok; 
+    new ItineraryHandler(options, true /* testing */).handle();
     verifyFirstConnection();
     // verifySecondConnection();
   });
 
-  it("return flight itinerary for existing trip", function() {
+  it("return flight itinerary for existing trip", function(done) {
     const session = sessions.find(fbid);
     session.addTrip(tripName);
     const trip = session.getTrip(tripName);
     const startDate = "5/1/17";
-    trip.addTripDetailsAndPersist({ startDate: startDate, portOfEntry: tripName, leavingFrom: "San Francisco"});
+    trip.addTripDetailsAndPersist({ startDate: startDate, portOfEntry: tripName, leavingFrom: "San Francisco", duration: 10});
     const options = {
       dep_date: '5/10/17',
       names: ["TestFirstName LastName"],
@@ -163,14 +177,29 @@ describe('ItineraryHandler tests', function() {
       total_price: "400.56",
       currency: "USD"
     };
-    expect(new ItineraryHandler(options, true /* testing */).handle()).to.be.ok; 
-    const returnTrip = new TripData(tripName, fbid);
+		const promise = new ItineraryHandler(options, true /* testing */).handle();
+		promise.done(
+			function(response) {
+				const trip = new TripData(tripName, fbid);
+				const itin = JSON.parse(fs.readFileSync(trip.tripItinFile(), 'utf8'));
+				const dayItin = itin["5/10/2017"];
+				expect(dayItin.startTime).to.equal("10:10");
+				expect(dayItin.arrivalTime).to.equal("14:15");
+				done();
+			},
+			function(err) {
+				done(err);	
+			}
+		);
+    const returnTrip = session.getTrip(tripName);
     expect(fs.existsSync(returnTrip.returnFlightFile())).to.be.ok;
     const itin = JSON.parse(fs.readFileSync(trip.returnFlightFile(), 'utf8'));
     const flightInfo = itin.flight_info[0];
     expect(flightInfo.departure_airport.airport_code).to.equal("JFK");
     expect(flightInfo.arrival_airport.airport_code).to.equal("SFO");
-    expect(flightInfo.flight_schedule.departure_time).to.equal("2017-5-10T10:10");
+    expect(flightInfo.flight_schedule.departure_time).to.equal(moment("2017-05-10T10:10").format("YYYY-MM-DDTHH:mm"));
+		expect(moment(returnTrip.data.returnDate).format("YYYY-MM-DD")).to.equal("2017-05-10");
+		expect(returnTrip.data.duration).to.equal(10);
   });
 
   it.skip('multiple passengers multiple itineraries', function() {
@@ -202,9 +231,8 @@ describe('ItineraryHandler tests', function() {
       total_price: "1700.56",
       currency: "USD"
     };
-    expect(new ItineraryHandler(options, true /* testing */).handle()).to.be.ok; 
+    new ItineraryHandler(options, true /* testing */).handle();
     verifyFirstConnection();
     verifyTripInContext();
   });
-
 });

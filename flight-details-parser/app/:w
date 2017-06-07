@@ -61,6 +61,7 @@ describe("Test Create Itinerary functionality", function() {
       const wip = new WeatherInfoProvider(country, city, itinDate);
       wip.getWeather(function(c, weatherDetails) {
         if(weatherDetails) {
+          logger.debug(`populateWeatherFile: Successfully obtained weather details ${JSON.stringify(weatherDetails)}`);
           fulfil(weatherDetails);
         }
         else {
@@ -95,7 +96,7 @@ describe("Test Create Itinerary functionality", function() {
       }
     );
     const readValues = poll("/home/ec2-user/weather/chennai-11011130.txt");
-    // console.log(`Weather details: ${readValues}`);
+    console.log(`Weather details: ${readValues}`);
   });
 
   // TODO: This test, while comprehensive has too many implementation details (like calculation numDays and remaining days for portOfEntry. Fix ME! The next test is better.
@@ -106,17 +107,19 @@ describe("Test Create Itinerary functionality", function() {
       'numOfDays': ['3','3','2','2']
     };
     const startDate = "2017-11-1";
+    const startTime = "09:00";
     const portOfEntry = "chennai";
     const tripData = new TripData('test-full-itin', "1234");
     tripData.data.country = "india";
     tripData.data.startDate = startDate;
+    tripData.data.startTime = startTime;
+		tripData.flightItin = "[{flight_schedule:{arrival_time: '2018-01-01T16:20'}}]";
     tripData.data.name = "full-itin-test";
     tripData.data.portOfEntry = portOfEntry;
     tripData.data.cityItin = cityItin;
     tripData.data.returnDate = "2017-11-10";
     tripData.data.duration = 10;
-		tripData.flightItin = JSON.parse(`[{"flight_schedule":{"departure_time":"2017-11-01T10:05", "arrival_time": "2017-11-01T16:20"}}]`);
-		tripData.returnFlightItin = JSON.parse(`[{"flight_schedule":{"departure_time":"2017-11-10T09:09", "arrival_time": "2017-11-10T14:59"}, "departure_airport": {"city": "chennai"}}]`);
+    tripData.data.departureTime = "11:00";
     const weatherPromises = [];
     cityItin.cities.forEach(city => {
       weatherPromises.push(populateWeatherFile(startDate, tripData.data.country, city));
@@ -137,8 +140,7 @@ describe("Test Create Itinerary functionality", function() {
             const stDateStr = CreateItinerary.formatDate(new Date(startDate));
             expect(details).to.include.keys(stDateStr);
             verifyItinExpectations(details[stDateStr], ['seattle','chennai']);
-            expect(details[stDateStr].startTime).to.equal("10:05");
-            expect(details[stDateStr].arrivalTime).to.equal("16:20");
+            expect(details[stDateStr].startTime).to.equal(startTime);
             let nextDay = new Date(startDate);
             nextDay.setDate(nextDay.getDate() + 1);
             // verify port of entry & remaining itinerary
@@ -155,8 +157,7 @@ describe("Test Create Itinerary functionality", function() {
             nextDay.setDate(nextDay.getDate() - 1);
             const nextDayStr = CreateItinerary.formatDate(nextDay);
             expect(nextDayStr).to.equal(CreateItinerary.formatDate(new Date(tripData.data.returnDate)));
-						expect(details[nextDayStr].startTime).to.equal("9:09");
-						expect(details[nextDayStr].arrivalTime).to.equal("14:59");
+            expect(details[nextDayStr].departureTime).to.equal(tripData.data.departureTime);
 
             // tell mocha that the asynchronous work is done
             done();
@@ -242,15 +243,18 @@ describe("Test Create Itinerary functionality", function() {
       'numOfDays': ['3', '3', '2', '2']
     };
     const startDate = "2017-11-1";
+    const startTime = "09:00";
     const portOfEntry = "chennai";
     const tripData = new TripData('test-full-itin', "1234");
     tripData.data.country = "india";
     tripData.data.startDate = startDate;
+    tripData.data.startTime = startTime;
     tripData.data.name = "full-itin-test";
     tripData.data.portOfEntry = portOfEntry;
     tripData.data.cityItin = cityItin;
     tripData.data.returnDate = "2017-11-10";
     tripData.data.duration = 10;
+    tripData.data.departureTime = "11:00";
     // call
     const createItin = new CreateItinerary(tripData, "seattle");
     const promises = createItin.create();

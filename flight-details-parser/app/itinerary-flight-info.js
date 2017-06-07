@@ -7,7 +7,6 @@ const FlightInfo = require('flight-details-parser/app/flight-info');
 // An Itinerary's flight_info object contains more fields than a boarding pass flight_info: See https://developers.facebook.com/docs/messenger-platform/send-api-reference/airline-itinerary-template (flight_info object)
 function ItineraryFlightInfo(options) {
   this.details = [];
-  options.departure_time = [];
   const flightCount = options.flight_num.length;
   const optionMap = toMap.call(this, options);
   for(let i = 0; i < flightCount; i++) {

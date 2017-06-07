@@ -7,124 +7,15 @@ const baseDir = "/home/ec2-user";
 const logger = require(`${baseDir}/my-logger`);
 const Country = require(`${baseDir}/country`);
 const Encoder = require(`${baseDir}/encoder`);
-const ItineraryFlightInfo = require('flight-details-parser/app/itinerary-flight-info');
+const ItineraryHandler = require('flight-details-parser/app/itinerary-handler');
 
 
 // TODO: This is leaking data model to other classes. Fix this by moving all functionality that require this variable into a function in this class.
 TripData.todo = "todoList";
 
-function TripData(rawTripName, fbid, testFbidFile) {
-  if(!rawTripName) throw new Error("TripData: Required parameter tripName is undefined");
-  if(!fbid) throw new Error("required field fbid is missing");
-  const encodedFbid = FbidHandler.get(testFbidFile).encode(fbid);
-  if(!encodedFbid) throw new Error(`could not find encoded id for fbid ${fbid}. passed test file is ${testFbidFile}`);
-  this.tripBaseDir = `${baseDir}/trips/${encodedFbid}`;
-  if(!fs.existsSync(this.tripBaseDir)) fs.mkdirSync(this.tripBaseDir);
-  this.rawTripName = rawTripName;
-  this.tripName = myEncode(rawTripName);
-  this.retrieveTripData();
-  if(!Object.keys(this.data).length) {
-    // New trip: update trip with information to be persisted later
-    this.data.name = this.tripName;
-    this.data.rawName = rawTripName;
-  }
-  else {
-    if(this.data.country) this.country = new Country(this.data.country);
-  }
-	updateTripItineraries.call(this);
-}
-
-function updateTripItineraries() {
-	getItinDetails.call(this, this.itineraryFile(), "flightItin");
-	getItinDetails.call(this, this.returnFlightFile(), "returnFlightItin");
-}
-
-function getItinDetails(file, key) {
-	if(!fs.existsSync(file)) return;
-	if(this[key]) {
-		logger.debug(`getItinDetails: key ${key} already present. Doing nothing!`);
-		return;
-	}
-	const data = JSON.parse(fs.readFileSync(file,'utf8'));
-	const options = {};
-	options.pnr = data.pnr_number;
-	options.names = [];
-	data.passenger_info.forEach(item => {
-		options.names.push(item.name);
-	});
-	options.flight_num = [];
-	options.dep_code = [];
-	options.dep_city = [];
-	options.arr_code = [];
-	options.arr_city = [];
-	options.departure_time = [];
-	options.arrival_time = [];
-	data.flight_info.forEach(item => {
-		options.flight_num.push(item.flight_number);
-		options.dep_code.push(item.departure_airport.airport_code);
-		options.dep_city.push(item.departure_airport.city);
-		options.arr_code.push(item.arrival_airport.airport_code);
-		options.arr_city.push(item.arrival_airport.city);
-		// logger.debug(`getItinDetails: departure time is ${item.flight_schedule.departure_time}`);
-		options.departure_time.push(moment(new Date(item.flight_schedule.departure_time).toISOString()).format("YYYY-MM-DDTHH:mm"));
-		options.arrival_time.push(item.flight_schedule.arrival_time);
-		if(item.flight_schedule.boarding_time) {
-			if(!options.boarding_time) options.boarding_time = [];
-			options.boarding_time.push(item.flight_schedule.boarding_time);
-		}
-	});
-	options.seats = [];
-	options.travel_class = [];
-	data.passenger_segment_info.forEach(item => {
-		if(item.seat) options.seats.push(item.seat);
-		if(item.seat_type) options.travel_class.push(item.seat_type);
-	});
-	options.total_price = data.total_price;
-	this[key] = new ItineraryFlightInfo(options).get();
-}
-
-// ======== Retrieve from trip =======
-TripData.prototype.getInfoFromTrip = function(tripKey) {
-  const trip = this.data;
-  if(_.isUndefined(trip) || _.isUndefined(trip[tripKey])) {
-    logger.info(`Could not find ${tripKey} for trip ${this.data.name}. Returning empty object`);
-    return {};
-  }
-  logger.info(`trip-data.js:getInfoFromTrip Key ${tripKey} has ${trip[tripKey].length} items; Destination is ${trip.country}`);
-  return trip[tripKey];
-}
-
-TripData.prototype.getPackList = function() {
-  const trip = this.data;
-  if(_.isUndefined(trip) || _.isUndefined(trip.packList)) {
-    logger.info(`Could not find packList for trip ${this.data.name}. Returning empty object`);
-    return {};
-  }
-  if(trip.packList.toPack) {
-    logger.info(`There are ${trip.packList.toPack.length} to pack items in pack list`);
-  }
-  if(trip.packList.done) {
-    logger.info(`There are ${trip.packList.done.length} done items in pack list`);
-  }
-  return trip.packList;
-}
-
-TripData.prototype.retrieveTripData = function() {
-  const file = tripFile.call(this);
-  try {
-    fs.accessSync(file, fs.F_OK);
-    try {
-      this.data = JSON.parse(fs.readFileSync(file, 'utf8')); 
-      this.tripFilePresent = true;
-    }
-    catch(err) {
-      logger.error(`error reading from file ${file}: ${err.stack}`);
-    }
-  }
-  catch(err) {
-      logger.info(`File ${file} does not exist for trip ${this.tripName}. Creating empty this.data object so it can be filled elsewhere`);
-      this.data = {};
-  }
+function TripData(tripName, fbid, testFbidFile) {
+  this.data = {};
+  this.data.name = "name";
 }
 
 // ========= URL paths ========
@@ -166,82 +57,19 @@ TripData.prototype.activitiesUrlPath = function() {
 
 // ======= Store data =======
 TripData.prototype.addTripDetailsAndPersist = function(tripDetails) {
-  this.data = {}; 
-  this.data.name = this.tripName;
-  this.data.rawName = this.rawTripName;
-  if(tripDetails.leavingFrom) this.data.leavingFrom = myEncode(tripDetails.leavingFrom);
-  if(tripDetails.destination) {
-    this.data.country = myEncode(tripDetails.destination);
-    this.country = new Country(tripDetails.destination);
-  }
-  // TODO: The date format needs to be identified and converted to the needed format.
-  if(tripDetails.datetime) {
-    this.data.startDate = tripDetails.datetime;
-  }
-  else if(tripDetails.startDate) {
-    this.data.startDate = tripDetails.startDate;
-  }
-	let sdIso = null;
-  if(this.data.startDate) {
-    sdIso = new Date(this.data.startDate).toISOString();
-    this.data.startDate = moment(sdIso).format("YYYY-MM-DD");
-  }
-  else this.data.startDate = "unknown";
-  
-  if(tripDetails.tripStarted) this.data.tripStarted = tripDetails.tripStarted;
-  this.addPortOfEntry(tripDetails.portOfEntry);
-  // duration includes the start date, so subtract 1
-  if(tripDetails.duration) {
-    this.data.duration = tripDetails.duration;
-		if(sdIso) this.data.returnDate = moment(sdIso).add(this.data.duration - 1,'days').format("YYYY-MM-DD");
-		else logger.warn(`addTripDetailsAndPersist: Not setting returnDate because we only have duration ${duration} and no start date`);
-  }
-  else this.data.returnDate = "unknown";
-  
-  // TODO: Get this information from weather API or the file persisted.
-  this.data.weather = "sunny";
-  createPackList.call(this);
-  createTodoList.call(this);
-  this.persistUpdatedTrip();
 }
 
 TripData.prototype.setReturnDate = function(date) {
-	const dateAsMoment = moment(new Date(date).toISOString());
-	// see if return date matches passed date. if not, atleast log an error and return an error
-	if(this.data.returnDate && this.data.returnDate !== "unknown") { 
-		const returnDateAsMoment = moment(this.data.returnDate);
-		if(returnDateAsMoment.isSame(dateAsMoment)) logger.info(`setReturnDate: returnDate is already set and the same as passed date ${date}. Doing nothing.`);
-		else logger.error(`setReturnDate: return date is already set with value ${returnDateAsMoment} and is different from passed date ${date}. This is a POSSIBLE BUG: ${new Error().stack}`);
-		return;
-	}
-	this.data.returnDate = dateAsMoment.format("YYYY-MM-DD");
-	this.data.duration = dateAsMoment.diff(this.data.startDate, 'days') + 1;
-	logger.debug(`setReturnDate: Set return date ${this.data.returnDate} and duration ${this.data.duration} days to trip ${this.data.name}`);
-	this.persistUpdatedTrip();
 }
 
 TripData.prototype.addPortOfEntry = function(portOfEntry) {
-  // this is needed for getting flight details.
-  if(portOfEntry) this.data.portOfEntry = myEncode(portOfEntry);
-  else return logger.warn("addPortOfEntry: passed value portOfEntry is undefined");
-	if(!this.data.cities) this.data.cities = [];
-  this.data.cities.push(myEncode(portOfEntry));
-	logger.debug(`addPortOfEntry: Added ${portOfEntry} as port of entry`);
-  this.persistUpdatedTrip();
 }
 
 // compare the port of entry with the passed city. This is a separate function to ensure that the encoding of portOfEntry does not leak outside this file.
 TripData.prototype.comparePortOfEntry = function(city) {
-  // logger.debug(`comparePortOfEntry: comparing ${this.data.portOfEntry} with ${myEncode(city)}`);
-  if(this.data.portOfEntry && (this.data.portOfEntry === myEncode(city))) return true;
-  // logger.debug(`comparePortOfEntry: No match`);
-  return false;
 }
 
 TripData.prototype.isLeavingFrom = function(city) {
-  const encCity = myEncode(city);
-  logger.debug(`isLeavingFrom: comparing ${this.data.leavingFrom} with ${encCity}`);
-  return (this.data.leavingFrom && (this.data.leavingFrom === encCity));
 }
 
 TripData.prototype.getPortOfEntry = function() {
@@ -250,45 +78,13 @@ TripData.prototype.getPortOfEntry = function() {
 
 // This function resets the city itinerary object and cities object.
 TripData.prototype.addCityItinerary = function(cities, numOfDays) {
-  // read the data from file to make sure we don't miss anything.
-  this.retrieveTripData();
-  if(cities.length !== numOfDays.length) throw new Error("cities and numOfDays array lengths are different. cannot persist city itinerary information");
-  if(!this.data.cityItin) {
-    this.data.cityItin = {};
-    this.data.cityItin.cities = [];
-    this.data.cityItin.numOfDays = [];
-  }
-  if(!this.data.cities) this.data.cities = [];
-  for(let i = 0; i < cities.length; i++) {
-    this.data.cityItin.cities.push(myEncode(cities[i]));
-    this.data.cities.push(myEncode(cities[i]));
-  }
-  this.data.cityItin.numOfDays = this.data.cityItin.numOfDays.concat(numOfDays);
-  logger.debug(`addCityItinerary: City itinerary is ${JSON.stringify(this.data.cityItin)}`);
-  logger.debug(`addCityItinerary: City list is ${this.data.cities}`);
-  this.persistUpdatedTrip();
 }
 
 TripData.prototype.storeTodoList = function(senderId, messageText) {
-  const reg = new RegExp("^todo[:]*[ ]*","i"); // ignore case
-  return storeList.call(this, senderId, messageText, reg, "todoList", "get todo");  
 }
 
 //TODO: senderId is not being used here. So remove it and update the place where this function is called.
 TripData.prototype.storePackList = function(senderId, messageText) {
-  const regex = new RegExp("^pack[:]*[ ]*","i"); // ignore case
-  // retrieve text
-  const items = messageText.replace(regex,"").split(',');
-  if(_.isUndefined(this.data.packList)) {
-    this.data.packList = {};
-    this.data.packList.toPack = [];
-    this.data.packList.done = [];
-  } 
-  this.data.packList.toPack = this.data.packList.toPack.concat(items);
-  // store it locally
-  this.persistUpdatedTrip();
-  // logger.info(`successfully stored item ${items} in packList's toPack list`);
-  return `Saved! You can retrieve this by saying get pack list`;
 }
 
 /*
@@ -314,64 +110,7 @@ TripData.prototype.userInputItinFile = function() {
 */
 // TODO: Fix ME! The returned value is a promise but promise.done does not work. This means that we CANNOT schedule any activity that depends on updateItinerary to complete.
 TripData.prototype.updateItinerary = function(incDate, itinDetail){
-  const filename = this.userInputItinFile();
-  const readPromise = new Promise(function(fulfil, reject){
-    const date = incDate.split("-").join("/"); // see calendar-view/app/formatter.js formatForMobile function.
-    let contents = null;
-    fs.readFile(filename, 'utf8', (err, data) => {
-      if(err && err.code != 'ENOENT') {
-        logger.error(`error reading file ${filename}: ${err.stack}`);
-        reject(err);
-      }
-      if(!data) {
-        logger.debug(`readPromise: empty file or file not present`);
-        contents = {};
-        contents[date] = [];
-      }
-      else {
-        logger.debug(`readPromise: read ${data.length} bytes from ${filename}`);
-        contents = JSON.parse(data);
-        if(!contents[date]) contents[date] = [];
-      }
-      contents[date].push(itinDetail);
-      fulfil(contents);
-    });
-  });
-  return readPromise.then(
-    function(contents) {
-      const json = JSON.stringify(contents);
-      return new Promise(function(fulfil, reject) {
-        fs.writeFile(filename, json, (err) => { 
-          if(err) return reject(err); 
-          logger.debug(`writePromise: wrote ${json.length} bytes to ${filename}`);
-        });
-        return fulfil("success");
-      });
-    },
-    function(e) {
-      logger.error(`updateItinerary: Error: ${e.stack}`);
-      return e;
-    }
-  );
 }
-
-// TO DEPRECATE!
-function getExpenseDetailsFromComments() {
-  const comments = this.getInfoFromTrip("comments"); 
-  let report = [];
-  if(!Object.keys(comments).length) {
-    logger.warn(`No comments found for trip ${this.tripName}. Returning empty list`);
-    return report;
-  }
-  comments.forEach(item => {
-    const encItem = item.toLowerCase();
-    // expenses
-    if(commentIsReportingExpense.call(this, encItem)) {
-      report.push(item);
-    }
-  });
-  return report;
-} 
 
 function commentIsReportingExpense(comment) {
   const item = comment.toLowerCase();
@@ -397,17 +136,6 @@ TripData.prototype.getTravelers = function() {
 }
 
 function storeList(senderId, messageText, regex, key, retrieveString) {
-  // retrieve text
-  const items = messageText.replace(regex,"").split(',');
-  if(!(key in this.data)) {
-    this.data[key] = [];
-  } 
-  // this.data[key] is an array, so concat here merges two arrays.
-  this.data[key] = this.data[key].concat(items);
-  // store it locally
-  this.persistUpdatedTrip();
-  logger.debug("successfully stored item " + items + " in " + key);
-  return `Saved! You can retrieve this by saying "${retrieveString}"`;
 }
 
 // return 0 if there is a match of different positions of mtchString, -1 otherwise.
@@ -502,6 +230,7 @@ TripData.prototype.parseComments = function() {
 
 TripData.prototype.persistUpdatedTrip = function() {
   const file = tripFile.call(this);
+  logger.debug(`persisting trip to file ${file}`);
   try {
     fs.writeFileSync(file, JSON.stringify(this.data));
     return true;
@@ -626,13 +355,6 @@ TripData.prototype.boardingPassImage = function() {
 }
 
 TripData.prototype.copyFrom = function(trip) {
-  logger.debug(`copyFrom: trip dump ${JSON.stringify(trip)}`);
-  const file = tripFile.call(trip);
-  if(fs.existsSync(file)) fs.createReadStream(file).pipe(fs.createWriteStream(tripFile.call(this)));
-  const dataFile = trip.tripDataFile();
-  if(fs.existsSync(dataFile)) fs.createReadStream(dataFile).pipe(fs.createWriteStream(this.tripDataFile));
-  const itinFile = trip.tripItinFile();
-  if(fs.existsSync(itinFile)) fs.createReadStream(itinFile).pipe(fs.createWriteStream(this.tripItinFile));
 }
 
 function filename() {

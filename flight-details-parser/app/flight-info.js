@@ -1,15 +1,16 @@
 'use strict';
 
+const moment = require('moment');
+
+const baseDir = "/home/ec2-user";
+const logger = require(`${baseDir}/my-logger`);
+
 // Object that represents facebook's flight-info object. See https://developers.facebook.com/docs/messenger-platform/send-api-reference/airline-itinerary-template (flight-info object)
 
-function FlightInfo(options) {
-  if(!options.dep_date) throw new Error(`FlightInfo: required parameter departure_date missing in passed parameter options`);
-  const dd = new Date(options.dep_date);
-  const formattedDate = `${dd.getFullYear()}-${dd.getMonth()+1}-${dd.getDate()}`;
-  if(!options.dep_time || !options.dep_time) throw new Error(`FlightInfo: required parameter departure_time missing in options. flight num is ${options.flight_num}`);
-  options.departure_time = `${formattedDate}T${options.dep_time}`;
-  if(options.boarding_time) options.boarding_time = `${formattedDate}T${options.boarding_time}`;
-  if(options.arrival_time) options.arrival_time = `${formattedDate}T${options.arrival_time}`;
+function FlightInfo(passedOptions) {
+	// we will only use departure_time every where. this is there for backwards compatibility;
+	if(!passedOptions.departure_time) passedOptions.departure_time = passedOptions.dep_time; 
+	const options = updateDates.call(this, passedOptions);
   this.details = {
       flight_number: options.flight_num,
       departure_airport: {
@@ -27,6 +28,30 @@ function FlightInfo(options) {
   if(options.boarding_time) this.details.flight_schedule.boarding_time = options.boarding_time;
   if(options.arrival_time) this.details.flight_schedule.arrival_time = options.arrival_time;
   validate.call(this);
+}
+
+function updateDates(po) {
+	const keys = ['departure_time', 'arrival_time', 'boarding_time'];
+	const options = po;
+	let formattedDate;
+	if(!options.departure_time) throw new Error(`FlightInfo: required parameter departure_time missing in passed options for flight num ${options.flight_num}`);
+	if(options.dep_date) {
+		const dd = new Date(options.dep_date);
+		formattedDate = moment(new Date(options.dep_date)).format("YYYY-MM-DD"); 
+	}
+	keys.forEach(key => {
+		if(!options[key]) return; // only departure_time is mandatory, so nothing to do if the other keys are not present
+		// logger.debug(`updateDates: value for key ${key} is ${options[key]}`);
+		if(options[key].includes('T')) {
+			if(!moment(options[key],moment.ISO_8601).isValid()) throw new Error(`FlightInfo: The value of options.${key} is in the wrong format: ${options[key]}. Required format is YYYY-MM-DDTHH:mm`);
+			// key is in the right format. nothing to do.
+			return;
+		}
+		// if the time is not in the expected format, expect the date to be present.
+		if(!options.dep_date) throw new Error(`FlightInfo: required parameter departure_date missing in passed parameter options`);
+		options[key] = `${formattedDate}T${options[key]}`;
+	});
+	return options;
 }
 
 function validate() {

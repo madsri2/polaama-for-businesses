@@ -103,6 +103,14 @@ function testCategorizingComments(comments, expected) {
   console.log(`EXPECTED: ${expected}. ACTUAL: ${actual}`);
 }
 
+function testTripItinerary() {
+	const trip = new TripData("Tel Aviv", "1120615267993271");
+	console.log(JSON.stringify(trip.flightItin));
+	console.log(JSON.stringify(trip.returnFlightItin));
+}
+
+testTripItinerary();
+
 /*
 testCategorizingComments(["beach activity","a beach worth visiting", "a beach.", "somethingwithbeachinmiddle", "gardentostart", "a garden.", ": garden."], "5 activities; 2 others");
 testCategorizingComments(["hotel ","airbnb: ", "somethinghotelairbnb", "an ok condo."], "3 stay; 1 others");

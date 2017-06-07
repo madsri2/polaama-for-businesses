@@ -12,6 +12,7 @@ const optionsDefn = [
   {name: 'arr_code', alias: 'a', multiple: true},
   {name: 'arr_city', alias: 'b', multiple: true},
   {name: 'dep_time', alias: 't', multiple: true},
+  {name: 'departure_time', multiple: true},
   {name: 'dep_date', alias: 'u', multiple: true},
   {name: 'seats', alias: 's', multiple: true},
   {name: 'boarding_time', multiple: true},
@@ -21,18 +22,8 @@ const optionsDefn = [
   {name: 'travel_class', defaultValue: 'economy', multiple: true}
 ];
 
-
 // TODO: Start here and add departure time
 const options = cmdLineArgs(optionsDefn);
-// set the flightNum_seats option
-options.names.forEach((name, pIdx) => {
-  options.flight_num.forEach((num,idx) => {
-    const key = `${num}_seats`;
-    if(!options[key]) options[key] = [];
-    options[key].push(options.seats[pIdx]);
-  });
-});
-delete options.seats;
 console.log(`options: ${JSON.stringify(options)}`);
 const itinHandler = new ItineraryHandler(options);
 itinHandler.handle();

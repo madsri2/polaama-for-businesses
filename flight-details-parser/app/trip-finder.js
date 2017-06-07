@@ -7,18 +7,25 @@ const baseDir = `/home/ec2-user`;
 const Sessions = require(`${baseDir}/sessions`);
 const TripData = require(`${baseDir}/trip-data`);
 const logger = require(`${baseDir}/my-logger`);
+const WebhookPostHandler = require(`${baseDir}/webhook-post-handler`);
 
 // Class to find trip associated with an itinerary or boarding pass. If there is no associated trip, create a new trip and return it.
-function TripFinder(name) {
+function TripFinder(name, testing) {
   this.name = name;
+	this.testing = testing;
 
   // 1) Get fbid and session corresponding to the name
   this.session = this.getSession();
+	this.postHandler = new WebhookPostHandler(this.session, this.testing);
 
   // 2) Now, get the trip corresponding to this trip or create a new trip
   this.trips = this.session.allTrips();
   this.tripCount = this.trips ? this.trips.length : 0;
   logger.debug(`TripFinder: There are ${this.tripCount} future trips in session`);
+}
+
+TripFinder.prototype.getPostHandler = function() {
+	return this.postHandler;
 }
 
 TripFinder.prototype.getSession = function() {
@@ -54,13 +61,15 @@ TripFinder.prototype.getTrip = function(departureDate, destCity, leavingFrom) {
       continue;
     }
     const tripStartDate = moment(new Date(tripData.startDate).toISOString());
+		logger.debug(`getTrip: departureDate value is ${departureDate}`);
     if(moment(new Date(departureDate).toISOString()).isSame(tripStartDate) && trip.comparePortOfEntry(destCity)) {
       logger.debug(`getTrip: found trip ${tripData.name} that matches port of entry ${destCity} and departure date ${tripStartDate} of boarding pass`);
       myTrip = trip;
       break;
     } 
-    // if the itinerary that was passed in is leaving from portOfEntry and returning to the home town of this trip, then this is the trip.
+    // if the itinerary that was passed is leaving from portOfEntry and returning to the home town of this trip, then this is the trip and this itinerary contains the return trip details.
     if(trip.comparePortOfEntry(leavingFrom) && trip.isLeavingFrom(destCity)) {
+			logger.debug(`getTrip: found trip ${tripData.name} for which this itinerary is the return flight details`);
       myTrip = trip;
       this.returnFlightItinerary = true;
       break;
@@ -70,21 +79,7 @@ TripFinder.prototype.getTrip = function(departureDate, destCity, leavingFrom) {
     this.session.setTripContextAndPersist(myTrip.tripName);
     return myTrip;
   }
-    logger.debug(`getTrip: could not find an existing trip that matches startDate and port of entry. Creating new trip for destCity ${destCity}`);
-    myTrip = this.session.addTrip(destCity);
-    const tripDetails = {
-      startDate: departureDate,
-      destination: destCity, // if the user is traveling to only one city, the destination & port of entry will be the same
-      leavingFrom: leavingFrom
-    };
-    myTrip.addTripDetailsAndPersist(tripDetails);
-    myTrip.addPortOfEntry(destCity);
-    // TODO: Trigger an event so webhook-post-handler can start planning for the new trip.
-    // this.postHandler.startPlanningTrip();
-    // load the session from file so that other classes (like webhook-post-handler) can get this information.
-    this.session = this.sessions.reloadSession(this.session.sessionId);
-
-  return myTrip;
+	return createNewTrip.call(this, destCity, departureDate, leavingFrom);
 }
 
 // used by receipt-managers (car & hotel), which won't have departure dates
@@ -127,19 +122,22 @@ TripFinder.prototype.getTripForReceipt = function(receiptDate, destCity) {
     this.session.setTripContextAndPersist(myTrip.tripName);
     return myTrip;
   }
+	logger.info(`getTripForReceipt: using receipt date ${receiptDate} as the start date for new trip because we don't have a start date`);
+  return createNewTrip.call(this, destCity, receiptDate);
+}
+
+function createNewTrip(destCity, departureDate, leavingFrom) {
   logger.debug(`getTrip: could not find an existing trip that matches startDate and port of entry. Creating new trip for destCity ${destCity}`);
-  myTrip = this.session.addTrip(destCity);
+  const myTrip = this.session.addTrip(destCity);
   const tripDetails = {
     destination: destCity // if the user is traveling to only one city, the destination & port of entry will be the same
   };
+	if(departureDate) tripDetails.startDate = departureDate;
+	if(leavingFrom) tripDetails.leavingFrom = leavingFrom;
   myTrip.addTripDetailsAndPersist(tripDetails);
   myTrip.addPortOfEntry(destCity);
-  // TODO: Trigger an event so webhook-post-handler can start planning for the new trip.
-  // this.postHandler.startPlanningTrip();
-  // load the session from file so that other classes (like webhook-post-handler) can get this information.
-  this.session = this.sessions.reloadSession(this.session.sessionId);
 
-  return myTrip;
+	return myTrip;
 }
 
 module.exports = TripFinder;

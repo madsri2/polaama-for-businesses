@@ -2,7 +2,6 @@
 const baseDir = "/home/ec2-user";
 const logger = require(`${baseDir}/my-logger`);
 const TripFinder = require('flight-details-parser/app/trip-finder');
-const WebhookPostHandler = require(`${baseDir}/webhook-post-handler`);
 
 function CarItineraryHandler(options, testing) {
   this.testing = testing;
@@ -62,9 +61,8 @@ function validate(options) {
 }
 
 CarItineraryHandler.prototype.handle = function() {
-  const tripFinder = new TripFinder(this.receipt.recipient_name);
+  const tripFinder = new TripFinder(this.receipt.recipient_name, this.testing);
   this.trip = tripFinder.getTripForReceipt(this.pick_up_date, this.receipt.address.city);
-  this.postHandler = new WebhookPostHandler(tripFinder.getSession(), this.testing);
   const file = this.trip.rentalCarReceiptFile();
   try {
     this.details.receipt = this.receipt;
@@ -76,7 +74,8 @@ CarItineraryHandler.prototype.handle = function() {
     // notify user that we have received a boarding pass.
     const message = `Received rental car receipt for your trip to ${this.trip.getPortOfEntry()}. Type 'get car details' to see details`;
     logger.debug(`handle: About to send message to user: ${message}`);
-    this.postHandler.notifyUser(message);
+		const postHandler = tripFinder.getPostHandler();
+    postHandler.notifyUser(message);
   }
   catch(e) {
     logger.error(`parse: Error writing to file ${file}. ${e.stack}`);

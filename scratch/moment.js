@@ -53,5 +53,15 @@ function testFormatting() {
   // console.log(`${moment("11/1/17","MM/D/YY")}`);
 }
 
-testFormatting();
+function dateDiff() {
+  const start = moment(new Date("6/7/17").toISOString());
+  const ret = moment("2017-06-15");
+  const duration = ret.diff(start, 'days') + 1;
+  console.log(`Duration: ${duration} days`);
+}
+
+dateDiff();
+
+// testFormatting();
+
 

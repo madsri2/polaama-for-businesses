@@ -5,13 +5,22 @@ const ItineraryFlightInfo = require('flight-details-parser/app/itinerary-flight-
 const TripFinder = require('flight-details-parser/app/trip-finder');
 
 const baseDir = "/home/ec2-user";
-const WebhookPostHandler = require(`${baseDir}/webhook-post-handler`);
 const logger = require(`${baseDir}/my-logger`);
 
 function ItineraryHandler(options, testing) {
+	// set the flightNum_seats option
+	if(options.seats && Array.isArray(options.seats)) {
+		options.names.forEach((name, pIdx) => {
+			options.flight_num.forEach((num,idx) => {
+				const key = `${num}_seats`;
+				if(!options[key]) options[key] = [];
+				options[key].push(options.seats[pIdx]);
+			});
+		});
+	}
+	delete options.seats;
   // uses the format expected by facebook. Details of the data structure are at: https://developers.facebook.com/docs/messenger-platform/send-api-reference/airline-boardingpass-template
-  const dd = new Date((options.dep_date instanceof Array) ? options.dep_date[0] : options.dep_date); // we care about the first departure_date
-  this.departure_date = `${dd.getFullYear()}-${dd.getMonth()+1}-${dd.getDate()}`;
+	if(!options.currency) options.currency = "USD";
   this.details = {
     template_type: 'airline_itinerary',
     'intro_message': `Flight itinerary for your trip`,
@@ -22,7 +31,9 @@ function ItineraryHandler(options, testing) {
     total_price: options.total_price,
     currency: options.currency
   };
-  logger.debug(`itinerary details so far: ${JSON.stringify(this.details)}`);
+	const dd = new Date(this.details.flight_info[0].flight_schedule.departure_time);
+	this.departure_date = `${dd.getFullYear()}-${dd.getMonth()+1}-${dd.getDate()}`;
+  // logger.debug(`itinerary details so far: ${JSON.stringify(this.details)}`);
   this.details.passenger_segment_info = getPassengerSegmentInfo.call(this, options);
   if(options.seat) this.details.seat = options.seat;
   this.testing = testing;
@@ -34,30 +45,34 @@ ItineraryHandler.prototype.handle = function() {
   const lastFlightIdx = this.details.flight_info.length - 1;
   const destCity = this.details.flight_info[lastFlightIdx].arrival_airport.city;
   const leavingFrom = this.details.flight_info[0].departure_airport.city;
+	let returnPromise;
 
   // for each passenger, find the trip, store itinerary and send notification
   this.details.passenger_info.forEach(info => {
-    const tripFinder = new TripFinder(info.name);
+    const tripFinder = new TripFinder(info.name, this.testing);
     logger.debug(`handle: Finding trip with start date ${this.departure_date} and city ${destCity}`);
     this.trip = tripFinder.getTrip(this.departure_date, destCity, leavingFrom);
     let file;
     let message;
     try {
       if(tripFinder.returnFlightItinerary) {
+				// update the return date for this itinerary.
+				this.trip.setReturnDate(this.departure_date);	
         file = this.trip.returnFlightFile();
         message = `Received return flight itinerary for your trip to ${this.trip.getPortOfEntry()}. Type 'get return flight details' to see your itinerary`;
       }
       else {
         file = this.trip.itineraryFile();
-        this.trip.markTodoItemDone("Flight tickets");
         // send a notification to the user that we have their details and will send them the boarding pass the day before the flight.
         message = `Received itinerary for your trip to ${this.trip.getPortOfEntry()}. Type 'get itinerary' to see your itinerary`;
       }
+			this.trip.markTodoItemDone("Flight tickets");
       fs.writeFileSync(file, JSON.stringify(this.details), 'utf8');
-      logger.debug(`handle: wrote ${JSON.stringify(this.details)} to file ${file}`);
+      // logger.debug(`handle: wrote ${JSON.stringify(this.details)} to file ${file}`);
       logger.debug(`handle: About to send message to user: ${message}`);
-      this.postHandler = new WebhookPostHandler(tripFinder.getSession(), this.testing);
-      this.postHandler.notifyUser(message);
+      tripFinder.getPostHandler().notifyUser(message);
+			// Trigger an event so webhook-post-handler can set itinerary and weather details
+			returnPromise = tripFinder.getPostHandler().setWeatherAndItineraryForNewTrip(this.trip.tripName);
     }
     catch(e) {
       logger.error(`parse: Error writing to file ${file}. ${e.stack}`);
@@ -66,7 +81,7 @@ ItineraryHandler.prototype.handle = function() {
     logger.debug(`handle: Stored flight details, marked todo item as done and pushed notification`);
   }, this);
 
-  return true;
+  return returnPromise;
 }
 
 function validate() {

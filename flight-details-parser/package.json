@@ -16,6 +16,7 @@
     "fs": "0.0.1-security",
     "mailin": "^3.0.4",
     "mocha": "^3.2.0",
+    "moment": "^2.18.1",
     "multiparty": "^4.1.3",
     "mv": "^2.1.1",
     "nodemailer": "^4.0.1",

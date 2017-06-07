@@ -37,6 +37,7 @@ function WebhookPostHandler(session, testing) {
   this.notifier = new Notifier(this.sessions);
   this.logOnce = {};
   const self = this;
+	// A Cheap way to trigger data update on changes across processes: Create a monitor that will trigger when files in ~/sessions changes, and reload the session that changed. This way, we don't have to reload sessions all over the place and this will work even across processes (for eg. when we create a new trip as a result of an itinerary or boarding pass email, the main webserver's sessions will automatically be reloaded within a few minutes)
   watch.createMonitor(Sessions.path(), { ignoreDotFiles: true }, function(monitor) {
     monitor.on('changed', function(f) {
       logger.debug(`file ${f} changed. reloading it`);
@@ -233,6 +234,44 @@ function displayTripDetails() {
   callSendAPI(messageData);
 }
 
+WebhookPostHandler.prototype.setWeatherAndItineraryForNewTrip = function(tripName) {
+	if(!tripName) throw new Error(`setWeatherAndItineraryForNewTrip: required parameter "tripName" not passed.`);
+	logger.debug(`setWeatherAndItineraryForNewTrip: This sessions' guid is ${this.session.guid}. Beginning to set weather and trip itinerary details for new trip`);
+	// reload this session to get the latest details about trips for this session (like flight itinerary and return flight itinerary).
+	const session = this.sessions.reloadSession(this.session.sessionId);
+	const trip = session.getTrip(tripName);
+	if(!trip) throw new Error(`setWeatherAndItineraryForNewTrip: could not find trip ${tripName} in session with fbid ${session.fbid}`);
+	const tip = new TripInfoProvider(trip, this.session.hometown);
+	const weatherDetails = Promise.denodeify(tip.getWeatherInformation.bind(tip));
+
+	// TODO: If this is a beach destinataion, use http://www.blueflag.global/beaches2 to determine the swimmability. Also use http://www.myweather2.com/swimming-and-water-temp-index.aspx to determine if water conditions are swimmable
+	const self = this;
+	return weatherDetails()
+		.then(
+			function(response) {
+				const tripNameInContext = trip.tripName;
+				try {
+					const createItin = new CreateItinerary(trip, self.session.hometown);
+					Promise.all(createItin.create()).done(
+						function(values) {
+							// nothing to do here if create succeeds. The itinerary will be persisted and can be obtained by reading the file, which is done in trip-data-formatter:displayCalendar when /calendar is called
+							logger.info(`Successfully created itinerary for trip ${tripNameInContext}`);
+						},
+						function(error) {
+							logger.error(`Error creating itinerary for trip ${tripNameInContext}: ${error.stack}`);
+						}
+					);
+				}
+				catch(e) {
+					logger.error(`Error creating itinerary for trip ${tripNameInContext}: ${e.stack}`);
+				}
+			},
+			function(err) {
+				logger.error(`error in gathering data for trip ${tripNameInContext}: ${err.stack}`);
+			}
+		);
+}
+
 // Start collecting useful information for trip and update the user.
 WebhookPostHandler.prototype.startPlanningTrip = function() {
   sendTextMessage(this.session.fbid, `Gathering weather, flight and stay related information for ${this.session.tripNameInContext}`);
@@ -249,7 +288,6 @@ WebhookPostHandler.prototype.startPlanningTrip = function() {
   // TODO: If this is a beach destinataion, use http://www.blueflag.global/beaches2 to determine the swimmability. Also use http://www.myweather2.com/swimming-and-water-temp-index.aspx to determine if water conditions are swimmable
   const self = this;
   activities()
-    // .then(flightDetails())
     .then(weatherDetails())
     .then(flightQuotes)
     .done(
@@ -630,8 +668,6 @@ function sendPastTrips() {
 }
 
 function sendTripButtons(addNewTrip) {
-  // reload session to get any new trips that were created by boarding-pass-handler.js
-  this.session = this.sessions.reloadSession(this.session.sessionId);
 	// Anytime we send trips for users to choose from, invalidate the session's tripData so it can be re-read from file. This way, any information that was added to the trip (by other session instances like the one in webpage-handler.js) will be re-read.
 	this.session.invalidateTripData();
   const tripDetails = this.session.getCurrentAndFutureTrips();
@@ -1137,7 +1173,7 @@ function determineResponseType(event) {
   if(mesg.startsWith("get car details")) return sendCarReceipt.call(this);
   if(mesg.startsWith("get hotel details")) return sendHotelItinerary.call(this);
 	if(mesg.startsWith("get tour details")) return sendTourDetails.call(this);
-  if(mesg.startsWith("get return flight details")) return sendReturnFlightDetails.call(this);
+  if(mesg.startsWith("get return flight details") || mesg.startsWith("return flight") || mesg.startsWith("get return flight")) return sendReturnFlightDetails.call(this);
 
   logger.debug(`determineResponseType: Did not understand the context of message <${mesg}>. Dump of session states: ${this.session.dumpState()}`);
   // We don't understand the text sent. Simply present the options we present on "getting started".

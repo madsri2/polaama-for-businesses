@@ -16,4 +16,16 @@ function mdt() {
   console.log(momentTz().tz("America/Cambridge_Bay").add(1, 'days').format("M/D/YYYY"));
 }
 
-mdt();
+function singleDigitMonth() {
+  const t = "2016-06-10T10:45";
+  console.log(moment(t).format("YYYY-MM-DDTHH:mm"));
+}
+
+function scratch() {
+  const t = new Date("2017-11-10");
+  console.log(t);
+}
+
+scratch();
+// singleDigitMonth();
+// mdt();

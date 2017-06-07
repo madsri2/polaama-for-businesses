@@ -1,5 +1,6 @@
 'use strict';
 const expect = require('chai').expect;
+const moment = require('moment');
 
 const BoardingPassHandler = require('flight-details-parser/app/boarding-pass-handler');
 const FbidHandler = require('fbid-handler/app/handler');
@@ -48,7 +49,8 @@ describe('BoardingPass handler', function() {
     const trip = new TripData(tripName, fbid);
     // verify that boarding pass file actually was written
     const boardingPass = JSON.parse(fs.readFileSync(trip.boardingPassFile(), 'utf8'));
-    expect(boardingPass.flight_info.flight_schedule.departure_time).to.equal("2017-5-1T09:00");
+		const formattedDepTime = moment("2017-05-01T09:00").format("YYYY-MM-DDTHH:mm");
+    expect(boardingPass.flight_info.flight_schedule.departure_time).to.equal(formattedDepTime);
     expect(boardingPass.passenger_name).to.equal("TestFirstName LastName");
     expect(boardingPass.pnr_number).to.equal("XWERGX");
     // verify that "flight ticket" todo item was marked done

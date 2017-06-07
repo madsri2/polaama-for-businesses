@@ -8,7 +8,6 @@ const TripFinder = require('flight-details-parser/app/trip-finder');
 
 const baseDir = `/home/ec2-user`;
 const logger = require(`${baseDir}/my-logger`);
-const WebhookPostHandler = require(`${baseDir}/webhook-post-handler`);
 
 // use a mailparser like https://www.npmjs.com/package/mailparser to parse email
 function BoardingPassHandler(options, testing) {
@@ -21,7 +20,7 @@ function BoardingPassHandler(options, testing) {
   if(!fs.existsSync(this.boardingPassImage)) throw new Error(`BoardingPassHandler: Boarding pass image does not exist at location ${this.boardingPassImage}. Cannot proceed`);
   // do some work
   const flightInfo = new FlightInfo(options);
-  const dd = new Date(options.dep_date);
+  const dd = new Date(flightInfo.get().flight_schedule.departure_time);
   this.dep_date = `${dd.getFullYear()}-${dd.getMonth()+1}-${dd.getDate()}`;
   this.dep_time = options.dep_time;
   // uses the format expected by facebook. Details of the data structure are at: https://developers.facebook.com/docs/messenger-platform/send-api-reference/airline-boardingpass-template
@@ -75,9 +74,9 @@ BoardingPassHandler.prototype.handle = function() {
   // get city corresponding to destination airport code
   const destCity = this.details.flight_info.arrival_airport.city;
 
-  const tripFinder = new TripFinder(this.details.passenger_name);
+  const tripFinder = new TripFinder(this.details.passenger_name, this.testing);
   this.trip = tripFinder.getTrip(this.dep_date, destCity);
-  this.postHandler = new WebhookPostHandler(tripFinder.getSession(), this.testing);
+	this.postHandler = tripFinder.getPostHandler();
 
   this.details.barcode_image_url = getBoardingPassImage.call(this); // Do this before writing boarding pass details into the boardingPass file so that the image url will be captured in the file.
 
