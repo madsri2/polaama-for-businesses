@@ -12,7 +12,7 @@ function CreateItinerary(trip, departureCity) {
   this.tripData = trip.data;
   this.tripName = trip.data.name;
   this.departureCity = departureCity;
-	this.country = new Country();
+  this.country = new Country();
   setDepartureCountry.call(this, departureCity);
 }  
 
@@ -51,39 +51,64 @@ const formatDate = CreateItinerary.formatDate; // shortcut for use in this file.
 CreateItinerary.prototype.create = function() {
   this.itin = {};
   // nextDay represents the day for which the itinerary needs to be set. Starts with startDate.
-  if(!this.tripData.startDate) {
-    throw new Error(`CreateItinerary: startDate not defined in tripData. Nothing to do!`);
-  }
+  if(!this.tripData.startDate) throw new Error(`CreateItinerary: startDate not defined in tripData. Nothing to do!`);
   this.nextDay = new Date(this.tripData.startDate);
   const promiseList = [];
-  promiseList.push(setDepartureCityDetails.call(this));
+  promiseList.push(setFirstDayDetails.call(this));
   promiseList.push(setRemainingItinerary.call(this));
-	const lastDayPromise = setLastDayDetails.call(this);
-	if(lastDayPromise) promiseList.push(lastDayPromise);
+  const lastDayPromises = setLastDayDetails.call(this);
+  if(lastDayPromises && lastDayPromises.length > 0) promiseList.push(lastDayPromises);
   persist.call(this); // persist to store any information that was synchronously written.
   return promiseList;
 }
 
 function setLastDayDetails() {
-	if(!this.trip.returnFlightItin) return null;
-	const firstLeg = this.trip.returnFlightItin[0];
-	const city = firstLeg.departure_airport.city;
-	const lastDay = new Date(this.tripData.returnDate);
-	const lastDayStr = formatDate(lastDay);
-	if(this.itin[lastDayStr]) throw new Error(`setLastDayDetails: last days' itin already set with value: ${this.itin[dayStr]}`);
-	this.itin[lastDayStr] = {};
-	this.itin[lastDayStr].city = city;
-	// for departure time, we only care about the first leg of the flight
-	const depDate = new Date(firstLeg.flight_schedule.departure_time);
-	this.itin[lastDayStr].startTime = getTime(depDate);
-	// for arrival time, we only care about the last leg of the flight.
-	const lastLeg = this.trip.returnFlightItin[this.trip.flightItin.length - 1];
-	const arrivalDate = new Date(lastLeg.flight_schedule.arrival_time);
-	this.itin[lastDayStr].arrivalTime = getTime(arrivalDate);
-	logger.debug(`setDepartureCityDetails: flightItin present. departure date is ${depDate}; arrival date is ${arrivalDate}`);
-	// returns a promise list
-	const country = this.country.getCountry(city);
-  return setWeatherDetails.call(this, lastDay, country, city);
+  const promiseList = [];
+  if(!this.tripData.returnDate) throw new Error(`setLastDayDetails: Do not know return date for trip ${this.tripData.rawName}`);
+  const lastDay = new Date(this.tripData.returnDate);
+  const lastDayStr = formatDate(lastDay);
+  if(this.itin[lastDayStr]) throw new Error(`setLastDayDetails: last days' itin already set with value: ${this.itin[dayStr]}`);
+  this.itin[lastDayStr] = {};
+  let city;
+  let firstLeg;
+  if(!this.trip.returnFlightItin) {
+    const cities = this.tripData.cityItin.cities;
+    // logger.debug(`setLastDayDetails: cities: ${cities}`);
+    // if the trip has a city list, the city for the last day would be the last city in the list. Otherwise, it is the city that we are traveling to.
+    if(cities) city = cities[cities.length - 1];
+    else 
+      if(!this.tripData.portOfEntry) throw new Error(`setLastDayDetails: trip's cityItin and portOfEntry not set: ${JSON.stringify(this.tripData)}`); 
+      else city = this.tripData.portOfEntry;
+    // logger.debug(`setLastDayDetails: city value is ${city}. returnFlightItin not present. trip data: ${JSON.stringify(this.tripData)}`);
+  }
+  else {
+    // logger.debug(`setLastDayDetails: returnFlightItin present`);
+    firstLeg = this.trip.returnFlightItin[0];
+    city = firstLeg.departure_airport.city;
+  }
+  this.itin[lastDayStr].city = city;
+  logger.debug(`The city for the last day is ${city}`);
+  promiseList.push(setWeatherDetails.call(this, lastDay, this.country.getCountry(city), city));
+  // nothing more to do if there is no return flight itin
+  if(!this.trip.returnFlightItin)  return promiseList;
+  // for departure time, we only care about the first leg of the flight
+  const depDate = new Date(firstLeg.flight_schedule.departure_time);
+  this.itin[lastDayStr].startTime = getTime(depDate);
+  // for arrival time, we only care about the last leg of the flight.
+  const lastLeg = this.trip.returnFlightItin[this.trip.returnFlightItin.length - 1];
+
+  const arrivalDate = new Date(lastLeg.flight_schedule.arrival_time);
+  const arrivalDateStr = formatDate(arrivalDate);
+  if(arrivalDateStr !== lastDayStr) {
+    if(this.itin[arrivalDateStr]) throw new Error(`setLastDayDetails: Did not expect itinerary for day ${arrivalDateStr} but it's present with value: ${JSON.stringify(this.itin[arrivalDateStr])}`);
+    const arrivalCity = lastLeg.arrival_airport.city;
+    this.itin[arrivalDateStr] = {};
+    this.itin[arrivalDateStr].city = arrivalCity;
+    promiseList.push(setWeatherDetails.call(this, arrivalDate, this.country.getCountry(arrivalCity), arrivalCity));
+  }
+  this.itin[arrivalDateStr].arrivalTime = getTime(arrivalDate);
+  logger.debug(`setLastDayDetails: returnFlightItin present. departure date is ${depDate}; arrival date is ${arrivalDate}`);
+  return promiseList;
 }
 
 CreateItinerary.prototype.getItinerary = function() {
@@ -114,35 +139,44 @@ CreateItinerary.prototype.getItinerary = function() {
     }
     // if code is ENOENT, it just means that the user_input_itin file is not present, which is ok.
   }
-	return this.itin;
+  return this.itin;
 }
 
-function setDepartureCityDetails() {
+function setFirstDayDetails() {
   const results = createCommonItinForEachDay.call(this, [this.departureCity, this.tripData.portOfEntry], this.departureCountry);
-	const nextDayStr = results.itinDay;
-  logger.debug(`setDepartureCityDetails: setting itinerary for first day: Departure city: ${this.departureCity}; port of entry: ${this.tripData.portOfEntry}`);
-	if(this.trip.flightItin) {
-		// for departure time, we only care about the first leg of the flight
-		const firstLeg = this.trip.flightItin[0];
-		const depDate = new Date(firstLeg.flight_schedule.departure_time);
-		if(formatDate(depDate) === nextDayStr) this.itin[nextDayStr].startTime = getTime(depDate);
-		// for arrival time, we only care about the last leg of the flight.
-		const lastLeg = this.trip.flightItin[this.trip.flightItin.length - 1];
-		const arrivalDate = new Date(lastLeg.flight_schedule.arrival_time);
-		if(formatDate(arrivalDate) === nextDayStr) this.itin[nextDayStr].arrivalTime = getTime(arrivalDate);
-		logger.debug(`setDepartureCityDetails: flightItin present. departure date is ${depDate}; arrival date is ${arrivalDate}`);
-	}
-	else logger.debug(`setDepartureCityDetails: this.trip.flightItin not present. Not setting flight details`);
+  logger.debug(`setFirstDayDetails: setting itinerary for first day: Departure city: ${this.departureCity}; port of entry: ${this.tripData.portOfEntry}`);
+  if(!this.trip.flightItin) {
+    logger.debug(`setFirstDayDetails: this.trip.flightItin not present. No flight details`);
+    return results.promise;
+  }
+  // for departure time, we only care about the first leg of the flight
+  const firstLeg = this.trip.flightItin[0];
+  const depDate = new Date(firstLeg.flight_schedule.departure_time);
+  const depDateStr = formatDate(depDate);
+  if(!this.itin[depDateStr]) throw new Error(`setFirstDayDetails: Expected itinerary to contain date ${depDateStr}, which should be the same as ${results.itinDay}, but that is not the case`);
+  this.itin[depDateStr].startTime = getTime(depDate);
+  // for arrival time, we only care about the last leg of the flight.
+  const lastLeg = this.trip.flightItin[this.trip.flightItin.length - 1];
+  const arrivalDate = new Date(lastLeg.flight_schedule.arrival_time);
+  const arrivalDateStr = formatDate(arrivalDate);
+  if(!this.itin[arrivalDateStr]) {
+    const city = lastLeg.arrival_airport.city;
+    this.itin[arrivalDateStr] = {};
+    this.itin[arrivalDateStr].city = city;
+    // we don't set weather details or any other common itinerary details because that will be taken care of by createCommonItinForEachDay, which will be called as part of setRemainingDay for this day.
+  }
+  this.itin[arrivalDateStr].arrivalTime = getTime(arrivalDate);
+  logger.debug(`setFirstDayDetails: flightItin present. departure date is ${depDate}; arrival date is ${arrivalDate}`);
   return results.promise;
 }
 
 // For each day, set the weather, activities and stay information. If there is no activity/stay information, keep it blank. Initially, simply use the information available for a city in activities.
 function setRemainingItinerary() {
-	const promises = []; // array of promises that will execute weather setting.
-	if(!this.tripData.cityItin) {
-		logger.warn(`setRemainingItinerary: cityItin not defined in tripData. Nothing to do!`);
-		return promises;
-	}
+  const promises = []; // array of promises that will execute weather setting.
+  if(!this.tripData.cityItin) {
+    logger.warn(`setRemainingItinerary: cityItin not defined in tripData. Nothing to do!`);
+    return promises;
+  }
   const cityItin = this.tripData.cityItin;
   const duration = this.tripData.duration;
   const departureCountry = this.tripData.country;
@@ -153,10 +187,10 @@ function setRemainingItinerary() {
     if(i === 0) cityNumDays -= 1; // we assume the first day would be at the port of entry, so we create the itin for one fewer day.
     // use this city for the number of days user is going to stay in this city
     while(numDays++ != cityNumDays) {
-			if(formatDate(this.nextDay) === formatDate(new Date(this.tripData.returnDate))) {
-				logger.info(`setRemainingItinerary: Not setting itin for last day: ${this.tripData.returnDate}. will be set by setLastDayDetails method`);
-				return;
-			}
+      if(formatDate(this.nextDay) === formatDate(new Date(this.tripData.returnDate))) {
+        logger.info(`setRemainingItinerary: Not setting itin for last day: ${this.tripData.returnDate}. will be set by setLastDayDetails method`);
+        return;
+      }
       promises.push(createCommonItinForEachDay.call(this, city, departureCountry).promise);
     }
   });
@@ -166,7 +200,7 @@ function setRemainingItinerary() {
 // TODO: As we get closer to the travel day, get realtime forecast, rather than historical forecast.
 function setWeatherDetails(itinDate, country, cityList) {
   const self = this;
-  let cities = []; // convert into an array because cityList could be a single city or a group of cities (see setDepartureCityDetails).
+  let cities = []; // convert into an array because cityList could be a single city or a group of cities (see setFirstDayDetails).
   cities = cities.concat(cityList);
   const promiseList = [];
   cities.forEach(city => {
@@ -206,10 +240,10 @@ function setWeatherDetails(itinDate, country, cityList) {
 }
 
 function getTime(date) {
-	if(!date) return null;
-	const m = date.getMinutes();
-	const h = date.getHours();
-	return (m > 9 ? `${h}:${m}` : `${h}:0${m}`);
+  if(!date) return null;
+  const m = date.getMinutes();
+  const h = date.getHours();
+  return (m > 9 ? `${h}:${m}` : `${h}:0${m}`);
 }
 
 /*
@@ -219,12 +253,16 @@ function getTime(date) {
 */
 function createCommonItinForEachDay(cityList, country) {
   const nextDayStr = formatDate(this.nextDay);
-  if(this.itin[nextDayStr]) {
-    // Possible bug
-    throw new Error(`createCommonItinForEachDay: Possible BUG! Itinerary for ${nextDayStr} should not be defined, but it is. Value is ${JSON.stringify(this.itin[nextDayStr])}`);
+  if(this.itin[nextDayStr] && nextDayStr !== formatDate(new Date(new Date(this.tripData.startDate).getDate() + 1))) {
+    const startDate = new Date(this.tripData.startDate);
+    startDate.setDate(startDate.getDate() + 1);
+    // it is possible for the day after start day to have an itinerary defined (see setFirstDayDetails, but throw error for anything else.
+    if(nextDayStr !== formatDate(startDate)) throw new Error(`createCommonItinForEachDay: Possible BUG! Itinerary for ${nextDayStr} should not be defined, but it is. Value is ${JSON.stringify(this.itin[nextDayStr])}`);
   }
-  this.itin[nextDayStr] = {};
-  this.itin[nextDayStr].city = cityList;
+  else {
+    this.itin[nextDayStr] = {};
+    this.itin[nextDayStr].city = cityList;
+  }
   const nextDayCopy = new Date(this.nextDay); // copy the state of nextDay into another variable so we can change this.nextDay without having to worry about any side effects.
   const promiseList = setWeatherDetails.call(this, nextDayCopy, country, cityList);
   this.nextDay.setDate(this.nextDay.getDate() + 1); // advance to the next day only if all the itinerary details for today were set correctly.

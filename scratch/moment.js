@@ -60,7 +60,23 @@ function dateDiff() {
   console.log(`Duration: ${duration} days`);
 }
 
-dateDiff();
+function formats() {
+  // console.log(new moment("7/1"));
+  console.log(new moment("07/01/17"));
+  console.log(new moment("2017-07-17"));
+}
+
+function patternMatch() {
+  command = "4/12";
+  const regex1 = /([a-zA-Z]+) (\d+)/;
+  console.log(regex1.exec(command));
+  const regex2 = /(\d+)\/(\d+)/;
+  console.log(regex2.exec(command));
+}
+patternMatch();
+
+// formats();
+// dateDiff();
 
 // testFormatting();
 

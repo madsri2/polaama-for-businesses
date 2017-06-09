@@ -34,8 +34,17 @@ function Country(country) {
 
 // TODO: Get the cities from the file instead of hard-coding it here.
 function cityCountryMap() {
+  // NOTE: City & Country needs to be encoded.
 	this.cityMap = {
-		'tel_aviv': 'israel'
+		'tel_aviv': 'israel',
+		'mumbai': 'india',
+		'chennai': 'india',
+		'goa': 'india',
+    'newark': 'usa',
+    'seattle': 'usa',
+    'san_francisco': 'usa',
+    'san_jose': 'usa',
+    'new_york': 'usa'
 	};
 }
 

@@ -2,7 +2,8 @@
 
 const logger = require('../../my-logger');
 const fs = require('fs');
-const CreateItinerary = require('../../trip-itinerary/app/create-itin'); // TODO: This relative path is ridiculous. Fix me
+const CreateItinerary = require('trip-itinerary/app/create-itin'); 
+const DayPlanner = require('calendar-view/app/day-planner');
 
 const alphabet = ['a','b','c','d','e','f','g'];
 const dayString = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
@@ -10,16 +11,16 @@ const monthNames = ["January", "February", "March", "April", "May", "June", "Jul
 const htmlBaseDir = "/home/ec2-user/html-templates"; // TODO: Move this to config.
 
 // This class gets data from trips/portugal-itinerary.txt and creates a calendar view from that information.
-
-function FormatCalendar(trip, hometown) {
+function FormatCalendar(trip, departureCity) {
   this.trip = trip;
   this.tripData = this.trip.data;
   this.tripName = this.trip.rawTripName;
-  this.hometown = hometown;
+  this.departureCity = departureCity;
   fetchItinerary.call(this);
   this.html = "";
 }
 
+/*
 FormatCalendar.prototype.format = function() {
   this.html = fetchCalView.call(this);
   const calHtml = formatView.call(this, this.tripData.startDate);
@@ -30,6 +31,7 @@ FormatCalendar.prototype.format = function() {
     .replace("${year}", year)
     .replace("${calendar}", calHtml);
 }
+*/
 
 FormatCalendar.prototype.formatForMobile = function() {
   const weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
@@ -48,7 +50,7 @@ FormatCalendar.prototype.formatForMobile = function() {
         "${day}": weekDays[thisDate.getDay()],
         "${dateVal}": dateVal,
         "${monthName}": monthNames[thisDate.getMonth()],
-        "${existingItinerary}": getThisDaysItin.call(this, thisDate)
+        "${existingItinerary}": this.getThisDaysItin(thisDate)
       }));
       fullJs = fullJs.concat(getJavascript(dateVal));
     });
@@ -74,26 +76,14 @@ function dayItin(search) {
   }
 }
 
-function setWeatherContents(details) {
-  let contents = "";
-  const weather = details.weather;
-  if(!weather) {
-    return contents;
-  }
-  if(!Array.isArray(weather)) {
-    contents += `<li>Avg min temp: ${weather.min_temp}&degF; Max temp: ${weather.max_temp}&degF</li>`;
-    contents += `<li>Chance of rain: ${weather.chanceofrain}%; It will be ${weather.cloud_cover} today.</li>`;
-    return contents;
-  }
-  // we have been sent an array of weather. That means there are multiple cities on the same day in the itinerary.
-  weather.forEach(cityWeather => {
-    contents += `<li>Average min temp at ${cityWeather.city}: ${cityWeather.min_temp}&degF; Max temp: ${cityWeather.max_temp}&degF</li>`;
-    contents += `<li>Chance of rain: ${cityWeather.chanceofrain}%; It will be ${cityWeather.cloud_cover} today.</li>`;
-  });
-  return contents;
+FormatCalendar.prototype.getThisDaysItin = function (date) {  
+  const dateStr = CreateItinerary.formatDate(date);
+  const dayPlanner = new DayPlanner(date, this.itinDetails[dateStr], this.trip); 
+  return dayPlanner.getPlan().dayPlan;
 }
 
-function getThisDaysItin(date) {
+/*
+FormatCalendar.prototype.getThisDaysItin = function (date) {
   const thisDateStr = CreateItinerary.formatDate(date);
   const details = this.itinDetails[thisDateStr];
   let contents = "";
@@ -117,16 +107,16 @@ function getThisDaysItin(date) {
       departureCity = details.city;
     }
   }
-  contents += setWeatherContents.call(this, details);
+  contents += setWeatherContents(details);
   if(details.startTime) {
-    contents += `<li>Leaving ${capitalize1stChar(departureCity)} at ${details.startTime}.</li>`;
+    contents += `<li><b>Flight</b>: Leaving ${capitalize1stChar(departureCity)} at ${details.startTime}.</li>`;
   }
   // returning from trip
   if(details.departureTime) {
-    contents += `<li>Leaving ${capitalize1stChar(departureCity)} at ${details.departureTime}.</li>`;
+    contents += `<li><b>Flight</b>: Leaving ${capitalize1stChar(departureCity)} at ${details.departureTime}.</li>`;
   }
   if(details.arrivalTime) {
-    contents += `<li>Reach ${capitalize1stChar(details.city)} at ${details.arrivalTime}.</li>`;
+    contents += `<li><b>Flight</b>: Reach ${capitalize1stChar(details.city)} at ${details.arrivalTime}.</li>`;
   }
   if(details.visit) {
     const visiting = details.visit;
@@ -142,6 +132,7 @@ function getThisDaysItin(date) {
   }
   return contents;
 }
+*/
 
 function getJavascript(dateVal) {
   let js = `
@@ -157,6 +148,7 @@ function getJavascript(dateVal) {
   return js; 
 }
 
+/*
 // Find out the day based on the date of travel. Create the month view from that.
 function formatView(startDate) {
   this.startDate = new Date(this.tripData.startDate);
@@ -189,6 +181,7 @@ function formatView(startDate) {
   } while(date.toString() != this.returnDate.toString());
   return calHtml;
 }
+*/
 
 function getPreviousSunday() {
   const startDay = this.startDate.getDay();
@@ -203,6 +196,7 @@ function capitalize1stChar(str) {
   });
 }
 
+/*
 // return weather information, stay details and activities.
 function getPopupContents(day) {
   logger.debug(`getPopupContents: Getting details for ${day}`);
@@ -260,9 +254,10 @@ function fetchCalView() {
     logger.info(`could not read html from file ${this.trip.tripItinFile()}. ${err.message}`);
   }
 }
+*/
 
 function fetchItinerary() {
-  this.itinDetails = (new CreateItinerary(this.trip, this.hometown)).getItinerary();  
+  this.itinDetails = (new CreateItinerary(this.trip, this.departureCity)).getItinerary();  
 }
 
 module.exports = FormatCalendar;

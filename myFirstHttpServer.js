@@ -288,7 +288,12 @@ app.get('/:id/:tripName/calendar', function(req, res) {
 
 app.get('/:id/:tripName/day-plan', function(req, res) {
   const handler = new WebpageHandler(req.params.id, req.params.tripName);
-  return handler.handleWebpage(res, handler.dayPlans);
+  return handler.handleWebpage(res, handler.dayPlan);
+});
+
+app.get('/:id/:tripName/:date', function(req, res) {
+  const handler = new WebpageHandler(req.params.id, req.params.tripName);
+  return handler.handleWebpage(res, handler.dayPlan, [req.params.date]);
 });
 
 app.get('/todo', function(req, res) {

@@ -14,7 +14,8 @@ const fs = require('fs');
 const TripInfoProvider = require('./trip-info-provider');
 const CommentParser = require('./expense-report/app/comment-parser');
 const ExpenseReportWorkflow = require('./expense-report/app/workflow');
-const CreateItinerary = require('./trip-itinerary/app/create-itin');
+const CreateItinerary = require('trip-itinerary/app/create-itin');
+const Commands = require('trip-itinerary/app/commands');
 
 const _ = require('lodash');
 const request = require('request');
@@ -23,8 +24,8 @@ const formidable = require('formidable');
 const Promise = require('promise');
 const validator = require('node-validator');
 
-// NOTE: WebhookPostHandler is a singleton, so all state will need to be maintained in this.session object. fbidHandler is also a singleton, so that will be part of the WebhookPostHandler object.
 let TEST_MODE = false;
+// NOTE: WebhookPostHandler is a singleton, so all state will need to be maintained in this.session object. fbidHandler is also a singleton, so that will be part of the WebhookPostHandler object.
 function WebhookPostHandler(session, testing) {
   if(testing) TEST_MODE = true; // Use sparingly. Currently, only used in callSendAPI
   this.sessions = Sessions.get();
@@ -43,6 +44,7 @@ function WebhookPostHandler(session, testing) {
       logger.debug(`file ${f} changed. reloading it`);
       const s = JSON.parse(fs.readFileSync(f, 'utf8'));
       self.sessions.reloadSession(s.sessionId);
+      self.tripCount = null; // force tripCount to be reloaded in determineResponseType below
     });
   });
 }
@@ -241,7 +243,7 @@ WebhookPostHandler.prototype.setWeatherAndItineraryForNewTrip = function(tripNam
 	const session = this.sessions.reloadSession(this.session.sessionId);
 	const trip = session.getTrip(tripName);
 	if(!trip) throw new Error(`setWeatherAndItineraryForNewTrip: could not find trip ${tripName} in session with fbid ${session.fbid}`);
-	const tip = new TripInfoProvider(trip, this.session.hometown);
+	const tip = new TripInfoProvider(trip, trip.flightItin[0].departure_airport.city);
 	const weatherDetails = Promise.denodeify(tip.getWeatherInformation.bind(tip));
 
 	// TODO: If this is a beach destinataion, use http://www.blueflag.global/beaches2 to determine the swimmability. Also use http://www.myweather2.com/swimming-and-water-temp-index.aspx to determine if water conditions are swimmable
@@ -251,7 +253,7 @@ WebhookPostHandler.prototype.setWeatherAndItineraryForNewTrip = function(tripNam
 			function(response) {
 				const tripNameInContext = trip.tripName;
 				try {
-					const createItin = new CreateItinerary(trip, self.session.hometown);
+					const createItin = new CreateItinerary(trip, trip.flightItin[0].departure_airport.city);
 					Promise.all(createItin.create()).done(
 						function(values) {
 							// nothing to do here if create succeeds. The itinerary will be persisted and can be obtained by reading the file, which is done in trip-data-formatter:displayCalendar when /calendar is called
@@ -421,10 +423,7 @@ function receivedPostback(event) {
     return;
   }
 
-  if(payload === "add_comments") {
-    enterCommentAsMessage.call(this);
-    return;
-  }
+  if(payload === "add_comments") return enterCommentAsMessage.call(this);
   if(payload === "add_todo") {
     enterTodoItemAsMessage.call(this);
     return;
@@ -446,7 +445,7 @@ function receivedPostback(event) {
     determineTravelCompanions.call(this);
     return;
   }
-  if(payload === "boarding_pass") return sendBoardingPass.call(this);
+  if(payload === "boarding_pass" || payload === "boarding pass") return sendBoardingPass.call(this);
   if(payload === "flight itinerary") return sendFlightItinerary.call(this);
   if(payload === "return flight") return sendReturnFlightDetails.call(this);
   if(payload === "hotel details") return sendHotelItinerary.call(this);
@@ -845,6 +844,7 @@ function UserConfirmation(message) {
 
 function createNewTrip(tripDetails) {
   this.session.addTrip(tripDetails.destination);
+  this.tripCount = this.session.getCurrentAndFutureTrips().futureTrips.length;
   const tripData = this.session.tripData();
   tripData.addTripDetailsAndPersist(tripDetails);
   logger.info(`createNewTrip: This session's trip name in context is ${tripDetails.destination}`);
@@ -987,14 +987,14 @@ function determineResponseType(event) {
   const mesg = messageText.toLowerCase();
 
   // Before doing anything, if the user types help, send the help message!
-  const tripCount = this.session.getCurrentAndFutureTrips().futureTrips.length;
+  if(!this.tripCount) this.tripCount = this.session.getCurrentAndFutureTrips().futureTrips.length;
   if(mesg === "hello" || mesg === "hi" || mesg === "howdy" || mesg === "hiya" || mesg.startsWith("help ") || mesg === "help") {
     if(mesg.startsWith("help ") || mesg === "help") {
       // clear all states 
       this.session.clearAllAwaitingStates();
       if(this.session.doesTripContextExist()) return sendAddOrGetOptions.call(this);
     }
-    if(tripCount) {
+    if(this.tripCount) {
       const messages = [];
       messages.push(getTextMessageData(senderID, "Hi! Welcome back to Polaama. How can I help you today?"));
       messages.push(getHelpMessageData.call(this, senderID, "Choose from the options below."));
@@ -1006,7 +1006,7 @@ function determineResponseType(event) {
   if(event.message.quick_reply && handleQuickRepliesToPlanNewTrip.call(this, event.message.quick_reply)) return;
 
   // At this point, if no trip exists and it's not being planned, the user has entered something we don't understand. Simply send them the Welcome message.
-  if(!tripCount && !this.session.planningNewTrip) return callSendAPI(getHelpMessageData.call(this, senderID, "Hi, I am your new personal travel assistant. Would you like to create a new trip to get started?"));
+  if(!this.tripCount && !this.session.planningNewTrip) return callSendAPI(getHelpMessageData.call(this, senderID, "Hi, I am your new personal travel assistant. Would you like to create a new trip to get started?"));
 
   // if we don't know what trip is being discussed, ask the user for this, unless the user is adding details about a new trip.
   if(!this.session.doesTripContextExist() && !this.session.planningNewTrip) {
@@ -1156,7 +1156,7 @@ function determineResponseType(event) {
     sendUrlButton.call(this, "Get pack-list", tripData.packListPath());
     return;
   }
-	if(mesg.startsWith("get trip details") || mesg.startsWith("trip details") || mesg.startsWith("trip calendar") || mesg.startsWith("get trip calendar")) return sendUrlButton.call(this, `${tripData.data.rawName} Trip calendar`, `${tripData.data.name}/calendar`);
+	if(mesg.startsWith("get trip details") || mesg.startsWith("trip details") || mesg.startsWith("trip calendar") || mesg.startsWith("get trip calendar") || mesg.startsWith("calendar") || mesg.startsWith("trip itinerary") || mesg.startsWith("itinerary")) return sendUrlButton.call(this, `${tripData.data.rawName} Trip calendar`, `${tripData.data.name}/calendar`);
 	if(mesg.startsWith("tomorrow's plans") || mesg.startsWith("plans for tomorrow") || mesg.startsWith("get plans for tomorrow")) return sendUrlButton.call(this, `Day plan`, `${tripData.data.rawName}/day-plan`);
 
   if(mesg.startsWith("deals")) return retrieveDeals(senderID, messageText);
@@ -1168,12 +1168,15 @@ function determineResponseType(event) {
     sendOtherActivities.call(this, messageText);
     return;
   }
-  if(mesg.startsWith("get boarding pass")) return sendBoardingPass.call(this);
-  if(mesg.startsWith("get itinerary")) return sendFlightItinerary.call(this);
+  if(mesg.startsWith("get boarding pass") || mesg.startsWith("boarding pass")) return sendBoardingPass.call(this);
+  if(mesg.startsWith("get flight itinerary") || mesg.startsWith("flight itinerary")) return sendFlightItinerary.call(this);
   if(mesg.startsWith("get car details")) return sendCarReceipt.call(this);
   if(mesg.startsWith("get hotel details")) return sendHotelItinerary.call(this);
 	if(mesg.startsWith("get tour details")) return sendTourDetails.call(this);
   if(mesg.startsWith("get return flight details") || mesg.startsWith("return flight") || mesg.startsWith("get return flight")) return sendReturnFlightDetails.call(this);
+
+  const commands = new Commands(tripData);
+  if(commands.canHandle(mesg)) return sendUrlButton.call(this, `Itin for ${mesg}`, `${tripData.data.name}/${commands.getPath()}`);
 
   logger.debug(`determineResponseType: Did not understand the context of message <${mesg}>. Dump of session states: ${this.session.dumpState()}`);
   // We don't understand the text sent. Simply present the options we present on "getting started".
@@ -1588,14 +1591,13 @@ function sendAddOrGetOptions() {
  * Typically, this should match the top level entries in Persistent Menu.
  */
 function getHelpMessageData(senderID, message) {
-  const tripCount = this.session.getCurrentAndFutureTrips().futureTrips.length;
   if(!message) message = "What would you like to do?";
   const quickReplies = [{
     content_type: "text",
     title: "New trip",
     payload: "qr_new_trip"
   }];
-  if(tripCount) quickReplies.push({
+  if(this.tripCount) quickReplies.push({
       content_type: "text",
       title: "Existing trips",
       payload: "qr_existing_trips"

@@ -23,7 +23,8 @@ function singleDigitMonth() {
 
 function scratch() {
   const t = new Date("2017-11-10");
-  console.log(t);
+  const t1 = t.setDate(t.getDate() + 1);
+  console.log(moment(t1).format("YYYY-MM-DD"));
 }
 
 scratch();

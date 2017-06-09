@@ -174,6 +174,73 @@ describe("Test Create Itinerary functionality", function() {
     );
   });
 
+	it("testing next day arrival", function(done) {
+		// set up
+		const cityItin = {
+			'cities': ['chennai','mumbai','goa','chennai'],
+			'numOfDays': ['3','3','2','2']
+		};
+		const startDate = "2017-11-1";
+		const portOfEntry = "chennai";
+		const tripData = new TripData('test-full-itin', "1234");
+		tripData.data.country = "india";
+		tripData.data.startDate = startDate;
+		tripData.data.name = "full-itin-test";
+		tripData.data.portOfEntry = portOfEntry;
+		tripData.data.cityItin = cityItin;
+		tripData.data.returnDate = "2017-11-10";
+		tripData.data.duration = 10;
+		tripData.flightItin = JSON.parse(`[{"flight_schedule":{"departure_time":"2017-11-01T10:05", "arrival_time": "2017-11-02T16:20"}, "arrival_airport": {"city": "chennai"}}]`);
+		tripData.returnFlightItin = JSON.parse(`[{"flight_schedule":{"departure_time":"2017-11-10T09:09", "arrival_time": "2017-11-11T14:59"}, "departure_airport": {"city": "chennai"}, "arrival_airport": {"city": "seattle"}}]`);
+		const weatherPromises = [];
+		cityItin.cities.forEach(city => {
+			weatherPromises.push(populateWeatherFile(startDate, tripData.data.country, city));
+		});
+		weatherPromises.push(populateWeatherFile(startDate, "usa", "seattle"));
+		const createItin = new CreateItinerary(tripData, "seattle");
+		const promises = createItin.create();
+				
+		Promise.all(weatherPromises).done(
+			// perform actual tests here
+			function(response) {
+				const createItin = new CreateItinerary(tripData, "seattle");
+				const promises = createItin.create();
+				Promise.all(promises).done(
+					function(values){
+						const details = createItin.getItinerary();
+						// verify departure date
+						const date = new Date(startDate);
+						const stDateStr = CreateItinerary.formatDate(date);
+						expect(details).to.include.keys(stDateStr);
+						expect(details[stDateStr].startTime).to.equal("10:05");
+						verifyItinExpectations(details[stDateStr], ['seattle','chennai']);
+						date.setDate(date.getDate() + 1);
+						const dayAfterStartStr = CreateItinerary.formatDate(date);
+						logger.debug(`About to test arrival day: ${dayAfterStartStr}; ${JSON.stringify(details[dayAfterStartStr])}`);
+						expect(details[dayAfterStartStr].arrivalTime).to.equal("16:20");
+						verifyItinExpectations(details[dayAfterStartStr], 'chennai');
+						const returnDate = new Date(tripData.data.returnDate);
+            const returnDateStr = CreateItinerary.formatDate(returnDate);
+            expect(details[returnDateStr].startTime).to.equal("9:09");
+            returnDate.setDate(returnDate.getDate() + 1);
+						const dayAfterReturnStr = CreateItinerary.formatDate(returnDate);
+						expect(details[dayAfterReturnStr].arrivalTime).to.equal("14:59");
+						// tell mocha that the asynchronous work is done
+						done();
+					},
+					function(err) {
+						logger.error(`Error calling create: ${err.message}. stack: ${err.stack}`);
+						// tell mocha that the asynchronous work is done
+						done(err);
+					}
+				);
+			},
+			function(err) {
+				logger.error(`entire itinerary test: error populating weather: ${err.stack}`);
+			}
+		);
+	});
+
   it("testing presence of user itinerary", function(done) {
     // set up
     const cityItin = {

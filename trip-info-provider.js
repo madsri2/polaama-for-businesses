@@ -11,9 +11,9 @@ const TripData = require('./trip-data');
 const FlightInfoProvider = require('./flight-info-provider');
 
 /* Class to handle manipulation of the trips/israel-data.txt file. */
-function TripInfoProvider(tripData, hometown) {
+function TripInfoProvider(tripData, departureCity) {
   this.trip = tripData;
-  this.hometown = hometown;
+  this.departureCity = departureCity;
   try {
     this.tripInfoDetails = JSON.parse(fs.readFileSync(this.trip.tripDataFile(),'utf8'));
   }
@@ -143,7 +143,7 @@ TripInfoProvider.prototype.getFlightDetails = function(callback) {
     logger.info(`Trip ${tripData.rawName} has already started. Not getting flight details. Simply returning!`);
     return callback();
   }
-  const fip = new FlightInfoProvider(this.hometown, tripData.portOfEntry, tripData.startDate, tripData.returnDate);
+  const fip = new FlightInfoProvider(this.departureCity, tripData.portOfEntry, tripData.startDate, tripData.returnDate);
   try {
     return fip.getFlightDetails(callback);
   }
@@ -162,7 +162,7 @@ TripInfoProvider.prototype.getFlightQuotes = function() {
       logger.warn(`getFlightQuoteDetails: Trip ${tripData.rawName} has already started. Not getting flight details. Simply returning!`);
       return Promise.resolve(true);
     }
-    const browseQuotes = new BrowseQuotes(this.hometown, tripData.portOfEntry, tripData.startDate, tripData.returnDate);
+    const browseQuotes = new BrowseQuotes(this.departureCity, tripData.portOfEntry, tripData.startDate, tripData.returnDate);
     return browseQuotes.getCachedQuotes();
   }
   catch(e) {
@@ -179,7 +179,7 @@ TripInfoProvider.prototype.getStoredFlightQuotes = function() {
       noflight: "Since the trip has already started, no flight information is available.<br>Support for intracity flights will be available soon."
     });
   }
-  const browseQuotes = new BrowseQuotes(this.hometown, tripData.portOfEntry, tripData.startDate, tripData.returnDate);
+  const browseQuotes = new BrowseQuotes(this.departureCity, tripData.portOfEntry, tripData.startDate, tripData.returnDate);
   return browseQuotes.getStoredQuotes();
 }
 
@@ -191,7 +191,7 @@ TripInfoProvider.prototype.getStoredFlightDetails = function() {
     }
   }
   logger.info(`getStoredFlightDetails: dest: ${tripData.portOfEntry}; tripData: ${JSON.stringify(tripData)}`);
-  const fip = new FlightInfoProvider(this.hometown, tripData.portOfEntry, tripData.startDate, tripData.returnDate);
+  const fip = new FlightInfoProvider(this.departureCity, tripData.portOfEntry, tripData.startDate, tripData.returnDate);
   return fip.getStoredFlightDetails();
 }
 

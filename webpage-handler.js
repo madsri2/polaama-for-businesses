@@ -12,7 +12,7 @@ const fs = require('fs');
 const formidable = require('formidable');
 const ExpenseReportFetcher = require('expense-report/app/report-fetcher');
 const BrowseQuotes = require('trip-flights/app/browse-quotes');
-const PlansForTomorrow = require('trip-itinerary/app/plans-for-tomorrow');
+const Commands = require('trip-itinerary/app/commands');
 
 function WebpageHandler(id, tripName) {
   this.fbidHandler = FbidHandler.get();
@@ -117,14 +117,19 @@ WebpageHandler.prototype.displayCalendar = function(res) {
   }
 }
 
-WebpageHandler.prototype.dayPlans = function(res) {
+WebpageHandler.prototype.dayPlan = function(res, args) {
+  const date = args[0];
   try {
+    const commands = new Commands(this.trip);
+    return res.send(commands.handle(date));
+    /*
 		const plansForTomorrow = new PlansForTomorrow(this.trip, this.session.hometown);
     return res.send(plansForTomorrow.get());
+    */
   }
   catch(e) {
     logger.error(`dayPlans: Error planning for tomorrow; ${e.stack}`);
-    return res.send(`Unable to show day plan for trip ${this.tripName} at this time`);
+    return res.send(`Unable to show day plan for trip ${this.tripName} and date ${date} at this time`);
   }
 }
 
