@@ -342,5 +342,33 @@ describe("Test Create Itinerary functionality", function() {
       }
     );
   });
+
+  it("test last day details without cityItin", function(done) {
+    const startDate = "2017-11-1";
+    const portOfEntry = "chennai";
+    const tripData = new TripData('test-full-itin', "1234");
+    tripData.data.country = "india";
+    tripData.data.startDate = startDate;
+    tripData.data.name = "full-itin-test";
+    tripData.data.portOfEntry = portOfEntry;
+    tripData.data.returnDate = "2017-11-10";
+    tripData.data.duration = 10;
+    // call
+    const createItin = new CreateItinerary(tripData, "seattle");
+    const promises = createItin.create();
+    Promise.all(promises).done(
+      function(values) {
+        const details = createItin.getItinerary();
+        const returnDateStr = CreateItinerary.formatDate(new Date(tripData.data.returnDate));
+        expect(details[returnDateStr]).to.not.be.null;
+        expect(details[returnDateStr].city).to.equal(portOfEntry);
+        done();
+      },
+      function(err) {
+        logger.error(`Error: ${err.stack}`);
+        done(err);
+      }
+    );
+  });
 });
 

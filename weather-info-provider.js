@@ -42,7 +42,6 @@ WeatherInfoProvider.prototype.getStoredWeather = function(responseCallback) {
   }
 }
 
-
 // International URL: http://api.wunderground.com/api/16f4fdcdf70aa630/planner_11051110/q/Israel/Jerusalem.json
 WeatherInfoProvider.prototype.getWeather = function(responseCallback) {
   // first check if we already have a file in the city's name.

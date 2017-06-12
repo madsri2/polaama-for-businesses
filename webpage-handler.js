@@ -117,10 +117,18 @@ WebpageHandler.prototype.displayCalendar = function(res) {
   }
 }
 
+WebpageHandler.prototype.myDayPlan = function(res, args) {
+  let html = require('fs').readFileSync(`html-templates/my-day-plan.html`, 'utf8');
+  html = html.replace("${date}", "6/11/17")
+            .replace("${city}", "Tel Aviv")
+            .replace("${plan}", "Some plan");
+  return res.send(html);
+}
+
 WebpageHandler.prototype.dayPlan = function(res, args) {
   const date = args[0];
   try {
-    const commands = new Commands(this.trip);
+    const commands = new Commands(this.trip, this.session.fbid);
     return res.send(commands.handle(date));
     /*
 		const plansForTomorrow = new PlansForTomorrow(this.trip, this.session.hometown);

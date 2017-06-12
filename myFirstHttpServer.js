@@ -286,9 +286,19 @@ app.get('/:id/:tripName/calendar', function(req, res) {
   return handler.handleWebpage(res, handler.displayCalendar);
 });
 
-app.get('/:id/:tripName/day-plan', function(req, res) {
+app.get('/:id/:tripName/itin-detail/:file', function(req, res) {
+  return res.sendFile(`/home/ec2-user/html-templates/${req.params.file}.html`, null, 
+  function(err) {
+    if(err) {
+      logger.error(`error sending file ${req.params.file}: ${err.stack}`);
+      return res.status(404).send("Even Bots need to eat lunch. Be back in a bit!");
+    }
+  });
+});
+
+app.get('/:id/:tripName/-/test-day', function(req, res) {
   const handler = new WebpageHandler(req.params.id, req.params.tripName);
-  return handler.handleWebpage(res, handler.dayPlan);
+  return handler.handleWebpage(res, handler.myDayPlan);
 });
 
 app.get('/:id/:tripName/:date', function(req, res) {
@@ -303,6 +313,14 @@ app.get('/todo', function(req, res) {
 // The filler "-" is needed here to disambiguate this route from "/:id/:tripName". If we don't use the filler here, that route will be chosen. TODO: FIX ME by chaining (see https://expressjs.com/en/guide/routing.html "Route handlers")
 app.get('/-/images/boarding-pass', function(req, res) {
   return res.sendFile('/home/ec2-user/boardingPass.png');
+});
+
+app.get('/partly-cloudy', function(req, res) {
+  return res.sendFile('/home/ec2-user/html-templates/partlycloudy.gif');
+});
+
+app.get('/clear', function(req, res) {
+  return res.sendFile('/home/ec2-user/html-templates/clear.gif');
 });
 
 app.get('/:id/:tripName/boarding-pass-image', function(req, res) {

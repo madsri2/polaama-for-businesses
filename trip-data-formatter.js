@@ -83,7 +83,7 @@ TripDataFormatter.prototype.formatPackList = function(headers) {
     logger.info("request call from browser. sending back html");
     const html = fs.readFileSync("html-templates/pack-list.html", 'utf8');
     return html.replace("${toPackList}",listAsHtml(packList.toPack))
-      .replace("${tripName}", this.trip.rawTripName)
+      .replace("${tripName}", this.trip.data.rawName)
       .replace("${donePackList}",listAsHtml(packList.done));
   }
   logger.info("request call from something other than browser. sending back json");

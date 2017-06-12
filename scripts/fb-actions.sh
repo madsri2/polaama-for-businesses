@@ -18,13 +18,14 @@ function subscribe_app {
 
 function send_message {
   id="$1"
-  echo "id is $id $1"
-  curl -X POST -H "Content-Type: application/json" -d '{
+  message="$2"
+  echo "id is $id; message is <$message>"
+  curl -v POST -H "Content-Type: application/json" -d '{
     "recipient":{
       "id":'$id'
     },
     "message":{
-      "text":"hello, world!"
+      "text":"$message"
     }
   }' "https://graph.facebook.com/v2.6/me/messages?access_token=$PAGE_ACCESS_TOKEN"
 }
@@ -71,7 +72,7 @@ case $key in
     subscribe_app
     ;;
   -sm|--send-message)
-    send_message "$2"
+    send_message "$2" "$3"
     shift # past argument
     ;;
   -p|--pmenu)

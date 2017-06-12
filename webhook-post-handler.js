@@ -60,7 +60,7 @@ function handleMessagingEvent(messagingEvent) {
     this.session = this.passedSession;
   }
   if(!this.logOnce[this.session.sessionId]) {
-    logger.debug(`handleMessagingEvent: First message from user ${this.session.fbid} with session ${this.session.sessionId} since this process started}`);
+    logger.debug(`handleMessagingEvent: First message from user ${this.session.fbid} with session ${this.session.sessionId} since this process started`);
     this.logOnce[this.session.sessionId] = true;
   }
   const promise = this.fbidHandler.add(fbid);
@@ -175,7 +175,7 @@ function setTripInContext(payload) {
   this.session.setTripContextAndPersist(tripName);
 }
 
-function sendUrlButton(title, urlPath) {
+WebhookPostHandler.prototype.urlButtonMessage = function(title, urlPath) {
   let messageData = {
     recipient: {
       id: this.session.fbid
@@ -201,7 +201,11 @@ function sendUrlButton(title, urlPath) {
       }
     }
   };
-  callSendAPI(messageData);
+  return messageData;
+}
+
+function sendUrlButton(title, urlPath) {
+  callSendAPI(this.urlButtonMessage(title, urlPath));
 }
 
 // Gather trip details (weather, flight, hotel, etc.) and send it in a web_url format.
@@ -450,6 +454,15 @@ function receivedPostback(event) {
   if(payload === "return flight") return sendReturnFlightDetails.call(this);
   if(payload === "hotel details") return sendHotelItinerary.call(this);
   if(payload === "car details") return sendCarReceipt.call(this);
+
+  const commands = new Commands(this.session.tripData(), this.session.fbid);
+  /*
+  if(payload === "todays_itin_next_set") {
+    return callSendAPI(commands.getTodaysItinNextSet(this.session.fbid));
+  }
+  */
+  const handled = commands.handlePostback(payload);
+  if(handled && (typeof handled === "object")) return callSendAPI(handled);
 
   // When an unknown postback is called, we'll send a message back to the sender to 
   // let them know it was successful
@@ -1122,6 +1135,8 @@ function determineResponseType(event) {
   }
 
   const tripData = this.session.tripData();
+  if(mesg === "add") return sendAddButtons.call(this);
+  if(mesg === "get") return displayTripDetails.call(this);
   if(mesg.startsWith("save") || mesg.startsWith("comment") || this.session.awaitingComment) {
     const returnString = tripData.storeFreeFormText(senderID, messageText);
     sendTextMessage(senderID, returnString);
@@ -1134,7 +1149,7 @@ function determineResponseType(event) {
     this.session.awaitingTodoItem = false;
     return;
   }
-  if(mesg.startsWith("pack") || this.session.awaitingPacklistItem) {
+  if(mesg.startsWith("pack ") || this.session.awaitingPacklistItem) {
     const returnString = tripData.storePackList(senderID, messageText);
     sendTextMessage(senderID, returnString);
     this.session.awaitingPacklistItem = false;
@@ -1152,11 +1167,11 @@ function determineResponseType(event) {
     sendUrlButton.call(this, "Get Comments", tripData.commentUrlPath());
     return;
   }
-  if(mesg.startsWith("get list") || mesg.startsWith("get pack")) {
+  if(mesg.startsWith("get list") || mesg.startsWith("get pack") || mesg === "packlist" || mesg === "pack") {
     sendUrlButton.call(this, "Get pack-list", tripData.packListPath());
     return;
   }
-	if(mesg.startsWith("get trip details") || mesg.startsWith("trip details") || mesg.startsWith("trip calendar") || mesg.startsWith("get trip calendar") || mesg.startsWith("calendar") || mesg.startsWith("trip itinerary") || mesg.startsWith("itinerary")) return sendUrlButton.call(this, `${tripData.data.rawName} Trip calendar`, `${tripData.data.name}/calendar`);
+	if(mesg.startsWith("get trip details") || mesg.startsWith("trip details") || mesg.startsWith("trip calendar") || mesg.startsWith("get trip calendar") || mesg.startsWith("calendar") || mesg.startsWith("trip itinerary") || mesg.startsWith("itinerary") || mesg.startsWith("get itinerary")) return sendUrlButton.call(this, `${tripData.data.rawName} Trip calendar`, `${tripData.data.name}/calendar`);
 	if(mesg.startsWith("tomorrow's plans") || mesg.startsWith("plans for tomorrow") || mesg.startsWith("get plans for tomorrow")) return sendUrlButton.call(this, `Day plan`, `${tripData.data.rawName}/day-plan`);
 
   if(mesg.startsWith("deals")) return retrieveDeals(senderID, messageText);
@@ -1169,14 +1184,21 @@ function determineResponseType(event) {
     return;
   }
   if(mesg.startsWith("get boarding pass") || mesg.startsWith("boarding pass")) return sendBoardingPass.call(this);
-  if(mesg.startsWith("get flight itinerary") || mesg.startsWith("flight itinerary")) return sendFlightItinerary.call(this);
+  if(mesg.startsWith("get flight itinerary") || mesg.startsWith("flight itinerary") || mesg.startsWith("flight")) return sendFlightItinerary.call(this);
   if(mesg.startsWith("get car details")) return sendCarReceipt.call(this);
   if(mesg.startsWith("get hotel details")) return sendHotelItinerary.call(this);
 	if(mesg.startsWith("get tour details")) return sendTourDetails.call(this);
-  if(mesg.startsWith("get return flight details") || mesg.startsWith("return flight") || mesg.startsWith("get return flight")) return sendReturnFlightDetails.call(this);
+  if(mesg.startsWith("return flight") || mesg.startsWith("get return flight")) return sendReturnFlightDetails.call(this);
 
-  const commands = new Commands(tripData);
-  if(commands.canHandle(mesg)) return sendUrlButton.call(this, `Itin for ${mesg}`, `${tripData.data.name}/${commands.getPath()}`);
+  const commands = new Commands(tripData, this.session.fbid);
+  if(commands.canHandle(mesg)) {
+    // let itinAsList = commands.getTodaysItinAsList(mesg, this.session.fbid);
+    // if(itinAsList) return callSendAPI(itinAsList);
+    const itinAsList = commands.handle(mesg); 
+    if(typeof itinAsList === "object") return callSendAPI(itinAsList);
+    logger.debug(`determineResponseType: Could not get list template for today from Commands. Defaulting to sending url`);
+    return sendUrlButton.call(this, `Itin for ${mesg}`, `${tripData.data.name}/${commands.getPath()}`);
+  }
 
   logger.debug(`determineResponseType: Did not understand the context of message <${mesg}>. Dump of session states: ${this.session.dumpState()}`);
   // We don't understand the text sent. Simply present the options we present on "getting started".
@@ -1772,12 +1794,23 @@ function getTextMessageData(senderID, text) {
   };
 }
 
+WebhookPostHandler.prototype.getTextMessageData = getTextMessageData;
+
 /*
  * Send a text message using the Send API.
  *
  */
 function sendTextMessage(senderID, messageText) {
   callSendAPI(getTextMessageData(senderID, messageText));
+}
+
+WebhookPostHandler.prototype.sendAnyMessage = function(message) {
+  callSendAPI(message);
+}
+
+WebhookPostHandler.prototype.sendMessage = function(senderID, messageText) {
+  sendTextMessage.call(this, senderID, messageText);
+  logger.debug(`sendMessage: sent message ${messageText}`);
 }
 
 function textMessages(messages) {
@@ -1787,6 +1820,8 @@ function textMessages(messages) {
   });
   return fbMessages;
 }
+
+WebhookPostHandler.prototype.sendMultipleMessages = sendMultipleMessages;
 
 // send messages strictly one after another
 function sendMultipleMessages(recipientId, messages) {
@@ -1834,6 +1869,7 @@ function callSendAPI(messageData) {
 WebhookPostHandler.prototype.testing_determineResponseType = determineResponseType;
 WebhookPostHandler.prototype.testing_createNewTrip = createNewTrip;
 WebhookPostHandler.prototype.testing_displayTripDetails = displayTripDetails;
+WebhookPostHandler.prototype.testing_receivedPostback = receivedPostback;
 
 // ********************************* TESTING *************************************
 

@@ -245,7 +245,9 @@ Session.prototype.getCurrentAndFutureTrips = function() {
   // Filter past trips
   let daysToEndOfTrip = -1;
   this.allTrips().forEach(trip => {
-    if(!trip.tripFilePresent || !trip.data) { 
+    // if trip.data is not present and if the trip file is not present, then throw an error.
+    if(!trip.tripFilePresent && !trip.data) { 
+      logger.info(`session dump: ${JSON.stringify(this)}; trip: ${JSON.stringify(trip)}`);
       logger.error(`getCurrentAndFutureTrips: trip.data not present for trip ${trip.rawTripName}. Possible BUG since session ${this.fbid} still contains this trip. In the interests of not letting the user continue, we are ignoring this and proceeding (instead of throwing an error). This would be a throwable error in testing, but not production.`);
       return;
     }

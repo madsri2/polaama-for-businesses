@@ -59,12 +59,12 @@ ItineraryHandler.prototype.handle = function() {
 				// update the return date for this itinerary.
 				this.trip.setReturnDate(this.departure_date);	
         file = this.trip.returnFlightFile();
-        message = `Received return flight itinerary for your trip to ${this.trip.getPortOfEntry()}. Type 'get return flight details' to see your itinerary`;
+        message = `Received return flight itinerary for your trip to ${this.trip.getPortOfEntry()}. Type 'return flight' to see your itinerary`;
       }
       else {
         file = this.trip.itineraryFile();
         // send a notification to the user that we have their details and will send them the boarding pass the day before the flight.
-        message = `Received itinerary for your trip to ${this.trip.getPortOfEntry()}. Type 'get itinerary' to see your itinerary`;
+        message = `Received itinerary for your trip to ${this.trip.getPortOfEntry()}. Type 'flight' to see your itinerary`;
       }
 			this.trip.markTodoItemDone("Flight tickets");
       fs.writeFileSync(file, JSON.stringify(this.details), 'utf8');

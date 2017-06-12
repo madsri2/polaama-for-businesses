@@ -5,12 +5,22 @@
 <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
 <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<style>
+  .ui-icon-weather:after {
+    background: url("https://polaama.com/partly-cloudy") no-repeat rgba(0, 0, 0, 0.4) !important;
+    /* Use https://ezgif.com/resize/ezgif-1-9ebf8cd9d6.gif to resize from png to gif (18 x 18) */
+  }
+</style>
 </head>
 <body>
 
 <div data-role="page" id="pageone">
   <div data-role="header">
+    <a href="#popupBasic" data-rel="popup" data-transition="pop" data-icon="weather">weather</a>
     <h1>${city}: ${date}</h1>
+  </div>
+  <div data-role="popup" id="popupBasic">
+  <p>Mostly sunny. Avg of 89&degF</p>
   </div>
 
   <div data-role="main" class="ui-content">

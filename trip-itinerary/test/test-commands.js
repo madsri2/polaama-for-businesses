@@ -1,7 +1,7 @@
 'use strict';
 
 const expect = require('chai').expect;
-const fs = require('fs');
+const fs = require('fs-extra');
 const Promise = require('promise');
 const CreateItinerary = require('trip-itinerary/app/create-itin');
 const Commands = require('trip-itinerary/app/commands');
@@ -55,11 +55,66 @@ describe("Commands tests: ", function() {
     trip.testing_delete();
   });
 
+  function verifyExpectations(html, city, date) {
+    const formattedDate = CreateItinerary.formatDate(date);
+    expect(html).to.contain(`${city}: ${formattedDate}`);
+    expect(html).to.contain(`Itinerary for ${date}`);
+  }
+
   it("today's itin", function(done) {
     Promise.all(promises).done(
       function(response) {
-        const commands = new Commands(trip, "seattle");
-        logger.debug(commands.handle("today"));
+        const commands = new Commands(trip, fbid);
+        const thisMonth = new Date().getMonth();
+        const thisYear = new Date().getFullYear();
+        const thisDate = new Date().getDate();
+        const html = commands.handle("today");
+        expect(commands.date.getMonth()).to.equal(thisMonth);
+        expect(commands.date.getFullYear()).to.equal(thisYear);
+        expect(commands.date.getDate()).to.equal(thisDate);
+        verifyExpectations(html, "Chennai", commands.date);
+        done();
+      },
+      function(err) {
+        done(err);
+      }
+    );
+  });
+
+  it("today as a list", function(done) {
+    Promise.all(promises).done(
+      function(response) {
+        const commands = new Commands(trip, fbid);
+        const thisMonth = new Date().getMonth();
+        const thisYear = new Date().getFullYear();
+        const thisDate = new Date().getDate();
+        const itinAsList = commands.getTodaysItinAsList("today", fbid);
+        expect(itinAsList).to.not.be.null;
+        expect(commands.date.getMonth()).to.equal(thisMonth);
+        expect(commands.date.getFullYear()).to.equal(thisYear);
+        expect(commands.date.getDate()).to.equal(thisDate);
+        logger.debug(`${JSON.stringify(itinAsList)}`);
+        done();
+      },
+      function(err) {
+        done(err);
+      }
+    );
+  });
+
+  it("today next set", function(done) {
+    Promise.all(promises).done(
+      function(response) {
+        const commands = new Commands(trip, fbid);
+        const thisMonth = new Date().getMonth();
+        const thisYear = new Date().getFullYear();
+        const thisDate = new Date().getDate();
+        const itinNextSet = commands.getTodaysItinNextSet(fbid);
+        expect(itinNextSet).to.not.be.null;
+        expect(commands.date.getMonth()).to.equal(thisMonth);
+        expect(commands.date.getFullYear()).to.equal(thisYear);
+        expect(commands.date.getDate()).to.equal(thisDate);
+        logger.debug(`${JSON.stringify(itinNextSet)}`);
         done();
       },
       function(err) {
@@ -71,8 +126,16 @@ describe("Commands tests: ", function() {
   it("tomorrow's itin", function(done) {
     Promise.all(promises).done(
       function(response) {
-        const commands = new Commands(trip);
-        logger.debug(commands.handle("tomorrow"));
+        const commands = new Commands(trip, fbid);
+        const html = commands.handle("tomorrow");
+        // logger.debug(commands.handle("tomorrow"));
+        const thisMonth = new Date().getMonth();
+        const thisYear = new Date().getFullYear();
+        const thisDate = new Date().getDate() + 1;
+        expect(commands.date.getMonth()).to.equal(thisMonth);
+        expect(commands.date.getFullYear()).to.equal(thisYear);
+        expect(commands.date.getDate()).to.equal(thisDate);
+        verifyExpectations(html, "Mumbai", commands.date);
         done();
       },
       function(err) {
@@ -84,7 +147,7 @@ describe("Commands tests: ", function() {
   it("specific date itin", function(done) {
     Promise.all(promises).done(
       function(response) {
-        const commands = new Commands(trip);
+        const commands = new Commands(trip, fbid);
         logger.debug(commands.handle("6/13"));
         done();
       },
@@ -97,8 +160,60 @@ describe("Commands tests: ", function() {
   it("month as string", function(done) {
     Promise.all(promises).done(
       function(response) {
-        const commands = new Commands(trip);
-        logger.debug(commands.handle("June  11"));
+        const commands = new Commands(trip, fbid);
+        logger.debug(commands.handle("June  13"));
+        done();
+      },
+      function(err) {
+        done(err);
+      }
+    );
+  });
+
+  it("list or html", function(done) {
+    Promise.all(promises).done(
+      function(response) {
+        // set up
+        fs.copySync("/home/ec2-user/trips/aeXf/tel_aviv-2017-6-13-itinerary.json", "/home/ec2-user/trips/ZDdz/test-mobile-view-2017-6-13-itinerary.json");
+        if(!fs.existsSync("/home/ec2-user/trips/ZDdz/test-mobile-view-2017-6-13-itinerary.json")) throw new Error(`file not present`);
+        // actual test
+        const commands = new Commands(trip, fbid);
+        let result = commands.handle("13th");
+        expect(typeof result).to.equal("object");
+        expect(result.message.attachment.payload.elements.length).to.equal(4);
+        expect(result.message.attachment.payload.elements[0].title).to.include("Carlton Hotel");
+        expect(result.message.attachment.payload.elements[3].title).to.include("Drive north");
+        expect(result.message.attachment.payload.buttons.length).to.equal(1);
+        expect(result.message.attachment.payload.buttons[0].title).to.equal("View more");
+        const postback = result.message.attachment.payload.buttons[0].payload;
+        result = commands.handlePostback(postback);
+        expect(result.message.attachment.payload.elements.length).to.equal(2);
+        expect(result.message.attachment.payload.elements[0].title).to.include("Dinner at Michmoret Beach");
+        expect(result.message.attachment.payload.elements[1].title).to.include("Overnight at");
+        logger.debug(JSON.stringify(result));
+        done();
+      },
+      function(err) {
+        done(err);
+      }
+    );
+  });
+
+  it("just send date", function(done) {
+    Promise.all(promises).done(
+      function(response) {
+        const commands = new Commands(trip, fbid);
+        const fourDaysFromNow = new Date().getDate() + 4;
+        logger.debug(`just send date: ${fourDaysFromNow}`);
+        const html = commands.handle(`${fourDaysFromNow}`);
+        // logger.debug(commands.handle("tomorrow"));
+        const thisMonth = new Date().getMonth();
+        const thisYear = new Date().getFullYear();
+        expect(commands.date.getMonth()).to.equal(thisMonth);
+        expect(commands.date.getFullYear()).to.equal(thisYear);
+        expect(commands.date.getDate()).to.equal(fourDaysFromNow);
+        // 4 days from now, we expect to be in Goa
+        verifyExpectations(html, "Goa", commands.date);
         done();
       },
       function(err) {
@@ -117,7 +232,7 @@ describe("Commands tests: ", function() {
         itinDetails[returnDateStr].startTime = "12:45";
         itinDetails[returnDateStr].arrivalTime = "20:45";
         fs.writeFileSync(trip.tripItinFile(), JSON.stringify(itinDetails), 'utf8');
-        const commands = new Commands(trip);
+        const commands = new Commands(trip, fbid);
         logger.debug(commands.handle(trip.data.returnDate));
         done();
       },
@@ -127,13 +242,23 @@ describe("Commands tests: ", function() {
     );
   });
 
-
   it("date formats", function() {
-    const commands = new Commands(trip);
+    const thisMonth = new Date().getMonth();
+    const thisYear = new Date().getFullYear();
+    const commands = new Commands(trip, fbid);
     expect(commands.canHandle("2017-06-11")).to.be.ok;
+    expect(CreateItinerary.formatDate(commands.date)).to.equal("6/11/2017");
     expect(commands.canHandle("June 11")).to.be.ok;
+    expect(commands.date.getTime()).to.equal(new Date(thisYear, 5, 11).getTime());
     expect(commands.canHandle("Dec 1")).to.be.ok;
+    expect(commands.date.getTime()).to.equal(new Date(thisYear, 11, 1).getTime());
     expect(commands.canHandle("10/01")).to.be.ok;
+    expect(commands.date.getTime()).to.equal(new Date(thisYear, 9, 1).getTime());
+    expect(commands.canHandle("10th")).to.be.ok;
+    expect(commands.date.getTime()).to.equal(new Date(thisYear, thisMonth, 10).getTime());
+    expect(commands.canHandle("10")).to.be.ok;
+    expect(commands.date.getTime()).to.equal(new Date(thisYear, thisMonth, 10).getTime());
+    expect(commands.canHandle("10sawe")).to.not.be.ok;
   });
 
   it("weather and flight", function() {
@@ -146,7 +271,7 @@ describe("Commands tests: ", function() {
       itinDetails[startDateStr].startTime = "12:45";
       itinDetails[startDateStr].arrivalTime = "20:45";
       fs.writeFileSync(trip.tripItinFile(), JSON.stringify(itinDetails), 'utf8');
-      const commands = new Commands(trip);
+      const commands = new Commands(trip, fbid);
       logger.debug(commands.handle("6/7"));
     },
     function(err) {

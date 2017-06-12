@@ -1,5 +1,6 @@
 'use strict';
 
+const fs = require('fs');
 const CreateItinerary = require('trip-itinerary/app/create-itin'); 
 const baseDir = "/home/ec2-user";
 const logger = require(`${baseDir}/my-logger`);
@@ -54,6 +55,158 @@ DayPlanner.prototype.getPlan = function() {
   };
 }
 
+DayPlanner.prototype.getPlanAsList = function(fbid, whichSet) {
+  const file = this.trip.dayItineraryFile(this.date);
+  logger.debug(`getPlanAsList: using list template to display itin for date ${this.date} and file ${file}`);
+  try {
+    const dayAsList = JSON.parse(fs.readFileSync(file, 'utf8'));
+    let message = {
+      recipient: {
+        id: fbid
+      },
+      message: {
+        attachment: {
+          type: "template",
+          payload: {
+            template_type: "list",
+            "top_element_style": "compact",
+          }
+        }
+      }
+    };
+    if(!whichSet || (whichSet === "first")) {
+      const viewMoreButton = [{
+        title: "View more",
+        type: "postback",
+        payload: `${this.date.getFullYear()}-${this.date.getMonth()}-${this.date.getDate()}-itin_second_set`
+      }];
+      message.message.attachment.payload.elements = dayAsList.firstSet;
+      message.message.attachment.payload.buttons = viewMoreButton;
+    }
+    else message.message.attachment.payload.elements = dayAsList.secondSet;
+    return message;
+  }
+  catch(e) {
+    logger.error(`error in getting plans for date ${this.date}: ${e.stack}`);
+    return null;
+  }
+}
+
+DayPlanner.prototype.getDayPlanAsList = function(fbid) {
+  const firstElementSet = [
+      {
+        title: "Breakfast at Carlton's",
+        image_url: "http://www.touryourway.com/uploadImages/systemFiles/Carlton-hotel-Tel-Aviv%20(2).jpg",
+        default_action: {
+          type: "web_url",
+          url: "www.carlton.co.il/en",
+          "webview_height_ratio": "full",
+        }
+      },
+      {
+        title: '08:30: "An Overview of the Middle East & Israel" by Michael Bauer',
+        subtitle: "Walking tour along Rothschild Boulevard",
+        default_action: {
+          type: "web_url",
+          url: "https://polaama.com/aeXf/tel_aviv/itin-detail/tel-aviv-2017-06-12-item-2",
+          "webview_height_ratio": "full",
+        }
+      },
+      {
+        title: '11:30: Meet with Inbal Arieli and Nadav Zafrir',
+        subtitle: "An Overview of the Israeli Tech Ecosystem and Its Roots at TBD",
+        default_action: {
+          type: "web_url",
+          url: "https://polaama.com/aeXf/tel_aviv/itin-detail/tel-aviv-2017-06-12-item-3",
+          "webview_height_ratio": "full",
+        }
+      },
+      {
+        title: '13:00: Lunch at Vicky & Crostina',
+        image_url: "https://media-cdn.tripadvisor.com/media/photo-s/02/7b/38/90/vicky-cristina.jpg",
+        default_action: {
+          type: "web_url",
+          url: "https://www.tripadvisor.com/Restaurant_Review-g293984-d2223803-Reviews-Vicky_Cristina-Tel_Aviv_Tel_Aviv_District.html",
+          "webview_height_ratio": "full",
+        }
+      }
+  ];
+  const viewMoreButton = [{
+    title: "View more",
+    type: "postback",
+    payload: "todays_itin_next_set"
+  }];
+  const message = {
+    recipient: {
+      id: fbid
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "list",
+          "top_element_style": "compact",
+          elements: firstElementSet,
+          buttons: viewMoreButton
+        }
+      }
+    }
+  };
+  return message;
+}
+
+DayPlanner.prototype.getDayPlanNextSet = function(fbid) {
+  const nextElementSet = [
+      {
+        title: "Free time or meeting time",
+        subtitle: "Option 1: Krav Maga(16:00 - 17:00) at beach near hotel; Option 2: SAP rental",
+        default_action: {
+          type: "web_url",
+          url: "https://polaama.com/aeXf/tel_aviv/itin-detail/tel-aviv-2017-06-12-item-5",
+          "webview_height_ratio": "full",
+        }
+      },
+      {
+        title: "18:00: Meet with Dani Gold at the hotel",
+        subtitle: "Dr. Daniel Gold is an expert on technology and innovation.",
+        default_action: {
+          type: "web_url",
+          url: "https://polaama.com/aeXf/tel_aviv/itin-detail/tel-aviv-2017-06-12-item-6",
+          "webview_height_ratio": "full",
+        }
+      },
+      {
+        title: "Cohort time. Summer Mixers event with members from Israeli tech ecosystem at TBD",
+        subtitle: "Followed by night-out at Tel Aviv",
+      },
+      {
+        title: 'Overnight stay at Carlton',
+        image_url: "http://www.touryourway.com/uploadImages/systemFiles/Carlton-hotel-Tel-Aviv%20(2).jpg",
+        default_action: {
+          type: "web_url",
+          url: "http://www.carlton.co.il/en",
+          "webview_height_ratio": "full",
+        }
+      }
+  ];
+  const message = {
+    recipient: {
+      id: fbid
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "list",
+          "top_element_style": "compact",
+          elements: nextElementSet,
+        }
+      }
+    }
+  };
+  return message;
+}
+
 function visitDetails(dayPlan) {
   let plans = [];
   if(!dayPlan.visit) return plans;
@@ -84,7 +237,6 @@ function weatherString(weather) {
   if(weather.city) city += ` at <b>${capitalize1stChar(weather.city)}</b>`;
   return `<div data-role="content" data-enhance="false">Weather${city}: Avg min temp: <b>${weather.min_temp}&degF</b>; Max temp: <b>${weather.max_temp}&degF</b>; It will be <b>${weather.cloud_cover}</b> today. ${rain}</div>`;
 }
-
 
 function flightDetails(dayPlan) {
   let plans = [];

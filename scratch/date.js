@@ -27,6 +27,18 @@ function scratch() {
   console.log(moment(t1).format("YYYY-MM-DD"));
 }
 
-scratch();
+function date(command) {
+  let contents = /^(\d+)$/.exec(command);
+  const thisMonth = new Date().getMonth();
+  const thisYear = new Date().getFullYear();
+  console.log(new Date(thisYear, thisMonth, contents[1]));
+}
+
+date(15);
+date(30);
+date(32);
+date(1);
+
+// scratch();
 // singleDigitMonth();
 // mdt();

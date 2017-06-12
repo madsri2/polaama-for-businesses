@@ -603,6 +603,10 @@ TripData.prototype.itineraryFile = function() {
   return `${this.tripBaseDir}/${this.data.name}-flight-itinerary.txt`;
 }
 
+TripData.prototype.dayItineraryFile = function(date) {
+  return `${this.tripBaseDir}/${this.data.name}-${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-itinerary.json`;
+}
+
 TripData.prototype.returnFlightFile = function() {
   return `${this.tripBaseDir}/${this.data.name}-return-flight.txt`;
 }

@@ -72,14 +72,15 @@ function setLastDayDetails() {
   let city;
   let firstLeg;
   if(!this.trip.returnFlightItin) {
-    const cities = this.tripData.cityItin.cities;
-    // logger.debug(`setLastDayDetails: cities: ${cities}`);
+    if(this.tripData.cityItin) {
+      const cities = this.tripData.cityItin.cities;
+      // logger.debug(`setLastDayDetails: cities: ${cities}`);
     // if the trip has a city list, the city for the last day would be the last city in the list. Otherwise, it is the city that we are traveling to.
-    if(cities) city = cities[cities.length - 1];
-    else 
-      if(!this.tripData.portOfEntry) throw new Error(`setLastDayDetails: trip's cityItin and portOfEntry not set: ${JSON.stringify(this.tripData)}`); 
-      else city = this.tripData.portOfEntry;
-    // logger.debug(`setLastDayDetails: city value is ${city}. returnFlightItin not present. trip data: ${JSON.stringify(this.tripData)}`);
+      city = cities[cities.length - 1];
+    }
+    else if(!this.tripData.portOfEntry) throw new Error(`setLastDayDetails: trip's cityItin and portOfEntry not set: ${JSON.stringify(this.tripData)}`); 
+    else city = this.tripData.portOfEntry;
+    logger.debug(`setLastDayDetails: city value is ${city}. returnFlightItin not present. trip data: ${JSON.stringify(this.tripData)}`);
   }
   else {
     // logger.debug(`setLastDayDetails: returnFlightItin present`);

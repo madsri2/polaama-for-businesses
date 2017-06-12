@@ -61,6 +61,73 @@ function setup() {
   return handler;
 }
 
+function setupTelAvivTrip() {
+  // set up
+  const myFbid = "1234";
+  const tripName = "test-tel-aviv";
+  const sessions = Sessions.get();
+  // first clean up previous test state
+  sessions.testing_delete(myFbid);
+  new TripData(tripName, myFbid).testing_delete();
+  const session = sessions.findOrCreate(myFbid);
+  // create new trip
+  const handler = new WebhookPostHandler(session, true /* testing */);
+  handler.testing_createNewTrip({
+    destination: tripName,
+    startDate: "06/10/2017",
+    duration: 8,
+    leavingFrom: "san francisco",
+    portOfEntry: "tel aviv"
+  });
+  session.persistHometown("san francisco");
+  // create the necessary files
+  const itin = {
+    "6/10/2017": {
+      city: ["san_francisco", "tel_aviv"]
+    },
+    "6/19/2017": {
+      city: "tel_aviv"
+    }
+  };
+  const trip = session.tripData();
+  const fs = require('fs');
+  fs.writeFileSync(trip.tripItinFile(), JSON.stringify(itin), "utf8");
+  const dayItin = {
+    "firstSet": [
+      {
+        title: "First Item",
+        subtitle: "First subtitle"
+      },
+      {
+        "title": "09:30 Program with KamaTech at WIX",
+        "subtitle": "Meet at WIX office",
+        "default_action": {
+          "type": "web_url",
+          "url": "https://polaama.com/aeXf/tel_aviv/itin-detail/tel-aviv-2017-06-13-item-2",
+          "webview_height_ratio": "full"
+        }
+      }
+    ],
+    "secondSet": [
+      {
+        title: "Second set First item",
+        subtitle: "Second subtitle"
+      },
+      {
+        "title": "Overnight at Nir Etzion",
+        "image_url": "https://www.nirezion-hotel.com/octopus/Upload/images/Resorts/home6.jpg",
+        "default_action": {
+          "type": "web_ur",
+          "url": "https://www.nirezion-hotel.com/",
+          "webview_height_ratio": "full"
+        }
+      }
+    ]
+  };
+  fs.writeFileSync(trip.dayItineraryFile(new Date("6/13/2017")), JSON.stringify(dayItin), "utf8");
+  return handler;
+}
+
 function testExtractingCityDetails() {
   const handler = setup();
   const session = handler.session;
@@ -101,7 +168,48 @@ function testDisplayTripDetails() {
   handler.testing_displayTripDetails();
 }
 
-testDisplayTripDetails();
+function testDayPlanCommand() {
+  // create new trip
+  const handler = setupTelAvivTrip();
+  const session = handler.session;
+  // set up state
+  session.planningNewTrip = false;
+  const event = { message: { text: "13th" } };
+  logger.debug(`testDayPlanCommand: ****** About to start test ********`); 
+  handler.testing_determineResponseType(event);
+}
+
+function testDayPlanSecondSetCommand() {
+  // create new trip
+  const handler = setupTelAvivTrip();
+  const session = handler.session;
+  // set up state
+  session.planningNewTrip = false;
+  let event = { message: { text: "13th" } };
+  // const message = handler.testing_determineResponseType(event);
+  // const postback = message.message.attachment.payload.buttons[0].payload;
+  const postback = "2017-5-13-itin_second_set";
+  event = { 
+    sender: {
+      id: session.fbid
+    }, 
+    recipient: {
+      id: session.fbid
+    }, 
+    timestamp: "12345",
+    postback: { 
+      payload: postback 
+    } 
+  };
+  logger.debug(`testDayPlanCommand: ****** About to start test ********`); 
+  handler.testing_receivedPostback(event);
+}
+
+testDayPlanSecondSetCommand();
+
+// testDayPlanCommand();
+
+// testDisplayTripDetails();
 
 // testAddingCityToExistingTrip();
 
