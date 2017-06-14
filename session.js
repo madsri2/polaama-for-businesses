@@ -298,7 +298,8 @@ Session.prototype.setTripContextAndPersist = function(tripName) {
   const trip = this.getTrip(tripName);
   if(!trip) throw new Error(`setTripContextAndPersist: cannot find trip ${trip.tripName} in session ${this.sessionId}, fbid ${this.fbid}`);
   this.tripNameInContext = trip.tripName;
-  this.rawTripNameInContext = trip.rawTripName;
+  logger.debug(`setTripContextAndPersist: setting raw trip name to ${trip.data.rawTripName}`);
+  this.rawTripNameInContext = trip.data.rawName;
   // Persist the new trip that was added to this session.
   logger.debug(`setTripContextAndPersist: set trip context for this session as ${this.tripNameInContext}. persisting session`);
   this.persistSession();

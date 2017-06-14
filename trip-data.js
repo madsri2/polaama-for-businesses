@@ -115,6 +115,7 @@ TripData.prototype.retrieveTripData = function() {
     fs.accessSync(file, fs.F_OK);
     try {
       this.data = JSON.parse(fs.readFileSync(file, 'utf8')); 
+      if(this.data.rawTripName) this.rawTripName = this.data.rawTripName;
       this.tripFilePresent = true;
     }
     catch(err) {
@@ -605,6 +606,17 @@ TripData.prototype.itineraryFile = function() {
 
 TripData.prototype.dayItineraryFile = function(date) {
   return `${this.tripBaseDir}/${this.data.name}-${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-itinerary.json`;
+}
+
+TripData.prototype.itemDetailsFile = function(dateStr, fileName) {
+  const date = new Date(dateStr);
+  return `${this.tripBaseDir}/${this.data.name}-${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-${fileName}.html`;
+}
+
+TripData.prototype.mapImageFile = function(dateStr) {
+  const date = new Date(dateStr);
+  logger.debug(`mapImageFile: ${date}`);
+  return `${this.tripBaseDir}/${this.data.name}-${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-map.png`;
 }
 
 TripData.prototype.returnFlightFile = function() {

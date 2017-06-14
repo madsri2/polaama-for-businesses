@@ -128,7 +128,7 @@ WebpageHandler.prototype.myDayPlan = function(res, args) {
 WebpageHandler.prototype.dayPlan = function(res, args) {
   const date = args[0];
   try {
-    const commands = new Commands(this.trip, this.session.fbid);
+    const commands = new Commands(this.trip, this.session.fbid, true /* sendHtml */);
     return res.send(commands.handle(date));
     /*
 		const plansForTomorrow = new PlansForTomorrow(this.trip, this.session.hometown);
@@ -419,6 +419,28 @@ WebpageHandler.prototype.getBoardingPass = function(req, res) {
   }
   logger.debug(`getBoardingPass: returning file ${file}`);
   return res.sendFile(file);
+}
+
+WebpageHandler.prototype.getItemDetails = function(res, date, itemFile) {
+  const file = this.trip.itemDetailsFile(date, itemFile);
+  return res.sendFile(file, null, 
+    function(e) {
+      if(e) {
+        logger.error(`getItemDetails: could not return file ${file}: ${e.stack}`);
+         return res.status(404).send("Could not retrieve item details at this time");
+      }
+    });
+}
+
+WebpageHandler.prototype.getMap = function(res, date) {
+  const file = this.trip.mapImageFile(date);
+  return res.sendFile(file, null, 
+    function(e) {
+      if(e) {
+        logger.error(`getItemDetails: could not return file ${file}: ${e.stack}`);
+         return res.status(404).send("Could not retrieve map image at this time");
+      }
+  });
 }
 
 WebpageHandler.prototype.testing_addTravelers = addTravelers;

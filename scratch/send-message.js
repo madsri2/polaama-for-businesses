@@ -5,6 +5,7 @@ const WebhookPostHandler = require(`${baseDir}/webhook-post-handler`);
 const TripData = require(`${baseDir}/trip-data`);
 const Sessions = require(`${baseDir}/sessions`);
 const Commands = require(`trip-itinerary/app/commands`);
+const FbidHandler = require('fbid-handler/app/handler');
 
 const fbid = "1120615267993271"; // madhu
 // const fbid = "1443244455734100"; // gillian
@@ -29,44 +30,95 @@ function flightStatusAndWaitTimes() {
   ]);
 }
 
-function sendNextMessage() {
-  const firstElementSet = [
-      {
-        title: "Breakfast at Carlton's",
-        image_url: "http://www.touryourway.com/uploadImages/systemFiles/Carlton-hotel-Tel-Aviv%20(2).jpg",
-        default_action: {
-          type: "web_url",
-          url: "www.carlton.co.il/en",
-          "webview_height_ratio": "full",
-        }
-      },
-      {
-        title: '08:30: "An Overview of the Middle East & Israel" by Michael Bauer',
-        subtitle: "Walking tour along Rothschild Boulevard",
-        default_action: {
-          type: "web_url",
-          url: "https://polaama.com/aeXf/tel_aviv/itin-detail/tel-aviv-2017-06-12-item-2",
-          webview_height_ratio: "full",
-        }
-      },
-      {
-        title: '11:30: Meet with Inbal Arieli and Nadav Zafrir',
-        subtitle: "An Overview of the Israeli Tech Ecosystem and Its Roots at TBD",
-        default_action: {
-          type: "web_url",
-          url: "https://polaama.com/aeXf/tel_aviv/itin-detail/tel-aviv-2017-06-12-item-3",
-          "webview_height_ratio": "full",
-        }
-      },
-      {
-        title: '13:00: Lunch at Vicky & Crostina',
-        image_url: "https://media-cdn.tripadvisor.com/media/photo-s/02/7b/38/90/vicky-cristina.jpg",
-        default_action: {
-          type: "web_url",
-          url: "https://www.tripadvisor.com/Restaurant_Review-g293984-d2223803-Reviews-Vicky_Cristina-Tel_Aviv_Tel_Aviv_District.html",
-          "webview_height_ratio": "full",
-        }
+function sendDayPlan() {
+  const firstSet = [
+    {
+      "title": "See your 6/17 itinerary as a map",
+      "subtitle": "Click to see map",
+      "image_url": "https://polaama.com/XQLn/tel_aviv/2017-6-17/-/map",
+      "default_action": {
+        "type": "web_url",
+        "url": "https://goo.gl/maps/jyNPwEpNC1v",
+        "webview_height_ratio": "full"
       }
+    },
+    {
+      "title": "Breakfast at Mamilla Hotel",
+      "subtitle": "\"Check out\" after breakfast",
+      "image_url": "http://tinyurl.com/y6w2q96e",
+      "default_action": {
+        "type": "web_url",
+        "url": "http://www.mamillahotel.com/",
+        "webview_height_ratio": "full"
+      }
+    },
+    {
+      "title": "Hike Masada",
+      "subtitle": "Ascend Masada and tour King Herod’s historic hilltop fortress",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Israel-2013-Aerial_21-Masada.jpg/180px-Israel-2013-Aerial_21-Masada.jpg",
+      "default_action": {
+        "type": "web_url",
+        "url": "https://polaama.com/XQLn/tel_aviv/2017-6-17/item-2",
+        "webview_height_ratio": "full"
+      }
+    },
+    {
+      "title": "Float at the Dead sea",
+      "subtitle": "Lunch at International beach",
+      "image_url": "http://www.movenpick.com/fileadmin/_migrated/pics/DeadSea_xxxxxxx_i104829_13.jpg",
+      "default_action": {
+        "type": "web_url",
+        "url": "https://polaama.com/XQLn/tel_aviv/2017-6-17/item-3",
+        "webview_height_ratio": "full"
+      }
+    }
+  ];
+  const secondSet = [
+    {
+      "title": "Drive south to Ramon Crater",
+      "subtitle": "Visit the largest erosion center",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Israel-2013-Aerial_00-Negev-Makhtesh_Ramon.jpg/256px-Israel-2013-Aerial_00-Negev-Makhtesh_Ramon.jpg",
+      "default_action": {
+        "url": "https://en.wikipedia.org/wiki/Makhtesh_Ramon",
+        "type": "web_url",
+        "webview_height_ratio": "full"
+      }
+    },
+    {
+      "title": "Sunset/Havdalah at Mizpe Ramon",
+      "subtitle": "Check-in at \"Beresheet hotel\"",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Mitzepe_Ramon_02.jpg/250px-Mitzepe_Ramon_02.jpg",
+      "default_action": {
+        "type": "web_url",
+        "url": "https://polaama.com/XQLn/tel_aviv/2017-6-17/item-5",
+        "webview_height_ratio": "full"
+      }
+    },
+    {
+      "title": "Hitbodedut at Ramon crater",
+      "subtitle": "Unstructured, spontaneous and individualized form of prayer",
+      "image_url": "http://tinyurl.com/ybo2pksh",
+      "default_action": {
+        "type": "web_url",
+        "url": "https://polaama.com/XQLn/tel_aviv/2017-6-17/item-6",
+        "webview_height_ratio": "full"
+      }
+    }
+  ];
+  const thirdSet = [
+    {
+      "title": "21:00 Desert Dinner experience",
+      "subtitle": "Ramon crater",
+    },
+    {
+      "title": "Overnight at Bereshhet hotel",
+      "image_url": "http://tinyurl.com/ycud3a3o",
+      "default_action": {
+        "type": "web_url",
+        "url": "http://www.isrotelexclusivecollection.com/beresheet/",
+        "webview_height_ratio": "full"
+      }
+    }
   ];
   const message = {
     recipient: {
@@ -74,34 +126,40 @@ function sendNextMessage() {
     },
     message: {
       attachment: {
-        type: "template",
+        "type": "template",
         payload: {
           template_type: "list",
           "top_element_style": "compact",
-          elements: firstElementSet,
+          elements: thirdSet,
           buttons: [{
             title: "View more",
-            type: "postback",
-            payload: "todays_itin_next_set"
+            "type": "postback",
+            payload: "view_more"
           }]
         }
       }
     }
   };
   const messageList = [];
-  messageList.push(handler.getTextMessageData(fbid, `Good morning! This is your itinerary for today!`));
   messageList.push(message);
   handler.sendMultipleMessages(fbid, messageList);
 }
 
-function sendDayAsListMessage() {
+function sendGoodMorningMessage() {
   const commands = new Commands(trip, fbid);
-  const message = commands.handle("13th");
-  handler.sendAnyMessage(message);
+  const message = commands.handle("today");
+  const messageList = [];
+  let name = new FbidHandler().getName(fbid);
+  if(!name) name = "";
+  else name = name.substring(0, name.indexOf(" "));
+  messageList.push(handler.getTextMessageData(fbid, `Good morning ${name}! It's going to be partly cloudy today. That's good, because there is going to be lots of traveling. Here is your itinerary`));
+  messageList.push(message);
+  handler.sendMultipleMessages(fbid, messageList);
 }
 
-sendDayAsListMessage();
 
-// sendNextMessage();
+// sendGoodMorningMessage();
+
+// sendDayPlan();
 // flightStatusAndWaitTimes();
 // sendPackList();

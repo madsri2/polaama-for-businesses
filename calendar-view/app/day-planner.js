@@ -37,14 +37,14 @@ DayPlanner.prototype.getPlan = function() {
     this.departureCity = city;
     this.arrivalCity = city;
   }
-  logger.debug(`getPlan: dayPlan city: ${dayPlan.city}`);
+  // logger.debug(`getPlan: dayPlan city: ${dayPlan.city}`);
   if(!dayPlan) return `No itinerary exists for date ${dateStr} for trip ${this.trip.data.rawName}, which starts on ${this.trip.data.startDate} and ends on ${this.trip.data.returnDate}`;
-  logger.debug(`getPlan: dayPlan dump: ${JSON.stringify(dayPlan)}; city: ${city}`);
+  // logger.debug(`getPlan: dayPlan dump: ${JSON.stringify(dayPlan)}; city: ${city}`);
   let plans = [];
   plans = plans.concat(weatherDetails.call(this, dayPlan));
   const returnDateStr = CreateItinerary.formatDate(new Date(this.trip.data.returnDate));
   // add flightDetails here only if this is not return date
-  logger.debug(`getPlan: returnDateStr: ${returnDateStr}; date: ${dateStr}`);
+  // logger.debug(`getPlan: returnDateStr: ${returnDateStr}; date: ${dateStr}`);
   if(returnDateStr !== dateStr) plans = plans.concat(flightDetails.call(this, dayPlan));
   plans = plans.concat(visitDetails.call(this, dayPlan));
   if(dayPlan.userInputDetails) plans = plans.concat(dayPlan.userInputDetails);
@@ -55,11 +55,20 @@ DayPlanner.prototype.getPlan = function() {
   };
 }
 
-DayPlanner.prototype.getPlanAsList = function(fbid, whichSet) {
+// Facebook supports sending only 4 items in an elementList. So, use payload (see below) to pass around the index for the next set of items. 
+DayPlanner.prototype.getPlanAsList = function(fbid, setNum) {
   const file = this.trip.dayItineraryFile(this.date);
   logger.debug(`getPlanAsList: using list template to display itin for date ${this.date} and file ${file}`);
   try {
     const dayAsList = JSON.parse(fs.readFileSync(file, 'utf8'));
+    const elementSet = [];
+    Object.keys(dayAsList).forEach(key => {
+      elementSet.push(dayAsList[key]);
+    });
+    let currIndex = 0;
+    if(setNum) currIndex = setNum;
+    const elements = elementSet[currIndex];
+    const payload = `${this.date.getFullYear()}-${this.date.getMonth()}-${this.date.getDate()}-${currIndex + 1}-itin_second_set`;
     let message = {
       recipient: {
         id: fbid
@@ -69,7 +78,42 @@ DayPlanner.prototype.getPlanAsList = function(fbid, whichSet) {
           type: "template",
           payload: {
             template_type: "list",
-            "top_element_style": "compact",
+          }
+        }
+      }
+    };
+    const viewMoreButton = [{
+        title: "View more",
+        type: "postback",
+        payload: payload
+    }];
+    message.message.attachment.payload.elements = elements;
+    if(currIndex < (elementSet.length - 1)) message.message.attachment.payload.buttons = viewMoreButton;
+    // the first item in the list is always a map, so we don't set the style to compact. Subsequent items are just normal.
+    if(currIndex > 0) message.message.attachment.payload.top_element_style = "compact";
+    return message;
+  }
+  catch(e) {
+    logger.error(`error in getting plans for date ${this.date}: ${e.stack}`);
+    return null;
+  }
+}
+
+DayPlanner.prototype.getPlanAsListOld = function(fbid, whichSet) {
+  const file = this.trip.dayItineraryFile(this.date);
+  logger.debug(`getPlanAsList: using list template to display itin for date ${this.date} and file ${file}`);
+  try {
+    const dayAsList = JSON.parse(fs.readFileSync(file, 'utf8'));
+    const numSets = Object.keys(dayAsList);
+    let message = {
+      recipient: {
+        id: fbid
+      },
+      message: {
+        attachment: {
+          type: "template",
+          payload: {
+            template_type: "list",
           }
         }
       }
@@ -83,128 +127,17 @@ DayPlanner.prototype.getPlanAsList = function(fbid, whichSet) {
       message.message.attachment.payload.elements = dayAsList.firstSet;
       message.message.attachment.payload.buttons = viewMoreButton;
     }
-    else message.message.attachment.payload.elements = dayAsList.secondSet;
+    else {
+      message.message.attachment.payload.elements = dayAsList.secondSet;
+      // the first item in the list is always a map, so we don't set the style to compact. Subsequent items are just normal.
+      message.message.attachment.payload.top_element_style = "compact";
+    }
     return message;
   }
   catch(e) {
     logger.error(`error in getting plans for date ${this.date}: ${e.stack}`);
     return null;
   }
-}
-
-DayPlanner.prototype.getDayPlanAsList = function(fbid) {
-  const firstElementSet = [
-      {
-        title: "Breakfast at Carlton's",
-        image_url: "http://www.touryourway.com/uploadImages/systemFiles/Carlton-hotel-Tel-Aviv%20(2).jpg",
-        default_action: {
-          type: "web_url",
-          url: "www.carlton.co.il/en",
-          "webview_height_ratio": "full",
-        }
-      },
-      {
-        title: '08:30: "An Overview of the Middle East & Israel" by Michael Bauer',
-        subtitle: "Walking tour along Rothschild Boulevard",
-        default_action: {
-          type: "web_url",
-          url: "https://polaama.com/aeXf/tel_aviv/itin-detail/tel-aviv-2017-06-12-item-2",
-          "webview_height_ratio": "full",
-        }
-      },
-      {
-        title: '11:30: Meet with Inbal Arieli and Nadav Zafrir',
-        subtitle: "An Overview of the Israeli Tech Ecosystem and Its Roots at TBD",
-        default_action: {
-          type: "web_url",
-          url: "https://polaama.com/aeXf/tel_aviv/itin-detail/tel-aviv-2017-06-12-item-3",
-          "webview_height_ratio": "full",
-        }
-      },
-      {
-        title: '13:00: Lunch at Vicky & Crostina',
-        image_url: "https://media-cdn.tripadvisor.com/media/photo-s/02/7b/38/90/vicky-cristina.jpg",
-        default_action: {
-          type: "web_url",
-          url: "https://www.tripadvisor.com/Restaurant_Review-g293984-d2223803-Reviews-Vicky_Cristina-Tel_Aviv_Tel_Aviv_District.html",
-          "webview_height_ratio": "full",
-        }
-      }
-  ];
-  const viewMoreButton = [{
-    title: "View more",
-    type: "postback",
-    payload: "todays_itin_next_set"
-  }];
-  const message = {
-    recipient: {
-      id: fbid
-    },
-    message: {
-      attachment: {
-        type: "template",
-        payload: {
-          template_type: "list",
-          "top_element_style": "compact",
-          elements: firstElementSet,
-          buttons: viewMoreButton
-        }
-      }
-    }
-  };
-  return message;
-}
-
-DayPlanner.prototype.getDayPlanNextSet = function(fbid) {
-  const nextElementSet = [
-      {
-        title: "Free time or meeting time",
-        subtitle: "Option 1: Krav Maga(16:00 - 17:00) at beach near hotel; Option 2: SAP rental",
-        default_action: {
-          type: "web_url",
-          url: "https://polaama.com/aeXf/tel_aviv/itin-detail/tel-aviv-2017-06-12-item-5",
-          "webview_height_ratio": "full",
-        }
-      },
-      {
-        title: "18:00: Meet with Dani Gold at the hotel",
-        subtitle: "Dr. Daniel Gold is an expert on technology and innovation.",
-        default_action: {
-          type: "web_url",
-          url: "https://polaama.com/aeXf/tel_aviv/itin-detail/tel-aviv-2017-06-12-item-6",
-          "webview_height_ratio": "full",
-        }
-      },
-      {
-        title: "Cohort time. Summer Mixers event with members from Israeli tech ecosystem at TBD",
-        subtitle: "Followed by night-out at Tel Aviv",
-      },
-      {
-        title: 'Overnight stay at Carlton',
-        image_url: "http://www.touryourway.com/uploadImages/systemFiles/Carlton-hotel-Tel-Aviv%20(2).jpg",
-        default_action: {
-          type: "web_url",
-          url: "http://www.carlton.co.il/en",
-          "webview_height_ratio": "full",
-        }
-      }
-  ];
-  const message = {
-    recipient: {
-      id: fbid
-    },
-    message: {
-      attachment: {
-        type: "template",
-        payload: {
-          template_type: "list",
-          "top_element_style": "compact",
-          elements: nextElementSet,
-        }
-      }
-    }
-  };
-  return message;
 }
 
 function visitDetails(dayPlan) {

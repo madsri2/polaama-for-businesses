@@ -456,11 +456,6 @@ function receivedPostback(event) {
   if(payload === "car details") return sendCarReceipt.call(this);
 
   const commands = new Commands(this.session.tripData(), this.session.fbid);
-  /*
-  if(payload === "todays_itin_next_set") {
-    return callSendAPI(commands.getTodaysItinNextSet(this.session.fbid));
-  }
-  */
   const handled = commands.handlePostback(payload);
   if(handled && (typeof handled === "object")) return callSendAPI(handled);
 
@@ -490,6 +485,7 @@ function sendReturnFlightDetails() {
     }
   });
 }
+
 function sendFlightItinerary() {
   const trip = this.session.tripData();
   const fbid = this.session.fbid;
@@ -704,6 +700,15 @@ function sendTripButtons(addNewTrip) {
     callSendAPI(messageData);
     return;
   }
+
+  // if there is only one trip, there is no point in asking user
+  // TODO: How would users get past trips? Maybe add a separate "past trips" in Persistent Menu.
+  if(tripNames.length === 1) {
+    const t = tripNames[0];
+    this.session.setTripContextAndPersist(t.name);
+    sendAddOrGetOptions.call(this);
+    return;
+  }
     
   // reset this sessions' context
   this.session.resetTripContext();
@@ -717,7 +722,7 @@ function sendTripButtons(addNewTrip) {
     }
     buttons[j].push({
       type: "postback",
-      title: t.name,
+      title: t.rawName,
       payload: `trip_in_context ${t.name}`
     });
   });
@@ -1135,8 +1140,12 @@ function determineResponseType(event) {
   }
 
   const tripData = this.session.tripData();
+  // same as user choosing "Add" after choosing trip from "Existing trip" persistent menu
   if(mesg === "add") return sendAddButtons.call(this);
-  if(mesg === "get") return displayTripDetails.call(this);
+  // same as user choosing "Get" after choosing trip from "Existing trip" persistent menu
+  if(mesg === "get") return displayTripDetails.call(this); 
+  // same as user clicking "existing trips" on persistent menu
+  if(mesg === "existing trips") return sendTripButtons.call(this); 
   if(mesg.startsWith("save") || mesg.startsWith("comment") || this.session.awaitingComment) {
     const returnString = tripData.storeFreeFormText(senderID, messageText);
     sendTextMessage(senderID, returnString);
@@ -1192,8 +1201,6 @@ function determineResponseType(event) {
 
   const commands = new Commands(tripData, this.session.fbid);
   if(commands.canHandle(mesg)) {
-    // let itinAsList = commands.getTodaysItinAsList(mesg, this.session.fbid);
-    // if(itinAsList) return callSendAPI(itinAsList);
     const itinAsList = commands.handle(mesg); 
     if(typeof itinAsList === "object") return callSendAPI(itinAsList);
     logger.debug(`determineResponseType: Could not get list template for today from Commands. Defaulting to sending url`);
@@ -1591,7 +1598,7 @@ function sendAddOrGetOptions() {
       id: this.session.fbid
     },
     message: {
-      text: `What would you like to do for your ${this.session.tripNameInContext} trip?`,
+      text: `What would you like to do for your ${this.session.rawTripNameInContext} trip?`,
       quick_replies:[
         {
           content_type: "text",

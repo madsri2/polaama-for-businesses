@@ -286,6 +286,17 @@ app.get('/:id/:tripName/calendar', function(req, res) {
   return handler.handleWebpage(res, handler.displayCalendar);
 });
 
+app.get('/:id/:tripName/:date/:file', function(req, res) {
+  const handler = new WebpageHandler(req.params.id, req.params.tripName);
+  return handler.getItemDetails(res, req.params.date, req.params.file);
+});
+
+app.get('/:id/:tripName/:date/-/map', function(req, res) {
+  const handler = new WebpageHandler(req.params.id, req.params.tripName);
+  return handler.getMap(res, req.params.date);
+});
+
+/*
 app.get('/:id/:tripName/itin-detail/:file', function(req, res) {
   return res.sendFile(`/home/ec2-user/html-templates/${req.params.file}.html`, null, 
   function(err) {
@@ -296,15 +307,22 @@ app.get('/:id/:tripName/itin-detail/:file', function(req, res) {
   });
 });
 
+app.get('/:id/:tripName/:date/-/map', function(req, res) {
+  const fileName = `${req.params.tripName}-${req.params.date}-map.png`;
+  return res.sendFile(`/home/ec2-user/html-templates/${fileName}`);
+});
+
 app.get('/:id/:tripName/-/test-day', function(req, res) {
   const handler = new WebpageHandler(req.params.id, req.params.tripName);
   return handler.handleWebpage(res, handler.myDayPlan);
 });
+*/
 
 app.get('/:id/:tripName/:date', function(req, res) {
   const handler = new WebpageHandler(req.params.id, req.params.tripName);
   return handler.handleWebpage(res, handler.dayPlan, [req.params.date]);
 });
+
 
 app.get('/todo', function(req, res) {
   return res.sendFile("/home/ec2-user/html-templates/todo-list.html");
@@ -321,6 +339,10 @@ app.get('/partly-cloudy', function(req, res) {
 
 app.get('/clear', function(req, res) {
   return res.sendFile('/home/ec2-user/html-templates/clear.gif');
+});
+
+app.get('/nt_clear', function(req, res) {
+  return res.sendFile('/home/ec2-user/html-templates/nt_clear.gif');
 });
 
 app.get('/:id/:tripName/boarding-pass-image', function(req, res) {

@@ -8,16 +8,20 @@ const baseDir = "/home/ec2-user";
 const logger = require(`${baseDir}/my-logger`);
 const Encoder = require(`${baseDir}/encoder`);
 
-function Commands(trip, fbid) {
+function Commands(trip, fbid, sendHtml) {
   if(!fbid) throw new Error(`Commands: required parameter fbid not passed`);
   this.fbid = fbid;
   this.trip = trip;
+  this.sendHtml = sendHtml;
   this.itin = new CreateItinerary(this.trip, this.trip.leavingFrom).getItinerary();
+  // we will always start with the first element set when a command is initialized (see DayPlanner.getPlanAsList)
+  this.setNum = 0;
 }
 
-Commands.prototype.handle = function(command, whichSet) {
-  this.whichSet = whichSet;
-  if(!this.whichSet) this.whichSet = "first";
+// Commands.prototype.handle = function(command, whichSet) {
+Commands.prototype.handle = function(command) {
+  // this.whichSet = whichSet;
+  // if(!this.whichSet) this.whichSet = "first";
   this.command = command;
   return handleDayItin.call(this);
 }
@@ -26,8 +30,18 @@ Commands.prototype.canHandle = function(command) {
   this.command = command;
   if(this.command.startsWith("tomorrow")) return true;
   if(this.command.startsWith("today")) return true;
+  if(this.command.startsWith("first activity")) return true;
+  if(this.command.startsWith("next activity")) return true;
   // if(this.command === "next" || this.command.startsWith("next ")) return true;
   return isDateValid.call(this);
+}
+
+function parseActivityCommand(command) {
+  let contents = /(first) activity for (.*)/.exec(command);
+  if(contents) {
+    return;
+  }
+
 }
 
 Commands.prototype.getPath = function(command) {
@@ -37,46 +51,27 @@ Commands.prototype.getPath = function(command) {
   return new moment(this.date).format("YYYY-MM-DD");
 }
 
-// TODO: reconcile with getTodaysItin
-/*
-Commands.prototype.getTodaysItinAsList = function(command, fbid) {
-  let today;
-  if(command.startsWith("today")) {
-    today = new Date(moment().tz(getTimezone()).format("M/DD/YYYY"));
-    // Currently, we only have list view created for 6/12
-    if(CreateItinerary.formatDate(today) !== "6/12/2017") return null;
-  }
-  else return null;
-  logger.debug(`getTodaysItinAsList: returning list itin for date ${today}`);
-  this.date = today;
-  const dateStr = CreateItinerary.formatDate(this.date);
-  const dayPlanner = new DayPlanner(this.date, this.itin[dateStr], this.trip); 
-  return dayPlanner.getDayPlanAsList(fbid);
-}
-
-Commands.prototype.getTodaysItinNextSet = function(fbid) {
-  this.date = new Date(moment().tz(getTimezone()).format("M/DD/YYYY"));
-  const dateStr = CreateItinerary.formatDate(this.date);
-  const dayPlanner = new DayPlanner(this.date, this.itin[dateStr], this.trip); 
-  return dayPlanner.getDayPlanNextSet(fbid);
-}
-*/
-
 Commands.prototype.handlePostback = function(payload) {
-  logger.debug(`handlePostback: handling payload ${payload}`);
-  let contents = /^(\d+)-(\d+)-(\d+)-itin_second_set/.exec(payload);  
+  // logger.debug(`handlePostback: handling payload ${payload}`);
+  let contents = /^(\d+)-(\d+)-(\d+)-(\d)-itin_second_set/.exec(payload);  
   if(!contents) return false;
   const date = new Date(contents[1], contents[2], contents[3]);
-  logger.debug(`handlePostback: date is ${date}; ${CreateItinerary.formatDate(date)}`);
-  if(!listFormat(date)) return false;
+  // logger.debug(`handlePostback: date is ${date}; ${CreateItinerary.formatDate(date)}`);
+  if(!listFormatAvailable(date)) return false;
   this.date = date;
-  this.whichSet = "second";
+  // this.whichSet = "second";
+  this.setNum = parseInt(contents[4]);
   return getDayItinerary.call(this);
 }
 
-function listFormat(date) {
-  const dateList = ["6/13/2017"];
-  if(dateList.indexOf(CreateItinerary.formatDate(date) !== -1)) return true;
+function listFormatAvailable(date) {
+  const dateList = ["6/12/2017", "6/13/2017", "6/14/2017", "6/15/2017", "6/16/2017", "6/17/2017"];
+  const dateStr = CreateItinerary.formatDate(date);
+  if(dateList.indexOf(dateStr) != -1) {
+    // logger.debug(`listFormatAvailable: ${dateStr} is present in dateList. Returning true.`);  
+    return true;
+  }
+  // logger.debug(`listFormatAvailable: ${dateStr} is NOT present in dateList. Returning false.`);  
   return false;
 }
 
@@ -124,11 +119,12 @@ function isDateValid() {
 function getDayItinerary() {
   const dateStr = CreateItinerary.formatDate(this.date);
   const dayPlanner = new DayPlanner(this.date, this.itin[dateStr], this.trip); 
-  // if(CreateItinerary.formatDate(this.date) === "6/13/2017") {
-  if(listFormat(this.date)) {
-    const dayAsList = dayPlanner.getPlanAsList(this.fbid, this.whichSet);
+  if(!this.sendHtml && listFormatAvailable(this.date)) {
+    logger.debug(`getDayItinerary: Sending list view format for date ${dateStr}`);
+    const dayAsList = dayPlanner.getPlanAsList(this.fbid, this.setNum);
     if(dayAsList) return dayAsList;
   }
+  logger.debug(`getDayItinerary: Sending html for date ${dateStr}`);
   const plans = dayPlanner.getPlan();
   const html = require('fs').readFileSync(`${htmlBaseDir}/day-plan.html`, 'utf8');
   return html.replace("${date}", dateStr)
@@ -165,9 +161,7 @@ function toNum(month) {
   return monthMap.get(Encoder.encode(month));
 }
 
-
 function getTomorrowsItin() {
-  // const tomorrow = new Date();
   const tomorrow = new Date(moment().tz(getTimezone()).format("M/DD/YYYY"));
   tomorrow.setDate(tomorrow.getDate() + 1);
   this.date = tomorrow;
@@ -200,10 +194,6 @@ function getTimezone() {
     '6/19/2017' : "Asia/Tel_Aviv",
   };  
   return userLocation[dateInUTC];
-  /*
-    if(this.trip.portOfEntry === "albuquerque") return "America/Cambridge_Bay";
-    if(this.trip.portOfEntry === "tel_aviv") return "Asia/Tel_Aviv";
-  */
 }
 
 module.exports = Commands;

@@ -170,7 +170,7 @@ describe("Commands tests: ", function() {
     );
   });
 
-  it("list or html", function(done) {
+  it("return list", function(done) {
     Promise.all(promises).done(
       function(response) {
         // set up
@@ -181,16 +181,58 @@ describe("Commands tests: ", function() {
         let result = commands.handle("13th");
         expect(typeof result).to.equal("object");
         expect(result.message.attachment.payload.elements.length).to.equal(4);
-        expect(result.message.attachment.payload.elements[0].title).to.include("Carlton Hotel");
-        expect(result.message.attachment.payload.elements[3].title).to.include("Drive north");
+        expect(result.message.attachment.payload.elements[0].title).to.include("See your itinerary as a map");
+        expect(result.message.attachment.payload.elements[1].title).to.include("Carlton Hotel");
+        expect(result.message.attachment.payload.elements[3].title).to.include("Lunch");
+        expect(result.message.attachment.payload.elements[3].subtitle).to.include("Location N/A");
         expect(result.message.attachment.payload.buttons.length).to.equal(1);
         expect(result.message.attachment.payload.buttons[0].title).to.equal("View more");
-        const postback = result.message.attachment.payload.buttons[0].payload;
-        result = commands.handlePostback(postback);
-        expect(result.message.attachment.payload.elements.length).to.equal(2);
-        expect(result.message.attachment.payload.elements[0].title).to.include("Dinner at Michmoret Beach");
-        expect(result.message.attachment.payload.elements[1].title).to.include("Overnight at");
-        logger.debug(JSON.stringify(result));
+        const payload = result.message.attachment.payload.buttons[0].payload;
+        result = commands.handlePostback(payload);
+        expect(result.message.attachment.payload.elements.length).to.equal(3);
+        expect(result.message.attachment.payload.elements[0].title).to.include("Drive north to Michmoret Beach");
+        expect(result.message.attachment.payload.elements[1].title).to.include("Dinner at Michmoret Beach");
+        expect(result.message.attachment.payload.elements[2].title).to.include("Overnight at");
+        expect(result.message.attachment.payload.top_element_style).to.equals("compact");
+        expect(result.message.attachment.payload.buttons).to.be.undefined;
+        // logger.debug(JSON.stringify(result));
+        done();
+      },
+      function(err) {
+        done(err);
+      }
+    );
+  });
+
+  function verifyListViewResponse(result, count, buttonPresent, first) {
+    expect(typeof result).to.equal("object");
+    expect(result.message.attachment.payload.elements.length).to.equal(count);
+    if(!first) expect(result.message.attachment.payload.top_element_style).to.equals("compact");
+    if(buttonPresent) {
+      expect(result.message.attachment.payload.buttons.length).to.equal(1);
+      expect(result.message.attachment.payload.buttons[0].title).to.equal("View more");
+    }
+    else expect(result.message.attachment.payload.buttons).to.be.undefined;
+  }
+
+  it("list format multiple sets", function(done) {
+    Promise.all(promises).done(
+      function(response) {
+        const filePrefix = "2017-6-17-itinerary.json";
+        // set up
+        fs.copySync(`${baseDir}/trips/aeXf/tel_aviv-${filePrefix}`, `${baseDir}/trips/ZDdz/test-mobile-view-${filePrefix}`);
+        if(!fs.existsSync(`${baseDir}/trips/ZDdz/test-mobile-view-${filePrefix}`)) throw new Error(`file not present`);
+        // actual test
+        const commands = new Commands(trip, fbid);
+        let result = commands.handle("17th");
+        verifyListViewResponse(result, 4, true, true /* first */);
+        let payload = result.message.attachment.payload.buttons[0].payload;
+        result = commands.handlePostback(payload);
+        verifyListViewResponse(result, 3, true);
+        payload = result.message.attachment.payload.buttons[0].payload;
+        result = commands.handlePostback(payload);
+        verifyListViewResponse(result, 2, false);
+        // logger.debug(JSON.stringify(result));
         done();
       },
       function(err) {
