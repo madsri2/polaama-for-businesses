@@ -145,6 +145,39 @@ function sendDayPlan() {
   handler.sendMultipleMessages(fbid, messageList);
 }
 
+function sendSingleActivity() {
+  const message = {
+    recipient: {
+      id: fbid
+    },
+    message: {
+      attachment: {
+        "type": "template",
+        payload: {
+          template_type: "generic",
+          elements: thirdSet,
+          buttons: [{
+            title: "View more",
+            "type": "postback",
+            payload: "view_more"
+          }]
+        }
+      }
+    }
+  };
+  const messageList = [];
+  messageList.push(message);
+  handler.sendMultipleMessages(fbid, messageList);
+}
+
+function sendNewFeatureMessage() {
+  const messageList = [];
+  messageList.push(handler.getTextMessageData(fbid, `We are excited to announce a new feature that will display a single activity. Simply type "first" to see the first activity for today. You can type "next" and "prev" at any time to iterate over activities.`));
+  messageList.push(handler.getTextMessageData(fbid, `Example commands to see a single activity for another day: "first for tomorrow", "next for 16th", "prev for 17th" etc. Try it out and tell us what you think!`));
+  handler.sendMultipleMessages(fbid, messageList);
+  
+}
+
 function sendGoodMorningMessage() {
   const commands = new Commands(trip, fbid);
   const message = commands.handle("today");
@@ -152,13 +185,14 @@ function sendGoodMorningMessage() {
   let name = new FbidHandler().getName(fbid);
   if(!name) name = "";
   else name = name.substring(0, name.indexOf(" "));
-  messageList.push(handler.getTextMessageData(fbid, `Good morning ${name}! It's going to be partly cloudy today. That's good, because there is going to be lots of traveling. Here is your itinerary`));
+  messageList.push(handler.getTextMessageData(fbid, `Good morning ${name}! It's going to be mostly sunny today. You will be going to Jerusalem. Here is your itinerary`));
   messageList.push(message);
   handler.sendMultipleMessages(fbid, messageList);
 }
 
 
 // sendGoodMorningMessage();
+// sendNewFeatureMessage();
 
 // sendDayPlan();
 // flightStatusAndWaitTimes();

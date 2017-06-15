@@ -456,7 +456,9 @@ function receivedPostback(event) {
   if(payload === "car details") return sendCarReceipt.call(this);
 
   const commands = new Commands(this.session.tripData(), this.session.fbid);
-  const handled = commands.handlePostback(payload);
+  let handled = commands.handlePostback(payload);
+  if(handled && (typeof handled === "object")) return callSendAPI(handled);
+  handled = commands.handleActivityPostback(payload);
   if(handled && (typeof handled === "object")) return callSendAPI(handled);
 
   // When an unknown postback is called, we'll send a message back to the sender to 
@@ -1205,6 +1207,10 @@ function determineResponseType(event) {
     if(typeof itinAsList === "object") return callSendAPI(itinAsList);
     logger.debug(`determineResponseType: Could not get list template for today from Commands. Defaulting to sending url`);
     return sendUrlButton.call(this, `Itin for ${mesg}`, `${tripData.data.name}/${commands.getPath()}`);
+  }
+  if(commands.canHandleActivity(mesg)) {
+    const result = commands.handleActivity(mesg);
+    if(result) return callSendAPI(result);
   }
 
   logger.debug(`determineResponseType: Did not understand the context of message <${mesg}>. Dump of session states: ${this.session.dumpState()}`);

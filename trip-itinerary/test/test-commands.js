@@ -11,10 +11,19 @@ const baseDir = "/home/ec2-user";
 const logger = require(`${baseDir}/my-logger`);
 const TripData = require(`${baseDir}/trip-data`);
 
+const fbid = "1234";
+let trip;
+
+function createNewTrip() {
+  trip = new TripData('test-mobile-view', fbid);
+}
+
+function cleanup() {
+  trip.testing_delete();
+}
+
 describe("Commands tests: ", function() {
   let promises;
-  const fbid = "1234";
-  let trip;
   let createItin;
   before(function() {
     // set up
@@ -27,7 +36,7 @@ describe("Commands tests: ", function() {
     const startDate = new moment(twoDaysAgo).format("YYYY-MM-DD");
     const startTime = "09:00";
     const portOfEntry = "chennai";
-    trip = new TripData('test-mobile-view', fbid);
+    createNewTrip();
     trip.data.leavingFrom = "seattle";
     trip.data.country = "india";
     trip.data.startDate = startDate;
@@ -52,7 +61,7 @@ describe("Commands tests: ", function() {
   });
 
   after(function() {
-    trip.testing_delete();
+    cleanup();
   });
 
   function verifyExpectations(html, city, date) {
@@ -61,7 +70,7 @@ describe("Commands tests: ", function() {
     expect(html).to.contain(`Itinerary for ${date}`);
   }
 
-  it("today's itin", function(done) {
+  it("today's itin as html", function(done) {
     Promise.all(promises).done(
       function(response) {
         const commands = new Commands(trip, fbid);
@@ -81,19 +90,25 @@ describe("Commands tests: ", function() {
     );
   });
 
-  it("today as a list", function(done) {
+  it("todays itin as a list", function(done) {
     Promise.all(promises).done(
       function(response) {
-        const commands = new Commands(trip, fbid);
         const thisMonth = new Date().getMonth();
         const thisYear = new Date().getFullYear();
         const thisDate = new Date().getDate();
-        const itinAsList = commands.getTodaysItinAsList("today", fbid);
-        expect(itinAsList).to.not.be.null;
+        // set up
+        const base = `${baseDir}/trips/ZDdz`;
+        const filePrefix = "test-mobile-view-2017-6-13-itinerary.json";
+        const targetFile = `test-mobile-view-${thisYear}-${thisMonth + 1}-${thisDate}-itinerary.json`;
+        fs.copySync(`${base}/forTestingPurposes/${filePrefix}`, `${base}/${targetFile}`);
+        if(!fs.existsSync(`${base}/${targetFile}`)) throw new Error(`file ${targetFile} not present`);
+        const commands = new Commands(trip, fbid);
+        const result = commands.handle("today");
+        expect(result).to.not.be.null;
         expect(commands.date.getMonth()).to.equal(thisMonth);
         expect(commands.date.getFullYear()).to.equal(thisYear);
         expect(commands.date.getDate()).to.equal(thisDate);
-        logger.debug(`${JSON.stringify(itinAsList)}`);
+        verifyListViewResponse(result, 4 /* activity count */, true /* button present */, true /* first */);
         done();
       },
       function(err) {
@@ -102,28 +117,7 @@ describe("Commands tests: ", function() {
     );
   });
 
-  it("today next set", function(done) {
-    Promise.all(promises).done(
-      function(response) {
-        const commands = new Commands(trip, fbid);
-        const thisMonth = new Date().getMonth();
-        const thisYear = new Date().getFullYear();
-        const thisDate = new Date().getDate();
-        const itinNextSet = commands.getTodaysItinNextSet(fbid);
-        expect(itinNextSet).to.not.be.null;
-        expect(commands.date.getMonth()).to.equal(thisMonth);
-        expect(commands.date.getFullYear()).to.equal(thisYear);
-        expect(commands.date.getDate()).to.equal(thisDate);
-        logger.debug(`${JSON.stringify(itinNextSet)}`);
-        done();
-      },
-      function(err) {
-        done(err);
-      }
-    );
-  });
-
-  it("tomorrow's itin", function(done) {
+  it("tomorrows itin as html", function(done) {
     Promise.all(promises).done(
       function(response) {
         const commands = new Commands(trip, fbid);
@@ -148,7 +142,16 @@ describe("Commands tests: ", function() {
     Promise.all(promises).done(
       function(response) {
         const commands = new Commands(trip, fbid);
+        const thisMonth = new Date().getMonth();
+        const thisYear = new Date().getFullYear();
+        const thisDate = new Date().getDate() + 1;
         logger.debug(commands.handle("6/13"));
+        /*
+        expect(commands.date.getMonth()).to.equal(thisMonth);
+        expect(commands.date.getFullYear()).to.equal(thisYear);
+        expect(commands.date.getDate()).to.equal(thisDate);
+        verifyExpectations(html, "Mumbai", commands.date);
+        */
         done();
       },
       function(err) {
@@ -170,18 +173,19 @@ describe("Commands tests: ", function() {
     );
   });
 
-  it("return list", function(done) {
+  it("test list view contents", function(done) {
     Promise.all(promises).done(
       function(response) {
         // set up
-        fs.copySync("/home/ec2-user/trips/aeXf/tel_aviv-2017-6-13-itinerary.json", "/home/ec2-user/trips/ZDdz/test-mobile-view-2017-6-13-itinerary.json");
-        if(!fs.existsSync("/home/ec2-user/trips/ZDdz/test-mobile-view-2017-6-13-itinerary.json")) throw new Error(`file not present`);
+        const filePrefix = "test-mobile-view-2017-6-13-itinerary.json";
+        fs.copySync(`${baseDir}/trips/ZDdz/forTestingPurposes/${filePrefix}`, `${baseDir}/trips/ZDdz/${filePrefix}`);
+        if(!fs.existsSync(`${baseDir}/trips/ZDdz/${filePrefix}`)) throw new Error(`file not present`);
         // actual test
         const commands = new Commands(trip, fbid);
         let result = commands.handle("13th");
         expect(typeof result).to.equal("object");
         expect(result.message.attachment.payload.elements.length).to.equal(4);
-        expect(result.message.attachment.payload.elements[0].title).to.include("See your itinerary as a map");
+        expect(result.message.attachment.payload.elements[0].title).to.include("See your 6/13 itinerary as a map");
         expect(result.message.attachment.payload.elements[1].title).to.include("Carlton Hotel");
         expect(result.message.attachment.payload.elements[3].title).to.include("Lunch");
         expect(result.message.attachment.payload.elements[3].subtitle).to.include("Location N/A");
@@ -218,10 +222,10 @@ describe("Commands tests: ", function() {
   it("list format multiple sets", function(done) {
     Promise.all(promises).done(
       function(response) {
-        const filePrefix = "2017-6-17-itinerary.json";
+        const filePrefix = "test-mobile-view-2017-6-17-itinerary.json";
         // set up
-        fs.copySync(`${baseDir}/trips/aeXf/tel_aviv-${filePrefix}`, `${baseDir}/trips/ZDdz/test-mobile-view-${filePrefix}`);
-        if(!fs.existsSync(`${baseDir}/trips/ZDdz/test-mobile-view-${filePrefix}`)) throw new Error(`file not present`);
+        fs.copySync(`${baseDir}/trips/ZDdz/forTestingPurposes/${filePrefix}`, `${baseDir}/trips/ZDdz/${filePrefix}`);
+        if(!fs.existsSync(`${baseDir}/trips/ZDdz/${filePrefix}`)) throw new Error(`file not present`);
         // actual test
         const commands = new Commands(trip, fbid);
         let result = commands.handle("17th");
@@ -232,7 +236,6 @@ describe("Commands tests: ", function() {
         payload = result.message.attachment.payload.buttons[0].payload;
         result = commands.handlePostback(payload);
         verifyListViewResponse(result, 2, false);
-        // logger.debug(JSON.stringify(result));
         done();
       },
       function(err) {
@@ -320,5 +323,161 @@ describe("Commands tests: ", function() {
       done(err);
     }
     );
+  });
+});
+
+describe("Commands tests: Activity tests: ", function() {
+  before(function() {
+    createNewTrip();
+    // set up
+    const base = `${baseDir}/trips/ZDdz`;
+    const filePrefix = "test-mobile-view-2017-6-13-itinerary.json";
+    fs.copySync(`${base}/forTestingPurposes/${filePrefix}`, `${base}/${filePrefix}`);
+    if(!fs.existsSync(`${base}/${filePrefix}`)) throw new Error(`file ${filePrefix} not present`);
+  });
+
+  after(function() {
+    cleanup();
+  });
+
+  beforeEach(function() {
+    const indexFile = trip.dayItinIndexFile(new Date("2017-6-13"));
+    if(fs.existsSync(indexFile)) fs.unlinkSync(indexFile);
+  });
+
+  function verifyFirstActivity(message) {
+    expect(message).to.not.be.null;
+    expect(message.recipient.id).to.equal(fbid);
+    expect(message.message.attachment.payload.template_type).to.equal("generic");
+    const buttons = message.message.attachment.payload.elements[0].buttons;
+    expect(buttons.length).to.equal(1);
+    expect(buttons[0].title).to.equal("Next");
+    const elements = message.message.attachment.payload.elements;
+    expect(elements.length).to.equal(1);
+    expect(elements[0].title).to.equal("Breakfast at Carlton Hotel");
+    expect(elements[0].default_action.url).to.equal("www.carlton.co.il/en");
+  }
+
+  it("first activity", function() {
+    const commands = new Commands(trip, fbid);
+    const message = commands.handleActivity("first activity for 6/13");
+    verifyFirstActivity(message);
+  });
+
+  function verifySecondActivity(message) {
+    expect(message).to.not.be.null;
+    expect(message.recipient.id).to.equal(fbid);
+    expect(message.message.attachment.payload.template_type).to.equal("generic");
+    const buttons = message.message.attachment.payload.elements[0].buttons;
+    expect(buttons.length).to.equal(2);
+    expect(buttons[0].title).to.equal("Prev");
+    expect(buttons[1].title).to.equal("Next");
+    const elements = message.message.attachment.payload.elements;
+    expect(elements.length).to.equal(1);
+    expect(elements[0].title).to.equal("09:30 Program with KamaTech at WIX");
+    expect(elements[0].default_action.url).to.equal("https://polaama.com/aeXf/tel_aviv/2017-6-13/item-2");
+  }
+
+  it("second activity", function() {
+    const commands = new Commands(trip, fbid);
+    // set up
+    const indexFile = trip.dayItinIndexFile(new Date("2017-6-13"));
+    fs.writeFileSync(indexFile, "1", 'utf8');
+    const message = commands.handleActivityPostback("2017-5-13-next");
+  });
+
+  it("interchange type and click", function() {
+    const commands = new Commands(trip, fbid);
+    // user types (First Activity)
+    let message = commands.handleActivity("first activity for 6/13");
+    verifyFirstActivity(message);
+    // user clicks (Second Activity)
+    message = commands.handleActivityPostback("2017-5-13-next");
+    verifySecondActivity(message);
+    // user clicks (Third Activity)
+    message = commands.handleActivityPostback("2017-5-13-next");
+    logger.debug(`interchange: ${JSON.stringify(message)}`);
+    expect(message).to.not.be.null;
+    expect(message.recipient.id).to.equal(fbid);
+    expect(message.message.attachment.payload.template_type).to.equal("generic");
+    let buttons = message.message.attachment.payload.elements[0].buttons;
+    expect(buttons.length).to.equal(2);
+    expect(buttons[0].title).to.equal("Prev");
+    expect(buttons[1].title).to.equal("Next");
+    let elements = message.message.attachment.payload.elements;
+    expect(elements.length).to.equal(1);
+    expect(elements[0].title).to.equal("Lunch");
+    expect(elements[0].subtitle).to.equal("Location N/A");
+    // user types (Fourth Activity)
+    message = commands.handleActivity("next activity for 6/13");
+    expect(message).to.not.be.null;
+    expect(message.recipient.id).to.equal(fbid);
+    expect(message.message.attachment.payload.template_type).to.equal("generic");
+    buttons = message.message.attachment.payload.elements[0].buttons;
+    expect(buttons.length).to.equal(2);
+    expect(buttons[0].title).to.equal("Prev");
+    expect(buttons[1].title).to.equal("Next");
+    elements = message.message.attachment.payload.elements;
+    expect(elements.length).to.equal(1);
+    expect(elements[0].title).to.equal("Drive north to Michmoret Beach");
+    expect(elements[0].subtitle).to.equal("\"Four Styles of Leadership\" exercise and teambuilding on the beach");
+  });
+
+  it("first, next and prev", function() {
+    // set up
+    const thisMonth = new Date().getMonth();
+    const thisYear = new Date().getFullYear();
+    const thisDate = new Date().getDate();
+    const base = `${baseDir}/trips/ZDdz`;
+    const filePrefix = "test-mobile-view-2017-6-13-itinerary.json";
+    const targetFile = `test-mobile-view-${thisYear}-${thisMonth + 1}-${thisDate}-itinerary.json`;
+    fs.copySync(`${base}/forTestingPurposes/${filePrefix}`, `${base}/${targetFile}`);
+    if(!fs.existsSync(`${base}/${targetFile}`)) throw new Error(`file ${targetFile} not present`);
+    const commands = new Commands(trip, fbid);
+    let message = commands.handleActivity("first");
+    verifyFirstActivity(message);
+    message = commands.handleActivity("next");
+    verifySecondActivity(message);
+    message = commands.handleActivity("prev");
+    verifyFirstActivity(message);
+  });
+
+  it("first, next and prev specific date", function() {
+    // set up
+    const base = `${baseDir}/trips/ZDdz`;
+    const filePrefix = "test-mobile-view-2017-6-13-itinerary.json";
+    fs.copySync(`${base}/forTestingPurposes/${filePrefix}`, `${base}/${filePrefix}`);
+    if(!fs.existsSync(`${base}/${filePrefix}`)) throw new Error(`file ${filePrefix} not present`);
+    const commands = new Commands(trip, fbid);
+    let message = commands.handleActivity("first activity for 6/13");
+    verifyFirstActivity(message);
+    message = commands.handleActivity("next 13th");
+    verifySecondActivity(message);
+    message = commands.handleActivity("prev for June 13");
+    verifyFirstActivity(message);
+  });
+
+  it("index < 0", function() {
+    const commands = new Commands(trip, fbid);
+    // set up
+    const indexFile = trip.dayItinIndexFile(new Date("2017-6-13"));
+    fs.writeFileSync(indexFile, "-1", 'utf8');
+    const message = commands.handleActivity("first activity for 13th");
+    expect(message).to.not.be.null;
+    expect(message.recipient.id).to.equal(fbid);
+    expect(message.message.text).to.contain("Already at first activity");
+    logger.debug(`${JSON.stringify(message)}`);
+  });
+
+  it("index > 0", function() {
+    const commands = new Commands(trip, fbid);
+    // set up
+    const indexFile = trip.dayItinIndexFile(new Date("2017-6-13"));
+    fs.writeFileSync(indexFile, "6", 'utf8');
+    const message = commands.handleActivity("first activity for 13th");
+    expect(message).to.not.be.null;
+    expect(message.recipient.id).to.equal(fbid);
+    expect(message.message.text).to.contain("No more activities");
+    logger.debug(`${JSON.stringify(message)}`);
   });
 });

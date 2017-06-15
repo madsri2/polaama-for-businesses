@@ -619,6 +619,10 @@ TripData.prototype.mapImageFile = function(dateStr) {
   return `${this.tripBaseDir}/${this.data.name}-${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-map.png`;
 }
 
+TripData.prototype.dayItinIndexFile = function(date) {
+  return `${this.tripBaseDir}/${this.data.name}-${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-current-index.txt`;
+}
+
 TripData.prototype.returnFlightFile = function() {
   return `${this.tripBaseDir}/${this.data.name}-return-flight.txt`;
 }

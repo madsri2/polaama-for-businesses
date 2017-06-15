@@ -5,16 +5,19 @@ const CreateItinerary = require('trip-itinerary/app/create-itin');
 const baseDir = "/home/ec2-user";
 const logger = require(`${baseDir}/my-logger`);
 
-function DayPlanner(date, dayItinerary, trip) {
+function DayPlanner(date, trip, fbid) {
+  if(!fbid) throw new Error(`Commands: required parameter fbid not passed`);
+  if(!trip) throw new Error(`Commands: required parameter trip not passed`);
+  if(!date) throw new Error(`Commands: required parameter date not passed`);
   this.date = date;
-  this.dayPlan = dayItinerary;
   this.trip = trip;
+  this.fbid = fbid;
 }
 
-DayPlanner.prototype.getPlan = function() {
+DayPlanner.prototype.getPlan = function(dayItinerary) {
   const date = this.date;
   const dateStr = CreateItinerary.formatDate(date);
-  const dayPlan = this.dayPlan;
+  const dayPlan = dayItinerary;
   logger.debug(`getDayItinerary: getting plans for date ${dateStr}`);
   let city = "";
   if(!dayPlan) {
@@ -56,7 +59,7 @@ DayPlanner.prototype.getPlan = function() {
 }
 
 // Facebook supports sending only 4 items in an elementList. So, use payload (see below) to pass around the index for the next set of items. 
-DayPlanner.prototype.getPlanAsList = function(fbid, setNum) {
+DayPlanner.prototype.getPlanAsList = function(setNum) {
   const file = this.trip.dayItineraryFile(this.date);
   logger.debug(`getPlanAsList: using list template to display itin for date ${this.date} and file ${file}`);
   try {
@@ -71,7 +74,7 @@ DayPlanner.prototype.getPlanAsList = function(fbid, setNum) {
     const payload = `${this.date.getFullYear()}-${this.date.getMonth()}-${this.date.getDate()}-${currIndex + 1}-itin_second_set`;
     let message = {
       recipient: {
-        id: fbid
+        id: this.fbid
       },
       message: {
         attachment: {
@@ -99,45 +102,138 @@ DayPlanner.prototype.getPlanAsList = function(fbid, setNum) {
   }
 }
 
-DayPlanner.prototype.getPlanAsListOld = function(fbid, whichSet) {
-  const file = this.trip.dayItineraryFile(this.date);
-  logger.debug(`getPlanAsList: using list template to display itin for date ${this.date} and file ${file}`);
+DayPlanner.prototype.setActivityList = function() {
+  if(this.activityList) return; // make this method idempotent
   try {
-    const dayAsList = JSON.parse(fs.readFileSync(file, 'utf8'));
-    const numSets = Object.keys(dayAsList);
-    let message = {
-      recipient: {
-        id: fbid
-      },
-      message: {
-        attachment: {
-          type: "template",
-          payload: {
-            template_type: "list",
-          }
-        }
-      }
-    };
-    if(!whichSet || (whichSet === "first")) {
-      const viewMoreButton = [{
-        title: "View more",
-        type: "postback",
-        payload: `${this.date.getFullYear()}-${this.date.getMonth()}-${this.date.getDate()}-itin_second_set`
-      }];
-      message.message.attachment.payload.elements = dayAsList.firstSet;
-      message.message.attachment.payload.buttons = viewMoreButton;
-    }
-    else {
-      message.message.attachment.payload.elements = dayAsList.secondSet;
-      // the first item in the list is always a map, so we don't set the style to compact. Subsequent items are just normal.
-      message.message.attachment.payload.top_element_style = "compact";
-    }
-    return message;
+    const file = this.trip.dayItineraryFile(this.date);
+    logger.debug(`setActivityList: getting activity from itin for date ${this.date} and file ${file}`);
+    const dayItin = JSON.parse(fs.readFileSync(file, 'utf8'));
+    this.activityList = [];
+    Object.keys(dayItin).forEach(key => {
+      if(!Array.isArray(dayItin[key])) throw new Error(`setActivityList: itin for date ${this.date} from file ${file} and key ${key} needs to be an array. But it's not. It's value is ${dayItin[key]}`);
+      // only add actual activities to the list. for example, we tack on a "Itinerary as a map" item. Ignore that..
+      if(dayItin[key][0].title.includes("itinerary as a map")) dayItin[key].splice(0, 1);
+      this.activityList = this.activityList.concat(dayItin[key]);
+    }, this);
   }
   catch(e) {
-    logger.error(`error in getting plans for date ${this.date}: ${e.stack}`);
-    return null;
+    logger.error(`error getting activities for date ${this.date}: ${e.stack}`);
   }
+}
+
+DayPlanner.prototype.getPrevActivity = function() {
+  const file = this.trip.dayItinIndexFile(this.date);
+  let idx = 0;
+  if(fs.existsSync(file)) {
+    idx = parseInt(fs.readFileSync(file, 'utf8')) - 1;
+    logger.debug(`getPrevActivity Getting activity at index ${idx} of this.activityList`);
+  }
+  else logger.debug(`getPrevActivity Getting first activity of this.activityList`);
+  const result = activityAsListElement.call(this, idx);
+  // write the next idx for future use. do this only if successfully got the current element
+  logger.debug(`writing to file ${file} current idx: ${idx}`);
+  fs.writeFileSync(file, idx, "utf8");
+  return result;
+}
+
+DayPlanner.prototype.getNextActivity = function(first) {
+  const file = this.trip.dayItinIndexFile(this.date);
+  let idx = 0;
+  if(fs.existsSync(file) && !first) {
+    idx = parseInt(fs.readFileSync(file, 'utf8')) + 1;
+    logger.debug(`getNextActivity: Getting activity at index ${idx} of this.activityList`);
+  }
+  else logger.debug(`getNextActivity: Getting first activity of this.activityList`);
+  const result = activityAsListElement.call(this, idx);
+  // write the next idx for future use. do this only if successfully got the current element
+  logger.debug(`writing to file ${file} current idx: ${idx+1}`);
+  fs.writeFileSync(file, idx, "utf8");
+  return result;
+}
+
+function activityAsListElement(idx) {
+  if(!this.activityList) throw new Error(`activityAsListElement: this.activityList is not defined. Maybe you forgot to call setActivityList before calling me?`);
+  if(idx >= this.activityList.length) {
+    return {
+      recipient: {
+        id: this.fbid
+      },
+      message: {
+        text: `No more activities. Get previous activity with command "prev for ${this.date.getDate()}th". You can also type "first ..." to get first activity`,
+        metadata: "DEVELOPER_DEFINED_METADATA"
+      }
+    };
+  }
+  if(idx < 0) {
+    return {
+      recipient: {
+        id: this.fbid
+      },
+      message: {
+        text: `Already at first activity. Get next activity with commmand "next for ${this.date.getDate()}th". You can also type "first ..." to get first activity`,
+        metadata: "DEVELOPER_DEFINED_METADATA"
+      }
+    };
+  }
+  const elements = [];
+  elements.push(this.activityList[idx]);
+  let buttons = [];
+  let prefix = `${this.date.getFullYear()}-${this.date.getMonth()}-${this.date.getDate()}-`;
+  if(idx > 0) {
+    const payload = prefix.concat(`prev`);
+    buttons.push({
+      title: "Prev",
+      type: "postback",
+      payload: payload
+    });
+  }
+  if(idx != (this.activityList.length - 1)) {
+    const payload = prefix.concat(`next`);
+    buttons.push({
+      title: "Next",
+      type: "postback",
+      payload: payload
+    });
+  }
+  if(buttons.length > 0) elements[0].buttons = buttons;
+  
+  let message = {
+    recipient: {
+      id: this.fbid
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "generic",
+          elements: elements
+        }
+      }
+    }
+  };
+
+  return message;
+}
+
+DayPlanner.parseActivityPostback = function(payload) {
+  let contents = /^(\d+)-(\d+)-(\d+)-(.*)/.exec(payload);  
+  if(!contents) return null;
+  const date = new Date(contents[1], contents[2], contents[3]);
+  return {
+    date: date,
+    dir: contents[4]
+  };
+}
+
+DayPlanner.parseDayItinPostback = function(payload) {
+  let contents = /^(\d+)-(\d+)-(\d+)-(\d)-itin_second_set/.exec(payload);  
+  if(!contents) return null;
+  const date = new Date(contents[1], contents[2], contents[3]);
+  const count = parseInt(contents[4]);
+  return {
+    date: date,
+    number: count
+  };
 }
 
 function visitDetails(dayPlan) {

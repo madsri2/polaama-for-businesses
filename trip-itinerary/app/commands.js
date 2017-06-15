@@ -10,57 +10,90 @@ const Encoder = require(`${baseDir}/encoder`);
 
 function Commands(trip, fbid, sendHtml) {
   if(!fbid) throw new Error(`Commands: required parameter fbid not passed`);
+  if(!trip) throw new Error(`Commands: required parameter trip not passed`);
   this.fbid = fbid;
   this.trip = trip;
   this.sendHtml = sendHtml;
-  this.itin = new CreateItinerary(this.trip, this.trip.leavingFrom).getItinerary();
   // we will always start with the first element set when a command is initialized (see DayPlanner.getPlanAsList)
   this.setNum = 0;
 }
 
-// Commands.prototype.handle = function(command, whichSet) {
 Commands.prototype.handle = function(command) {
-  // this.whichSet = whichSet;
-  // if(!this.whichSet) this.whichSet = "first";
   this.command = command;
   return handleDayItin.call(this);
 }
 
-Commands.prototype.canHandle = function(command) {
+Commands.prototype.handleActivity = function(command) {
   this.command = command;
-  if(this.command.startsWith("tomorrow")) return true;
-  if(this.command.startsWith("today")) return true;
-  if(this.command.startsWith("first activity")) return true;
-  if(this.command.startsWith("next activity")) return true;
-  // if(this.command === "next" || this.command.startsWith("next ")) return true;
-  return isDateValid.call(this);
+  return handleActivityCommand.call(this);
 }
 
-function parseActivityCommand(command) {
-  let contents = /(first) activity for (.*)/.exec(command);
-  if(contents) {
-    return;
-  }
+Commands.prototype.canHandle = function(command) {
+  this.command = command;
+  if(this.command.startsWith("first") || this.command.startsWith("next") || this.command.startsWith("prev")) return false;
+  if(this.command.startsWith("tomorrow")) return true;
+  if(this.command.startsWith("today")) return true;
+  return setDateIfValid.call(this);
+}
 
+Commands.prototype.canHandleActivity = function(command) {
+  this.command = command;
+  if(this.command.startsWith("first activity ") || (this.command.startsWith("first for ") || this.command === "first")) return true;
+  if(this.command.startsWith("next activity ") || (this.command.startsWith("next for ") || this.command === "next")) return true;
+  if(this.command.startsWith("prev activity ") || (this.command.startsWith("prev for ") || this.command === "prev")) return true;
+  return false;
+}
+
+Commands.prototype.handleActivityPostback = function(payload) {
+  const content = DayPlanner.parseActivityPostback(payload);
+  if(!content) return null;
+  this.date = content.date;
+  this.command = null;
+  // logger.debug(`handleActivityPostback: date is ${this.date}; ${CreateItinerary.formatDate(this.date)}`);
+  const dayPlanner = new DayPlanner(this.date, this.trip, this.fbid);
+  dayPlanner.setActivityList();
+  // return dayPlanner.activityAsListElement(content.index);
+  if(content.dir === "next") return dayPlanner.getNextActivity();
+  if(content.dir === "prev") return dayPlanner.getPrevActivity();
+  logger.error(`handleActivityPostback: unknown direction <${content.dir}>`);
+  return null;
+}
+
+function handleActivityCommand() {
+  // parse
+  // let contents = /(first|next) activity for (.*)/.exec(this.command);
+  let contents = /(first|next|prev)\s*(?:activity)?\s*(?:for)?\s*(.*)/.exec(this.command);
+  if(!contents) return null;
+  if(contents[1] !== "first" && contents[1] !== "next" && contents[1] !== "prev") return null;
+  let val;
+  if(contents[2] == '') val = "today"; else val = contents[2];
+  if(!setDateIfValid.call(this, val)) return null;
+  logger.debug(`handleActivityCommand: parsed date <${this.date}> from <${val}> and command <${this.command}>`);
+  const dateStr = CreateItinerary.formatDate(this.date);
+  const dayPlanner = new DayPlanner(this.date, this.trip, this.fbid); 
+  dayPlanner.setActivityList();
+  // if(contents[1] === "first") return dayPlanner.activityAsListElement(0);
+  if(contents[1] === "first") return dayPlanner.getNextActivity(true /* first */);
+  if(contents[1] === "next") return dayPlanner.getNextActivity();
+  if(contents[1] === "prev") return dayPlanner.getPrevActivity();
+  return null;
 }
 
 Commands.prototype.getPath = function(command) {
   if(this.command.startsWith("tomorrow")) return "tomorrow";
   if(this.command.startsWith("today")) return "today";
-  if(!this.date && !isDateValid.call(this)) throw new Error(`getPath: invalid command ${command}`);
+  if(!this.date && !setDateIfValid.call(this)) throw new Error(`getPath: invalid command ${command}`);
   return new moment(this.date).format("YYYY-MM-DD");
 }
 
+// TODO: Move the parsing logic into dayPlanner, so the postback format is not leaked outside that class.
 Commands.prototype.handlePostback = function(payload) {
-  // logger.debug(`handlePostback: handling payload ${payload}`);
-  let contents = /^(\d+)-(\d+)-(\d+)-(\d)-itin_second_set/.exec(payload);  
-  if(!contents) return false;
-  const date = new Date(contents[1], contents[2], contents[3]);
   // logger.debug(`handlePostback: date is ${date}; ${CreateItinerary.formatDate(date)}`);
-  if(!listFormatAvailable(date)) return false;
-  this.date = date;
-  // this.whichSet = "second";
-  this.setNum = parseInt(contents[4]);
+  const parsedPayload = DayPlanner.parseDayItinPostback(payload); 
+  if(!parsedPayload) return null;
+  if(!listFormatAvailable(parsedPayload.date)) return null;
+  this.date = parsedPayload.date;
+  this.setNum = parseInt(parsedPayload.number);
   return getDayItinerary.call(this);
 }
 
@@ -76,56 +109,68 @@ function listFormatAvailable(date) {
 }
 
 function handleDayItin() {
-  if(this.command.startsWith("tomorrow")) return getTomorrowsItin.call(this);
-  if(this.command.startsWith("today")) return getTodaysItin.call(this);
-  if(!isDateValid.call(this)) return null;
+  if(!setDateIfValid.call(this)) return null;
   return getDayItinerary.call(this);
 }
 
-// Get today's itinerary.
-// Find the time (Based on timezone).
-// Start comparing the hour
-// Possible options: 1st item, last item, item with time, 
-function getNextItem() {
-}
+function setDateIfValid(passedCommand) {
+  let command = passedCommand;
+  if(!command) command = this.command;
 
-function isDateValid() {
+  if(command.startsWith("tomorrow")) {
+    const tomorrow = new Date(moment().tz(getTimezone()).format("M/DD/YYYY"));
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    this.date = tomorrow;
+    logger.debug(`setDateIfValid: set date to be tomorrow (${this.date})`);
+    return true;
+  }
+  if(command.startsWith("today")) {
+    // this.date = new Date();
+    this.date = new Date(moment().tz(getTimezone()).format("M/DD/YYYY"));
+    logger.debug(`setDateIfValid: set date to be today (${this.date})`);
+    return true;
+  }
   const thisMonth = new Date().getMonth();
   const thisYear = new Date().getFullYear();
-  let contents = /^(\d+)t?h?$/.exec(this.command);
+  let contents = /^(\d+)t?h?$/.exec(command);
   if(contents) {
     this.date = new Date(thisYear, thisMonth, contents[1]);
+    logger.debug(`setDateIfValid: Matched [date]. contents: [${contents}] set date to be today (${this.date})`);
     return true;
   }
-  contents = /([a-zA-Z]+) *(\d+)/.exec(this.command);
+  contents = /^([a-zA-Z]+) *(\d+)/.exec(command);
   if(contents) {
     this.date = new Date(thisYear, toNum(contents[1]), contents[2]);    
+    logger.debug(`setDateIfValid: Matched [MON date]. contents: [${contents}] set date to be today (${this.date})`);
     return true;
   }
-  contents = /(\d+)\/(\d+)/.exec(this.command);
+  contents = /(\d+)\/(\d+)/.exec(command);
   if(contents) {
     this.date = new Date(thisYear, contents[1]-1, contents[2]);    
+    logger.debug(`setDateIfValid: Matched [dd/mm]. contents: [${contents}] set date to be today (${this.date})`);
     return true;
   }
-  contents = /(\d+)-(\d+)-(\d+)/.exec(this.command);
+  contents = /(\d+)-(\d+)-(\d+)/.exec(command);
   if(contents) {
-    this.date = new Date(this.command);
+    this.date = new Date(command);
+    logger.debug(`setDateIfValid: Matched [YYYY-MM-DD]. contents: [${contents}] set date to be today (${this.date})`);
     return true;
   }
-  logger.error(`isDateValid: unknown format ${this.command} that did not match any of the known formats.`);
+  logger.error(`setDateIfValid: unknown format ${command} that did not match any of the known formats.`);
   return false;
 }
 
 function getDayItinerary() {
+  const dayPlanner = new DayPlanner(this.date, this.trip, this.fbid); 
   const dateStr = CreateItinerary.formatDate(this.date);
-  const dayPlanner = new DayPlanner(this.date, this.itin[dateStr], this.trip); 
   if(!this.sendHtml && listFormatAvailable(this.date)) {
     logger.debug(`getDayItinerary: Sending list view format for date ${dateStr}`);
-    const dayAsList = dayPlanner.getPlanAsList(this.fbid, this.setNum);
+    const dayAsList = dayPlanner.getPlanAsList(this.setNum);
     if(dayAsList) return dayAsList;
   }
   logger.debug(`getDayItinerary: Sending html for date ${dateStr}`);
-  const plans = dayPlanner.getPlan();
+  const itin = new CreateItinerary(this.trip, this.trip.leavingFrom).getItinerary();
+  const plans = dayPlanner.getPlan(itin[dateStr]);
   const html = require('fs').readFileSync(`${htmlBaseDir}/day-plan.html`, 'utf8');
   return html.replace("${date}", dateStr)
              .replace("${city}", plans.city)
@@ -161,26 +206,9 @@ function toNum(month) {
   return monthMap.get(Encoder.encode(month));
 }
 
-function getTomorrowsItin() {
-  const tomorrow = new Date(moment().tz(getTimezone()).format("M/DD/YYYY"));
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  this.date = tomorrow;
-  logger.debug(`getTomorrowsItin: tomorrow's date is ${this.date}`);
-  return getDayItinerary.call(this);
-}
-
-function getTodaysItin() {
-  // this.date = new Date();
-  this.date = new Date(moment().tz(getTimezone()).format("M/DD/YYYY"));
-  logger.debug(`getTodaysItin: today's date is ${this.date}`);
-  return getDayItinerary.call(this);
-}
-
-// TODO: (searching for "today" at 6/3/2017T02:00TEV will show 6/2/2017, instead of 6/3. Fix me!
 // user enters today. We find out the date in UTC. We use that to determine where the user will be. (Between 6/11 - 6/19 UTC, the user will be in Tel Aviv). We get moment for that timezone and determine the day.
 function getTimezone() {
-  // const dateInUTC = moment().format("M/DD/YYYY");
-  const dateInUTC = "6/12/2017";
+  const dateInUTC = moment().format("M/DD/YYYY");
   const userLocation = {
     '6/10/2017' : "America/New_York",
     '6/11/2017' : "Asia/Tel_Aviv",
