@@ -104,7 +104,7 @@ function testCategorizingComments(comments, expected) {
 }
 
 function testTripItinerary() {
-	const trip = new TripData("Tel Aviv", "1120615267993271");
+	const trip = new TripData("albuquerque", "1718674778147181");
 	console.log(JSON.stringify(trip.flightItin));
 	console.log(JSON.stringify(trip.returnFlightItin));
 }

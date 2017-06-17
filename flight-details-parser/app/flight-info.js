@@ -27,6 +27,7 @@ function FlightInfo(passedOptions) {
   };
   if(options.boarding_time) this.details.flight_schedule.boarding_time = options.boarding_time;
   if(options.arrival_time) this.details.flight_schedule.arrival_time = options.arrival_time;
+  if(options.aircraft_type) this.details.aircraft_type = options.aircraft_type;
   validate.call(this);
 }
 

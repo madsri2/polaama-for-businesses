@@ -11,11 +11,15 @@ const monthNames = ["January", "February", "March", "April", "May", "June", "Jul
 const htmlBaseDir = "/home/ec2-user/html-templates"; // TODO: Move this to config.
 
 // This class gets data from trips/portugal-itinerary.txt and creates a calendar view from that information.
-function FormatCalendar(trip, departureCity) {
+function FormatCalendar(trip, departureCity, fbid) {
+  if(!fbid) throw new Error(`FormatCalendar: required parameter fbid not passed`);
+  if(!trip) throw new Error(`FormatCalendar: required parameter trip not passed`);
+  if(!departureCity) throw new Error(`FormatCalendar: required parameter departureCity not passed`);
   this.trip = trip;
   this.tripData = this.trip.data;
   this.tripName = this.trip.rawTripName;
   this.departureCity = departureCity;
+  this.fbid = fbid;
   fetchItinerary.call(this);
   this.html = "";
 }
@@ -78,8 +82,8 @@ function dayItin(search) {
 
 FormatCalendar.prototype.getThisDaysItin = function (date) {  
   const dateStr = CreateItinerary.formatDate(date);
-  const dayPlanner = new DayPlanner(date, this.itinDetails[dateStr], this.trip); 
-  return dayPlanner.getPlan().dayPlan;
+  const dayPlanner = new DayPlanner(date, this.trip, this.fbid);
+  return dayPlanner.getPlan(this.itinDetails[dateStr]).dayPlan;
 }
 
 /*

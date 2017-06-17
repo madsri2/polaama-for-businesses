@@ -81,6 +81,7 @@ CarItineraryHandler.prototype.handle = function() {
     logger.error(`parse: Error writing to file ${file}. ${e.stack}`);
     throw e;
   }
+	this.trip.markTodoItemDone("Rental car");
   logger.debug(`handle: Stored rental car details and pushed notification`);
   return true;
 }

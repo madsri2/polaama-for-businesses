@@ -73,7 +73,22 @@ function patternMatch() {
   const regex2 = /(\d+)\/(\d+)/;
   console.log(regex2.exec(command));
 }
-patternMatch();
+
+function compareHours() {
+  const currTime = "01:30";
+  const time = "01:30";
+  const a = /(\d\d):(\d\d)/.exec(currTime);
+  if(!a) throw new Error(`isBefore: currTime ${currTime} is not in expected format HH:mm`);
+  const b = /(\d\d):(\d\d)/.exec(time);
+  if(!b) throw new Error(`isBefore: Time ${time} is not in expected format HH:mm`);
+  const a1 = moment().startOf('day').add(a[1], 'hours').add(a[2], 'minutes');
+  const b1 = moment().startOf('day').add(b[1], 'hours').add(b[2], 'minutes');
+  if(a1.isBefore(b1)) console.log("true");
+  else console.log("false");
+}
+
+compareHours();
+// patternMatch();
 
 // formats();
 // dateDiff();

@@ -46,6 +46,7 @@ function getItinDetails(file, key) {
 		return;
 	}
 	const data = JSON.parse(fs.readFileSync(file,'utf8'));
+  // logger.debug(`getItinDetails: dump of data from file ${file}: ${JSON.stringify(data)}`);
 	const options = {};
 	options.pnr = data.pnr_number;
 	options.names = [];
@@ -65,7 +66,7 @@ function getItinDetails(file, key) {
 		options.dep_city.push(item.departure_airport.city);
 		options.arr_code.push(item.arrival_airport.airport_code);
 		options.arr_city.push(item.arrival_airport.city);
-		// logger.debug(`getItinDetails: departure time is ${item.flight_schedule.departure_time}`);
+		logger.debug(`getItinDetails: departure time is ${item.flight_schedule.departure_time}`);
 		options.departure_time.push(moment(new Date(item.flight_schedule.departure_time).toISOString()).format("YYYY-MM-DDTHH:mm"));
 		options.arrival_time.push(item.flight_schedule.arrival_time);
 		if(item.flight_schedule.boarding_time) {
@@ -115,7 +116,7 @@ TripData.prototype.retrieveTripData = function() {
     fs.accessSync(file, fs.F_OK);
     try {
       this.data = JSON.parse(fs.readFileSync(file, 'utf8')); 
-      if(this.data.rawTripName) this.rawTripName = this.data.rawTripName;
+      if(this.data.rawName) this.rawTripName = this.data.rawName;
       this.tripFilePresent = true;
     }
     catch(err) {
@@ -206,6 +207,12 @@ TripData.prototype.addTripDetailsAndPersist = function(tripDetails) {
   this.persistUpdatedTrip();
 }
 
+TripData.prototype.setCountry = function(country) {
+  this.data.country = myEncode(country);
+  this.country = new Country(country);
+  this.persistUpdatedTrip();
+}
+
 TripData.prototype.setReturnDate = function(date) {
 	const dateAsMoment = moment(new Date(date).toISOString());
 	// see if return date matches passed date. if not, atleast log an error and return an error
@@ -224,7 +231,7 @@ TripData.prototype.setReturnDate = function(date) {
 TripData.prototype.addPortOfEntry = function(portOfEntry) {
   // this is needed for getting flight details.
   if(portOfEntry) this.data.portOfEntry = myEncode(portOfEntry);
-  else return logger.warn("addPortOfEntry: passed value portOfEntry is undefined");
+  else return logger.warn("addPortOfEntry: passed value portOfEntry is undefined. doing nothing!");
 	if(!this.data.cities) this.data.cities = [];
   this.data.cities.push(myEncode(portOfEntry));
 	logger.debug(`addPortOfEntry: Added ${portOfEntry} as port of entry`);
@@ -628,11 +635,11 @@ TripData.prototype.returnFlightFile = function() {
 }
 
 TripData.prototype.rentalCarReceiptFile = function() {
-  return `${this.tripBaseDir}/${this.data.name}-hotel-rental-receipt.txt`;
+  return `${this.tripBaseDir}/${this.data.name}-rental-car-receipt.txt`;
 }
 
 TripData.prototype.hotelRentalReceiptFile = function() {
-  return `${this.tripBaseDir}/${this.data.name}-rental-car-receipt.txt`;
+  return `${this.tripBaseDir}/${this.data.name}-hotel-rental-receipt.txt`;
 }
 
 TripData.prototype.archiveBoardingPassFile = function() {

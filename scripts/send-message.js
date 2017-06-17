@@ -33,91 +33,60 @@ function flightStatusAndWaitTimes() {
 function sendDayPlan() {
   const firstSet = [
     {
-      "title": "See your 6/17 itinerary as a map",
+      "title": "See your 6/18 itinerary as a map",
       "subtitle": "Click to see map",
-      "image_url": "https://polaama.com/XQLn/tel_aviv/2017-6-17/-/map",
+      "image_url": "https://polaama.com/XQLn/tel_aviv/2017-6-18/-/map",
       "default_action": {
         "type": "web_url",
-        "url": "https://goo.gl/maps/jyNPwEpNC1v",
+        "url": "https://goo.gl/maps/y4NdfL5RuYC2",
         "webview_height_ratio": "full"
       }
     },
     {
-      "title": "Breakfast at Mamilla Hotel",
-      "subtitle": "\"Check out\" after breakfast",
-      "image_url": "http://tinyurl.com/y6w2q96e",
-      "default_action": {
-        "type": "web_url",
-        "url": "http://www.mamillahotel.com/",
-        "webview_height_ratio": "full"
-      }
-    },
-    {
-      "title": "Hike Masada",
-      "subtitle": "Ascend Masada and tour King Herod’s historic hilltop fortress",
-      "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Israel-2013-Aerial_21-Masada.jpg/180px-Israel-2013-Aerial_21-Masada.jpg",
-      "default_action": {
-        "type": "web_url",
-        "url": "https://polaama.com/XQLn/tel_aviv/2017-6-17/item-2",
-        "webview_height_ratio": "full"
-      }
-    },
-    {
-      "title": "Float at the Dead sea",
-      "subtitle": "Lunch at International beach",
-      "image_url": "http://www.movenpick.com/fileadmin/_migrated/pics/DeadSea_xxxxxxx_i104829_13.jpg",
-      "default_action": {
-        "type": "web_url",
-        "url": "https://polaama.com/XQLn/tel_aviv/2017-6-17/item-3",
-        "webview_height_ratio": "full"
-      }
-    }
-  ];
-  const secondSet = [
-    {
-      "title": "Drive south to Ramon Crater",
-      "subtitle": "Visit the largest erosion center",
-      "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Israel-2013-Aerial_00-Negev-Makhtesh_Ramon.jpg/256px-Israel-2013-Aerial_00-Negev-Makhtesh_Ramon.jpg",
-      "default_action": {
-        "url": "https://en.wikipedia.org/wiki/Makhtesh_Ramon",
-        "type": "web_url",
-        "webview_height_ratio": "full"
-      }
-    },
-    {
-      "title": "Sunset/Havdalah at Mizpe Ramon",
-      "subtitle": "Check-in at \"Beresheet hotel\"",
-      "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Mitzepe_Ramon_02.jpg/250px-Mitzepe_Ramon_02.jpg",
-      "default_action": {
-        "type": "web_url",
-        "url": "https://polaama.com/XQLn/tel_aviv/2017-6-17/item-5",
-        "webview_height_ratio": "full"
-      }
-    },
-    {
-      "title": "Hitbodedut at Ramon crater",
-      "subtitle": "Unstructured, spontaneous and individualized form of prayer",
-      "image_url": "http://tinyurl.com/ybo2pksh",
-      "default_action": {
-        "type": "web_url",
-        "url": "https://polaama.com/XQLn/tel_aviv/2017-6-17/item-6",
-        "webview_height_ratio": "full"
-      }
-    }
-  ];
-  const thirdSet = [
-    {
-      "title": "21:00 Desert Dinner experience",
-      "subtitle": "Ramon crater",
-    },
-    {
-      "title": "Overnight at Bereshhet hotel",
+      "title": "Breakfast and relaxing morning at the hotel",
+      "subtitle": "Check-out",
       "image_url": "http://tinyurl.com/ycud3a3o",
       "default_action": {
         "type": "web_url",
         "url": "http://www.isrotelexclusivecollection.com/beresheet/",
         "webview_height_ratio": "full"
       }
+    },
+    {
+      "title": "Visit Ben Gurion's grave",
+      "subtitle": "The decision we make as leaders",
+      "image_url": "http://www.parks.org.il/sites/English/ParksAndReserves/benGorion/PublishingImages/%D7%90%D7%97%D7%95%D7%96%D7%AA%20%D7%A7%D7%91%D7%A8%20%D7%91%D7%9F%20%D7%92%D7%95%D7%A8%D7%99%D7%95%D7%9F.jpg",
+      "default_action": {
+        "type": "web_url",
+        "url": "https://polaama.com/XQLn/tel_aviv/2017-6-18/item-2",
+        "webview_height_ratio": "full"
+      }
+    },
+    {
+      "title": "Leadership Dilemmas",
+      "subtitle": "Sde Boker",
+      "default_action": {
+        "type": "web_url",
+        "url": "https://polaama.com/XQLn/tel_aviv/2017-6-18/item-3",
+        "webview_height_ratio": "full"
+      }
+    },
+  ];
+  const secondSet = [
+    {
+      "title": "Closing session and Dinner",
+      "subtitle": "Hedal Offaim's home",
+      "image_url": "http://www.ofaimme.com/wp-content/uploads/2013/08/2-672x400.jpg",
+      "default_action": {
+        "type": "web_url",
+        "url": "https://polaama.com/XQLn/tel_aviv/2017-6-18/item-4",
+        "webview_height_ratio": "full"
+      }
+    },
+    {
+      "title": "Bus departs for Ben Gurion airport",
+      "subtitle": "Depart at 23:10. Flight UA91",
+      "image_url": "http://tinyurl.com/ybrq92nt",
     }
   ];
   const message = {
@@ -130,11 +99,11 @@ function sendDayPlan() {
         payload: {
           template_type: "list",
           "top_element_style": "compact",
-          elements: thirdSet,
+          elements: secondSet,
           buttons: [{
-            title: "View more",
+            title: "Return Flight",
             "type": "postback",
-            payload: "view_more"
+            payload: "return flight"
           }]
         }
       }
@@ -155,19 +124,26 @@ function sendSingleActivity() {
         "type": "template",
         payload: {
           template_type: "generic",
-          elements: thirdSet,
-          buttons: [{
-            title: "View more",
-            "type": "postback",
-            payload: "view_more"
+          elements: [{
+              "title": "Hike Masada",
+              "subtitle": "\"Activity 2 on 16th\": Option 1: Krav Maga(16:00 - 17:00) at beach near hotel; Option 2: SAP rental",
+              "image_url": "http://tinyurl.com/ycud3a3o",
+              "default_action": {
+                "type": "web_url",
+                "url": "http://www.isrotelexclusivecollection.com/beresheet/",
+                "webview_height_ratio": "full"
+              },
+              buttons: [{
+                title: "Next",
+                "type": "postback",
+                payload: "next"
+              }]
           }]
         }
       }
     }
   };
-  const messageList = [];
-  messageList.push(message);
-  handler.sendMultipleMessages(fbid, messageList);
+  handler.sendAnyMessage(message);
 }
 
 function sendNewFeatureMessage() {
@@ -185,15 +161,16 @@ function sendGoodMorningMessage() {
   let name = new FbidHandler().getName(fbid);
   if(!name) name = "";
   else name = name.substring(0, name.indexOf(" "));
-  messageList.push(handler.getTextMessageData(fbid, `Good morning ${name}! It's going to be mostly sunny today. You will be going to Jerusalem. Here is your itinerary`));
+  messageList.push(handler.getTextMessageData(fbid, `Good morning ${name}!. It's going to be mostly sunny today and there is lots of driving, so be prepared. Here is the itinerary.`));
   messageList.push(message);
   handler.sendMultipleMessages(fbid, messageList);
 }
 
+// sendDayPlan();
+sendGoodMorningMessage();
 
-// sendGoodMorningMessage();
+// sendSingleActivity();
 // sendNewFeatureMessage();
 
-// sendDayPlan();
 // flightStatusAndWaitTimes();
 // sendPackList();

@@ -80,7 +80,7 @@ function setLastDayDetails() {
     }
     else if(!this.tripData.portOfEntry) throw new Error(`setLastDayDetails: trip's cityItin and portOfEntry not set: ${JSON.stringify(this.tripData)}`); 
     else city = this.tripData.portOfEntry;
-    logger.debug(`setLastDayDetails: city value is ${city}. returnFlightItin not present. trip data: ${JSON.stringify(this.tripData)}`);
+    // logger.debug(`setLastDayDetails: city value is ${city}. returnFlightItin not present. trip data: ${JSON.stringify(this.tripData)}`);
   }
   else {
     // logger.debug(`setLastDayDetails: returnFlightItin present`);

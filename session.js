@@ -296,9 +296,9 @@ Session.prototype.getCurrentAndFutureTrips = function() {
 
 Session.prototype.setTripContextAndPersist = function(tripName) {
   const trip = this.getTrip(tripName);
-  if(!trip) throw new Error(`setTripContextAndPersist: cannot find trip ${trip.tripName} in session ${this.sessionId}, fbid ${this.fbid}`);
+  if(!trip) throw new Error(`setTripContextAndPersist: cannot find trip ${tripName} [encoded: ${TripData.encode(tripName)}] in session ${this.sessionId}, fbid ${this.fbid}`);
   this.tripNameInContext = trip.tripName;
-  logger.debug(`setTripContextAndPersist: setting raw trip name to ${trip.data.rawTripName}`);
+  logger.debug(`setTripContextAndPersist: setting raw trip name to ${trip.data.rawName}`);
   this.rawTripNameInContext = trip.data.rawName;
   // Persist the new trip that was added to this session.
   logger.debug(`setTripContextAndPersist: set trip context for this session as ${this.tripNameInContext}. persisting session`);
@@ -308,6 +308,7 @@ Session.prototype.setTripContextAndPersist = function(tripName) {
 Session.prototype.addTrip = function(tripName) {
   const trip = new TripData(tripName, this.fbid);
   const encTripName = trip.tripName;
+  // logger.debug(`addTrip: encTripName: ${encTripName}; dump of trip ${tripName}: ${JSON.stringify(trip)}`);
 	// TODO: this is data leak. fix it by calling TripData.addTripDetailsAndPersist after making sure that it does not cause any side effects.
 	if(this.hometown) trip.data.leavingFrom = TripData.encode(this.hometown);
   if(!this.trips[encTripName]) {

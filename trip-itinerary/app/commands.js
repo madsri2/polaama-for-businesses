@@ -30,7 +30,7 @@ Commands.prototype.handleActivity = function(command) {
 
 Commands.prototype.canHandle = function(command) {
   this.command = command;
-  if(this.command.startsWith("first") || this.command.startsWith("next") || this.command.startsWith("prev")) return false;
+  if(this.command.startsWith("first") || this.command.startsWith("next")) return false; // || this.command.startsWith("prev")) return false;
   if(this.command.startsWith("tomorrow")) return true;
   if(this.command.startsWith("today")) return true;
   return setDateIfValid.call(this);
@@ -39,9 +39,32 @@ Commands.prototype.canHandle = function(command) {
 Commands.prototype.canHandleActivity = function(command) {
   this.command = command;
   if(this.command.startsWith("first activity ") || (this.command.startsWith("first for ") || this.command === "first")) return true;
-  if(this.command.startsWith("next activity ") || (this.command.startsWith("next for ") || this.command === "next")) return true;
-  if(this.command.startsWith("prev activity ") || (this.command.startsWith("prev for ") || this.command === "prev")) return true;
+  if(this.command === "next") return true; // support getting activity relative to current time
   return false;
+}
+
+Commands.prototype.canHandleMealsCommand = function(command) {
+  this.command = command;
+  if(this.command.startsWith("breakfast on ") || this.command === "breakfast tomorrow" || this.command === "breakfast") return true;
+  if(this.command.startsWith("lunch on ") || this.command === "lunch tomorrow" || this.command === "lunch") return true;
+  if(this.command.startsWith("dinner on ") || this.command === "dinner tomorrow" || this.command === "dinner") return true;
+
+  return false;
+}
+
+Commands.prototype.handleMealsCommand = function(command) {
+  this.command = command;
+  let contents = /(breakfast|lunch|dinner)\s*(?:on)?\s*(.*)/.exec(this.command);
+  if(!contents) return null;
+  if(contents[1] !== "breakfast" && contents[1] !== "lunch" && contents[1] !== "dinner") return null;
+  let val;
+  if(contents[2] == '') val = "today"; else val = contents[2];
+  if(!setDateIfValid.call(this, val)) return null;
+  logger.debug(`handleMealsCommand: parsed date <${CreateItinerary.formatDate(this.date)}> from <${val}> and command <${this.command}>`);
+  const dateStr = CreateItinerary.formatDate(this.date);
+  const dayPlanner = new DayPlanner(this.date, this.trip, this.fbid); 
+  dayPlanner.setActivityList();
+  return dayPlanner.getMealElement(contents[1]);
 }
 
 Commands.prototype.handleActivityPostback = function(payload) {
@@ -52,19 +75,17 @@ Commands.prototype.handleActivityPostback = function(payload) {
   // logger.debug(`handleActivityPostback: date is ${this.date}; ${CreateItinerary.formatDate(this.date)}`);
   const dayPlanner = new DayPlanner(this.date, this.trip, this.fbid);
   dayPlanner.setActivityList();
-  // return dayPlanner.activityAsListElement(content.index);
-  if(content.dir === "next") return dayPlanner.getNextActivity();
-  if(content.dir === "prev") return dayPlanner.getPrevActivity();
+  if(content.dir === "next") return dayPlanner.getNextActivity(content.idx + 1);
+  if(content.dir === "prev") return dayPlanner.getPrevActivity(content.idx - 1);
   logger.error(`handleActivityPostback: unknown direction <${content.dir}>`);
   return null;
 }
 
 function handleActivityCommand() {
   // parse
-  // let contents = /(first|next) activity for (.*)/.exec(this.command);
-  let contents = /(first|next|prev)\s*(?:activity)?\s*(?:for)?\s*(.*)/.exec(this.command);
+  let contents = /(first|next)\s*(?:activity)?\s*(?:for)?\s*(.*)/.exec(this.command);
   if(!contents) return null;
-  if(contents[1] !== "first" && contents[1] !== "next" && contents[1] !== "prev") return null;
+  if(contents[1] !== "first" && contents[1] !== "next") return null;
   let val;
   if(contents[2] == '') val = "today"; else val = contents[2];
   if(!setDateIfValid.call(this, val)) return null;
@@ -72,10 +93,8 @@ function handleActivityCommand() {
   const dateStr = CreateItinerary.formatDate(this.date);
   const dayPlanner = new DayPlanner(this.date, this.trip, this.fbid); 
   dayPlanner.setActivityList();
-  // if(contents[1] === "first") return dayPlanner.activityAsListElement(0);
-  if(contents[1] === "first") return dayPlanner.getNextActivity(true /* first */);
-  if(contents[1] === "next") return dayPlanner.getNextActivity();
-  if(contents[1] === "prev") return dayPlanner.getPrevActivity();
+  if(contents[1] === "first") return dayPlanner.getNextActivity(0);
+  if(contents[1] === "next") return dayPlanner.getNextActivityRelativeToTime();
   return null;
 }
 
@@ -86,7 +105,6 @@ Commands.prototype.getPath = function(command) {
   return new moment(this.date).format("YYYY-MM-DD");
 }
 
-// TODO: Move the parsing logic into dayPlanner, so the postback format is not leaked outside that class.
 Commands.prototype.handlePostback = function(payload) {
   // logger.debug(`handlePostback: date is ${date}; ${CreateItinerary.formatDate(date)}`);
   const parsedPayload = DayPlanner.parseDayItinPostback(payload); 
@@ -98,7 +116,7 @@ Commands.prototype.handlePostback = function(payload) {
 }
 
 function listFormatAvailable(date) {
-  const dateList = ["6/12/2017", "6/13/2017", "6/14/2017", "6/15/2017", "6/16/2017", "6/17/2017"];
+  const dateList = ["6/12/2017", "6/13/2017", "6/14/2017", "6/15/2017", "6/16/2017", "6/17/2017", "6/18/2017"];
   const dateStr = CreateItinerary.formatDate(date);
   if(dateList.indexOf(dateStr) != -1) {
     // logger.debug(`listFormatAvailable: ${dateStr} is present in dateList. Returning true.`);  

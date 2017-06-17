@@ -63,6 +63,7 @@ function validate(options) {
 HotelReceiptManager.prototype.handle = function() {
   const tripFinder = new TripFinder(this.receipt.recipient_name, this.testing);
   this.trip = tripFinder.getTripForReceipt(this.check_in_date, this.receipt.address.city);
+  this.trip.setCountry(this.receipt.address.country);
   const file = this.trip.hotelRentalReceiptFile();
   try {
     this.details.receipt = this.receipt;
@@ -81,6 +82,7 @@ HotelReceiptManager.prototype.handle = function() {
     logger.error(`parse: Error writing to file ${file}. ${e.stack}`);
     throw e;
   }
+	this.trip.markTodoItemDone("Place to stay");
   logger.debug(`handle: Stored rental hotel details and pushed notification`);
   return true;
 }

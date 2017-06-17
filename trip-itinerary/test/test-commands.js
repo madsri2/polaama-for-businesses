@@ -6,6 +6,9 @@ const Promise = require('promise');
 const CreateItinerary = require('trip-itinerary/app/create-itin');
 const Commands = require('trip-itinerary/app/commands');
 const moment = require('moment');
+const chai = require('chai');
+chai.use(require('chai-string'));
+
 
 const baseDir = "/home/ec2-user";
 const logger = require(`${baseDir}/my-logger`);
@@ -345,7 +348,7 @@ describe("Commands tests: Activity tests: ", function() {
     if(fs.existsSync(indexFile)) fs.unlinkSync(indexFile);
   });
 
-  function verifyFirstActivity(message) {
+  function verifyFirstActivity(message, day) {
     expect(message).to.not.be.null;
     expect(message.recipient.id).to.equal(fbid);
     expect(message.message.attachment.payload.template_type).to.equal("generic");
@@ -355,8 +358,17 @@ describe("Commands tests: Activity tests: ", function() {
     const elements = message.message.attachment.payload.elements;
     expect(elements.length).to.equal(1);
     expect(elements[0].title).to.equal("Breakfast at Carlton Hotel");
+    if(!day) day = "13";
+    expect(elements[0].subtitle).to.startsWith(`\"Activity 1 on ${day}th\": `); 
     expect(elements[0].default_action.url).to.equal("www.carlton.co.il/en");
   }
+
+  it('next relative to now', function() {
+    setupFilesForTodayTests(16);
+    const commands = new Commands(trip, fbid);
+    const message = commands.handleActivity("next");
+    logger.debug(`${JSON.stringify(message)}`);
+  });
 
   it("first activity", function() {
     const commands = new Commands(trip, fbid);
@@ -364,7 +376,7 @@ describe("Commands tests: Activity tests: ", function() {
     verifyFirstActivity(message);
   });
 
-  function verifySecondActivity(message) {
+  function verifySecondActivity(message, day) {
     expect(message).to.not.be.null;
     expect(message.recipient.id).to.equal(fbid);
     expect(message.message.attachment.payload.template_type).to.equal("generic");
@@ -375,6 +387,8 @@ describe("Commands tests: Activity tests: ", function() {
     const elements = message.message.attachment.payload.elements;
     expect(elements.length).to.equal(1);
     expect(elements[0].title).to.equal("09:30 Program with KamaTech at WIX");
+    if(!day) day = "13";
+    expect(elements[0].subtitle).to.equal(`\"Activity 2 on ${day}th\": Meet at WIX office`);
     expect(elements[0].default_action.url).to.equal("https://polaama.com/aeXf/tel_aviv/2017-6-13/item-2");
   }
 
@@ -386,16 +400,16 @@ describe("Commands tests: Activity tests: ", function() {
     const message = commands.handleActivityPostback("2017-5-13-next");
   });
 
-  it("interchange type and click", function() {
+  it("multiple postbacks", function() {
     const commands = new Commands(trip, fbid);
     // user types (First Activity)
     let message = commands.handleActivity("first activity for 6/13");
     verifyFirstActivity(message);
     // user clicks (Second Activity)
-    message = commands.handleActivityPostback("2017-5-13-next");
+    message = commands.handleActivityPostback("2017-5-13-0-next");
     verifySecondActivity(message);
     // user clicks (Third Activity)
-    message = commands.handleActivityPostback("2017-5-13-next");
+    message = commands.handleActivityPostback("2017-5-13-1-next");
     logger.debug(`interchange: ${JSON.stringify(message)}`);
     expect(message).to.not.be.null;
     expect(message.recipient.id).to.equal(fbid);
@@ -407,9 +421,9 @@ describe("Commands tests: Activity tests: ", function() {
     let elements = message.message.attachment.payload.elements;
     expect(elements.length).to.equal(1);
     expect(elements[0].title).to.equal("Lunch");
-    expect(elements[0].subtitle).to.equal("Location N/A");
+    expect(elements[0].subtitle).to.equal("\"Activity 3 on 13th\": Location N/A");
     // user types (Fourth Activity)
-    message = commands.handleActivity("next activity for 6/13");
+    message = commands.handleActivityPostback("2017-5-13-4-prev");
     expect(message).to.not.be.null;
     expect(message.recipient.id).to.equal(fbid);
     expect(message.message.attachment.payload.template_type).to.equal("generic");
@@ -420,26 +434,31 @@ describe("Commands tests: Activity tests: ", function() {
     elements = message.message.attachment.payload.elements;
     expect(elements.length).to.equal(1);
     expect(elements[0].title).to.equal("Drive north to Michmoret Beach");
-    expect(elements[0].subtitle).to.equal("\"Four Styles of Leadership\" exercise and teambuilding on the beach");
+    expect(elements[0].subtitle).to.equal("\"Activity 4 on 13th\": \"Four Styles of Leadership\" exercise and teambuilding on the beach");
   });
 
-  it("first, next and prev", function() {
-    // set up
+  function setupFilesForTodayTests(date) {
     const thisMonth = new Date().getMonth();
     const thisYear = new Date().getFullYear();
     const thisDate = new Date().getDate();
     const base = `${baseDir}/trips/ZDdz`;
-    const filePrefix = "test-mobile-view-2017-6-13-itinerary.json";
+    const filePrefix = `test-mobile-view-2017-6-${date}-itinerary.json`;
     const targetFile = `test-mobile-view-${thisYear}-${thisMonth + 1}-${thisDate}-itinerary.json`;
     fs.copySync(`${base}/forTestingPurposes/${filePrefix}`, `${base}/${targetFile}`);
     if(!fs.existsSync(`${base}/${targetFile}`)) throw new Error(`file ${targetFile} not present`);
+    return thisDate;
+  }
+
+  it("first, next and prev postbacks", function() {
+    // set up
+    const thisDate = setupFilesForTodayTests(13);
     const commands = new Commands(trip, fbid);
     let message = commands.handleActivity("first");
-    verifyFirstActivity(message);
-    message = commands.handleActivity("next");
-    verifySecondActivity(message);
-    message = commands.handleActivity("prev");
-    verifyFirstActivity(message);
+    verifyFirstActivity(message, thisDate);
+    message = commands.handleActivityPostback(`2017-5-${thisDate}-0-next`);
+    verifySecondActivity(message, thisDate);
+    message = commands.handleActivityPostback(`2017-5-${thisDate}-1-prev`);
+    verifyFirstActivity(message, thisDate);
   });
 
   it("first, next and prev specific date", function() {
@@ -451,18 +470,17 @@ describe("Commands tests: Activity tests: ", function() {
     const commands = new Commands(trip, fbid);
     let message = commands.handleActivity("first activity for 6/13");
     verifyFirstActivity(message);
-    message = commands.handleActivity("next 13th");
+    message = commands.handleActivityPostback("2017-5-13-0-next");
     verifySecondActivity(message);
-    message = commands.handleActivity("prev for June 13");
+    message = commands.handleActivityPostback("2017-5-13-1-prev");
     verifyFirstActivity(message);
   });
 
   it("index < 0", function() {
     const commands = new Commands(trip, fbid);
     // set up
-    const indexFile = trip.dayItinIndexFile(new Date("2017-6-13"));
-    fs.writeFileSync(indexFile, "-1", 'utf8');
-    const message = commands.handleActivity("first activity for 13th");
+    const message = commands.handleActivityPostback("2017-5-13-0-prev");
+    logger.debug(JSON.stringify(message));
     expect(message).to.not.be.null;
     expect(message.recipient.id).to.equal(fbid);
     expect(message.message.text).to.contain("Already at first activity");
@@ -472,12 +490,49 @@ describe("Commands tests: Activity tests: ", function() {
   it("index > 0", function() {
     const commands = new Commands(trip, fbid);
     // set up
-    const indexFile = trip.dayItinIndexFile(new Date("2017-6-13"));
-    fs.writeFileSync(indexFile, "6", 'utf8');
-    const message = commands.handleActivity("first activity for 13th");
+    const message = commands.handleActivityPostback("2017-5-13-6-next");
     expect(message).to.not.be.null;
     expect(message.recipient.id).to.equal(fbid);
     expect(message.message.text).to.contain("No more activities");
     logger.debug(`${JSON.stringify(message)}`);
+  });
+});
+
+describe("Commands tests: Meal commands", function() {
+  before(function() {
+    createNewTrip();
+    // set up
+    const base = `${baseDir}/trips/ZDdz`;
+    let filePrefix = "test-mobile-view-2017-6-17-itinerary.json";
+    fs.copySync(`${base}/forTestingPurposes/${filePrefix}`, `${base}/${filePrefix}`);
+    if(!fs.existsSync(`${base}/${filePrefix}`)) throw new Error(`file ${filePrefix} not present`);
+    filePrefix = "test-mobile-view-2017-6-18-itinerary.json";
+    fs.copySync(`${base}/forTestingPurposes/${filePrefix}`, `${base}/${filePrefix}`);
+    if(!fs.existsSync(`${base}/${filePrefix}`)) throw new Error(`file ${filePrefix} not present`);
+  });
+
+  after(function() {
+    cleanup();
+  });
+
+  it("basic tests", function() {
+    const commands = new Commands(trip, fbid);
+    ["breakfast", "lunch", "dinner"].forEach(meal => {
+      expect(commands.canHandleMealsCommand(meal)).to.be.ok;
+      expect(commands.canHandleMealsCommand(`${meal} tomorrow`)).to.be.ok;
+      expect(commands.canHandleMealsCommand(`${meal} on 18th`)).to.be.ok;
+    });
+    let message = commands.handleMealsCommand("breakfast");
+    logger.debug(`breakfast today: ${JSON.stringify(message)}`);
+    message = commands.handleMealsCommand("lunch");
+    logger.debug(`lunch today: ${JSON.stringify(message)}`);
+    message = commands.handleMealsCommand("dinner");
+    logger.debug(`dinner today: ${JSON.stringify(message)}`);
+    message = commands.handleMealsCommand("breakfast on 18th");
+    logger.debug(`breakfast on 18th: ${JSON.stringify(message)}`);
+    message = commands.handleMealsCommand("lunch on 18th");
+    logger.debug(`lunch on 18th: ${JSON.stringify(message)}`);
+    message = commands.handleMealsCommand("dinner on 18th");
+    logger.debug(`dinner on 18th: ${JSON.stringify(message)}`);
   });
 });

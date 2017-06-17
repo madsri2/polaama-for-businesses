@@ -4,11 +4,13 @@ const fs = require('fs');
 const CreateItinerary = require('trip-itinerary/app/create-itin'); 
 const baseDir = "/home/ec2-user";
 const logger = require(`${baseDir}/my-logger`);
+const moment = require('moment');
+const NextActivityGetter = require('calendar-view/app/next-activity-getter');
 
 function DayPlanner(date, trip, fbid) {
-  if(!fbid) throw new Error(`Commands: required parameter fbid not passed`);
-  if(!trip) throw new Error(`Commands: required parameter trip not passed`);
-  if(!date) throw new Error(`Commands: required parameter date not passed`);
+  if(!fbid) throw new Error(`DayPlanner: required parameter fbid not passed`);
+  if(!trip) throw new Error(`DayPlanner: required parameter trip not passed`);
+  if(!date) throw new Error(`DayPlanner: required parameter date not passed`);
   this.date = date;
   this.trip = trip;
   this.fbid = fbid;
@@ -22,6 +24,7 @@ DayPlanner.prototype.getPlan = function(dayItinerary) {
   let city = "";
   if(!dayPlan) {
     logger.info(`getPlan: Itinerary does not contain any information for date ${dateStr}`);
+    logger.debug(`getPlan: dump of trip ${this.trip.tripName}; ${JSON.stringify(this.trip)}`);
     return {
       city: this.trip.data.rawName,
       dayPlan: `<li>No details available for date ${dateStr}</li>`
@@ -58,6 +61,36 @@ DayPlanner.prototype.getPlan = function(dayItinerary) {
   };
 }
 
+DayPlanner.prototype.getMealElement = function(meal) {
+  const dateStr = CreateItinerary.formatDate(this.date);
+  const dateMealMapping = {
+    "6/17/2017": {
+      breakfast: "0",
+      lunch: "2",
+      dinner: "6"
+    },
+    "6/18/2017": {
+      breakfast: "0",
+      dinner: "3"
+    }
+  };
+  const idx = dateMealMapping[dateStr][meal];
+  logger.debug(`getMealElement: meal ${meal} on date ${dateStr}. index is ${idx}`);
+  if(!idx) {
+    const date = new moment(this.date).format("Do");
+    return {
+      recipient: {
+        id: this.fbid
+      },
+      message: {
+        text: `Cannot find ${meal} details for the ${date}. See activities for that day by typing "${date}"`,
+        metadata: "DEVELOPER_DEFINED_METADATA"
+      }
+    };
+  }
+  return activityAsListElement.call(this, parseInt(idx));
+}
+
 // Facebook supports sending only 4 items in an elementList. So, use payload (see below) to pass around the index for the next set of items. 
 DayPlanner.prototype.getPlanAsList = function(setNum) {
   const file = this.trip.dayItineraryFile(this.date);
@@ -86,12 +119,19 @@ DayPlanner.prototype.getPlanAsList = function(setNum) {
       }
     };
     const viewMoreButton = [{
-        title: "View more",
-        type: "postback",
-        payload: payload
+      title: "View more",
+      type: "postback",
+      payload: payload
+    }];
+    const returnFlight = [{
+      title: "Return Flight",
+      "type": "postback",
+      payload: "return flight"
     }];
     message.message.attachment.payload.elements = elements;
     if(currIndex < (elementSet.length - 1)) message.message.attachment.payload.buttons = viewMoreButton;
+    // TODO: A better way to determine if we want to show the return flight is to see if this is the last activity for this trip.
+    if(elements[elements.length-1].subtitle.startsWith("Flight ")) message.message.attachment.payload.buttons = returnFlight;
     // the first item in the list is always a map, so we don't set the style to compact. Subsequent items are just normal.
     if(currIndex > 0) message.message.attachment.payload.top_element_style = "compact";
     return message;
@@ -121,34 +161,42 @@ DayPlanner.prototype.setActivityList = function() {
   }
 }
 
-DayPlanner.prototype.getPrevActivity = function() {
-  const file = this.trip.dayItinIndexFile(this.date);
-  let idx = 0;
-  if(fs.existsSync(file)) {
-    idx = parseInt(fs.readFileSync(file, 'utf8')) - 1;
-    logger.debug(`getPrevActivity Getting activity at index ${idx} of this.activityList`);
-  }
-  else logger.debug(`getPrevActivity Getting first activity of this.activityList`);
+// TODO: Replace getPrevActivity & getNextActivity by activityAsListElement and remove these functions.
+DayPlanner.prototype.getPrevActivity = function(idx) {
   const result = activityAsListElement.call(this, idx);
-  // write the next idx for future use. do this only if successfully got the current element
-  logger.debug(`writing to file ${file} current idx: ${idx}`);
-  fs.writeFileSync(file, idx, "utf8");
   return result;
 }
 
-DayPlanner.prototype.getNextActivity = function(first) {
-  const file = this.trip.dayItinIndexFile(this.date);
-  let idx = 0;
-  if(fs.existsSync(file) && !first) {
-    idx = parseInt(fs.readFileSync(file, 'utf8')) + 1;
-    logger.debug(`getNextActivity: Getting activity at index ${idx} of this.activityList`);
-  }
-  else logger.debug(`getNextActivity: Getting first activity of this.activityList`);
+DayPlanner.prototype.getNextActivity = function(idx) {
   const result = activityAsListElement.call(this, idx);
-  // write the next idx for future use. do this only if successfully got the current element
-  logger.debug(`writing to file ${file} current idx: ${idx+1}`);
-  fs.writeFileSync(file, idx, "utf8");
   return result;
+}
+
+DayPlanner.prototype.getNextActivityRelativeToTime = function() {
+  const errMessage = {
+      recipient: {
+        id: this.fbid
+      },
+      message: {
+        text: `unable to get "next" activity for today. We are actively looking into the issue. In the meanwhile, you can try "first" or "today" to get the itinerary details`,
+        metadata: "DEVELOPER_DEFINED_METADATA"
+      }
+  };
+  try {
+    const date = this.date.getDate();
+    logger.debug(`getNextActivityRelativeToTime: getting next activity for date ${date}`);
+    const nag = new NextActivityGetter(date);
+    const index = nag.getNext();
+    if(index < 0 || index > this.activityList.length) {
+      logger.error(`getNextActivityRelativeToTime: index ${index} out of bounds for date ${date}`);
+      return errMessage;
+    }
+    return activityAsListElement.call(this, index);
+  }
+  catch(e) {
+    logger.error(`getNextActivityRelativeToTime: error ${e.stack}`);
+    return errMessage;
+  }
 }
 
 function activityAsListElement(idx) {
@@ -177,8 +225,10 @@ function activityAsListElement(idx) {
   }
   const elements = [];
   elements.push(this.activityList[idx]);
+  logger.debug(`activityAsListElement: date ${this.date}; date: ${new moment(this.date).format("D")}; date: ${new moment(this.date).format("Do")}`);
+  elements[0].subtitle = `"Activity ${idx + 1} on ${new moment(this.date).format("Do")}": ` + elements[0].subtitle; 
   let buttons = [];
-  let prefix = `${this.date.getFullYear()}-${this.date.getMonth()}-${this.date.getDate()}-`;
+  let prefix = `${this.date.getFullYear()}-${this.date.getMonth()}-${this.date.getDate()}-${idx}-`;
   if(idx > 0) {
     const payload = prefix.concat(`prev`);
     buttons.push({
@@ -216,12 +266,13 @@ function activityAsListElement(idx) {
 }
 
 DayPlanner.parseActivityPostback = function(payload) {
-  let contents = /^(\d+)-(\d+)-(\d+)-(.*)/.exec(payload);  
+  let contents = /^(\d+)-(\d+)-(\d+)-(\d)-(.*)/.exec(payload);  
   if(!contents) return null;
   const date = new Date(contents[1], contents[2], contents[3]);
   return {
     date: date,
-    dir: contents[4]
+    idx: parseInt(contents[4]),
+    dir: contents[5]
   };
 }
 

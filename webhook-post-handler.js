@@ -242,11 +242,12 @@ function displayTripDetails() {
 
 WebhookPostHandler.prototype.setWeatherAndItineraryForNewTrip = function(tripName) {
 	if(!tripName) throw new Error(`setWeatherAndItineraryForNewTrip: required parameter "tripName" not passed.`);
-	logger.debug(`setWeatherAndItineraryForNewTrip: This sessions' guid is ${this.session.guid}. Beginning to set weather and trip itinerary details for new trip`);
+	logger.debug(`setWeatherAndItineraryForNewTrip: This sessions' guid is ${this.session.guid}. Beginning to set weather and trip itinerary details for new trip ${tripName}`);
 	// reload this session to get the latest details about trips for this session (like flight itinerary and return flight itinerary).
 	const session = this.sessions.reloadSession(this.session.sessionId);
 	const trip = session.getTrip(tripName);
 	if(!trip) throw new Error(`setWeatherAndItineraryForNewTrip: could not find trip ${tripName} in session with fbid ${session.fbid}`);
+  // logger.debug(`setWeatherAndItineraryForNewTrip: trip dump is ${JSON.stringify(trip)}`);
 	const tip = new TripInfoProvider(trip, trip.flightItin[0].departure_airport.city);
 	const weatherDetails = Promise.denodeify(tip.getWeatherInformation.bind(tip));
 
@@ -1210,6 +1211,11 @@ function determineResponseType(event) {
   }
   if(commands.canHandleActivity(mesg)) {
     const result = commands.handleActivity(mesg);
+    if(result) return callSendAPI(result);
+  }
+
+  if(commands.canHandleMealsCommand(mesg)) {
+    const result = commands.handleMealsCommand(mesg);
     if(result) return callSendAPI(result);
   }
 

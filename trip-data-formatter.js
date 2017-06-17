@@ -7,9 +7,12 @@ const TripData = require('./trip-data');
 const logger = require('./my-logger');
 const CalendarFormatter = require('./calendar-view/app/formatter');
 
-function TripDataFormatter(tripData) {
+function TripDataFormatter(trip, fbid) {
+  if(!fbid) throw new Error(`TripDataFormatter: required parameter fbid not passed`);
+  if(!trip) throw new Error(`TripDataFormatter: required parameter trip not passed`);
   // TODO: This needs to change when we add login by facebook to myFirstHttpServer.
-  this.trip = tripData;
+  this.trip = trip;
+  this.fbid = fbid;
 }
 
 TripDataFormatter.prototype.formatListResponse = function(headers, key) {
@@ -321,7 +324,7 @@ TripDataFormatter.prototype.formatExpensePage = function(report) {
 }
 
 TripDataFormatter.prototype.displayCalendar = function(hometown) {
-  const calFormatter = new CalendarFormatter(this.trip, hometown);
+  const calFormatter = new CalendarFormatter(this.trip, hometown, this.fbid);
   // if(headers['user-agent'].startsWith("Mozilla")) {
   if(0) {
     logger.debug(`displayCalendar: Request from browser. Sending the full calendar view`);

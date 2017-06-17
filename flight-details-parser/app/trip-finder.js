@@ -31,7 +31,9 @@ TripFinder.prototype.getPostHandler = function() {
 TripFinder.prototype.getSession = function() {
   if(this.session) return this.session;
   const name = this.name;
-  const fbidHandler = FbidHandler.get();
+  let fbidHandler;
+  if(this.testing) fbidHandler = FbidHandler.get('fbid-test.txt'); 
+  else fbidHandler = FbidHandler.get();
   const fbid = fbidHandler.fbid(name);
   if(!fbid) throw new Error(`Could not get the fbid corresponding to name \"${name}\". Maybe the user never initiated a chat conversation with polaama?`);
   this.fbid = fbid;
@@ -74,6 +76,7 @@ TripFinder.prototype.getTrip = function(departureDate, destCity, leavingFrom) {
       this.returnFlightItinerary = true;
       break;
     }
+    // see if the passed hotel or car receipt belongs to this trip
   }
   if(myTrip) {
     this.session.setTripContextAndPersist(myTrip.tripName);

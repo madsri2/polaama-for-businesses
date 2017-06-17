@@ -34,7 +34,7 @@ function WebpageHandler(id, tripName) {
     logger.error(`No trip named ${tripName} exists in session ${this.session.sessionId}`);
     return;
   }
-  this.formatter = new TripDataFormatter(this.trip);
+  this.formatter = new TripDataFormatter(this.trip, this.fbid);
 }
 
 WebpageHandler.prototype.displayTrip = function(res) {

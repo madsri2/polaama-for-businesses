@@ -27,6 +27,10 @@ function scratch() {
   console.log(moment(t1).format("YYYY-MM-DD"));
 }
 
+function testInvalidTimeRange() {
+	const t = moment(new Date("2017-05-30T09:35").toISOString()).format("YYYY-MM-DDTHH:mm");
+}
+
 function date(command) {
   let contents = /^(\d+)$/.exec(command);
   const thisMonth = new Date().getMonth();
@@ -34,10 +38,14 @@ function date(command) {
   console.log(new Date(thisYear, thisMonth, contents[1]));
 }
 
+testInvalidTimeRange();
+
+/*
 date(15);
 date(30);
 date(32);
 date(1);
+*/
 
 // scratch();
 // singleDigitMonth();

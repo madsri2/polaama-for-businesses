@@ -19,7 +19,9 @@ const optionsDefn = [
   {name: 'arrival_time', multiple: true},
   {name: 'total_price'},
   {name: 'currency', defaultValue: 'USD'},
-  {name: 'travel_class', defaultValue: 'economy', multiple: true}
+  {name: 'travel_class', defaultValue: 'economy', multiple: true},
+  {name: 'aircraft_type', multiple: true},
+  {name: 'ticket_number', multiple: true}
 ];
 
 // TODO: Start here and add departure time

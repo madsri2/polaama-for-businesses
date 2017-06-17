@@ -9,14 +9,17 @@ const logger = require(`${baseDir}/my-logger`);
 
 function ItineraryHandler(options, testing) {
 	// set the flightNum_seats option
+  // number of seats should be numPassengers x numFlights
 	if(options.seats && Array.isArray(options.seats)) {
-		options.names.forEach((name, pIdx) => {
-			options.flight_num.forEach((num,idx) => {
+    let seatIdx = 0;
+    for(let f = 0; f < options.flight_num.length; f++) {
+      for(let n = 0; n < options.names.length; n++) {
+        const num = options.flight_num[f];
 				const key = `${num}_seats`;
 				if(!options[key]) options[key] = [];
-				options[key].push(options.seats[pIdx]);
-			});
-		});
+				options[key].push(options.seats[seatIdx++]);
+      }
+    }
 	}
 	delete options.seats;
   // uses the format expected by facebook. Details of the data structure are at: https://developers.facebook.com/docs/messenger-platform/send-api-reference/airline-boardingpass-template
@@ -49,7 +52,14 @@ ItineraryHandler.prototype.handle = function() {
 
   // for each passenger, find the trip, store itinerary and send notification
   this.details.passenger_info.forEach(info => {
-    const tripFinder = new TripFinder(info.name, this.testing);
+    let tripFinder;
+    try {
+      tripFinder = new TripFinder(info.name, this.testing);
+    }
+    catch(e) {
+      logger.error(`Error creating TripFinder: ${e.stack}. Moving on to next passenger!`);
+      return;
+    }
     logger.debug(`handle: Finding trip with start date ${this.departure_date} and city ${destCity}`);
     this.trip = tripFinder.getTrip(this.departure_date, destCity, leavingFrom);
     let file;
@@ -99,10 +109,12 @@ function validate() {
 function getPassengerInfo(options) {
   const info = [];
   for(let i = 0; i < options.names.length; i++) {
-    info.push({
+    const obj = {
       'name': options.names[i],
       'passenger_id': `p00${i+1}`
-    });
+    };
+    if(options.ticket_number) obj.ticket_number = options.ticket_number[i];
+    info.push(obj);
   }
   if(info.length < 1) throw new Error(`getPassengerInfo: Atleast one passenger name expected in passed object (options)`);
   const piFields = ['name', 'passenger_id'];
