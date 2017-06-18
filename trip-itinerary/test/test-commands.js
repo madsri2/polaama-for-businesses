@@ -12,6 +12,7 @@ chai.use(require('chai-string'));
 
 const baseDir = "/home/ec2-user";
 const logger = require(`${baseDir}/my-logger`);
+logger.setTestConfig();
 const TripData = require(`${baseDir}/trip-data`);
 
 const fbid = "1234";
@@ -302,6 +303,10 @@ describe("Commands tests: ", function() {
     expect(commands.date.getTime()).to.equal(new Date(thisYear, 11, 1).getTime());
     expect(commands.canHandle("10/01")).to.be.ok;
     expect(commands.date.getTime()).to.equal(new Date(thisYear, 9, 1).getTime());
+    expect(commands.canHandle("1st")).to.be.ok;
+    expect(commands.canHandle("2nd")).to.be.ok;
+    expect(commands.canHandle("3rd")).to.be.ok;
+    expect(commands.canHandle("4th")).to.be.ok;
     expect(commands.canHandle("10th")).to.be.ok;
     expect(commands.date.getTime()).to.equal(new Date(thisYear, thisMonth, 10).getTime());
     expect(commands.canHandle("10")).to.be.ok;
@@ -494,6 +499,23 @@ describe("Commands tests: Activity tests: ", function() {
     expect(message).to.not.be.null;
     expect(message.recipient.id).to.equal(fbid);
     expect(message.message.text).to.contain("No more activities");
+    logger.debug(`${JSON.stringify(message)}`);
+  });
+
+  it("date outside window", function() {
+    const twoDaysAgo = new Date();
+    twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+    const startDate = new moment(twoDaysAgo).format("YYYY-MM-DD");
+    trip.data.startDate = startDate;
+    trip.data.name = "test-mobile-view";
+    const eightDaysFromNow = new Date();
+    eightDaysFromNow.setDate(twoDaysAgo.getDate() + 10);
+    trip.data.returnDate = new moment(eightDaysFromNow).format("YYYY-MM-DD");
+
+    const commands = new Commands(trip, fbid);
+    let message = commands.handleActivity("first on 2nd");
+    logger.debug(`${JSON.stringify(message)}`);
+    message = commands.handleActivity("first on 29th");
     logger.debug(`${JSON.stringify(message)}`);
   });
 });

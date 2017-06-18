@@ -66,7 +66,7 @@ function getItinDetails(file, key) {
 		options.dep_city.push(item.departure_airport.city);
 		options.arr_code.push(item.arrival_airport.airport_code);
 		options.arr_city.push(item.arrival_airport.city);
-		logger.debug(`getItinDetails: departure time is ${item.flight_schedule.departure_time}`);
+		// logger.debug(`getItinDetails: departure time is ${item.flight_schedule.departure_time}`);
 		options.departure_time.push(moment(new Date(item.flight_schedule.departure_time).toISOString()).format("YYYY-MM-DDTHH:mm"));
 		options.arrival_time.push(item.flight_schedule.arrival_time);
 		if(item.flight_schedule.boarding_time) {

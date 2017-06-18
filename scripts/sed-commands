@@ -1,0 +1,1 @@
+for i in `ls tel_aviv-2017-6-*`; do d=`echo $i | sed 's/tel_aviv-\(.*\)/\1/g'`; echo "mv $i test-mobile-view-${d}"; done

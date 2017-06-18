@@ -17,10 +17,18 @@ function http() {
 }
 
 function activityRegex() {
-  const contents = /(first|next)\s*(?:activity)?\s*(?:for)?\s*(.*)/.exec("net");
+  const contents = /(first|next)\s*(?:activity)?\s*(?:for|on)?\s*(.*)/.exec("first on");
   if(!contents) return console.log("null");
   if(contents[1] !== "first" && contents[1] !== "next") return console.log("null");
-  if(contents[2] == '') console.log(`${contents[0]} today`);
+  if(contents[2] == '') console.log(`${contents} `);
 }
 
+function dateCommand() {
+  const command = "23 after";
+  let contents = /^(\d+)(.*)$/.exec(command);
+  console.log(contents);
+  if(contents && (contents[2] === " " || contents[2] === '' || contents[2] === "th" || contents[2] === "rd" || contents[2] === "st")) console.log("valid"); else console.log("invalid");
+}
+
+// dateCommand();
 activityRegex();

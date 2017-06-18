@@ -6,6 +6,7 @@ const baseDir = "/home/ec2-user";
 const logger = require(`${baseDir}/my-logger`);
 const moment = require('moment');
 const NextActivityGetter = require('calendar-view/app/next-activity-getter');
+const MealActivityGetter = require('calendar-view/app/meal-activity-getter');
 
 function DayPlanner(date, trip, fbid) {
   if(!fbid) throw new Error(`DayPlanner: required parameter fbid not passed`);
@@ -62,33 +63,24 @@ DayPlanner.prototype.getPlan = function(dayItinerary) {
 }
 
 DayPlanner.prototype.getMealElement = function(meal) {
-  const dateStr = CreateItinerary.formatDate(this.date);
-  const dateMealMapping = {
-    "6/17/2017": {
-      breakfast: "0",
-      lunch: "2",
-      dinner: "6"
+  if(!this.activityList) throw new Error(`this.activityList is undefined. Maybe you did not call setActivityList?`);
+  const date = new moment(this.date).format("Do");
+  const errMessage = {
+    recipient: {
+      id: this.fbid
     },
-    "6/18/2017": {
-      breakfast: "0",
-      dinner: "3"
+    message: {
+      text: `Cannot find ${meal} details for the ${date}. See activities for that day by typing "${date}"`,
+      metadata: "DEVELOPER_DEFINED_METADATA"
     }
   };
-  const idx = dateMealMapping[dateStr][meal];
-  logger.debug(`getMealElement: meal ${meal} on date ${dateStr}. index is ${idx}`);
-  if(!idx) {
-    const date = new moment(this.date).format("Do");
-    return {
-      recipient: {
-        id: this.fbid
-      },
-      message: {
-        text: `Cannot find ${meal} details for the ${date}. See activities for that day by typing "${date}"`,
-        metadata: "DEVELOPER_DEFINED_METADATA"
-      }
-    };
+  const mag = new MealActivityGetter(this.activityList);
+  const idx = mag.getMealIndex(meal);
+  if(idx === -1) {
+    logger.error(`getMealElement: could not find index for meal ${meal} for ${date}`);
+    return errMessage;
   }
-  return activityAsListElement.call(this, parseInt(idx));
+  return activityAsListElement.call(this, idx);
 }
 
 // Facebook supports sending only 4 items in an elementList. So, use payload (see below) to pass around the index for the next set of items. 
@@ -124,14 +116,35 @@ DayPlanner.prototype.getPlanAsList = function(setNum) {
       payload: payload
     }];
     const returnFlight = [{
-      title: "Return Flight",
+      title: "Flight details",
       "type": "postback",
       payload: "return flight"
+    }];
+    const onwardFlight = [{
+      title: "Flight details",
+      "type": "postback",
+      payload: "flight itinerary"
+    }];
+    const hotelReceipt = [{
+      title: "Hotel Receipt",
+      "type": "postback",
+      payload: "hotel details"
     }];
     message.message.attachment.payload.elements = elements;
     if(currIndex < (elementSet.length - 1)) message.message.attachment.payload.buttons = viewMoreButton;
     // TODO: A better way to determine if we want to show the return flight is to see if this is the last activity for this trip.
-    if(elements[elements.length-1].subtitle.startsWith("Flight ")) message.message.attachment.payload.buttons = returnFlight;
+    const subtitle = elements[elements.length - 1].subtitle;
+    if(subtitle && subtitle.startsWith("Flight ")) {
+      const startDateStr = CreateItinerary.formatDate(new Date(this.trip.data.startDate));
+      const dateStr = CreateItinerary.formatDate(this.date);
+      logger.debug(`activityAsListElement: Start date ${startDateStr}; this.date ${dateStr}`);
+      if(startDateStr === dateStr) message.message.attachment.payload.buttons = onwardFlight;
+      else message.message.attachment.payload.buttons = returnFlight;
+    }
+    // TODO: Think of a better way
+    const title = elements[elements.length - 1].title;
+    if(title && title.startsWith("Checkin ")) message.message.attachment.payload.buttons = hotelReceipt;
+    
     // the first item in the list is always a map, so we don't set the style to compact. Subsequent items are just normal.
     if(currIndex > 0) message.message.attachment.payload.top_element_style = "compact";
     return message;
@@ -225,7 +238,7 @@ function activityAsListElement(idx) {
   }
   const elements = [];
   elements.push(this.activityList[idx]);
-  logger.debug(`activityAsListElement: date ${this.date}; date: ${new moment(this.date).format("D")}; date: ${new moment(this.date).format("Do")}`);
+  // logger.debug(`activityAsListElement: date: ${new moment(this.date).format("D")}; date: ${new moment(this.date).format("Do")}`);
   elements[0].subtitle = `"Activity ${idx + 1} on ${new moment(this.date).format("Do")}": ` + elements[0].subtitle; 
   let buttons = [];
   let prefix = `${this.date.getFullYear()}-${this.date.getMonth()}-${this.date.getDate()}-${idx}-`;

@@ -63,7 +63,7 @@ TripFinder.prototype.getTrip = function(departureDate, destCity, leavingFrom) {
       continue;
     }
     const tripStartDate = moment(new Date(tripData.startDate).toISOString());
-		logger.debug(`getTrip: departureDate value is ${departureDate}`);
+		logger.debug(`getTrip: departureDate value is ${departureDate}; destCity is ${destCity}; leaving from ${leavingFrom}`);
     if(moment(new Date(departureDate).toISOString()).isSame(tripStartDate) && trip.comparePortOfEntry(destCity)) {
       logger.debug(`getTrip: found trip ${tripData.name} that matches port of entry ${destCity} and departure date ${tripStartDate} of boarding pass`);
       myTrip = trip;

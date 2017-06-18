@@ -14,7 +14,8 @@ const htmlBaseDir = "/home/ec2-user/html-templates"; // TODO: Move this to confi
 function FormatCalendar(trip, departureCity, fbid) {
   if(!fbid) throw new Error(`FormatCalendar: required parameter fbid not passed`);
   if(!trip) throw new Error(`FormatCalendar: required parameter trip not passed`);
-  if(!departureCity) throw new Error(`FormatCalendar: required parameter departureCity not passed`);
+  if(!departureCity) departureCity = trip.data.leavingFrom;
+  if(!departureCity) throw new Error(`FormatCalendar: required parameter departureCity not passed. trip.leavingFrom is not present as well.`);
   this.trip = trip;
   this.tripData = this.trip.data;
   this.tripName = this.trip.rawTripName;

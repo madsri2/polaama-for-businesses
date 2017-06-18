@@ -132,17 +132,20 @@ function getPassengerSegmentInfo(options) {
   this.details.passenger_info.forEach((passenger,pIdx) => {
     this.details.flight_info.forEach(flight => {
       const fNum = flight.flight_number;
-      const seats = options[`${fNum}_seats`];
-      if(!seats) throw new Error(`getPassengerSegmentInfo: cannot find seat info for flight ${fNum}`);
-      // the ordering of seats is the same as ordering of names. 
-      // eg. UA123_seats: ["3A", "4B"] indicates there are two passengers traveling on this flight. Passenger 1 (whose name corresponds to passenger_info[0])'s seat is 3A and passenger 2's seat is 4B.
-      if(seats.length != options.names.length) throw new Error(`getPassengerSegmentInfo: number of seats ${seats.length} does not match name count ${options.names.length}`);
-      info.push({
+      const segInfo = {
         passenger_id: passenger.passenger_id,
         segment_id: flight.segment_id,
-        seat: seats[pIdx],
         seat_type: flight.travel_class
-      });
+      };
+      const seats = options[`${fNum}_seats`];
+      if(seats) {
+        // if(!seats) throw new Error(`getPassengerSegmentInfo: cannot find seat info for flight ${fNum}`);
+        // the ordering of seats is the same as ordering of names. 
+        // eg. UA123_seats: ["3A", "4B"] indicates there are two passengers traveling on this flight. Passenger 1 (whose name corresponds to passenger_info[0])'s seat is 3A and passenger 2's seat is 4B.
+        if(seats.length != options.names.length) throw new Error(`getPassengerSegmentInfo: number of seats ${seats.length} does not match name count ${options.names.length}`);
+        segInfo.seats = seats[pIdx];
+      }
+      info.push(segInfo);
     }, this);
   }, this);
   return info;

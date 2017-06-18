@@ -247,7 +247,7 @@ WebhookPostHandler.prototype.setWeatherAndItineraryForNewTrip = function(tripNam
 	const session = this.sessions.reloadSession(this.session.sessionId);
 	const trip = session.getTrip(tripName);
 	if(!trip) throw new Error(`setWeatherAndItineraryForNewTrip: could not find trip ${tripName} in session with fbid ${session.fbid}`);
-  // logger.debug(`setWeatherAndItineraryForNewTrip: trip dump is ${JSON.stringify(trip)}`);
+  logger.debug(`setWeatherAndItineraryForNewTrip: trip dump is ${JSON.stringify(trip)}`);
 	const tip = new TripInfoProvider(trip, trip.flightItin[0].departure_airport.city);
 	const weatherDetails = Promise.denodeify(tip.getWeatherInformation.bind(tip));
 

@@ -6,10 +6,21 @@ const logger = require(`${baseDir}/my-logger`);
 function NextActivityGetter(dayItin, testing) {
   if(testing) this.testing = true;
 
+  this.hourToActivityMapOn18th = {
+    'undefined-0': { index: 0, estimate: "08:30" }, // breakfast and relaxing morning
+    'undefined-1': { index: 1 }, // Visit ben Gurion's grave
+    'undefined-2': { index: 2 }, // Leadership dilemma
+    'undefined-3': { index: 3, estimate: "19:00"}, // closing session and dinner
+    'undefined-4': { index: 4, estimate: "20:15" }, // Bus departs to Gurion airport
+    'undefined-5': { index: 5 }, // Hitboudedut
+    '21:00': { index: 6 }, // dinner.
+    'undefined-7': { index: 7 }, // overnight stay.
+  };
+
   this.hourToActivityMapOn17th = {
     'undefined-0': { index: 0, estimate: "08:00" }, // breakfast [if not present, default to 8.00] 
-    'undefined-1': { index: 1 }, // Hike Masada: activity 1 is 1.5 hours away. So }, it cannot start until 10.30 at the latest. Hiking masada takes about 2.5 hours.
-    'undefined-2': { index: 2, estimate: "13:00" }, // Float at dead sea and lunch: activity 2 is 20 minutes away. So }, activity can start anytime between 11.00
+    'undefined-1': { index: 1 }, // Hike Masada: activity 1 is 1.5 hours away. So, it cannot start until 10.30 at the latest. Hiking masada takes about 2.5 hours.
+    'undefined-2': { index: 2, estimate: "13:00" }, // Float at dead sea and lunch: activity 2 is 20 minutes away. So, activity can start anytime between 11.00
     'undefined-3': { index: 3 }, // Drive south & visit erosion center
     'undefined-4': { index: 4, estimate: "19:30" }, // sunset. estimatedStart 19:30
     'undefined-5': { index: 5 }, // Hitboudedut
@@ -48,6 +59,8 @@ function NextActivityGetter(dayItin, testing) {
       this.hourToActivityMap = this.hourToActivityMapOn16th; break;
     case 17:
       this.hourToActivityMap = this.hourToActivityMapOn17th; break;
+    case 18:
+      this.hourToActivityMap = this.hourToActivityMapOn18th; break;
   }
 }
 
@@ -170,9 +183,6 @@ function setCurrentTime() {
   const tz = "Asia/Tel_Aviv";
   this.now = new moment().tz(tz).format("HH:mm");
   logger.debug(`setCurrentTime: Time now in HH:mm format is ${this.now}`);
-}
-
-function createMaps() {
 }
 
 module.exports = NextActivityGetter;

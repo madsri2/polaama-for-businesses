@@ -130,10 +130,6 @@ WebpageHandler.prototype.dayPlan = function(res, args) {
   try {
     const commands = new Commands(this.trip, this.session.fbid, true /* sendHtml */);
     return res.send(commands.handle(date));
-    /*
-		const plansForTomorrow = new PlansForTomorrow(this.trip, this.session.hometown);
-    return res.send(plansForTomorrow.get());
-    */
   }
   catch(e) {
     logger.error(`dayPlans: Error planning for tomorrow; ${e.stack}`);

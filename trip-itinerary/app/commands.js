@@ -30,7 +30,8 @@ Commands.prototype.handleActivity = function(command) {
 
 Commands.prototype.canHandle = function(command) {
   this.command = command;
-  if(this.command.startsWith("first") || this.command.startsWith("next")) return false; // || this.command.startsWith("prev")) return false;
+  // return false here so that it will be picked up by canHandleActivity below.
+  if(this.command.startsWith("first") || this.command.startsWith("next")) return false; 
   if(this.command.startsWith("tomorrow")) return true;
   if(this.command.startsWith("today")) return true;
   return setDateIfValid.call(this);
@@ -38,7 +39,7 @@ Commands.prototype.canHandle = function(command) {
 
 Commands.prototype.canHandleActivity = function(command) {
   this.command = command;
-  if(this.command.startsWith("first activity ") || (this.command.startsWith("first for ") || this.command === "first")) return true;
+  if(this.command.startsWith("first activity ") || (this.command.startsWith("first for ") || this.command === "first") || (this.command.startsWith("first on "))) return true;
   if(this.command === "next") return true; // support getting activity relative to current time
   return false;
 }
@@ -83,7 +84,7 @@ Commands.prototype.handleActivityPostback = function(payload) {
 
 function handleActivityCommand() {
   // parse
-  let contents = /(first|next)\s*(?:activity)?\s*(?:for)?\s*(.*)/.exec(this.command);
+  let contents = /(first|next)\s*(?:activity)?\s*(?:for|on)?\s*(.*)/.exec(this.command);
   if(!contents) return null;
   if(contents[1] !== "first" && contents[1] !== "next") return null;
   let val;
@@ -92,10 +93,41 @@ function handleActivityCommand() {
   logger.debug(`handleActivityCommand: parsed date <${this.date}> from <${val}> and command <${this.command}>`);
   const dateStr = CreateItinerary.formatDate(this.date);
   const dayPlanner = new DayPlanner(this.date, this.trip, this.fbid); 
+  if(!isValidDate.call(this)) {
+    const errMessage = {
+        recipient: {
+          id: this.fbid
+        },
+        message: {
+          text: `${CreateItinerary.formatDate(this.date)} is not a valid date for your ${this.trip.data.rawName} trip`,
+          metadata: "DEVELOPER_DEFINED_METADATA"
+        }
+    };
+    return errMessage;
+  }
   dayPlanner.setActivityList();
   if(contents[1] === "first") return dayPlanner.getNextActivity(0);
   if(contents[1] === "next") return dayPlanner.getNextActivityRelativeToTime();
   return null;
+}
+
+function isValidDate() {
+  const dateMoment = new moment(this.date);
+  const sdMoment = new moment(this.trip.data.startDate);
+  const rdMoment = new moment(this.trip.data.returnDate);
+
+  if(dateMoment.isBefore(sdMoment)) {
+    logger.warn(`isValidDate: ${this.date} is before ${this.trip.data.startDate}`);
+    return false;
+  }
+
+  if(dateMoment.isAfter(rdMoment)) {
+    logger.warn(`isValidDate: ${this.date} is after ${this.trip.data.returnDate}`);
+    return false;
+  }
+
+  logger.debug(`isValidDate: ${this.date} is valid. startDate: ${this.trip.data.startDate}; returnDate: ${this.trip.data.returnDate}`);
+  return true;
 }
 
 Commands.prototype.getPath = function(command) {
@@ -116,7 +148,7 @@ Commands.prototype.handlePostback = function(payload) {
 }
 
 function listFormatAvailable(date) {
-  const dateList = ["6/12/2017", "6/13/2017", "6/14/2017", "6/15/2017", "6/16/2017", "6/17/2017", "6/18/2017"];
+  const dateList = ["6/12/2017", "6/13/2017", "6/14/2017", "6/15/2017", "6/16/2017", "6/17/2017", "6/18/2017","6/19/2017","6/20/2017","6/21/2017","6/22/2017","6/23/2017","6/24/2017","6/25/2017","6/26/2017"];
   const dateStr = CreateItinerary.formatDate(date);
   if(dateList.indexOf(dateStr) != -1) {
     // logger.debug(`listFormatAvailable: ${dateStr} is present in dateList. Returning true.`);  
@@ -136,25 +168,24 @@ function setDateIfValid(passedCommand) {
   if(!command) command = this.command;
 
   if(command.startsWith("tomorrow")) {
-    const tomorrow = new Date(moment().tz(getTimezone()).format("M/DD/YYYY"));
+    const tomorrow = new Date(moment().tz(getTimezone.call(this)).format("M/DD/YYYY"));
     tomorrow.setDate(tomorrow.getDate() + 1);
     this.date = tomorrow;
     logger.debug(`setDateIfValid: set date to be tomorrow (${this.date})`);
     return true;
   }
   if(command.startsWith("today")) {
-    // this.date = new Date();
-    this.date = new Date(moment().tz(getTimezone()).format("M/DD/YYYY"));
+    this.date = new Date(moment().tz(getTimezone.call(this)).format("M/DD/YYYY"));
     logger.debug(`setDateIfValid: set date to be today (${this.date})`);
     return true;
   }
   const thisMonth = new Date().getMonth();
   const thisYear = new Date().getFullYear();
-  let contents = /^(\d+)t?h?$/.exec(command);
-  if(contents) {
-    this.date = new Date(thisYear, thisMonth, contents[1]);
-    logger.debug(`setDateIfValid: Matched [date]. contents: [${contents}] set date to be today (${this.date})`);
-    return true;
+  let contents = /^(\d+)(.*)$/.exec(command);
+  if(contents && (contents[2] === " " || contents[2] === '' || contents[2] === "th" || contents[2] === "rd" || contents[2] === "st" || contents[2] === "nd")) {
+      this.date = new Date(thisYear, thisMonth, contents[1]);
+      logger.debug(`setDateIfValid: Matched [date]. contents: [${contents}] set date to be today (${this.date})`);
+      return true;
   }
   contents = /^([a-zA-Z]+) *(\d+)/.exec(command);
   if(contents) {
@@ -239,7 +270,11 @@ function getTimezone() {
     '6/18/2017' : "Asia/Tel_Aviv",
     '6/19/2017' : "Asia/Tel_Aviv",
   };  
-  return userLocation[dateInUTC];
+  const telAvivList = ["1443244455734100", "1120615267993271", "1420209771356315"];
+  const londonList = ["1420839671315623"];
+  if(telAvivList.includes(this.fbid)) return "Asia/Tel_Aviv";
+  if(londonList.includes(this.fbid)) return "Europe/London";
+  return "US/Pacific";
 }
 
 module.exports = Commands;

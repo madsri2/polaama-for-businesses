@@ -73,9 +73,10 @@ BoardingPassHandler.prototype.handle = function() {
   */
   // get city corresponding to destination airport code
   const destCity = this.details.flight_info.arrival_airport.city;
+  const leavingFrom = this.details.flight_info.departure_airport.city;
 
   const tripFinder = new TripFinder(this.details.passenger_name, this.testing);
-  this.trip = tripFinder.getTrip(this.dep_date, destCity);
+  this.trip = tripFinder.getTrip(this.dep_date, destCity, leavingFrom);
 	this.postHandler = tripFinder.getPostHandler();
 
   this.details.barcode_image_url = getBoardingPassImage.call(this); // Do this before writing boarding pass details into the boardingPass file so that the image url will be captured in the file.

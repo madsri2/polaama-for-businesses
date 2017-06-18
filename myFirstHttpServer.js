@@ -320,6 +320,8 @@ app.get('/:id/:tripName/-/test-day', function(req, res) {
 
 app.get('/:id/:tripName/:date', function(req, res) {
   const handler = new WebpageHandler(req.params.id, req.params.tripName);
+  // TODO: This is ridiculous. fix me!
+  if(req.params.date === "boarding-pass-image") return handler.getBoardingPass(req, res);
   return handler.handleWebpage(res, handler.dayPlan, [req.params.date]);
 });
 
