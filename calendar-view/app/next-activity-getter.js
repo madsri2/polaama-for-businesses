@@ -2,66 +2,84 @@
 const moment = require('moment-timezone');
 const baseDir = "/home/ec2-user";
 const logger = require(`${baseDir}/my-logger`);
+const fs = require('fs');
 
-function NextActivityGetter(dayItin, testing) {
+// function NextActivityGetter(activityList, testing) {
+function NextActivityGetter(trip, date, activityList, testing) {
+  if(!trip) throw new Error("NextActivityGetter: required param trip is missing");
+  if(!date) throw new Error("NextActivityGetter: required param date is missing");
+  if(!activityList) throw new Error("NextActivityGetter: required param activityList is missing");
+  this.trip = trip;
+  // this is the date of the month (eg. in 6/7/2018, the date is "7")
+  this.date = date;
+  this.activityList = activityList;
   if(testing) this.testing = true;
+  createNextActivityPointerFile.call(this);
+  updateNAPFileWithEstimates.call(this);
+}
 
-  this.hourToActivityMapOn18th = {
-    'undefined-0': { index: 0, estimate: "08:30" }, // breakfast and relaxing morning
-    'undefined-1': { index: 1 }, // Visit ben Gurion's grave
-    'undefined-2': { index: 2 }, // Leadership dilemma
-    'undefined-3': { index: 3, estimate: "19:00"}, // closing session and dinner
-    'undefined-4': { index: 4, estimate: "20:15" }, // Bus departs to Gurion airport
-    'undefined-5': { index: 5 }, // Hitboudedut
-    '21:00': { index: 6 }, // dinner.
-    'undefined-7': { index: 7 }, // overnight stay.
-  };
-
-  this.hourToActivityMapOn17th = {
-    'undefined-0': { index: 0, estimate: "08:00" }, // breakfast [if not present, default to 8.00] 
-    'undefined-1': { index: 1 }, // Hike Masada: activity 1 is 1.5 hours away. So, it cannot start until 10.30 at the latest. Hiking masada takes about 2.5 hours.
-    'undefined-2': { index: 2, estimate: "13:00" }, // Float at dead sea and lunch: activity 2 is 20 minutes away. So, activity can start anytime between 11.00
-    'undefined-3': { index: 3 }, // Drive south & visit erosion center
-    'undefined-4': { index: 4, estimate: "19:30" }, // sunset. estimatedStart 19:30
-    'undefined-5': { index: 5 }, // Hitboudedut
-    '21:00': { index: 6 }, // dinner.
-    'undefined-7': { index: 7 }, // overnight stay.
-  };
-
-  this.hourToActivityMapOn16th = {
-    "undefined-0": { index: 0 }, // breakfast
-    "08:45": { index: 1 }, // Meet Rena Quint
-    "11:00": { index: 2 }, // visit yad vashem holocaust
-    "14:00": { index: 3 }, // reflection and light lunch
-    "17:15": { index: 4 }, // Jon Medved (same place as next activity)
-    "undefined-5": { index: 5 }, // Shabbat Candle (15 minutes to next activity location) 
-    "undefined-6": { index: 6 }, // Kabbalath Shabat at Western Wall
-    "undefined-7": { index: 7, estimate: "20:30" }, // Shabbath dinner [estimatedStart: 21:00]
-    "undefined-8": { index: 8 } // overnight stay.
-  };
-
-  this.hourToActivityMapOn15th = {
-    "undefined-0": { index: 0, estimate: "08:00" }, // breakfast at Merom Golan
-    "undefined-1": { index: 1 }, // Gratitude session 
-    "undefined-2": { index: 2 }, // Shehecheyanu blessing (Driving to Jerusalem. Takes 2.45 hours to reach Jerusalem). estimatedStart should be atleast after 10.00 assuming early breakfast.
-    "13:00": { index: 3 }, // lunch
-    "13:30": { index: 4 }, // overview of jerusalem with mayor
-    "undefined-5": { index: 5 }, // tour old city
-    "18:30": { index: 6 }, // Program with MEET
-    "20:30": { index: 7 }, // Culinary tour & dinner
-    "undefined-8": { index: 8 }, // overnight stay
-  };
-
-  switch(dayItin) {
-    case 15:
-      this.hourToActivityMap = this.hourToActivityMapOn15th; break;
-    case 16:
-      this.hourToActivityMap = this.hourToActivityMapOn16th; break;
-    case 17:
-      this.hourToActivityMap = this.hourToActivityMapOn17th; break;
-    case 18:
-      this.hourToActivityMap = this.hourToActivityMapOn18th; break;
+/*
+  Expect NAPEstimate file to contain the following structure:
+  18: {
+    1: "23:30",
+    3: "20:00
+  },
+  19: {
+    ...
   }
+*/
+function updateNAPFileWithEstimates() {
+  const file = this.trip.getNAPEstimatesFile();
+  if(!fs.existsSync(file)) return;
+  const estimates = JSON.parse(fs.readFileSync(file, 'utf8'));
+  const nap = this.hourToActivityMap[this.date];
+  if(!nap) throw new Error(`updateNAPFileWithEstimates: Expected this.hourToActivityMap to contain an object ${this.date}, but did not find it. Possible BUG!. dump of hourToActivityMap is ${JSON.stringify(this.hourToActivityMap)}`);
+  Object.keys(estimates).forEach(date => {
+    Object.keys(estimates[date]).forEach(idx => {
+      const napKey = `undefined-${idx}`;
+      if(!nap[napKey]) throw new Error(`updateNAPFileWithEstimates: key ${napKey} is present in estimate file ${file}, but it's not present in hourToActivityMap. Possible BUG! dump of hourToActivityMap: ${JSON.stringify(this.hourToActivityMap)}; nap dump: ${JSON.stringify(nap)} nap[napKey]: ${nap[napKey]}`);
+      nap[napKey].estimate = estimates[date][idx];
+    });
+  });
+}
+
+/*
+ Create an object with the following structure:
+ "18": {
+   'undefined-0': { index: 0, estimate: "08:30" }, // breakfast and relaxing morning
+   'undefined-1': { index: 1 }, // Visit ben Gurion's grave
+   'undefined-2': { index: 2 }, // Leadership dilemma
+   'undefined-3': { index: 3, estimate: "19:00"}, // closing session and dinner
+   'undefined-4': { index: 4, estimate: "20:15" }, // Bus departs to Gurion airport
+   'undefined-5': { index: 5 }, // Hitboudedut
+   '21:00': { index: 6 }, // dinner.
+   'undefined-7': { index: 7 }, // overnight stay.
+ };
+*/
+function createNextActivityPointerFile() {
+  const file = this.trip.getNAPFile();
+  if(fs.existsSync(file)) {
+    this.hourToActivityMap = JSON.parse(fs.readFileSync(this.trip.getNAPFile(), 'utf8'));
+    // if there is already an object for this date in the nap file, simply return;
+    if(this.hourToActivityMap[this.date]) return;
+  }
+  const nap = {};
+  const regex = new RegExp(/^(\d\d:\d\d).*/i);
+  // logger.debug(`createNextActivityPointerFile: activity list: ${JSON.stringify(this.activityList)}`);
+  this.activityList.forEach((activity,idx) => {
+    let contents;
+    if(activity.title) contents = regex.exec(activity.title);
+    if(!contents && activity.subtitle) contents = regex.exec(activity.subtitle);
+    // time not found. Create a key of the form "undefined-<idx>".
+    let key;
+    if(!contents) key = `undefined-${idx}`;
+    else key = contents[1];
+    if(!nap[key]) nap[key] = {};
+    nap[key].index = idx;
+  });
+  if(!this.hourToActivityMap) this.hourToActivityMap = {};
+  this.hourToActivityMap[this.date] = nap;
+  fs.writeFileSync(file, JSON.stringify(this.hourToActivityMap), 'utf8');
 }
 
 NextActivityGetter.prototype.getNext = function() {
@@ -71,31 +89,10 @@ NextActivityGetter.prototype.getNext = function() {
   return findCurrentActivityIndex.call(this);
 }
 
-  /*
-    prevKey = firstTime;
-    For each time in (hourToActivityMap) { // thisTime
-      prevKey = thisTime;
-      if(thisTime) time = thisTime;
-      if(thisTime.estimatedStart) {
-        time = thisTime.estimatedStart;
-        if(!firstUndefinedTime) firstUndefinedTime = thisTime;
-      }
-
-      if(currTime isBefore time) return prevKey.index; 
-      
-      if(currTime isAfter time) {
-        potentialIndex = time.index; // overwrite thisTime as the new potential index
-        delete firstUndefinedTime; // we want the next unDefined time after this match to be potential index.
-      }
-      // no estimatedStart present. Keep going until we find a potential match.
-    }
-    if(potentialIndex) return potentialIndex; // with warning that this is the estimate.
-    if(firstUndefintedTime) return firstUndefinedTime.index; // with warning that this is the closest we could find.
-    throw new Error();
-  */
 function findCurrentActivityIndex() {
-  const hourToActivityMap = this.hourToActivityMap;
+  const hourToActivityMap = this.hourToActivityMap[this.date];
   const keys = Object.keys(hourToActivityMap);
+  logger.debug(`findCurrentActivityIndex: keys: ${keys}`);
   let firstUndefinedTime;
   let potentialIndex;
   for(let i = 0; i < keys.length; i++) {
@@ -109,7 +106,7 @@ function findCurrentActivityIndex() {
         continue;;
       }
     }
-    // logger.debug(`findCurrentActivityIndex: Now comparing ${this.now} with ${time};`);
+    logger.debug(`findCurrentActivityIndex: Now comparing ${this.now} with ${time};`);
     // thisTime's activity has not happend yet. Return index for the activity. 
     if(compare(this.now, time, "before")) {
       logger.debug(`findCurrentActivityIndex: potentialIndex is ${potentialIndex}; firstUndefinedTime is ${firstUndefinedTime}; thisTime: ${thisTime}; time is ${time}; now is ${this.now}. Returning either potentialIndex or this activities' index`);
@@ -117,7 +114,7 @@ function findCurrentActivityIndex() {
       let index;
       if(diffInMinutes(time, this.now) > 30 && potentialIndex) index = potentialIndex;
       else index = hourToActivityMap[thisTime].index;
-      logger.debug(`findCurrentActivityIndex: returning index ${index}`);
+      logger.debug(`findCurrentActivityIndex: returning index ${index}; thisTime is ${thisTime}`);
       return index;
     }
     

@@ -266,7 +266,7 @@ Session.prototype.getCurrentAndFutureTrips = function() {
     }
     // if we don't know the start date for whatever reason, include those trips as well
     if(!trip.data.startDate || daysToEndOfTrip >= 0) {
-      logger.debug(`getCurrentAndFutureTrips: considering trip ${trip.rawTripName} with startDate ${trip.data.startDate} and days to end of trip ${daysToEndOfTrip}`);
+      // logger.debug(`getCurrentAndFutureTrips: considering trip ${trip.rawTripName} with startDate ${trip.data.startDate} and days to end of trip ${daysToEndOfTrip}`);
       trips.push({
         name: trip.data.name,
         rawName: trip.data.rawName,

@@ -76,6 +76,12 @@ function addFriends() {
   });
 }
 
+FbidHandler.prototype.getId = function(name) {
+  if(!name) throw new Error(`getId: required parameter name is missing`);
+  const fbid = this.fbid(name);
+  return this.encode(fbid);
+}
+
 FbidHandler.prototype.fbid = function(name) {
   if(!name) throw new Error(`fbid: required parameter name is missing`);
   const fbid = this.nameFbidMap.get(name.toLowerCase());

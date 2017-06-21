@@ -78,13 +78,12 @@ describe("Commands tests: ", function() {
     Promise.all(promises).done(
       function(response) {
         const commands = new Commands(trip, fbid);
-        const thisMonth = new Date().getMonth();
-        const thisYear = new Date().getFullYear();
-        const thisDate = new Date().getDate();
+        commands.testing = true;
+        const date = moment().tz("US/Pacific");
         const html = commands.handle("today");
-        expect(commands.date.getMonth()).to.equal(thisMonth);
-        expect(commands.date.getFullYear()).to.equal(thisYear);
-        expect(commands.date.getDate()).to.equal(thisDate);
+        expect(commands.date.getMonth()).to.equal(date.month());
+        expect(commands.date.getFullYear()).to.equal(date.year());
+        expect(commands.date.getDate()).to.equal(date.date());
         verifyExpectations(html, "Chennai", commands.date);
         done();
       },
@@ -97,9 +96,10 @@ describe("Commands tests: ", function() {
   it("todays itin as a list", function(done) {
     Promise.all(promises).done(
       function(response) {
-        const thisMonth = new Date().getMonth();
-        const thisYear = new Date().getFullYear();
-        const thisDate = new Date().getDate();
+        const date = moment().tz("US/Pacific");
+        const thisMonth = date.month();
+        const thisYear = date.year();
+        const thisDate = date.date();
         // set up
         const base = `${baseDir}/trips/ZDdz`;
         const filePrefix = "test-mobile-view-2017-6-13-itinerary.json";
@@ -107,6 +107,7 @@ describe("Commands tests: ", function() {
         fs.copySync(`${base}/forTestingPurposes/${filePrefix}`, `${base}/${targetFile}`);
         if(!fs.existsSync(`${base}/${targetFile}`)) throw new Error(`file ${targetFile} not present`);
         const commands = new Commands(trip, fbid);
+        commands.testing = true;
         const result = commands.handle("today");
         expect(result).to.not.be.null;
         expect(commands.date.getMonth()).to.equal(thisMonth);
@@ -125,11 +126,13 @@ describe("Commands tests: ", function() {
     Promise.all(promises).done(
       function(response) {
         const commands = new Commands(trip, fbid);
+        commands.testing = true;
         const html = commands.handle("tomorrow");
         // logger.debug(commands.handle("tomorrow"));
-        const thisMonth = new Date().getMonth();
-        const thisYear = new Date().getFullYear();
-        const thisDate = new Date().getDate() + 1;
+        const date = moment().tz("US/Pacific");
+        const thisMonth = date.month();
+        const thisYear = date.year();
+        const thisDate = date.date() + 1;
         expect(commands.date.getMonth()).to.equal(thisMonth);
         expect(commands.date.getFullYear()).to.equal(thisYear);
         expect(commands.date.getDate()).to.equal(thisDate);
@@ -185,6 +188,10 @@ describe("Commands tests: ", function() {
         fs.copySync(`${baseDir}/trips/ZDdz/forTestingPurposes/${filePrefix}`, `${baseDir}/trips/ZDdz/${filePrefix}`);
         if(!fs.existsSync(`${baseDir}/trips/ZDdz/${filePrefix}`)) throw new Error(`file not present`);
         // actual test
+        const origStartDate = trip.data.startDate;
+        const origReturnDate = trip.data.returnDate;
+        trip.data.startDate = "2017-6-10";
+        trip.data.returnDate = "2017-6-16";
         const commands = new Commands(trip, fbid);
         let result = commands.handle("13th");
         expect(typeof result).to.equal("object");
@@ -196,6 +203,7 @@ describe("Commands tests: ", function() {
         expect(result.message.attachment.payload.buttons.length).to.equal(1);
         expect(result.message.attachment.payload.buttons[0].title).to.equal("View more");
         const payload = result.message.attachment.payload.buttons[0].payload;
+        logger.debug(`test list view contents: payload ${payload}`);
         result = commands.handlePostback(payload);
         expect(result.message.attachment.payload.elements.length).to.equal(3);
         expect(result.message.attachment.payload.elements[0].title).to.include("Drive north to Michmoret Beach");
@@ -204,6 +212,8 @@ describe("Commands tests: ", function() {
         expect(result.message.attachment.payload.top_element_style).to.equals("compact");
         expect(result.message.attachment.payload.buttons).to.be.undefined;
         // logger.debug(JSON.stringify(result));
+        trip.data.startDate = origStartDate;
+        trip.data.returnDate =  origReturnDate; 
         done();
       },
       function(err) {
@@ -226,20 +236,27 @@ describe("Commands tests: ", function() {
   it("list format multiple sets", function(done) {
     Promise.all(promises).done(
       function(response) {
-        const filePrefix = "test-mobile-view-2017-6-17-itinerary.json";
+        const filePrefix = "test-mobile-view-2017-6-16-itinerary.json";
         // set up
         fs.copySync(`${baseDir}/trips/ZDdz/forTestingPurposes/${filePrefix}`, `${baseDir}/trips/ZDdz/${filePrefix}`);
         if(!fs.existsSync(`${baseDir}/trips/ZDdz/${filePrefix}`)) throw new Error(`file not present`);
         // actual test
-        const commands = new Commands(trip, fbid);
-        let result = commands.handle("17th");
+        const origStartDate = trip.data.startDate;
+        const origReturnDate = trip.data.returnDate;
+        const localTrip = trip;
+        localTrip.data.startDate = "2017-6-12";
+        localTrip.data.returnDate = "2017-6-19";
+        const commands = new Commands(localTrip, fbid);
+        let result = commands.handle("16th");
         verifyListViewResponse(result, 4, true, true /* first */);
         let payload = result.message.attachment.payload.buttons[0].payload;
         result = commands.handlePostback(payload);
-        verifyListViewResponse(result, 3, true);
+        verifyListViewResponse(result, 4, true);
         payload = result.message.attachment.payload.buttons[0].payload;
         result = commands.handlePostback(payload);
         verifyListViewResponse(result, 2, false);
+        trip.data.startDate = origStartDate;
+        trip.data.returnDate = origReturnDate;
         done();
       },
       function(err) {
@@ -253,7 +270,7 @@ describe("Commands tests: ", function() {
       function(response) {
         const commands = new Commands(trip, fbid);
         const fourDaysFromNow = new Date().getDate() + 4;
-        logger.debug(`just send date: ${fourDaysFromNow}`);
+        logger.debug(`just send date: ${fourDaysFromNow}; trip start date: ${trip.data.startDate}; return date: ${trip.data.returnDate}`);
         const html = commands.handle(`${fourDaysFromNow}`);
         // logger.debug(commands.handle("tomorrow"));
         const thisMonth = new Date().getMonth();
@@ -295,6 +312,10 @@ describe("Commands tests: ", function() {
     const thisMonth = new Date().getMonth();
     const thisYear = new Date().getFullYear();
     const commands = new Commands(trip, fbid);
+    const origStartDate = trip.data.startDate;
+    const origReturnDate = trip.data.returnDate;
+    trip.data.startDate = "2017-6-1";
+    trip.data.returnDate = "2017-6-12";
     expect(commands.canHandle("2017-06-11")).to.be.ok;
     expect(CreateItinerary.formatDate(commands.date)).to.equal("6/11/2017");
     expect(commands.canHandle("June 11")).to.be.ok;
@@ -312,6 +333,8 @@ describe("Commands tests: ", function() {
     expect(commands.canHandle("10")).to.be.ok;
     expect(commands.date.getTime()).to.equal(new Date(thisYear, thisMonth, 10).getTime());
     expect(commands.canHandle("10sawe")).to.not.be.ok;
+    trip.data.startDate = origStartDate;
+    trip.data.returnDate = origReturnDate;
   });
 
   it("weather and flight", function() {
@@ -520,6 +543,7 @@ describe("Commands tests: Activity tests: ", function() {
   });
 });
 
+// TODO: Make this relative. this won't scale.
 describe("Commands tests: Meal commands", function() {
   before(function() {
     createNewTrip();
@@ -531,14 +555,40 @@ describe("Commands tests: Meal commands", function() {
     filePrefix = "test-mobile-view-2017-6-18-itinerary.json";
     fs.copySync(`${base}/forTestingPurposes/${filePrefix}`, `${base}/${filePrefix}`);
     if(!fs.existsSync(`${base}/${filePrefix}`)) throw new Error(`file ${filePrefix} not present`);
+    filePrefix = "test-mobile-view-2017-6-19-itinerary.json";
+    fs.copySync(`${base}/forTestingPurposes/${filePrefix}`, `${base}/${filePrefix}`);
+    if(!fs.existsSync(`${base}/${filePrefix}`)) throw new Error(`file ${filePrefix} not present`);
   });
 
   after(function() {
     cleanup();
   });
 
+  function setupFilesForTestingToday() {
+    const date = moment().tz("US/Pacific");
+    const thisMonth = date.month();
+    const thisYear = date.year();
+    let thisDate = date.date();
+    // set up
+    const base = `${baseDir}/trips/ZDdz`;
+    const filePrefix = "test-mobile-view-2017-6-17-itinerary.json";
+    let targetFile = `test-mobile-view-${thisYear}-${thisMonth + 1}-${thisDate}-itinerary.json`;
+    fs.copySync(`${base}/forTestingPurposes/${filePrefix}`, `${base}/${targetFile}`);
+    if(!fs.existsSync(`${base}/${targetFile}`)) throw new Error(`file ${targetFile} not present`);
+    date.add(1, "day");
+    thisDate = date.date();
+    targetFile = `test-mobile-view-${thisYear}-${thisMonth + 1}-${thisDate}-itinerary.json`;
+    fs.copySync(`${base}/forTestingPurposes/${filePrefix}`, `${base}/${targetFile}`);
+    if(!fs.existsSync(`${base}/${targetFile}`)) throw new Error(`file ${targetFile} not present`);
+  }
+
   it("basic tests", function() {
     const commands = new Commands(trip, fbid);
+    const origStartDate = trip.data.startDate;
+    const origReturnDate = trip.data.returnDate;
+    trip.data.startDate = "2017-6-15";
+    trip.data.returnDate = "2017-6-19";
+    setupFilesForTestingToday();
     ["breakfast", "lunch", "dinner"].forEach(meal => {
       expect(commands.canHandleMealsCommand(meal)).to.be.ok;
       expect(commands.canHandleMealsCommand(`${meal} tomorrow`)).to.be.ok;
@@ -556,5 +606,7 @@ describe("Commands tests: Meal commands", function() {
     logger.debug(`lunch on 18th: ${JSON.stringify(message)}`);
     message = commands.handleMealsCommand("dinner on 18th");
     logger.debug(`dinner on 18th: ${JSON.stringify(message)}`);
+    trip.data.startDate =  origStartDate;
+    trip.data.returnDate = origReturnDate;
   });
 });

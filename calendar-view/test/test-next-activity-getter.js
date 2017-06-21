@@ -1,69 +1,110 @@
 'use strict';
-const logger = require('../../my-logger');
-logger.setTestConfig(); // indicate that we are logging for a test
 const expect = require('chai').expect;
 const NextActivityGetter = require('calendar-view/app/next-activity-getter');
+const DayPlanner = require('calendar-view/app/day-planner');
+const fs = require('fs-extra');
 
-describe("NextActivityGetter tests: ", function() {
-/*
-  it.skip("before first activity", function() {
-    // check time 08:30
+const baseDir = "/home/ec2-user";
+const logger = require(`${baseDir}/my-logger`);
+logger.setTestConfig(); // indicate that we are logging for a test
+const TripData = require(`${baseDir}/trip-data`);
+
+let trip;
+let fbid = "1234";
+
+function cleanup() {
+  trip.testing_delete();
+}
+
+describe("NextActivityGetter tests: 6/25 itin", function() {
+  const dateStr = "2017-6-25";
+
+  before(function() {
+    trip = new TripData("test-mobile-view", fbid);  
+    const filePrefix = `test-mobile-view-${dateStr}-itinerary.json`;
+    fs.copySync(`${baseDir}/trips/ZDdz/forTestingPurposes/${filePrefix}`, `${baseDir}/trips/ZDdz/${filePrefix}`);
+    if(!fs.existsSync(`${baseDir}/trips/ZDdz/${filePrefix}`)) throw new Error(`file not present`);
+    // create estimates
+    const estimate = {
+      "25": {
+        '0': "08:30",
+        '3': "19:00",
+        '4': "20:15"
+      }
+    };
+    fs.writeFileSync(trip.getNAPEstimatesFile(),JSON.stringify(estimate), 'utf8');
   });
 
-  it.skip("between first & second activity", function() {
+  after(function() {
+    cleanup();
   });
 
-  it.skip("after last activity", function() {
-  });
-
-  it.skip("undefined estimatedStart present", function() {
-  });
-
-  it.skip("undefined no estimatedStart", function() {
-  });
-*/
-});
-
-describe("NextActivityGetter tests: 6/16 itin", function() {
   it("first", function() {
+    const date = new Date(dateStr);
+    const dayPlanner = new DayPlanner(date, trip, fbid);
+    dayPlanner.setActivityList();
+    const nag = new NextActivityGetter(trip, date.getDate(), dayPlanner.activityList, true /* testing */);
+
     // set time to 08:30:
-    const nag = new NextActivityGetter(16, true);
+    // const nag = new NextActivityGetter(16, true);
     nag.testing_setNow("08:30");
     expect(nag.getNext()).to.equal(1);
 
     // 11:00
     nag.testing_setNow("11:00");
-    expect(nag.getNext()).to.equal(3);
+    expect(nag.getNext()).to.equal(1);
 
     // 13:00
     nag.testing_setNow("13:00");
-    expect(nag.getNext()).to.equal(3);
+    expect(nag.getNext()).to.equal(1);
 
-    // 18:00
-    nag.testing_setNow("18:00");
-    expect(nag.getNext()).to.equal(5);
+    // 19:00
+    nag.testing_setNow("19:00");
+    expect(nag.getNext()).to.equal(4);
 
     // 20:15
     nag.testing_setNow("20:15");
-    expect(nag.getNext()).to.equal(7);
+    expect(nag.getNext()).to.equal(5);
 
     // 20:30: estimatedTime for dinner
     nag.testing_setNow("20:30");
-    expect(nag.getNext()).to.equal(8);
+    expect(nag.getNext()).to.equal(5);
 
     // 21:30
     nag.testing_setNow("21:30");
-    expect(nag.getNext()).to.equal(8);
+    expect(nag.getNext()).to.equal(5);
 
     // 23:30
     nag.testing_setNow("23:30");
-    expect(nag.getNext()).to.equal(8);
+    expect(nag.getNext()).to.equal(5);
   });
 });
 
-describe("NextActivityGetter tests: 6/17 itin", function() {
-  it("6/17", function() {
-    const nag = new NextActivityGetter(17, true);
+describe("NextActivityGetter tests: 6/24 itin", function() {
+  before(function() {
+    trip = new TripData("test-mobile-view", fbid);  
+    let filePrefix = `test-mobile-view-2017-6-24-itinerary.json`;
+    fs.copySync(`${baseDir}/trips/ZDdz/forTestingPurposes/${filePrefix}`, `${baseDir}/trips/ZDdz/${filePrefix}`);
+    if(!fs.existsSync(`${baseDir}/trips/ZDdz/${filePrefix}`)) throw new Error(`file not present`);
+    const estimate = {
+      "24": {
+        "0": "08:00",
+        "2": "13:00",
+        "4": "19:30"
+      }
+    };
+    fs.writeFileSync(trip.getNAPEstimatesFile(),JSON.stringify(estimate), 'utf8');
+  });
+
+  after(function() {
+    cleanup();
+  });
+
+  it("first", function() {
+    const date = new Date("2017-6-24");
+    const dayPlanner = new DayPlanner(date, trip, fbid);
+    dayPlanner.setActivityList();
+    const nag = new NextActivityGetter(trip, date.getDate(), dayPlanner.activityList, true /* testing */);
     nag.testing_setNow("07:50");
     expect(nag.getNext()).to.equal(0);
   
@@ -118,47 +159,67 @@ describe("NextActivityGetter tests: 6/17 itin", function() {
   });
 });
 
-describe("NextActivityGetter tests: 6/15 itin", function() {
-  it("6/15", function() {
-  const nag = new NextActivityGetter(15, true);
-  // 07:00
-  nag.testing_setNow("07:00");
-  expect(nag.getNext()).to.equal(0);
+describe("NextActivityGetter tests: 6/21 itin", function() {
+  before(function() {
+    trip = new TripData("test-mobile-view", fbid);  
+    let filePrefix = `test-mobile-view-2017-6-21-itinerary.json`;
+    fs.copySync(`${baseDir}/trips/ZDdz/forTestingPurposes/${filePrefix}`, `${baseDir}/trips/ZDdz/${filePrefix}`);
+    if(!fs.existsSync(`${baseDir}/trips/ZDdz/${filePrefix}`)) throw new Error(`file not present`);
+    const estimate = {
+      "21": {
+        "0": "08:00"
+      }
+    };
+    fs.writeFileSync(trip.getNAPEstimatesFile(),JSON.stringify(estimate), 'utf8');
+  });
 
-  // 09:00
-  nag.testing_setNow("09:00");
-  expect(nag.getNext()).to.equal(1);
+  after(function() {
+    cleanup();
+  });
+
+  it("first", function() {
+    const date = new Date("2017-6-21");
+    const dayPlanner = new DayPlanner(date, trip, fbid);
+    dayPlanner.setActivityList();
+    const nag = new NextActivityGetter(trip, date.getDate(), dayPlanner.activityList, true /* testing */);
+    // 07:00
+    nag.testing_setNow("07:00");
+    expect(nag.getNext()).to.equal(0);
   
-  // 12:30
-  nag.testing_setNow("12:31");
-  expect(nag.getNext()).to.equal(3);
-
-  // 13:20
-  nag.testing_setNow("13:20");
-  expect(nag.getNext()).to.equal(4);
-
-  // 15:00
-  nag.testing_setNow("15:00");
-  expect(nag.getNext()).to.equal(5);
-
-  // 17:00
-  nag.testing_setNow("17:00");
-  expect(nag.getNext()).to.equal(5);
-
-  // 18:15
-  nag.testing_setNow("18:15");
-  expect(nag.getNext()).to.equal(6);
-
-  // 19:30
-  nag.testing_setNow("19:30");
-  expect(nag.getNext()).to.equal(7);
-
-  // 20:15
-  nag.testing_setNow("20:15");
-  expect(nag.getNext()).to.equal(7);
-
-  // 20:45
-  nag.testing_setNow("20:45");
-  expect(nag.getNext()).to.equal(8);
+    // 09:00
+    nag.testing_setNow("09:00");
+    expect(nag.getNext()).to.equal(1);
+    
+    // 12:30
+    nag.testing_setNow("12:31");
+    expect(nag.getNext()).to.equal(3);
+  
+    // 13:20
+    nag.testing_setNow("13:20");
+    expect(nag.getNext()).to.equal(4);
+  
+    // 15:00
+    nag.testing_setNow("15:00");
+    expect(nag.getNext()).to.equal(5);
+  
+    // 17:00
+    nag.testing_setNow("17:00");
+    expect(nag.getNext()).to.equal(5);
+  
+    // 18:15
+    nag.testing_setNow("18:15");
+    expect(nag.getNext()).to.equal(5);
+  
+    // 19:30
+    nag.testing_setNow("19:30");
+    expect(nag.getNext()).to.equal(6);
+  
+    // 20:15
+    nag.testing_setNow("20:15");
+    expect(nag.getNext()).to.equal(6);
+  
+    // 20:45
+    nag.testing_setNow("20:45");
+    expect(nag.getNext()).to.equal(7);
   });
 });

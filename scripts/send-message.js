@@ -7,8 +7,8 @@ const Sessions = require(`${baseDir}/sessions`);
 const Commands = require(`trip-itinerary/app/commands`);
 const FbidHandler = require('fbid-handler/app/handler');
 
-const fbid = "1120615267993271"; // madhu
-// const fbid = "1443244455734100"; // gillian
+// const fbid = "1120615267993271"; // madhu
+const fbid = "1718674778147181"; // Beth
 const trip = new TripData("tel_aviv", fbid);
 const session = Sessions.get().find(fbid);
 if(!session) throw new Error(`could not find session for fbid ${fbid}`);
@@ -125,19 +125,19 @@ function sendSingleActivity() {
         payload: {
           template_type: "generic",
           elements: [{
-              "title": "Hike Masada",
-              "subtitle": "\"Activity 2 on 16th\": Option 1: Krav Maga(16:00 - 17:00) at beach near hotel; Option 2: SAP rental",
-              "image_url": "http://tinyurl.com/ycud3a3o",
+              "title": "Flight DL752 departs SEA at 7:24 AM on July 26th",
+              "subtitle": "Mostly sunny in Seattle; Partly cloudy in Salt Lake City",
+              "image_url": "https://polaama.com/aeXf/salt_lake_city/2017-7-26/-/map",
               "default_action": {
                 "type": "web_url",
-                "url": "http://www.isrotelexclusivecollection.com/beresheet/",
+                "url": "https://flightaware.com/live/flight/DL752",
                 "webview_height_ratio": "full"
               },
-              buttons: [{
-                title: "Next",
-                "type": "postback",
-                payload: "next"
-              }]
+            buttons: [{
+              "title": "Flight details",
+              "type": "postback", 
+              "payload": "flight itinerary"
+            }]
           }]
         }
       }
@@ -155,10 +155,15 @@ function sendFeatureMessage() {
       attachment: {
         "type": "template",
         payload: {
-          template_type: "generic",
+          top_element_style: "compact",
+          template_type: "list",
           elements: [{
-              "title": "Minor new feature alert",
-              "subtitle": "Try these new commands: \"lunch\", \"breakfast\", \"dinner\", \"lunch on 18th\" etc.",
+            "title": "Feature Alert",
+            "subtitle": `Add details to your itinerary with the "trip calendar" command`
+          },
+          {
+            "title": "Feature Alert",
+            "subtitle": `See a specific day's itinerary by entering a travel day. Eg. "25", "26th" etc.`
           }]
         }
       }
@@ -187,11 +192,11 @@ function sendGoodMorningMessage() {
 }
 
 // sendDayPlan();
-sendGoodMorningMessage();
+// sendGoodMorningMessage();
 
 // sendSingleActivity();
 // sendNewFeatureMessage();
-// sendFeatureMessage();
+sendFeatureMessage();
 
 // flightStatusAndWaitTimes();
 // sendPackList();

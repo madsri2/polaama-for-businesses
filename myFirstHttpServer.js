@@ -9,10 +9,11 @@ const logger = require('./my-logger');
 const crypto = require('crypto');
 const TripDataFormatter = require('./trip-data-formatter.js');
 const passport = require('passport');
-const fbStrategy = require('passport-facebook').Strategy;
+const FacebookStrategy = require('passport-facebook').Strategy;
 const session = require('express-session');
 const EmailParser = require('flight-details-parser/app/email-parser');
 const SecretManager = require('secret-manager/app/manager');
+const FbidHandler = require('fbid-handler/app/handler');
 // ----------------------------------------------------------------------------
 // Set up a webserver
 
@@ -37,9 +38,9 @@ const options = {
   cert: fs.readFileSync(sslPath + 'fullchain.pem')
 };
 
-let u;
-// authentication
-passport.use(new fbStrategy({
+let userIdMapping = {};
+// Our Authentication strategy:  FacebookStrategy is used by passport when passport.authenticate is called below. passport.authenticate is used as a middleware for "/auth/facebook" request (which is in turn called by app.get("/") or any other app.get() where the ensureAuthenticated() middleware is used (see ensureAuthenticated below).
+passport.use(new FacebookStrategy({
     clientID: FB_APP_ID,
     clientSecret: FB_APP_SECRET,
     callbackURL: "https://polaama.com/auth/facebook/callback"
@@ -52,21 +53,24 @@ passport.use(new fbStrategy({
       name: profile._json.name,
       id: profile._json.id
     };
-    u = user;
+    // TODO: This will not work when there are name collisions.
+    user.fbid = FbidHandler.get().getId(user.name);
+    userIdMapping[user.id] = user;
+    logger.debug(`FacebookStrategy: found fbid: ${user.fbid} for id: ${user.id} & name: ${user.name}`);
     done(null, user);
   }
 ));
 
-// used to serialize the user for the session
+// used to serialize the user for the session. This is called by passport.authenticate see app.get(/auth/facebook/callback)
 passport.serializeUser(function(user, done) {
-  console.log(`serializeUser called with ${JSON.stringify(user)}`);
+  logger.debug(`serializeUser called with ${JSON.stringify(user)}`);
   done(null, user.id);
 });
 
-// used to deserialize the user
+// used to deserialize the user. This is called by passport.authenticate after authentication is done as part of app.get(/auth/facebook/callback). Also called by req.isAuthenticated() (in ensureAuthentication). This sets the request.user object (done by passport).
 passport.deserializeUser(function(id, done) {
-  console.log(`deserializeUser called with ${id}. Returning ${JSON.stringify(u)}`);
-  done(null, u);
+  logger.debug(`deserializeUser: called with id ${id}. Returning ${JSON.stringify(userIdMapping[id])}`);
+  done(null, userIdMapping[id]);
 });
 
 // configure
@@ -95,12 +99,45 @@ app.get('/auth/facebook', passport.authenticate('facebook'));
 // authentication process by attempting to obtain an access token.  If
 // access was granted, the user will be logged in.  Otherwise,
 // authentication has failed.
-app.get('/auth/facebook/callback',
-  // Not using successRedirect here because ensureAuthentication handles that by setting req.session.redirect_to
-  passport.authenticate('facebook', { successRedirect: '/index',
-                                      failureRedirect: '/login',
-                                      failureFlash: true,
-                                      session: true}));
+app.get('/auth/facebook/callback', function(req, res, next) {
+    // Not using successRedirect here because ensureAuthentication handles that by setting req.session.redirectTo
+    passport.authenticate('facebook', function(err, user, info) {
+      if(err) { 
+        logger.error(`facebook callback: passport.authenticate: error authenticating using facebook strategy. info object is ${JSON.stringify(info)}`);
+        return next(err);
+      }
+      if(!user) {
+        logger.info(`facebook callback: passport.authenticate: user object not present. redirecting to "/login"`);
+        return res.redirect('/login');
+      }
+      req.login(user, function(err) {
+        if(err) { 
+          logger.error(`facebook callback: passport.authenticate: req.login threw error: ${err.stack}`);
+          return next(err);
+        }
+        logger.info(`facebook callback: passport.authenticate was successful. redirecting to the original request path ${req.session.redirectTo}. user details: ${JSON.stringify(user)}. req.param.id: ${req.session.fbid}`);
+        const mesg = reject(req, user);
+        if(mesg) return res.send(mesg);
+        else return res.redirect(req.session.redirectTo);
+      });
+    })(req, res, next);
+});
+
+function reject(req, user) {
+  // only the authorized user or the admin can see this page.
+  if(req.session.fbid === user.fbid || user.fbid === "aeXf") return null;
+  logger.error(`facebook callback: passport authenticate: user ${user.fbid} attempted to call url ${req.session.redirectTo}, whose id is ${req.session.fbid}. Rejecting the call.`);
+  return "You are not authorized to view this page!";
+}
+
+// TODO: Remove at some point. Older facebook callback handler.
+app.get('/auth/facebook/callback_old', 
+    // Not using successRedirect here because ensureAuthentication handles that by setting req.session.redirectTo
+    passport.authenticate('facebook', { successRedirect: '/index',
+                                        failureRedirect: '/login',
+                                        failureFlash: true,
+                                        session: true})
+  );
 
 /*
  * Verify that the callback came from Facebook. Using the App Secret from
@@ -114,9 +151,8 @@ function verifyRequestSignature(req, res, buf) {
   var signature = req.headers["x-hub-signature"];
 
   if (!signature) {
-    // For testing, let's log an error. In production, you should throw an
-    // error.
-    logger.error("Couldn't validate the signature.");
+    // For testing, let's log an error. In production, you should throw an error.
+    logger.error("verifyRequestSignature: Couldn't validate the signature.");
     throw new Error("Could not validate the signature");
   } else {
     let elements = signature.split('=');
@@ -131,7 +167,7 @@ function verifyRequestSignature(req, res, buf) {
                         .update(buf)
                         .digest('hex');
     if (signatureHash != expectedHash) {
-      logger.error(`Could not validate request signature. signatureHash: <${signatureHash}>; expectedHash: <${expectedHash}>; prototype_expected_hash: <${prototypeExpectedHash}>`);
+      logger.error(`verifyRequestSignature: Could not validate request signature. signatureHash: <${signatureHash}>; expectedHash: <${expectedHash}>; prototype_expected_hash: <${prototypeExpectedHash}>`);
       throw new Error("Couldn't validate the request signature.");
     }
   }
@@ -171,12 +207,18 @@ app.get('/login', function(req, res) {
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     // req.user is available for use here
-    logger.info(`ensureAuthenticated: request is authenticated`);
+    logger.info(`ensureAuthenticated: request is authenticated. now the actual request (${req.path}) will be handled. req.user is ${JSON.stringify(req.user)}`);
+    req.session.redirectTo = req.path;
+    req.session.fbid = req.params.id;
+    const mesg = reject(req, req.user);
+    if(mesg) return res.send(mesg);
     return next(); 
   }
   // denied. redirect to login
-  logger.info(`ensureAuthenticated: not authenticated. Redirecting to /auth/facebook`);
-  req.session.redirect_to = req.path;
+  logger.info(`ensureAuthenticated: not authenticated. Redirecting to /auth/facebook; req.path is ${req.path}. params.id is: ${req.params.id}`);
+  req.session.redirectTo = req.path;
+  req.session.fbid = req.params.id;
+  // TODO: this might be useless.
   res.redirect('/');
 }
 
@@ -281,7 +323,7 @@ app.get('/jqmobile-itin', function(req, res) {
   return res.send(fs.readFileSync("/home/ec2-user/html-templates/jqmobile-itin.html",'utf8'));
 });
 
-app.get('/:id/:tripName/calendar', function(req, res) {
+app.get('/:id/:tripName/calendar', ensureAuthenticated, function(req, res) {
   const handler = new WebpageHandler(req.params.id, req.params.tripName);
   return handler.handleWebpage(res, handler.displayCalendar);
 });

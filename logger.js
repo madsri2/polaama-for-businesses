@@ -43,7 +43,18 @@ function Logger(configFile) {
 
 Logger.prototype.init = function() {
   winston.level = this.logLevel;
-  const tsFormat = () => (new Date()).toLocaleTimeString();
+  const tsFormat = () => (new Date()).toLocaleTimeString([], 
+  {
+    timeZone: 'UTC',
+    timeZoneName: 'short',
+    year: "2-digit", 
+    month: "2-digit", 
+    day: "2-digit", 
+    hour: "2-digit", 
+    minute: "2-digit", 
+    second: "2-digit"
+  });
+
   const logger = new (winston.Logger)({
     transports: [
       new (winston.transports.Console)({ 

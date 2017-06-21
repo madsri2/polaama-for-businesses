@@ -1148,7 +1148,7 @@ function determineResponseType(event) {
   // same as user choosing "Get" after choosing trip from "Existing trip" persistent menu
   if(mesg === "get") return displayTripDetails.call(this); 
   // same as user clicking "existing trips" on persistent menu
-  if(mesg === "existing trips") return sendTripButtons.call(this); 
+  if(mesg === "existing trips" || mesg === "trips") return sendTripButtons.call(this); 
   if(mesg.startsWith("save") || mesg.startsWith("comment") || this.session.awaitingComment) {
     const returnString = tripData.storeFreeFormText(senderID, messageText);
     sendTextMessage(senderID, returnString);
@@ -1196,11 +1196,11 @@ function determineResponseType(event) {
     return;
   }
   if(mesg.startsWith("get boarding pass") || mesg.startsWith("boarding pass")) return sendBoardingPass.call(this);
-  if(mesg.startsWith("get flight itinerary") || mesg.startsWith("flight itinerary") || mesg.startsWith("flight")) return sendFlightItinerary.call(this);
-  if(mesg.startsWith("get car details")) return sendCarReceipt.call(this);
-  if(mesg.startsWith("get hotel details")) return sendHotelItinerary.call(this);
-	if(mesg.startsWith("get tour details")) return sendTourDetails.call(this);
-  if(mesg.startsWith("return flight") || mesg.startsWith("get return flight")) return sendReturnFlightDetails.call(this);
+  if(mesg.startsWith("get flight itinerary") || mesg.startsWith("flight details") || mesg.startsWith("flight")) return sendFlightItinerary.call(this);
+  if(mesg.startsWith("get car details") || mesg.startsWith("car details")) return sendCarReceipt.call(this);
+  if(mesg.startsWith("get hotel details") || mesg.startsWith("hotel details")) return sendHotelItinerary.call(this);
+	if(mesg.startsWith("get tour details") || mesg.startsWith("tour details")) return sendTourDetails.call(this);
+  if(mesg.startsWith("get return flight") || mesg.startsWith("return flight")) return sendReturnFlightDetails.call(this);
 
   const commands = new Commands(tripData, this.session.fbid);
   if(commands.canHandle(mesg)) {

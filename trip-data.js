@@ -16,6 +16,7 @@ TripData.todo = "todoList";
 function TripData(rawTripName, fbid, testFbidFile) {
   if(!rawTripName) throw new Error("TripData: Required parameter tripName is undefined");
   if(!fbid) throw new Error("required field fbid is missing");
+  this.fbid = fbid;
   const encodedFbid = FbidHandler.get(testFbidFile).encode(fbid);
   if(!encodedFbid) throw new Error(`could not find encoded id for fbid ${fbid}. passed test file is ${testFbidFile}`);
   this.tripBaseDir = `${baseDir}/trips/${encodedFbid}`;
@@ -609,6 +610,14 @@ TripData.prototype.boardingPassFile = function() {
 
 TripData.prototype.itineraryFile = function() {
   return `${this.tripBaseDir}/${this.data.name}-flight-itinerary.txt`;
+}
+
+TripData.prototype.getNAPFile = function() {
+  return `${this.tripBaseDir}/${this.data.name}-next-activity-pointers.json`;
+}
+
+TripData.prototype.getNAPEstimatesFile = function() {
+  return `${this.tripBaseDir}/${this.data.name}-nap-estimates.json`;
 }
 
 TripData.prototype.dayItineraryFile = function(date) {

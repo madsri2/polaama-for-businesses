@@ -8,6 +8,7 @@ const baseDir = "/home/ec2-user";
 const logger = require(`${baseDir}/my-logger`);
 const Encoder = require(`${baseDir}/encoder`);
 
+// TODO: fbid is not needed as trip object contains an fbid. Use that instead and remove the use of fbid everywhere.
 function Commands(trip, fbid, sendHtml) {
   if(!fbid) throw new Error(`Commands: required parameter fbid not passed`);
   if(!trip) throw new Error(`Commands: required parameter trip not passed`);
@@ -111,22 +112,50 @@ function handleActivityCommand() {
   return null;
 }
 
+// set this trips year and month, accounting for the cases where month & year of start and return dates need not be the same.
+function setTripMonthAndYear(date) {
+  const sdMoment = new moment(new Date(this.trip.data.startDate));
+  const rdMoment = new moment(new Date(this.trip.data.returnDate));
+  const sdYear = sdMoment.year();
+  const rdYear = rdMoment.year();
+  const sdMonth = sdMoment.month();
+  const rdMonth = rdMoment.month();
+
+  const dateInSdMonth = new moment(new Date(sdYear,sdMonth,date));
+  if(dateInSdMonth.isBetween(sdMoment, rdMoment) || dateInSdMonth.isSame(sdMoment)) {
+    this.tripYear = sdYear;
+    this.tripMonth = sdMonth;
+    logger.debug(`setTripMonthAndYear: Set month of the trip to ${this.tripMonth} and year to ${this.tripYear}`);
+    return;
+  }
+  const dateInRdMonth = new moment(new Date(rdYear,rdMonth,date));
+  if(dateInRdMonth.isBetween(sdMoment, rdMoment) || dateInRdMonth.isSame(rdMoment)) {
+    this.tripYear = rdYear;
+    this.tripMonth = rdMonth;
+    logger.debug(`setTripMonthAndYear: Set month of the trip to ${this.tripMonth} and year to ${this.tripYear}`);
+    return;
+  }
+
+  logger.warn(`setTripMonthAndYear: date ${date} did not fall between start date ${this.trip.data.startDate} and return date ${this.trip.data.returnDate}. Not setting tripMonth and tripYear.`);
+}
+
 function isValidDate() {
   const dateMoment = new moment(this.date);
+  if(!this.trip.data.startDate || this.trip.data.startDate ==="unknown" || !this.trip.data.returnDate || this.trip.data.returnDate === "unknown") {
+    logger.warn("return date is null or unknown. cannot validate if date ${this.date} is part of the trip or not. returning true. if it's not a valid date, there won't be a corresponding day plan, so it's ok to assume it is valid here");
+    return true;
+  }
+
   const sdMoment = new moment(this.trip.data.startDate);
   const rdMoment = new moment(this.trip.data.returnDate);
 
-  if(dateMoment.isBefore(sdMoment)) {
-    logger.warn(`isValidDate: ${this.date} is before ${this.trip.data.startDate}`);
+  if(!dateMoment.isBetween(sdMoment, rdMoment) || !dateMoment.isSame(sdMoment) || !dateMoment.isSame(rdMoment)) {
+    logger.warn(`isValidDate: ${this.date} is not between ${this.trip.data.startDate} & ${this.trip.data.returnDate}`);
     return false;
   }
 
-  if(dateMoment.isAfter(rdMoment)) {
-    logger.warn(`isValidDate: ${this.date} is after ${this.trip.data.returnDate}`);
-    return false;
-  }
-
-  logger.debug(`isValidDate: ${this.date} is valid. startDate: ${this.trip.data.startDate}; returnDate: ${this.trip.data.returnDate}`);
+  logger.debug(`isValidDate: ${this.date} is valid. It is in inbetween start & return dates. startDate: ${this.trip.data.startDate}; returnDate: ${this.trip.data.returnDate}`);
+  setTripMonthAndYear.call(this, dateMoment.date());
   return true;
 }
 
@@ -148,6 +177,8 @@ Commands.prototype.handlePostback = function(payload) {
 }
 
 function listFormatAvailable(date) {
+  return true;
+  /*
   const dateList = ["6/12/2017", "6/13/2017", "6/14/2017", "6/15/2017", "6/16/2017", "6/17/2017", "6/18/2017","6/19/2017","6/20/2017","6/21/2017","6/22/2017","6/23/2017","6/24/2017","6/25/2017","6/26/2017"];
   const dateStr = CreateItinerary.formatDate(date);
   if(dateList.indexOf(dateStr) != -1) {
@@ -156,6 +187,7 @@ function listFormatAvailable(date) {
   }
   // logger.debug(`listFormatAvailable: ${dateStr} is NOT present in dateList. Returning false.`);  
   return false;
+  */
 }
 
 function handleDayItin() {
@@ -183,10 +215,15 @@ function setDateIfValid(passedCommand) {
   const thisYear = new Date().getFullYear();
   let contents = /^(\d+)(.*)$/.exec(command);
   if(contents && (contents[2] === " " || contents[2] === '' || contents[2] === "th" || contents[2] === "rd" || contents[2] === "st" || contents[2] === "nd")) {
-      this.date = new Date(thisYear, thisMonth, contents[1]);
-      logger.debug(`setDateIfValid: Matched [date]. contents: [${contents}] set date to be today (${this.date})`);
-      return true;
-  }
+      // user just provided the date, without specifying month & year. Infer the month & year based on this trip's start & return dates.
+      setTripMonthAndYear.call(this, contents[1]);
+      if(!Array.isArray(this.tripMonth) && !Array.isArray(this.tripYear)) {
+        this.date = new Date(this.tripYear, this.tripMonth, contents[1]);
+        logger.debug(`setDateIfValid: Matched [date]. contents: [${contents}] set date to be (${this.date})`);
+        return true;
+      }
+      // the month or year spans multiple years. Get the appropriate month.
+    }
   contents = /^([a-zA-Z]+) *(\d+)/.exec(command);
   if(contents) {
     this.date = new Date(thisYear, toNum(contents[1]), contents[2]);    
@@ -196,7 +233,7 @@ function setDateIfValid(passedCommand) {
   contents = /(\d+)\/(\d+)/.exec(command);
   if(contents) {
     this.date = new Date(thisYear, contents[1]-1, contents[2]);    
-    logger.debug(`setDateIfValid: Matched [dd/mm]. contents: [${contents}] set date to be today (${this.date})`);
+    logger.debug(`setDateIfValid: Matched [dd/mm]. contents: [${contents}] set date to be (${this.date})`);
     return true;
   }
   contents = /(\d+)-(\d+)-(\d+)/.exec(command);
@@ -215,11 +252,13 @@ function getDayItinerary() {
   if(!this.sendHtml && listFormatAvailable(this.date)) {
     logger.debug(`getDayItinerary: Sending list view format for date ${dateStr}`);
     const dayAsList = dayPlanner.getPlanAsList(this.setNum);
+    // logger.debug(`getDayItinerary: dayAsList dump: ${JSON.stringify(dayAsList)}`);
     if(dayAsList) return dayAsList;
   }
   logger.debug(`getDayItinerary: Sending html for date ${dateStr}`);
   const itin = new CreateItinerary(this.trip, this.trip.leavingFrom).getItinerary();
   const plans = dayPlanner.getPlan(itin[dateStr]);
+  if(plans && plans.noPlans) return plans.noPlans;
   const html = require('fs').readFileSync(`${htmlBaseDir}/day-plan.html`, 'utf8');
   return html.replace("${date}", dateStr)
              .replace("${city}", plans.city)
@@ -257,6 +296,7 @@ function toNum(month) {
 
 // user enters today. We find out the date in UTC. We use that to determine where the user will be. (Between 6/11 - 6/19 UTC, the user will be in Tel Aviv). We get moment for that timezone and determine the day.
 function getTimezone() {
+  if(this.testing) return "US/Pacific";
   const dateInUTC = moment().format("M/DD/YYYY");
   const userLocation = {
     '6/10/2017' : "America/New_York",
