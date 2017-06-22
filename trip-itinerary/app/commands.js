@@ -91,8 +91,8 @@ function handleActivityCommand() {
   let val;
   if(contents[2] == '') val = "today"; else val = contents[2];
   if(!setDateIfValid.call(this, val)) return null;
-  logger.debug(`handleActivityCommand: parsed date <${this.date}> from <${val}> and command <${this.command}>`);
   const dateStr = CreateItinerary.formatDate(this.date);
+  logger.debug(`handleActivityCommand: parsed date <${dateStr}> from <${val}> and command <${this.command}>`);
   const dayPlanner = new DayPlanner(this.date, this.trip, this.fbid); 
   if(!isValidDate.call(this)) {
     const errMessage = {
@@ -100,7 +100,7 @@ function handleActivityCommand() {
           id: this.fbid
         },
         message: {
-          text: `${CreateItinerary.formatDate(this.date)} is not a valid date for your ${this.trip.data.rawName} trip`,
+          text: `${dateStr} is not a valid date for your ${this.trip.data.rawName} trip`,
           metadata: "DEVELOPER_DEFINED_METADATA"
         }
     };
@@ -146,11 +146,11 @@ function isValidDate() {
     return true;
   }
 
-  const sdMoment = new moment(this.trip.data.startDate);
-  const rdMoment = new moment(this.trip.data.returnDate);
+  const sdMoment = new moment(new Date(this.trip.data.startDate));
+  const rdMoment = new moment(new Date(this.trip.data.returnDate));
 
-  if(!dateMoment.isBetween(sdMoment, rdMoment) || !dateMoment.isSame(sdMoment) || !dateMoment.isSame(rdMoment)) {
-    logger.warn(`isValidDate: ${this.date} is not between ${this.trip.data.startDate} & ${this.trip.data.returnDate}`);
+  if(!dateMoment.isBetween(sdMoment, rdMoment) && !dateMoment.isSame(sdMoment) && !dateMoment.isSame(rdMoment)) {
+    logger.warn(`isValidDate: ${CreateItinerary.formatDate(this.date)} is not between ${this.trip.data.startDate} & ${this.trip.data.returnDate}`);
     return false;
   }
 
@@ -310,7 +310,7 @@ function getTimezone() {
     '6/18/2017' : "Asia/Tel_Aviv",
     '6/19/2017' : "Asia/Tel_Aviv",
   };  
-  const telAvivList = ["1443244455734100", "1120615267993271", "1420209771356315"];
+  const telAvivList = ["1443244455734100", "1120615267993271", "1420209771356315", "1234"];
   const londonList = ["1420839671315623"];
   if(telAvivList.includes(this.fbid)) return "Asia/Tel_Aviv";
   if(londonList.includes(this.fbid)) return "Europe/London";

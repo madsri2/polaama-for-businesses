@@ -543,6 +543,43 @@ describe("Commands tests: Activity tests: ", function() {
   });
 });
 
+
+describe("Commands tests: Next Activity", function() {
+  before(function() {
+    const twoDaysAgo = new Date();
+    twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+    const startDate = new moment(twoDaysAgo).format("YYYY-MM-DD");
+    createNewTrip();
+    trip.data.startDate = startDate;
+    const eightDaysFromNow = new Date();
+    eightDaysFromNow.setDate(twoDaysAgo.getDate() + 10);
+    trip.data.returnDate = new moment(eightDaysFromNow).format("YYYY-MM-DD");
+    trip.data.duration = 10;
+    // set up
+    const base = `${baseDir}/trips/ZDdz`;
+    let filePrefix = "test-mobile-view-2017-6-22-itinerary.json";
+    const date = moment().tz("GMT");
+    const thisMonth = date.month();
+    const thisYear = date.year();
+    const thisDate = date.date();
+    const targetPrefix = `test-mobile-view-${thisYear}-${thisMonth + 1}-${thisDate}-itinerary.json`;
+    fs.copySync(`${base}/forTestingPurposes/${filePrefix}`, `${base}/${targetPrefix}`);
+    if(!fs.existsSync(`${base}/${targetPrefix}`)) throw new Error(`file ${targetPrefix} not present`);
+  });
+
+  after(function() {
+    cleanup();
+  });
+
+  it("next", function() {
+    const commands = new Commands(trip, fbid);
+    const message = commands.handleActivity("next");
+    // An error message would result in message.text. Otherwise, it would be a generic template of a list template (an object)
+    expect(message.message.text).to.be.undefined;
+    logger.debug(`${JSON.stringify(message)}`);
+  });
+});
+
 // TODO: Make this relative. this won't scale.
 describe("Commands tests: Meal commands", function() {
   before(function() {

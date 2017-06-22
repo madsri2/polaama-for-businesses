@@ -243,7 +243,6 @@ DayPlanner.prototype.getNextActivityRelativeToTime = function() {
   try {
     const date = this.date.getDate();
     logger.debug(`getNextActivityRelativeToTime: getting next activity for date ${date}`);
-    // const nag = new NextActivityGetter(date);
     const nag = new NextActivityGetter(this.trip, date, this.activityList);
     const index = nag.getNext();
     if(index < 0 || index > this.activityList.length) {

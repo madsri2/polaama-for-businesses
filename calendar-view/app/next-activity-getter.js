@@ -4,7 +4,6 @@ const baseDir = "/home/ec2-user";
 const logger = require(`${baseDir}/my-logger`);
 const fs = require('fs');
 
-// function NextActivityGetter(activityList, testing) {
 function NextActivityGetter(trip, date, activityList, testing) {
   if(!trip) throw new Error("NextActivityGetter: required param trip is missing");
   if(!date) throw new Error("NextActivityGetter: required param date is missing");

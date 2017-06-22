@@ -87,7 +87,18 @@ function compareHours() {
   else console.log("false");
 }
 
-compareHours();
+function compare() {
+  const dateMoment = new moment(new Date("2017-6-22"));
+  const sdMoment = new moment(new Date("2017-6-17"));
+  const rdMoment = new moment(new Date("2017-6-25"));
+
+  if(!dateMoment.isBetween(sdMoment, rdMoment) && !dateMoment.isSame(sdMoment) && !dateMoment.isSame(rdMoment)) {
+    console.log(`isValidDate: ${dateMoment} is not between ${sdMoment} & ${rdMoment}`);
+  }
+}
+
+compare();
+// compareHours();
 // patternMatch();
 
 // formats();
