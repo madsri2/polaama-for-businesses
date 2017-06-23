@@ -79,6 +79,7 @@ function handleMessagingEvent(messagingEvent) {
       }
     );
   }
+  else logger.debug(`handleMessagingEvent: fbid ${fbid} already exists in fbidHandler file.`);
   // if promise was null, it means this fbid already exists in the fbidHandler file. So, nothing to do
 
   try {
@@ -457,6 +458,7 @@ function receivedPostback(event) {
   if(payload === "car details") return sendCarReceipt.call(this);
 
   const commands = new Commands(this.session.tripData(), this.session.fbid);
+  if(payload.includes("recommendation_next_set")) return callSendAPI(commands.handleRecommendationPostback(payload));
   let handled = commands.handlePostback(payload);
   if(handled && (typeof handled === "object")) return callSendAPI(handled);
   handled = commands.handleActivityPostback(payload);

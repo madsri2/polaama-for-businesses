@@ -65,13 +65,13 @@ ButtonsPlacement.prototype.getPlacement = function() {
 
   buttons.push(tripCalendar);
 	buttons.push(weather);
-  buttons.push({
+  buttons.push(/*{
     type:"web_url",
   	url: url(this.urlPrefix, `${this.trip.activitiesUrlPath()}`),
     title:"Activities",
     webview_height_ratio: "compact",
     messenger_extensions: true,
-  }, {
+  }, */ {
     type: "web_url",
     url: url(this.urlPrefix, `${this.tripName}/comments`),
     title: "Comments",

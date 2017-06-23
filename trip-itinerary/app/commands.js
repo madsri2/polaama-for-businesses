@@ -42,6 +42,11 @@ Commands.prototype.canHandleActivity = function(command) {
   this.command = command;
   if(this.command.startsWith("first activity ") || (this.command.startsWith("first for ") || this.command === "first") || (this.command.startsWith("first on "))) return true;
   if(this.command === "next") return true; // support getting activity relative to current time
+  return canHandleRecommendations.call(this);
+}
+
+function canHandleRecommendations() {
+  if(this.command === "running" || this.command === "trails") return true;
   return false;
 }
 
@@ -69,6 +74,16 @@ Commands.prototype.handleMealsCommand = function(command) {
   return dayPlanner.getMealElement(contents[1]);
 }
 
+Commands.prototype.handlePostback = function(payload) {
+  // logger.debug(`handlePostback: date is ${date}; ${CreateItinerary.formatDate(date)}`);
+  const parsedPayload = DayPlanner.parseDayItinPostback(payload); 
+  if(!parsedPayload) return null;
+  if(!listFormatAvailable(parsedPayload.date)) return null;
+  this.date = parsedPayload.date;
+  this.setNum = parseInt(parsedPayload.number);
+  return getDayItinerary.call(this);
+}
+
 Commands.prototype.handleActivityPostback = function(payload) {
   const content = DayPlanner.parseActivityPostback(payload);
   if(!content) return null;
@@ -83,7 +98,30 @@ Commands.prototype.handleActivityPostback = function(payload) {
   return null;
 }
 
+Commands.prototype.handleRecommendationPostback = function(payload) {
+  const content = DayPlanner.parseRecommendationPostback(payload);
+  if(!content) return {
+    recipient: {
+      id: this.fbid
+    },
+    message: {
+      text: `Cannot get recommendations for this intereste for trip ${this.trip.data.rawName}`,
+      metadata: "DEVELOPER_DEFINED_METADATA"
+    }
+  };
+  const dayPlanner = new DayPlanner("invalid", this.trip, this.fbid); 
+  return dayPlanner.getRecommendations("running_trail", content.idx);
+}
+
+function handleRecommendations() {
+  if(this.command !== "running" && this.command !== "trails") return null;
+  const dayPlanner = new DayPlanner("invalid", this.trip, this.fbid); 
+  return dayPlanner.getRecommendations("running_trail");
+}
+
 function handleActivityCommand() {
+  const message = handleRecommendations.call(this); 
+  if(message) return message;
   // parse
   let contents = /(first|next)\s*(?:activity)?\s*(?:for|on)?\s*(.*)/.exec(this.command);
   if(!contents) return null;
@@ -166,15 +204,6 @@ Commands.prototype.getPath = function(command) {
   return new moment(this.date).format("YYYY-MM-DD");
 }
 
-Commands.prototype.handlePostback = function(payload) {
-  // logger.debug(`handlePostback: date is ${date}; ${CreateItinerary.formatDate(date)}`);
-  const parsedPayload = DayPlanner.parseDayItinPostback(payload); 
-  if(!parsedPayload) return null;
-  if(!listFormatAvailable(parsedPayload.date)) return null;
-  this.date = parsedPayload.date;
-  this.setNum = parseInt(parsedPayload.number);
-  return getDayItinerary.call(this);
-}
 
 function listFormatAvailable(date) {
   return true;
@@ -217,6 +246,7 @@ function setDateIfValid(passedCommand) {
   if(contents && (contents[2] === " " || contents[2] === '' || contents[2] === "th" || contents[2] === "rd" || contents[2] === "st" || contents[2] === "nd")) {
       // user just provided the date, without specifying month & year. Infer the month & year based on this trip's start & return dates.
       setTripMonthAndYear.call(this, contents[1]);
+      if(!this.tripMonth && !this.tripYear) return false;
       if(!Array.isArray(this.tripMonth) && !Array.isArray(this.tripYear)) {
         this.date = new Date(this.tripYear, this.tripMonth, contents[1]);
         logger.debug(`setDateIfValid: Matched [date]. contents: [${contents}] set date to be (${this.date})`);
@@ -310,8 +340,8 @@ function getTimezone() {
     '6/18/2017' : "Asia/Tel_Aviv",
     '6/19/2017' : "Asia/Tel_Aviv",
   };  
-  const telAvivList = ["1443244455734100", "1120615267993271", "1420209771356315", "1234"];
-  const londonList = ["1420839671315623"];
+  const telAvivList = ["1443244455734100", "1420209771356315"]; // , "1234"];
+  const londonList = ["1420839671315623", "1120615267993271"];
   if(telAvivList.includes(this.fbid)) return "Asia/Tel_Aviv";
   if(londonList.includes(this.fbid)) return "Europe/London";
   return "US/Pacific";

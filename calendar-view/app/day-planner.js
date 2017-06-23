@@ -101,6 +101,20 @@ DayPlanner.prototype.getMealElement = function(meal) {
   return activityAsGenericTemplate.call(this, idx);
 }
 
+function addViewMoreButton(message, currIndex, lastSet) {
+  const payload = `${currIndex + 1}-recommendation_next_set`;
+  const viewMoreButton = [{
+    title: "View more",
+    type: "postback",
+    payload: payload
+  }];
+  const elements = message.message.attachment.payload.elements;
+  logger.debug(`addViewMoreButton: lastSet: ${lastSet}; elements length: ${elements.length};`);
+  // unless this is the last set of activity elements for this day, send along a "view more" button
+  if(!lastSet && (elements.length > 1)) message.message.attachment.payload.buttons = viewMoreButton;
+  return message;
+}
+
 function addButtonsToMessage(message, currIndex, lastSet) {
   const payload = `${this.date.getFullYear()}-${this.date.getMonth()}-${this.date.getDate()}-${currIndex + 1}-itin_second_set`;
   const viewMoreButton = [{
@@ -156,6 +170,42 @@ function addButtonsToMessage(message, currIndex, lastSet) {
   return message;
 }
 
+DayPlanner.prototype.getRecommendations = function(interest, index) {
+  let currIndex = 0;
+  if(index) currIndex = index; 
+  let file;
+
+  switch(interest) {
+    case "running_trail": 
+      file = this.trip.runningTrailFile();
+      break;
+  };
+  const errMessage = {
+    recipient: {
+      id: this.fbid
+    },
+    message: {
+      text: `Unable to get recommendations for this interest for trip ${this.trip.data.rawName}`,
+      metadata: "DEVELOPER_DEFINED_METADATA"
+    }
+  };
+  if(!file) {
+    logger.error(`getRecommendations: cannot find any file that matches interest ${interest} for trip ${this.trip.data.rawName}`);
+    return errMessage;
+  }
+  try {
+    const activityList = JSON.parse(fs.readFileSync(file, 'utf8'));
+    return createListTemplate.call(this, activityList, currIndex);
+  }
+  catch(err) {
+    let text;
+    if(err.code === 'ENOENT') text = `No recommendations yet for this interest for trip ${this.trip.data.rawName}.`;
+    else text = `Unable to get recommendations for this interest for trip ${this.trip.data.rawName}.`;
+    errMessage.message.text = text;
+    return errMessage;
+  }
+}
+
 // Facebook supports sending only 4 items in an elementList. So, use payload (see below) to pass around the index for the next set of items. 
 DayPlanner.prototype.getPlanAsList = function(setNum) {
   const file = this.trip.dayItineraryFile(this.date);
@@ -163,9 +213,18 @@ DayPlanner.prototype.getPlanAsList = function(setNum) {
   try {
     // read the itinerary file, which is a list of json objects. Push each json object (which contains utmost 4 elements) into an array. Then, based on the index (either passed or defaults to 0), return the corresponding element set.
     const dayAsList = JSON.parse(fs.readFileSync(file, 'utf8'));
+    return createListTemplate.call(this, dayAsList, setNum);
+  }
+  catch(e) {
+    logger.error(`error in getting plans for date ${this.date}: ${e.stack}`);
+    return null;
+  }
+}
+
+function createListTemplate(list, setNum) {
     const elementSet = [];
-    Object.keys(dayAsList).forEach(key => {
-      elementSet.push(dayAsList[key]);
+    Object.keys(list).forEach(key => {
+      elementSet.push(list[key]);
     });
     let currIndex = 0;
     if(setNum) currIndex = setNum;
@@ -186,18 +245,14 @@ DayPlanner.prototype.getPlanAsList = function(setNum) {
     // if there is only one element in elements, then use a "generic" template instead of "list" template. 
     if(elements.length === 1) message.message.attachment.payload.template_type = "generic";
     message.message.attachment.payload.elements = elements;
-    logger.debug(`getPlanAsList: currIndex: ${currIndex}; elementSet length: ${elementSet.length}`);
+    logger.debug(`getPlanAsList: currIndex: ${currIndex}; elementSet length: ${elementSet.length}; this.date: ${this.date}`);
     // the last parameter indicates whether this is the lastSet or not.
-    message = addButtonsToMessage.call(this, message, currIndex, currIndex >= (elementSet.length - 1));
+    if(this.date === "invalid") message = addViewMoreButton.call(this, message, currIndex, currIndex >= (elementSet.length -1));
+    else message = addButtonsToMessage.call(this, message, currIndex, currIndex >= (elementSet.length - 1));
+    // logger.debug(`createListTemplate: message is ${JSON.stringify(message)}`);
     // the first item in the list is almost always a map, so we don't set the style to compact. Subsequent items are just normal.
-    // logger.debug(`getPlanAsList: currIndex: ${currIndex}; elements.length: ${elements.length}`);
     if(currIndex > 0 && elements.length > 1) message.message.attachment.payload.top_element_style = "compact";
     return message;
-  }
-  catch(e) {
-    logger.error(`error in getting plans for date ${this.date}: ${e.stack}`);
-    return null;
-  }
 }
 
 DayPlanner.prototype.setActivityList = function() {
@@ -284,11 +339,13 @@ function activityAsGenericTemplate(idx) {
   const elements = [];
   elements.push(this.activityList[idx]);
   // logger.debug(`activityAsGenericTemplate: date: ${new moment(this.date).format("D")}; date: ${new moment(this.date).format("Do")}`);
-  elements[0].subtitle = `"Activity ${idx + 1} on ${new moment(this.date).format("Do")}": ` + elements[0].subtitle; 
+  const prefix = `"Activity ${idx + 1} on ${new moment(this.date).format("Do")}"`;
+  if(elements[0].subtitle) elements[0].subtitle = `${prefix}: ${elements[0].subtitle}`;
+  else elements[0].subtitle = prefix;
   let buttons = [];
-  let prefix = `${this.date.getFullYear()}-${this.date.getMonth()}-${this.date.getDate()}-${idx}-`;
+  let payloadPrefix = `${this.date.getFullYear()}-${this.date.getMonth()}-${this.date.getDate()}-${idx}-`;
   if(idx > 0) {
-    const payload = prefix.concat(`prev`);
+    const payload = payloadPrefix.concat(`prev`);
     buttons.push({
       title: "Prev",
       type: "postback",
@@ -296,7 +353,7 @@ function activityAsGenericTemplate(idx) {
     });
   }
   if(idx != (this.activityList.length - 1)) {
-    const payload = prefix.concat(`next`);
+    const payload = payloadPrefix.concat(`next`);
     buttons.push({
       title: "Next",
       type: "postback",
@@ -342,6 +399,13 @@ DayPlanner.parseDayItinPostback = function(payload) {
   return {
     date: date,
     number: count
+  };
+}
+
+DayPlanner.parseRecommendationPostback = function(payload) {
+  let contents = /^(\d+)-recommendation_next_set/.exec(payload);  
+  return {
+    idx: parseInt(contents[1]),
   };
 }
 

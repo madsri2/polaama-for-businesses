@@ -113,6 +113,7 @@ describe("Commands tests: ", function() {
         expect(commands.date.getMonth()).to.equal(thisMonth);
         expect(commands.date.getFullYear()).to.equal(thisYear);
         expect(commands.date.getDate()).to.equal(thisDate);
+        logger.debug(`${JSON.stringify(result)}`);
         verifyListViewResponse(result, 4 /* activity count */, true /* button present */, true /* first */);
         done();
       },
@@ -387,7 +388,8 @@ describe("Commands tests: Activity tests: ", function() {
     expect(elements.length).to.equal(1);
     expect(elements[0].title).to.equal("Breakfast at Carlton Hotel");
     if(!day) day = "13";
-    expect(elements[0].subtitle).to.startsWith(`\"Activity 1 on ${day}th\": `); 
+    const dayMoment = new moment().date(day).format("Do");
+    expect(elements[0].subtitle).to.startsWith(`\"Activity 1 on ${dayMoment}\":`); 
     expect(elements[0].default_action.url).to.equal("www.carlton.co.il/en");
   }
 
@@ -416,7 +418,8 @@ describe("Commands tests: Activity tests: ", function() {
     expect(elements.length).to.equal(1);
     expect(elements[0].title).to.equal("09:30 Program with KamaTech at WIX");
     if(!day) day = "13";
-    expect(elements[0].subtitle).to.equal(`\"Activity 2 on ${day}th\": Meet at WIX office`);
+    const dayMoment = new moment().date(day).format("Do");
+    expect(elements[0].subtitle).to.equal(`\"Activity 2 on ${dayMoment}\": Meet at WIX office`);
     expect(elements[0].default_action.url).to.equal("https://polaama.com/aeXf/tel_aviv/2017-6-13/item-2");
   }
 
@@ -466,9 +469,13 @@ describe("Commands tests: Activity tests: ", function() {
   });
 
   function setupFilesForTodayTests(date) {
-    const thisMonth = new Date().getMonth();
-    const thisYear = new Date().getFullYear();
-    const thisDate = new Date().getDate();
+    const dateMoment = moment().tz("US/Pacific");
+    const thisMonth = dateMoment.month();
+    const thisYear = dateMoment.year();
+    let thisDate = dateMoment.date();
+    // const thisMonth = new Date().getMonth();
+    // const thisYear = new Date().getFullYear();
+    // const thisDate = new Date().getDate();
     const base = `${baseDir}/trips/ZDdz`;
     const filePrefix = `test-mobile-view-2017-6-${date}-itinerary.json`;
     const targetFile = `test-mobile-view-${thisYear}-${thisMonth + 1}-${thisDate}-itinerary.json`;
@@ -536,9 +543,16 @@ describe("Commands tests: Activity tests: ", function() {
     trip.data.returnDate = new moment(eightDaysFromNow).format("YYYY-MM-DD");
 
     const commands = new Commands(trip, fbid);
-    let message = commands.handleActivity("first on 2nd");
-    logger.debug(`${JSON.stringify(message)}`);
-    message = commands.handleActivity("first on 29th");
+    const threeDaysAgo = new Date();
+    threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
+    const threeDaysAgoMoment = new moment(threeDaysAgo).format("Do");
+    expect(commands.handleActivity(`first on ${threeDaysAgoMoment}`)).to.be.null;
+    // logger.debug(`${JSON.stringify(message)}`);
+    const twelveDaysFromNow = new Date();
+    twelveDaysFromNow.setDate(twelveDaysFromNow.getDate() + 12);
+    const twelveDaysFromNowMoment = new moment(twelveDaysFromNow).format("Do");
+    const message = commands.handleActivity(`first on ${twelveDaysFromNow}`);
+    expect(message).to.be.null;
     logger.debug(`${JSON.stringify(message)}`);
   });
 });
@@ -645,5 +659,35 @@ describe("Commands tests: Meal commands", function() {
     logger.debug(`dinner on 18th: ${JSON.stringify(message)}`);
     trip.data.startDate =  origStartDate;
     trip.data.returnDate = origReturnDate;
+  });
+});
+
+describe("Running trail tests", function() {
+  before(function() {
+    createNewTrip();
+    // set up
+    const base = `${baseDir}/trips/ZDdz`;
+    let filePrefix = "test-mobile-view-running-trails.json";
+    fs.copySync(`${base}/forTestingPurposes/${filePrefix}`, `${base}/${filePrefix}`);
+    if(!fs.existsSync(`${base}/${filePrefix}`)) throw new Error(`file ${filePrefix} not present`);
+  });
+
+  after(function() {
+    cleanup();
+  });
+
+  it("basic test", function() {
+    const commands = new Commands(trip, fbid);
+    expect(commands.canHandleActivity("running")).to.be.ok;
+    let message = commands.handleActivity("running");
+    expect(message.message.attachment.payload.template_type).to.equal("list");
+    expect(message.message.attachment.payload.elements.length).to.equal(3);
+    expect(message.message.attachment.payload.elements[0].subtitle).to.equal("Near your hotel");
+    logger.debug(`basic test: ${JSON.stringify(message)}`);
+    message = commands.handleRecommendationPostback(`1-recommendation_next_set`);
+    expect(message.message.attachment.payload.top_element_style).to.equal("compact");
+    expect(message.message.attachment.payload.elements.length).to.equal(2);
+    expect(message.message.attachment.payload.elements[0].subtitle).to.equal("2.2 miles from hotel");
+    logger.debug(`second set ${JSON.stringify(message)}`);
   });
 });

@@ -37,11 +37,11 @@ describe("DayPlanner tests", function() {
     dp.setActivityList();
     if(!exceptionList) exceptionList = [];
     exceptionList.forEach(meal => {
-      expect(dp.getMealElementNew(meal).message.text).to.not.be.null;
+      expect(dp.getMealElement(meal).message.text).to.not.be.null;
     });
     ["breakfast", "lunch", "dinner"].forEach(meal => {
       if(exceptionList.includes(meal)) return;
-      expect(dp.getMealElementNew(meal).message.attachment.payload.template_type).to.equal("generic");
+      expect(dp.getMealElement(meal).message.attachment.payload.template_type).to.equal("generic");
     });
   }
 

@@ -620,6 +620,10 @@ TripData.prototype.getNAPEstimatesFile = function() {
   return `${this.tripBaseDir}/${this.data.name}-nap-estimates.json`;
 }
 
+TripData.prototype.runningTrailFile = function() {
+  return `${this.tripBaseDir}/${this.data.name}-running-trails.json`;
+}
+
 TripData.prototype.dayItineraryFile = function(date) {
   return `${this.tripBaseDir}/${this.data.name}-${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-itinerary.json`;
 }

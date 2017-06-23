@@ -9,12 +9,13 @@ const FbidHandler = require('fbid-handler/app/handler');
 
 // const fbid = "1120615267993271"; // madhu
 const fbid = "1718674778147181"; // Beth
-const trip = new TripData("tel_aviv", fbid);
+// const fbid = "1420839671315623"; // Aparna
 const session = Sessions.get().find(fbid);
 if(!session) throw new Error(`could not find session for fbid ${fbid}`);
 const handler = new WebhookPostHandler(session);
 
 function sendPackList() {
+	const trip = new TripData("london", fbid);
   handler.sendMultipleMessages(fbid, [
     handler.getTextMessageData(fbid, `Don't forget "sunscreen" for your ${trip.data.rawName} trip. It is going to be sunny (around 80°F)`), 
     handler.getTextMessageData(fbid, "We have created a full pack list for you"),
@@ -31,64 +32,88 @@ function flightStatusAndWaitTimes() {
 }
 
 function sendDayPlan() {
-  const firstSet = [
+	const firstSet = [
     {
-      "title": "See your 6/18 itinerary as a map",
-      "subtitle": "Click to see map",
-      "image_url": "https://polaama.com/XQLn/tel_aviv/2017-6-18/-/map",
-      "default_action": {
-        "type": "web_url",
-        "url": "https://goo.gl/maps/y4NdfL5RuYC2",
-        "webview_height_ratio": "full"
-      }
+      "title": "Running trails in Salt Lake city",
+      "subtitle": "Near your hotel",
+      "image_url": "https://cdn.pixabay.com/photo/2012/04/02/12/56/exercising-24419_960_720.png"
     },
     {
-      "title": "Breakfast and relaxing morning at the hotel",
-      "subtitle": "Check-out",
-      "image_url": "http://tinyurl.com/ycud3a3o",
+      "title": "Herman Franks Park",
+      "subtitle": ".3 miles from hotel",
+      "image_url": "http://www.slcgov.com/sites/default/files/images/parks/2012/hermanfranks-(1)-1185.jpg",
       "default_action": {
         "type": "web_url",
-        "url": "http://www.isrotelexclusivecollection.com/beresheet/",
+        "url": "http://www.slcgov.com/cityparks/parks-herman-franks-park",
         "webview_height_ratio": "full"
-      }
+      },
+      "buttons": [
+        {
+          "title": "Directions",
+          "type": "web_url",
+          "url": "https://goo.gl/maps/zQvhVZGjxSx",
+          "webview_height_ratio": "full"
+        }
+      ]
     },
     {
-      "title": "Visit Ben Gurion's grave",
-      "subtitle": "The decision we make as leaders",
-      "image_url": "http://www.parks.org.il/sites/English/ParksAndReserves/benGorion/PublishingImages/%D7%90%D7%97%D7%95%D7%96%D7%AA%20%D7%A7%D7%91%D7%A8%20%D7%91%D7%9F%20%D7%92%D7%95%D7%A8%D7%99%D7%95%D7%9F.jpg",
+      "title": "Liberty Park",
+      "subtitle": "1 mile from hotel",
+      "image_url": "http://www.slcgov.com/sites/default/files/images/parks/2012/IMG_2859.jpg",
       "default_action": {
         "type": "web_url",
-        "url": "https://polaama.com/XQLn/tel_aviv/2017-6-18/item-2",
-        "webview_height_ratio": "full"
-      }
-    },
-    {
-      "title": "Leadership Dilemmas",
-      "subtitle": "Sde Boker",
-      "default_action": {
-        "type": "web_url",
-        "url": "https://polaama.com/XQLn/tel_aviv/2017-6-18/item-3",
-        "webview_height_ratio": "full"
-      }
-    },
-  ];
-  const secondSet = [
-    {
-      "title": "Closing session and Dinner",
-      "subtitle": "Hedal Offaim's home",
-      "image_url": "http://www.ofaimme.com/wp-content/uploads/2013/08/2-672x400.jpg",
-      "default_action": {
-        "type": "web_url",
-        "url": "https://polaama.com/XQLn/tel_aviv/2017-6-18/item-4",
-        "webview_height_ratio": "full"
-      }
-    },
-    {
-      "title": "Bus departs for Ben Gurion airport",
-      "subtitle": "Depart at 23:10. Flight UA91",
-      "image_url": "http://tinyurl.com/ybrq92nt",
+        "webview_height_ratio": "full",
+        "url": "http://www.slcgov.com/cityparks/parks-liberty-park"
+      },
+      "buttons": [
+        {
+          "title": "Directions",
+          "type": "web_url",
+          "url": "https://goo.gl/maps/zQvhVZGjxSx",
+          "webview_height_ratio": "full"
+        }
+      ]
     }
   ];
+  // Interactive SLC: http://www.slcgov.com/cityparks/parks-wasatch-hollow-park
+	const secondSet = [
+    {
+      "title": "Sunnyside Park",
+      "subtitle": "2.2 miles from hotel",
+      "image_url": "http://www.slcgov.com/sites/default/files/images/parks/2012/sunnyside-(6)-1333.jpg",
+      "default_action": {
+        "type": "web_url",
+        "url": "http://www.slcgov.com/cityparks/parks-sunnyside-park",
+        "webview_height_ratio": "full"
+      },
+      "buttons": [
+        {
+          "title": "Directions",
+          "type": "web_url",
+          "url": "https://goo.gl/maps/JvwRiVZnJy42",
+          "webview_height_ratio": "full"
+        }
+      ]
+    },
+    {
+      "title": "Wasatch Hollow park",
+      "subtitle": "1.6 miles from hotel",
+      "image_url": "http://www.slcgov.com/sites/default/files/images/parks/2012/wasatchhollow-(1)-1294.jpg",
+      "default_action": {
+        "type": "web_url",
+        "webview_height_ratio": "full",
+        "url": "http://www.slcgov.com/cityparks/parks-wasatch-hollow-park"
+      },
+      "buttons": [
+        {
+          "title": "Directions",
+          "type": "web_url",
+          "url": "https://goo.gl/maps/wah5FyTtxTy",
+          "webview_height_ratio": "full"
+        }
+      ]
+    }
+	];
   const message = {
     recipient: {
       id: fbid
@@ -99,11 +124,12 @@ function sendDayPlan() {
         payload: {
           template_type: "list",
           "top_element_style": "compact",
+          // elements: firstSet,
           elements: secondSet,
           buttons: [{
-            title: "Return Flight",
+            title: "View more",
             "type": "postback",
-            payload: "return flight"
+            payload: "view more"
           }]
         }
       }
@@ -112,6 +138,44 @@ function sendDayPlan() {
   const messageList = [];
   messageList.push(message);
   handler.sendMultipleMessages(fbid, messageList);
+}
+
+function sendCheckinMessage() {
+  const message = {
+    recipient: {
+      id: fbid
+    },
+    message: {
+      attachment: {
+        "type": "template",
+        payload: {
+        "template_type": "airline_checkin",
+        "intro_message": "Time to head home",
+        "locale": "en_US",
+        "pnr_number": "KLZ72D",
+        "flight_info": [
+          {
+            "flight_number": "BA279",
+            "departure_airport": {
+              "airport_code": "LHR",
+              "city": "London",
+            },
+            "arrival_airport": {
+              "airport_code": "SJC",
+              "city": "San Jose",
+            },
+            "flight_schedule": {
+              "departure_time": "2017-06-23T15:00",
+              "arrival_time": "2017-06-23T18:00"
+            }
+          }
+        ],
+        "checkin_url": "https://www.britishairways.com/travel/home/public/en_us"
+      	}
+    	}
+  	}
+	};
+  handler.sendAnyMessage(message);
 }
 
 function sendSingleActivity() {
@@ -125,9 +189,8 @@ function sendSingleActivity() {
         payload: {
           template_type: "generic",
           elements: [{
-              "title": "Flight DL752 departs SEA at 7:24 AM on July 26th",
-              "subtitle": "Mostly sunny in Seattle; Partly cloudy in Salt Lake City",
-              "image_url": "https://polaama.com/aeXf/salt_lake_city/2017-7-26/-/map",
+              "title": "Your BA Flight BA279 leaves at 3.00 PM tomorrow",
+              "subtitle": "Time to check-in",
               "default_action": {
                 "type": "web_url",
                 "url": "https://flightaware.com/live/flight/DL752",
@@ -157,14 +220,16 @@ function sendFeatureMessage() {
         payload: {
           top_element_style: "compact",
           template_type: "list",
-          elements: [{
+          elements: [
+					{
             "title": "Feature Alert",
             "subtitle": `Add details to your itinerary with the "trip calendar" command`
           },
           {
             "title": "Feature Alert",
             "subtitle": `See a specific day's itinerary by entering a travel day. Eg. "25", "26th" etc.`
-          }]
+          }
+					]
         }
       }
     }
@@ -173,30 +238,50 @@ function sendFeatureMessage() {
 }
 
 function sendNewFeatureMessage() {
-  const messageList = [];
-  messageList.push(handler.getTextMessageData(fbid, `New Feature Alert: You can now find out where you are going to eat with simple commands like "breakfast", "lunch","dinner","lunch on 18th" etc.`));
-  handler.sendMultipleMessages(fbid, messageList);
-  
+  const message = {
+    recipient: {
+      id: fbid
+    },
+    message: {
+      attachment: {
+        "type": "template",
+        payload: {
+          template_type: "generic",
+          elements: [
+					{
+            "title": "New Feature Alert: We have added running trail recommendations",
+            "subtitle": `See trails near your Salt Lake City hotel with commands: "running" or "trails"`
+          },
+					]
+        }
+      }
+    }
+  };
+  handler.sendAnyMessage(message);
+  // handler.sendMultipleMessages(fbid, messageList);
 }
 
 function sendGoodMorningMessage() {
+	const trip = new TripData("london", fbid);
   const commands = new Commands(trip, fbid);
   const message = commands.handle("today");
   const messageList = [];
   let name = new FbidHandler().getName(fbid);
   if(!name) name = "";
   else name = name.substring(0, name.indexOf(" "));
-  messageList.push(handler.getTextMessageData(fbid, `Good morning ${name}!. Hope you had a great trip. You will be flying home today. Here is your itinerary.`));
+  messageList.push(handler.getTextMessageData(fbid, `Good morning ${name}!. Hope you had a great trip at London. You will be flying home today. Here is your itinerary.`));
   messageList.push(message);
   handler.sendMultipleMessages(fbid, messageList);
 }
+
+// sendCheckinMessage();
 
 // sendDayPlan();
 // sendGoodMorningMessage();
 
 // sendSingleActivity();
-// sendNewFeatureMessage();
-sendFeatureMessage();
+sendNewFeatureMessage();
+// sendFeatureMessage();
 
 // flightStatusAndWaitTimes();
 // sendPackList();
