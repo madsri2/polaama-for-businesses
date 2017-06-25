@@ -7,8 +7,8 @@ const Sessions = require(`${baseDir}/sessions`);
 const Commands = require(`trip-itinerary/app/commands`);
 const FbidHandler = require('fbid-handler/app/handler');
 
-// const fbid = "1120615267993271"; // madhu
-const fbid = "1718674778147181"; // Beth
+const fbid = "1120615267993271"; // madhu
+// const fbid = "1718674778147181"; // Beth
 // const fbid = "1420839671315623"; // Aparna
 const session = Sessions.get().find(fbid);
 if(!session) throw new Error(`could not find session for fbid ${fbid}`);

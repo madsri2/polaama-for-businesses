@@ -190,7 +190,7 @@ TripData.prototype.addTripDetailsAndPersist = function(tripDetails) {
     this.data.startDate = moment(sdIso).format("YYYY-MM-DD");
   }
   else this.data.startDate = "unknown";
-  
+
   if(tripDetails.tripStarted) this.data.tripStarted = tripDetails.tripStarted;
   this.addPortOfEntry(tripDetails.portOfEntry);
   // duration includes the start date, so subtract 1
@@ -201,6 +201,9 @@ TripData.prototype.addTripDetailsAndPersist = function(tripDetails) {
   }
   else this.data.returnDate = "unknown";
   
+  if(tripDetails.returnDate) this.data.returnDate = moment(new Date(tripDetails.returnDate).toISOString()).format("YYYY-MM-DD");
+  logger.debug(`addTripDetailsAndPersist: return date is ${tripDetails.returnDate}`);
+
   // TODO: Get this information from weather API or the file persisted.
   this.data.weather = "sunny";
   createPackList.call(this);
@@ -649,6 +652,17 @@ TripData.prototype.returnFlightFile = function() {
 
 TripData.prototype.rentalCarReceiptFile = function() {
   return `${this.tripBaseDir}/${this.data.name}-rental-car-receipt.txt`;
+}
+
+TripData.prototype.getHotelReceiptDetails = function() {
+  if(this.hotelReceiptDetails) return this.hotelReceiptDetails;
+  const file = this.hotelRentalReceiptFile();
+  if(!fs.existsSync(file)) {
+    this.hotelReceiptDetails = null;
+    return null;
+  }
+  this.hotelReceiptDetails = JSON.parse(fs.readFileSync(this.hotelRentalReceiptFile(), 'utf8'));
+  return this.hotelReceiptDetails;
 }
 
 TripData.prototype.hotelRentalReceiptFile = function() {

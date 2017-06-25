@@ -2,6 +2,8 @@
 const baseDir = "/home/ec2-user";
 const logger = require(`${baseDir}/my-logger`);
 const TripFinder = require('flight-details-parser/app/trip-finder');
+const fs = require('fs');
+const Encoder = require(`${baseDir}/encoder`);
 
 function HotelReceiptManager(options, testing) {
   this.testing = testing;
@@ -34,6 +36,12 @@ function HotelReceiptManager(options, testing) {
       total_cost: options.total_price
     }
   };
+  this.tripFinder = new TripFinder(this.receipt.recipient_name, this.testing);
+  // if the trip name was sent, we use that to create the trip
+  if(options.trip_name && options.trip_name !== '') {
+    this.trip = this.tripFinder.getSession().getTrip(options.trip_name);
+    if(!this.trip) throw new Error(`HotelReceiptManager: options.trip_name was set to ${options.trip_name}, but there is no such trip. Possible BUG!`);
+  }
   this.receipt_ext = {
     template_type: 'generic',
     elements: [{
@@ -61,19 +69,27 @@ function validate(options) {
 }
 
 HotelReceiptManager.prototype.handle = function() {
-  const tripFinder = new TripFinder(this.receipt.recipient_name, this.testing);
-  this.trip = tripFinder.getTripForReceipt(this.check_in_date, this.receipt.address.city);
-  this.trip.setCountry(this.receipt.address.country);
+  // if the trip name was sent, short-circuit getting trip info from TripFinder
+  const tripFinder = this.tripFinder;
+  if(!this.trip) {
+    this.trip = tripFinder.getTripForReceipt(this.check_in_date, this.receipt.address.city);
+    this.trip.setCountry(this.receipt.address.country);
+  }
+  else tripFinder.getSession().setTripContextAndPersist(this.trip.tripName);
+
   const file = this.trip.hotelRentalReceiptFile();
   try {
     this.details.receipt = this.receipt;
     this.details.receipt_ext = this.receipt_ext;
-    const json = JSON.stringify(this.details);
-    require('fs').writeFileSync(file, json, 'utf8');
+    let hotelDetails = {};
+    if(fs.existsSync(file)) hotelDetails = JSON.parse(fs.readFileSync(file, 'utf8'));
+    hotelDetails[Encoder.encode(this.receipt.address.city)] = this.details;
+    const json = JSON.stringify(hotelDetails);
+    fs.writeFileSync(file, json, 'utf8');
     // send a notification to the user that we have their details and will send them the boarding pass the day before the flight.
     logger.debug(`handle: wrote ${json.length} bytes to file ${file}`);
     // notify user that we have received a boarding pass.
-    const message = `Received hotel rental receipt for your trip to ${this.trip.getPortOfEntry()}. Type 'get hotel details' to see details`;
+    const message = `Received receipt for your hotel stay in ${this.receipt.address.city}. Type 'get hotel details' to see details`;
     logger.debug(`handle: About to send message to user: ${message}`);
 		const postHandler = tripFinder.getPostHandler();
 		postHandler.notifyUser(message);

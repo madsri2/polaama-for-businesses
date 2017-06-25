@@ -6,6 +6,8 @@ const TripData = require(`${baseDir}/trip-data`);
 const TripInfoProvider = require(`${baseDir}/trip-info-provider`);
 const logger = require(`${baseDir}/my-logger`);
 logger.setTestConfig(); // indicate that we are logging for a test
+const FbidHandler = require('fbid-handler/app/handler');
+const fs = require('fs');
 
 const moment = require('moment');
 const Promise = require('promise');
@@ -205,7 +207,35 @@ function testDayPlanSecondSetCommand() {
   handler.testing_receivedPostback(event);
 }
 
-testDayPlanSecondSetCommand();
+function testHotelItineraryMultipleHotels() {
+  const handler = setup();
+  // update with hotel details
+  const hotels = {"port_moresby":{"receipt":{"template_type":"receipt","recipient_name":"Madhuvanesh Parthasarathy","order_number":"65786645","merchant_name":"Holiday Inn","payment_method":"Unknown","currency":"USD","order_url":"http://tinyurl.com/yb6uvywg","elements":[{"title":"Confirmation #:65786645","price":"177.73","currency":"USD"}],"address":{"street_1":"Cnr Waigani Drive & Wards Rd, Boroko","city":"Port Moresby","state":"National Capital District","country":"Papua New Guinea","postal_code":"121"},"summary":{"total_cost":"177.73"}},"receipt_ext":{"template_type":"generic","elements":[{"title":"Phone: 675-303-2000","buttons":[{"type":"web_url","url":"http://tinyurl.com/yb6uvywg","title":"Hotel rental"}],"subtitle":"CHECK-IN: Aug 11 2017 02:00 PM; CHECK-OUT: Aug 12 2017 11:00 AM"}]}},"brisbane":{"receipt":{"template_type":"receipt","recipient_name":"Madhuvanesh Parthasarathy","order_number":"BB1706166422446","merchant_name":"Novotel Brisbane Airport","payment_method":"Unknown","currency":"AUD","order_url":"http://www.novotelbrisbaneairport.com.au/guest-rooms/standard-room/","elements":[{"title":"Confirmation #:BB1706166422446","price":"333.00","currency":"AUD"}],"address":{"street_1":"6-8 The Circuit, Brisbane Airport","city":"Brisbane","state":"QLD","country":"Australia","postal_code":"4008"},"summary":{"total_cost":"333.00"}},"receipt_ext":{"template_type":"generic","elements":[{"title":"Phone: +61 7 3175 3100","buttons":[{"type":"web_url","url":"http://www.novotelbrisbaneairport.com.au/guest-rooms/standard-room/","title":"Hotel rental"}],"subtitle":"CHECK-IN: Aug 24 2017 02:00 PM; CHECK-OUT: Aug 25 2017 11:00 AM"}]}}};
+  const session = handler.session;
+  const trip = session.findTrip(); 
+  fs.writeFileSync(trip.hotelRentalReceiptFile(), JSON.stringify(hotels), 'utf8');
+  const event = { 
+    sender: {
+      id: session.fbid
+    }, 
+    recipient: {
+      id: session.fbid
+    }, 
+    timestamp: "12345",
+    postback: { 
+      payload: "hotel details" 
+    } 
+  };
+  handler.testing_receivedPostback(event);
+  event.postback.payload = "port_moresby-hotel-receipt";
+  handler.testing_receivedPostback(event);
+  event.postback.payload = "brisbane-hotel-receipt";
+  handler.testing_receivedPostback(event);
+}
+
+testHotelItineraryMultipleHotels();
+
+// testDayPlanSecondSetCommand();
 
 // testDayPlanCommand();
 

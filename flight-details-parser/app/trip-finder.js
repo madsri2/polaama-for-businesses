@@ -85,7 +85,7 @@ TripFinder.prototype.getTrip = function(departureDate, destCity, leavingFrom) {
 	return createNewTrip.call(this, destCity, departureDate, leavingFrom);
 }
 
-// used by receipt-managers (car & hotel), which won't have departure dates
+// used by receipt-managers (car & hotel), which might not have departure dates
 TripFinder.prototype.getTripForReceipt = function(receiptDate, destCity) {
   let myTrip;
   for(let idx = 0; idx < this.tripCount; idx++) {
@@ -94,8 +94,7 @@ TripFinder.prototype.getTripForReceipt = function(receiptDate, destCity) {
     logger.debug(`getTrip: found trip ${trip.tripName}. checking to see if it matches itinerary.`);
     // nothing to do if the cities don't match.
     if(!trip.comparePortOfEntry(destCity)) break;
-    logger.debug(`getTrip: found trip that matches city ${destCity}. Checking dates`);
-    // If the doesn't have a start date, then, it might be the trip (unless there is no other trip with the same name but with a start date).
+    // If this trip doesn't have a start date, then, it might be the trip (unless there is no other trip with the same name but with a start date).
     if(!tripData.startDate) {
       logger.debug(`getTrip: No start date for trip ${trip.tripName} for fbid ${this.fbid}. skipping this trip but marking it as a potential trip`);
       this.potentialTrip = tripData;
@@ -103,17 +102,18 @@ TripFinder.prototype.getTripForReceipt = function(receiptDate, destCity) {
     }
     // if receipt date is in between start date and return date, this is the trip
     const tripStartDate = moment(new Date(tripData.startDate).toISOString());
+    // logger.debug(`getTripForReceipt: tripStart date: ${tripStartDate}; return date is ${tripData.returnDate}. receiptDate is ${receiptDate}`);
     if(tripData.returnDate && tripData.returnDate != "unknown") {
       const mReturnDate = moment(new Date(tripData.returnDate).toISOString());
       const mReceiptDate = moment(new Date(receiptDate).toISOString());
-      if(mReceiptDate.isBetween(tripStartDate, mReturnDate)) {
+      if(mReceiptDate.isBetween(tripStartDate, mReturnDate) || mReceiptDate.isSame(tripStartDate)) {
         logger.debug(`getTrip: trip ${tripData.name} is a match. receipt date ${mReceiptDate} is in between trip's start date and return date`);
         myTrip = trip;
         break;
       }
       else continue; // this is not the trip.
     }
-		logger.debug(`comparing <${receiptDate}>, ${new Date(receiptDate)} and ${tripStartDate}`);
+		// logger.debug(`comparing <${receiptDate}>, ${new Date(receiptDate)} and ${tripStartDate}`);
     // if receipt date is after start date and there is no return date, this is the trip
     if(moment(new Date(receiptDate).toISOString()).isAfter(tripStartDate)) {
       logger.debug(`getTrip: found trip ${tripData.name} that matches port of entry ${destCity} and departure date ${tripStartDate} of boarding pass`);
@@ -125,7 +125,6 @@ TripFinder.prototype.getTripForReceipt = function(receiptDate, destCity) {
     this.session.setTripContextAndPersist(myTrip.tripName);
     return myTrip;
   }
-	logger.info(`getTripForReceipt: using receipt date ${receiptDate} as the start date for new trip because we don't have a start date`);
   return createNewTrip.call(this, destCity, receiptDate);
 }
 

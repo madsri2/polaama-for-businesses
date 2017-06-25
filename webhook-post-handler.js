@@ -79,7 +79,7 @@ function handleMessagingEvent(messagingEvent) {
       }
     );
   }
-  else logger.debug(`handleMessagingEvent: fbid ${fbid} already exists in fbidHandler file.`);
+  // else logger.debug(`handleMessagingEvent: fbid ${fbid} already exists in fbidHandler file.`);
   // if promise was null, it means this fbid already exists in the fbidHandler file. So, nothing to do
 
   try {
@@ -390,10 +390,7 @@ function receivedPostback(event) {
   this.session.clearAllAwaitingStates();
 
 	// new trip cta
-  if(payload === "new_trip" || payload === "pmenu_new_trip") {
-    planNewTrip.call(this);
-		return;
-	}
+  if(payload === "new_trip" || payload === "pmenu_new_trip") return planNewTrip.call(this);
 
   // existing trip
   if(payload.startsWith("trip_in_context")) {
@@ -410,15 +407,9 @@ function receivedPostback(event) {
     }
   }
 
-  if(payload === "pmenu_existing_trips") {
-		sendTripButtons.call(this);
-		return;
-  }
-  if(payload === "past_trips") {
-    // Do not set past trip as trip context because there is not much users can do.
-    sendPastTrips.call(this);
-    return;
-  }
+  if(payload === "pmenu_existing_trips") return sendTripButtons.call(this);
+  // Do not set past trip as trip context because there is not much users can do.
+  if(payload === "past_trips") return sendPastTrips.call(this);
 	
 	// In order to add travelers to a trip, we need to know the trip in context.
   if(!this.session.doesTripContextExist()) { 
@@ -430,31 +421,20 @@ function receivedPostback(event) {
   }
 
   if(payload === "add_comments") return enterCommentAsMessage.call(this);
-  if(payload === "add_todo") {
-    enterTodoItemAsMessage.call(this);
-    return;
-  }
-  if(payload === "add_pack_item") {
-    enterPackItemAsMessage.call(this);
-    return;
-  }
-  if(payload === "add_cities") {
-    addCitiesToExistingTrip.call(this);
-    return;
-  }
+  if(payload === "add_todo") return enterTodoItemAsMessage.call(this);
+  if(payload === "add_pack_item") return enterPackItemAsMessage.call(this);
+  if(payload === "add_cities") return addCitiesToExistingTrip.call(this);
   if(payload === "add_expense") {
     this.session.expenseReportWorkflow = new ExpenseReportWorkflow(this.session);
     callSendAPI(this.session.expenseReportWorkflow.startWork());
     return;
   }
-  if(payload === "add_travelers") {
-    determineTravelCompanions.call(this);
-    return;
-  }
+  if(payload === "add_travelers") return determineTravelCompanions.call(this);
   if(payload === "boarding_pass" || payload === "boarding pass") return sendBoardingPass.call(this);
   if(payload === "flight itinerary") return sendFlightItinerary.call(this);
   if(payload === "return flight") return sendReturnFlightDetails.call(this);
   if(payload === "hotel details") return sendHotelItinerary.call(this);
+  if(payload.includes("-hotel-receipt")) return sendCityHotelReceipt.call(this, payload);
   if(payload === "car details") return sendCarReceipt.call(this);
 
   const commands = new Commands(this.session.tripData(), this.session.fbid);
@@ -556,11 +536,18 @@ function sendTourDetails() {
   sendMultipleMessages(this.session.fbid, messages);
 }
 
-function sendHotelItinerary() {
-  const fbid = this.session.fbid;
+function sendCityHotelReceipt(payload) {
+  const content = /(.*)-.*-.*/.exec(payload);
+  if(!content) throw new Error(`cannot find city in hotel receipt postback: ${payload}`);
+  const city = content[1];
   const trip = this.session.tripData();
+  const details = trip.getHotelReceiptDetails();
+  // logger.debug(`sendCityHotelReceipt: getting details for hotel [${content}]; ${city}: ${JSON.stringify(details[city])}`);
+  sendHotelReceiptMessage.call(this, this.session.fbid, details[city]);
+}
+
+function sendHotelReceiptMessage(fbid, details) {
 	const messages = [];
-  const details = JSON.parse(fs.readFileSync(trip.hotelRentalReceiptFile(), 'utf8'));
   messages.push({
     recipient: {
       id: fbid
@@ -584,6 +571,55 @@ function sendHotelItinerary() {
     }
   });
   sendMultipleMessages(this.session.fbid, messages);
+}
+
+function sendHotelItinerary() {
+  const fbid = this.session.fbid;
+  const trip = this.session.tripData();
+	const messages = [];
+  const details = trip.getHotelReceiptDetails();
+  const hotels = Object.keys(details);
+  if(hotels.length > 1) {
+    logger.debug(`cities with hotels: ${hotels}`);
+    messages.push({
+      recipient: {
+        id: fbid
+      },
+      message: {
+        text: "Select the hotel receipt you would like to see",
+        metadata: "hotel_receipt_list"
+      }
+    });
+    const buttons = [];
+    hotels.forEach(list => {
+        buttons.push({
+          "type": "postback",
+          "title": `${list}`,
+          "payload": `${list}-hotel-receipt`
+        });
+    });
+    const elements = [];
+    elements.push({
+      title: "Hotel list",
+      buttons: buttons
+    });
+    messages.push({
+      recipient: {
+        id: this.session.fbid
+      },
+      message: {
+        attachment: {
+          type: "template",
+          payload: {
+            template_type: "generic",
+            elements: elements
+          }
+        }
+      }
+    });
+    return sendMultipleMessages(this.session.fbid, messages);
+  }
+  sendHotelReceiptMessage.call(this, fbid, details);
 }
 
 /*
@@ -707,7 +743,7 @@ function sendTripButtons(addNewTrip) {
   }
 
   // if there is only one trip, there is no point in asking user
-  // TODO: How would users get past trips? Maybe add a separate "past trips" in Persistent Menu.
+  // TODO: How would users get past trips in this case? Maybe add a separate "past trips" in Persistent Menu.
   if(tripNames.length === 1) {
     const t = tripNames[0];
     this.session.setTripContextAndPersist(t.name);
@@ -1852,7 +1888,12 @@ function sendMultipleMessages(recipientId, messages) {
     return;
   }
   if(messages.length === 0) return;
-  if(TEST_MODE) return logger.debug(`MESSAGE TO CHAT: ${JSON.stringify(messageData)}`);
+  if(TEST_MODE) {
+    messages.forEach(message => {
+      logger.debug(`MESSAGE TO CHAT: ${JSON.stringify(message)}`);
+    });
+    return;
+  }
   request({
     uri: 'https://graph.facebook.com/v2.6/me/messages',
     qs: { access_token: (new SecretManager()).getPageAccessToken() },

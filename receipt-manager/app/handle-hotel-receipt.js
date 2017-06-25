@@ -4,6 +4,7 @@ const cmdLineArgs = require('command-line-args');
 const HotelReceiptManager = require('receipt-manager/app/hotel-receipt-manager');
 
 const optionsDefn = [
+  {name: 'trip_name', defaultOption: ''},
   {name: 'recipient_name'}, //default String
   {name: 'order_number'},
   {name: 'merchant_name'},
