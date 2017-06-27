@@ -64,6 +64,11 @@ ButtonsPlacement.prototype.getPlacement = function() {
   if(fs.existsSync(this.trip.rentalCarReceiptFile())) buttons.push(carDetailsButton);
 
   buttons.push(tripCalendar);
+  if(fs.existsSync(this.trip.runningTrailFile())) buttons.push({
+	  type: "postback",
+	  title: "Running Trails",
+	  payload: "running"
+  });
 	buttons.push(weather);
   buttons.push(/*{
     type:"web_url",
@@ -95,7 +100,9 @@ ButtonsPlacement.prototype.getPlacement = function() {
     title: "Expense report",
     webview_height_ratio: "compact",
     messenger_extensions: true
-  },{
+  });
+  // flight quote only if there is no flight details
+	if(!fs.existsSync(this.trip.itineraryFile())) buttons.push({
     type: "web_url",
   	url: url(this.urlPrefix, `${this.trip.flightQuoteUrlPath()}`),
     title:"Flight",

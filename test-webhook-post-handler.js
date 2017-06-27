@@ -207,6 +207,28 @@ function testDayPlanSecondSetCommand() {
   handler.testing_receivedPostback(event);
 }
 
+function testHotelItinerarySingleHotel() {
+  const handler = setup();
+  // update with hotel details
+  const hotels = {"port_moresby":{"receipt":{"template_type":"receipt","recipient_name":"Madhuvanesh Parthasarathy","order_number":"65786645","merchant_name":"Holiday Inn","payment_method":"Unknown","currency":"USD","order_url":"http://tinyurl.com/yb6uvywg","elements":[{"title":"Confirmation #:65786645","price":"177.73","currency":"USD"}],"address":{"street_1":"Cnr Waigani Drive & Wards Rd, Boroko","city":"Port Moresby","state":"National Capital District","country":"Papua New Guinea","postal_code":"121"},"summary":{"total_cost":"177.73"}},"receipt_ext":{"template_type":"generic","elements":[{"title":"Phone: 675-303-2000","buttons":[{"type":"web_url","url":"http://tinyurl.com/yb6uvywg","title":"Hotel rental"}],"subtitle":"CHECK-IN: Aug 11 2017 02:00 PM; CHECK-OUT: Aug 12 2017 11:00 AM"}]}}};
+  const session = handler.session;
+  const trip = session.findTrip(); 
+  fs.writeFileSync(trip.hotelRentalReceiptFile(), JSON.stringify(hotels), 'utf8');
+  const event = { 
+    sender: {
+      id: session.fbid
+    }, 
+    recipient: {
+      id: session.fbid
+    }, 
+    timestamp: "12345",
+    postback: { 
+      payload: "hotel details" 
+    } 
+  };
+  handler.testing_receivedPostback(event);
+}
+
 function testHotelItineraryMultipleHotels() {
   const handler = setup();
   // update with hotel details
@@ -233,7 +255,8 @@ function testHotelItineraryMultipleHotels() {
   handler.testing_receivedPostback(event);
 }
 
-testHotelItineraryMultipleHotels();
+testHotelItinerarySingleHotel();
+// testHotelItineraryMultipleHotels();
 
 // testDayPlanSecondSetCommand();
 

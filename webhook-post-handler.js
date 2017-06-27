@@ -10,6 +10,7 @@ const SecretManager = require('secret-manager/app/manager');
 const ButtonsPlacement = require('get-buttons-placer/app/buttons-placement');
 const watch = require('watch');
 const fs = require('fs');
+const RequestProfiler = require('./request-profiler');
 
 const TripInfoProvider = require('./trip-info-provider');
 const CommentParser = require('./expense-report/app/comment-parser');
@@ -93,7 +94,7 @@ function handleMessagingEvent(messagingEvent) {
     } else if (messagingEvent.postback) {
       receivedPostback.call(this, messagingEvent);
     } else {
-      logger.info("Webhook received unknown messagingEvent: ", messagingEvent);
+      logger.error("Webhook received unknown messagingEvent: ", messagingEvent);
     }
   }
   catch(err) {
@@ -443,6 +444,8 @@ function receivedPostback(event) {
   if(handled && (typeof handled === "object")) return callSendAPI(handled);
   handled = commands.handleActivityPostback(payload);
   if(handled && (typeof handled === "object")) return callSendAPI(handled);
+  handled = commands.handleRecommendationPostback(payload);
+  if(handled && (typeof handled === "object")) return callSendAPI(handled);
 
   // When an unknown postback is called, we'll send a message back to the sender to 
   // let them know it was successful
@@ -586,7 +589,7 @@ function sendHotelItinerary() {
         id: fbid
       },
       message: {
-        text: "Select the hotel receipt you would like to see",
+        text: "Which hotel's receipt would you like to see?",
         metadata: "hotel_receipt_list"
       }
     });
@@ -619,7 +622,7 @@ function sendHotelItinerary() {
     });
     return sendMultipleMessages(this.session.fbid, messages);
   }
-  sendHotelReceiptMessage.call(this, fbid, details);
+  sendHotelReceiptMessage.call(this, fbid, details[hotels[0]]);
 }
 
 /*
@@ -648,7 +651,7 @@ function receivedMessage(event) {
     return;
   }
 
-  logger.info("receivedMessage: Received event for user %d, page %d, session %d at timestamp: %d, guid: %s Event: ", senderID, recipientID, this.session.fbid, timeOfMessage, this.session.guid, JSON.stringify(event));
+  // logger.info("receivedMessage: Received event for user %d, page %d, session %d at timestamp: %d, guid: %s Event: ", senderID, recipientID, this.session.fbid, timeOfMessage, this.session.guid, JSON.stringify(event));
 
   const messageText = message.text;
   const messageAttachments = message.attachments;

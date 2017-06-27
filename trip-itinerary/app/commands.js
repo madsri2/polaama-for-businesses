@@ -47,6 +47,7 @@ Commands.prototype.canHandleActivity = function(command) {
 
 function canHandleRecommendations() {
   if(this.command === "running" || this.command === "trails") return true;
+  if(this.command.startsWith("veg ") || this.command.startsWith("vegetarian ")) return true;
   return false;
 }
 
@@ -98,7 +99,11 @@ Commands.prototype.handleActivityPostback = function(payload) {
   return null;
 }
 
+// There are two ways this method can be reached: user clicks "Running Trails" as part of "Get..." buttons list (for existing trips) or they click "View More" after seeing the first set of "running trails". Handle the first case through handleRecommendations.
 Commands.prototype.handleRecommendationPostback = function(payload) {
+  this.command = payload;
+  const message = handleRecommendations.call(this);
+  if(message) return message;
   const content = DayPlanner.parseRecommendationPostback(payload);
   if(!content) return {
     recipient: {
@@ -114,9 +119,10 @@ Commands.prototype.handleRecommendationPostback = function(payload) {
 }
 
 function handleRecommendations() {
-  if(this.command !== "running" && this.command !== "trails") return null;
+  if(this.command !== "running" && this.command !== "trails" && !this.command.startsWith("veg ") && !this.command.startsWith("vegetarian ")) return null;
   const dayPlanner = new DayPlanner("invalid", this.trip, this.fbid); 
-  return dayPlanner.getRecommendations("running_trail");
+  if(this.command === "running" || this.command === "trails") return dayPlanner.getRecommendations("running_trail");
+  if(this.command.startsWith("veg ") || this.command.startsWith("vegetarian ")) return dayPlanner.getRecommendations("vegetarian_restaurants");
 }
 
 function handleActivityCommand() {

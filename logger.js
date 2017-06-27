@@ -5,6 +5,7 @@ const fs = require('fs');
 const winston = require('winston');
 const logDir = '/home/ec2-user/log';
 const traceback = require('traceback');
+const moment = require('moment-timezone');
 
 function Logger(configFile) {
   const config = `/home/ec2-user/config/${configFile}`;
@@ -43,18 +44,9 @@ function Logger(configFile) {
 
 Logger.prototype.init = function() {
   winston.level = this.logLevel;
-  const tsFormat = () => (new Date()).toLocaleTimeString([], 
-  {
-    timeZone: 'UTC',
-    timeZoneName: 'short',
-    year: "2-digit", 
-    month: "2-digit", 
-    day: "2-digit", 
-    hour: "2-digit", 
-    minute: "2-digit", 
-    second: "2-digit"
-  });
-
+  const tsFormat = function() {
+    return moment().tz('UTC').format("YYYY-MM-DD HH:mm:ss.SSS z");
+  }
   const logger = new (winston.Logger)({
     transports: [
       new (winston.transports.Console)({ 

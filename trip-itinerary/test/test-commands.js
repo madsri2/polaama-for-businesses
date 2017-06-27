@@ -223,6 +223,41 @@ describe("Commands tests: ", function() {
     );
   });
 
+  it("test compact style for second set", function(done) {
+    Promise.all(promises).done(
+      function(response) {
+        // set up
+        const filePrefix = "test-mobile-view-single-element-second-set.json";
+        const targetFile = "test-mobile-view-2017-6-13-itinerary.json";
+        fs.copySync(`${baseDir}/trips/ZDdz/forTestingPurposes/${filePrefix}`, `${baseDir}/trips/ZDdz/${targetFile}`);
+        if(!fs.existsSync(`${baseDir}/trips/ZDdz/${targetFile}`)) throw new Error(`file not present`);
+        // actual test
+        const origStartDate = trip.data.startDate;
+        const origReturnDate = trip.data.returnDate;
+        trip.data.startDate = "2017-6-10";
+        trip.data.returnDate = "2017-6-16";
+        const commands = new Commands(trip, fbid);
+        let result = commands.handle("13th");
+        expect(typeof result).to.equal("object");
+        expect(result.message.attachment.payload.top_element_style).to.not.equals("compact");
+        expect(result.message.attachment.payload.elements.length).to.equal(4);
+        expect(result.message.attachment.payload.buttons.length).to.equal(1);
+        expect(result.message.attachment.payload.buttons[0].title).to.equal("View more");
+        const payload = result.message.attachment.payload.buttons[0].payload;
+        result = commands.handlePostback(payload);
+        expect(result.message.attachment.payload.elements.length).to.equal(1);
+        expect(result.message.attachment.payload.top_element_style).to.equals("compact");
+        expect(result.message.attachment.payload.buttons).to.be.undefined;
+        trip.data.startDate = origStartDate;
+        trip.data.returnDate =  origReturnDate; 
+        done();
+      },
+      function(err) {
+        done(err);
+      }
+    );
+  });
+
   function verifyListViewResponse(result, count, buttonPresent, first) {
     expect(typeof result).to.equal("object");
     expect(result.message.attachment.payload.elements.length).to.equal(count);
@@ -662,7 +697,7 @@ describe("Commands tests: Meal commands", function() {
   });
 });
 
-describe("Running trail tests", function() {
+describe("Commands tests: Running trail tests", function() {
   before(function() {
     createNewTrip();
     // set up
@@ -689,5 +724,30 @@ describe("Running trail tests", function() {
     expect(message.message.attachment.payload.elements.length).to.equal(2);
     expect(message.message.attachment.payload.elements[0].subtitle).to.equal("2.2 miles from hotel");
     logger.debug(`second set ${JSON.stringify(message)}`);
+  });
+});
+
+describe("Commands tests: Vegetarian restaurant tests", function() {
+  before(function() {
+    createNewTrip();
+    // set up
+    const base = `${baseDir}/trips/ZDdz`;
+    let filePrefix = "test-mobile-view-vegetarian-restaurants.json";
+    fs.copySync(`${base}/forTestingPurposes/${filePrefix}`, `${base}/${filePrefix}`);
+    if(!fs.existsSync(`${base}/${filePrefix}`)) throw new Error(`file ${filePrefix} not present`);
+  });
+
+  after(function() {
+    cleanup();
+  });
+
+  it("basic test", function() {
+    const commands = new Commands(trip, fbid);
+    expect(commands.canHandleActivity("veg options")).to.be.ok;
+    let message = commands.handleActivity("veg options");
+    expect(message.message.attachment.payload.template_type).to.equal("list");
+    expect(message.message.attachment.payload.elements.length).to.equal(3);
+    expect(message.message.attachment.payload.elements[0].title).to.equal("Vegetarian restaurants near you");
+    logger.debug(`basic test: ${JSON.stringify(message)}`);
   });
 });

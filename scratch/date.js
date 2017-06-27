@@ -38,7 +38,9 @@ function date(command) {
   console.log(new Date(thisYear, thisMonth, contents[1]));
 }
 
-testInvalidTimeRange();
+console.log(momentTz().tz('UTC').format("YYYY-MM-DD HH:mm:ss.SSS"));
+
+// testInvalidTimeRange();
 
 /*
 date(15);

@@ -179,6 +179,9 @@ DayPlanner.prototype.getRecommendations = function(interest, index) {
     case "running_trail": 
       file = this.trip.runningTrailFile();
       break;
+    case "vegetarian_restaurants":
+      file = this.trip.vegRestaurantsFile();
+      break;
   };
   const errMessage = {
     recipient: {
@@ -251,7 +254,8 @@ function createListTemplate(list, setNum) {
     else message = addButtonsToMessage.call(this, message, currIndex, currIndex >= (elementSet.length - 1));
     // logger.debug(`createListTemplate: message is ${JSON.stringify(message)}`);
     // the first item in the list is almost always a map, so we don't set the style to compact. Subsequent items are just normal.
-    if(currIndex > 0 && elements.length > 1) message.message.attachment.payload.top_element_style = "compact";
+    // if(currIndex > 0 && elements.length > 1) message.message.attachment.payload.top_element_style = "compact";
+    if(currIndex > 0 && message.message.attachment.payload.template_type != "generic") message.message.attachment.payload.top_element_style = "compact";
     return message;
 }
 

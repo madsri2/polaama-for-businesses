@@ -14,6 +14,7 @@ const session = require('express-session');
 const EmailParser = require('flight-details-parser/app/email-parser');
 const SecretManager = require('secret-manager/app/manager');
 const FbidHandler = require('fbid-handler/app/handler');
+const RequestProfiler = require('./request-profiler');
 // ----------------------------------------------------------------------------
 // Set up a webserver
 
@@ -63,13 +64,13 @@ passport.use(new FacebookStrategy({
 
 // used to serialize the user for the session. This is called by passport.authenticate see app.get(/auth/facebook/callback)
 passport.serializeUser(function(user, done) {
-  logger.debug(`serializeUser called with ${JSON.stringify(user)}`);
+  // logger.debug(`serializeUser called with ${JSON.stringify(user)}`);
   done(null, user.id);
 });
 
 // used to deserialize the user. This is called by passport.authenticate after authentication is done as part of app.get(/auth/facebook/callback). Also called by req.isAuthenticated() (in ensureAuthentication). This sets the request.user object (done by passport).
 passport.deserializeUser(function(id, done) {
-  logger.debug(`deserializeUser: called with id ${id}. Returning ${JSON.stringify(userIdMapping[id])}`);
+  // logger.debug(`deserializeUser: called with id ${id}. Returning ${JSON.stringify(userIdMapping[id])}`);
   done(null, userIdMapping[id]);
 });
 
@@ -89,6 +90,10 @@ app.use(morgan('common', { stream: accessLogStream }));
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 app.use(bodyParser.json({ verify: verifyRequestSignature }));
+
+// Routes
+app.use(RequestProfiler.profile());
+
 
 // Routes for authentication
 // Redirect the user to Facebook for authentication.  When complete,
@@ -459,6 +464,8 @@ app.get('/webhook', function(req, res) {
 });
 
 app.post('/webhook', jsonParser, function(req, res) {
+  // DONT log "is_echo" messages. They pollute the logs.
+  if(!req.body.entry[0].messaging[0].is_echo) logger.debug(`/webhook called: fbid: ${req.body.entry[0].messaging[0].sender.id}; page id: ${req.body.entry[0].id}; messagingEvent dump: <${JSON.stringify(req.body.entry[0].messaging[0])}>`);
   postHandler.handle(req, res);
 });
 

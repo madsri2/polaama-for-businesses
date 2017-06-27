@@ -48,6 +48,10 @@ function getItinDetails(file, key) {
 	}
 	const data = JSON.parse(fs.readFileSync(file,'utf8'));
   // logger.debug(`getItinDetails: dump of data from file ${file}: ${JSON.stringify(data)}`);
+  if(Object.keys(data).length === 0) {
+    logger.error(`getItinDetails: Flight itinerary data in file ${file} is empty!`);
+    return;
+  }
 	const options = {};
 	options.pnr = data.pnr_number;
 	options.names = [];
@@ -627,6 +631,10 @@ TripData.prototype.runningTrailFile = function() {
   return `${this.tripBaseDir}/${this.data.name}-running-trails.json`;
 }
 
+TripData.prototype.vegRestaurantsFile = function() {
+  return `${this.tripBaseDir}/${this.data.name}-vegetarian-restaurants.json`;
+}
+
 TripData.prototype.dayItineraryFile = function(date) {
   return `${this.tripBaseDir}/${this.data.name}-${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-itinerary.json`;
 }
@@ -702,6 +710,22 @@ TripData.prototype.testing_delete = function() {
     if(!fs.existsSync(targetDir)) fs.mkdirSync(targetDir);
     fs.renameSync(`${this.tripBaseDir}/${file}`, `${targetDir}/${file}`);
   });
+}
+
+// TODO: Duplicates itineraryFile() & boardingPassFile. Fix the first time this causes an issue
+TripData.testing_itineraryFile = function(encodedFbid, tripName) {
+  const tripDir = `${baseDir}/trips/${encodedFbid}`;
+  return `${tripDir}/${tripName}-flight-itinerary.txt`;
+}
+
+TripData.testing_boardingPassFile = function(encodedFbid, tripName) {
+  const tripDir = `${baseDir}/trips/${encodedFbid}`;
+  return `${tripDir}/${tripName}-boarding-pass.txt`;
+}
+
+TripData.testing_runningTrailFile = function(encodedFbid, tripName) {
+  const tripDir = `${baseDir}/trips/${encodedFbid}`;
+  return `${tripDir}/${tripName}-running-trails.json`;
 }
 
 TripData.prototype.testing_categorizeComments = categorizeComments;
