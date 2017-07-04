@@ -7,7 +7,7 @@ const getFileName = require('flight-details-parser/app/email-parser').testingGet
 const spam = require('flight-details-parser/app/email-parser').testingSpam;
 const dir = require('flight-details-parser/app/email-parser').dir;
 
-describe('EmailParser tests', function() {
+describe('EmailParser tests: basic tests', function() {
   let emailId;
 
   before(function(done) {
@@ -33,7 +33,7 @@ describe('EmailParser tests', function() {
   });
 });
 
-describe('Spam tests', function() {
+describe('EmailParser tests: Spam tests', function() {
   it('spam score', function() {
     const msg = {
       from: [{ 
@@ -62,6 +62,17 @@ describe('Spam tests', function() {
       from: [{ 
         address: "spameri@tiscali.it"
       }],
+    };
+    expect(spam(msg)).to.be.ok;
+    msg.from[0].address = "madsri@hotmail.com";
+    expect(spam(msg)).to.not.be.ok;
+  });
+
+  it('partial blacklist email', function() {
+    const msg = {
+      from: [{
+        address: "spam1@ec2-54-167-220-143.compute-1.amazonaws.com"
+      }]
     };
     expect(spam(msg)).to.be.ok;
     msg.from[0].address = "madsri@hotmail.com";

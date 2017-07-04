@@ -151,7 +151,7 @@ function addButtonsToMessage(message, currIndex, lastSet) {
     nextDay.setDate(nextDay.getDate() + 1);
     const nextDayStr = CreateItinerary.formatDate(nextDay);
     const dateStr = CreateItinerary.formatDate(this.date);
-    logger.debug(`activityAsGenericTemplate: Start date ${startDateStr}; this.date ${dateStr}`);
+    logger.debug(`addButtonsToMessage: Start date ${startDateStr}; this.date ${dateStr}`);
     if(startDateStr === dateStr || (dateStr === nextDayStr)) {
       logger.debug(`addButtonsToMessage:: Adding onward flight postback button to message.`);
       elements[index].buttons = onwardFlight;

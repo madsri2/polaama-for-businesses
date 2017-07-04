@@ -10,6 +10,9 @@ const logger = require(`${baseDir}/my-logger`);
 function ItineraryHandler(options, testing) {
 	// set the flightNum_seats option
   // number of seats should be numPassengers x numFlights
+  logger.debug(`ItineraryHandler: travel_class: ${options.travel_class}`);
+  let defaultTc;
+  if(options.travel_class.length === 1) defaultTc = options.travel_class[0];
 	if(options.seats && Array.isArray(options.seats)) {
     let seatIdx = 0;
     for(let f = 0; f < options.flight_num.length; f++) {
@@ -17,7 +20,13 @@ function ItineraryHandler(options, testing) {
         const num = options.flight_num[f];
 				const key = `${num}_seats`;
 				if(!options[key]) options[key] = [];
-				options[key].push(options.seats[seatIdx++]);
+        const tc = (defaultTc) ? defaultTc : options.travel_class[seatIdx];
+        if(tc != 'economy' && tc != 'business' && tc != 'first_class') throw new Error(`travel class needs to be one of economy, business, first_class. But it is ${tc}. flight_num is ${options.flight_num[f]}`);
+        // options[key].push(options.seats[seatIdx++]);
+				options[key].push({
+          'seat': options.seats[seatIdx++],
+          'travel_class': tc
+        });
       }
     }
 	}
@@ -135,7 +144,7 @@ function getPassengerSegmentInfo(options) {
       const segInfo = {
         passenger_id: passenger.passenger_id,
         segment_id: flight.segment_id,
-        seat_type: flight.travel_class
+        // seat_type: flight.travel_class
       };
       const seats = options[`${fNum}_seats`];
       if(seats) {
@@ -143,7 +152,8 @@ function getPassengerSegmentInfo(options) {
         // the ordering of seats is the same as ordering of names. 
         // eg. UA123_seats: ["3A", "4B"] indicates there are two passengers traveling on this flight. Passenger 1 (whose name corresponds to passenger_info[0])'s seat is 3A and passenger 2's seat is 4B.
         if(seats.length != options.names.length) throw new Error(`getPassengerSegmentInfo: number of seats ${seats.length} does not match name count ${options.names.length}`);
-        segInfo.seats = seats[pIdx];
+        segInfo.seat = seats[pIdx].seat;
+        segInfo.seat_type = seats[pIdx].travel_class;
       }
       info.push(segInfo);
     }, this);

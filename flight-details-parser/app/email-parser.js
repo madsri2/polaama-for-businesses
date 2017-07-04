@@ -85,6 +85,7 @@ EmailParser.prototype.parse = function(req, res, callback) {
 
 function spam(msg) {
   const blacklist = ["spameri@tiscali.it","postmaster@office.com","postmaster@outlook.com","mysterryshop@gmail.com"];
+  const blacklistPartialMatch = ["ec2-54-167-220-143.compute-1.amazonaws.com"];
   if(msg.spamScore && msg.spamScore > 5) {
     logger.debug("spam score greater than 5. Marking message as spam");
     return true;
@@ -100,6 +101,12 @@ function spam(msg) {
   blacklist.forEach(email => {
     if(email === origin) {
       logger.debug(`${origin} email is blacklisted. Marking message as spam`);
+      emailBlacklisted = true;
+    }
+  });
+  blacklistPartialMatch.forEach(partial => {
+    if(origin.includes(partial)) {
+      logger.debug(`${origin} email matches partial ${partial}. Marking message as spam and dropping it`);
       emailBlacklisted = true;
     }
   });

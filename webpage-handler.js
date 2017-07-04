@@ -439,6 +439,17 @@ WebpageHandler.prototype.getMap = function(res, date) {
   });
 }
 
+WebpageHandler.prototype.getItemImage = function(res, date, item) {
+  const file = this.trip.itemImageFile(date, item);
+  return res.sendFile(file, null, 
+    function(e) {
+      if(e) {
+        logger.error(`getItemDetails: could not return file ${file}: ${e.stack}`);
+         return res.status(404).send("Could not retrieve map image at this time");
+      }
+  });
+}
+
 WebpageHandler.prototype.testing_addTravelers = addTravelers;
 
 module.exports = WebpageHandler;

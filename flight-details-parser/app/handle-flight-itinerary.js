@@ -15,6 +15,8 @@ const optionsDefn = [
   {name: 'departure_time', multiple: true},
   {name: 'dep_date', alias: 'u', multiple: true},
   {name: 'seats', alias: 's', multiple: true},
+  {name: 'dep_terminal', multiple: true, defaultValue: 'N/A'},
+  {name: 'arr_terminal', multiple: true, defaultValue: 'N/A'},
   {name: 'boarding_time', multiple: true},
   {name: 'arrival_time', multiple: true},
   {name: 'total_price'},

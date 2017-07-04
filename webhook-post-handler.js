@@ -173,7 +173,7 @@ function enterPackItemAsMessage() {
 }
 
 function setTripInContext(payload) {
-  const tripName = payload.substring("trip_in_context ".length);
+  let tripName = payload.substring("trip_in_context ".length);
   this.session.setTripContextAndPersist(tripName);
 }
 
@@ -371,7 +371,7 @@ function planNewTrip(userChoice) {
     return;
   }
   if(userChoice.email) sendMultipleMessages(this.session.fbid, textMessages.call(this, [
-    'Send your flight itinerary or boarding pass to TRIPS@MAIL.POLAAMA.COM. As soon as we receive it, we will send you an "ack" message',
+    'Send your flight itinerary or boarding pass to "TRIPS@MAIL.POLAAMA.COM". As soon as we receive it, we will send you an "ack" message',
     'If your trip is starting within 24 hours, we will send you the boarding pass']));
 }
 
@@ -1190,7 +1190,7 @@ function determineResponseType(event) {
   if(mesg === "get") return displayTripDetails.call(this); 
   // same as user clicking "existing trips" on persistent menu
   if(mesg === "existing trips" || mesg === "trips") return sendTripButtons.call(this); 
-  if(mesg.startsWith("save") || mesg.startsWith("comment") || this.session.awaitingComment) {
+  if(mesg.startsWith("save ") || mesg.startsWith("comment ") || this.session.awaitingComment) {
     const returnString = tripData.storeFreeFormText(senderID, messageText);
     sendTextMessage(senderID, returnString);
     this.session.awaitingComment = false;
@@ -1237,17 +1237,20 @@ function determineResponseType(event) {
     return;
   }
   if(mesg.startsWith("get boarding pass") || mesg.startsWith("boarding pass")) return sendBoardingPass.call(this);
-  if(mesg.startsWith("get flight itinerary") || mesg.startsWith("flight details") || mesg.startsWith("flight")) return sendFlightItinerary.call(this);
-  if(mesg.startsWith("get car details") || mesg.startsWith("car details")) return sendCarReceipt.call(this);
-  if(mesg.startsWith("get hotel details") || mesg.startsWith("hotel details")) return sendHotelItinerary.call(this);
+  if(mesg.startsWith("get flight itinerary") || mesg.startsWith("flight")) return sendFlightItinerary.call(this);
+  if(mesg.startsWith("get car details") || mesg.startsWith("car")) return sendCarReceipt.call(this);
+  if(mesg.startsWith("get hotel details") || mesg.startsWith("hotel")) return sendHotelItinerary.call(this);
 	if(mesg.startsWith("get tour details") || mesg.startsWith("tour details")) return sendTourDetails.call(this);
   if(mesg.startsWith("get return flight") || mesg.startsWith("return flight")) return sendReturnFlightDetails.call(this);
 
   const commands = new Commands(tripData, this.session.fbid);
-  if(commands.canHandle(mesg)) {
+  const canHandle = commands.canHandle(mesg);
+  if(canHandle) {
+    // case where user entered an invalid message.
+    if(typeof canHandle === "object") return callSendAPI(canHandle); 
     const itinAsList = commands.handle(mesg); 
     if(typeof itinAsList === "object") return callSendAPI(itinAsList);
-    logger.debug(`determineResponseType: Could not get list template for today from Commands. Defaulting to sending url`);
+    logger.warn(`determineResponseType: Could not get list template from Commands. Defaulting to sending url`);
     return sendUrlButton.call(this, `Itin for ${mesg}`, `${tripData.data.name}/${commands.getPath()}`);
   }
   if(commands.canHandleActivity(mesg)) {

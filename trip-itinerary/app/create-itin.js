@@ -88,7 +88,7 @@ function setLastDayDetails() {
     city = firstLeg.departure_airport.city;
   }
   this.itin[lastDayStr].city = city;
-  logger.debug(`The city for the last day is ${city}`);
+  logger.debug(`The city for the last day is ${city} and last Day is ${lastDayStr}`);
   promiseList.push(setWeatherDetails.call(this, lastDay, this.country.getCountry(city), city));
   // nothing more to do if there is no return flight itin
   if(!this.trip.returnFlightItin)  return promiseList;

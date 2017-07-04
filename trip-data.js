@@ -650,6 +650,12 @@ TripData.prototype.mapImageFile = function(dateStr) {
   return `${this.tripBaseDir}/${this.data.name}-${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-map.png`;
 }
 
+TripData.prototype.itemImageFile = function(dateStr, item) {
+  const date = new Date(dateStr);
+  logger.debug(`itemImageFile: ${date}; item: ${item}`);
+  return `${this.tripBaseDir}/${this.data.name}-${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-${item}.png`;
+}
+
 TripData.prototype.dayItinIndexFile = function(date) {
   return `${this.tripBaseDir}/${this.data.name}-${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-current-index.txt`;
 }
@@ -675,6 +681,10 @@ TripData.prototype.getHotelReceiptDetails = function() {
 
 TripData.prototype.hotelRentalReceiptFile = function() {
   return `${this.tripBaseDir}/${this.data.name}-hotel-rental-receipt.txt`;
+}
+
+TripData.prototype.tripImageFile = function() {
+  return `${this.tripBaseDir}/${this.data.name}-trip-image.json`;
 }
 
 TripData.prototype.archiveBoardingPassFile = function() {

@@ -262,22 +262,22 @@ function sendNewFeatureMessage() {
 }
 
 function sendGoodMorningMessage() {
-	const trip = new TripData("port_moresby", fbid);
+	const trip = new TripData("papua_new_guinea", fbid);
   const commands = new Commands(trip, fbid);
   const message = commands.handle("15th");
   const messageList = [];
   let name = new FbidHandler().getName(fbid);
   if(!name) name = "";
   else name = name.substring(0, name.indexOf(" "));
-  messageList.push(handler.getTextMessageData(fbid, `Good morning ${name}!. It's going to be hot and sunny in Kanganamun village today. Here is your itinerary:`));
+  messageList.push(handler.getTextMessageData(fbid, `Good morning ${name}!. Hope you had a great trip at London. You will be flying home today. Here is your itinerary.`));
   messageList.push(message);
   handler.sendMultipleMessages(fbid, messageList);
 }
 
 
 // sendDayPlan();
-sendGoodMorningMessage();
-// sendCheckinMessage();
+// sendGoodMorningMessage();
+sendCheckinMessage();
 
 // sendSingleActivity();
 // sendNewFeatureMessage();

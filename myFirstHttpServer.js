@@ -120,6 +120,7 @@ app.get('/auth/facebook/callback', function(req, res, next) {
           logger.error(`facebook callback: passport.authenticate: req.login threw error: ${err.stack}`);
           return next(err);
         }
+        if(!req.session.redirectTo) req.session.redirectTo = "/index";
         logger.info(`facebook callback: passport.authenticate was successful. redirecting to the original request path ${req.session.redirectTo}. user details: ${JSON.stringify(user)}. req.param.id: ${req.session.fbid}`);
         const mesg = reject(req, user);
         if(mesg) return res.send(mesg);
@@ -177,6 +178,16 @@ function verifyRequestSignature(req, res, buf) {
     }
   }
 }
+
+// set up plain http server
+const http = require('http');
+const regularApp = express();
+regularApp.get('*',function(req,res){  
+  res.redirect('https://polaama.com'+req.url)
+});
+http.createServer(regularApp).listen(8080, function() {
+  logger.info("Listening on port 8080 (all requests to this port will be redirected to the secure port).");
+});
 
 const server = https.createServer(options, app);  
 server.listen(port, function() {
@@ -343,6 +354,11 @@ app.get('/:id/:tripName/:date/-/map', function(req, res) {
   return handler.getMap(res, req.params.date);
 });
 
+app.get('/:id/:tripName/:date/images/:item', function(req, res) {
+  const handler = new WebpageHandler(req.params.id, req.params.tripName);
+  return handler.getItemImage(res, req.params.date, req.params.item);
+});
+
 /*
 app.get('/:id/:tripName/itin-detail/:file', function(req, res) {
   return res.sendFile(`/home/ec2-user/html-templates/${req.params.file}.html`, null, 
@@ -465,7 +481,8 @@ app.get('/webhook', function(req, res) {
 
 app.post('/webhook', jsonParser, function(req, res) {
   // DONT log "is_echo" messages. They pollute the logs.
-  if(!req.body.entry[0].messaging[0].is_echo) logger.debug(`/webhook called: fbid: ${req.body.entry[0].messaging[0].sender.id}; page id: ${req.body.entry[0].id}; messagingEvent dump: <${JSON.stringify(req.body.entry[0].messaging[0])}>`);
+  const echo = (req.body.entry[0].messaging[0].message) ?  req.body.entry[0].messaging[0].message.is_echo : false; 
+  if(!echo) logger.debug(`/webhook called: fbid: ${req.body.entry[0].messaging[0].sender.id}; page id: ${req.body.entry[0].id}; messagingEvent dump: <${JSON.stringify(req.body.entry[0].messaging[0])}>`);
   postHandler.handle(req, res);
 });
 

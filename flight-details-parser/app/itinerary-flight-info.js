@@ -13,10 +13,12 @@ function ItineraryFlightInfo(options) {
     const item = new FlightInfo(optionMap[i]).get();
     item.connection_id = `c00${i+1}`;
     item.segment_id = `s00${i+1}`;
+    /*
     const tc = optionMap[i].travel_class;
     if(!tc) throw new Error(`required field travel_class missing for flight ${optionMap[i].flight_num}`);
     if(tc != 'economy' && tc != 'business' && tc != 'first_class') throw new Error(`travel class needs to be one of economy, business, first_class. But it is ${tc}. flight_num is ${options.flight_num[i]}`);
     item.travel_class = tc;
+    */
     this.details.push(item);
   }
 }

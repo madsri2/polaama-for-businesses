@@ -13,6 +13,10 @@ Response.prototype.send = function(html) {
   this.html = html;
 }
 
+Response.prototype.sendFile = function(file) {
+  this.file = file;
+}
+
 const headers = {
   'user-agent': 'Mozilla test'
 };
@@ -105,7 +109,27 @@ function testAddingNewTraveler() {
   logger.debug(`EXPECTATION: 0; ACTUAL: ${str.indexOf("saved trips to friends' list")}`);
 }
 
+const fs = require('fs-extra');
+function testNewItemImage() {
+  // setup
+  fs.copySync("/home/ec2-user/trips/aaaa/forTestingPurposes/fort_lauderdale-2017-7-14-item-1.png", "/home/ec2-user/trips/aaaa/fort_lauderdale-2017-7-14-item-1.png");
+  const fbid = "2";
+  const session = ss.findOrCreate(fbid);
+  session.addTrip("fort_lauderdale");
+  const handler = new WebpageHandler("aaaa", "fort_lauderdale");
+  const res = new Response();
+  // test
+  handler.getItemImage(res, "2017-7-14", "item-1");
+  // verify
+  logger.debug(`EXPECTATION: "/home/ec2-user/trips/aaaa/fort_lauderdale-2017-7-14-item-1.png"; ACTUAL: ${res.file}`);
+  if(!fs.existsSync(res.file)) logger.error(`Expected ${res.file} to be present, but it is not`);
+  session.getTrip("fort_lauderdale").testing_delete();
+  ss.testing_delete(fbid);
+}
+
+testNewItemImage();
+/*
 testAddCitiesNewTrip();
 testAddCitiesExistingTrip();
 testAddingNewTraveler();
-
+*/

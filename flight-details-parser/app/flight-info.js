@@ -25,6 +25,8 @@ function FlightInfo(passedOptions) {
         departure_time: options.departure_time
       }
   };
+  if(options.dep_terminal) this.details.departure_airport.terminal = options.dep_terminal;
+  if(options.arr_terminal) this.details.arrival_airport.terminal = options.arr_terminal;
   if(options.boarding_time) this.details.flight_schedule.boarding_time = options.boarding_time;
   if(options.arrival_time) this.details.flight_schedule.arrival_time = options.arrival_time;
   if(options.aircraft_type) this.details.aircraft_type = options.aircraft_type;

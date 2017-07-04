@@ -7,6 +7,8 @@ const htmlBaseDir = "/home/ec2-user/html-templates"; // TODO: Move this to confi
 const baseDir = "/home/ec2-user";
 const logger = require(`${baseDir}/my-logger`);
 const Encoder = require(`${baseDir}/encoder`);
+const FbidHandler = require("fbid-handler/app/handler");
+const fs = require('fs');
 
 // TODO: fbid is not needed as trip object contains an fbid. Use that instead and remove the use of fbid everywhere.
 function Commands(trip, fbid, sendHtml) {
@@ -21,6 +23,7 @@ function Commands(trip, fbid, sendHtml) {
 
 Commands.prototype.handle = function(command) {
   this.command = command;
+  if(this.command === "dates") return sendTripDates.call(this);
   return handleDayItin.call(this);
 }
 
@@ -35,6 +38,7 @@ Commands.prototype.canHandle = function(command) {
   if(this.command.startsWith("first") || this.command.startsWith("next")) return false; 
   if(this.command.startsWith("tomorrow")) return true;
   if(this.command.startsWith("today")) return true;
+  if(this.command === "dates") return true;
   return setDateIfValid.call(this);
 }
 
@@ -67,7 +71,10 @@ Commands.prototype.handleMealsCommand = function(command) {
   if(contents[1] !== "breakfast" && contents[1] !== "lunch" && contents[1] !== "dinner") return null;
   let val;
   if(contents[2] == '') val = "today"; else val = contents[2];
-  if(!setDateIfValid.call(this, val)) return null;
+  const validDate = setDateIfValid.call(this, val);
+  if(!validDate) return null;
+  if(typeof validDate === "object") return validDate; // short-circuit and respond to user.
+  
   logger.debug(`handleMealsCommand: parsed date <${CreateItinerary.formatDate(this.date)}> from <${val}> and command <${this.command}>`);
   const dateStr = CreateItinerary.formatDate(this.date);
   const dayPlanner = new DayPlanner(this.date, this.trip, this.fbid); 
@@ -134,22 +141,12 @@ function handleActivityCommand() {
   if(contents[1] !== "first" && contents[1] !== "next") return null;
   let val;
   if(contents[2] == '') val = "today"; else val = contents[2];
-  if(!setDateIfValid.call(this, val)) return null;
+  const validDate = setDateIfValid.call(this, val);
+  if(!validDate) return null;
+  if(typeof validDate === "object") return validDate; // short-circuit and respond to user.
   const dateStr = CreateItinerary.formatDate(this.date);
   logger.debug(`handleActivityCommand: parsed date <${dateStr}> from <${val}> and command <${this.command}>`);
   const dayPlanner = new DayPlanner(this.date, this.trip, this.fbid); 
-  if(!isValidDate.call(this)) {
-    const errMessage = {
-        recipient: {
-          id: this.fbid
-        },
-        message: {
-          text: `${dateStr} is not a valid date for your ${this.trip.data.rawName} trip`,
-          metadata: "DEVELOPER_DEFINED_METADATA"
-        }
-    };
-    return errMessage;
-  }
   dayPlanner.setActivityList();
   if(contents[1] === "first") return dayPlanner.getNextActivity(0);
   if(contents[1] === "next") return dayPlanner.getNextActivityRelativeToTime();
@@ -181,8 +178,18 @@ function setTripMonthAndYear(date) {
   }
 
   logger.warn(`setTripMonthAndYear: date ${date} did not fall between start date ${this.trip.data.startDate} and return date ${this.trip.data.returnDate}. Not setting tripMonth and tripYear.`);
+  this.errMessage = {
+      recipient: {
+        id: this.fbid
+      },
+      message: {
+        text: `${this.command} is not a valid date for trip ${this.trip.data.rawName}, which starts on ${this.trip.data.startDate} and ends on ${this.trip.data.returnDate}`,
+        metadata: "DEVELOPER_DEFINED_METADATA"
+      }
+  };
 }
 
+// TODO: This might be redundant since the same check is handled in setTripMonthAndYear above. So, use that and remove this method.
 function isValidDate() {
   const dateMoment = new moment(this.date);
   if(!this.trip.data.startDate || this.trip.data.startDate ==="unknown" || !this.trip.data.returnDate || this.trip.data.returnDate === "unknown") {
@@ -195,11 +202,19 @@ function isValidDate() {
 
   if(!dateMoment.isBetween(sdMoment, rdMoment) && !dateMoment.isSame(sdMoment) && !dateMoment.isSame(rdMoment)) {
     logger.warn(`isValidDate: ${CreateItinerary.formatDate(this.date)} is not between ${this.trip.data.startDate} & ${this.trip.data.returnDate}`);
+    this.errMessage = {
+        recipient: {
+          id: this.fbid
+        },
+        message: {
+          text: `${this.command} is not a valid date for trip ${this.trip.data.rawName}, which starts on ${this.trip.data.startDate} and ends on ${this.trip.data.returnDate}`,
+          metadata: "DEVELOPER_DEFINED_METADATA"
+        }
+    };
     return false;
   }
 
   logger.debug(`isValidDate: ${this.date} is valid. It is in inbetween start & return dates. startDate: ${this.trip.data.startDate}; returnDate: ${this.trip.data.returnDate}`);
-  setTripMonthAndYear.call(this, dateMoment.date());
   return true;
 }
 
@@ -207,6 +222,7 @@ Commands.prototype.getPath = function(command) {
   if(this.command.startsWith("tomorrow")) return "tomorrow";
   if(this.command.startsWith("today")) return "today";
   if(!this.date && !setDateIfValid.call(this)) throw new Error(`getPath: invalid command ${command}`);
+  if(this.errMessage) throw new Error(`getPath: errMessage is set: ${JSON.stringify(this.errMessage)}`);
   return new moment(this.date).format("YYYY-MM-DD");
 }
 
@@ -226,7 +242,9 @@ function listFormatAvailable(date) {
 }
 
 function handleDayItin() {
-  if(!setDateIfValid.call(this)) return null;
+  const validDate = setDateIfValid.call(this);
+  if(!validDate) return null;
+  if(typeof validDate === "object") return validDate; // short-circuit and respond to user.
   return getDayItinerary.call(this);
 }
 
@@ -239,11 +257,13 @@ function setDateIfValid(passedCommand) {
     tomorrow.setDate(tomorrow.getDate() + 1);
     this.date = tomorrow;
     logger.debug(`setDateIfValid: set date to be tomorrow (${this.date})`);
+    if(!isValidDate.call(this)) return this.errMessage;
     return true;
   }
   if(command.startsWith("today")) {
     this.date = new Date(moment().tz(getTimezone.call(this)).format("M/DD/YYYY"));
     logger.debug(`setDateIfValid: set date to be today (${this.date})`);
+    if(!isValidDate.call(this)) return this.errMessage;
     return true;
   }
   const thisMonth = new Date().getMonth();
@@ -252,6 +272,7 @@ function setDateIfValid(passedCommand) {
   if(contents && (contents[2] === " " || contents[2] === '' || contents[2] === "th" || contents[2] === "rd" || contents[2] === "st" || contents[2] === "nd")) {
       // user just provided the date, without specifying month & year. Infer the month & year based on this trip's start & return dates.
       setTripMonthAndYear.call(this, contents[1]);
+      if(this.errMessage) return this.errMessage;
       if(!this.tripMonth && !this.tripYear) return false;
       if(!Array.isArray(this.tripMonth) && !Array.isArray(this.tripYear)) {
         this.date = new Date(this.tripYear, this.tripMonth, contents[1]);
@@ -280,6 +301,40 @@ function setDateIfValid(passedCommand) {
   }
   logger.error(`setDateIfValid: unknown format ${command} that did not match any of the known formats.`);
   return false;
+}
+
+function sendTripDates() {
+  const start = (this.trip.data.startDate) ? this.trip.data.startDate: "unknown";
+  const returnDate = (this.trip.data.returnDate) ? this.trip.data.returnDate: "unknown";
+  const tripDates = `Trip starts on ${start} and ends on ${returnDate}`;
+  const imageUrl = (fs.existsSync(this.trip.tripImageFile())) ? JSON.parse(fs.readFileSync(this.trip.tripImageFile(), 'utf8')).url : undefined;
+  const encodedFbid = FbidHandler.get().encode(this.fbid);
+  const message = {
+    recipient: {
+      id: this.fbid
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "generic",
+          elements: [{
+            "title": `Trip to ${this.trip.data.rawName}`,
+            "subtitle": tripDates,
+            // "image_url": imageUrl,
+            "default_action": {
+              "type": "web_url",
+              "url": `https://polaama.com/${encodedFbid}/${this.trip.data.name}/calendar`,
+              "webview_height_ratio": "full"
+            }
+          }]
+        }
+      }
+    }
+  };
+  if(imageUrl) message.message.attachment.payload.elements[0].image_url = imageUrl;
+  logger.debug(`sendTripDates: ${JSON.stringify(message)}`);
+  return message;
 }
 
 function getDayItinerary() {
@@ -334,6 +389,7 @@ function toNum(month) {
 function getTimezone() {
   if(this.testing) return "US/Pacific";
   const dateInUTC = moment().format("M/DD/YYYY");
+  /*
   const userLocation = {
     '6/10/2017' : "America/New_York",
     '6/11/2017' : "Asia/Tel_Aviv",
@@ -346,10 +402,11 @@ function getTimezone() {
     '6/18/2017' : "Asia/Tel_Aviv",
     '6/19/2017' : "Asia/Tel_Aviv",
   };  
-  const telAvivList = ["1443244455734100", "1420209771356315"]; // , "1234"];
-  const londonList = ["1420839671315623", "1120615267993271"];
-  if(telAvivList.includes(this.fbid)) return "Asia/Tel_Aviv";
-  if(londonList.includes(this.fbid)) return "Europe/London";
+  // const telAvivList = ["1443244455734100", "1420209771356315"]; // , "1234"];
+  // const londonList = ["1420839671315623", "1120615267993271"];
+  // if(telAvivList.includes(this.fbid)) return "Asia/Tel_Aviv";
+  // if(londonList.includes(this.fbid)) return "Europe/London";
+  */
   return "US/Pacific";
 }
 

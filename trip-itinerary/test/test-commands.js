@@ -26,7 +26,7 @@ function cleanup() {
   trip.testing_delete();
 }
 
-describe("Commands tests: ", function() {
+describe("Commands tests: Basic tests", function() {
   let promises;
   let createItin;
   before(function() {
@@ -35,9 +35,8 @@ describe("Commands tests: ", function() {
       'cities': ['chennai', 'mumbai', 'goa', 'chennai'],
       'numOfDays': ['3', '3', '2', '2']
     };
-    const twoDaysAgo = new Date();
-    twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
-    const startDate = new moment(twoDaysAgo).format("YYYY-MM-DD");
+    // start date is two days ago.
+    const startDate = new moment().tz('US/Pacific').subtract(2,'days').format("YYYY-MM-DD");
     const startTime = "09:00";
     const portOfEntry = "chennai";
     createNewTrip();
@@ -48,16 +47,16 @@ describe("Commands tests: ", function() {
     trip.data.name = "test-mobile-view";
     trip.data.portOfEntry = portOfEntry;
     trip.data.cityItin = cityItin;
-    const eightDaysFromNow = new Date();
-    eightDaysFromNow.setDate(twoDaysAgo.getDate() + 10);
-    trip.data.returnDate = new moment(eightDaysFromNow).format("YYYY-MM-DD");
+    // return date is 8 days from today.
+    trip.data.returnDate = new moment(startDate).add(10, 'days').format("YYYY-MM-DD");
     trip.data.duration = 10;
     trip.data.departureTime = "22:00";
     const userItin = {};
-    let sd = new Date(startDate);
+    let sd = new moment(startDate);
     for(let i = 0; i < trip.data.duration+1; i++) {
-      userItin[CreateItinerary.formatDate(sd)] = [`Itinerary for ${sd}`];
-      sd.setDate(sd.getDate() + 1);
+      const date = new Date(sd.format("YYYY-MM-DD"));
+      userItin[sd.format('M/D/YYYY')] = [`Itinerary for ${date}`];
+      sd.add(1, 'days');
     }
     fs.writeFile(trip.userInputItinFile(), JSON.stringify(userItin), 'utf8');
     createItin = new CreateItinerary(trip, "seattle");
@@ -74,7 +73,7 @@ describe("Commands tests: ", function() {
     expect(html).to.contain(`Itinerary for ${date}`);
   }
 
-  it("today's itin as html", function(done) {
+  it("todays itin as html", function(done) {
     Promise.all(promises).done(
       function(response) {
         const commands = new Commands(trip, fbid);
@@ -115,6 +114,43 @@ describe("Commands tests: ", function() {
         expect(commands.date.getDate()).to.equal(thisDate);
         logger.debug(`${JSON.stringify(result)}`);
         verifyListViewResponse(result, 4 /* activity count */, true /* button present */, true /* first */);
+        done();
+      },
+      function(err) {
+        done(err);
+      }
+    );
+  });
+
+  it("invalid date outside the start and return date range", function(done) {
+    Promise.all(promises).done(
+      function(response) {
+        const date = moment().tz("US/Pacific");
+        const thisMonth = date.month();
+        const thisYear = date.year();
+        const thisDate = date.date();
+        // actual test
+        const origStartDate = trip.data.startDate;
+        const origReturnDate = trip.data.returnDate;
+        trip.data.startDate = "2017-8-10";
+        trip.data.returnDate = "2017-8-16";
+        const commands = new Commands(trip, fbid);
+        commands.testing = true;
+        let result = commands.handle("9th");
+        expect(result).to.not.be.null;
+        logger.debug(`${JSON.stringify(result)}`);
+        expect(result.message.text).to.include("is not a valid date for ");
+        result = commands.handle("today");
+        expect(result).to.not.be.null;
+        logger.debug(`${JSON.stringify(result)}`);
+        expect(result.message.text).to.include("is not a valid date for ");
+        result = commands.handle("tomorrow");
+        expect(result).to.not.be.null;
+        logger.debug(`${JSON.stringify(result)}`);
+        expect(result.message.text).to.include("is not a valid date for ");
+
+        trip.data.startDate = origStartDate;
+        trip.data.returnDate = origReturnDate;
         done();
       },
       function(err) {
@@ -245,8 +281,9 @@ describe("Commands tests: ", function() {
         expect(result.message.attachment.payload.buttons[0].title).to.equal("View more");
         const payload = result.message.attachment.payload.buttons[0].payload;
         result = commands.handlePostback(payload);
+        logger.debug(`test compact style: ${JSON.stringify(result)}`);
         expect(result.message.attachment.payload.elements.length).to.equal(1);
-        expect(result.message.attachment.payload.top_element_style).to.equals("compact");
+        expect(result.message.attachment.payload.template_type).to.equal("generic");
         expect(result.message.attachment.payload.buttons).to.be.undefined;
         trip.data.startDate = origStartDate;
         trip.data.returnDate =  origReturnDate; 
@@ -345,8 +382,8 @@ describe("Commands tests: ", function() {
   });
 
   it("date formats", function() {
-    const thisMonth = new Date().getMonth();
-    const thisYear = new Date().getFullYear();
+    const thisMonth = "5"; // index for month, not the actual month.
+    const thisYear = "2017"; 
     const commands = new Commands(trip, fbid);
     const origStartDate = trip.data.startDate;
     const origReturnDate = trip.data.returnDate;
@@ -508,14 +545,12 @@ describe("Commands tests: Activity tests: ", function() {
     const thisMonth = dateMoment.month();
     const thisYear = dateMoment.year();
     let thisDate = dateMoment.date();
-    // const thisMonth = new Date().getMonth();
-    // const thisYear = new Date().getFullYear();
-    // const thisDate = new Date().getDate();
     const base = `${baseDir}/trips/ZDdz`;
     const filePrefix = `test-mobile-view-2017-6-${date}-itinerary.json`;
     const targetFile = `test-mobile-view-${thisYear}-${thisMonth + 1}-${thisDate}-itinerary.json`;
     fs.copySync(`${base}/forTestingPurposes/${filePrefix}`, `${base}/${targetFile}`);
     if(!fs.existsSync(`${base}/${targetFile}`)) throw new Error(`file ${targetFile} not present`);
+    logger.debug(`setupFilesForTodayTests: target file is ${targetFile}; month: ${thisMonth}`);
     return thisDate;
   }
 
@@ -525,9 +560,11 @@ describe("Commands tests: Activity tests: ", function() {
     const commands = new Commands(trip, fbid);
     let message = commands.handleActivity("first");
     verifyFirstActivity(message, thisDate);
-    message = commands.handleActivityPostback(`2017-5-${thisDate}-0-next`);
+    const month = moment().tz("US/Pacific").month();
+    const year = moment().tz("US/Pacific").year();
+    message = commands.handleActivityPostback(`${year}-${month}-${thisDate}-0-next`);
     verifySecondActivity(message, thisDate);
-    message = commands.handleActivityPostback(`2017-5-${thisDate}-1-prev`);
+    message = commands.handleActivityPostback(`${year}-${month}-${thisDate}-1-prev`);
     verifyFirstActivity(message, thisDate);
   });
 
@@ -581,14 +618,16 @@ describe("Commands tests: Activity tests: ", function() {
     const threeDaysAgo = new Date();
     threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
     const threeDaysAgoMoment = new moment(threeDaysAgo).format("Do");
-    expect(commands.handleActivity(`first on ${threeDaysAgoMoment}`)).to.be.null;
+    let result = commands.handleActivity(`first on ${threeDaysAgoMoment}`)
+    expect(result).to.not.be.null;
+    expect(result.message.text).to.include("is not a valid date for ");
     // logger.debug(`${JSON.stringify(message)}`);
     const twelveDaysFromNow = new Date();
     twelveDaysFromNow.setDate(twelveDaysFromNow.getDate() + 12);
     const twelveDaysFromNowMoment = new moment(twelveDaysFromNow).format("Do");
-    const message = commands.handleActivity(`first on ${twelveDaysFromNow}`);
-    expect(message).to.be.null;
-    logger.debug(`${JSON.stringify(message)}`);
+    result = commands.handleActivity(`first on ${twelveDaysFromNowMoment}`);
+    expect(result).to.not.be.null;
+    expect(result.message.text).to.include("is not a valid date for ");
   });
 });
 
@@ -748,6 +787,53 @@ describe("Commands tests: Vegetarian restaurant tests", function() {
     expect(message.message.attachment.payload.template_type).to.equal("list");
     expect(message.message.attachment.payload.elements.length).to.equal(3);
     expect(message.message.attachment.payload.elements[0].title).to.equal("Vegetarian restaurants near you");
+    logger.debug(`basic test: ${JSON.stringify(message)}`);
+  });
+});
+
+describe("Commands tests: Trip dates", function() {
+  before(function() {
+    createNewTrip();
+    const twoDaysAgo = new Date();
+    twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+    const startDate = new moment(twoDaysAgo).format("YYYY-MM-DD");
+    trip.data.startDate = startDate;
+    trip.data.name = "test-mobile-view";
+    const eightDaysFromNow = new Date();
+    eightDaysFromNow.setDate(twoDaysAgo.getDate() + 10);
+    trip.data.returnDate = new moment(eightDaysFromNow).format("YYYY-MM-DD");
+    // set up
+    const base = `${baseDir}/trips/ZDdz`;
+    let filePrefix = "test-mobile-view-trip-image.json";
+    fs.copySync(`${base}/forTestingPurposes/${filePrefix}`, `${base}/${filePrefix}`);
+    if(!fs.existsSync(`${base}/${filePrefix}`)) throw new Error(`file ${filePrefix} not present`);
+  });
+
+  after(function() {
+    cleanup();
+  });
+
+  it("basic test", function() {
+    const commands = new Commands(trip, fbid);
+    expect(commands.canHandle("dates")).to.be.ok;
+    let message = commands.handle("dates");
+    expect(message.message.attachment.payload.template_type).to.equal("generic");
+    expect(message.message.attachment.payload.elements.length).to.equal(1);
+    expect(message.message.attachment.payload.elements[0].title).to.equal(`Trip to ${trip.data.rawName}`);
+    logger.debug(`basic test: ${JSON.stringify(message)}`);
+  });
+
+  it("image not present", function() {
+    // remove the image file.
+    const imageFile = `${baseDir}/trips/ZDdz/test-mobile-view-trip-image.json`;
+    fs.unlinkSync(imageFile);
+    if(fs.existsSync(imageFile)) throw new Error(`file ${imageFile} present even after deleting it`);
+    const commands = new Commands(trip, fbid);
+    expect(commands.canHandle("dates")).to.be.ok;
+    let message = commands.handle("dates");
+    expect(message.message.attachment.payload.template_type).to.equal("generic");
+    expect(message.message.attachment.payload.elements.length).to.equal(1);
+    expect(message.message.attachment.payload.elements[0].title).to.equal(`Trip to ${trip.data.rawName}`);
     logger.debug(`basic test: ${JSON.stringify(message)}`);
   });
 });
