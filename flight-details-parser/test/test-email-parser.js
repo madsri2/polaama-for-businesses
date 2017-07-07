@@ -75,7 +75,9 @@ describe('EmailParser tests: Spam tests', function() {
       }]
     };
     expect(spam(msg)).to.be.ok;
-    msg.from[0].address = "madsri@hotmail.com";
+    msg.from[0].address = "madsri@amazonaws.com";
+    expect(spam(msg)).to.be.ok;
+    msg.from[0].address = "madsri@gmail.com";
     expect(spam(msg)).to.not.be.ok;
   });
 });

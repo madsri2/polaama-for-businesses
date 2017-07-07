@@ -37,6 +37,7 @@ function TripData(rawTripName, fbid, testFbidFile) {
 
 function updateTripItineraries() {
 	getItinDetails.call(this, this.itineraryFile(), "flightItin");
+  logger.debug(`Now calling return flight itinerary`);
 	getItinDetails.call(this, this.returnFlightFile(), "returnFlightItin");
 }
 
@@ -65,6 +66,7 @@ function getItinDetails(file, key) {
 	options.arr_city = [];
 	options.departure_time = [];
 	options.arrival_time = [];
+	options.flightInfo_travelClass = [];
 	data.flight_info.forEach(item => {
 		options.flight_num.push(item.flight_number);
 		options.dep_code.push(item.departure_airport.airport_code);
@@ -78,13 +80,19 @@ function getItinDetails(file, key) {
 			if(!options.boarding_time) options.boarding_time = [];
 			options.boarding_time.push(item.flight_schedule.boarding_time);
 		}
+    if(item.travel_class) options.flightInfo_travelClass.push(item.travel_class); 
 	});
 	options.seats = [];
-	options.travel_class = [];
+  options.passenger_travelClass = [];
 	data.passenger_segment_info.forEach(item => {
 		if(item.seat) options.seats.push(item.seat);
-		if(item.seat_type) options.travel_class.push(item.seat_type);
+		if(item.seat_type) options.passenger_travelClass.push(item.seat_type);
 	});
+  /*
+  // if the travel_class is present both in flight_info object and seat_type, seat_types' travel class takes precedence);
+  if(options.travel_class.length === 0) options.travel_class = options.tc;
+  delete options.tc;
+  */
 	options.total_price = data.total_price;
 	this[key] = new ItineraryFlightInfo(options).get();
 }
@@ -654,6 +662,10 @@ TripData.prototype.itemImageFile = function(dateStr, item) {
   const date = new Date(dateStr);
   logger.debug(`itemImageFile: ${date}; item: ${item}`);
   return `${this.tripBaseDir}/${this.data.name}-${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-${item}.png`;
+}
+
+TripData.prototype.hotelChoiceFile = function(city) {
+  return `${this.tripBaseDir}/${city}-hotel-choices.json`;
 }
 
 TripData.prototype.dayItinIndexFile = function(date) {

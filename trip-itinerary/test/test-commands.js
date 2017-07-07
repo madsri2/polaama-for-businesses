@@ -837,3 +837,35 @@ describe("Commands tests: Trip dates", function() {
     logger.debug(`basic test: ${JSON.stringify(message)}`);
   });
 });
+
+describe("Commands tests: Hotel choices", function() {
+  before(function() {
+    createNewTrip();
+    const twoDaysAgo = new Date();
+    twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+    const startDate = new moment(twoDaysAgo).format("YYYY-MM-DD");
+    trip.data.startDate = startDate;
+    trip.data.name = "test-mobile-view";
+    const eightDaysFromNow = new Date();
+    eightDaysFromNow.setDate(twoDaysAgo.getDate() + 10);
+    trip.data.returnDate = new moment(eightDaysFromNow).format("YYYY-MM-DD");
+    // set up
+    const base = `${baseDir}/trips/ZDdz`;
+    let filePrefix = "city-hotel-choices.json";
+    fs.copySync(`${base}/forTestingPurposes/${filePrefix}`, `${base}/${filePrefix}`);
+    if(!fs.existsSync(`${base}/${filePrefix}`)) throw new Error(`file ${filePrefix} not present`);
+  });
+
+  after(function() {
+    cleanup();
+  });
+
+  it("basic test", function() {
+    const commands = new Commands(trip, fbid);
+    expect(commands.canHandle("city hotel choices")).to.be.ok;
+    let message = commands.handle("city hotel choices");
+    expect(message.message.attachment.payload.template_type).to.equal("generic");
+    expect(message.message.attachment.payload.elements.length).to.equal(3);
+    expect(message.message.attachment.payload.elements[0].title).to.equal("Hotel1 Name");
+  });
+});

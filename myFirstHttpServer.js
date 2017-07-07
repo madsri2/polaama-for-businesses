@@ -121,7 +121,7 @@ app.get('/auth/facebook/callback', function(req, res, next) {
           return next(err);
         }
         if(!req.session.redirectTo) req.session.redirectTo = "/index";
-        logger.info(`facebook callback: passport.authenticate was successful. redirecting to the original request path ${req.session.redirectTo}. user details: ${JSON.stringify(user)}. req.param.id: ${req.session.fbid}`);
+        logger.info(`facebook callback: passport.authenticate was successful. redirecting to the original request path ${req.session.redirectTo}. user details: ${JSON.stringify(user)}. req.param.id: ${req.session.fbid}; req param: ${JSON.stringify(req.param)};`);
         const mesg = reject(req, user);
         if(mesg) return res.send(mesg);
         else return res.redirect(req.session.redirectTo);
@@ -130,8 +130,11 @@ app.get('/auth/facebook/callback', function(req, res, next) {
 });
 
 function reject(req, user) {
+  // if there was no fbid passed in the path, then there is no comparing to be done.
+  if(!req.session.fbid) return null;
   // only the authorized user or the admin can see this page.
-  if(req.session.fbid === user.fbid || user.fbid === "aeXf") return null;
+  // TODO: The keflavik trip is shared so Arpan & Avani can use it. Fix me.
+  if(req.session.fbid === user.fbid || user.fbid === "aeXf" || req.session.redirectTo.includes("keflavik")) return null;
   logger.error(`facebook callback: passport authenticate: user ${user.fbid} attempted to call url ${req.session.redirectTo}, whose id is ${req.session.fbid}. Rejecting the call.`);
   return "You are not authorized to view this page!";
 }
@@ -223,7 +226,7 @@ app.get('/login', function(req, res) {
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     // req.user is available for use here
-    logger.info(`ensureAuthenticated: request is authenticated. now the actual request (${req.path}) will be handled. req.user is ${JSON.stringify(req.user)}`);
+    logger.info(`ensureAuthenticated: request is authenticated. now the actual request (${req.path}) will be handled. req.user is ${JSON.stringify(req.user)}; req.session is ${JSON.stringify(req.params)}; req.path is ${req.path}`);
     req.session.redirectTo = req.path;
     req.session.fbid = req.params.id;
     const mesg = reject(req, req.user);
@@ -260,7 +263,7 @@ app.post('/:id/:tripName/handle_trip_friends', function(req, res) {
 	// TODO: close this page and then send the "help" message to the session in order to make forward progress.
 });
 
-app.get('/:id/:tripName', function(req, res) {
+app.get('/:id/:tripName', ensureAuthenticated, function(req, res) {
   const handler = new WebpageHandler(req.params.id, req.params.tripName);
   return handler.handleWebpage(res, handler.displayTrip);
 });
@@ -318,7 +321,7 @@ app.post('/:id/:tripName/handle-city-choice', function(req, res) {
 });
 
 // Handling the addition of cities to existing trips
-app.get('/:id/:tripName/add-cities', function(req, res) {
+app.get('/:id/:tripName/add-cities', ensureAuthenticated, function(req, res) {
   const handler = new WebpageHandler(req.params.id, req.params.tripName);
   return handler.handleWebpage(res, handler.displayCitiesForExistingTrip);
 });
@@ -464,6 +467,10 @@ app.post('/:id/:tripName/handle-hotel-receipt', function(req, res) {
 
 app.get('/:id/:tripName/hotel-receipt', function(req, res) {
   return res.sendFile('/home/ec2-user/html-templates/hotel-receipt.html', 'utf8');
+});
+
+app.get('/:id/:tripName/:city/-/hotel-choices', function(req, res) {
+  return res.sendFile(`/home/ec2-user/html-templates/${req.params.city}-hotel-choices.html`, 'utf8');
 });
 
 // handling webhook

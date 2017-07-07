@@ -249,7 +249,7 @@ WebhookPostHandler.prototype.setWeatherAndItineraryForNewTrip = function(tripNam
 	const session = this.sessions.reloadSession(this.session.sessionId);
 	const trip = session.getTrip(tripName);
 	if(!trip) throw new Error(`setWeatherAndItineraryForNewTrip: could not find trip ${tripName} in session with fbid ${session.fbid}`);
-  logger.debug(`setWeatherAndItineraryForNewTrip: trip dump is ${JSON.stringify(trip)}`);
+  // logger.debug(`setWeatherAndItineraryForNewTrip: trip dump is ${JSON.stringify(trip)}`);
 	const tip = new TripInfoProvider(trip, trip.flightItin[0].departure_airport.city);
 	const weatherDetails = Promise.denodeify(tip.getWeatherInformation.bind(tip));
 
@@ -1381,9 +1381,7 @@ WebhookPostHandler.prototype.sendReminderNotification = function() {
     sessions[id].allTrips().forEach(trip => {
       const todoList = trip.getTodoList();
       logger.info(`sendReminderNotification: Trip ${trip.data.name} from session ${id} has ${todoList.length} todo items.`);
-      if(!todoList.length) {
-        return;
-      }
+      if(!todoList.length) return;
       const now = moment().tz("Etc/UTC");
       const tripEnd = moment.tz(trip.data.returnDate, "Etc/UTC");
       if(now.diff(tripEnd,'days') >= 0) {

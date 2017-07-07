@@ -48,8 +48,8 @@ describe('ItineraryHandler tests', function() {
     };
   }
 
-  function verifyFirstConnection() {
-    const obj = getItinerary();
+  function verifyFirstConnection(tName) {
+    const obj = getItinerary(tName);
     const itin = obj.itin;
     const trip = obj.trip;
     verifyFlightInfo(itin, itin.flight_info[0]);
@@ -62,16 +62,14 @@ describe('ItineraryHandler tests', function() {
     expect(trip.getTodoDoneList()).to.include("Flight tickets");
   }
 
-  /*
-  function verifySecondConnection() {
-    const obj = getItinerary();
+  function verifySecondConnection(tName) {
+    const obj = getItinerary(tName);
     const itin = obj.itin;
     const trip = obj.trip;
-    verifyFlightInfo(itin, itin.flight_info, options, idx);
-    verifyPassengerInfo(itin, itin.passenger_info, options, idx);
-    verifyPassengerSegment(itin, itin.passenger_segment_info, options, idx);
+    flightInfoCheck(itin.flight_info[1], "CA35", "c002", "s002", "JFK", "AMS", "2017-05-01T17:00", null, "business");
+    passengerInfoCheck(itin.passenger_info[0], "TestFirstName LastName", "p001");
+    passengerSegmentCheck(itin.passenger_segment_info[1], "s002", "p001", "4A", "business");
   }
-  */
 
   // TODO: verify passenger_segment_info. There needs to be same number of seats and seat_types as passengers for each flight.
   function verifyPassengerSegment(itin, passengerSegment) {
@@ -106,7 +104,7 @@ describe('ItineraryHandler tests', function() {
       arr_code: ['JFK'],
       arr_city: [tripName],
       arrival_time: ['14:15'],
-      UA123_seats: ['35J'],
+      seats: ['35J'],
       total_price: "1700.56",
       currency: "USD"
     };
@@ -128,11 +126,11 @@ describe('ItineraryHandler tests', function() {
     verifyTripInContext();
   });
 
-  it.skip('single passenger multiple itineraries', function() {
+  it('single passenger multiple itineraries', function() {
     const tName = 'Amsterdam';
     const options = {
       dep_date: '5/1/17',
-      names: ["TestFirstName LastName", "first last"],
+      names: ["TestFirstName LastName"],
       flight_num: ['UA123', 'CA35'],
       pnr: ['CA242V', 'XDS45Z'],
       travel_class: ['economy', 'business'],
@@ -143,13 +141,54 @@ describe('ItineraryHandler tests', function() {
       arr_code: ['JFK', 'AMS'],
       arr_city: ['New York', tName], // not using tripName because we are using a different name
       arrival_time: ['14:15', '23:00'],
-      UA123_seats: ['35J', '4A'],
+      seats: ['35J', '4A'],
       total_price: "1700.56",
       currency: "USD"
     };
     new ItineraryHandler(options, true /* testing */).handle();
-    verifyFirstConnection();
-    // verifySecondConnection();
+    verifyFirstConnection(tName);
+    verifySecondConnection(tName);
+    (new TripData(tName, fbid)).testing_delete();
+  });
+
+  function verifyMPMIDTCTest(tName, firstPsngr, secondPsngr) {
+    verifyFirstConnection(tName);
+    // second connection for passenger 1
+    const obj = getItinerary(tName);
+    const itin = obj.itin;
+    const trip = obj.trip;
+    flightInfoCheck(itin.flight_info[1], "CA35", "c002", "s002", "JFK", "AMS", "2017-05-01T17:00", null, "economy");
+    passengerInfoCheck(itin.passenger_info[0], "TestFirstName LastName", "p001");
+    passengerSegmentCheck(itin.passenger_segment_info[1], "s002", "p001", "4A", "business");
+    // first connection for passenger 2
+    passengerInfoCheck(itin.passenger_info[1], "First Last", "p002");
+    passengerSegmentCheck(itin.passenger_segment_info[2], "s001", "p002", "36J", "economy");
+    // second connection for passenger 2
+    passengerSegmentCheck(itin.passenger_segment_info[3], "s002", "p002", "36J", "economy");
+  }
+
+  it('multiple passengers multiple itineraries different travel class', function() {
+    const tName = 'Amsterdam';
+    const options = {
+      dep_date: '5/1/17',
+      names: ["TestFirstName LastName", "First Last"],
+      flight_num: ['UA123', 'CA35'],
+      pnr: ['CA242V', 'XDS45Z'],
+      travel_class: ['economy', 'economy', 'business', 'economy'],
+      boarding_time: ['09:15', '15:30'],
+      dep_time: ['10:10', '17:00'],
+      dep_code: ['SEA', 'JFK'],
+      dep_city: ['Seattle', 'New York'],
+      arr_code: ['JFK', 'AMS'],
+      arr_city: ['New York', tName], // not using tripName because we are using a different name
+      arrival_time: ['14:15', '23:00'],
+      seats: ['35J', '36J', '4A', '36J'],
+      total_price: "1700.56",
+      currency: "USD"
+    };
+    new ItineraryHandler(options, true /* testing */).handle();
+    verifyMPMIDTCTest(tName);
+    (new TripData(tName, fbid)).testing_delete();
   });
 
 
@@ -176,7 +215,7 @@ describe('ItineraryHandler tests', function() {
     expect(flightInfo.flight_schedule.departure_time).to.equal(moment(depTime).format("YYYY-MM-DDTHH:mm"));
     if(aircraftType) expect(flightInfo.aircraft_type).to.equal(aircraftType);
     if(!travelClass) travelClass = "economy";
-    expect(flightInfo.travel_class).to.equal("economy");
+    expect(flightInfo.travel_class).to.equal(travelClass);
 
   }
 
@@ -220,7 +259,7 @@ describe('ItineraryHandler tests', function() {
       flight_num: ['DL998', 'DL6794', 'VA39'],
       aircraft_type: ["Airbus", "Boeing 747", "Boeing 737"],
       pnr: ['HNPOL6', 'HNPOL6', 'RPQMDH'],
-      travel_class: ['economy', 'economy', 'economy'],
+      travel_class: ["economy"],
       // dep_time: ['10:10', '17:00'],
       departure_time: ['2017-08-09T17:00', '2017-08-09T23:50', '2017-08-11T09:55'],
       dep_code: ['SEA', 'LAX', 'BNE'],
@@ -343,7 +382,7 @@ describe('ItineraryHandler tests', function() {
       arr_code: ['JFK'],
       arr_city: [tripName],
       arrival_time: ['14:15'],
-      UA123_seats: ['35J'],
+      seats: ['35J'],
       total_price: "1700.56",
       currency: "USD"
     };

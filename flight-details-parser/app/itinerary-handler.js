@@ -7,22 +7,32 @@ const TripFinder = require('flight-details-parser/app/trip-finder');
 const baseDir = "/home/ec2-user";
 const logger = require(`${baseDir}/my-logger`);
 
+
 function ItineraryHandler(options, testing) {
 	// set the flightNum_seats option
   // number of seats should be numPassengers x numFlights
-  logger.debug(`ItineraryHandler: travel_class: ${options.travel_class}`);
+  logger.debug(`ItineraryHandler: travel_class: ${options.travel_class}; travel_class length: ${options.travel_class.length}; options.flight_num: ${options.flight_num.length}; options.names: ${options.names.length}`);
   let defaultTc;
-  if(options.travel_class.length === 1) defaultTc = options.travel_class[0];
+  options = setTravelClass(options);
+  // if(options.travel_class.length === 1) defaultTc = options.travel_class[0];
 	if(options.seats && Array.isArray(options.seats)) {
     let seatIdx = 0;
+    // for each flight, for each passenger, identify the seat number, travel class and push it.
     for(let f = 0; f < options.flight_num.length; f++) {
+      const fNum = options.flight_num[f];
+      if(!options[fNum]) {
+        options[fNum] = {};
+      }
       for(let n = 0; n < options.names.length; n++) {
         const num = options.flight_num[f];
 				const key = `${num}_seats`;
 				if(!options[key]) options[key] = [];
+        const tc = options.passenger_travelClass[seatIdx];
+        /*
         const tc = (defaultTc) ? defaultTc : options.travel_class[seatIdx];
+        logger.debug(`setting travel_class to ${tc}`);
         if(tc != 'economy' && tc != 'business' && tc != 'first_class') throw new Error(`travel class needs to be one of economy, business, first_class. But it is ${tc}. flight_num is ${options.flight_num[f]}`);
-        // options[key].push(options.seats[seatIdx++]);
+        */
 				options[key].push({
           'seat': options.seats[seatIdx++],
           'travel_class': tc
@@ -51,6 +61,63 @@ function ItineraryHandler(options, testing) {
   this.testing = testing;
   validate.call(this);
 }
+
+/*
+  travel_class is present in two places:
+  1) In FlightInfo object
+  2) In PassengerSegmentInfo (as seat_type)
+
+  So, options.travel_class array can contain:
+  1) Just one element. In this case, all the flights for all passengers use this in both FlightInfo and PassengerSegmentInfo objects. Update options.travel_class
+  2) Same number of elements as flight. In this case, for each flight, all passengers have the same travel_class. 
+  3) Same number of elements as flight X passengers. 
+
+  This function updates options.flightInfo_travelClass and options.passenger_travelClass as arrays, used to udpate the FlightInfo & PassengerSegmentInfo objects. 
+*/
+function setTravelClass(options) {
+  if(!options) throw new Error(`setTravelClass: required parameter 'options' is not defined`);
+  if(!options.travel_class) throw new Error(`setTravelClass: required parameter options.travel_class is not defined`);
+  const tcLength = options.travel_class.length;
+  for(let i = 0; i < tcLength; i++) {
+    const tc = options.travel_class[i];
+    if(tc != 'economy' && tc != 'business' && tc != 'first_class') throw new Error(`travel class needs to be one of economy, business, first_class. But it is ${tc}. Options dump: ${JSON.stringify(options)}`);
+  }
+  const flightCount = options.flight_num.length;
+  const passengerCount = options.names.length;
+  if(tcLength != 1 && tcLength != flightCount && (tcLength != (flightCount * passengerCount))) throw new Error(`setTravelClass: options.travel_class (${options.travel_class}) does not contain the right number of elements. Entire dump: ${JSON.stringify(options)}`);
+
+  options.flightInfo_travelClass = []; 
+  options.passenger_travelClass = [];
+  if(tcLength === 1) {
+    const tc = options.travel_class[0];
+    for(let i = 0; i < flightCount; i++) {
+      options.flightInfo_travelClass.push(tc);
+      for(let i = 0; i < passengerCount; i++) {
+        options.passenger_travelClass.push(tc);
+      }
+    }
+  }
+  else if(tcLength === flightCount) {
+    options.flightInfo_travelClass = options.travel_class;
+    for(let fc = 0; fc < flightCount; fc++) {
+      for(let pc = 0; pc < passengerCount; pc++) {
+        options.passenger_travelClass.push(options.travel_class[fc]);  
+      }
+    }
+  }
+  else if(tcLength === (flightCount * passengerCount)) {
+    options.passenger_travelClass = options.travel_class;
+    let pc = passengerCount / flightCount;
+    for(let fc = 0; fc < flightCount; fc++) {
+      let idx = fc * pc;
+      options.flightInfo_travelClass.push(options.travel_class[idx]);
+    }
+  }
+  delete options.travel_class;
+  // logger.debug(`setTravelClass: options dump: ${JSON.stringify(options)}`);
+  return options;
+}
+
 
 ItineraryHandler.prototype.handle = function() {
   // we want the final destination, which is the arrival_city of the last element in flightInfo

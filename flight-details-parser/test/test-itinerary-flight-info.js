@@ -11,6 +11,7 @@ describe('itinerary flight info tests', function() {
   function verifyFirstConnection(result) {
     expect(result.connection_id).to.equal("c001");
     expect(result.segment_id).to.equal("s001");
+    expect(result.flight_number).to.equal("UA123");
     expect(Object.keys(result.departure_airport).length).to.equal(2);
     expect(Object.keys(result.arrival_airport).length).to.equal(2);
     expect(Object.keys(result.flight_schedule).length).to.equal(3);
@@ -24,7 +25,7 @@ describe('itinerary flight info tests', function() {
     const options = {
       dep_date: '5/1/17',
       flight_num: ['UA123'],
-      travel_class: ['economy'],
+      flightInfo_travelClass: ['economy'],
       boarding_time: ['09:15'],
       dep_time: ['10:10'],
       dep_code: ['SEA'],
@@ -42,7 +43,7 @@ describe('itinerary flight info tests', function() {
     const options = {
       dep_date: '5/1/17',
       flight_num: ['UA123', 'VA345'],
-      travel_class: ['economy', 'business'],
+      flightInfo_travelClass: ['economy', 'business'],
       boarding_time: ['09:15', '15:45'],
       dep_time: ['10:10', '16:30'],
       dep_code: ['SEA', 'JFK'],
@@ -56,5 +57,7 @@ describe('itinerary flight info tests', function() {
     verifyFirstConnection(parsedDetails[0]);
     expect(parsedDetails[1].connection_id).to.equal("c002");
     expect(parsedDetails[1].segment_id).to.equal("s002");
+    expect(parsedDetails[1].travel_class).to.equal("business");
+    expect(parsedDetails[1].flight_number).to.equal("VA345");
   });
 });

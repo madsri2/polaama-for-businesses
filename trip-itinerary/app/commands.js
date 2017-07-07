@@ -24,6 +24,7 @@ function Commands(trip, fbid, sendHtml) {
 Commands.prototype.handle = function(command) {
   this.command = command;
   if(this.command === "dates") return sendTripDates.call(this);
+  if(this.command.includes("hotel choices")) return sendHotelChoices.call(this);
   return handleDayItin.call(this);
 }
 
@@ -39,6 +40,7 @@ Commands.prototype.canHandle = function(command) {
   if(this.command.startsWith("tomorrow")) return true;
   if(this.command.startsWith("today")) return true;
   if(this.command === "dates") return true;
+  if(this.command.includes("hotel choices")) return true;
   return setDateIfValid.call(this);
 }
 
@@ -83,6 +85,10 @@ Commands.prototype.handleMealsCommand = function(command) {
 }
 
 Commands.prototype.handlePostback = function(payload) {
+  if(payload.includes("hotel choices")) {
+    this.command = payload;
+    return sendHotelChoices.call(this);
+  }
   // logger.debug(`handlePostback: date is ${date}; ${CreateItinerary.formatDate(date)}`);
   const parsedPayload = DayPlanner.parseDayItinPostback(payload); 
   if(!parsedPayload) return null;
@@ -334,6 +340,58 @@ function sendTripDates() {
   };
   if(imageUrl) message.message.attachment.payload.elements[0].image_url = imageUrl;
   logger.debug(`sendTripDates: ${JSON.stringify(message)}`);
+  return message;
+}
+
+function sendHotelChoices() {
+  const contents = /(.*) hotel choices/.exec(this.command);
+  const errMessage = {
+      recipient: {
+        id: this.fbid
+      },
+      message: {
+        text: `Unable to display hotel choices at this point`,
+        metadata: "DEVELOPER_DEFINED_METADATA"
+      }
+  };
+  if(!contents) {
+    logger.error(`sendHotelChoices: ${this.command} does not match format "<city> hotel choices"`);
+    return errMessage;
+  }
+  const city = contents[1];
+  const file = this.trip.hotelChoiceFile(city);
+  if(!fs.existsSync(file)) {
+    logger.error(`sendHotelChoices: file ${file} does not exist for city "${city}" in trip "${this.trip.rawTripName}"`);
+    return errMessage;
+  }
+  const message = {
+    recipient: {
+      id: this.fbid
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "generic",
+        }
+      }
+    }
+  };
+  const json = JSON.parse(fs.readFileSync(file, 'utf8'));
+  const elements = [];
+  json.forEach(hotel => {
+    const element = {};
+    element.title = hotel.name;
+    element.subtitle = hotel.price;
+    element.default_action = {
+      "type": "web_url",
+      "webview_height_ratio": "full",
+      "url": hotel.url
+    };
+    if(hotel.image_url) element.image_url = hotel.image_url;
+    elements.push(element);
+  });
+  message.message.attachment.payload.elements = elements;
   return message;
 }
 
