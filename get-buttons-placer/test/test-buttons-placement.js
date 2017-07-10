@@ -125,4 +125,10 @@ describe('testing buttons placement', function() {
     expect(result.thirdSet[0].title).to.equal("Pack list");
     expect(result.thirdSet[1].title).to.equal("Expense report");
   });
+
+  it("todo list button", function() {
+    const trip = new TripData(tripName, "12345", "fbid-test.txt");
+    const result = new ButtonsPlacement("https://polaama.com/WBkW", new TripData(tripName, fbid, "fbid-test.txt")).getPlacement();
+    logger.debug(`${JSON.stringify(result, null, 2)}`);
+  });
 });

@@ -127,6 +127,7 @@ CreateItinerary.prototype.getItinerary = function() {
     const contents = JSON.parse(fs.readFileSync(this.trip.userInputItinFile(), 'utf8'));
     if(contents) {
       Object.keys(contents).forEach(key => {
+        if(key === "title") return;
         if(!this.itin[key]) {
           throw new Error(`getItinerary: key ${key} is not present in main itinerary file, but is present in user input itinerary file. Possible BUG!`);
         }

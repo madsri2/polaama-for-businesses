@@ -80,7 +80,7 @@ TripDataFormatter.prototype.formatPackList = function(headers) {
   }
   if(_.isUndefined(headers) || _.isUndefined(headers['user-agent'])) {
     logger.info("header or user-agent not defined. sending back json");
-    return list;
+    return packList;
   }
   if(headers['user-agent'].startsWith("Mozilla")) {
     logger.info("request call from browser. sending back html");
@@ -369,7 +369,7 @@ function toLink(text) {
 function listAsHtml(list) {
   let html = "<ol>";
   if(_.isNull(list) || _.isUndefined(list) || _.isEmpty(list)) {
-    return "";
+    return "No data available!";
   }
   list.forEach(function(item) {
     if(item) {

@@ -109,7 +109,39 @@ function testTripItinerary() {
 	console.log(JSON.stringify(trip.returnFlightItin));
 }
 
-testTripItinerary();
+const fbid = "1234";
+function testPackListUpdate() {
+	const trip = new TripData("test_trip_data", fbid);
+  const message = trip.storePackList("pack item1 with words");
+  console.log(`testPackListUpdate: message is ${message}`);
+  console.log(`testPackListUpdate: pack list ${JSON.stringify(trip.getPackList())}`);
+  trip.testing_delete();
+}
+
+function testPackListUpdateForOlderTrips() {
+  // set up
+  const sessions = require(`${baseDir}/sessions`).get();
+  const session = sessions.findOrCreate(fbid);
+  session.addTrip("test_pack_list");
+  const trip = session.getTrip("test_pack_list");
+  const tripFile = `${baseDir}/trips/ZDdz/test_pack_list.txt`
+  const json = JSON.parse(fs.readFileSync(tripFile));
+  json.packList = {};
+  json.packList.toPack = ["Already existing item", "item1 with words"];
+  json.packList.done = ["Packed item that already existed"];
+  fs.writeFileSync(tripFile, JSON.stringify(json), 'utf8');
+  const message = trip.storePackList("item1 with words");
+  console.log(`testPackListUpdate: message is ${message}`);
+  const packList = trip.getPackList();
+  console.log(`testPackListUpdate: pack list ${JSON.stringify(packList)} with ${packList.toPack.length} / ${trip.getPackList().toPack.length} items`);
+  session.testing_delete();
+  trip.testing_delete();
+}
+
+testPackListUpdateForOlderTrips();
+// testPackListUpdate();
+
+// testTripItinerary();
 
 /*
 testCategorizingComments(["beach activity","a beach worth visiting", "a beach.", "somethingwithbeachinmiddle", "gardentostart", "a garden.", ": garden."], "5 activities; 2 others");

@@ -252,6 +252,16 @@ app.get('/favicon.ico', function(req, res) {
   return res.end();
 });
 
+app.get('/images/:file/', function(req, res) {
+  return res.sendFile(`/home/ec2-user/images/${req.params.file}.png`, null, 
+    function(e) {
+      if(e) {
+        logger.error(`images file: could not return file ${req.params.file}: ${e.stack}`);
+        return res.status(404).send("Could not retrieve image at this time");
+      }
+  });
+});
+
 app.get('/:id/:tripName/friends', function(req, res) {
   const handler = new WebpageHandler(req.params.id, req.params.tripName);
   return handler.sendFriendsList(res);
@@ -489,7 +499,8 @@ app.get('/webhook', function(req, res) {
 app.post('/webhook', jsonParser, function(req, res) {
   // DONT log "is_echo" messages. They pollute the logs.
   const echo = (req.body.entry[0].messaging[0].message) ?  req.body.entry[0].messaging[0].message.is_echo : false; 
-  if(!echo) logger.debug(`/webhook called: fbid: ${req.body.entry[0].messaging[0].sender.id}; page id: ${req.body.entry[0].id}; messagingEvent dump: <${JSON.stringify(req.body.entry[0].messaging[0])}>`);
+  const watermark = (req.body.entry[0].messaging[0].delivery) ? req.body.entry[0].messaging[0].delivery.watermark : false;
+  if(!echo && !watermark) logger.debug(`/webhook called: fbid: ${req.body.entry[0].messaging[0].sender.id}; page id: ${req.body.entry[0].id}; messagingEvent dump: <${JSON.stringify(req.body.entry[0].messaging[0])}>`);
   postHandler.handle(req, res);
 });
 

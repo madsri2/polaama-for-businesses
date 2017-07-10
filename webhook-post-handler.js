@@ -229,16 +229,22 @@ function displayTripDetails() {
         elements: [{
           title: "Get", 
           buttons: buttons.firstSet
-        }, {
-          title: "Get", 
-          buttons: buttons.secondSet
-        }, {
-          title: "Get",
-          buttons: buttons.thirdSet
         }]
       }
     }
   };
+  if(buttons.secondSet) {
+    messageData.message.attachment.payload.elements.push({
+      title: "Get",
+      buttons: buttons.secondSet
+    });
+  }
+  if(buttons.thirdSet) {
+    messageData.message.attachment.payload.elements.push({
+      title: "Get",
+      buttons: buttons.thirdSet
+    });
+  }
   callSendAPI(messageData);
 }
 
@@ -437,6 +443,7 @@ function receivedPostback(event) {
   if(payload === "hotel details") return sendHotelItinerary.call(this);
   if(payload.includes("-hotel-receipt")) return sendCityHotelReceipt.call(this, payload);
   if(payload === "car details") return sendCarReceipt.call(this);
+  if(payload === "get receipt") return sendGeneralReceipt.call(this);
 
   const commands = new Commands(this.session.tripData(), this.session.fbid);
   if(payload.includes("recommendation_next_set")) return callSendAPI(commands.handleRecommendationPostback(payload));
@@ -488,6 +495,38 @@ function sendFlightItinerary() {
       }
     }
   });
+}
+
+function sendGeneralReceipt() {
+  const fbid = this.session.fbid;
+  const trip = this.session.tripData();
+  const receiptFiles = trip.generalReceiptFile();
+  if(receiptFiles.length > 1) throw new Error(`sendGeneralReceipt: We don't currently support handling more than 1 receipt`);
+	const messages = [];
+  const details = JSON.parse(fs.readFileSync(receiptFiles[0]));
+  messages.push({
+    recipient: {
+      id: fbid
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: details.receipt
+      }
+    }
+  });
+  messages.push({
+    recipient: {
+      id: fbid
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: details.receipt_ext
+      }
+    }
+  });
+  sendMultipleMessages(this.session.fbid, messages);
 }
 
 function sendCarReceipt() {
@@ -581,6 +620,7 @@ function sendHotelItinerary() {
   const trip = this.session.tripData();
 	const messages = [];
   const details = trip.getHotelReceiptDetails();
+  if(!details) return sendTextMessage(fbid, `No hotel receipts for your ${trip.data.rawName} trip! If you have made hotel reservations, send receipt to TRIPS@MAIL.POLAAMA.COM`);
   const hotels = Object.keys(details);
   if(hotels.length > 1) {
     logger.debug(`cities with hotels: ${hotels}`);
@@ -1203,7 +1243,7 @@ function determineResponseType(event) {
     return;
   }
   if(mesg.startsWith("pack ") || this.session.awaitingPacklistItem) {
-    const returnString = tripData.storePackList(senderID, messageText);
+    const returnString = tripData.storePackList(messageText);
     sendTextMessage(senderID, returnString);
     this.session.awaitingPacklistItem = false;
     return;
@@ -1239,6 +1279,7 @@ function determineResponseType(event) {
   if(mesg.startsWith("get boarding pass") || mesg.startsWith("boarding pass")) return sendBoardingPass.call(this);
   if(mesg.startsWith("get flight itinerary") || mesg.startsWith("flight")) return sendFlightItinerary.call(this);
   if(mesg.startsWith("get car details") || mesg.startsWith("car")) return sendCarReceipt.call(this);
+  if(mesg.startsWith("get receipt") || mesg.startsWith("receipt ")) return sendGeneralReceipt.call(this);
   if(mesg.startsWith("get hotel details") || mesg.startsWith("hotel")) return sendHotelItinerary.call(this);
 	if(mesg.startsWith("get tour details") || mesg.startsWith("tour details")) return sendTourDetails.call(this);
   if(mesg.startsWith("get return flight") || mesg.startsWith("return flight")) return sendReturnFlightDetails.call(this);

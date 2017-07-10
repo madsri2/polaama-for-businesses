@@ -37,12 +37,12 @@ ButtonsPlacement.prototype.getPlacement = function() {
   };
   const itinButton = {
 	  type: "postback",
-	  title: "Flight Itinerary",
+	  title: "Onward Flight",
 	  payload: "flight itinerary"
   };
   const returnItinButton = {
 	  type: "postback",
-	  title: "Return flight Itinerary",
+	  title: "Return flight",
 	  payload: "return flight"
   };
   const hotelDetailsButton = {
@@ -55,52 +55,74 @@ ButtonsPlacement.prototype.getPlacement = function() {
 	  title: "Car details",
 	  payload: "car details"
   };
+  const receiptsButton = {
+	  type: "postback",
+	  title: "Receipts",
+	  payload: "get receipt"
+  };
   const buttons = [];
+  buttons.push(tripCalendar);
   const fs = require('fs');
 	if(fs.existsSync(this.trip.boardingPassFile())) buttons.push(bpButton);
 	if(fs.existsSync(this.trip.itineraryFile())) buttons.push(itinButton);
 	if(fs.existsSync(this.trip.returnFlightFile())) buttons.push(returnItinButton);
   if(fs.existsSync(this.trip.hotelRentalReceiptFile())) buttons.push(hotelDetailsButton);
   if(fs.existsSync(this.trip.rentalCarReceiptFile())) buttons.push(carDetailsButton);
+  const receipts = this.trip.generalReceiptFile();
+  if(receipts.length > 0 && fs.existsSync(receipts[0])) buttons.push(receiptsButton);
 
-  buttons.push(tripCalendar);
   if(fs.existsSync(this.trip.runningTrailFile())) buttons.push({
 	  type: "postback",
-	  title: "Running Trails",
+	  title: "   Running Trails",
 	  payload: "running"
   });
-	buttons.push(weather);
-  buttons.push(/*{
+  /*
+  {
     type:"web_url",
   	url: url(this.urlPrefix, `${this.trip.activitiesUrlPath()}`),
     title:"Activities",
     webview_height_ratio: "compact",
     messenger_extensions: true,
-  }, */ {
+  }, 
+  */
+  const todoListButton = {
+    type: "web_url",
+    url: url(this.urlPrefix, `${this.tripName}/todo`),
+    title: "       Todo list",
+    webview_height_ratio: "compact",
+    messenger_extensions: true
+  };
+  const todoList = this.trip.getTodoList();
+  if(todoList && (todoList.length > 0)) buttons.push(todoListButton);
+
+  const packListButton = {
+    type: "web_url",
+    url: url(this.urlPrefix, `${this.tripName}/pack-list`),
+    title: "       Pack list",
+    webview_height_ratio: "compact",
+    messenger_extensions: true
+  };
+  const packlist = this.trip.getPackList();
+  if(Object.keys(packlist).length > 0) buttons.push(packListButton);
+  
+  const commentsButton = {
     type: "web_url",
     url: url(this.urlPrefix, `${this.tripName}/comments`),
     title: "Comments",
     webview_height_ratio: "compact",
     messenger_extensions: true
-  }, {
-    type: "web_url",
-    url: url(this.urlPrefix, `${this.tripName}/todo`),
-    title: "Todo list",
-    webview_height_ratio: "compact",
-    messenger_extensions: true
-  }, {
-    type: "web_url",
-    url: url(this.urlPrefix, `${this.tripName}/pack-list`),
-    title: "Pack list",
-    webview_height_ratio: "compact",
-    messenger_extensions: true
-  }, {
+  };
+  const comments = this.trip.parseComments();
+  if(Object.keys(comments).length > 0) buttons.push(commentsButton);
+  
+  const expenseButton = {
     type: "web_url",
   	url: url(this.urlPrefix, `${this.tripName}/expense-report`),
-    title: "Expense report",
+    title: "  Expense report",
     webview_height_ratio: "compact",
     messenger_extensions: true
-  });
+  };
+  if(this.trip.getTravelers()) buttons.push(expenseButton);
   // flight quote only if there is no flight details
 	if(!fs.existsSync(this.trip.itineraryFile())) buttons.push({
     type: "web_url",
@@ -109,18 +131,24 @@ ButtonsPlacement.prototype.getPlacement = function() {
     webview_height_ratio: "compact",
     messenger_extensions: true
   });
+	buttons.push(weather);
   const result = {
-    firstSet: [],
-    secondSet: [],
-    thirdSet: []
+    firstSet: []
   };
   let list = result.firstSet;
   for(let i = 0; i < buttons.length; i++) {
     list.push(buttons[i]);
-    if(i === 2) list = result.secondSet;
-    if(i === 5) list = result.thirdSet;
+    if(i === 2 && (buttons.length > i + 1)) { 
+      result.secondSet = [];
+      list = result.secondSet;
+    }
+    if(i === 5 && (buttons.length > i + 1)) {
+      result.thirdSet = [];
+      list = result.thirdSet;
+    }
     if(i === 8) break; // we only allow the top 9 buttons for now.
   }
+  logger.debug(`getPlacement: dump: ${JSON.stringify(result)}`);
   return result;
 }
 

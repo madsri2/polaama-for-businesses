@@ -32,6 +32,7 @@ function TripData(rawTripName, fbid, testFbidFile) {
   else {
     if(this.data.country) this.country = new Country(this.data.country);
   }
+  this.sharedFilesBaseDir = `${baseDir}/trips/shared`;
 	updateTripItineraries.call(this);
 }
 
@@ -108,19 +109,38 @@ TripData.prototype.getInfoFromTrip = function(tripKey) {
   return trip[tripKey];
 }
 
+function moveToPackList(items, target) {
+  if(!items) return target;
+  if(!target) return items;
+  items.forEach(item => {
+    if(!target.includes(item)) target.push(item);
+  });
+  return target;
+}
+
 TripData.prototype.getPackList = function() {
+  // retrieve latest data
+  this.retrieveTripData();
   const trip = this.data;
-  if(_.isUndefined(trip) || _.isUndefined(trip.packList)) {
+  const file = this.packListFile();
+  let packList = (fs.existsSync(file)) ? JSON.parse(fs.readFileSync(file, 'utf8')) : undefined;
+  if(!packList) packList = {};
+  // For backwards compatibility, look for pack-list in the trip file as well.
+  if(trip.packList) {
+    packList.toPack = moveToPackList(trip.packList.toPack, packList.toPack);
+    packList.done = moveToPackList(trip.packList.done, packList.done);
+    // update pack-list file if any data was obtained from the trip file. then, delete trip file.
+    if(packList.toPack || packList.done) fs.writeFileSync(this.packListFile(), JSON.stringify(packList));
+    delete trip.packList;
+    this.persistUpdatedTrip();
+  }
+  if(!packList || (!packList.toPack && !packList.done) || (packList.toPack.length === 0 && packList.done.length === 0)) {
     logger.info(`Could not find packList for trip ${this.data.name}. Returning empty object`);
     return {};
   }
-  if(trip.packList.toPack) {
-    logger.info(`There are ${trip.packList.toPack.length} to pack items in pack list`);
-  }
-  if(trip.packList.done) {
-    logger.info(`There are ${trip.packList.done.length} done items in pack list`);
-  }
-  return trip.packList;
+  if(packList.toPack) logger.info(`There are ${packList.toPack.length} to pack items in pack list`);
+  if(packList.done) logger.info(`There are ${packList.done.length} done items in pack list`);
+  return packList;
 }
 
 TripData.prototype.retrieveTripData = function() {
@@ -298,21 +318,35 @@ TripData.prototype.storeTodoList = function(senderId, messageText) {
   return storeList.call(this, senderId, messageText, reg, "todoList", "get todo");  
 }
 
-//TODO: senderId is not being used here. So remove it and update the place where this function is called.
-TripData.prototype.storePackList = function(senderId, messageText) {
+TripData.prototype.packListFile = function() {
+  this.tripSharedFilesBaseDir = `${this.sharedFilesBaseDir}/${this.data.name}`;
+  if(!fs.existsSync(this.tripSharedFilesBaseDir)) fs.mkdirSync(this.tripSharedFilesBaseDir);
+  return `${this.tripSharedFilesBaseDir}/pack_list.json`;
+}
+
+TripData.prototype.storePackList = function(messageText) {
   const regex = new RegExp("^pack[:]*[ ]*","i"); // ignore case
   // retrieve text
   const items = messageText.replace(regex,"").split(',');
-  if(_.isUndefined(this.data.packList)) {
-    this.data.packList = {};
-    this.data.packList.toPack = [];
-    this.data.packList.done = [];
-  } 
-  this.data.packList.toPack = this.data.packList.toPack.concat(items);
+  let packList;
+  const file = this.packListFile();
+  if(fs.existsSync(file)) packList = JSON.parse(fs.readFileSync(file, 'utf8'));
+  if(!packList) {
+    packList = {};
+    packList.toPack = [];
+    packList.done = [];
+  }
+  packList.toPack = packList.toPack.concat(items);
   // store it locally
-  this.persistUpdatedTrip();
+  try {
+    fs.writeFileSync(file, JSON.stringify(packList));
+    return `Saved! You can retrieve this by saying get pack list`;
+  }
+  catch(err) {
+    logger.error("error writing to ",file,err.stack);
+  }
   // logger.info(`successfully stored item ${items} in packList's toPack list`);
-  return `Saved! You can retrieve this by saying get pack list`;
+  return `Even bots need to eat! Be back in a bit.`;
 }
 
 /*
@@ -331,7 +365,6 @@ TripData.prototype.storeExpenseEntry = function(senderId, messageText) {
 TripData.prototype.userInputItinFile = function() {
   return `${this.tripBaseDir}/${this.data.name}-user-itinerary.txt`;
 }
-
 
 /*
   TODO: Since we have are writing to one file, there will be a race condition if two users attempt to update an itinerary. You need a lock to serialize in this case! This is true for any file writing that is done. Or, move to using dynamodb or something which will handle it for you
@@ -550,16 +583,16 @@ function createPackList() {
   // if the weather is sunny, add corresponding items.
   switch(this.data.weather) {
     case "sunny": 
-      this.storePackList("unused", "A hat, Sunglasses, Sunscreen lotion");
+      this.storePackList("A hat, Sunglasses, Sunscreen lotion");
       break;
     case "rainy":
-      this.storePackList("unused", "Rain Jacket, Gloves");
+      this.storePackList("Rain Jacket, Gloves");
       break;
     case "cold":
-      this.storePackList("unused", "Winter coat, Gloves");
+      this.storePackList("Winter coat, Gloves");
       break;
   }
-  this.storePackList("unused", "Travel adapter");
+  this.storePackList("Travel adapter");
   // TODO: Use http://www.myweather2.com/swimming-and-water-temp-index.aspx to determine if beach is swimmable and update accordingly
   return;
 }
@@ -680,6 +713,27 @@ TripData.prototype.rentalCarReceiptFile = function() {
   return `${this.tripBaseDir}/${this.data.name}-rental-car-receipt.txt`;
 }
 
+TripData.prototype.updateReceiptDetails = function(title) {
+  if(!this.data.receipts) this.data.receipts = [];
+  // nothing to do if the title already exists.
+  if(this.data.receipts.includes(title)) return;
+  this.data.receipts.push(title);
+  this.persistUpdatedTrip();
+}
+
+TripData.prototype.generalReceiptFile = function(title) {
+  if(title) return `${this.tripBaseDir}/${this.data.name}-${title}-receipt.txt`;
+  // reload trips data
+  // read the data from file to make sure we don't miss anything.
+  this.retrieveTripData();
+  const receipts = [];
+  if(!this.data.receipts) return receipts;
+  this.data.receipts.forEach(receipt => {
+    receipts.push(`${this.tripBaseDir}/${this.data.name}-${receipt}-receipt.txt`);
+  });
+  return receipts;
+}
+
 TripData.prototype.getHotelReceiptDetails = function() {
   if(this.hotelReceiptDetails) return this.hotelReceiptDetails;
   const file = this.hotelRentalReceiptFile();
@@ -732,6 +786,8 @@ TripData.prototype.testing_delete = function() {
     if(!fs.existsSync(targetDir)) fs.mkdirSync(targetDir);
     fs.renameSync(`${this.tripBaseDir}/${file}`, `${targetDir}/${file}`);
   });
+
+  // fs.renameSync(`${this.tripSharedFilesBaseDir}`, `${this.sharedFilesBaseDir}/oldFiles/${this.data.name}`);
 }
 
 // TODO: Duplicates itineraryFile() & boardingPassFile. Fix the first time this causes an issue

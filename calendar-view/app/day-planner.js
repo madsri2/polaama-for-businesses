@@ -441,16 +441,17 @@ function weatherString(weather) {
   if(weather.chanceofrain !== '0') rain += `; Chance of rain: <b>${weather.chanceofrain}%</b>`;
   let city = "";
   if(weather.city) city += ` at <b>${capitalize1stChar(weather.city)}</b>`;
-  return `<div data-role="content" data-enhance="false">Weather Forecast${city}: Avg min temp: <b>${weather.min_temp}&degF</b>; Max temp: <b>${weather.max_temp}&degF</b>; It will typically be <b>${weather.cloud_cover}</b> today. ${rain}</div>`;
+  return `Weather Forecast${city}: Min: <i>${weather.min_temp}&degF</i>; Max: <i>${weather.max_temp}&degF</i>; <b>${capitalize1stChar(weather.cloud_cover)}</b>${rain}`;
 }
 
 function flightDetails(dayPlan) {
   let plans = [];
-  let flightPlans = `<div data-role="content" data-enhance="false">`;
+  // let flightPlans = `<div data-role="content" data-enhance="false">`;
+  let flightPlans = "";
 
   if(dayPlan.startTime) flightPlans += `Leaving ${capitalize1stChar(this.departureCity)} at <b>${dayPlan.startTime}</b>; `;
   if(dayPlan.arrivalTime) flightPlans += `Arriving in ${capitalize1stChar(this.arrivalCity)} at <b>${dayPlan.arrivalTime}</b>`;
-  flightPlans += "</div>";
+  // flightPlans += "</div>";
   if(dayPlan.startTime || dayPlan.arrivalTime) plans.push(flightPlans);
   logger.debug(`flightDetails: returning array of length ${plans.length}`);
   return plans;
@@ -460,7 +461,7 @@ function list(planList) {
   if(planList.length === 0) return "<li>No plans yet.</li>";
   let list = "";
   planList.forEach(l => {
-    list += `<li>${l}</li>`;
+    list += `<li><div data-role="content" data-enhance="false" style="font-size:16px; white-space: normal;">${l}</div></li>`;
   });
   return list;
 }

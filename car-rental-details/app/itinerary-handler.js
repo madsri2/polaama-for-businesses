@@ -51,6 +51,12 @@ function CarItineraryHandler(options, testing) {
   if(options.street_2) this.receipt.address.street_2 = options.street_2;
   if(options.subtotal) this.receipt.summary.subtotal = options.subtotal;
   if(options.total_tax) this.receipt.summary.total_tax = options.total_tax;
+  // if the trip name was sent, we use that to create the trip
+  this.tripFinder = new TripFinder(this.receipt.recipient_name, this.testing);
+  if(options.trip_name && options.trip_name !== '') {
+    this.trip = this.tripFinder.getSession().getTrip(options.trip_name);
+    if(!this.trip) throw new Error(`CarItineraryHandler: options.trip_name was set to ${options.trip_name}, but there is no such trip. Possible BUG!`);
+  }
 }
 
 function validate(options) {
@@ -61,8 +67,8 @@ function validate(options) {
 }
 
 CarItineraryHandler.prototype.handle = function() {
-  const tripFinder = new TripFinder(this.receipt.recipient_name, this.testing);
-  this.trip = tripFinder.getTripForReceipt(this.pick_up_date, this.receipt.address.city);
+  const tripFinder = this.tripFinder;
+  if(!this.trip) this.trip = tripFinder.getTripForReceipt(this.pick_up_date, this.receipt.address.city);
   const file = this.trip.rentalCarReceiptFile();
   try {
     this.details.receipt = this.receipt;
@@ -72,7 +78,7 @@ CarItineraryHandler.prototype.handle = function() {
     // send a notification to the user that we have their details and will send them the boarding pass the day before the flight.
     logger.debug(`handle: wrote ${json.length} bytes to file ${file}`);
     // notify user that we have received a boarding pass.
-    const message = `Received rental car receipt for your trip to ${this.trip.getPortOfEntry()}. Type 'get car details' to see details`;
+    const message = `Received rental car receipt for your trip to ${this.trip.getPortOfEntry()}. Type 'car' to see details`;
     logger.debug(`handle: About to send message to user: ${message}`);
 		const postHandler = tripFinder.getPostHandler();
     postHandler.notifyUser(message);

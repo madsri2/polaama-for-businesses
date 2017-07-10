@@ -7,7 +7,7 @@
 	$(document).bind("mobileinit", function(){
 		$.mobile.ignoreContentEnabled = true;
 	});
-
+<!-- updated -->
 </script>
 <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 <style type="text/css">
@@ -51,6 +51,9 @@
       border-left-width: 0;
   }
 </style>
+<style type="text/css">
+  white-space: normal;
+</style>
 <script>
 function show (dateVal){
   itinId = `#itin-${dateVal}`;
@@ -89,7 +92,6 @@ function show (dateVal){
    <h1>Your itinerary</h1> 
  </div>
  <ul data-role="listview" class="ui-listview-outer ui-mini">
-	<p><i>Landscape mode provides a better mobile viewing experience</i></p>
   ${itinerary}
 	<li></li>
  </ul> 
