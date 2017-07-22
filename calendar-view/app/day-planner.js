@@ -102,7 +102,7 @@ DayPlanner.prototype.getMealElement = function(meal) {
 }
 
 function addViewMoreButton(message, currIndex, lastSet) {
-  const payload = `${currIndex + 1}-recommendation_next_set`;
+  const payload = `${this.interest}-${currIndex + 1}-recommendation_next_set`;
   const viewMoreButton = [{
     title: "View more",
     type: "postback",
@@ -138,7 +138,7 @@ function addButtonsToMessage(message, currIndex, lastSet) {
     payload: "hotel details"
   }];
   const elements = message.message.attachment.payload.elements;
-  logger.debug(`addButtonsToMessage: lastSet: ${lastSet}; elements length: ${elements.length};`);
+  // logger.debug(`addButtonsToMessage: lastSet: ${lastSet}; elements length: ${elements.length};`);
   // unless this is the last set of activity elements for this day, send along a "view more" button
   if(!lastSet && (elements.length > 1)) message.message.attachment.payload.buttons = viewMoreButton;
   // TODO: A better way to determine if we want to show the return flight is to see if this is the last activity for this trip.
@@ -182,6 +182,24 @@ DayPlanner.prototype.getRecommendations = function(interest, index) {
     case "vegetarian_restaurants":
       file = this.trip.vegRestaurantsFile();
       break;
+    case "walking_tours":
+      file = this.trip.walkingToursFile();
+      break;
+    case "rome_walking_tours":
+      file = this.trip.walkingToursFile("rome");
+      break;
+    case "monterosso_activities":
+      file = "/home/ec2-user/trips/aeXf/milan-monterosso-activities.json";
+      break;
+    case "glacier_activities":
+      file = "/home/ec2-user/trips/aeXf/iceland-glacier-activities.json";
+      break;
+    case "ita_ms":
+      file = "/home/ec2-user/trips/aeXf/seattle-ita-ms.json";
+      break;
+    case "da_ms":
+      file = "/home/ec2-user/trips/aeXf/seattle-da-ms.json";
+      break;
   };
   const errMessage = {
     recipient: {
@@ -192,18 +210,23 @@ DayPlanner.prototype.getRecommendations = function(interest, index) {
       metadata: "DEVELOPER_DEFINED_METADATA"
     }
   };
+  logger.debug(`getRecommendations: Looking at file ${file}`);
   if(!file) {
     logger.error(`getRecommendations: cannot find any file that matches interest ${interest} for trip ${this.trip.data.rawName}`);
     return errMessage;
   }
   try {
     const activityList = JSON.parse(fs.readFileSync(file, 'utf8'));
+    this.interest = interest;
     return createListTemplate.call(this, activityList, currIndex);
   }
   catch(err) {
     let text;
     if(err.code === 'ENOENT') text = `No recommendations yet for this interest for trip ${this.trip.data.rawName}.`;
-    else text = `Unable to get recommendations for this interest for trip ${this.trip.data.rawName}.`;
+    else {
+      logger.error(`getRecommendations: Error: ${err.stack}`);
+      text = `Unable to get recommendations for this interest for trip ${this.trip.data.rawName}.`;
+    }
     errMessage.message.text = text;
     return errMessage;
   }
@@ -211,7 +234,8 @@ DayPlanner.prototype.getRecommendations = function(interest, index) {
 
 // Facebook supports sending only 4 items in an elementList. So, use payload (see below) to pass around the index for the next set of items. 
 DayPlanner.prototype.getPlanAsList = function(setNum) {
-  const file = this.trip.dayItineraryFile(this.date);
+  let file = this.trip.dayItineraryFile(this.date);
+  if(this.trip.data.name === "iceland" && CreateItinerary.formatDate(this.date) === "9/5/2017") file = "/home/ec2-user/trips/aeXf/iceland-2017-9-5-fake-itinerary.json";
   logger.debug(`getPlanAsList: using list template to display itin for date ${CreateItinerary.formatDate(this.date)} and file ${file}`);
   try {
     // read the itinerary file, which is a list of json objects. Push each json object (which contains utmost 4 elements) into an array. Then, based on the index (either passed or defaults to 0), return the corresponding element set.
@@ -248,7 +272,7 @@ function createListTemplate(list, setNum) {
     // if there is only one element in elements, then use a "generic" template instead of "list" template. 
     if(elements.length === 1) message.message.attachment.payload.template_type = "generic";
     message.message.attachment.payload.elements = elements;
-    logger.debug(`getPlanAsList: currIndex: ${currIndex}; elementSet length: ${elementSet.length}; this.date: ${this.date}`);
+    // logger.debug(`getPlanAsList: currIndex: ${currIndex}; elementSet length: ${elementSet.length}; this.date: ${this.date}`);
     // the last parameter indicates whether this is the lastSet or not.
     if(this.date === "invalid") message = addViewMoreButton.call(this, message, currIndex, currIndex >= (elementSet.length -1));
     else message = addButtonsToMessage.call(this, message, currIndex, currIndex >= (elementSet.length - 1));
@@ -257,6 +281,46 @@ function createListTemplate(list, setNum) {
     // if(currIndex > 0 && elements.length > 1) message.message.attachment.payload.top_element_style = "compact";
     if(currIndex > 0 && message.message.attachment.payload.template_type != "generic") message.message.attachment.payload.top_element_style = "compact";
     return message;
+}
+
+DayPlanner.prototype.getPartOfDay = function(part) {
+  let message = {
+    recipient: {
+      id: this.fbid
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "list",
+        }
+      }
+    }
+  };
+  logger.debug(`getPartOfDay: activityList is ${JSON.stringify(this.activityList)}`);
+  let elements = [];
+  switch(part) {
+    case "morning": 
+      for(let i = 1; i < 5; i++) {
+        elements.push(this.activityList[i]);
+      }
+      break;
+    case "noon":
+      for(let i = 5; i < 8; i++) {
+        elements.push(this.activityList[i]);
+      }
+      break;
+    case "evening":
+      for(let i = 8; i < 10; i++) {
+        elements.push(this.activityList[i]);
+      }
+      break;
+    default:
+      return null;
+  }
+  message.message.attachment.payload.elements = elements;
+  logger.debug(`getPartOfDay: Returning message ${JSON.stringify(message)}`);
+  return message;
 }
 
 DayPlanner.prototype.setActivityList = function() {
@@ -271,7 +335,9 @@ DayPlanner.prototype.setActivityList = function() {
       // only add actual activities to the list. for example, we tack on a "Itinerary as a map" item. Ignore that..
       if(dayItin[key][0].title.includes("itinerary as a map")) dayItin[key].splice(0, 1);
       this.activityList = this.activityList.concat(dayItin[key]);
+      // logger.debug(`key is ${key}; item is ******** ${JSON.stringify(dayItin[key])}; ******** this.activiyt: ${JSON.stringify(this.activityList)}`);
     }, this);
+    // logger.debug(`dayItin: ${JSON.stringify(dayItin)}; activity list: ${JSON.stringify(this.activityList)}`);
   }
   catch(e) {
     logger.error(`error getting activities for date ${this.date}: ${e.stack}`);
@@ -407,9 +473,12 @@ DayPlanner.parseDayItinPostback = function(payload) {
 }
 
 DayPlanner.parseRecommendationPostback = function(payload) {
-  let contents = /^(\d+)-recommendation_next_set/.exec(payload);  
+  let contents = /^(.*)-(\d+)-recommendation_next_set/.exec(payload);  
+  logger.debug(`parseRecommendationPostback: parsed ${payload}; contents are ${contents}`);
+  if(!contents) return null;
   return {
-    idx: parseInt(contents[1]),
+    interest: contents[1],
+    idx: parseInt(contents[2]),
   };
 }
 

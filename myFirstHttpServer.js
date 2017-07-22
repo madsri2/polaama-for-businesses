@@ -62,7 +62,7 @@ passport.use(new FacebookStrategy({
   }
 ));
 
-// used to serialize the user for the session. This is called by passport.authenticate see app.get(/auth/facebook/callback)
+// used to serialize the user for the session. This is called by passport.authenticate. see app.get(/auth/facebook/callback)
 passport.serializeUser(function(user, done) {
   // logger.debug(`serializeUser called with ${JSON.stringify(user)}`);
   done(null, user.id);
@@ -121,15 +121,15 @@ app.get('/auth/facebook/callback', function(req, res, next) {
           return next(err);
         }
         if(!req.session.redirectTo) req.session.redirectTo = "/index";
-        logger.info(`facebook callback: passport.authenticate was successful. redirecting to the original request path ${req.session.redirectTo}. user details: ${JSON.stringify(user)}. req.param.id: ${req.session.fbid}; req param: ${JSON.stringify(req.param)};`);
-        const mesg = reject(req, user);
+        logger.info(`/auth/facebook/callback: passport.authenticate was successful. redirecting to the original request path ${req.session.redirectTo}. user details: ${JSON.stringify(user)}. req.param.id: ${req.session.fbid}; req param: ${JSON.stringify(req.param)};`);
+        const mesg = compareCallerWithUserInRequest(req, user);
         if(mesg) return res.send(mesg);
         else return res.redirect(req.session.redirectTo);
       });
     })(req, res, next);
 });
 
-function reject(req, user) {
+function compareCallerWithUserInRequest(req, user) {
   // if there was no fbid passed in the path, then there is no comparing to be done.
   if(!req.session.fbid) return null;
   // only the authorized user or the admin can see this page.
@@ -210,8 +210,9 @@ app.get('/index', function(req, res) {
   return res.send(fs.readFileSync("html-templates/home.html", 'utf8'));
 });
 
-app.get('/', function(req, res) {
-  res.redirect('/auth/facebook');
+app.get('/', ensureAuthenticated, function(req, res) {
+  // this code is executed after ensureAuthenticated is called (by virtue of next() being called in ensureAuthenticated()). Redirect to "/index" if we were successfully ensured.
+  res.redirect('/index');
 });
 
 app.get('/login', function(req, res) {
@@ -227,9 +228,10 @@ function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     // req.user is available for use here
     logger.info(`ensureAuthenticated: request is authenticated. now the actual request (${req.path}) will be handled. req.user is ${JSON.stringify(req.user)}; req.session is ${JSON.stringify(req.params)}; req.path is ${req.path}`);
-    req.session.redirectTo = req.path;
+    if(req.path === "/") req.session.redirectTo = "/index";
+    else req.session.redirectTo = req.path;
     req.session.fbid = req.params.id;
-    const mesg = reject(req, req.user);
+    const mesg = compareCallerWithUserInRequest(req, req.user);
     if(mesg) return res.send(mesg);
     return next(); 
   }
@@ -238,7 +240,8 @@ function ensureAuthenticated(req, res, next) {
   req.session.redirectTo = req.path;
   req.session.fbid = req.params.id;
   // TODO: this might be useless.
-  res.redirect('/');
+  res.redirect('/auth/facebook');
+  // res.redirect('/");
 }
 
 // var json2html = require('node-json2html');
@@ -362,6 +365,11 @@ app.get('/:id/:tripName/:date/:file', function(req, res) {
   return handler.getItemDetails(res, req.params.date, req.params.file);
 });
 
+app.get('/:id/:tripName/-/receipts/:file', function(req, res) {
+  const handler = new WebpageHandler(req.params.id, req.params.tripName);
+  return handler.getReceiptDetails(res, req.params.file);
+});
+
 app.get('/:id/:tripName/:date/-/map', function(req, res) {
   const handler = new WebpageHandler(req.params.id, req.params.tripName);
   return handler.getMap(res, req.params.date);
@@ -479,8 +487,16 @@ app.get('/:id/:tripName/hotel-receipt', function(req, res) {
   return res.sendFile('/home/ec2-user/html-templates/hotel-receipt.html', 'utf8');
 });
 
-app.get('/:id/:tripName/:city/-/hotel-choices', function(req, res) {
-  return res.sendFile(`/home/ec2-user/html-templates/${req.params.city}-hotel-choices.html`, 'utf8');
+app.get('/:id/:tripName/:location/-/hotel-choices', function(req, res) {
+  return res.sendFile(`/home/ec2-user/html-templates/${req.params.location}-hotel-choices.html`, 'utf8');
+});
+
+app.get('/:id/:tripName/:location/-/activities', function(req, res) {
+  return res.sendFile(`/home/ec2-user/html-templates/${req.params.location}-activities.html`, 'utf8');
+});
+
+app.get('/:id/:tripName/:location/-/lunch-choices', function(req, res) {
+  return res.sendFile(`/home/ec2-user/html-templates/${req.params.location}-lunch-choices.html`, 'utf8');
 });
 
 // handling webhook

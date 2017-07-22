@@ -19,6 +19,8 @@ const optionsDefn = [
   {name: 'state'},
   {name: 'country'},
   {name: 'postal_code'},
+  {name: 'metadata'},
+  {name: 'phone'}
 ];
 
 

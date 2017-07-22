@@ -58,13 +58,13 @@ function updateNAPFileWithEstimates() {
 function createNextActivityPointerFile() {
   const file = this.trip.getNAPFile();
   if(fs.existsSync(file)) {
-    this.hourToActivityMap = JSON.parse(fs.readFileSync(this.trip.getNAPFile(), 'utf8'));
+    this.hourToActivityMap = JSON.parse(fs.readFileSync(file, 'utf8'));
     // if there is already an object for this date in the nap file, simply return;
     if(this.hourToActivityMap[this.date]) return;
   }
   const nap = {};
-  const regex = new RegExp(/^(\d\d:\d\d).*/i);
-  // logger.debug(`createNextActivityPointerFile: activity list: ${JSON.stringify(this.activityList)}`);
+  const regex = new RegExp(/^(\d\d?:\d\d).*/i);
+  logger.debug(`createNextActivityPointerFile: activity list: ${JSON.stringify(this.activityList)}`);
   this.activityList.forEach((activity,idx) => {
     let contents;
     if(activity.title) contents = regex.exec(activity.title);
@@ -176,7 +176,8 @@ NextActivityGetter.prototype.testing_setNow = function(now) {
 
 function setCurrentTime() {
   if(this.testing) return;
-  const tz = "Asia/Tel_Aviv";
+  // const tz = "Asia/Tel_Aviv";
+  const tz = "Pacific";
   this.now = new moment().tz(tz).format("HH:mm");
   logger.debug(`setCurrentTime: Time now in HH:mm format is ${this.now}`);
 }

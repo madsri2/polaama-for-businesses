@@ -7,9 +7,14 @@ const Sessions = require(`${baseDir}/sessions`);
 const Commands = require(`trip-itinerary/app/commands`);
 const FbidHandler = require('fbid-handler/app/handler');
 
+// const fbid = "1630377990366886"; // raj
+// const fbid = "1311237785652279"; // divya
 const fbid = "1120615267993271"; // madhu
 // const fbid = "1718674778147181"; // Beth
 // const fbid = "1420839671315623"; // Aparna
+let name = new FbidHandler().getName(fbid);
+if(!name) name = "";
+else name = name.substring(0, name.indexOf(" "));
 const session = Sessions.get().find(fbid);
 if(!session) throw new Error(`could not find session for fbid ${fbid}`);
 const handler = new WebhookPostHandler(session);
@@ -150,27 +155,27 @@ function sendCheckinMessage() {
         "type": "template",
         payload: {
           "template_type": "airline_checkin",
-          "intro_message": "Time to leave for Papua New Guinea",
+          "intro_message": "Hope you had a great time! Its time to head back home",
           "locale": "en_US",
-          "pnr_number": "KLZ72D",
+          "pnr_number": "VZECCB",
           "flight_info": [
             {
-              "flight_number": "BA279",
+              "flight_number": "EK205",
               "departure_airport": {
-                "airport_code": "SFO",
-                "city": "San Francisco",
+                "airport_code": "MXP",
+                "city": "Milan",
               },
               "arrival_airport": {
-                "airport_code": "BNE",
-                "city": "Brisbane",
+                "airport_code": "JFK",
+                "city": "New York",
               },
               "flight_schedule": {
-                "departure_time": "2017-06-23T15:00",
-                "arrival_time": "2017-06-23T18:00"
+                "departure_time": "2017-07-22T16:10",
+                "arrival_time": "2017-07-22T19:00"
               }
             }
           ],
-          "checkin_url": "https://www.britishairways.com/travel/home/public/en_us"
+          "checkin_url": "https://mobile.emirates.com/english/CKIN/OLCI/flightInfo.xhtml"
   	    }
       }
     }
@@ -189,11 +194,11 @@ function sendSingleActivity() {
         payload: {
           template_type: "generic",
           elements: [{
-              "title": "Your BA Flight BA279 leaves at 3.00 PM tomorrow",
+              "title": "Your Emirates Flight EK205 leaves at 4.10 p.m. tomorrow",
               "subtitle": "Time to check-in",
               "default_action": {
                 "type": "web_url",
-                "url": "https://flightaware.com/live/flight/DL752",
+                "url": "https://flightaware.com/live/flight/EK205",
                 "webview_height_ratio": "full"
               },
             buttons: [{
@@ -237,6 +242,29 @@ function sendFeatureMessage() {
   handler.sendAnyMessage(message);
 }
 
+function sendRecommendationAlert() {
+  const message = {
+    recipient: {
+      id: fbid
+    },
+    message: {
+      attachment: {
+        "type": "template",
+        payload: {
+          template_type: "generic",
+          elements: [
+					{
+            "title": "Alert: We have added plans for tomorrow",
+            "subtitle": `Type 20th or "tomorrow" to see our recommendations`
+          },
+					]
+        }
+      }
+    }
+  };
+  handler.sendAnyMessage(message);
+}
+
 function sendNewFeatureMessage() {
   const message = {
     recipient: {
@@ -262,26 +290,29 @@ function sendNewFeatureMessage() {
 }
 
 function sendGoodMorningMessage() {
-	const trip = new TripData("port_moresby", fbid);
+	const trip = new TripData("milan", fbid);
   const commands = new Commands(trip, fbid);
-  const message = commands.handle("15th");
+  const message = commands.handle("19th");
   const messageList = [];
-  let name = new FbidHandler().getName(fbid);
-  if(!name) name = "";
-  else name = name.substring(0, name.indexOf(" "));
-  messageList.push(handler.getTextMessageData(fbid, `Good morning ${name}!. It's going to be hot and sunny in Kanganamun village today. Here is your itinerary:`));
+  messageList.push(handler.getTextMessageData(fbid, `Good morning ${name}! It'll be sunny at Pisa today. Check-out of the apartment by 8.45 a.m to reach Rome Termini for your 9.45 a.m. Florence train. Here's your itinerary:`));
   messageList.push(message);
   handler.sendMultipleMessages(fbid, messageList);
 }
 
+const readline = require('readline-sync');
+const proceed = readline.question(`Send message to ${name}? [Y/N] `);
+if(proceed !== 'Y' && proceed !== 'y') {
+  console.log(`Doing nothing`);
+  return process.exit(0);
+}
+console.log(`Sending message to ${name}`);
 
+// sendRecommendationAlert();
 // sendDayPlan();
-sendGoodMorningMessage();
-// sendCheckinMessage();
-
+// sendGoodMorningMessage();
+sendCheckinMessage();
 // sendSingleActivity();
 // sendNewFeatureMessage();
 // sendFeatureMessage();
-
 // flightStatusAndWaitTimes();
 // sendPackList();

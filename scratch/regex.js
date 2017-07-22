@@ -30,5 +30,14 @@ function dateCommand() {
   if(contents && (contents[2] === " " || contents[2] === '' || contents[2] === "th" || contents[2] === "rd" || contents[2] === "st")) console.log("valid"); else console.log("invalid");
 }
 
+function recoRegex() {
+  // const payload = "monterosso activities";
+  const payload = "rome walking tours";
+  let contents = /^(.*)-(\d+)-recommendation_next_set/.exec(payload);  
+  console.log(contents);
+}
+
+recoRegex();
+
 // dateCommand();
-activityRegex();
+// activityRegex();

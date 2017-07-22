@@ -5,6 +5,7 @@ const HotelReceiptManager = require('receipt-manager/app/hotel-receipt-manager')
 
 const optionsDefn = [
   {name: 'trip_name', defaultOption: ''},
+  {name: 'image_url'},
   {name: 'recipient_name'}, //default String
   {name: 'order_number'},
   {name: 'merchant_name'},

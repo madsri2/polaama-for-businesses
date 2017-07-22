@@ -103,7 +103,7 @@ function _formatWeatherDetails(weatherDetails) {
   let wText = `<div data-role="collapsibleset">\n`;
 
   keys.forEach(city => {
-      wText += `<div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d">\n`;
+      wText += `<div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d" data-collapsed="false">\n`;
       wText += `<h1>${capitalize1stChar(city)}</h1>\n`;
       weatherDetails[city].forEach(note => {
           wText += `<p>${toLink(note)}</p>\n`;

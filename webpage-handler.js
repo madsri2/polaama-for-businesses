@@ -417,6 +417,17 @@ WebpageHandler.prototype.getBoardingPass = function(req, res) {
   return res.sendFile(file);
 }
 
+WebpageHandler.prototype.getReceiptDetails = function(res, receiptFile) {
+  const file = this.trip.receiptDetailsFile(receiptFile);
+  return res.sendFile(file, null, 
+    function(e) {
+      if(e) {
+        logger.error(`getReceiptDetails: could not return file ${file}: ${e.stack}`);
+         return res.status(404).send("Could not retrieve item details at this time");
+      }
+    });
+}
+
 WebpageHandler.prototype.getItemDetails = function(res, date, itemFile) {
   const file = this.trip.itemDetailsFile(date, itemFile);
   return res.sendFile(file, null, 
@@ -433,7 +444,7 @@ WebpageHandler.prototype.getMap = function(res, date) {
   return res.sendFile(file, null, 
     function(e) {
       if(e) {
-        logger.error(`getItemDetails: could not return file ${file}: ${e.stack}`);
+        logger.error(`getMap: could not return file ${file}: ${e.stack}`);
          return res.status(404).send("Could not retrieve map image at this time");
       }
   });

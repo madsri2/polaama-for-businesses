@@ -24,6 +24,7 @@ const moment = require('moment-timezone');
 const formidable = require('formidable');
 const Promise = require('promise');
 const validator = require('node-validator');
+const Encoder = require(`${baseDir}/encoder`);
 
 let TEST_MODE = false;
 // NOTE: WebhookPostHandler is a singleton, so all state will need to be maintained in this.session object. fbidHandler is also a singleton, so that will be part of the WebhookPostHandler object.
@@ -396,6 +397,35 @@ function receivedPostback(event) {
   // A pmenu, past_trips or a postback starting with "trip_in_context" is indicative of the beginning of a new state in the state machine. So, clear the session's "awaiting" states to indicate the beginning of a new state.
   this.session.clearAllAwaitingStates();
 
+  if(payload === "trip_calendar_seattle") {
+    const mesg = "13th";
+    const commands = new Commands(this.session.tripData(), this.session.fbid);
+    const canHandle = commands.canHandle(mesg);
+    // case where user entered an invalid message.
+    if(typeof canHandle === "object") return callSendAPI(canHandle); 
+    const itinAsList = commands.handle(mesg); 
+    if(typeof itinAsList === "object") return callSendAPI(itinAsList);
+  }
+  if(payload === "business_question") return askBusiness.call(this);
+  // if user moves on to any other question, reset the askBusiness workflow.
+  this.askBusiness = false;
+  if(payload === "other_reminders") return otherReminders.call(this);
+  if(payload === "mark_done") return sendMultipleMessages(this.session.fbid,
+    textMessages.call(this, 
+      [
+        "Nice work being on top of your todo list. This item has been marked done.",
+        "If you send the receipt to trips@mail.polaama.com, we can add the details to your itinerary for you."
+      ])
+  );
+
+  if(payload.startsWith("get_receipt")) {
+    const contents = /get_receipt (.*)/.exec(payload);
+    if(!contents) throw new Error(`receivedPostback: get_receipt postback should be followed with valid title, but it's not: ${payload}`);
+    const title = contents[1];
+    logger.debug(`title is ${title}`);
+    return sendGeneralReceipt.call(this, title);
+  }
+
 	// new trip cta
   if(payload === "new_trip" || payload === "pmenu_new_trip") return planNewTrip.call(this);
 
@@ -497,36 +527,107 @@ function sendFlightItinerary() {
   });
 }
 
-function sendGeneralReceipt() {
+function createElementsList(payloadPrefix, elArray, title) {
+  const elements = [];
+  const buttons = [];
+  elArray.forEach((receipt,i) => {
+    const j = parseInt(i/3);
+    if(!buttons[j]) {
+      buttons[j] = [];
+    }
+    buttons[j].push({
+      type: "postback",
+      title: `${Encoder.decode(receipt)}`,
+      payload: `${payloadPrefix} ${receipt}`
+    });
+  });
+  let lastIndex = buttons.length - 1;
+  let numDashes = 3 - buttons[lastIndex].length;
+  // if numDashes is 0, the number of trips is an exact multiple of 3. Add another entry in buttons array
+  while(numDashes-- > 0) {
+    // fill the remaining slots with "-"
+    buttons[lastIndex].push({
+      type: "postback",
+      title: "-",
+      payload: "dash"
+    });
+  }
+  buttons.forEach(list => {
+    elements.push({
+      title: title,
+      buttons: list
+    });
+  });
+  logger.debug(`createElementsList: elements dump: ${JSON.stringify(elements)}`);
+  return elements;
+}
+
+function sendGeneralReceipt(title) {
   const fbid = this.session.fbid;
   const trip = this.session.tripData();
-  const receiptFiles = trip.generalReceiptFile();
-  if(receiptFiles.length > 1) throw new Error(`sendGeneralReceipt: We don't currently support handling more than 1 receipt`);
+  if(!title) {
+    const receipts = trip.receipts();
+    if(!receipts) return sendTextMessage(fbid, `No receipts found for trip ${trip.rawTripName}`);
+    /*
+    receipts.forEach(receipt => {
+      const button = {
+        "type": "postback"
+      };
+      button.payload = `get_receipt ${receipt}`;
+      button.title = Encoder.decode(receipt);
+      logger.debug(`sendGeneralReceipt: decode details: ${receipt}; ${buttons.title}`);
+      buttons.push(button);
+    });
+    */
+    const elements = createElementsList("get_receipt", receipts, "Receipts");
+    const message = {
+      recipient: {
+        id: fbid
+      },
+      message: {
+        attachment: {
+          type: "template",
+          payload: {
+            /* 
+              template_type: "button",
+              text: "Which receipt would you like to see?",
+              "buttons": buttons
+            */
+            template_type: "generic",
+            "elements": elements
+          }
+        }
+      }
+    };
+    return this.sendAnyMessage(message);
+  }
+  const receiptFile = trip.generalReceiptFile(title);
+  if(!receiptFile) return sendTextMessage(fbid, `No receipts found for trip ${trip.rawTripName}`);
 	const messages = [];
-  const details = JSON.parse(fs.readFileSync(receiptFiles[0]));
-  messages.push({
-    recipient: {
-      id: fbid
-    },
-    message: {
-      attachment: {
-        type: "template",
-        payload: details.receipt
+  const details = JSON.parse(fs.readFileSync(receiptFile));
+    messages.push({
+      recipient: {
+        id: fbid
+      },
+      message: {
+        attachment: {
+          type: "template",
+          payload: details.receipt
+        }
       }
-    }
-  });
-  messages.push({
-    recipient: {
-      id: fbid
-    },
-    message: {
-      attachment: {
-        type: "template",
-        payload: details.receipt_ext
+    });
+    messages.push({
+      recipient: {
+        id: fbid
+      },
+      message: {
+        attachment: {
+          type: "template",
+          payload: details.receipt_ext
+        }
       }
-    }
-  });
-  sendMultipleMessages(this.session.fbid, messages);
+    });
+  return sendMultipleMessages(this.session.fbid, messages);
 }
 
 function sendCarReceipt() {
@@ -806,7 +907,7 @@ function sendTripButtons(addNewTrip) {
     }
     buttons[j].push({
       type: "postback",
-      title: t.rawName,
+      title: `    ${t.rawName}`,
       payload: `trip_in_context ${t.name}`
     });
   });
@@ -1069,6 +1170,207 @@ function addCitiesToExistingTrip() {
   }
 }
 
+function askBusiness() {
+  const fbid = this.session.fbid;
+  if(!this.askBusiness) {
+    this.askBusiness = true;
+    return sendTextMessage(fbid, "What question do you have for \"Extreme Iceland\"?");
+  }
+  this.askBusiness = false;
+  const message = {
+    recipient: {
+      id: fbid
+    },
+    message: {
+      attachment: {
+        "type": "template",
+        payload: {
+          template_type: "button",
+          "text": "Lunch is not included. You can bring your own or we will stop at Akureyri to pick up lunch.",
+          "buttons": [{
+            "type": "web_url",
+            "url": "https://www.tripadvisor.com/Restaurants-g189954-Akureyri_Northeast_Region.html",
+            "title": "Options at Akureyri"
+          }]
+        }
+      }
+    }
+  };
+  return this.sendAnyMessage(message);
+}
+
+function otherReminders() {
+  const fbid = this.session.fbid;
+  const message = {
+    recipient: {
+      id: fbid
+    },
+    message: {
+      attachment: {
+        "type": "template",
+        payload: {
+          template_type: "list",
+          top_element_style: "compact",
+          elements: [{
+            "title": "Place to stay from 9/9 - 9/11 in northern Iceland",
+            "subtitle": "Click for hotel choices",
+            "image_url": "http://solvanes.is/wp-content/uploads/2016/11/7-26-1-960x447.jpg",
+            "default_action": {
+              "url": "https://polaama.com/aeXf/keflavik/diamond-circle/-/hotel-choices",
+              "webview_height_ratio": "full",
+              "type": "web_url"
+            },
+            "buttons": [
+            {
+              "title": "Mark Done",
+              "type": "postback",
+              "payload": "mark_done"
+            }]
+          },
+          {
+            "title": "Buy kid down jacket",
+            "image_url": "https://images-na.ssl-images-amazon.com/images/I/51FyvD0Z9mL._AC_US200_.jpg",
+            "subtitle": "Click for options",
+            "default_action": {
+              "url": "https://www.amazon.com/s/ref=nb_sb_noss_1?url=search-alias%3Daps&field-keywords=toddler+down+jacket",
+              "webview_height_ratio": "full",
+              "type": "web_url"
+            },
+            "buttons": [
+            {
+              "title": "Mark Done",
+              "type": "postback",
+              "payload": "mark_done"
+            }]
+          }]
+        }
+      }
+    }
+  };
+  return this.sendAnyMessage(message);
+}
+
+function expense() {
+  const fbid = this.session.fbid;
+  const message = {
+    recipient: {
+      id: fbid
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "list",
+          top_element_style: "compact",
+          elements: [{
+            "title": `You owe Arpan $1000`,
+            "subtitle": "Click for details",
+            "image_url": "http://cdn.quotesgram.com/small/11/46/1393139104-owe-money.jpg",
+            "default_action": {
+              "type": "web_url",
+              "url": `https://polaama.com/aeXf/iceland`,
+              "webview_height_ratio": "full"
+            }
+          },
+          {
+            "title": `Nabeel owes you $500`,
+            "subtitle": "Click for details",
+            "image_url": "http://cdn.quotesgram.com/img/39/48/1411713443-337ca6c595c8d0f0c4c288416b0da5f3.jpg",
+            "default_action": {
+              "type": "web_url",
+              "url": `https://polaama.com/aeXf/iceland`,
+              "webview_height_ratio": "full"
+            }
+          }]
+        }
+      }
+    }
+  };
+  return this.sendAnyMessage(message);
+}
+
+function handleDRandTR(mesg) {
+  const fbid = this.session.fbid;
+  const message = {
+    recipient: {
+      id: fbid
+    },
+    message: {
+      attachment: {
+        "type": "template",
+        payload: {
+        }
+      }
+    }
+  };
+  message.message.attachment.payload.elements = [{
+    "title": "You still need to rent your car",
+    "subtitle": "Click for car options",
+    "image_url": "https://polaama.com/images/never-forget-md",
+    "default_action": {
+      "url": "http://www.rentalcars.com/SearchResults.do;jsessionid=EA55013837267879FB8435A66F319C86.node378a?enabler=&country=Iceland&doYear=2017&city=Keflavik&driverage=on&doFiltering=false&filterName=CarCategorisationSupplierFilter&dropCity=Keflavik&driversAge=30&filterTo=1000&fromLocChoose=true&dropLocationName=Keflavik+International+Airport&dropCountryCode=&doMinute=0&countryCode=is&puYear=2017&puSameAsDo=on&locationName=Keflavik+International+Airport&puMinute=0&doDay=11&searchType=&filterFrom=0&puMonth=9&dropLocation=840413&doHour=16&dropCountry=Iceland&puDay=3&puHour=7&location=840413&doMonth=9&filterAdditionalInfo=&advSearch=&exSuppliers=&groupSize=large",
+      "webview_height_ratio": "full",
+      "type": "web_url"
+    }
+  }];
+  if(mesg === "tr") {
+    message.message.attachment.payload.template_type = "generic";
+    message.message.attachment.payload.elements[0].buttons = [
+    {
+      "title": "Mark Done",
+      "type": "postback",
+      "payload": "mark_done"
+    },
+    {
+      "title": "Other reminders",
+      "type": "postback",
+      "payload": "other_reminders"
+    }];
+    return this.sendAnyMessage(message);
+  }
+  const messageList = [];
+  messageList.push(this.getTextMessageData(fbid, `Good morning Madhu. It's going to be mostly sunny in the Diamond circle. Here's your plan for today`));
+  message.message.attachment.payload.template_type = "list";
+  message.message.attachment.payload.elements = [
+  {
+    "title": "Day's plan as a map",
+    "subtitle": "Lots of driving. 6 hours/377 Km",
+    "image_url": "https://polaama.com/aeXf/keflavik/2017-9-8/-/map",
+    "default_action": {
+      "url": "https://goo.gl/maps/82SGLEM4iuN2",
+      "webview_height_ratio": "full",
+      "type": "web_url"
+    }
+  },
+  {
+    "title": "Dettifoss waterfall",
+    "subtitle": "2.5 hours from Hotel",
+    "image_url": "https://www.northiceland.is/static/toy/images/Place_355_1___Selected.jpg",
+    "default_action": {
+      "url": "http://www.diamondcircle.is/dettifoss/",
+      "webview_height_ratio": "full",
+      "type": "web_url"
+    }
+  },
+  {
+    "title": "Tjornes Peninsula guided tour with Extreme Iceland",
+    "subtitle": "Meet at Myvatn, 45 minutes from Dettifoss",
+    "image_url": "http://www.diamondcircle.is/wp-content/uploads/2015/02/P7020263-672x372.jpg",
+    "default_action": {
+      "url": "https://www.extremeiceland.is/en/sightseeing-tours/day-tours/north-iceland/diamond-circle",
+      "webview_height_ratio": "full",
+      "type": "web_url"
+    },
+    buttons: [{
+      "title": "Ask the business",
+      "type": "postback",
+      "payload": "business_question"
+    }]
+  }];
+  messageList.push(message);
+  return this.sendMultipleMessages(fbid, messageList);
+}
+
 /*
 New trip Workflow:
 
@@ -1088,9 +1390,49 @@ function determineResponseType(event) {
   const messageText = event.message.text;
   const mesg = messageText.toLowerCase();
 
+  if(this.askBusiness) return askBusiness.call(this);
+  // if user moves on to any other question, reset the askBusiness workflow.
+  this.askBusiness = false;
+  if(mesg === "expenses") return expense.call(this);
+  if(mesg === "dr" || mesg === "tr") return handleDRandTR.call(this, mesg);
+
+  if(mesg.startsWith("help ") || mesg === "help" || mesg === "commands") {
+    const message = {
+      recipient: {
+        id: senderID
+      },
+      message: {
+        attachment: {
+          type: "template",
+          payload: {
+            template_type: "list",
+            top_element_style: "compact",
+            elements: [{
+              "title": "Here are some commands you can try out",
+              "subtitle": "for information about your trip"
+            },
+            {
+              "title": "Enter a date to get detailed plan for that day",
+              "subtitle": "Eg. 13th. Polaama knows to look for dates in the context of your trip",
+            },
+            {
+              "title": "Enter \"next\" to see the next session for today",
+              "subtitle": "Enter \"first\" to see the first session"
+            },
+            {
+              "title": "Enter parts of the day to see a list of sessions",
+              "subtitle": "Eg. morning, noon, evening"
+            }]
+          }
+        }
+      }
+    };
+    return callSendAPI(message);
+  }
+
   // Before doing anything, if the user types help, send the help message!
   if(!this.tripCount) this.tripCount = this.session.getCurrentAndFutureTrips().futureTrips.length;
-  if(mesg === "hello" || mesg === "hi" || mesg === "howdy" || mesg === "hiya" || mesg.startsWith("help ") || mesg === "help") {
+  if(mesg === "hello" || mesg === "hi" || mesg === "howdy" || mesg === "hiya") { // || mesg.startsWith("help ") || mesg === "help") {
     if(mesg.startsWith("help ") || mesg === "help") {
       // clear all states 
       this.session.clearAllAwaitingStates();
@@ -1104,6 +1446,7 @@ function determineResponseType(event) {
     }
     return sendWelcomeMessage.call(this, senderID);
   }
+  
 
   if(event.message.quick_reply && handleQuickRepliesToPlanNewTrip.call(this, event.message.quick_reply)) return;
 
@@ -1279,8 +1622,8 @@ function determineResponseType(event) {
   if(mesg.startsWith("get boarding pass") || mesg.startsWith("boarding pass")) return sendBoardingPass.call(this);
   if(mesg.startsWith("get flight itinerary") || mesg.startsWith("flight")) return sendFlightItinerary.call(this);
   if(mesg.startsWith("get car details") || mesg.startsWith("car")) return sendCarReceipt.call(this);
-  if(mesg.startsWith("get receipt") || mesg.startsWith("receipt ")) return sendGeneralReceipt.call(this);
-  if(mesg.startsWith("get hotel details") || mesg.startsWith("hotel")) return sendHotelItinerary.call(this);
+  if(mesg.startsWith("get receipt") || mesg === "receipts") return sendGeneralReceipt.call(this);
+  if(mesg.startsWith("stay") || mesg.startsWith ("get stay") || mesg.startsWith("get hotel details") || mesg.startsWith("hotel")) return sendHotelItinerary.call(this);
 	if(mesg.startsWith("get tour details") || mesg.startsWith("tour details")) return sendTourDetails.call(this);
   if(mesg.startsWith("get return flight") || mesg.startsWith("return flight")) return sendReturnFlightDetails.call(this);
 

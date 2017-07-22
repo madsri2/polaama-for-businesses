@@ -25,6 +25,7 @@ Commands.prototype.handle = function(command) {
   this.command = command;
   if(this.command === "dates") return sendTripDates.call(this);
   if(this.command.includes("hotel choices")) return sendHotelChoices.call(this);
+  if(this.command.includes("lunch choices")) return sendLunchChoices.call(this);
   return handleDayItin.call(this);
 }
 
@@ -37,6 +38,7 @@ Commands.prototype.canHandle = function(command) {
   this.command = command;
   // return false here so that it will be picked up by canHandleActivity below.
   if(this.command.startsWith("first") || this.command.startsWith("next")) return false; 
+  if(this.command === "morning" || this.command === "noon" || this.command === "eveninig") return false;
   if(this.command.startsWith("tomorrow")) return true;
   if(this.command.startsWith("today")) return true;
   if(this.command === "dates") return true;
@@ -48,12 +50,15 @@ Commands.prototype.canHandleActivity = function(command) {
   this.command = command;
   if(this.command.startsWith("first activity ") || (this.command.startsWith("first for ") || this.command === "first") || (this.command.startsWith("first on "))) return true;
   if(this.command === "next") return true; // support getting activity relative to current time
+  if(this.command === "morning" || this.command === "noon" || this.command === "evening") return true;
   return canHandleRecommendations.call(this);
 }
 
 function canHandleRecommendations() {
-  if(this.command === "running" || this.command === "trails") return true;
+  if(this.command === "running" || this.command === "trails" || this.command.startsWith("running ")) return true;
   if(this.command.startsWith("veg ") || this.command.startsWith("vegetarian ")) return true;
+  if(this.command.startsWith("rome walk")) return true;
+  if(this.command.startsWith("glacier")) return true;
   return false;
 }
 
@@ -89,6 +94,10 @@ Commands.prototype.handlePostback = function(payload) {
     this.command = payload;
     return sendHotelChoices.call(this);
   }
+  if(payload.includes("lunch choices")) {
+    this.command = payload;
+    return sendLunchChoices.call(this);
+  }
   // logger.debug(`handlePostback: date is ${date}; ${CreateItinerary.formatDate(date)}`);
   const parsedPayload = DayPlanner.parseDayItinPostback(payload); 
   if(!parsedPayload) return null;
@@ -123,30 +132,38 @@ Commands.prototype.handleRecommendationPostback = function(payload) {
       id: this.fbid
     },
     message: {
-      text: `Cannot get recommendations for this intereste for trip ${this.trip.data.rawName}`,
+      text: `Cannot get recommendations for this interest for trip ${this.trip.data.rawName}`,
       metadata: "DEVELOPER_DEFINED_METADATA"
     }
   };
   const dayPlanner = new DayPlanner("invalid", this.trip, this.fbid); 
-  return dayPlanner.getRecommendations("running_trail", content.idx);
+  // return dayPlanner.getRecommendations("running_trail", content.idx);
+  return dayPlanner.getRecommendations(content.interest, content.idx);
 }
 
 function handleRecommendations() {
-  if(this.command !== "running" && this.command !== "trails" && !this.command.startsWith("veg ") && !this.command.startsWith("vegetarian ")) return null;
   const dayPlanner = new DayPlanner("invalid", this.trip, this.fbid); 
-  if(this.command === "running" || this.command === "trails") return dayPlanner.getRecommendations("running_trail");
+  if(this.command === "running" || this.command === "trails" || this.command.startsWith("running ")) return dayPlanner.getRecommendations("running_trail");
   if(this.command.startsWith("veg ") || this.command.startsWith("vegetarian ")) return dayPlanner.getRecommendations("vegetarian_restaurants");
+  if(this.command === "walking tours") return dayPlanner.getRecommendations("walking_tours");
+  if(this.command === "glacier activities") return dayPlanner.getRecommendations("glacier_activities");
+  if(this.command.startsWith("rome walk")) return dayPlanner.getRecommendations("rome_walking_tours");
+  if(this.command === "ita ms") return dayPlanner.getRecommendations("ita_ms");
+  if(this.command === "da ms") return dayPlanner.getRecommendations("da_ms");
+  if(this.command === "monterosso activities") return dayPlanner.getRecommendations("monterosso_activities");
+  return null;
 }
 
 function handleActivityCommand() {
-  const message = handleRecommendations.call(this); 
+  let message = handleRecommendations.call(this); 
   if(message) return message;
   // parse
-  let contents = /(first|next)\s*(?:activity)?\s*(?:for|on)?\s*(.*)/.exec(this.command);
+  let contents = /(first|next|morning|noon|evening)\s*(?:activity)?\s*(?:for|on)?\s*(.*)/.exec(this.command);
   if(!contents) return null;
-  if(contents[1] !== "first" && contents[1] !== "next") return null;
+  // if(contents[1] !== "first" && contents[1] !== "next") return null;
   let val;
   if(contents[2] == '') val = "today"; else val = contents[2];
+  logger.debug(`handleActivityCommand: parsed contents: ${contents}. command is ${this.command}`);
   const validDate = setDateIfValid.call(this, val);
   if(!validDate) return null;
   if(typeof validDate === "object") return validDate; // short-circuit and respond to user.
@@ -156,6 +173,7 @@ function handleActivityCommand() {
   dayPlanner.setActivityList();
   if(contents[1] === "first") return dayPlanner.getNextActivity(0);
   if(contents[1] === "next") return dayPlanner.getNextActivityRelativeToTime();
+  if(contents[1] === "morning" || contents[1] === "noon" || contents[1] === "evening") return dayPlanner.getPartOfDay(this.command);
   return null;
 }
 
@@ -309,12 +327,50 @@ function setDateIfValid(passedCommand) {
   return false;
 }
 
+function handleIcelandDates(imageUrl) {
+  const message = {
+    recipient: {
+      id: this.fbid
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "generic",
+          elements: [{
+            "title": `Madhu's Trip: starts Sep 3rd, ends Sep 11th`,
+            "subtitle": "Iceland trip",
+            "image_url": imageUrl,
+            "default_action": {
+              "type": "web_url",
+              "url": `https://polaama.com/aeXf/iceland/calendar`,
+              "webview_height_ratio": "full"
+            }
+          },
+          {
+            "title": `Arpan's Trip: starts Sep 2nd, ends Sep 11th`,
+            "subtitle": "Iceland trip",
+            "image_url": imageUrl,
+            "default_action": {
+              "type": "web_url",
+              "url": `https://polaama.com/aeXf/iceland/calendar`,
+              "webview_height_ratio": "full"
+            }
+          }]
+        }
+      }
+    }
+  };
+  return message;
+}
+
 function sendTripDates() {
   const start = (this.trip.data.startDate) ? this.trip.data.startDate: "unknown";
   const returnDate = (this.trip.data.returnDate) ? this.trip.data.returnDate: "unknown";
   const tripDates = `Trip starts on ${start} and ends on ${returnDate}`;
   const imageUrl = (fs.existsSync(this.trip.tripImageFile())) ? JSON.parse(fs.readFileSync(this.trip.tripImageFile(), 'utf8')).url : undefined;
   const encodedFbid = FbidHandler.get().encode(this.fbid);
+  if(this.trip.data.name === "iceland") return handleIcelandDates.call(this, imageUrl);
   const message = {
     recipient: {
       id: this.fbid
@@ -343,7 +399,93 @@ function sendTripDates() {
   return message;
 }
 
+function sendLunchChoices() {
+  const contents = /(.*) lunch choices/.exec(this.command);
+  const errMessage = {
+      recipient: {
+        id: this.fbid
+      },
+      message: {
+        text: `Unable to display lunch choices at this point`,
+        metadata: "DEVELOPER_DEFINED_METADATA"
+      }
+  };
+  if(!contents) {
+    logger.error(`sendLunchChoices:: ${this.command} does not match format "<city> lunch choices"`);
+    return errMessage;
+  }
+  const city = contents[1];
+  const file = this.trip.lunchChoiceFile(city);
+  if(!fs.existsSync(file)) {
+    logger.error(`sendLunchChoices: file ${file} does not exist for city "${city}" in trip "${this.trip.rawTripName}"`);
+    return errMessage;
+  }
+  const message = {
+    recipient: {
+      id: this.fbid
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "generic",
+        }
+      }
+    }
+  };
+  const json = JSON.parse(fs.readFileSync(file, 'utf8'));
+  const elements = [];
+  json.forEach(hotel => {
+    const element = {};
+    element.title = hotel.name;
+    element.subtitle = hotel.price;
+    element.default_action = {
+      "type": "web_url",
+      "webview_height_ratio": "full",
+      "url": hotel.url
+    };
+    if(hotel.image_url) element.image_url = hotel.image_url;
+    elements.push(element);
+  });
+  message.message.attachment.payload.elements = elements;
+  return message;
+}
+
+function sendHotelChoiceAsList() {
+  const message = {
+    recipient: {
+      id: this.fbid
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "list",
+        }
+      }
+    }
+  };
+  const file = "/home/ec2-user/trips/aeXf/iceland-hotel-choices.json";
+  const json = JSON.parse(fs.readFileSync(file, 'utf8'));
+  const elements = [];
+  json.forEach(hotel => {
+    const element = {};
+    element.title = hotel.name;
+    element.subtitle = hotel.price;
+    element.default_action = {
+      "type": "web_url",
+      "webview_height_ratio": "full",
+      "url": hotel.url
+    };
+    if(hotel.image_url) element.image_url = hotel.image_url;
+    elements.push(element);
+  });
+  message.message.attachment.payload.elements = elements;
+  return message;
+}
+
 function sendHotelChoices() {
+  if(this.trip.tripName === "iceland" && this.command.startsWith("diamond-circle")) return sendHotelChoiceAsList.call(this);
   const contents = /(.*) hotel choices/.exec(this.command);
   const errMessage = {
       recipient: {

@@ -89,10 +89,28 @@ HotelReceiptManager.prototype.handle = function() {
     // send a notification to the user that we have their details and will send them the boarding pass the day before the flight.
     logger.debug(`handle: wrote ${json.length} bytes to file ${file}`);
     // notify user that we have received a boarding pass.
-    const message = `Received receipt for your hotel stay in ${this.receipt.address.city}. Type 'get hotel details' to see details`;
-    logger.debug(`handle: About to send message to user: ${message}`);
+    const message = {
+      recipient: {
+        id: this.trip.fbid
+      },
+      message: {
+        attachment: {
+          "type": "template",
+          payload: {
+            template_type: "button",
+            "text": `Received receipt for your stay in ${this.receipt.address.city}. Type 'stay' to see details.`,
+            "buttons": [{
+              "type": "postback",
+              "title": "Stay details",
+              "payload": `hotel details`,
+            }]
+          }
+        }
+      }
+    };
+    logger.debug(`handle: About to send message to user: ${JSON.stringify(message)}`);
 		const postHandler = tripFinder.getPostHandler();
-		postHandler.notifyUser(message);
+    return postHandler.sendAnyMessage(message);
   }
   catch(e) {
     logger.error(`parse: Error writing to file ${file}. ${e.stack}`);

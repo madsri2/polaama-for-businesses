@@ -33,12 +33,14 @@ function TripData(rawTripName, fbid, testFbidFile) {
     if(this.data.country) this.country = new Country(this.data.country);
   }
   this.sharedFilesBaseDir = `${baseDir}/trips/shared`;
+  this.tripSharedFilesBaseDir = `${this.sharedFilesBaseDir}/${this.data.name}`;
+  if(!fs.existsSync(this.tripSharedFilesBaseDir)) fs.mkdirSync(this.tripSharedFilesBaseDir);
 	updateTripItineraries.call(this);
 }
 
 function updateTripItineraries() {
 	getItinDetails.call(this, this.itineraryFile(), "flightItin");
-  logger.debug(`Now calling return flight itinerary`);
+  // logger.debug(`Now calling return flight itinerary`);
 	getItinDetails.call(this, this.returnFlightFile(), "returnFlightItin");
 }
 
@@ -122,7 +124,7 @@ TripData.prototype.getPackList = function() {
   // retrieve latest data
   this.retrieveTripData();
   const trip = this.data;
-  const file = this.packListFile();
+  const file = packListFile.call(this);
   let packList = (fs.existsSync(file)) ? JSON.parse(fs.readFileSync(file, 'utf8')) : undefined;
   if(!packList) packList = {};
   // For backwards compatibility, look for pack-list in the trip file as well.
@@ -130,7 +132,7 @@ TripData.prototype.getPackList = function() {
     packList.toPack = moveToPackList(trip.packList.toPack, packList.toPack);
     packList.done = moveToPackList(trip.packList.done, packList.done);
     // update pack-list file if any data was obtained from the trip file. then, delete trip file.
-    if(packList.toPack || packList.done) fs.writeFileSync(this.packListFile(), JSON.stringify(packList));
+    if(packList.toPack || packList.done) fs.writeFileSync(packListFile.call(this), JSON.stringify(packList));
     delete trip.packList;
     this.persistUpdatedTrip();
   }
@@ -157,7 +159,7 @@ TripData.prototype.retrieveTripData = function() {
     }
   }
   catch(err) {
-      logger.info(`File ${file} does not exist for trip ${this.tripName}. Creating empty this.data object so it can be filled elsewhere`);
+      // logger.info(`File ${file} does not exist for trip ${this.tripName}. Creating empty this.data object so it can be filled elsewhere`);
       this.data = {};
   }
 }
@@ -313,14 +315,16 @@ TripData.prototype.addCityItinerary = function(cities, numOfDays) {
   this.persistUpdatedTrip();
 }
 
+function todoFile() {
+  return `${this.tripSharedFilesBaseDir}/todo_list.json`;
+}
+
 TripData.prototype.storeTodoList = function(senderId, messageText) {
   const reg = new RegExp("^todo[:]*[ ]*","i"); // ignore case
   return storeList.call(this, senderId, messageText, reg, "todoList", "get todo");  
 }
 
-TripData.prototype.packListFile = function() {
-  this.tripSharedFilesBaseDir = `${this.sharedFilesBaseDir}/${this.data.name}`;
-  if(!fs.existsSync(this.tripSharedFilesBaseDir)) fs.mkdirSync(this.tripSharedFilesBaseDir);
+function packListFile() {
   return `${this.tripSharedFilesBaseDir}/pack_list.json`;
 }
 
@@ -329,7 +333,7 @@ TripData.prototype.storePackList = function(messageText) {
   // retrieve text
   const items = messageText.replace(regex,"").split(',');
   let packList;
-  const file = this.packListFile();
+  const file = packListFile.call(this);
   if(fs.existsSync(file)) packList = JSON.parse(fs.readFileSync(file, 'utf8'));
   if(!packList) {
     packList = {};
@@ -672,6 +676,11 @@ TripData.prototype.runningTrailFile = function() {
   return `${this.tripBaseDir}/${this.data.name}-running-trails.json`;
 }
 
+TripData.prototype.walkingToursFile = function(location) {
+  const city = (location) ? `${location}-` : "";
+  return `${this.tripBaseDir}/${this.data.name}-${city}walking-tours.json`;
+}
+
 TripData.prototype.vegRestaurantsFile = function() {
   return `${this.tripBaseDir}/${this.data.name}-vegetarian-restaurants.json`;
 }
@@ -701,6 +710,10 @@ TripData.prototype.hotelChoiceFile = function(city) {
   return `${this.tripBaseDir}/${city}-hotel-choices.json`;
 }
 
+TripData.prototype.lunchChoiceFile = function(city) {
+  return `${this.tripBaseDir}/${city}-lunch-choices.json`;
+}
+
 TripData.prototype.dayItinIndexFile = function(date) {
   return `${this.tripBaseDir}/${this.data.name}-${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-current-index.txt`;
 }
@@ -713,7 +726,8 @@ TripData.prototype.rentalCarReceiptFile = function() {
   return `${this.tripBaseDir}/${this.data.name}-rental-car-receipt.txt`;
 }
 
-TripData.prototype.updateReceiptDetails = function(title) {
+TripData.prototype.updateReceiptDetails = function(rawTitle) {
+  const title = myEncode(rawTitle);
   if(!this.data.receipts) this.data.receipts = [];
   // nothing to do if the title already exists.
   if(this.data.receipts.includes(title)) return;
@@ -721,17 +735,31 @@ TripData.prototype.updateReceiptDetails = function(title) {
   this.persistUpdatedTrip();
 }
 
+TripData.prototype.receipts = function() {
+  // reload trips data
+  this.retrieveTripData();
+  return this.data.receipts;
+}
+
+TripData.prototype.receiptDetailsFile = function(title) {
+  if(title) return `${this.tripBaseDir}/${this.data.name}-${myEncode(title)}-receipt.pdf`;
+  return null;
+}
+
 TripData.prototype.generalReceiptFile = function(title) {
-  if(title) return `${this.tripBaseDir}/${this.data.name}-${title}-receipt.txt`;
+  if(title) return `${this.tripBaseDir}/${this.data.name}-${myEncode(title)}-receipt.txt`;
+  return null;
+  /*
   // reload trips data
   // read the data from file to make sure we don't miss anything.
   this.retrieveTripData();
   const receipts = [];
-  if(!this.data.receipts) return receipts;
+  if(!this.data.receipts) return null;
   this.data.receipts.forEach(receipt => {
     receipts.push(`${this.tripBaseDir}/${this.data.name}-${receipt}-receipt.txt`);
   });
   return receipts;
+  */
 }
 
 TripData.prototype.getHotelReceiptDetails = function() {

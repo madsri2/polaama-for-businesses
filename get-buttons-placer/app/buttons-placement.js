@@ -23,11 +23,16 @@ ButtonsPlacement.prototype.getPlacement = function() {
   	webview_height_ratio: "full",
   	messenger_extensions: true,
 	};
+  const seattleTripCalendar = {
+  	type: "postback",
+  	title: "Trip calendar",
+  	payload: "trip_calendar_seattle",
+  };
 	const weather = {
 		type:"web_url",
   	url: url(this.urlPrefix, `${this.trip.weatherUrlPath()}`),
-		title: "Weather",
-		webview_height_ratio: "compact",
+		title: "     Weather",
+		webview_height_ratio: "full",
 		messenger_extensions: true,
 	}; 
   const bpButton = {
@@ -61,15 +66,19 @@ ButtonsPlacement.prototype.getPlacement = function() {
 	  payload: "get receipt"
   };
   const buttons = [];
-  buttons.push(tripCalendar);
+  if(this.tripName === "seattle") buttons.push(seattleTripCalendar);
+  else buttons.push(tripCalendar);
   const fs = require('fs');
 	if(fs.existsSync(this.trip.boardingPassFile())) buttons.push(bpButton);
 	if(fs.existsSync(this.trip.itineraryFile())) buttons.push(itinButton);
 	if(fs.existsSync(this.trip.returnFlightFile())) buttons.push(returnItinButton);
   if(fs.existsSync(this.trip.hotelRentalReceiptFile())) buttons.push(hotelDetailsButton);
   if(fs.existsSync(this.trip.rentalCarReceiptFile())) buttons.push(carDetailsButton);
-  const receipts = this.trip.generalReceiptFile();
-  if(receipts.length > 0 && fs.existsSync(receipts[0])) buttons.push(receiptsButton);
+  const receipts = this.trip.receipts();
+  let receiptFile;
+  if(receipts) receiptFile = this.trip.generalReceiptFile(receipts[0]);
+  logger.debug(`getPlacement: receipts list: ${receipts}; file: ${receiptFile}`);
+  if(receiptFile && fs.existsSync(receiptFile)) buttons.push(receiptsButton);
 
   if(fs.existsSync(this.trip.runningTrailFile())) buttons.push({
 	  type: "postback",
@@ -89,7 +98,7 @@ ButtonsPlacement.prototype.getPlacement = function() {
     type: "web_url",
     url: url(this.urlPrefix, `${this.tripName}/todo`),
     title: "       Todo list",
-    webview_height_ratio: "compact",
+    webview_height_ratio: "full",
     messenger_extensions: true
   };
   const todoList = this.trip.getTodoList();
@@ -98,8 +107,8 @@ ButtonsPlacement.prototype.getPlacement = function() {
   const packListButton = {
     type: "web_url",
     url: url(this.urlPrefix, `${this.tripName}/pack-list`),
-    title: "       Pack list",
-    webview_height_ratio: "compact",
+    title: "Trip Pack list",
+    webview_height_ratio: "full",
     messenger_extensions: true
   };
   const packlist = this.trip.getPackList();
@@ -109,7 +118,7 @@ ButtonsPlacement.prototype.getPlacement = function() {
     type: "web_url",
     url: url(this.urlPrefix, `${this.tripName}/comments`),
     title: "Comments",
-    webview_height_ratio: "compact",
+    webview_height_ratio: "full",
     messenger_extensions: true
   };
   const comments = this.trip.parseComments();
@@ -124,6 +133,7 @@ ButtonsPlacement.prototype.getPlacement = function() {
   };
   if(this.trip.getTravelers()) buttons.push(expenseButton);
   // flight quote only if there is no flight details
+  /*
 	if(!fs.existsSync(this.trip.itineraryFile())) buttons.push({
     type: "web_url",
   	url: url(this.urlPrefix, `${this.trip.flightQuoteUrlPath()}`),
@@ -131,7 +141,16 @@ ButtonsPlacement.prototype.getPlacement = function() {
     webview_height_ratio: "compact",
     messenger_extensions: true
   });
-	buttons.push(weather);
+  */
+	// buttons.push(weather);
+  // only add this button if there is another button in the third panel. This is done in order to get the buttons to show vertically (which depends on the title length).
+  if(buttons.length > 6 && buttons.length < 9) buttons.push({
+    type: "web_url",
+  	url: url(this.urlPrefix, `${this.tripName}`),
+    title: "All Trip Details", 
+    webview_height_ratio: "full",
+    messenger_extensions: true
+  });
   const result = {
     firstSet: []
   };

@@ -43,7 +43,7 @@ function ReceiptHandler(options, testing) {
         url: options.order_url,
         title: this.title
       }],
-      subtitle: "Print out the ticket to show at gate"
+      subtitle: options.metadata
     }]
   };
   if(options.image_url) this.receipt.elements[0].image_url = options.image_url;
@@ -82,10 +82,30 @@ ReceiptHandler.prototype.handle = function() {
     logger.debug(`handle: wrote ${json.length} bytes to file ${file}`);
     // notify user that we have received a boarding pass.
     // TODO: Add a button to make it easy to see this.
-    const message = `Received ${this.title}'s receipt for your trip to ${this.trip.getPortOfEntry()}. Type 'get receipt' to see details`;
-    logger.debug(`handle: About to send message to user: ${message}`);
+    const messageList = [];
+    const fbid = this.trip.fbid;
+    const message = {
+      recipient: {
+        id: fbid
+      },
+      message: {
+        attachment: {
+          "type": "template",
+          payload: {
+            template_type: "button",
+            "text": `Received ${this.title}'s receipt for your trip to ${this.trip.rawTripName}. Type 'get receipt' to see details at any time.`,
+            "buttons": [{
+              "type": "postback",
+              "title": "Get receipt",
+              "payload": `get_receipt ${this.title}`,
+            }]
+          }
+        }
+      }
+    };
+    logger.debug(`handle: About to send message to user: ${JSON.stringify(message)}`);
 		const postHandler = tripFinder.getPostHandler();
-    postHandler.notifyUser(message);
+    return postHandler.sendAnyMessage(message);
   }
   catch(e) {
     logger.error(`parse: Error writing to file ${file}. ${e.stack}`);
