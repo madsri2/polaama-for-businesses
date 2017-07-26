@@ -37,7 +37,12 @@ function recoRegex() {
   console.log(contents);
 }
 
-recoRegex();
+function colorRegex() {
+    const contents = /^color: (.*)/.exec("color: red");
+    if(contents) console.log(contents[1]);
+}
 
+colorRegex();
+// recoRegex();
 // dateCommand();
 // activityRegex();

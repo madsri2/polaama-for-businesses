@@ -37,12 +37,15 @@ FormatCalendar.prototype.formatForMobile = function() {
       const month = thisDate.getMonth() + 1; // getMonth() starts with 0
       // convert "/" to "-" because this id will be used in javascript and a value like "#update-11/01/2017" will result in a syntax error
       const dateVal = CreateItinerary.formatDate(thisDate).split('/').join('-');
+      const thisDaysItin = this.getThisDaysItin(thisDate);
       itinView = itinView.concat(dayItin({
+        "${color}": thisDaysItin.color,
         "${dayOfMonth}": thisDate.getDate(),
         "${day}": weekDays[thisDate.getDay()],
         "${dateVal}": dateVal,
         "${monthName}": monthNames[thisDate.getMonth()],
-        "${existingItinerary}": this.getThisDaysItin(thisDate)
+        // "${existingItinerary}": this.getThisDaysItin(thisDate)
+        "${existingItinerary}": thisDaysItin.dayPlan
       }));
       fullJs = fullJs.concat(getJavascript(dateVal));
     });
@@ -71,7 +74,8 @@ function dayItin(search) {
 FormatCalendar.prototype.getThisDaysItin = function (date) {  
   const dateStr = CreateItinerary.formatDate(date);
   const dayPlanner = new DayPlanner(date, this.trip, this.fbid);
-  return dayPlanner.getPlan(this.itinDetails[dateStr]).dayPlan;
+  // return dayPlanner.getPlan(this.itinDetails[dateStr]).dayPlan;
+  return dayPlanner.getPlan(this.itinDetails[dateStr]);
 }
 
 function getJavascript(dateVal) {

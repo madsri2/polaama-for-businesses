@@ -59,6 +59,7 @@ function canHandleRecommendations() {
   if(this.command.startsWith("veg ") || this.command.startsWith("vegetarian ")) return true;
   if(this.command.startsWith("rome walk")) return true;
   if(this.command.startsWith("glacier")) return true;
+  if(this.command === "airport to hotel") return true;
   return false;
 }
 
@@ -145,6 +146,8 @@ function handleRecommendations() {
   const dayPlanner = new DayPlanner("invalid", this.trip, this.fbid); 
   if(this.command === "running" || this.command === "trails" || this.command.startsWith("running ")) return dayPlanner.getRecommendations("running_trail");
   if(this.command.startsWith("veg ") || this.command.startsWith("vegetarian ")) return dayPlanner.getRecommendations("vegetarian_restaurants");
+  if(this.command === "airport to hotel") return dayPlanner.getRecommendations("airport_to_hotel");
+  if(this.command === "hotel-to-airport") return dayPlanner.getRecommendations("hotel_to_airport");
   if(this.command === "walking tours") return dayPlanner.getRecommendations("walking_tours");
   if(this.command === "glacier activities") return dayPlanner.getRecommendations("glacier_activities");
   if(this.command.startsWith("rome walk")) return dayPlanner.getRecommendations("rome_walking_tours");

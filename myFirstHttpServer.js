@@ -112,7 +112,7 @@ app.get('/auth/facebook/callback', function(req, res, next) {
         return next(err);
       }
       if(!user) {
-        logger.info(`facebook callback: passport.authenticate: user object not present. redirecting to "/login"`);
+        logger.nfo(`facebook callback: passport.authenticate: user object not present. redirecting to "/login"`);
         return res.redirect('/login');
       }
       req.login(user, function(err) {
@@ -134,7 +134,7 @@ function compareCallerWithUserInRequest(req, user) {
   if(!req.session.fbid) return null;
   // only the authorized user or the admin can see this page.
   // TODO: The keflavik trip is shared so Arpan & Avani can use it. Fix me.
-  if(req.session.fbid === user.fbid || user.fbid === "aeXf" || req.session.redirectTo.includes("keflavik")) return null;
+  if(req.session.fbid === user.fbid || user.fbid === "aeXf" || req.session.redirectTo.includes("keflavik") || req.session.redirectTo.includes("iceland_alt")) return null;
   logger.error(`facebook callback: passport authenticate: user ${user.fbid} attempted to call url ${req.session.redirectTo}, whose id is ${req.session.fbid}. Rejecting the call.`);
   return "You are not authorized to view this page!";
 }
@@ -211,9 +211,14 @@ app.get('/index', function(req, res) {
 });
 
 app.get('/', ensureAuthenticated, function(req, res) {
+  return res.redirect('https://madhupolaama.wixsite.com/polaama');
+});
+/*
+app.get('/', ensureAuthenticated, function(req, res) {
   // this code is executed after ensureAuthenticated is called (by virtue of next() being called in ensureAuthenticated()). Redirect to "/index" if we were successfully ensured.
   res.redirect('/index');
 });
+*/
 
 app.get('/login', function(req, res) {
   return res.send(fs.readFileSync("html-templates/login.html", 'utf8'));
@@ -256,10 +261,13 @@ app.get('/favicon.ico', function(req, res) {
 });
 
 app.get('/images/:file/', function(req, res) {
-  return res.sendFile(`/home/ec2-user/images/${req.params.file}.png`, null, 
+  let file = `/home/ec2-user/images/${req.params.file}`;
+  if(fs.existsSync(`${file}.png`)) file = file.concat(".png");
+  if(fs.existsSync(`${file}.jpg`)) file = file.concat(".jpg");
+  return res.sendFile(`${file}`, null,
     function(e) {
       if(e) {
-        logger.error(`images file: could not return file ${req.params.file}: ${e.stack}`);
+        logger.error(`images file: could not return file ${file}: ${e.stack}`);
         return res.status(404).send("Could not retrieve image at this time");
       }
   });
@@ -487,17 +495,27 @@ app.get('/:id/:tripName/hotel-receipt', function(req, res) {
   return res.sendFile('/home/ec2-user/html-templates/hotel-receipt.html', 'utf8');
 });
 
+/************ CHOICES ***************/
 app.get('/:id/:tripName/:location/-/hotel-choices', function(req, res) {
   return res.sendFile(`/home/ec2-user/html-templates/${req.params.location}-hotel-choices.html`, 'utf8');
 });
 
-app.get('/:id/:tripName/:location/-/activities', function(req, res) {
-  return res.sendFile(`/home/ec2-user/html-templates/${req.params.location}-activities.html`, 'utf8');
+app.get('/:id/:tripName/:location/-/car-choices', function(req, res) {
+  return res.sendFile(`/home/ec2-user/html-templates/${req.params.location}-car-choices.html`, 'utf8');
 });
 
 app.get('/:id/:tripName/:location/-/lunch-choices', function(req, res) {
   return res.sendFile(`/home/ec2-user/html-templates/${req.params.location}-lunch-choices.html`, 'utf8');
 });
+
+app.get('/:id/:tripName/:location/-/running-trail', function(req, res) {
+  return res.sendFile(`/home/ec2-user/html-templates/${req.params.location}-running-trail.html`, 'utf8');
+});
+
+app.get('/:id/:tripName/:location/-/activities', function(req, res) {
+  return res.sendFile(`/home/ec2-user/html-templates/${req.params.location}-activities.html`, 'utf8');
+});
+/************ CHOICES ***************/
 
 // handling webhook
 app.get('/webhook', function(req, res) {

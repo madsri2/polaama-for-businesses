@@ -9,8 +9,8 @@ const FbidHandler = require('fbid-handler/app/handler');
 
 // const fbid = "1630377990366886"; // raj
 // const fbid = "1311237785652279"; // divya
-const fbid = "1120615267993271"; // madhu
-// const fbid = "1718674778147181"; // Beth
+// const fbid = "1120615267993271"; // madhu
+const fbid = "1718674778147181"; // Beth
 // const fbid = "1420839671315623"; // Aparna
 let name = new FbidHandler().getName(fbid);
 if(!name) name = "";
@@ -289,13 +289,43 @@ function sendNewFeatureMessage() {
   // handler.sendMultipleMessages(fbid, messageList);
 }
 
-function sendGoodMorningMessage() {
-	const trip = new TripData("milan", fbid);
+function sendBeforeFlightMessage() {
+	const trip = new TripData("salt_lake_city", fbid);
   const commands = new Commands(trip, fbid);
-  const message = commands.handle("19th");
+  const message = commands.handle("26th");
   const messageList = [];
-  messageList.push(handler.getTextMessageData(fbid, `Good morning ${name}! It'll be sunny at Pisa today. Check-out of the apartment by 8.45 a.m to reach Rome Termini for your 9.45 a.m. Florence train. Here's your itinerary:`));
+  messageList.push(handler.getTextMessageData(fbid, `Hi ${name}! Your flight to Salt lake city leaves at 7.24 a.m. tomorrow. Here is your day's itinerary`));
   messageList.push(message);
+  handler.sendMultipleMessages(fbid, messageList);
+}
+
+function sendExpenseAndFeedbackRequest() {
+  const trip = new TripData("milan", fbid);
+  const messageList = [];
+  messageList.push(handler.getTextMessageData(fbid, `Hope you had a great time at Milan ${name}. Your total expenses (that Polaama knows about) is $3714/-`));
+  messageList.push({
+    recipient: {
+      id: fbid
+    },
+    message: {
+      attachment: {
+        "type": "template",
+        payload: {
+          template_type: "generic",
+          elements: [
+          {
+            "title": "Can you take a quick survey?",
+            "subtitle": "We appreciate your feedback. Click to begin",
+            "default_action": {
+              "type": "web_url",
+              "url": "https://madhu85.typeform.com/to/S9SnZi",
+              "webview_height_ratio": "full"
+            }
+          }]
+        }
+      }
+    }
+  });
   handler.sendMultipleMessages(fbid, messageList);
 }
 
@@ -306,11 +336,21 @@ if(proceed !== 'Y' && proceed !== 'y') {
   return process.exit(0);
 }
 console.log(`Sending message to ${name}`);
+// Surveys: Goal: See if user liked it, would they pay, features.
+/*
+* What feature in the bot did you use the most?
+* What feature(s) did you wish the bot had?
+* How did the Bot help for your Milan trip? (N/A if it did not).
+* Is there any trip planning feature would you pay for? If so, what? (say N/A if there is no such feature)
+* Any other general comments about the bot?
+*/
 
+sendBeforeFlightMessage();
+// sendExpenseAndFeedbackRequest();
 // sendRecommendationAlert();
 // sendDayPlan();
 // sendGoodMorningMessage();
-sendCheckinMessage();
+// sendCheckinMessage();
 // sendSingleActivity();
 // sendNewFeatureMessage();
 // sendFeatureMessage();

@@ -676,6 +676,14 @@ TripData.prototype.runningTrailFile = function() {
   return `${this.tripBaseDir}/${this.data.name}-running-trails.json`;
 }
 
+TripData.prototype.airportToHotelFile = function() {
+  return `${this.tripBaseDir}/${this.data.name}-airport-to-hotel.json`;
+}
+
+TripData.prototype.hotelToAirportFile = function() {
+  return `${this.tripBaseDir}/${this.data.name}-hotel-to-airport.json`;
+}
+
 TripData.prototype.walkingToursFile = function(location) {
   const city = (location) ? `${location}-` : "";
   return `${this.tripBaseDir}/${this.data.name}-${city}walking-tours.json`;

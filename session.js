@@ -226,6 +226,7 @@ Session.prototype.allTrips = function() {
 Session.prototype.getPastTrips = function() {
   let trips = [];
   this.allTrips().forEach(trip => {
+    // logger.debug(`getPastTrips: Now looking at trip ${trip.tripName}`);
     const start = moment(new Date(trip.data.startDate).toISOString());
     const daysToTrip = start.diff(moment(),'days');
     if(!trip.data.startDate || daysToTrip <= 0) {

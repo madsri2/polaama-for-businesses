@@ -22,7 +22,7 @@ DayPlanner.prototype.getPlan = function(dayItinerary) {
   const date = this.date;
   const dateStr = CreateItinerary.formatDate(date);
   const dayPlan = dayItinerary;
-  logger.debug(`getDayItinerary: getting plans for date ${dateStr}`);
+  // logger.debug(`getDayItinerary: getting plans for date ${dateStr}`);
   let city = "";
   const noPlanDateStr = new moment(this.date).format("MMM Do");
   const noPlansMesg = { 
@@ -67,7 +67,16 @@ DayPlanner.prototype.getPlan = function(dayItinerary) {
   // add flightDetails here only if this is not return date
   if(returnDateStr !== dateStr) plans = plans.concat(flightDetails.call(this, dayPlan));
   plans = plans.concat(visitDetails.call(this, dayPlan));
-  if(dayPlan.userInputDetails) plans = plans.concat(dayPlan.userInputDetails);
+  let color = "black";
+  if(dayPlan.userInputDetails) {
+    const dp = dayPlan.userInputDetails;
+    const contents = /^color: (.*)/.exec(dp[0]);
+    if(contents) {
+      color = contents[1];
+      dp.splice(0, 1);
+    }
+    plans = plans.concat(dp);
+  }
   if(returnDateStr === dateStr) plans = plans.concat(flightDetails.call(this, dayPlan));
   if(plans.length === 0) return {
     city: city,
@@ -76,7 +85,8 @@ DayPlanner.prototype.getPlan = function(dayItinerary) {
   };
   return {
     city: city,
-    dayPlan: list(plans)
+    dayPlan: list(plans),
+    color: color
   };
 }
 
@@ -174,8 +184,16 @@ DayPlanner.prototype.getRecommendations = function(interest, index) {
   let currIndex = 0;
   if(index) currIndex = index; 
   let file;
-
+  let makeFirstElementCompact = false;
   switch(interest) {
+    case "airport_to_hotel":
+      makeFirstElementCompact = true;
+      file = this.trip.airportToHotelFile();
+      break;
+    case "hotel_to_airport":
+      makeFirstElementCompact = true;
+      file = this.trip.hotelToAirportFile();
+      break;
     case "running_trail": 
       file = this.trip.runningTrailFile();
       break;
@@ -218,7 +236,9 @@ DayPlanner.prototype.getRecommendations = function(interest, index) {
   try {
     const activityList = JSON.parse(fs.readFileSync(file, 'utf8'));
     this.interest = interest;
-    return createListTemplate.call(this, activityList, currIndex);
+    const message = createListTemplate.call(this, activityList, currIndex);
+    if(makeFirstElementCompact) message.message.attachment.payload.top_element_style = "compact";
+    return message;
   }
   catch(err) {
     let text;
@@ -278,7 +298,6 @@ function createListTemplate(list, setNum) {
     else message = addButtonsToMessage.call(this, message, currIndex, currIndex >= (elementSet.length - 1));
     // logger.debug(`createListTemplate: message is ${JSON.stringify(message)}`);
     // the first item in the list is almost always a map, so we don't set the style to compact. Subsequent items are just normal.
-    // if(currIndex > 0 && elements.length > 1) message.message.attachment.payload.top_element_style = "compact";
     if(currIndex > 0 && message.message.attachment.payload.template_type != "generic") message.message.attachment.payload.top_element_style = "compact";
     return message;
 }
@@ -509,20 +528,24 @@ function weatherString(weather) {
   let rain = "";
   if(weather.chanceofrain !== '0') rain += `; Chance of rain: <b>${weather.chanceofrain}%</b>`;
   let city = "";
-  if(weather.city) city += ` at <b>${capitalize1stChar(weather.city)}</b>`;
-  return `Weather Forecast${city}: Min: <i>${weather.min_temp}&degF</i>; Max: <i>${weather.max_temp}&degF</i>; <b>${capitalize1stChar(weather.cloud_cover)}</b>${rain}`;
+  if(weather.city) city += `<b>${capitalize1stChar(weather.city)}</b>`;
+  let img = "";
+  if(weather.cloud_cover === "mostly sunny") img = "mostly-sunny-16";
+  if(weather.cloud_cover === "partly cloudy") img = "partly-sunny-16";
+  if(weather.cloud_cover === "clear") img = "clear-sunny-16";
+  if(weather.cloud_cover === "cloudy") img = "cloudy-16";
+  return `<img src="https://polaama.com/images/${img}"/> ${city} weather: ${capitalize1stChar(weather.cloud_cover)}; <span style="font-size:small">${weather.max_temp}&degF/${weather.min_temp}&degF</span>${rain}`;
 }
 
 function flightDetails(dayPlan) {
   let plans = [];
   // let flightPlans = `<div data-role="content" data-enhance="false">`;
-  let flightPlans = "";
-
+  let flightPlans = `<img src="https://polaama.com/images/plane-flight-icon"/> `;
   if(dayPlan.startTime) flightPlans += `Leaving ${capitalize1stChar(this.departureCity)} at <b>${dayPlan.startTime}</b>; `;
   if(dayPlan.arrivalTime) flightPlans += `Arriving in ${capitalize1stChar(this.arrivalCity)} at <b>${dayPlan.arrivalTime}</b>`;
-  // flightPlans += "</div>";
   if(dayPlan.startTime || dayPlan.arrivalTime) plans.push(flightPlans);
-  logger.debug(`flightDetails: returning array of length ${plans.length}`);
+  // flightPlans += "</div>";
+  // logger.debug(`flightDetails: returning array of length ${plans.length}`);
   return plans;
 }
 

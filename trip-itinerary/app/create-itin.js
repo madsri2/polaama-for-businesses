@@ -144,6 +144,10 @@ CreateItinerary.prototype.getItinerary = function() {
   return this.itin;
 }
 
+// https://m.uber.com/ul/?action=setPickup&client_id=5cMxoTVfs2ljtAJa8uddnjyYuwQff4sP&pickup=my_location&dropoff[formatted_address]=836%20Harrison%20Avenue%20South%2C%20Salt%20Lake%20City%2C%20UT%2084105%2C%20United%20States&dropoff[latitude]=40.739661&dropoff[longitude]=-111.866892
+// https://m.uber.com/ul/?action=setPickup&client_id=5cMxoTVfs2ljtAJa8uddnjyYuwQff4sP&pickup[formatted_address]=SLC%20Airport%2C%20Salt%20Lake%20City%2C%20UT%2C%20United%20States&pickup[latitude]=40.789940&pickup[longitude]=-111.979071&dropoff[formatted_address]=836%20Harrison%20Avenue%20South%2C%20Salt%20Lake%20City%2C%20UT%2C%20United%20States&dropoff[latitude]=40.739661&dropoff[longitude]=-111.866892
+// "url": "https://lyft.com/ride/?id=lyft&pickup[latitude]=40.789940&pickup[longitude]=-111.979071&partner=ejwSKO9XD0NZ&destination[latitude]=40.739661&destination[longitude]=-111.866892",
+// "url": "https://lyft.com/ride?id=lyft&pickup[latitude]=37.764728&pickup[longitude]=-122.422999&partner=ejwSKO9XD0NZ&destination[latitude]=37.7763592&destination[longitude]=-122.4242038", --> WORKS
 function setFirstDayDetails() {
   const results = createCommonItinForEachDay.call(this, [this.departureCity, this.tripData.portOfEntry], this.departureCountry);
   logger.debug(`setFirstDayDetails: setting itinerary for first day: Departure city: ${this.departureCity}; port of entry: ${this.tripData.portOfEntry}`);

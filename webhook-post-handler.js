@@ -397,18 +397,6 @@ function receivedPostback(event) {
   // A pmenu, past_trips or a postback starting with "trip_in_context" is indicative of the beginning of a new state in the state machine. So, clear the session's "awaiting" states to indicate the beginning of a new state.
   this.session.clearAllAwaitingStates();
 
-  if(payload === "trip_calendar_seattle") {
-    const mesg = "13th";
-    const commands = new Commands(this.session.tripData(), this.session.fbid);
-    const canHandle = commands.canHandle(mesg);
-    // case where user entered an invalid message.
-    if(typeof canHandle === "object") return callSendAPI(canHandle); 
-    const itinAsList = commands.handle(mesg); 
-    if(typeof itinAsList === "object") return callSendAPI(itinAsList);
-  }
-  if(payload === "business_question") return askBusiness.call(this);
-  // if user moves on to any other question, reset the askBusiness workflow.
-  this.askBusiness = false;
   if(payload === "other_reminders") return otherReminders.call(this);
   if(payload === "mark_done") return sendMultipleMessages(this.session.fbid,
     textMessages.call(this, 
@@ -425,6 +413,11 @@ function receivedPostback(event) {
     logger.debug(`title is ${title}`);
     return sendGeneralReceipt.call(this, title);
   }
+
+  if(payload === "add_postback") return sendAddButtons.call(this);
+  if(payload === "get_postback") return displayTripDetails.call(this);
+  if(payload === "supported_commands") return supportedCommands.call(this);
+  if(payload === "view_more_commands") return supportedCommands.call(this, true /* more elements */);
 
 	// new trip cta
   if(payload === "new_trip" || payload === "pmenu_new_trip") return planNewTrip.call(this);
@@ -1396,47 +1389,22 @@ function determineResponseType(event) {
   if(mesg === "expenses") return expense.call(this);
   if(mesg === "dr" || mesg === "tr") return handleDRandTR.call(this, mesg);
 
-  if(mesg.startsWith("help ") || mesg === "help" || mesg === "commands") {
-    const message = {
-      recipient: {
-        id: senderID
-      },
-      message: {
-        attachment: {
-          type: "template",
-          payload: {
-            template_type: "list",
-            top_element_style: "compact",
-            elements: [{
-              "title": "Here are some commands you can try out",
-              "subtitle": "for information about your trip"
-            },
-            {
-              "title": "Enter a date to get detailed plan for that day",
-              "subtitle": "Eg. 13th. Polaama knows to look for dates in the context of your trip",
-            },
-            {
-              "title": "Enter \"next\" to see the next session for today",
-              "subtitle": "Enter \"first\" to see the first session"
-            },
-            {
-              "title": "Enter parts of the day to see a list of sessions",
-              "subtitle": "Eg. morning, noon, evening"
-            }]
-          }
-        }
-      }
-    };
-    return callSendAPI(message);
+  if(mesg === "commands" || (mesg.includes("help") && mesg.includes("commands"))) return supportedCommands.call(this);
+
+  // indicates a recommendation request from user. Send this to the admin to take action.
+  if(mesg.startsWith("reco ")) {
+    sendTextMessage(Session.adminId, `[ACTION REQD]: Recommendation request from ${this.session.fbid}: ${mesg}`);
+    return sendTextMessage(this.session.fbid, "Received your request. We are actively working on it and will get back to you soon with results.");
   }
 
   // Before doing anything, if the user types help, send the help message!
   if(!this.tripCount) this.tripCount = this.session.getCurrentAndFutureTrips().futureTrips.length;
-  if(mesg === "hello" || mesg === "hi" || mesg === "howdy" || mesg === "hiya") { // || mesg.startsWith("help ") || mesg === "help") {
+  if(mesg === "hello" || mesg === "hi" || mesg === "howdy" || mesg === "hiya" || mesg === "help") {
     if(mesg.startsWith("help ") || mesg === "help") {
       // clear all states 
       this.session.clearAllAwaitingStates();
-      if(this.session.doesTripContextExist()) return sendAddOrGetOptions.call(this);
+      // if(this.session.doesTripContextExist()) return sendAddOrGetOptions.call(this);
+      if(this.session.doesTripContextExist()) return respondToHelp.call(this);
     }
     if(this.tripCount) {
       const messages = [];
@@ -1446,7 +1414,6 @@ function determineResponseType(event) {
     }
     return sendWelcomeMessage.call(this, senderID);
   }
-  
 
   if(event.message.quick_reply && handleQuickRepliesToPlanNewTrip.call(this, event.message.quick_reply)) return;
 
@@ -1661,6 +1628,65 @@ function determineResponseType(event) {
     return;
   }
   handleMessageSentByHuman.call(this, messageText, senderID);
+}
+
+function supportedCommands(moreElements) {
+  const message = {
+    recipient: {
+      id: this.session.fbid
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "list",
+          top_element_style: "compact"
+        }
+      }
+    }
+  };
+  if(!moreElements) {
+    message.message.attachment.payload.elements = [
+      {
+        "title": "To get detailed plan for a specific day",
+        "subtitle": "Type a date. Eg. '13th', '14', 'today', 'tomorrow'",
+      },
+      {
+        "title": "To enter a recommendation request",
+        "subtitle": "Type 'reco <detailed message of recommendation>'"
+      }
+      {
+        "title": "To get flight details about your current trip",
+        "subtitle": "Type 'flight' or 'return flight'"
+      },
+      {
+        "title": "To get hotel details about your current trip",
+        "subtitle": "Type 'hotel'"
+      },
+      {
+        "title": "To see your entire trip calendar",
+        "subtitle": "Type 'calendar'"
+    }];
+    message.message.attachment.payload.buttons = [{
+      title: "View more",
+      type: "postback",
+      payload: "view_more_commands"
+    }];
+    return callSendAPI(message);
+  }
+  message.message.attachment.payload.elements = [
+  {
+    "title": "To see running trail recommendations",
+    "subtitle": "Type 'trails' or 'running'"
+  },
+  {
+    "title": "To see restaurant recommendations",
+    "subtitle": "Type 'vegetarian reco','veg reco','vegetarian restaurants' or 'veg rest'"
+  },{
+    "title": "To see trip dates",
+    "subtitle": "Type 'dates'"
+  }];
+  return callSendAPI(message);
 }
 
 function sendOtherActivities(messageText) {
@@ -2028,6 +2054,58 @@ function determineTravelCompanions() {
   callSendAPI(messageData);
 }
 
+function respondToHelp() {
+  const message = {
+    recipient: {
+      id: this.session.fbid
+    },
+    message: {
+      attachment: {
+        "type": "template",
+        payload: {
+          template_type: "list",
+          "top_element_style": "compact",
+          elements: [
+          {
+            "title": "Supported commands",
+            "subtitle": "commands that are currently available",
+            "buttons": [{
+              title: "Commands",
+              "type": "postback",
+              payload: "supported_commands"
+            }]
+          },{
+            "title": "Add details",
+            "subtitle": `to your ${this.session.rawTripNameInContext} trip`,
+            "buttons": [{
+              title: "Add",
+              type: "postback",
+              payload: "add_postback"
+            }]
+          },{
+            "title": "Get details",
+            "subtitle": `from your ${this.session.rawTripNameInContext} trip`,
+            "buttons": [{
+              title: "Get",
+              type: "postback",
+              payload: "get_postback"
+            }]
+          },{
+            "title": "Create a new trip",
+            "subtitle": "Let's plan a trip together",
+            "buttons": [{
+              title: "New trip",
+              type: "postback",
+              payload: "new_trip"
+            }]
+          }]
+        }
+      }
+    }
+  };
+  return this.sendAnyMessage(message);
+}
+
 // only call this method if there is a trip name in context
 function sendAddOrGetOptions() {
   if(!this.session.tripNameInContext) throw new Error(`sendAddOrGetOptions: I was called even though there is no trip in context in session ${this.session.sessionId}. Potential BUG!`);
@@ -2058,6 +2136,12 @@ function sendAddOrGetOptions() {
  * Typically, this should match the top level entries in Persistent Menu.
  */
 function getHelpMessageData(senderID, message) {
+  // clear all awaiting states
+  this.session.clearAllAwaitingStates();
+  if(this.session.doesTripContextExist()) {
+    sendTextMessage(this.session.fbid, message);
+    return respondToHelp.call(this);
+  }
   if(!message) message = "What would you like to do?";
   const quickReplies = [{
     content_type: "text",
