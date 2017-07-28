@@ -104,10 +104,10 @@ function getItinDetails(file, key) {
 TripData.prototype.getInfoFromTrip = function(tripKey) {
   const trip = this.data;
   if(_.isUndefined(trip) || _.isUndefined(trip[tripKey])) {
-    logger.info(`Could not find ${tripKey} for trip ${this.data.name}. Returning empty object`);
+    // logger.info(`Could not find ${tripKey} for trip ${this.data.name}. Returning empty object`);
     return {};
   }
-  logger.info(`trip-data.js:getInfoFromTrip Key ${tripKey} has ${trip[tripKey].length} items; Destination is ${trip.country}`);
+  // logger.info(`trip-data.js:getInfoFromTrip Key ${tripKey} has ${trip[tripKey].length} items; Destination is ${trip.country}`);
   return trip[tripKey];
 }
 
@@ -140,8 +140,8 @@ TripData.prototype.getPackList = function() {
     logger.info(`Could not find packList for trip ${this.data.name}. Returning empty object`);
     return {};
   }
-  if(packList.toPack) logger.info(`There are ${packList.toPack.length} to pack items in pack list`);
-  if(packList.done) logger.info(`There are ${packList.done.length} done items in pack list`);
+  // if(packList.toPack) logger.info(`There are ${packList.toPack.length} to pack items in pack list`);
+  // if(packList.done) logger.info(`There are ${packList.done.length} done items in pack list`);
   return packList;
 }
 
@@ -236,7 +236,7 @@ TripData.prototype.addTripDetailsAndPersist = function(tripDetails) {
   else this.data.returnDate = "unknown";
   
   if(tripDetails.returnDate) this.data.returnDate = moment(new Date(tripDetails.returnDate).toISOString()).format("YYYY-MM-DD");
-  logger.debug(`addTripDetailsAndPersist: return date is ${tripDetails.returnDate}`);
+  // logger.debug(`addTripDetailsAndPersist: return date is ${tripDetails.returnDate}`);
 
   // TODO: Get this information from weather API or the file persisted.
   this.data.weather = "sunny";
@@ -272,7 +272,7 @@ TripData.prototype.addPortOfEntry = function(portOfEntry) {
   else return logger.warn("addPortOfEntry: passed value portOfEntry is undefined. doing nothing!");
 	if(!this.data.cities) this.data.cities = [];
   this.data.cities.push(myEncode(portOfEntry));
-	logger.debug(`addPortOfEntry: Added ${portOfEntry} as port of entry`);
+	// logger.debug(`addPortOfEntry: Added ${portOfEntry} as port of entry`);
   this.persistUpdatedTrip();
 }
 
@@ -310,8 +310,8 @@ TripData.prototype.addCityItinerary = function(cities, numOfDays) {
     this.data.cities.push(myEncode(cities[i]));
   }
   this.data.cityItin.numOfDays = this.data.cityItin.numOfDays.concat(numOfDays);
-  logger.debug(`addCityItinerary: City itinerary is ${JSON.stringify(this.data.cityItin)}`);
-  logger.debug(`addCityItinerary: City list is ${this.data.cities}`);
+  // logger.debug(`addCityItinerary: City itinerary is ${JSON.stringify(this.data.cityItin)}`);
+  // logger.debug(`addCityItinerary: City list is ${this.data.cities}`);
   this.persistUpdatedTrip();
 }
 

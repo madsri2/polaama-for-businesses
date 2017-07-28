@@ -50,7 +50,8 @@ WebpageHandler.prototype.displayPackList = function(res, args) {
 
 WebpageHandler.prototype.displayTodoList = function(res, args) {
   const headers = args[0];
-  return res.send(this.formatter.formatListResponse(headers, TripData.todo));
+  const html = this.formatter.formatTodoList(headers);
+  return res.send(html);
 }
 
 WebpageHandler.prototype.displayRawComments = function(res, args) {

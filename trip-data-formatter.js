@@ -72,6 +72,26 @@ TripDataFormatter.prototype.formatTripDetails = function(weatherDetails, activit
     .replace("${donePackList}",listAsHtml(packList.done));
 }
 
+TripDataFormatter.prototype.formatTodoList = function(headers) {
+  const todoList = this.trip.getTodoList();
+  const tripName = this.trip.data.name;
+  if(_.isUndefined(todoList)) {
+    return `Could not find todoList for trip ${tripName}`;
+  }
+  if(_.isUndefined(headers) || _.isUndefined(headers['user-agent'])) {
+    logger.info("formatTodoList: header or user-agent not defined. sending back json");
+    return todoList;
+  }
+  if(headers['user-agent'].startsWith("Mozilla")) {
+    logger.info("formatTodoList: request call from browser. sending back html");
+    const html = fs.readFileSync("html-templates/todo-list.html", 'utf8');
+    return html.replace("${todoList}",listAsHtml(todoList))
+      .replace("${tripName}", this.trip.data.rawName);
+  }
+  logger.info("formatTodoList: request call from something other than browser. sending back json");
+  return todoList;
+}
+
 TripDataFormatter.prototype.formatPackList = function(headers) {
   const packList = this.trip.getPackList();
   const tripName = this.trip.data.name;
@@ -79,17 +99,17 @@ TripDataFormatter.prototype.formatPackList = function(headers) {
     return `Could not find packList for trip ${tripName}`;
   }
   if(_.isUndefined(headers) || _.isUndefined(headers['user-agent'])) {
-    logger.info("header or user-agent not defined. sending back json");
+    logger.info("formatPackList: header or user-agent not defined. sending back json");
     return packList;
   }
   if(headers['user-agent'].startsWith("Mozilla")) {
-    logger.info("request call from browser. sending back html");
+    logger.info("formatPackList: request call from browser. sending back html");
     const html = fs.readFileSync("html-templates/pack-list.html", 'utf8');
     return html.replace("${toPackList}",listAsHtml(packList.toPack))
       .replace("${tripName}", this.trip.data.rawName)
       .replace("${donePackList}",listAsHtml(packList.done));
   }
-  logger.info("request call from something other than browser. sending back json");
+  logger.info("formatPackList: request call from something other than browser. sending back json");
   return packList.toPack;
 }
 

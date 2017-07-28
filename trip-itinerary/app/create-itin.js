@@ -88,7 +88,7 @@ function setLastDayDetails() {
     city = firstLeg.departure_airport.city;
   }
   this.itin[lastDayStr].city = city;
-  logger.debug(`The city for the last day is ${city} and last Day is ${lastDayStr}`);
+  // logger.debug(`The city for the last day is ${city} and last Day is ${lastDayStr}`);
   promiseList.push(setWeatherDetails.call(this, lastDay, this.country.getCountry(city), city));
   // nothing more to do if there is no return flight itin
   if(!this.trip.returnFlightItin)  return promiseList;
@@ -108,7 +108,7 @@ function setLastDayDetails() {
     promiseList.push(setWeatherDetails.call(this, arrivalDate, this.country.getCountry(arrivalCity), arrivalCity));
   }
   this.itin[arrivalDateStr].arrivalTime = getTime(arrivalDate);
-  logger.debug(`setLastDayDetails: returnFlightItin present. departure date is ${depDate}; arrival date is ${arrivalDate}`);
+  // logger.debug(`setLastDayDetails: returnFlightItin present. departure date is ${depDate}; arrival date is ${arrivalDate}`);
   return promiseList;
 }
 
@@ -150,9 +150,9 @@ CreateItinerary.prototype.getItinerary = function() {
 // "url": "https://lyft.com/ride?id=lyft&pickup[latitude]=37.764728&pickup[longitude]=-122.422999&partner=ejwSKO9XD0NZ&destination[latitude]=37.7763592&destination[longitude]=-122.4242038", --> WORKS
 function setFirstDayDetails() {
   const results = createCommonItinForEachDay.call(this, [this.departureCity, this.tripData.portOfEntry], this.departureCountry);
-  logger.debug(`setFirstDayDetails: setting itinerary for first day: Departure city: ${this.departureCity}; port of entry: ${this.tripData.portOfEntry}`);
+  // logger.debug(`setFirstDayDetails: setting itinerary for first day: Departure city: ${this.departureCity}; port of entry: ${this.tripData.portOfEntry}`);
   if(!this.trip.flightItin) {
-    logger.debug(`setFirstDayDetails: this.trip.flightItin not present. No flight details`);
+    // logger.debug(`setFirstDayDetails: this.trip.flightItin not present. No flight details`);
     return results.promise;
   }
   // for departure time, we only care about the first leg of the flight
@@ -172,7 +172,7 @@ function setFirstDayDetails() {
     // we don't set weather details or any other common itinerary details because that will be taken care of by createCommonItinForEachDay, which will be called as part of setRemainingDay for this day.
   }
   this.itin[arrivalDateStr].arrivalTime = getTime(arrivalDate);
-  logger.debug(`setFirstDayDetails: flightItin present. departure date is ${depDate}; arrival date is ${arrivalDate}`);
+  // logger.debug(`setFirstDayDetails: flightItin present. departure date is ${depDate}; arrival date is ${arrivalDate}`);
   return results.promise;
 }
 
@@ -187,7 +187,7 @@ function setRemainingItinerary() {
   const duration = this.tripData.duration;
   const departureCountry = this.tripData.country;
   cityItin.cities.forEach((city,i) => {
-    logger.debug(`setRemainingItinerary: setting itinerary for city ${city}`);
+    // logger.debug(`setRemainingItinerary: setting itinerary for city ${city}`);
     let numDays = 0;
     let cityNumDays = cityItin.numOfDays[i];
     if(i === 0) cityNumDays -= 1; // we assume the first day would be at the port of entry, so we create the itin for one fewer day.
@@ -216,7 +216,7 @@ function setWeatherDetails(itinDate, country, cityList) {
       wip.getStoredWeather(function(c, weatherDetails) {
       // wip.getWeather(function(c, weatherDetails) {
         if(!weatherDetails) {
-          logger.error(`callGetWeather: WeatherInfoProvider.getStoredWeather returned null for weather details`);
+          // logger.error(`callGetWeather: WeatherInfoProvider.getStoredWeather returned null for weather details`);
           // return reject(new Error(`Could not get weather for city ${city}`));
           // we don't want to reject here because if the caller uses Promise.all, the first reject will short-circuit other requests. So, simply use fulfil and move on.
           return fulfil('did not get weather for city ${city}');

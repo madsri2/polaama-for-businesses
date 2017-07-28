@@ -8,7 +8,7 @@ const Encoder = require(`${baseDir}/encoder`);
 function Country(country) {
 	cityCountryMap.call(this);
   if(!country) {
-    logger.warn(`Passed parameter country is not defined`);
+    // logger.warn(`Passed parameter country is not defined`);
     return undefined;
   }
 	
@@ -27,7 +27,7 @@ function Country(country) {
     return;
   }
   catch(err) {
-    logger.warn(`file for country ${country} does not exist`);
+    // logger.warn(`file for country ${country} does not exist`);
   }
   return undefined;
 }

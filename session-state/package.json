@@ -1,0 +1,11 @@
+{
+  "name": "session-state",
+  "version": "1.0.0",
+  "description": "manage all states of a session",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha --reporter spec"
+  },
+  "author": "Madhu Parthasarathy",
+  "license": "GPL-2.0"
+}

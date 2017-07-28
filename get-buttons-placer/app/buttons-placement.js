@@ -77,7 +77,7 @@ ButtonsPlacement.prototype.getPlacement = function() {
   const receipts = this.trip.receipts();
   let receiptFile;
   if(receipts) receiptFile = this.trip.generalReceiptFile(receipts[0]);
-  logger.debug(`getPlacement: receipts list: ${receipts}; file: ${receiptFile}`);
+  // logger.debug(`getPlacement: receipts list: ${receipts}; file: ${receiptFile}`);
   if(receiptFile && fs.existsSync(receiptFile)) buttons.push(receiptsButton);
 
   if(fs.existsSync(this.trip.runningTrailFile())) buttons.push({
@@ -167,7 +167,7 @@ ButtonsPlacement.prototype.getPlacement = function() {
     }
     if(i === 8) break; // we only allow the top 9 buttons for now.
   }
-  logger.debug(`getPlacement: dump: ${JSON.stringify(result)}`);
+  // logger.debug(`getPlacement: dump: ${JSON.stringify(result)}`);
   return result;
 }
 

@@ -515,6 +515,7 @@ function weatherDetails(dayPlan) {
   let plans = [];
   if(!dayPlan.weather) return plans;
   const weather = dayPlan.weather;
+  if(dayPlan.city) weather.city = dayPlan.city;
   if(!Array.isArray(weather)) { plans.push(weatherString(weather)); return plans; }
   // we have been sent an array of weather. That means there are multiple cities on the same day in the itinerary.
   weather.forEach(cityWeather => {
@@ -529,12 +530,13 @@ function weatherString(weather) {
   if(weather.chanceofrain !== '0') rain += `; Chance of rain: <b>${weather.chanceofrain}%</b>`;
   let city = "";
   if(weather.city) city += `<b>${capitalize1stChar(weather.city)}</b>`;
-  let img = "";
+  let img;
   if(weather.cloud_cover === "mostly sunny") img = "mostly-sunny-16";
   if(weather.cloud_cover === "partly cloudy") img = "partly-sunny-16";
   if(weather.cloud_cover === "clear") img = "clear-sunny-16";
-  if(weather.cloud_cover === "cloudy") img = "cloudy-16";
-  return `<img src="https://polaama.com/images/${img}"/> ${city} weather: ${capitalize1stChar(weather.cloud_cover)}; <span style="font-size:small">${weather.max_temp}&degF/${weather.min_temp}&degF</span>${rain}`;
+  if(weather.cloud_cover === "cloudy" || weather.cloud_cover === "mostly cloudy") img = "cloudy-16";
+  img = (img) ? `<img src="https://polaama.com/images/${img}"/>`: "";
+  return `${img} ${city} weather: ${capitalize1stChar(weather.cloud_cover)}; <span style="font-size:small">${weather.max_temp}&degF/${weather.min_temp}&degF</span>${rain}`;
 }
 
 function flightDetails(dayPlan) {

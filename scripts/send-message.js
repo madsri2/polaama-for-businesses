@@ -9,12 +9,11 @@ const FbidHandler = require('fbid-handler/app/handler');
 
 // const fbid = "1630377990366886"; // raj
 // const fbid = "1311237785652279"; // divya
-// const fbid = "1120615267993271"; // madhu
-const fbid = "1718674778147181"; // Beth
+const fbid = "1120615267993271"; // madhu
+// const fbid = "1718674778147181"; // Beth
 // const fbid = "1420839671315623"; // Aparna
 let name = new FbidHandler().getName(fbid);
-if(!name) name = "";
-else name = name.substring(0, name.indexOf(" "));
+if(!name) name = ""; else name = name.substring(0, name.indexOf(" "));
 const session = Sessions.get().find(fbid);
 if(!session) throw new Error(`could not find session for fbid ${fbid}`);
 const handler = new WebhookPostHandler(session);
@@ -299,6 +298,48 @@ function sendBeforeFlightMessage() {
   handler.sendMultipleMessages(fbid, messageList);
 }
 
+function sendGoodMorningMessage() {
+	const trip = new TripData("salt_lake_city", fbid);
+  const commands = new Commands(trip, fbid);
+  // const message = commands.handle("today");
+  const messageList = [];
+  messageList.push(handler.getTextMessageData(fbid,`Good morning ${name}! It'll be mostly sunny in Salt Lake City today with a high of 91°F (don't forget  your hat, sunglasses and sunscreen)!`));
+  messageList.push(handler.getTextMessageData(fbid,`You don't seem to have any plans today. Use the 'reco' command to get recommendations or details about anything. Type 'veg rest' to see lunch recommendations.`));
+  handler.sendMultipleMessages(fbid, messageList);
+}
+
+function sendRentalCarDetails() {
+	const trip = new TripData("salt_lake_city", fbid);
+  const commands = new Commands(trip, fbid);
+  const messageList = [];
+  messageList.push(handler.getTextMessageData(fbid, `Welcome to Salt Lake City ${name}! Here are your rental car details`));
+  messageList.push({
+    recipient: {
+      id: fbid
+    },
+    message: {
+      attachment: {
+        "type": "template",
+        payload: {
+          template_type: "generic",
+          elements: [
+          {
+            "title": "Rental car details",
+      "buttons": [
+        {
+          "title": "Enterprise",
+          "type": "postback",
+          "payload": "car details"
+        }
+      ]
+          }]
+        }
+      }
+    }
+  });
+  handler.sendMultipleMessages(fbid, messageList);
+}
+
 function sendExpenseAndFeedbackRequest() {
   const trip = new TripData("milan", fbid);
   const messageList = [];
@@ -345,11 +386,12 @@ console.log(`Sending message to ${name}`);
 * Any other general comments about the bot?
 */
 
-sendBeforeFlightMessage();
+sendGoodMorningMessage();
+// sendRentalCarDetails();
+// sendBeforeFlightMessage();
 // sendExpenseAndFeedbackRequest();
 // sendRecommendationAlert();
 // sendDayPlan();
-// sendGoodMorningMessage();
 // sendCheckinMessage();
 // sendSingleActivity();
 // sendNewFeatureMessage();

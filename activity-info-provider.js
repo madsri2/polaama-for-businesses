@@ -53,7 +53,7 @@ ActivityInfoProvider.prototype.getActivities = function(responseCallback) {
     }
     // file not present. Get it from google's custom search and update the file.
     const url = this.url.replace("${search-term}",this.activities[key]["search-term"]).replace("${exact-term}",this.activities[key]["exact-term"]);
-    logger.info(`getActivities: file ${srFile} does not exist. Getting it with custom search url ${url}`);
+    // logger.info(`getActivities: file ${srFile} does not exist. Getting it with custom search url ${url}`);
     const self = this;
     request({
       uri: url,
@@ -102,7 +102,7 @@ function extractActivityDetails(key) {
   }
   const json = JSON.parse(body);
   if(_.isUndefined(json.items)) {
-    logger.error(`extractActivityDetails: Custom search results from file ${srFile} does not contain items property.`);
+    // logger.error(`extractActivityDetails: Custom search results from file ${srFile} does not contain items property.`);
     return determineResponse.call(this);
   }
   json.items.forEach(item => {

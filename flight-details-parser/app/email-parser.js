@@ -84,7 +84,7 @@ EmailParser.prototype.parse = function(req, res, callback) {
 }
 
 function spam(msg) {
-  const blacklist = ["spameri@tiscali.it","postmaster@office.com","postmaster@outlook.com","mysterryshop@gmail.com", "msg10@aledcantcl.myhouse.com", "msgid-is-681sx.68@msg-BOA.6818838758.cbs46.com"];
+  const blacklist = ["spameri@tiscali.it","postmaster@office.com","postmaster@outlook.com","mysterryshop@gmail.com", "msg10@aledcantcl.myhouse.com", "msgid-is-681sx.68@msg-BOA.6818838758.cbs46.com","fmail.6004057861@6004057861.brightfocus.org"];
   // for now, blindly drop all maiis from amazonaws domain. TODO: MAke me better
   const blacklistPartialMatch = ["amazonaws.com"];
   if(msg.spamScore && msg.spamScore > 5) {

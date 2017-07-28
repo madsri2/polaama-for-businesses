@@ -33,7 +33,7 @@ WeatherInfoProvider.prototype.getStoredWeather = function(responseCallback) {
   }
   catch(err) {
     if(err.code === 'ENOENT') {
-      logger.warn(`getStoredWeather: file ${file} is not present. nothing to do`);
+      // logger.warn(`getStoredWeather: file ${file} is not present. nothing to do`);
     }
     else {
       logger.error(`getStoredWeather: error reading file ${file}: ${err.stack}`);
@@ -59,7 +59,7 @@ WeatherInfoProvider.prototype.getWeather = function(responseCallback) {
     // file not present. Get it from wunderground.
     const uri = `http://api.wunderground.com/api/16f4fdcdf70aa630/planner_${this.timeRange}/q/${this.country}/${this.city}.json`;
     const err = new Error();
-    logger.info(`${file} does not exist. Getting it from wunderground with url <${uri}>`);
+    // logger.info(`${file} does not exist. Getting it from wunderground with url <${uri}>`);
     request({
       uri: uri,
       method: 'GET',

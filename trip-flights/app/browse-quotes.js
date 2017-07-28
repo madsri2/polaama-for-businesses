@@ -61,13 +61,13 @@ BrowseQuotes.prototype.getCachedQuotes = function() {
   ).then(
     function(result) {
       const file = getFileName.call(self);
-      logger.info(`getCachedQuotes: origCode is ${self.origCode}; destCode is ${self.destCode}. file is ${file}. About to do something around getting flights`);
+      // logger.info(`getCachedQuotes: origCode is ${self.origCode}; destCode is ${self.destCode}. file is ${file}. About to do something around getting flights`);
       if(fs.existsSync(file)) {
         const maxAgeInMinutes = 30;
         const ctime = (new Date(fs.statSync(file).ctime)).getTime();
         const diffInMinutes = (Date.now()-ctime)/(1000*60);
         if(diffInMinutes < maxAgeInMinutes) { // file's age is less than maxAge
-          logger.info(`getCachedQuotes: file ${file} was created ${diffInMinutes} minutes ago, which is less than ${maxAgeInMinutes} minutes. done!`);
+          // logger.info(`getCachedQuotes: file ${file} was created ${diffInMinutes} minutes ago, which is less than ${maxAgeInMinutes} minutes. done!`);
           return true;
         }
         logger.info(`getCachedQuotes: file ${file} exists but it is older than ${maxAgeInMinutes} minutes (${diffInMinutes} minutes). Calling skyscanner API`);

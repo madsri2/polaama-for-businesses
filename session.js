@@ -156,7 +156,7 @@ Session.prototype.persistSession = function() {
   try {
     const filename = file.call(this);
     fs.writeFileSync(filename, JSON.stringify(data));
-    logger.debug(`persistSession: wrote ${(JSON.stringify(data)).length} bytes to file ${filename}`);
+    // logger.debug(`persistSession: wrote ${(JSON.stringify(data)).length} bytes to file ${filename}`);
   }
   catch(err) {
       logger.error(`error writing to session file: ${file}`, err.stack);
@@ -257,7 +257,7 @@ Session.prototype.getCurrentAndFutureTrips = function() {
       daysToEndOfTrip = end.diff(moment(),'days');
     }
     else {
-      logger.debug(`getCurrentAndFutureTrips: considering trip ${trip.rawTripName} with startDate ${trip.data.startDate} and unknown return date`);
+      // logger.debug(`getCurrentAndFutureTrips: considering trip ${trip.rawTripName} with startDate ${trip.data.startDate} and unknown return date`);
       trips.push({
         name: trip.data.name,
         rawName: trip.data.rawName,
@@ -275,7 +275,7 @@ Session.prototype.getCurrentAndFutureTrips = function() {
       });
       return;
     }
-    logger.debug(`getCurrentAndFutureTrips: ignoring trip ${trip.rawTripName} which happened in the past: ${trip.data.startDate}`);
+    // logger.debug(`getCurrentAndFutureTrips: ignoring trip ${trip.rawTripName} which happened in the past: ${trip.data.startDate}`);
     pastTrips = true;
   }, this);
   const sortedArr = trips.sort(function(a,b) {
@@ -299,10 +299,10 @@ Session.prototype.setTripContextAndPersist = function(tripName) {
   const trip = this.getTrip(tripName);
   if(!trip) throw new Error(`setTripContextAndPersist: cannot find trip ${tripName} [encoded: ${TripData.encode(tripName)}] in session ${this.sessionId}, fbid ${this.fbid}`);
   this.tripNameInContext = trip.tripName;
-  logger.debug(`setTripContextAndPersist: setting raw trip name to ${trip.data.rawName}`);
+  // logger.debug(`setTripContextAndPersist: setting raw trip name to ${trip.data.rawName}`);
   this.rawTripNameInContext = trip.data.rawName;
   // Persist the new trip that was added to this session.
-  logger.debug(`setTripContextAndPersist: set trip context for this session as ${this.tripNameInContext}. persisting session`);
+  // logger.debug(`setTripContextAndPersist: set trip context for this session as ${this.tripNameInContext}. persisting session`);
   this.persistSession();
 }
 
@@ -314,7 +314,7 @@ Session.prototype.addTrip = function(tripName) {
 	if(this.hometown) trip.data.leavingFrom = TripData.encode(this.hometown);
   if(!this.trips[encTripName]) {
     // this is only possible in case of a new trip created in this session. 
-    logger.info(`Creating new trip for session ${this.fbid} for trip ${encTripName}`);
+    // logger.info(`Creating new trip for session ${this.fbid} for trip ${encTripName}`);
     // define a tripName json object.
     this.trips[encTripName] = { 
       aiContext: {
@@ -391,27 +391,11 @@ Session.prototype.getTrip = function(tripName) {
   return trip.tripData;
 }
 
-Session.prototype.clearAllAwaitingStates = function() {
-  Object.keys(this).forEach(key => {
-    if(key.startsWith("awaiting")) {
-      this[key] = false;
-    }
-  });
-  this.planningNewTrip = false;
-}
-
 // TODO: Fix ME. this always return PST/PDT now. Obtain the timezone from the hometown.
 Session.prototype.getTimezone = function() {
   return "America/Los_Angeles"; // Using the timezone understood by moment-timezone
 }
 
-Session.prototype.dumpState = function() {
-  let dump = "";
-  Object.keys(this).forEach(key => {
-    if(key.startsWith("awaiting")) dump = dump.concat(`${key}: ${this[key]}; `);
-  });
-  return dump.concat(`planningNewTrip: ${this.planningNewTrip}`);
-}
 
 /********************* TESTING APIs ****************/
 

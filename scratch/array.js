@@ -12,8 +12,7 @@ function testSplice() {
 }
 
 function testIncludes() {
-  const list = ["Already existing item", "item1 with words"];
-  if(list.includes("item1 with words")) console.log("true");
+  if(["Already existing item", "item1 with words"].includes("item1 with words")) console.log("true");
   else console.log("false");
 }
 

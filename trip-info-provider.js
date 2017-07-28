@@ -29,7 +29,7 @@ function TripInfoProvider(tripData, departureCity) {
 // callback function meant to be called by WeatherInfoProvider.getWeather 
 function parseWeatherResponse(city, weatherDetails) {
   if(!weatherDetails) {
-    logger.error(`parseWeatherResponse: could not get weather for city: ${city}`);
+    // logger.error(`parseWeatherResponse: could not get weather for city: ${city}`);
     return;
   }
   const text = [];
@@ -206,7 +206,7 @@ function getActivityForCity(city, index, callback) {
   const cities = _.uniq(this.trip.data.cities);
   const dataFile = this.trip.tripDataFile();
   if(cityDetails.activities) {
-    logger.debug(`getActivityForCity: Activities available for city ${city}. Doing nothing more for this city`);
+    // logger.debug(`getActivityForCity: Activities available for city ${city}. Doing nothing more for this city`);
     // handle case where we have gathered data for all cities. TODO: Do we need this check in both places (here and in the callback function below)?
     if(citiesWithActivities(details.cities) === cities.length) {
       logger.info("getActivityForCity: obtained activities for all cities. invoking callback");
@@ -215,7 +215,7 @@ function getActivityForCity(city, index, callback) {
     return;
   }
   const aip = new ActivityInfoProvider(this.trip.data.country, city, this.trip.data.startDate);
-  logger.debug(`getActivityForCity: About to call ActivityInfoProvider to get activities for city ${city}`);
+  // logger.debug(`getActivityForCity: About to call ActivityInfoProvider to get activities for city ${city}`);
   aip.getActivities(function(activityDetails) {
     if(activityDetails) cityDetails.activities = activityDetails;
     // handle case where we have gathered data for all cities.

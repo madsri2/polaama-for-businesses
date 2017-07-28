@@ -7,6 +7,7 @@ const TripInfoProvider = require(`${baseDir}/trip-info-provider`);
 const logger = require(`${baseDir}/my-logger`);
 logger.setTestConfig(); // indicate that we are logging for a test
 const FbidHandler = require('fbid-handler/app/handler');
+const SessionState = require('session-state/app/state');
 const fs = require('fs');
 
 const moment = require('moment');
@@ -54,6 +55,9 @@ function setup() {
   const session = sessions.findOrCreate(myFbid);
   // create new trip
   const handler = new WebhookPostHandler(session, true /* testing */);
+  const state = new SessionState();
+  state.set("awaitingNewTripDetails");
+  handler.testing_setState(state);
   handler.testing_createNewTrip({
     destination: tripName,
     startDate: moment().add(7, 'days').format("MM/DD/YYYY"), // 05/10/2017,
@@ -146,16 +150,18 @@ function testAddingCityToExistingTrip() {
   const session = handler.session;
   // first add three cities.
   // setup state
-  session.planningNewTrip = true;
-  session.awaitingCitiesForNewTrip = true;
+  const state = new SessionState();
+  state.set("planningNewTrip");
+  state.set("awaitingCitiesForNewTrip");
   // test
   {
-    const event = { message: { text: "city(1),cityx(2),city y(3)" } };
+    const event = { message: { text: "city(1),cityx(2),cityy(3)" } };
+    handler.testing_setState(state);
     handler.testing_determineResponseType(event);
   }
   logger.debug(`*************** Existing Trip *****************`);
   // setup state
-  session.awaitingCitiesForExistingTrip = true;
+  state.set("awaitingCitiesForExistingTrip");
   // now test adding 4th city
   const event = { message: { text: "another city(6)" } };
   handler.testing_determineResponseType(event);
@@ -255,7 +261,7 @@ function testHotelItineraryMultipleHotels() {
   handler.testing_receivedPostback(event);
 }
 
-testHotelItinerarySingleHotel();
+// testHotelItinerarySingleHotel();
 // testHotelItineraryMultipleHotels();
 
 // testDayPlanSecondSetCommand();
@@ -264,7 +270,7 @@ testHotelItinerarySingleHotel();
 
 // testDisplayTripDetails();
 
-// testAddingCityToExistingTrip();
+testAddingCityToExistingTrip();
 
 // testExtractingCityDetails();
 
