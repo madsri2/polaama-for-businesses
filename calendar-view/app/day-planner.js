@@ -4,6 +4,7 @@ const fs = require('fs');
 const CreateItinerary = require('trip-itinerary/app/create-itin'); 
 const baseDir = "/home/ec2-user";
 const logger = require(`${baseDir}/my-logger`);
+const Encoder = require(`${baseDir}/encoder`);
 const moment = require('moment');
 const NextActivityGetter = require('calendar-view/app/next-activity-getter');
 const MealActivityGetter = require('calendar-view/app/meal-activity-getter');
@@ -35,7 +36,7 @@ DayPlanner.prototype.getPlan = function(dayItinerary) {
     }
   };
   if(!dayPlan || (Object.keys(dayPlan).length === 0)) {
-    logger.debug(`getPlan: Itinerary does not contain any information for date ${dateStr} for trip ${this.trip.tripName}`);
+    // logger.debug(`getPlan: Itinerary does not contain any information for date ${dateStr} for trip ${this.trip.tripName}`);
     // logger.debug(`getPlan: dump of trip ${this.trip.tripName}; ${JSON.stringify(this.trip)}`);
     return {
       city: this.trip.data.rawName,
@@ -142,41 +143,46 @@ function addButtonsToMessage(message, currIndex, lastSet) {
     "type": "postback",
     payload: "flight itinerary"
   }];
-  const hotelReceipt = [{
-    title: "Hotel Receipt",
-    "type": "postback",
-    payload: "hotel details"
-  }];
   const elements = message.message.attachment.payload.elements;
   // logger.debug(`addButtonsToMessage: lastSet: ${lastSet}; elements length: ${elements.length};`);
   // unless this is the last set of activity elements for this day, send along a "view more" button
   if(!lastSet && (elements.length > 1)) message.message.attachment.payload.buttons = viewMoreButton;
   // TODO: A better way to determine if we want to show the return flight is to see if this is the last activity for this trip.
-  const index = elements.length - 1;
-  const subtitle = elements[index].subtitle;
-  const title = elements[index].title;
-  if((subtitle && subtitle.startsWith("Flight ")) || (title && title.startsWith("Flight "))) {
-    const startDateStr = CreateItinerary.formatDate(new Date(this.trip.data.startDate));
-    const nextDay = new Date(this.trip.data.startDate);
-    nextDay.setDate(nextDay.getDate() + 1);
-    const nextDayStr = CreateItinerary.formatDate(nextDay);
-    const dateStr = CreateItinerary.formatDate(this.date);
-    logger.debug(`addButtonsToMessage: Start date ${startDateStr}; this.date ${dateStr}`);
-    if(startDateStr === dateStr || (dateStr === nextDayStr)) {
-      logger.debug(`addButtonsToMessage:: Adding onward flight postback button to message.`);
-      elements[index].buttons = onwardFlight;
+  // const index = elements.length - 1;
+  for(let index = 0; index < elements.length; index++) {
+    const subtitle = elements[index].subtitle;
+    const title = elements[index].title;
+    if((subtitle && subtitle.startsWith("Flight ")) || (title && title.startsWith("Flight "))) {
+      const startDateStr = CreateItinerary.formatDate(new Date(this.trip.data.startDate));
+      const nextDay = new Date(this.trip.data.startDate);
+      nextDay.setDate(nextDay.getDate() + 1);
+      const nextDayStr = CreateItinerary.formatDate(nextDay);
+      const dateStr = CreateItinerary.formatDate(this.date);
+      // logger.debug(`addButtonsToMessage: Start date ${startDateStr}; this.date ${dateStr}`);
+      if(startDateStr === dateStr || (dateStr === nextDayStr)) {
+        // logger.debug(`addButtonsToMessage:: Adding onward flight postback button to message.`);
+        elements[index].buttons = onwardFlight;
+      }
+      else {
+        // logger.debug(`addButtonsToMessage:: Adding return flight postback button to message`);
+        elements[index].buttons = returnFlight;
+      }
     }
-    else {
-      logger.debug(`addButtonsToMessage:: Adding return flight postback button to message`);
-      elements[index].buttons = returnFlight;
+    // TODO: Think of a better way
+    else if(title && new RegExp(["checkin", "checkout", "check-in", "check-out"].join("|")).test(Encoder.encode(title))) {
+      const hotelReceipt = [{
+        title: "Hotel Receipt",
+        "type": "postback",
+        payload: "hotel details"
+      }];
+      let payload = hotelReceipt[0].payload;
+      if(elements[index].hotel_name) {
+        hotelReceipt[0].payload = payload.concat(` ${elements[index].hotel_name}`);
+        delete elements[index].hotel_name;
+      }
+      elements[index].buttons = hotelReceipt;
     }
   }
-  // TODO: Think of a better way
-  if(title && title.startsWith("Checkin ") || title.startsWith("Checkout ")) {
-    logger.debug(`addButtonsToMessage:: Adding hotel receipt postback button to message`);
-    elements[index].buttons = hotelReceipt;
-  }
-
   return message;
 }
 
@@ -256,7 +262,7 @@ DayPlanner.prototype.getRecommendations = function(interest, index) {
 DayPlanner.prototype.getPlanAsList = function(setNum) {
   let file = this.trip.dayItineraryFile(this.date);
   if(this.trip.data.name === "iceland" && CreateItinerary.formatDate(this.date) === "9/5/2017") file = "/home/ec2-user/trips/aeXf/iceland-2017-9-5-fake-itinerary.json";
-  logger.debug(`getPlanAsList: using list template to display itin for date ${CreateItinerary.formatDate(this.date)} and file ${file}`);
+  // logger.debug(`getPlanAsList: using list template to display itin for date ${CreateItinerary.formatDate(this.date)} and file ${file}`);
   try {
     // read the itinerary file, which is a list of json objects. Push each json object (which contains utmost 4 elements) into an array. Then, based on the index (either passed or defaults to 0), return the corresponding element set.
     const dayAsList = JSON.parse(fs.readFileSync(file, 'utf8'));
@@ -515,13 +521,14 @@ function weatherDetails(dayPlan) {
   let plans = [];
   if(!dayPlan.weather) return plans;
   const weather = dayPlan.weather;
-  if(dayPlan.city) weather.city = dayPlan.city;
+  if(dayPlan.city && !weather.city) weather.city = dayPlan.city;
   if(!Array.isArray(weather)) { plans.push(weatherString(weather)); return plans; }
   // we have been sent an array of weather. That means there are multiple cities on the same day in the itinerary.
-  weather.forEach(cityWeather => {
+  weather.forEach((cityWeather,idx) => {
+    if(!cityWeather.city) cityWeather.city = dayPlan.city[idx];
     plans.push(weatherString(cityWeather));
   });
-  logger.debug(`weatherDetails: returning array of length ${plans.length}`);
+  // logger.debug(`weatherDetails: returning array of length ${plans.length}`);
   return plans;
 }
 

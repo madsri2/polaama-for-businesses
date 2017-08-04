@@ -11,6 +11,7 @@ const TripDataFormatter = require('./trip-data-formatter.js');
 const passport = require('passport');
 const FacebookStrategy = require('passport-facebook').Strategy;
 const session = require('express-session');
+const Session = require('./session');
 const EmailParser = require('flight-details-parser/app/email-parser');
 const SecretManager = require('secret-manager/app/manager');
 const FbidHandler = require('fbid-handler/app/handler');
@@ -49,15 +50,15 @@ passport.use(new FacebookStrategy({
   function(accessToken, refreshToken, profile, done) {
     // From https://scotch.io/tutorials/easy-node-authentication-facebook
     // This is to store the user profile in local database. For now, simply persist the access token corresponding to the user.
-    logger.info(`login details: accessToken: ${accessToken}; profile: ${JSON.stringify(profile)}`);
+    // logger.info(`login details: accessToken: ${accessToken}; profile: ${JSON.stringify(profile)}`);
     const user = {
       name: profile._json.name,
       id: profile._json.id
     };
     // TODO: This will not work when there are name collisions.
-    user.fbid = FbidHandler.get().getId(user.name);
+    user.myId = FbidHandler.get().getId(user.name);
     userIdMapping[user.id] = user;
-    logger.debug(`FacebookStrategy: found fbid: ${user.fbid} for id: ${user.id} & name: ${user.name}`);
+    logger.debug(`FacebookStrategy: found fbid: ${user.myId} for id: ${user.id} & name: ${user.name}`);
     done(null, user);
   }
 ));
@@ -121,7 +122,7 @@ app.get('/auth/facebook/callback', function(req, res, next) {
           return next(err);
         }
         if(!req.session.redirectTo) req.session.redirectTo = "/index";
-        logger.info(`/auth/facebook/callback: passport.authenticate was successful. redirecting to the original request path ${req.session.redirectTo}. user details: ${JSON.stringify(user)}. req.param.id: ${req.session.fbid}; req param: ${JSON.stringify(req.param)};`);
+        // logger.info(`/auth/facebook/callback: passport.authenticate was successful. redirecting to the original request path ${req.session.redirectTo}. user details: ${JSON.stringify(user)}. req.param.id: ${req.session.myId}; req param: ${JSON.stringify(req.param)};`);
         const mesg = compareCallerWithUserInRequest(req, user);
         if(mesg) return res.send(mesg);
         else return res.redirect(req.session.redirectTo);
@@ -131,11 +132,13 @@ app.get('/auth/facebook/callback', function(req, res, next) {
 
 function compareCallerWithUserInRequest(req, user) {
   // if there was no fbid passed in the path, then there is no comparing to be done.
-  if(!req.session.fbid) return null;
+  if(!req.session.myId) return null;
   // only the authorized user or the admin can see this page.
   // TODO: The keflavik trip is shared so Arpan & Avani can use it. Fix me.
-  if(req.session.fbid === user.fbid || user.fbid === "aeXf" || req.session.redirectTo.includes("keflavik") || req.session.redirectTo.includes("iceland_alt")) return null;
-  logger.error(`facebook callback: passport authenticate: user ${user.fbid} attempted to call url ${req.session.redirectTo}, whose id is ${req.session.fbid}. Rejecting the call.`);
+  const thisFbid = FbidHandler.get().decode(user.myId);
+  // logger.debug(`compareCallerWithUserInRequest: userFbid: ${user.myId}; id is ${thisFbid}. adminId is ${Session.adminId}`);
+  if(req.session.myId === user.myId || thisFbid === Session.adminId || req.session.redirectTo.includes("keflavik")) return null;
+  logger.error(`facebook callback: passport authenticate: user ${user.myId} attempted to call url ${req.session.redirectTo}, whose id is ${req.session.myId}. Rejecting the call.`);
   return "You are not authorized to view this page!";
 }
 
@@ -232,10 +235,11 @@ app.get('/login', function(req, res) {
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     // req.user is available for use here
-    logger.info(`ensureAuthenticated: request is authenticated. now the actual request (${req.path}) will be handled. req.user is ${JSON.stringify(req.user)}; req.session is ${JSON.stringify(req.params)}; req.path is ${req.path}`);
+    // logger.info(`ensureAuthenticated: request is authenticated. now the actual request (${req.path}) will be handled. req.user is ${JSON.stringify(req.user)}; req.session is ${JSON.stringify(req.params)}; req.path is ${req.path}`);
     if(req.path === "/") req.session.redirectTo = "/index";
     else req.session.redirectTo = req.path;
-    req.session.fbid = req.params.id;
+    // Ideally, this would be req.session.id, but that is taken already
+    req.session.myId = req.params.id;
     const mesg = compareCallerWithUserInRequest(req, req.user);
     if(mesg) return res.send(mesg);
     return next(); 
@@ -243,7 +247,7 @@ function ensureAuthenticated(req, res, next) {
   // denied. redirect to login
   logger.info(`ensureAuthenticated: not authenticated. Redirecting to /auth/facebook; req.path is ${req.path}. params.id is: ${req.params.id}`);
   req.session.redirectTo = req.path;
-  req.session.fbid = req.params.id;
+  req.session.myId = req.params.id;
   // TODO: this might be useless.
   res.redirect('/auth/facebook');
   // res.redirect('/");

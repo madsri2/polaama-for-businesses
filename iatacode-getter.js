@@ -47,7 +47,7 @@ IataCodeGetter.prototype.getCodeSync = function() {
   if(file) {
     try {
       const body = JSON.parse(fs.readFileSync(file, 'utf8'));
-      // logger.debug(`getCodeSync: Obtained body ${JSON.stringify(body)} from file ${file}`);
+      logger.debug(`getCodeSync: Obtained body ${JSON.stringify(body)} from file ${file}`);
       if(body.iatacode) return body.iatacode;
     }
     catch(e) {
@@ -72,6 +72,7 @@ IataCodeGetter.prototype.getCode = function(callback) {
       return callback(new Error(err));
     }
     const airports = response.airports_by_cities;
+    logger.debug(`getCode: airports details: ${JSON.stringify(airports)}`);
     if(!airports) {
       logger.warn(`getIataCode: Could not find code in response: ${JSON.stringify(response)}`);
       return callback(new Error("airport code not found in response"));
@@ -94,7 +95,19 @@ IataCodeGetter.prototype.getCode = function(callback) {
   });
 }
 
-/*
+IataCodeGetter.prototype.getCodePromise = function(city) {
+  return new Promise(function(fulfil, reject) {
+    ic.api('autocomplete', {query: `${city}`}, function(err, response) {
+      if(err) {
+        logger.error(`getCity: error: ${err.stack}`);
+        return reject(err);
+      }
+      logger.debug(`response from iatacode: ${JSON.stringify(response)}`);
+      return fulfil(response);
+    });
+  });
+}
+
 IataCodeGetter.prototype.getCity = function(code) {
   return new Promise(function(fulfil, reject) {
     ic.api('cities', {code: `${code}`}, function(err, response) {
@@ -107,7 +120,6 @@ IataCodeGetter.prototype.getCity = function(code) {
     });
   });
 }
-*/
 
 function cityFileExists() {
   if(_.isUndefined(this.fileList)) {

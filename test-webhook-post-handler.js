@@ -15,33 +15,50 @@ const Promise = require('promise');
 
 function testGatheringDetailsForNewTrip() {
   const dtdCallback = function() { 
-    console.log("All callbacks successfully called");
+    logger.debug("All callbacks successfully called");
   }
   // Iceland
-  const td = new TripData("iceland", "1234");
+  const td = new TripData("san_francisco", "1234");
   td.addTripDetailsAndPersist({
-    startDate: "5/10/2017",
-    destination: "iceland",
-    duration: 8,
+    startDate: "9/11/2017",
+    destination: "san_francisco",
+    duration: 4,
   });
-  td.addCityItinerary(["landmannalaugar","reykjavik"],[4,4]);
-  td.addPortOfEntry("reykjavik");
-  const tip = new TripInfoProvider(td, "seattle");
+  td.addPortOfEntry("san_francisco");
+  const tip = new TripInfoProvider(td, "ewr");
   
   const activities = Promise.denodeify(tip.getActivities.bind(tip));
   // const flightDetails = Promise.denodeify(tip.getFlightDetails.bind(tip));
-  const flightQuote = tip.getFlightQuotes();
+  // const flightQuote = tip.getFlightQuotes();
   const weatherDetails = Promise.denodeify(tip.getWeatherInformation.bind(tip));
   
   activities()
     // .then(flightDetails())
-    .then(weatherDetails())
-    .then(flightQuote)
-    .done(function() {
-      console.log("all functions called.");
-    }, function(err) {
-      console.log(`error: ${err.stack}`);
-    });
+    .then(
+      function(response) {
+        return tip.getFlightQuotes();
+      },
+      function(err) {
+        logger.error(`Activities promise returned error: ${err.stack}`);
+        return Promise.reject(err);
+      }
+    )
+    .then(
+      function(response) {
+        return weatherDetails();
+      },
+      function(err) {
+        logger.error(`FlightQuotes promise returned error: ${err.stack}`);
+        return Promise.reject(err);
+      }
+    )
+    .done(
+      function(response) {
+        console.log(`all functions called. response type is ${typeof response}`);
+      }, function(err) {
+        console.log(`test-webhook-post-handler error: ${err.stack}`);
+      }
+    );
 }
 
 function setup() {
@@ -134,12 +151,38 @@ function setupTelAvivTrip() {
   return handler;
 }
 
+function testStartPlanningTrip() {
+  const sessions = Sessions.get();
+  const myFbid = "1234";
+  const tripName = "ewr-sfo";
+  // set up
+  // first clean up previous test state
+  sessions.testing_delete(myFbid);
+  const session = sessions.findOrCreate(myFbid);
+  // create new trip
+  const handler = new WebhookPostHandler(session, true /* testing */);
+  handler.testing_createNewTrip({
+    destination: "san_francisco",
+    startDate: "09/11/2017",
+    leavingFrom: "ewr",
+    duration: 4
+  });
+  session.persistHometown("ewr");
+  const sessionState = handler.sessionState;
+  // setup state
+  sessionState.set("planningNewTrip");
+  const event = { message: { text: "invalid" } };
+  // test
+  handler.testing_determineResponseType(event);
+}
+
 function testExtractingCityDetails() {
   const handler = setup();
-  const session = handler.session;
+  handler.session.tripData().data.leavingFrom = "san_francisco";
+  const sessionState = handler.sessionState;
   // setup state
-  session.planningNewTrip = true;
-  session.awaitingCitiesForNewTrip = true;
+  sessionState.set("planningNewTrip");
+  sessionState.set("awaitingCitiesForNewTrip");
   // test
   const event = { message: { text: "city(1)" } };
   handler.testing_determineResponseType(event);
@@ -150,7 +193,7 @@ function testAddingCityToExistingTrip() {
   const session = handler.session;
   // first add three cities.
   // setup state
-  const state = new SessionState();
+  const state = handler.sessionState;
   state.set("planningNewTrip");
   state.set("awaitingCitiesForNewTrip");
   // test
@@ -261,6 +304,37 @@ function testHotelItineraryMultipleHotels() {
   handler.testing_receivedPostback(event);
 }
 
+function testAddingDepartureCityThatIsNotHometown() {
+  const handler = setup();
+  const trip = handler.session.findTrip();
+  handler.sessionState.set("planningNewTrip");
+  handler.sessionState.set("awaitingUseHometownAsDepartureCity");
+  const event = { message: { text: "", quick_reply: { payload: "qr_use_hometown_as_dep_city_no" }}};
+  let response = handler.testing_determineResponseType(event);
+  console.log(`testAddingDepartureCityThatIsNotHometown: response from determineResponseType is ${response}`);
+  event.message.quick_reply = null;
+  event.message.text = "newark";
+  response = handler.testing_determineResponseType(event);
+  console.log(`testAddingDepartureCityThatIsNotHometown: response from determineResponseType is ${response}`);
+}
+
+function testAddingDepartureCityNoHometownSet() {
+  const handler = setup();
+  handler.session.hometown = null;
+  handler.sessionState.set("planningNewTrip");
+  handler.sessionState.set("awaitingDepartureCityDetails");
+  const event = { message: { text: "newark" }};
+  let response = handler.testing_determineResponseType(event);
+  console.log(`testAddingDepartureCityNoHometownSet: response from determineResponseType is ${response}`);
+  event.message.quick_reply = { payload: "qr_use_as_hometown_yes" };
+  response = handler.testing_determineResponseType(event);
+  console.log(`testAddingDepartureCityNoHometownSet: response from determineResponseType is ${response}; hometown: ${handler.session.hometown}`);
+}
+
+// testAddingDepartureCityNoHometownSet();
+
+// testAddingDepartureCityThatIsNotHometown();
+
 // testHotelItinerarySingleHotel();
 // testHotelItineraryMultipleHotels();
 
@@ -270,8 +344,12 @@ function testHotelItineraryMultipleHotels() {
 
 // testDisplayTripDetails();
 
-testAddingCityToExistingTrip();
+// testAddingCityToExistingTrip();
 
 // testExtractingCityDetails();
 
+testStartPlanningTrip();
+
 // testGatheringDetailsForNewTrip();
+
+// testAddingDepartureCity();

@@ -131,4 +131,33 @@ describe('testing buttons placement', function() {
     const result = new ButtonsPlacement("https://polaama.com/WBkW", new TripData(tripName, fbid, "fbid-test.txt")).getPlacement();
     logger.debug(`${JSON.stringify(result, null, 2)}`);
   });
+
+  it("weather list button", function() {
+    const trip = new TripData("san_francisco", fbid, "fbid-test.txt");
+    trip.addTripDetailsAndPersist({
+      startDate: "9/10/2017",
+      portOfEntry: "san_francisco"
+    });
+    const result = new ButtonsPlacement("https://polaama.com/WBkW", trip).getPlacement();
+    expect(result.secondSet[0].title).to.have.string("Weather");
+    // logger.debug(`${JSON.stringify(result, null, 2)}`);
+    trip.testing_delete();
+  });
+
+  it("flight quotes button", function() {
+    const trip = new TripData("san_francisco", fbid, "fbid-test.txt");
+    trip.addTripDetailsAndPersist({
+      startDate: "9/11/2017",
+      duration: "4",
+      portOfEntry: "san_francisco",
+      leavingFrom: "newark"
+    });
+    const file = `${baseDir}/flights/newark-san_francisco-2017-09-11-quote.txt`;
+    fs.writeFileSync(file, "exists");
+    const result = new ButtonsPlacement("https://polaama.com/WBkW", trip).getPlacement();
+    expect(result.secondSet[0].title).to.have.string("Flight");
+    // logger.debug(`${JSON.stringify(result, null, 2)}`);
+    trip.testing_delete();
+    fs.unlinkSync(file);
+  });
 });

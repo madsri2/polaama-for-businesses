@@ -42,7 +42,18 @@ function colorRegex() {
     if(contents) console.log(contents[1]);
 }
 
-colorRegex();
+function hotelPayloadRegex() {
+  let hotel;
+  const payload = "hotel details ";
+  if(payload) {
+    const contents = /hotel details (.*)/.exec(payload);
+    if(contents) hotel = contents[1];
+  }
+  console.log(`hotelPayloadRegex: hotel is <${hotel}>`);
+}
+
+hotelPayloadRegex();
+// colorRegex();
 // recoRegex();
 // dateCommand();
 // activityRegex();

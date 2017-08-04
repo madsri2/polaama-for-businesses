@@ -83,11 +83,12 @@ HotelReceiptManager.prototype.handle = function() {
     this.details.receipt_ext = this.receipt_ext;
     let hotelDetails = {};
     if(fs.existsSync(file)) hotelDetails = JSON.parse(fs.readFileSync(file, 'utf8'));
-    hotelDetails[Encoder.encode(this.receipt.address.city)] = this.details;
+    const city = Encoder.encode(this.receipt.address.city);
+    hotelDetails[city] = this.details;
     const json = JSON.stringify(hotelDetails);
     fs.writeFileSync(file, json, 'utf8');
     // send a notification to the user that we have their details and will send them the boarding pass the day before the flight.
-    logger.debug(`handle: wrote ${json.length} bytes to file ${file}`);
+    // logger.debug(`handle: wrote ${json.length} bytes to file ${file}`);
     // notify user that we have received a boarding pass.
     const message = {
       recipient: {
@@ -102,13 +103,13 @@ HotelReceiptManager.prototype.handle = function() {
             "buttons": [{
               "type": "postback",
               "title": "Stay details",
-              "payload": `hotel details`,
+              "payload": `hotel details ${city}`,
             }]
           }
         }
       }
     };
-    logger.debug(`handle: About to send message to user: ${JSON.stringify(message)}`);
+    // logger.debug(`handle: About to send message to user: ${JSON.stringify(message)}`);
 		const postHandler = tripFinder.getPostHandler();
     return postHandler.sendAnyMessage(message);
   }

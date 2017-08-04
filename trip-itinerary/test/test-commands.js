@@ -9,7 +9,6 @@ const moment = require('moment');
 const chai = require('chai');
 chai.use(require('chai-string'));
 
-
 const baseDir = "/home/ec2-user";
 const logger = require(`${baseDir}/my-logger`);
 logger.setTestConfig();

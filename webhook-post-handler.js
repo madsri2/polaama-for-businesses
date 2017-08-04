@@ -18,6 +18,8 @@ const CommentParser = require('./expense-report/app/comment-parser');
 const ExpenseReportWorkflow = require('./expense-report/app/workflow');
 const CreateItinerary = require('trip-itinerary/app/create-itin');
 const Commands = require('trip-itinerary/app/commands');
+const DepartureCityWorkflow = require('departure-city-workflow/app/workflow');
+const DestinationCityWorkflow = require('destination-cities-workflow/app/workflow');
 
 const _ = require('lodash');
 const request = require('request');
@@ -292,26 +294,44 @@ WebhookPostHandler.prototype.setWeatherAndItineraryForNewTrip = function(tripNam
 
 // Start collecting useful information for trip and update the user.
 WebhookPostHandler.prototype.startPlanningTrip = function() {
-  sendTextMessage(this.session.fbid, `Gathering weather, flight and stay related information for ${this.session.tripNameInContext}`);
+  sendTextMessage(this.session.fbid, `Gathering information for your ${this.session.tripNameInContext} trip`);
   sendTypingAction.call(this);
 	// logger.debug(`startPlanningTrip: This sessions' guid is ${this.session.guid}`);
-
-  const tip = new TripInfoProvider(this.session.tripData(), this.session.hometown);
+  const trip = this.session.tripData();
+  const tip = new TripInfoProvider(trip, this.session.hometown);
   const activities = Promise.denodeify(tip.getActivities.bind(tip));
   // const flightDetails = Promise.denodeify(tip.getFlightDetails.bind(tip));
-  const flightQuotes = tip.getFlightQuotes();
+  // const flightQuotes = tip.getFlightQuotes();
   const weatherDetails = Promise.denodeify(tip.getWeatherInformation.bind(tip));
   const dtdCallback = displayTripDetails.bind(this);
 
   // TODO: If this is a beach destinataion, use http://www.blueflag.global/beaches2 to determine the swimmability. Also use http://www.myweather2.com/swimming-and-water-temp-index.aspx to determine if water conditions are swimmable
   const self = this;
   activities()
-    .then(weatherDetails())
-    .then(flightQuotes)
+    .then(
+      function(response) {
+        return tip.getFlightQuotes();
+      },
+      function(err) {
+        logger.error(`Activities promise returned error: ${err.stack}`);
+        // even though Activities promise failed, we want flight quotes to be called.
+        return tip.getFlightQuotes();
+      }
+    )
+    .then(
+      function(response) {
+        return weatherDetails();
+      },
+      function(err) {
+        logger.error(`FlightQuotes promise returned error: ${err.stack}`);
+        // even though Flight Quotes promise failed, we want weatherDetails to be handled.
+        return weatherDetails();
+      }
+    )
     .done(
       function(response) {
         try {
-          const createItin = new CreateItinerary(self.session.tripData(), self.session.hometown);
+          const createItin = new CreateItinerary(trip, self.session.hometown);
           const tripNameInContext = self.session.tripNameInContext;
           Promise.all(createItin.create()).done(
             function(values) {
@@ -325,7 +345,7 @@ WebhookPostHandler.prototype.startPlanningTrip = function() {
         }
         catch(e) {
           logger.error(`Error creating itinerary for trip ${tripNameInContext}: ${e.stack}`);
-          // proceed to continue with other aspects of trip planning
+          // proceed to display trip details because other items might be available.
         }
         dtdCallback();
       },
@@ -371,7 +391,7 @@ function planNewTrip(userChoice) {
   logger.info("User wants to plan a new trip");
   if(userChoice.enter_details) {
     const messages = [
-      "Can you provide details about your trip: destination country, start date, duration (in days) as a comma separated list?",
+      "Can you provide details about your trip: destination city/country, start date, duration (in days) as a comma separated list?",
       "Example: India,11/01,20 or India,11/01/17,20"
     ];
     sendMultipleMessages(this.session.fbid, textMessages.call(this, messages));
@@ -392,14 +412,13 @@ function receivedPostback(event) {
   // button for Structured Messages. 
   let payload = event.postback.payload;
 
-  logger.info("Received postback for user %d, page %d, session %d at timestamp: %d. Payload: %s", senderID, recipientID, this.session.fbid, timeOfPostback, payload);
+  // logger.info("Received postback for user %d, page %d, session %d at timestamp: %d. Payload: %s", senderID, recipientID, this.session.fbid, timeOfPostback, payload);
 
   if(payload === "GET_STARTED_PAYLOAD") return sendWelcomeMessage.call(this, senderID); 
 
   // A pmenu, past_trips or a postback starting with "trip_in_context" is indicative of the beginning of a new state in the state machine. So, clear the session's "awaiting" states to indicate the beginning of a new state.
   this.sessionState.clearAll();
 
-  if(payload === "other_reminders") return otherReminders.call(this);
   if(payload === "mark_done") return sendMultipleMessages(this.session.fbid,
     textMessages.call(this, 
       [
@@ -465,7 +484,7 @@ function receivedPostback(event) {
   if(payload === "boarding_pass" || payload === "boarding pass") return sendBoardingPass.call(this);
   if(payload === "flight itinerary") return sendFlightItinerary.call(this);
   if(payload === "return flight") return sendReturnFlightDetails.call(this);
-  if(payload === "hotel details") return sendHotelItinerary.call(this);
+  if(payload.startsWith("hotel details")) return sendHotelItinerary.call(this, payload);
   if(payload.includes("-hotel-receipt")) return sendCityHotelReceipt.call(this, payload);
   if(payload === "car details") return sendCarReceipt.call(this);
   if(payload === "get receipt") return sendGeneralReceipt.call(this);
@@ -628,6 +647,7 @@ function sendGeneralReceipt(title) {
 function sendCarReceipt() {
   const fbid = this.session.fbid;
   const trip = this.session.tripData();
+  if(!fs.existsSync(trip.rentalCarReceiptFile())) return sendTextMessage(fbid, `No car receipt found for your trip ${trip.rawTripName}`);
   const details = JSON.parse(fs.readFileSync(trip.rentalCarReceiptFile(), 'utf8'));
 	const messages = [];
   messages.push({
@@ -711,13 +731,19 @@ function sendHotelReceiptMessage(fbid, details) {
   sendMultipleMessages(this.session.fbid, messages);
 }
 
-function sendHotelItinerary() {
+function sendHotelItinerary(payload) {
+  let hotelKey;
+  if(payload) {
+    const contents = /hotel details (.*)/.exec(payload);
+    if(contents) hotelKey = contents[1];
+  }
   const fbid = this.session.fbid;
   const trip = this.session.tripData();
 	const messages = [];
   const details = trip.getHotelReceiptDetails();
   if(!details) return sendTextMessage(fbid, `No hotel receipts for your ${trip.data.rawName} trip! If you have made hotel reservations, send receipt to TRIPS@MAIL.POLAAMA.COM`);
   const hotels = Object.keys(details);
+  if(hotelKey && details[hotelKey]) return sendHotelReceiptMessage.call(this, fbid, details[hotelKey]);
   if(hotels.length > 1) {
     logger.debug(`cities with hotels: ${hotels}`);
     messages.push({
@@ -730,17 +756,23 @@ function sendHotelItinerary() {
       }
     });
     const buttons = [];
-    hotels.forEach(list => {
-        buttons.push({
-          "type": "postback",
-          "title": `${list}`,
-          "payload": `${list}-hotel-receipt`
-        });
+    hotels.forEach((list,idx) => {
+      const j = parseInt(idx/3);
+      if(!buttons[j]) {
+        buttons[j] = [];
+      }
+      buttons[j].push({
+        "type": "postback",
+        "title": `${Encoder.decode(list)}`,
+        "payload": `${list}-hotel-receipt`
+      });
     });
     const elements = [];
-    elements.push({
-      title: "Hotel list",
-      buttons: buttons
+    buttons.forEach(buttonList => {
+      elements.push({
+        title: "Hotels",
+        buttons: buttonList
+      });
     });
     messages.push({
       recipient: {
@@ -819,6 +851,7 @@ WebhookPostHandler.prototype.createUrl = function(urlPath) {
 function sendUrl(urlPath) {
   return this.createUrl(urlPath);
 }
+WebhookPostHandler.prototype.sendUrl = sendUrl;
 
 function sendPastTrips() {
   // reset this sessions' context
@@ -832,7 +865,7 @@ function sendPastTrips() {
         type: "web_url",
         url:sendUrl.call(this, `${t.name}`),
         title: t.name,
-        webview_height_ratio: "compact",
+        webview_height_ratio: "full",
         messenger_extensions: true
       }]
     })
@@ -902,7 +935,7 @@ function sendTripButtons(addNewTrip) {
     }
     buttons[j].push({
       type: "postback",
-      title: `    ${t.rawName}`,
+      title: `    ${Encoder.decode(t.rawName)}`,
       payload: `trip_in_context ${t.name}`
     });
   });
@@ -1000,6 +1033,10 @@ function handleQuickReplies(quick_reply) {
     displayTripDetails.call(this);
     return true;
   }
+  if(payload === "qr_day_plan_") {
+    sendTextMessage(this.session.fbid, `Enter a day. Example: '3rd', '14', 'today', 'tomorrow', '9/3'`);
+    return true;
+  }
 
   // This quick reply came from the user typing "help" (see getHelpMessage)
   if(payload === "qr_existing_trips") {
@@ -1052,7 +1089,7 @@ function createNewTrip(tripDetails) {
 function extractNewTripDetails(messageText) {
 	// short-circuit parsing the input and validation if the data already existed.
 	if(this.session.previouslyEnteredTripDetails && this.session.previouslyEnteredTripDetails.tripStarted) {
-		logger.debug(`extractNewTripDetails: User previously entered trip information and the trip has already started. Creating new trip`);
+		// logger.debug(`extractNewTripDetails: User previously entered trip information and the trip has already started. Creating new trip`);
 		createNewTrip.call(this, this.session.previouslyEnteredTripDetails);
 		return;
 	}
@@ -1187,96 +1224,6 @@ function askBusiness() {
             "type": "web_url",
             "url": "https://www.tripadvisor.com/Restaurants-g189954-Akureyri_Northeast_Region.html",
             "title": "Options at Akureyri"
-          }]
-        }
-      }
-    }
-  };
-  return this.sendAnyMessage(message);
-}
-
-function otherReminders() {
-  const fbid = this.session.fbid;
-  const message = {
-    recipient: {
-      id: fbid
-    },
-    message: {
-      attachment: {
-        "type": "template",
-        payload: {
-          template_type: "list",
-          top_element_style: "compact",
-          elements: [{
-            "title": "Place to stay from 9/9 - 9/11 in northern Iceland",
-            "subtitle": "Click for hotel choices",
-            "image_url": "http://solvanes.is/wp-content/uploads/2016/11/7-26-1-960x447.jpg",
-            "default_action": {
-              "url": "https://polaama.com/aeXf/keflavik/diamond-circle/-/hotel-choices",
-              "webview_height_ratio": "full",
-              "type": "web_url"
-            },
-            "buttons": [
-            {
-              "title": "Mark Done",
-              "type": "postback",
-              "payload": "mark_done"
-            }]
-          },
-          {
-            "title": "Buy kid down jacket",
-            "image_url": "https://images-na.ssl-images-amazon.com/images/I/51FyvD0Z9mL._AC_US200_.jpg",
-            "subtitle": "Click for options",
-            "default_action": {
-              "url": "https://www.amazon.com/s/ref=nb_sb_noss_1?url=search-alias%3Daps&field-keywords=toddler+down+jacket",
-              "webview_height_ratio": "full",
-              "type": "web_url"
-            },
-            "buttons": [
-            {
-              "title": "Mark Done",
-              "type": "postback",
-              "payload": "mark_done"
-            }]
-          }]
-        }
-      }
-    }
-  };
-  return this.sendAnyMessage(message);
-}
-
-function expense() {
-  const fbid = this.session.fbid;
-  const message = {
-    recipient: {
-      id: fbid
-    },
-    message: {
-      attachment: {
-        type: "template",
-        payload: {
-          template_type: "list",
-          top_element_style: "compact",
-          elements: [{
-            "title": `You owe Arpan $1000`,
-            "subtitle": "Click for details",
-            "image_url": "http://cdn.quotesgram.com/small/11/46/1393139104-owe-money.jpg",
-            "default_action": {
-              "type": "web_url",
-              "url": `https://polaama.com/aeXf/iceland`,
-              "webview_height_ratio": "full"
-            }
-          },
-          {
-            "title": `Nabeel owes you $500`,
-            "subtitle": "Click for details",
-            "image_url": "http://cdn.quotesgram.com/img/39/48/1411713443-337ca6c595c8d0f0c4c288416b0da5f3.jpg",
-            "default_action": {
-              "type": "web_url",
-              "url": `https://polaama.com/aeXf/iceland`,
-              "webview_height_ratio": "full"
-            }
           }]
         }
       }
@@ -1450,6 +1397,8 @@ function determineResponseType(event) {
     return sendWelcomeMessage.call(this, senderID);
   }
 
+  if(mesg === "new trip" || mesg === "create new trip") return planNewTrip.call(this);
+
   if(event.message.quick_reply && handleQuickRepliesToPlanNewTrip.call(this, event.message.quick_reply)) return;
 
   // At this point, if no trip exists and it's not being planned, the user has entered something we don't understand. Simply send them the Welcome message.
@@ -1481,7 +1430,7 @@ function determineResponseType(event) {
 				}		
 				else {
 					logger.error(`determineResponseType: BUG! Session is in state awaitingUserConfirmation  but the mesg is not qr_yes or qr_no. It is ${userResponse}. This is unexpected`);
-					sendTextMessage(messagingEvent.sender.id,"Even bots need to eat! Be back in a bit..");
+					sendTextMessage(this.session.fbid,"Even bots need to eat! Be back in a bit..");
 					return;
 				}
 			}
@@ -1494,60 +1443,63 @@ function determineResponseType(event) {
       	}
 			}
 			catch(e) {
-				// Assume that the only exception being thrown now is UserConfirmation. Update if this changes in the future
-				logger.debug(`determineResponse type: error thrown ${e}; ${e.stack}`);
+				// Assume that the only exception being thrown now is UserConfirmation from extractNewTripDetails. Update if this changes in the future
+				logger.error(`determineResponse type: error thrown ${e}; ${e.stack}`);
 				this.sessionState.set("awaitingUserConfirmation");
 				sendYesNoButtons.call(this, e.message);
 				return;
 			}
     }
 
-    // 2) Get hometown if it's undefined and if the trip has not already started. If the trip has already started, we currently don't need it since the hometown is only needed for flight details currently
-    const thisTrip = this.session.tripData().data;
-    if(!this.session.hometown && !thisTrip.tripStarted) {
-      // TODO: If the hometown is defined, don't simply assume that to be the point of origin. Confirm with the user.
-      if(this.sessionState.get("awaitingHometownInfo")) {
-        // TODO: Validate hometown
-        this.session.persistHometown(messageText); 
-        this.sessionState.clear("awaitingHometownInfo");
-      }
-      else {
-        sendTextMessage(this.session.fbid, "What is your home city? We will use this as your trip's origin");
-        this.sessionState.set("awaitingHometownInfo");
+    // Step 2: Successfully parsed new trip details above. Now get the departure details.
+    const depCityWorkflow = new DepartureCityWorkflow(this, messageText, event.message.quick_reply);
+    const promiseOrBool = depCityWorkflow.set();
+    if(typeof promiseOrBool === "object") {
+      const self = this;
+      // promise. If we received a promise, then, no code can execute outside of the done function (because that will be executed immediately). This is the reason for the structure of the code.
+      promiseOrBool.done(function(response) {
+        // this indicates workflow completed work, so proceed to do other things.
+        if(response === false) return;
+        return handleAdditionalCommands.call(self, event, mesg);
+      },
+      function(err) {
+        logger.error(`determineResponseType: error in departure city workflow: ${err.stack}`);
         return;
-      }
+      });
     }
-  
-    // 3) If we already asked for cities, handle that and start planning. Else, get cities for the trip.
-    // TODO: Handle case where user does not yet know which cities they are going to!
-    if(this.sessionState.get("awaitingCitiesForNewTrip")) return getCityDetailsAndStartPlanningTrip.call(this, messageText);
+    // require additional information from user. So, short-circuit
+    else if(promiseOrBool === false) return;
+    // continue with other aspects of travel planning.
+    else if(promiseOrBool === true) {
+      return handleAdditionalCommands.call(this, event, mesg);
+    }
+  }
+  else return handleAdditionalCommands.call(this, event, mesg);
+}
 
-    const tripData = this.session.tripData();
-    if(!determineCities.call(this)) {
-      // ask user to enter cities and port of entry because we don't have that data yet.
-      const messages = [
-        `For your trip to ${tripData.data.country}, add cities and number of days in each city in the following format`,
-        `seattle(3),portland(4),sfo(5)`,
-        `The first city in your list will be the port of entry` 
-      ];
-      sendMultipleMessages(this.session.fbid, textMessages.call(this, messages));
-      this.sessionState.set("awaitingCitiesForNewTrip");
-      return;
-    }
-    else { 
-      // determineCities returned true, indicating that we have city list information
+function handleAdditionalCommands(event, mesg) {
+  const senderID = this.session.fbid;
+
+  if(this.sessionState.get('planningNewTrip')) {
+    // 3) If we already asked for cities, handle that and start planning. Else, get cities for the trip.
+    const destCityWorkflow = new DestinationCityWorkflow(this);
+    const result = destCityWorkflow.handleNewTrip(mesg);
+    if(result) {
       // End of new trip workflow. The workflow will complete when user selects cities (handled by determineCities function) and webpage-handler.js calls the startPlanningTrip method
       // TODO: Rather than let webpage-handler.js call startPlanning (and thus exposing this functionality there), consider calling startPlanningTrip from here.. The presence of tripData.data.cities can be a signal from webpage-handler.js's formParseCallback method that the cities were correctly chosen and added here.
       this.sessionState.clear("planningNewTrip");
-      this.sessionState.clear("awaitingCitiesForNewTrip");
-			// invalidate this trip in the session so that it will be fetched from a datastore.
-			this.session.invalidateTripData();
+      // invalidate this trip in the session so that it will be fetched from a datastore.
+      this.session.invalidateTripData();
+      // see if we have enough data to start planning a trip
+      if(this.session.tripData().cityItinDefined()) {
+        // logger.debug(`getCityDetailsAndStartPlanningTrip: cities available for trip ${tripData.rawTripName}. Start planning trip for customer ${this.session.fbid}`);
+        this.startPlanningTrip();
+      }
     }
+    // irrespective of the response from handleNewTrip, we are done handling this message from the user.
     return;
   }
-
-  logger.debug(`determineResponseType: Handling message <${mesg}>. Dump of session states: ${this.sessionState.dump()}`);
-
+  // logger.debug(`determineResponseType: Handling message <${mesg}>. Dump of session states: ${this.sessionState.dump()}`);
   if(this.sessionState.get("awaitingCitiesForExistingTrip")) return getCityDetailsAndStartPlanningTrip.call(this, messageText, true /* existing trip */);
 
   if(this.session.expenseReportWorkflow) {
@@ -1599,7 +1551,7 @@ function determineResponseType(event) {
     sendUrlButton.call(this, "Get Todo list", tripData.todoUrlPath());
     return;
   }
-  if(mesg.startsWith("get expense")) {
+  if(mesg.startsWith("get expense") || mesg.startsWith("expense")) {
     sendUrlButton.call(this, "Get expense report", tripData.expenseReportUrlPath());
     return;
   }
@@ -1650,12 +1602,15 @@ function determineResponseType(event) {
     const result = commands.handleMealsCommand(mesg);
     if(result) return callSendAPI(result);
   }
-
   logger.debug(`determineResponseType: Did not understand the context of message <${mesg}>. Dump of session states: ${this.sessionState.dump()}`);
   // We don't understand the text sent. Simply present the options we present on "getting started".
   return callSendAPI(getHelpMessageData.call(this, senderID, "Hi, I did not understand what you said. I can help you with the following."));
   
   // ****** INTENTIONALLY UNREACHABLE CODE 
+  intentionallyUnreachableCode.call(this, senderID);
+}
+
+function intentionallyUnreachableCode(senderID) {
   const humanContext = this.session.humanContext();
   logger.info("determineResponseType: human context: ",JSON.stringify(humanContext));
   if(senderID != humanContext.fbid) {
@@ -1685,8 +1640,8 @@ function supportedCommands(moreElements) {
   if(!moreElements) {
     message.message.attachment.payload.elements = [
       {
-        "title": "To get detailed plan for a specific day",
-        "subtitle": "Type a date. Eg. '13th', '14', 'today', 'tomorrow'",
+        "title": "To get plans for a specific day",
+        "subtitle": "Type a date in the trip. Eg. '13th', '14', 'today'"
       },
       {
         "title": "To enter a recommendation request",
@@ -1709,29 +1664,33 @@ function supportedCommands(moreElements) {
     return callSendAPI(message);
   }
   message.message.attachment.payload.elements = [
-      {
-        "title": "To get rental car details about your current trip",
-        "subtitle": "Type 'car'"
-      },
-  {
-    "title": "To see your entire trip calendar",
-    "subtitle": "Type 'calendar'"
-  },
-  {
-    "title": "To see running trail recommendations",
-    "subtitle": "Type 'trails' or 'running'"
-  },
-  {
-    "title": "To see restaurant recommendations",
-    "subtitle": "Type 'vegetarian reco','veg reco','vegetarian restaurants' or 'veg rest'"
-  }
+    {
+      "title": "To get rental car details about your current trip",
+      "subtitle": "Type 'car'"
+    },
+    {
+      "title": "To see your entire trip calendar",
+      "subtitle": "Type 'calendar'"
+    },
+    {
+      "title": "To see trip dates",
+      "subtitle": "Type 'dates'"
+    },
+    {
+      "title": "To add or get details from current trip",
+      "subtitle": "Type 'get' or 'add'"
+    }
+    /*
+    {
+      "title": "To see running trail recommendations",
+      "subtitle": "Type 'trails' or 'running'"
+    },
+    {
+      "title": "To see restaurant recommendations",
+      "subtitle": "Type 'vegetarian reco','veg reco','vegetarian restaurants' or 'veg rest'"
+    },
+    */
   ];
-  /*
-  {
-    "title": "To see trip dates",
-    "subtitle": "Type 'dates'"
-  }
-  */
   return callSendAPI(message);
 }
 
@@ -2057,7 +2016,7 @@ function determineCities(existingTrip) {
               type:"web_url",
               url: sendUrl.call(this, `${trip.data.name}/${uri}`),
               title:"Cities",
-              webview_height_ratio: "compact",
+              webview_height_ratio: "full",
               messenger_extensions: true,
             }]
           }]
@@ -2088,7 +2047,7 @@ function determineTravelCompanions() {
               type:"web_url",
               url: sendUrl.call(this, "friends"),
               title:"Choose Friends",
-              webview_height_ratio: "compact",
+              webview_height_ratio: "full",
               messenger_extensions: true,
               fallback_url: sendUrl.call(this, `${trip.data.name}/friends`)
             }]
@@ -2171,6 +2130,11 @@ function sendAddOrGetOptions() {
           content_type: "text",
           title: "Get ...",
           payload: "qr_get_"
+        },
+        {
+          content_type: "text",
+          title: "Day plan",
+          payload: "qr_day_plan_"
         }
       ]
     }
@@ -2379,6 +2343,7 @@ WebhookPostHandler.prototype.getTextMessageData = getTextMessageData;
 function sendTextMessage(senderID, messageText) {
   callSendAPI(getTextMessageData(senderID, messageText));
 }
+WebhookPostHandler.prototype.sendTextMessage = sendTextMessage;
 
 WebhookPostHandler.prototype.sendAnyMessage = function(message) {
   callSendAPI(message);
@@ -2397,6 +2362,7 @@ function textMessages(messages) {
   return fbMessages;
 }
 
+WebhookPostHandler.prototype.textMessages = textMessages;
 WebhookPostHandler.prototype.sendMultipleMessages = sendMultipleMessages;
 
 // send messages strictly one after another
@@ -2444,7 +2410,7 @@ function callSendAPI(messageData) {
      // TODO: If there was an error in sending an intercept message to a human, then send a push notification to the original sender that we are having some technical difficulty and will respond to them shortly.
     if(response.statusCode != 200) {
       logger.error(`Unable to send message ${JSON.stringify(messageData)}. status code is ${response.statusCode}.`);
-      logger.error(`Error is ${response.body["error"]}`);
+      logger.error(`Error is ${JSON.stringify(response.body["error"])}`);
       if(response.body && response.body.error) logger.error(`Continuation of above message: Message from FB is <${response.body.error.message}>; Error type: ${response.body.error.type}`);
       else if(response.body) logger.error(`Continuation of above message: response.body.error is undefined. response.body dump: ${JSON.stringify(response.body)}`);
       else logger.error(`Continuation of above message: response.body is undefined. response dump: ${JSON.stringify(response)}`);
@@ -2457,7 +2423,6 @@ WebhookPostHandler.prototype.testing_determineResponseType = determineResponseTy
 WebhookPostHandler.prototype.testing_createNewTrip = createNewTrip;
 WebhookPostHandler.prototype.testing_displayTripDetails = displayTripDetails;
 WebhookPostHandler.prototype.testing_receivedPostback = receivedPostback;
-
 
 WebhookPostHandler.prototype.testing_setState = function(sessionState) {
   this.sessionState = sessionState;

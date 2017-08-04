@@ -10,53 +10,50 @@ const request = require('request');
 const SecretManager = require('secret-manager/app/manager');
 const _ = require('lodash');
 const fs = require('fs');
+const AirportCodes = require('trip-flights/app/airport-codes');
 require('promise/lib/rejection-tracking').enable(
   {allRejections: true}
 );
+
+const airportCodes = new AirportCodes();
 
 function BrowseQuotes(origCity, destCity, startDate, returnDate) {
   if(!origCity || !destCity || !startDate || !returnDate) throw new Error(`BrowseQuotes: One or more of required arguments origCity, destCity, startDate, returnDate missing. cannot proceed.`);
   this.origCity = origCity;
   this.destCity = destCity;
-  this.origCode = new IataCodeGetter(origCity).getCodeSync();
-  this.destCode = new IataCodeGetter(destCity).getCodeSync();
   this.startDate = startDate;
   this.returnDate = returnDate;
+  this.promise = airportCodes.promise;
+}
+
+function getAirportCode(city) {
+  if(city.length === 3) {
+    // logger.debug(`getAirportCode. passed city ${city} is potentially an airport code`);
+    const actualCity = airportCodes.getCity(city); 
+    if(actualCity) return city; // this means that the passed city was actually a code. simply return that.
+  }
+  // logger.debug(`trying to get code for city ${city}`);
+  return airportCodes.getCode(city);
+}
+
+BrowseQuotes.prototype.quoteExists = function() {
+  if(fs.existsSync(getQuoteExistsFile.call(this))) return true;
+  return false;
 }
 
 BrowseQuotes.prototype.getCachedQuotes = function() {
   const self = this;
-  return new Promise(
-    function(fulfil, reject) {
-      (new IataCodeGetter(self.origCity)).getCode(
-        function(result) {
-          if(result instanceof Error) return reject(result);
-          self.origCode = result;
-          fulfil(true); 
-        });
-    }
-  ).then(
-    function(result) {
-      return new Promise(
-        function(fulfil, reject) {
-          (new IataCodeGetter(self.destCity)).getCode(
-            function(result) {
-              if(result instanceof Error) return reject(result);
-              self.destCode = result;
-              if(!self.origCode || !self.destCode) {
-                // no point in proceeding if either dest or orig code is missing.
-                logger.warn(`getCachedQuotes: either origCode or destCode is undefined [origCode: ${self.origCode}; destCode: ${self.destCode}]. Not proceeding with getting flight details!`);
-                return reject(new Error(`Either origCode or destCode is undefined`));
-              }
-              fulfil(result);
-            }
-          );
-        }
-      );  
+  return this.promise.then(
+    function(response) {
+      self.origCode = getAirportCode(self.origCity);
+      if(!self.origCode) return Promise.reject(new Error(`BrowseQuotes: could not find code for original city ${self.origCity}`));
+      self.destCode = getAirportCode(self.destCity);
+      if(!self.destCode) Promise.reject(new Error(`BrowseQuotes: could not find code for destination city ${self.destCode}`));
+      return Promise.resolve("success");
     },
     function(err) {
-      logger.error(`first promise failed: error: ${err.stack}`);
-      throw err;
+      logger.error(`getCachedQuotes: first promise failed. ${err.stack}`);
+      return Promise.reject(err);
     }
   ).then(
     function(result) {
@@ -68,7 +65,7 @@ BrowseQuotes.prototype.getCachedQuotes = function() {
         const diffInMinutes = (Date.now()-ctime)/(1000*60);
         if(diffInMinutes < maxAgeInMinutes) { // file's age is less than maxAge
           // logger.info(`getCachedQuotes: file ${file} was created ${diffInMinutes} minutes ago, which is less than ${maxAgeInMinutes} minutes. done!`);
-          return true;
+          return Promise.resolve(true);
         }
         logger.info(`getCachedQuotes: file ${file} exists but it is older than ${maxAgeInMinutes} minutes (${diffInMinutes} minutes). Calling skyscanner API`);
       }
@@ -76,69 +73,92 @@ BrowseQuotes.prototype.getCachedQuotes = function() {
     },
     function(err) {
       logger.error(`getCachedQuotes: second promise failed: ${err.stack}`);
-      throw err;
+      return Promise.reject(err);
     }
   );
 }
 
 function getQuotesFromSkyscanner() {
   const self = this;
-  return new Promise(function(fulfil, reject) {
-    const uri = "http://partners.api.skyscanner.net/apiservices/browsequotes/v1.0/US/USD/en-US"
-              .concat(`/${self.origCode}`)
-              .concat(`/${self.destCode}`)
-              .concat(`/${self.startDate}`)
-              .concat(`/${self.returnDate}`);
-    request({
-      uri: uri,
-      headers: { Accept: "application/json" },
-      qs: { apiKey: (new SecretManager()).getSkyscannerApiKey() }
-    }, function(err, res, body) {
-      if(!_.isUndefined(err) && !_.isNull(err)) {
-        logger.error(`Error talking to skyscanner: ${err}`);
-        return reject(err);
-      }
-      if(res.statusCode == "200") {
-        return fulfil(body);
-      }
-      logger.error(`getQuotesFromSkyscanner: skyscanner api returned a non-20X status code: res is ${JSON.stringify(res)}`);
-      reject(new Error(`skyscanner api returned status code ${res.statusCode}. Link is ${res.href}`));
-    });
-  }).then(
-    function(contents) {
-      if(!contents) throw new Error(`getQuotesFromSkyscanner: response body is undefined`);
+  return this.promise.then(
+    function(response) {
       return new Promise(function(fulfil, reject) {
-        fs.writeFile(getFileName.call(self), contents, 
-          function(err, res) {
-            if(err) return reject(new Error(err));
-            fulfil(true);
+        const uri = "http://partners.api.skyscanner.net/apiservices/browsequotes/v1.0/US/USD/en-US"
+                  .concat(`/${self.origCode}`)
+                  .concat(`/${self.destCode}`)
+                  .concat(`/${self.startDate}`)
+                  .concat(`/${self.returnDate}`);
+        request({
+          uri: uri,
+          headers: { Accept: "application/json" },
+          qs: { apiKey: (new SecretManager()).getSkyscannerApiKey() }
+        }, function(err, res, body) {
+          if(!_.isUndefined(err) && !_.isNull(err)) {
+            logger.error(`Error talking to skyscanner: ${err}`);
+            const file = getQuoteExistsFile.call(self);
+            if(fs.existsSync(file)) fs.unlinkSync(file);
+            return reject(err);
           }
-        );
-      });
+          if(res.statusCode == "200") return fulfil(body);
+          logger.error(`getQuotesFromSkyscanner: skyscanner api returned a non-20X status code: res is ${JSON.stringify(res)}`);
+          return reject(new Error(`skyscanner api returned status code ${res.statusCode}. Link is ${res.href}`));
+        });
+      }).then(
+        function(contents) {
+          if(!contents) return Promise.reject(new Error(`getQuotesFromSkyscanner: response body is undefined`));
+          return new Promise(function(fulfil, reject) {
+            // a hack to work around the fact that buttons-placement.js does not use Promise and we don't want to use promises just to see if a quote exists for a given trip.
+            fs.writeFileSync(getQuoteExistsFile.call(self), `quote from ${self.origCity} to ${self.destCity} on ${this.startDate} exists`);
+            logger.debug(`getQuotesFromSkyscanner: created file ${getQuoteExistsFile.call(self)}`);
+            fs.writeFile(getFileName.call(self), contents, 
+              function(err, res) {
+                if(err) reject(new Error(err));
+                else fulfil(true);
+              }
+            );
+          });
+        },
+        function(err) {
+          logger.error(`third promise failed: ${err.stack}`);
+          return Promise.reject(err);
+        }
+      );
     },
     function(err) {
-      logger.error(`third promise failed: ${err.stack}`);
-      throw err;
+      logger.error(`getting airport codes promise failed: ${err.stack}`);
+      return Promise.reject(err);
     }
-  );
+  ).catch(function(err) {
+    logger.error(`promises catch-all function. error: ${err.stack}`);
+    // delete the file created below to indicate that quote exists.
+    const file = getQuoteExistsFile.call(self);
+    if(fs.existsSync(file)) fs.unlinkSync(file);
+  });
 }
 
 BrowseQuotes.prototype.getStoredQuotes = function() {
-  const file = getFileName.call(this);
   const self = this;
-  return new Promise(
-    function(fulfil, reject) {
-      fs.readFile(file, (err, contents) => {
-        if(err) { 
-          logger.error(`getStoredQuotes: Error from response: ${err}`); 
-          return reject(err);
+  return this.promise.then(
+    function(response) {
+      const file = getFileName.call(this);
+      return new Promise(
+        function(fulfil, reject) {
+          fs.readFile(file, (err, contents) => {
+            if(err) { 
+              logger.error(`getStoredQuotes: Error from response: ${err}`); 
+              return reject(err);
+            }
+            fulfil(JSON.parse(contents));
+          });
         }
-        fulfil(JSON.parse(contents));
-      });
+      ).then(
+        function(storedQuoteContents) { return parseQuoteContents.call(self, storedQuoteContents); },
+        function(err) { return Promise.reject(err); }
+      );
+    },
+    function(err) {
+      return Promise.reject(err); 
     }
-  ).then(
-    function(contents) { return parseQuoteContents.call(self, contents); },
-    function(err) { throw new Error(err); }
   );
 }
 
@@ -279,6 +299,12 @@ function getCarrierName(id) {
 
 function getFileName() {
   return `${baseDir}/flights/${this.origCode}to${this.destCode}on${this.startDate}-cached.txt`;
+}
+
+function getQuoteExistsFile() {
+  const file = `${baseDir}/flights/${this.origCity}-${this.destCity}-${this.startDate}-quote.txt`;
+  logger.debug(`getQuoteExistsFile: file is ${file}`);
+  return file;
 }
 
 /***** TESTING ****/

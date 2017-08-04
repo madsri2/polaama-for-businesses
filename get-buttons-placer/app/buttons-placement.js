@@ -1,6 +1,8 @@
 'use strict';
 const baseDir = '/home/ec2-user';
 const logger = require(`${baseDir}/my-logger`);
+const WeatherInfoProvider = require(`${baseDir}/weather-info-provider`);
+const BrowseQuotes = require(`trip-flights/app/browse-quotes`);
 
 function ButtonsPlacement(urlPrefix, trip) {
   if(!urlPrefix) throw new Error(`ButtonsPlacement: required parameter urlPrefix is missing`);
@@ -127,24 +129,26 @@ ButtonsPlacement.prototype.getPlacement = function() {
   const expenseButton = {
     type: "web_url",
   	url: url(this.urlPrefix, `${this.tripName}/expense-report`),
-    title: "  Expense report",
-    webview_height_ratio: "compact",
+    title: "Expense report",
+    webview_height_ratio: "full",
     messenger_extensions: true
   };
   if(this.trip.getTravelers()) buttons.push(expenseButton);
   // flight quote only if there is no flight details
-  /*
-	if(!fs.existsSync(this.trip.itineraryFile())) buttons.push({
-    type: "web_url",
-  	url: url(this.urlPrefix, `${this.trip.flightQuoteUrlPath()}`),
-    title:"Flight",
-    webview_height_ratio: "compact",
-    messenger_extensions: true
-  });
-  */
-	// buttons.push(weather);
+	if(!fs.existsSync(this.trip.itineraryFile())) {
+  const quotes = new BrowseQuotes(this.trip.data.leavingFrom, this.trip.getPortOfEntry(), this.trip.data.startDate, this.trip.data.returnDate);
+    if(quotes.quoteExists()) buttons.push({
+      type: "web_url",
+    	url: url(this.urlPrefix, `${this.trip.flightQuoteUrlPath()}`),
+      title:"Flight",
+      webview_height_ratio: "full",
+      messenger_extensions: true
+    });
+  }
+  const wip = new WeatherInfoProvider(this.trip.data.country, this.trip.getPortOfEntry(), this.trip.data.startDate);
+	if(wip.weatherInfoExists()) buttons.push(weather);
   // only add this button if there is another button in the third panel. This is done in order to get the buttons to show vertically (which depends on the title length).
-  if(buttons.length > 6 && buttons.length < 9) buttons.push({
+  if((buttons.length > 3 && buttons.length < 6) || (buttons.length > 6 && buttons.length < 9)) buttons.push({
     type: "web_url",
   	url: url(this.urlPrefix, `${this.tripName}`),
     title: "All Trip Details", 

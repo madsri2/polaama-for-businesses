@@ -28,7 +28,7 @@ Sessions.prototype.findOrCreate = function(fbid) {
   let sessionId = findSessionId.call(this,fbid);
   if (_.isNull(sessionId)) {
     // No session found for user fbid, let's create a new one
-    logger.info("Creating a new session for ",fbid);
+    // logger.info("Creating a new session for ",fbid);
     sessionId = new Date().toISOString() + "-" + fbid;
     this.sessions[sessionId] = new Session(fbid, sessionId);
     // persist new session for later use
@@ -89,7 +89,7 @@ function findSessionId(fbid) {
     // const session = Sessions.retrieveSession(fbid);
     const session = new Session(fbid); // see if the sessionId can be obtained from persistent store
     if(!session.synced) {
-      logger.warn(`session for ${fbid} does not exist in sessions object and in file.`);
+      // logger.warn(`session for ${fbid} does not exist in sessions object and in file.`);
       return null;
     }
     else {

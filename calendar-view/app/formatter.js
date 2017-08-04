@@ -29,7 +29,7 @@ FormatCalendar.prototype.formatForMobile = function() {
   const weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
   try {
     const html = fs.readFileSync(`${htmlBaseDir}/mobile-itinerary-view.html`, 'utf8');
-    logger.debug(`formatForMobile: There are ${Object.keys(this.itinDetails).length} days in itinerary`);
+    // logger.debug(`formatForMobile: There are ${Object.keys(this.itinDetails).length} days in itinerary`);
     let itinView = "";
     let fullJs = "";
     Object.keys(this.itinDetails).forEach(day => {

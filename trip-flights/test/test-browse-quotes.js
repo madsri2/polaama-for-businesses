@@ -1,4 +1,6 @@
 'use strict';
+
+const moment = require('moment');
 const baseDir = "/home/ec2-user";
 const logger = require(`${baseDir}/my-logger`);
 logger.setTestConfig();
@@ -11,17 +13,18 @@ const Promise = require('promise');
 const cachedFile = "/home/ec2-user/flights/SFOtoAUSon2017-08-01-cached.txt";
 
 describe("Browse Quotes tests", function() {
-
   it("testing cached quotes", function(done) {
     // delete file to force a skyscaner uri call
     if(fs.existsSync(cachedFile)) fs.unlinkSync(cachedFile);
     this.timeout(5000); // mocha's timeout
-    const promise = (new BrowseQuotes("san francisco", "austin", "2017-08-01", "2017-08-08")).getCachedQuotes();
-    promise.then(
+    const startDate = moment().add(7, 'days').format("YYYY-MM-DD");
+    const returnDate = moment().add(14, 'days').format("YYYY-MM-DD");
+    const promise = (new BrowseQuotes("san francisco", "austin", startDate, returnDate)).getCachedQuotes();
+    promise.done(
       function(result) { 
         logger.debug(`Result from browse quotes: ${result}`); 
         expect(result).to.be.ok;
-        expect(fs.existsSync(cachedFile)).to.be.ok;
+        expect(fs.existsSync(cachedFile)).to.be.true;
         done();
       },
       function(err) {

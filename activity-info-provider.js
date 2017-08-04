@@ -119,7 +119,7 @@ function extractActivityDetails(key) {
 function determineResponse() {
   if(this.count == Object.keys(this.activities).length) {
     if(this.links.length == 0) {
-      logger.warn("determineResponse: No links found from any of the files");
+      // logger.warn("determineResponse: No links found from any of the files");
       return this.callback([`No activity information available for ${this.city}`]);
     }
     return this.callback(this.links);

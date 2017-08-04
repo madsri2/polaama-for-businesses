@@ -207,17 +207,11 @@ TripData.prototype.addTripDetailsAndPersist = function(tripDetails) {
   this.data.name = this.tripName;
   this.data.rawName = this.rawTripName;
   if(tripDetails.leavingFrom) this.data.leavingFrom = myEncode(tripDetails.leavingFrom);
-  if(tripDetails.destination) {
-    this.data.country = myEncode(tripDetails.destination);
-    this.country = new Country(tripDetails.destination);
-  }
+  // destination might be different from trip name. Also, destination might be city or country. That determination is made and appropriate values are set in destination-cities-workflow/app/workflow.js
+  if(tripDetails.destination) this.data.destination = tripDetails.destination;
   // TODO: The date format needs to be identified and converted to the needed format.
-  if(tripDetails.datetime) {
-    this.data.startDate = tripDetails.datetime;
-  }
-  else if(tripDetails.startDate) {
-    this.data.startDate = tripDetails.startDate;
-  }
+  if(tripDetails.datetime) this.data.startDate = tripDetails.datetime;
+  else if(tripDetails.startDate) this.data.startDate = tripDetails.startDate;
 	let sdIso = null;
   if(this.data.startDate) {
     sdIso = new Date(this.data.startDate).toISOString();
@@ -245,6 +239,12 @@ TripData.prototype.addTripDetailsAndPersist = function(tripDetails) {
   this.persistUpdatedTrip();
 }
 
+// Set the correct departure city (leavingFrom) for this trip. Users might have passed an airport code or city. Figure out which and store it accordingly.
+TripData.prototype.persistDepartureCity = function(city) {
+  this.data.leavingFrom = myEncode(city); 
+  this.persistUpdatedTrip();
+}
+
 TripData.prototype.setCountry = function(country) {
   this.data.country = myEncode(country);
   this.country = new Country(country);
@@ -269,7 +269,8 @@ TripData.prototype.setReturnDate = function(date) {
 TripData.prototype.addPortOfEntry = function(portOfEntry) {
   // this is needed for getting flight details.
   if(portOfEntry) this.data.portOfEntry = myEncode(portOfEntry);
-  else return logger.warn("addPortOfEntry: passed value portOfEntry is undefined. doing nothing!");
+  // else return logger.warn("addPortOfEntry: passed value portOfEntry is undefined. doing nothing!");
+  else return;
 	if(!this.data.cities) this.data.cities = [];
   this.data.cities.push(myEncode(portOfEntry));
 	// logger.debug(`addPortOfEntry: Added ${portOfEntry} as port of entry`);
@@ -313,6 +314,10 @@ TripData.prototype.addCityItinerary = function(cities, numOfDays) {
   // logger.debug(`addCityItinerary: City itinerary is ${JSON.stringify(this.data.cityItin)}`);
   // logger.debug(`addCityItinerary: City list is ${this.data.cities}`);
   this.persistUpdatedTrip();
+}
+
+TripData.prototype.cityItinDefined = function() {
+  return (this.data.cityItin) ? true : false;
 }
 
 function todoFile() {
@@ -614,7 +619,7 @@ function createTodoList() {
   this.data.todoList.push("Flight tickets");
   this.data.todoList.push("Place to stay");
   this.data.todoList.push("Rental car");
-  this.data.todoList.push("[US Citizens only] Enroll in STEP (https://step.state.gov/step/) to get travel alerts and warnings.");
+  if(this.data.country && this.data.country !== "usa" && this.data.country !== "united_states" && this.data.country !== "us") this.data.todoList.push("[US Citizens only] Enroll in STEP (https://step.state.gov/step/) to get travel alerts and warnings.");
   if(visaRequirements[this.data.country]) this.data.todoList.push(visaRequirements[this.data.country]);
 }
 
@@ -773,6 +778,7 @@ TripData.prototype.generalReceiptFile = function(title) {
 TripData.prototype.getHotelReceiptDetails = function() {
   if(this.hotelReceiptDetails) return this.hotelReceiptDetails;
   const file = this.hotelRentalReceiptFile();
+  // logger.debug(`getHotelReceiptDetails: hotel file is ${file}`);
   if(!fs.existsSync(file)) {
     this.hotelReceiptDetails = null;
     return null;
@@ -817,7 +823,7 @@ function filename() {
 TripData.prototype.testing_delete = function() {
   fs.readdirSync(this.tripBaseDir).forEach(file => {
     if(!file.includes(this.data.name)) return;
-    logger.debug(`moving file ${file} to oldFiles`);
+    // logger.debug(`moving file ${file} to oldFiles`);
     const targetDir = `${this.tripBaseDir}/oldFiles`;
     if(!fs.existsSync(targetDir)) fs.mkdirSync(targetDir);
     fs.renameSync(`${this.tripBaseDir}/${file}`, `${targetDir}/${file}`);

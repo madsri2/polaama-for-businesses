@@ -193,14 +193,14 @@ function setTripMonthAndYear(date) {
   if(dateInSdMonth.isBetween(sdMoment, rdMoment) || dateInSdMonth.isSame(sdMoment)) {
     this.tripYear = sdYear;
     this.tripMonth = sdMonth;
-    logger.debug(`setTripMonthAndYear: Set month of the trip to ${this.tripMonth} and year to ${this.tripYear}`);
+    // logger.debug(`setTripMonthAndYear: Set month of the trip to ${this.tripMonth} and year to ${this.tripYear}`);
     return;
   }
   const dateInRdMonth = new moment(new Date(rdYear,rdMonth,date));
   if(dateInRdMonth.isBetween(sdMoment, rdMoment) || dateInRdMonth.isSame(rdMoment)) {
     this.tripYear = rdYear;
     this.tripMonth = rdMonth;
-    logger.debug(`setTripMonthAndYear: Set month of the trip to ${this.tripMonth} and year to ${this.tripYear}`);
+    // logger.debug(`setTripMonthAndYear: Set month of the trip to ${this.tripMonth} and year to ${this.tripYear}`);
     return;
   }
 
@@ -303,7 +303,7 @@ function setDateIfValid(passedCommand) {
       if(!this.tripMonth && !this.tripYear) return false;
       if(!Array.isArray(this.tripMonth) && !Array.isArray(this.tripYear)) {
         this.date = new Date(this.tripYear, this.tripMonth, contents[1]);
-        logger.debug(`setDateIfValid: Matched [date]. contents: [${contents}] set date to be (${this.date})`);
+        // logger.debug(`setDateIfValid: Matched [date]. contents: [${contents}] set date to be (${this.date})`);
         return true;
       }
       // the month or year spans multiple years. Get the appropriate month.
@@ -544,7 +544,7 @@ function getDayItinerary() {
   const dayPlanner = new DayPlanner(this.date, this.trip, this.fbid); 
   const dateStr = CreateItinerary.formatDate(this.date);
   if(!this.sendHtml && listFormatAvailable(this.date)) {
-    logger.debug(`getDayItinerary: Sending list view format for date ${dateStr}`);
+    // logger.debug(`getDayItinerary: Sending list view format for date ${dateStr}`);
     const dayAsList = dayPlanner.getPlanAsList(this.setNum);
     // logger.debug(`getDayItinerary: dayAsList dump: ${JSON.stringify(dayAsList)}`);
     if(dayAsList) return dayAsList;

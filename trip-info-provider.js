@@ -18,7 +18,7 @@ function TripInfoProvider(tripData, departureCity) {
     this.tripInfoDetails = JSON.parse(fs.readFileSync(this.trip.tripDataFile(),'utf8'));
   }
   catch(err) {
-    logger.info(`could not read trip details from file ${this.trip.tripDataFile()}. ${err.message}. This might just mean that we have not done any planning for this trip yet.`);
+    // logger.info(`could not read trip details from file ${this.trip.tripDataFile()}. ${err.message}. This might just mean that we have not done any planning for this trip yet.`);
     this.tripInfoDetails = {};
     this.tripInfoDetails.cities = {};
   }
@@ -163,6 +163,7 @@ TripInfoProvider.prototype.getFlightQuotes = function() {
       return Promise.resolve(true);
     }
     const browseQuotes = new BrowseQuotes(this.departureCity, tripData.portOfEntry, tripData.startDate, tripData.returnDate);
+    // logger.debug(`getFlightQuotes: orig code: ${this.departureCity}, dest: ${tripData.portOfEntry}`);
     return browseQuotes.getCachedQuotes();
   }
   catch(e) {
@@ -209,19 +210,19 @@ function getActivityForCity(city, index, callback) {
     // logger.debug(`getActivityForCity: Activities available for city ${city}. Doing nothing more for this city`);
     // handle case where we have gathered data for all cities. TODO: Do we need this check in both places (here and in the callback function below)?
     if(citiesWithActivities(details.cities) === cities.length) {
-      logger.info("getActivityForCity: obtained activities for all cities. invoking callback");
+      // logger.info("getActivityForCity: obtained activities for all cities. invoking callback");
       return callback();
     }
     return;
   }
+  // logger.debug(`getActivityForCity: About to call ActivityInfoProvider to get activities for city ${city} in country ${this.trip.data.country} with startDate: ${this.trip.data.startDate}`);
   const aip = new ActivityInfoProvider(this.trip.data.country, city, this.trip.data.startDate);
-  // logger.debug(`getActivityForCity: About to call ActivityInfoProvider to get activities for city ${city}`);
   aip.getActivities(function(activityDetails) {
     if(activityDetails) cityDetails.activities = activityDetails;
     // handle case where we have gathered data for all cities.
     const numCitiesWithActivities = citiesWithActivities(details.cities);
     if(numCitiesWithActivities === cities.length) {
-      logger.info(`getActivities: gathered activities for all ${numCitiesWithActivities} cities. Persisting data to file ${dataFile} and invoking callback`);
+      // logger.info(`getActivities: gathered activities for all ${numCitiesWithActivities} cities. Persisting data to file ${dataFile} and invoking callback`);
       try {
         fs.writeFileSync(dataFile, JSON.stringify(details));
       }

@@ -130,7 +130,7 @@ function sync() {
       logger.error("error reading from ", file, err.stack);
     }
   }
-  catch(err) { logger.warn(`sync: file ${file} cannot be accessed (it is possible that this session never existed): ${err.message}`); }
+  catch(err) { } // logger.warn(`sync: file ${file} cannot be accessed (it is possible that this session never existed): ${err.message}`); }
 }
 
 Session.prototype.persistSession = function() {

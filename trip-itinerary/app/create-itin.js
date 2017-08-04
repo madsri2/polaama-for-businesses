@@ -226,12 +226,13 @@ function setWeatherDetails(itinDate, country, cityList) {
         weather.max_temp = weatherDetails.max_temp;
         weather.chanceofrain = weatherDetails.chanceofrain;
         weather.cloud_cover = weatherDetails.cloud_cover;
+        weather.city = city; // always set the city associated with this weather
         const itin = self.itin[formatDate(itinDate)];
         if(cities.length > 1) { // multiple cities
           if(!itin.weather) {
             itin.weather = [];
           }
-          weather.city = city; // this way, if we don't get weather for one city, the formatter will know which city's weather has been recorded. see calendar-view/app/formatter.js
+          // weather.city = city; // this way, if we don't get weather for one city, the formatter will know which city's weather has been recorded. see calendar-view/app/formatter.js
           itin.weather.push(weather);
         }
         else {
