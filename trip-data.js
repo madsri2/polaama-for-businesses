@@ -32,9 +32,6 @@ function TripData(rawTripName, fbid, testFbidFile) {
   else {
     if(this.data.country) this.country = new Country(this.data.country);
   }
-  this.sharedFilesBaseDir = `${baseDir}/trips/shared`;
-  this.tripSharedFilesBaseDir = `${this.sharedFilesBaseDir}/${this.data.name}`;
-  if(!fs.existsSync(this.tripSharedFilesBaseDir)) fs.mkdirSync(this.tripSharedFilesBaseDir);
 	updateTripItineraries.call(this);
 }
 
@@ -111,28 +108,23 @@ TripData.prototype.getInfoFromTrip = function(tripKey) {
   return trip[tripKey];
 }
 
-function moveToPackList(items, target) {
-  if(!items) return target;
-  if(!target) return items;
-  items.forEach(item => {
-    if(!target.includes(item)) target.push(item);
-  });
-  return target;
-}
-
 TripData.prototype.getPackList = function() {
   // retrieve latest data
   this.retrieveTripData();
   const trip = this.data;
   const file = packListFile.call(this);
   let packList = (fs.existsSync(file)) ? JSON.parse(fs.readFileSync(file, 'utf8')) : undefined;
-  if(!packList) packList = {};
+  if(!packList) {
+    packList = {};
+    packList.toPack = [];
+    packList.done = [];
+  }
   // For backwards compatibility, look for pack-list in the trip file as well.
   if(trip.packList) {
-    packList.toPack = moveToPackList(trip.packList.toPack, packList.toPack);
-    packList.done = moveToPackList(trip.packList.done, packList.done);
+    packList.toPack = moveLists(trip.packList.toPack, packList.toPack);
+    packList.done = moveLists(trip.packList.done, packList.done);
     // update pack-list file if any data was obtained from the trip file. then, delete trip file.
-    if(packList.toPack || packList.done) fs.writeFileSync(packListFile.call(this), JSON.stringify(packList));
+    if(packList.toPack || packList.done) fs.writeFileSync(file, JSON.stringify(packList));
     delete trip.packList;
     this.persistUpdatedTrip();
   }
@@ -206,6 +198,7 @@ TripData.prototype.addTripDetailsAndPersist = function(tripDetails) {
   this.data = {}; 
   this.data.name = this.tripName;
   this.data.rawName = this.rawTripName;
+  if(!tripDetails.ownerId) throw new Error(`addTripDetailsAndPersist: Required field ownerId is missing in passed tripDetails parameter`);
   if(tripDetails.leavingFrom) this.data.leavingFrom = myEncode(tripDetails.leavingFrom);
   // destination might be different from trip name. Also, destination might be city or country. That determination is made and appropriate values are set in destination-cities-workflow/app/workflow.js
   if(tripDetails.destination) this.data.destination = tripDetails.destination;
@@ -232,11 +225,28 @@ TripData.prototype.addTripDetailsAndPersist = function(tripDetails) {
   if(tripDetails.returnDate) this.data.returnDate = moment(new Date(tripDetails.returnDate).toISOString()).format("YYYY-MM-DD");
   // logger.debug(`addTripDetailsAndPersist: return date is ${tripDetails.returnDate}`);
 
+  // the shared files are located in /home/ec2-user/trips/shared/aeXf/san_francisco
+  this.data.ownerId = tripDetails.ownerId;
+
   // TODO: Get this information from weather API or the file persisted.
   this.data.weather = "sunny";
   createPackList.call(this);
   createTodoList.call(this);
   this.persistUpdatedTrip();
+}
+
+function getSharedBaseDir() {
+  if(this.tripSharedFilesBaseDir) return this.tripSharedFilesBaseDir;
+  if(!this.data.ownerId) {
+    logger.error(`getSharedBaseDir: Expected field ownerId missing`);
+    return null;
+  }
+  this.sharedFilesBaseDir = `${baseDir}/trips/shared`;
+  this.tripSharedFilesBaseDir = `${this.sharedFilesBaseDir}/${this.data.ownerId}`;
+  if(!fs.existsSync(this.tripSharedFilesBaseDir)) fs.mkdirSync(this.tripSharedFilesBaseDir);
+  this.tripSharedFilesBaseDir = `${this.tripSharedFilesBaseDir}/${this.data.name}`;
+  if(!fs.existsSync(this.tripSharedFilesBaseDir)) fs.mkdirSync(this.tripSharedFilesBaseDir);
+  return this.tripSharedFilesBaseDir;
 }
 
 // Set the correct departure city (leavingFrom) for this trip. Users might have passed an airport code or city. Figure out which and store it accordingly.
@@ -321,16 +331,38 @@ TripData.prototype.cityItinDefined = function() {
 }
 
 function todoFile() {
-  return `${this.tripSharedFilesBaseDir}/todo_list.json`;
+  return `${getSharedBaseDir.call(this)}/todo_list.json`;
 }
 
 TripData.prototype.storeTodoList = function(senderId, messageText) {
-  const reg = new RegExp("^todo[:]*[ ]*","i"); // ignore case
-  return storeList.call(this, senderId, messageText, reg, "todoList", "get todo");  
+  const regex = new RegExp("^todo[:]*[ ]*","i"); // ignore case
+  // retrieve text
+  const items = messageText.replace(regex,"").split(',');
+  let todoList;
+  const file = todoFile.call(this);
+  logger.debug(`storetodoList: file is ${file}`);
+  if(fs.existsSync(file)) todoList = JSON.parse(fs.readFileSync(file, 'utf8'));
+  if(!todoList) {
+    todoList = {};
+    todoList.todo = [];
+    todoList.done = [];
+  }
+  todoList.todo = todoList.todo.concat(items);
+  // store it locally
+  try {
+    fs.writeFileSync(file, JSON.stringify(todoList));
+    return `Saved! You can retrieve this by saying get todo list`;
+  }
+  catch(err) {
+    logger.error("error writing to ",file,err.stack);
+  }
+  logger.info(`successfully stored item ${items} in packList's toPack list`);
+  return `Even bots need to eat! Be back in a bit.`;
+  // return storeList.call(this, senderId, messageText, reg, "todoList", "get todo");  
 }
 
 function packListFile() {
-  return `${this.tripSharedFilesBaseDir}/pack_list.json`;
+  return `${getSharedBaseDir.call(this)}/pack_list.json`;
 }
 
 TripData.prototype.storePackList = function(messageText) {
@@ -339,6 +371,7 @@ TripData.prototype.storePackList = function(messageText) {
   const items = messageText.replace(regex,"").split(',');
   let packList;
   const file = packListFile.call(this);
+  // logger.debug(`storePackList: file is ${file}`);
   if(fs.existsSync(file)) packList = JSON.parse(fs.readFileSync(file, 'utf8'));
   if(!packList) {
     packList = {};
@@ -362,8 +395,24 @@ TripData.prototype.storePackList = function(messageText) {
  * Store whatever string the user input and return "Saved!"
  */
 TripData.prototype.storeFreeFormText = function(senderId, messageText) {
-  const reg = new RegExp("^save:?[ ]*","i"); // ignore case
-  return storeList.call(this, senderId, messageText, reg, "comments", "comments, get comments or retrieve");
+  const regex = new RegExp("^save:?[ ]*","i"); // ignore case
+  // retrieve text
+  const items = messageText.replace(regex,"").split(',');
+  let comments;
+  const file = commentsFile.call(this);
+  if(fs.existsSync(file)) comments = JSON.parse(fs.readFileSync(file, 'utf8'));
+  if(!comments) comments = [];
+  comments = comments.concat(items);
+  // store it locally
+  try {
+    fs.writeFileSync(file, JSON.stringify(comments));
+    return `Saved! You can retrieve this by saying 'get comments' or 'retrieve' list`;
+  }
+  catch(err) {
+    logger.error(`error writing to file ${file}: ${err.stack}`);
+  }
+  return `Even bots need to eat! Be back in a bit.`;
+  // return storeList.call(this, senderId, messageText, reg, "comments", "comments, get comments or retrieve");
 }
 
 TripData.prototype.storeExpenseEntry = function(senderId, messageText) {
@@ -558,11 +607,34 @@ function categorizeComments(comments) {
   return taggedComments;
 }
 
+function commentsFile() {
+  return `${getSharedBaseDir.call(this)}/comments.json`;
+}
+
 TripData.prototype.parseComments = function() {
-  const comments = this.getInfoFromTrip("comments"); 
-  if(!Object.keys(comments).length) {
+  // const comments = this.getInfoFromTrip("comments"); 
+  const file = commentsFile.call(this);
+  let comments = (fs.existsSync(file)) ? JSON.parse(fs.readFileSync(file, 'utf8')) : undefined;
+  if(!comments) {
+    comments = [];
+    // retrieve latest data
+    this.retrieveTripData();
+    const trip = this.data;
+    // For backwards compatibility, look for comments in the trip file as well.
+    if(trip.comments) {
+      comments = moveLists(trip.comments, comments);
+      // update comments file if any data was obtained from trip file. then, delete comments from trip file.
+      logger.debug(`parseComments: writing to file ${file}, ${comments.length} comments`);
+      if(comments) fs.writeFileSync(file, JSON.stringify(comments));
+      delete trip.comments;
+      this.persistUpdatedTrip();
+    }
+  }
+  if(!comments || comments.length === 0) {
+    logger.info(`Could not find comments for trip ${this.data.name} in trip object or file ${file}. Returning empty object`);
     return {};
   }
+  logger.debug(`parseComments: found ${comments.length} comments for trip ${this.data.name}. Categorizing them`);
   return categorizeComments(comments);
 }
 
@@ -629,14 +701,15 @@ function tripFile() {
   return `${this.tripBaseDir}/${filename.call(this)}`;
 }
 
+// TODO: test this
 TripData.prototype.markTodoItemDone = function(doneItem) {
   const doneItemLc = doneItem.toLowerCase();
-  if(!this.data.todoList) return; 
-  if(!this.data.todoDoneList) this.data.todoDoneList = [];
-  for(let idx = 0; idx < this.data.todoList.length; idx++) {
-    if(this.data.todoList[idx].toLowerCase() === doneItemLc)  {
-      this.data.todoDoneList.push(doneItem);
-      this.data.todoList.splice(idx, 1);
+  const todoList = this.getTodoList();
+  if(!todoList) return; 
+  for(let idx = 0; idx < todoList.todo.length; idx++) {
+    if(todoList.todo[idx].toLowerCase() === doneItemLc)  {
+      todoList.done.push(doneItem);
+      todoList.todo.splice(idx, 1);
       this.persistUpdatedTrip();
       return;
     }
@@ -645,8 +718,47 @@ TripData.prototype.markTodoItemDone = function(doneItem) {
   return;
 }
 
+function moveLists(items, target) {
+  if(!items) return target;
+  if(!target) return items;
+  items.forEach(item => {
+    if(!target.includes(item)) target.push(item);
+  });
+  return target;
+}
+
 TripData.prototype.getTodoList = function() {
-  return this.data.todoList;
+  const file = todoFile.call(this);
+  let todoList = (fs.existsSync(file)) ? JSON.parse(fs.readFileSync(file, 'utf8')) : undefined;
+  if(!todoList) {
+    todoList = {};
+    todoList.todo = [];
+    todoList.done = [];
+  }
+  // retrieve latest data
+  this.retrieveTripData();
+  const trip = this.data;
+  // For backwards compatibility, look for pack-list in the trip file as well.
+  if(trip.todoList || trip.todoDoneList) {
+    if(trip.todoList) {
+      todoList.todo = moveLists(trip.todoList, todoList.todo);
+      delete trip.todoList;
+    }
+    if(trip.todoDoneList) {
+      todoList.done = moveLists(trip.todoDoneList, todoList.done);
+      delete trip.todoDoneList;
+    }
+    // update pack-list file if any data was obtained from the trip file. then, delete trip file.
+    fs.writeFileSync(todoFile.call(this), JSON.stringify(todoList));
+    this.persistUpdatedTrip();
+  }
+  if(!todoList || (!todoList.todo && !todoList.done) || (todoList.todo.length === 0 && todoList.done.length === 0)) {
+    logger.info(`Could not find todoList for trip ${this.data.name}. Returning empty object`);
+    return {};
+  }
+  if(todoList.todo) logger.info(`There are ${todoList.todo.length} to pack items in todo list`);
+  if(todoList.done) logger.info(`There are ${todoList.done.length} done items in todo list`);
+  return todoList;
 }
 
 TripData.prototype.getTodoDoneList = function() {
@@ -806,13 +918,17 @@ TripData.prototype.boardingPassImage = function() {
 }
 
 TripData.prototype.copyFrom = function(trip) {
-  logger.debug(`copyFrom: trip dump ${JSON.stringify(trip)}`);
   const file = tripFile.call(trip);
-  if(fs.existsSync(file)) fs.createReadStream(file).pipe(fs.createWriteStream(tripFile.call(this)));
+  const toFile = tripFile.call(this);
+  logger.debug(`copyFrom: trip dump ${JSON.stringify(trip)}; fromFile is ${file}. toFile is ${toFile}`);
+  if(fs.existsSync(file)) fs.createReadStream(file).pipe(fs.createWriteStream(toFile));
+  logger.debug(`copied ${toFile} from ${file}`);
   const dataFile = trip.tripDataFile();
-  if(fs.existsSync(dataFile)) fs.createReadStream(dataFile).pipe(fs.createWriteStream(this.tripDataFile));
+  if(fs.existsSync(dataFile)) fs.createReadStream(dataFile).pipe(fs.createWriteStream(this.tripDataFile()));
+  logger.debug(`copied ${this.tripDataFile()} from ${dataFile}`);
   const itinFile = trip.tripItinFile();
-  if(fs.existsSync(itinFile)) fs.createReadStream(itinFile).pipe(fs.createWriteStream(this.tripItinFile));
+  if(fs.existsSync(itinFile)) fs.createReadStream(itinFile).pipe(fs.createWriteStream(this.tripItinFile()));
+  logger.debug(`copied ${this.tripItinFile()} from ${itinFile}`);
 }
 
 function filename() {
@@ -828,8 +944,16 @@ TripData.prototype.testing_delete = function() {
     if(!fs.existsSync(targetDir)) fs.mkdirSync(targetDir);
     fs.renameSync(`${this.tripBaseDir}/${file}`, `${targetDir}/${file}`);
   });
-
-  // fs.renameSync(`${this.tripSharedFilesBaseDir}`, `${this.sharedFilesBaseDir}/oldFiles/${this.data.name}`);
+  // Take care of shared files
+  const sharedBaseDir = getSharedBaseDir.call(this);
+  logger.debug(`sharedBaseDir: ${sharedBaseDir}`);
+  if(!sharedBaseDir) return;
+  fs.readdirSync(sharedBaseDir).forEach(file => {
+    if(file.includes("oldFiles")) return;
+    const targetDir = `${sharedBaseDir}/oldFiles`;
+    if(!fs.existsSync(targetDir)) fs.mkdirSync(targetDir);
+    fs.renameSync(`${sharedBaseDir}/${file}`, `${targetDir}/${file}`);
+  });
 }
 
 // TODO: Duplicates itineraryFile() & boardingPassFile. Fix the first time this causes an issue

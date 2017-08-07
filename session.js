@@ -342,6 +342,7 @@ Session.prototype.addNewTrip = function(tripName, trip) {
     return;
   }
   // copy the trip into this user's trips
+  // TODO: What if there are two trips with the same name created by 2 different people? How will you differentiate? You need a way to pass the ownerId at the time when "add travelers" is called (in webhook-post-handler). Because that's the only right way to get the owner id correctly.
   new TripData(trip.rawTripName, this.fbid).copyFrom(trip);
   // finally, update session and persist
   const encTripName = TripData.encode(tripName);

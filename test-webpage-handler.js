@@ -62,7 +62,8 @@ function addTripForSession() {
   const tripDetails = {
     destination: tripName,
     startDate: "11/1/17",
-    duration: 10
+    duration: 10,
+    ownerId: "aaaa"
   };
   s2.tripData().addTripDetailsAndPersist(tripDetails);
 }
@@ -103,9 +104,10 @@ function testAddingNewTraveler() {
   // we need sessions for friends and ourselves
   ss.findOrCreate("2");
   ss.findOrCreate("1234");
+  addTripForSession();
   const handler = new WebpageHandler("aaaa", "b");
   const str = handler.testing_addTravelers(null, {"Testing Testing":"Testing Testing", "Hu Tha": "Hu Tha"});
-  
+  logger.debug(`testAddingNewTraveler: string is ${str}`);
   logger.debug(`EXPECTATION: 0; ACTUAL: ${str.indexOf("saved trips to friends' list")}`);
 }
 
@@ -127,9 +129,9 @@ function testNewItemImage() {
   ss.testing_delete(fbid);
 }
 
-testNewItemImage();
+testAddingNewTraveler();
+// testNewItemImage();
 /*
 testAddCitiesNewTrip();
 testAddCitiesExistingTrip();
-testAddingNewTraveler();
 */

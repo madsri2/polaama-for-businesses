@@ -8,12 +8,10 @@ const tripBaseDir = "trips";
 const baseDir = "/home/ec2-user";
 const logger = require(`${baseDir}/my-logger`);
 logger.setTestConfig(); // indicate that we are logging for a test
+const myFbid = "1234";
+const myId = require('fbid-handler/app/handler').get().encode(myFbid);
 
 const tripData = new TripData("Israel", "1234");
-
-function testingGetInfoFromTrip() {
-  console.log("testing getInfoFromTrip trip details: ",JSON.stringify(tripData.getInfoFromTrip("comments")));
-}
 
 function testingEncode() {
   console.log("encode testing: ",tripData.encode("Hello World"));
@@ -109,9 +107,9 @@ function testTripItinerary() {
 	console.log(JSON.stringify(trip.returnFlightItin));
 }
 
-const fbid = "1234";
 function testPackListUpdate() {
-	const trip = new TripData("test_trip_data", fbid);
+	const trip = new TripData("test_trip_data", myFbid);
+  trip.addTripDetailsAndPersist({ ownerId: myId});
   const message = trip.storePackList("pack item1 with words");
   console.log(`testPackListUpdate: message is ${message}`);
   console.log(`testPackListUpdate: pack list ${JSON.stringify(trip.getPackList())}`);
@@ -138,7 +136,19 @@ function testPackListUpdateForOlderTrips() {
   trip.testing_delete();
 }
 
-testPackListUpdateForOlderTrips();
+function testSetAndGetComments() {
+  const trip = new TripData("Israel", myFbid);
+  trip.addTripDetailsAndPersist({
+    ownerId: "ZDdz"
+  });
+  trip.storeFreeFormText(myFbid, "comment 1");
+  logger.debug(`testSetAndGetComments: comments: ${JSON.stringify(trip.parseComments())}`);
+  trip.testing_delete();
+}
+
+testSetAndGetComments();
+
+// testPackListUpdateForOlderTrips();
 // testPackListUpdate();
 
 // testTripItinerary();
@@ -150,10 +160,6 @@ testCategorizingComments(["consumeraffairs","flight plan", "air tickets."], "2 f
 testCategorizingComments(["http://www.travelweekly.com/Cruise/Carnival-Cruise-Line/Carnival-Conquest/Cruise-p51209461","july 13th is royal caribbean and july 14th is carnival"], "2 others");
 */
 
-/*
-tripData.storeFreeFormText("1234", "comment 1");
-testingGetInfoFromTrip();
-*/
 
 // testAddCityItinerary();
 // testUpdateItinerary();

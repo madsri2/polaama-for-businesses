@@ -117,7 +117,7 @@ function extractActivityDetails(key) {
 
 // determine if we need to call the callback. If we have obtained links from all the search sites defined in this.activities, we are ready to call the callback.
 function determineResponse() {
-  if(this.count == Object.keys(this.activities).length) {
+  if(this.count === Object.keys(this.activities).length) {
     if(this.links.length == 0) {
       // logger.warn("determineResponse: No links found from any of the files");
       return this.callback([`No activity information available for ${this.city}`]);

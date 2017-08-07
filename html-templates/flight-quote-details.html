@@ -5,6 +5,23 @@
 <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
 <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<script type="text/JavaScript" src="https://www.kayak.com/affiliate/widget-v2.js"></script>
+<script type="text/JavaScript">
+KAYAK.embed({
+  container: document.getElementById("#kayakSearchWidgetContainer"),
+  autoPosition: true,
+  defaultProduct: "flights",
+  enabledProducts: ["hotels", "flights"],
+  startDate: "2015-12-24",
+  endDate: "2016-01-3",
+  origin: "New York, NY",
+  destination: "Boston, MA",
+  baseURL: "www.kayak.com",
+  ssl: true,
+  affiliateId: "acme_corp",
+  isInternalLoad: false
+});
+</script>
 <!-- Need the css line below to wrap paragraphs in mobile so the entire line shows up -->
 <style> .ui-listview > li p { white-space: normal !important; }</style>
 </head>
@@ -36,6 +53,8 @@
       -->
     </div>
   </div>
+
+  <div id="kayakSearchWidgetContainer"></div>
 
   <div data-role="footer">
     <h3>

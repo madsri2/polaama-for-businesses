@@ -298,10 +298,9 @@ WebhookPostHandler.prototype.startPlanningTrip = function() {
   sendTypingAction.call(this);
 	// logger.debug(`startPlanningTrip: This sessions' guid is ${this.session.guid}`);
   const trip = this.session.tripData();
-  const tip = new TripInfoProvider(trip, this.session.hometown);
+  const tip = new TripInfoProvider(trip, trip.data.leavingFrom);
   const activities = Promise.denodeify(tip.getActivities.bind(tip));
   // const flightDetails = Promise.denodeify(tip.getFlightDetails.bind(tip));
-  // const flightQuotes = tip.getFlightQuotes();
   const weatherDetails = Promise.denodeify(tip.getWeatherInformation.bind(tip));
   const dtdCallback = displayTripDetails.bind(this);
 
@@ -482,8 +481,14 @@ function receivedPostback(event) {
   }
   if(payload === "add_travelers") return determineTravelCompanions.call(this);
   if(payload === "boarding_pass" || payload === "boarding pass") return sendBoardingPass.call(this);
-  if(payload === "flight itinerary") return sendFlightItinerary.call(this);
-  if(payload === "return flight") return sendReturnFlightDetails.call(this);
+  if(payload === "flight itinerary") {
+    this.showReturnFlight = true;
+    return sendFlightItinerary.call(this);
+  }
+  if(payload === "return flight") {
+    this.showOnwardFlight = true;
+    return sendReturnFlightDetails.call(this);
+  }
   if(payload.startsWith("hotel details")) return sendHotelItinerary.call(this, payload);
   if(payload.includes("-hotel-receipt")) return sendCityHotelReceipt.call(this, payload);
   if(payload === "car details") return sendCarReceipt.call(this);
@@ -511,8 +516,15 @@ function sendBoardingPass() {
 
 function sendReturnFlightDetails() {
   const trip = this.session.tripData();
+  if(!fs.existsSync(trip.returnFlightFile())) {
+    logger.warn(`sendReturnFlightDetails: No flight details exists for trip ${trip.rawTripName}`);
+    if(!fs.existsSync(trip.itineraryFile())) {
+      return this.sendTextMessage(this.session.fbid,`No flight itinerary present for your trip to ${trip.rawTripName}. If you have already booked a flight, send it to TRIPS@MAIL.POLAAMA.COM`);
+    }
+  }
   const fbid = this.session.fbid;
-  callSendAPI({
+  const messageList = [];
+  messageList.push({
     recipient: {
       id: fbid
     },
@@ -523,12 +535,39 @@ function sendReturnFlightDetails() {
       }
     }
   });
+  this.showReturnFlight = false;
+  if(this.showOnwardFlight) {
+    messageList.push({
+      recipient: {
+        id: fbid
+      },
+      message: {
+        text: "See onward flight",
+        quick_replies:[
+          {
+            content_type: "text",
+            title: "Onward flight",
+            payload: "qr_onward_flight",
+            // image_url: ""
+          }
+        ]
+      }
+    });
+  }
+  sendMultipleMessages(fbid, messageList);
 }
 
 function sendFlightItinerary() {
   const trip = this.session.tripData();
+  if(!fs.existsSync(trip.itineraryFile())) {
+    logger.warn(`sendFlightItinerary: No flight details exists for trip ${trip.rawTripName}`);
+    if(!fs.existsSync(trip.returnFlightFile())) {
+      return this.sendTextMessage(this.session.fbid,`No flight itinerary present for your trip to ${trip.rawTripName}. If you have already booked a flight, send it to TRIPS@MAIL.POLAAMA.COM`);
+    }
+  }
   const fbid = this.session.fbid;
-  callSendAPI({
+  const messageList = [];
+  messageList.push({
     recipient: {
       id: fbid
     },
@@ -539,6 +578,26 @@ function sendFlightItinerary() {
       }
     }
   });
+  this.showOnwardFlight = false;
+  if(this.showReturnFlight) {
+    messageList.push({
+      recipient: {
+        id: fbid
+      },
+      message: {
+        text: "See return flight",
+        quick_replies:[
+          {
+            content_type: "text",
+            title: "Return flight",
+            payload: "qr_return_flight",
+            // image_url: ""
+          }
+        ]
+      }
+    });
+  }
+  sendMultipleMessages(fbid, messageList);
 }
 
 function createElementsList(payloadPrefix, elArray, title) {
@@ -1044,6 +1103,16 @@ function handleQuickReplies(quick_reply) {
     return true;
   }
 
+  // quick reply from sendFlightItinerary and sendReturnFlightDetails
+  if(payload === "qr_onward_flight") {
+    sendFlightItinerary.call(this);
+    return true;
+  }
+  if(payload === "qr_return_flight") {
+    sendReturnFlightDetails.call(this);
+    return true;
+  }
+
   logger.warn(`handleQuickReplies: Session ${this.session.fbid}: quick_reply not handled here ${JSON.stringify(quick_reply)}`);
   return false;
 }
@@ -1078,6 +1147,7 @@ function UserConfirmation(message) {
 }
 
 function createNewTrip(tripDetails) {
+  tripDetails.ownerId = this.fbidHandler.encode(this.session.fbid);
   this.session.addTrip(tripDetails.destination);
   this.tripCount = this.session.getCurrentAndFutureTrips().futureTrips.length;
   const tripData = this.session.tripData();
@@ -1500,7 +1570,7 @@ function handleAdditionalCommands(event, mesg) {
     return;
   }
   // logger.debug(`determineResponseType: Handling message <${mesg}>. Dump of session states: ${this.sessionState.dump()}`);
-  if(this.sessionState.get("awaitingCitiesForExistingTrip")) return getCityDetailsAndStartPlanningTrip.call(this, messageText, true /* existing trip */);
+  if(this.sessionState.get("awaitingCitiesForExistingTrip")) return getCityDetailsAndStartPlanningTrip.call(this, mesg, true /* existing trip */);
 
   if(this.session.expenseReportWorkflow) {
     const workflow = this.session.expenseReportWorkflow;
@@ -1530,19 +1600,19 @@ function handleAdditionalCommands(event, mesg) {
   // same as user clicking "existing trips" on persistent menu
   if(mesg === "existing trips" || mesg === "trips") return sendTripButtons.call(this); 
   if(mesg.startsWith("save ") || mesg.startsWith("comment ") || this.sessionState.get("awaitingComment")) {
-    const returnString = tripData.storeFreeFormText(senderID, messageText);
+    const returnString = tripData.storeFreeFormText(senderID, mesg);
     sendTextMessage(senderID, returnString);
     this.sessionState.clear("awaitingComment");
     return;
   }
   if(mesg.startsWith("todo") || this.sessionState.get("awaitingTodoItem")) {
-    const returnString = tripData.storeTodoList(senderID, messageText);
+    const returnString = tripData.storeTodoList(senderID, mesg);
     sendTextMessage(senderID, returnString);
     this.sessionState.clear("awaitingTodoItem");
     return;
   }
   if(mesg.startsWith("pack ") || this.sessionState.get("awaitingPacklistItem")) {
-    const returnString = tripData.storePackList(messageText);
+    const returnString = tripData.storePackList(mesg);
     sendTextMessage(senderID, returnString);
     this.sessionState.get("awaitingPacklistItem");
     return;
@@ -1566,22 +1636,28 @@ function handleAdditionalCommands(event, mesg) {
 	if(mesg.startsWith("get trip details") || mesg.startsWith("trip details") || mesg.startsWith("trip calendar") || mesg.startsWith("get trip calendar") || mesg.startsWith("calendar") || mesg.startsWith("trip itinerary") || mesg.startsWith("itinerary") || mesg.startsWith("get itinerary")) return sendUrlButton.call(this, `${tripData.data.rawName} Trip calendar`, `${tripData.data.name}/calendar`);
 	if(mesg.startsWith("tomorrow's plans") || mesg.startsWith("plans for tomorrow") || mesg.startsWith("get plans for tomorrow")) return sendUrlButton.call(this, `Day plan`, `${tripData.data.rawName}/day-plan`);
 
-  if(mesg.startsWith("deals")) return retrieveDeals(senderID, messageText);
+  if(mesg.startsWith("deals")) return retrieveDeals(senderID, mesg);
   if(mesg.startsWith("top activity list") || mesg.startsWith("top activities") || mesg.startsWith("get top activities")) {
-    sendActivityList.call(this, messageText);
+    sendActivityList.call(this, mesg);
     return;
   }
   if(mesg.startsWith("other activity list") || mesg.startsWith("other activities") || mesg.startsWith("get other activities")) {
-    sendOtherActivities.call(this, messageText);
+    sendOtherActivities.call(this, mesg);
     return;
   }
   if(mesg.startsWith("get boarding pass") || mesg.startsWith("boarding pass")) return sendBoardingPass.call(this);
-  if(mesg.startsWith("get flight itinerary") || mesg.startsWith("flight")) return sendFlightItinerary.call(this);
+  if(mesg.startsWith("get flight itinerary") || mesg.startsWith("flight")) {
+    this.showReturnFlight = true;
+    return sendFlightItinerary.call(this);
+  }
+  if(mesg.startsWith("get return flight") || mesg.startsWith("return flight")) {
+    this.showOnwardFlight = true;
+    return sendReturnFlightDetails.call(this);
+  }
   if(mesg.startsWith("get car details") || mesg.startsWith("car")) return sendCarReceipt.call(this);
   if(mesg.startsWith("get receipt") || mesg === "receipts") return sendGeneralReceipt.call(this);
   if(mesg.startsWith("stay") || mesg.startsWith ("get stay") || mesg.startsWith("get hotel details") || mesg.startsWith("hotel")) return sendHotelItinerary.call(this);
 	if(mesg.startsWith("get tour details") || mesg.startsWith("tour details")) return sendTourDetails.call(this);
-  if(mesg.startsWith("get return flight") || mesg.startsWith("return flight")) return sendReturnFlightDetails.call(this);
 
   const commands = new Commands(tripData, this.session.fbid);
   const canHandle = commands.canHandle(mesg);
@@ -2045,7 +2121,7 @@ function determineTravelCompanions() {
             title: "Who are you traveling with?",
             buttons: [{
               type:"web_url",
-              url: sendUrl.call(this, "friends"),
+              url: sendUrl.call(this, `${trip.data.name}/friends`),
               title:"Choose Friends",
               webview_height_ratio: "full",
               messenger_extensions: true,
@@ -2182,6 +2258,37 @@ function sendWelcomeMessage(senderID) {
   return sendMultipleMessages(senderID, messages);
 }
 
+/*
+// used by workflow for planningNewTrip
+function sendFlightQuickReplies() {
+  const messageData = {
+    recipient: {
+      id: this.session.fbid
+    },
+    message: {
+      text: "Which flight segment do you want to see?",
+      quick_replies:[
+        {
+          content_type: "text",
+          title: "Onward",
+          payload: "qr_onward_flight",
+        },
+				{
+					content_type: "text",
+					title: "Return",
+					payload: "qr_return_flight",
+				},
+        {
+					content_type: "text",
+					title: "Both flights",
+					payload: "qr_both_flights",
+        }
+			]
+		}
+	};
+	callSendAPI(messageData);
+}
+*/
 
 // used by workflow for planningNewTrip
 function sendYesNoButtons(message) {

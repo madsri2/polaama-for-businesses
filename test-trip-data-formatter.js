@@ -3,6 +3,11 @@ const TripDataFormatter = require('./trip-data-formatter');
 const TripData = require('./trip-data');
 const TripInfoProvider = require('./trip-info-provider');
 const Country = require('./country');
+const baseDir = "/home/ec2-user";
+const logger = require(`${baseDir}/my-logger`);
+logger.setTestConfig(); // indicate that we are logging for a test
+
+const myFbid = "1234";
 
 function testFormatWeatherDetailsNoCity() {
   const trip = new TripData('Test Trip',"1234");
@@ -134,7 +139,22 @@ function testFormatCities() {
   console.log(formatter.formatCities());
 }
 
-testFormatCities();
+function testFormatComments() {
+  const trip = new TripData("test-trip-comments", myFbid);
+  trip.addTripDetailsAndPersist({
+    ownerId: "ZDdz"
+  });
+  trip.storeFreeFormText(myFbid, "comment 1, comment 2");
+  trip.storeFreeFormText(myFbid, "http://www.google.com");
+  const formatter = new TripDataFormatter(trip);
+  logger.debug(formatter.formatComments());
+  trip.testing_delete();
+}
+
+// testFormatCities();
+
+testFormatComments();
+
 // testDisplayCalendar();
 // testFormatExpensePage();
 

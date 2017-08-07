@@ -142,15 +142,6 @@ function compareCallerWithUserInRequest(req, user) {
   return "You are not authorized to view this page!";
 }
 
-// TODO: Remove at some point. Older facebook callback handler.
-app.get('/auth/facebook/callback_old', 
-    // Not using successRedirect here because ensureAuthentication handles that by setting req.session.redirectTo
-    passport.authenticate('facebook', { successRedirect: '/index',
-                                        failureRedirect: '/login',
-                                        failureFlash: true,
-                                        session: true})
-  );
-
 /*
  * Verify that the callback came from Facebook. Using the App Secret from
  * the App Dashboard, we can verify the signature that is sent with each
@@ -414,13 +405,11 @@ app.get('/:id/:tripName/-/test-day', function(req, res) {
 });
 */
 
-app.get('/:id/:tripName/:date', function(req, res) {
+app.get('/:id/:tripName/flight-quotes', function(req, res) {
+  logger.debug(`flight-quotes: called`);
   const handler = new WebpageHandler(req.params.id, req.params.tripName);
-  // TODO: This is ridiculous. fix me!
-  if(req.params.date === "boarding-pass-image") return handler.getBoardingPass(req, res);
-  return handler.handleWebpage(res, handler.dayPlan, [req.params.date]);
+  return handler.displayFlightQuotes(req, res);
 });
-
 
 app.get('/todo', function(req, res) {
   return res.sendFile("/home/ec2-user/html-templates/todo-list.html");
@@ -464,11 +453,6 @@ app.post('/:id/:tripName/save-itin-update', function(req, res) {
   return handler.saveItinUpdate(req, res);
 });
 
-app.get('/:id/:tripName/flight-quotes', function(req, res) {
-  const handler = new WebpageHandler(req.params.id, req.params.tripName);
-  return handler.displayFlightQuotes(req, res);
-});
-
 // tripName is the arrival city for this flight
 app.post('/:id/:tripName/handle-flight-itinerary', function(req, res) {
   const handler = new WebpageHandler(req.params.id, req.params.tripName);
@@ -497,6 +481,13 @@ app.post('/:id/:tripName/handle-hotel-receipt', function(req, res) {
 
 app.get('/:id/:tripName/hotel-receipt', function(req, res) {
   return res.sendFile('/home/ec2-user/html-templates/hotel-receipt.html', 'utf8');
+});
+
+app.get('/:id/:tripName/:date', function(req, res) {
+  const handler = new WebpageHandler(req.params.id, req.params.tripName);
+  // TODO: This is ridiculous. fix me!
+  if(req.params.date === "boarding-pass-image") return handler.getBoardingPass(req, res);
+  return handler.handleWebpage(res, handler.dayPlan, [req.params.date]);
 });
 
 /************ CHOICES ***************/

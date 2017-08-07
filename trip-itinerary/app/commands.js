@@ -326,7 +326,8 @@ function setDateIfValid(passedCommand) {
     logger.debug(`setDateIfValid: Matched [YYYY-MM-DD]. contents: [${contents}] set date to be today (${this.date})`);
     return true;
   }
-  logger.error(`setDateIfValid: unknown format ${command} that did not match any of the known formats.`);
+  const err = new Error();
+  logger.error(`setDateIfValid: unknown format ${command} that did not match any of the known formats. ${err.stack}`);
   return false;
 }
 

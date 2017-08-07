@@ -4,6 +4,7 @@ const baseDir = "/home/ec2-user";
 const Encoder = require(`${baseDir}/encoder`);
 const logger = require(`${baseDir}/my-logger`);
 const Promise = require('promise');
+const fs = require('fs');
 
 // Use data obtained from https://openflights.org/data.html#airport to get details. Here are the titles for each column
 /*
@@ -27,6 +28,7 @@ function AirportCodes() {
   this.codes = {};
   this.cities = {};
   const self = this;
+  this.cityNameChanges = JSON.parse(fs.readFileSync(`${baseDir}/countries/cities-name-changes.json`));
   this.promise = require('readline-promise').createInterface({
     input: require('fs').createReadStream(file)
   }).each(function(line) {
@@ -43,10 +45,10 @@ function AirportCodes() {
       // logger.debug(`AirportCodes: multiple airports in city ${city}. This airport's name is ${airportName}.`);
       if(airportName.toLowerCase().includes("international")) {
         // logger.debug(`AirportCodes: choosing code ${iataCode} for city ${city} with code ${iataCode} and airport ${airportName}`);
-        self.codes[city] = iataCode;
+        self.codes[city] = iataCode.toUpperCase();
       }
     }
-    else self.codes[city] = iataCode;
+    else self.codes[city] = iataCode.toUpperCase();
     self.cities[iataCode] = city;
   }).catch(function(err) {
     logger.error(`AirportCodes: error in promise`);
@@ -55,7 +57,17 @@ function AirportCodes() {
 }
 
 AirportCodes.prototype.getCode = function(city) {
-  return this.codes[Encoder.encode(city)];
+  const encodedCity = Encoder.encode(city);
+  if(this.codes[encodedCity]) return this.codes[encodedCity];
+  // see if the city name changed and if it did then send the appropriate city
+  if(this.cityNameChanges[encodedCity]) {
+    const encodedOldName = Encoder.encode(this.cityNameChanges[encodedCity]);
+    if(this.codes[encodedOldName]) {
+      this.codes[encodedCity] = this.codes[encodedOldName];
+      return this.codes[encodedOldName];
+    }
+  }
+  return undefined;
 }
 
 AirportCodes.prototype.getCity = function(iataCode) {

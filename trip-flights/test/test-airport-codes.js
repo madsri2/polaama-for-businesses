@@ -13,8 +13,8 @@ describe("AirportCodes test", function() {
     airports.promise.done(
       function(response) {
         console.log(`getCode: There are ${JSON.stringify(response)} lines in the file`);
-        expect(airports.getCode("Goroka")).to.equal("gka");
-        expect(airports.getCode("Austin")).to.equal("aus");
+        expect(airports.getCode("Goroka")).to.equal("GKA");
+        expect(airports.getCode("Austin")).to.equal("AUS");
         done();
       },
       function(err) {
@@ -38,4 +38,20 @@ describe("AirportCodes test", function() {
     );
   });
 
+  it("get code for city using new name", function(done) {
+    airports.promise.done(
+      function(response) {
+        expect(airports.getCode("Chennai")).to.equal("MAA");
+        expect(airports.getCode("Madras")).to.equal("MAA");
+        expect(airports.getCode("mumbai")).to.equal("BOM");
+        expect(airports.getCode("kolkata")).to.equal("CCU");
+        expect(airports.getCode("Bengaluru")).to.equal("BLR");
+        done();
+      },
+      function(err) {
+        console.log(`error in airport's promise: ${err.stack}`);
+        done(err);
+      }
+    );
+  });
 });

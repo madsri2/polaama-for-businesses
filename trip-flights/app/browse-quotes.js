@@ -23,16 +23,29 @@ function BrowseQuotes(origCity, destCity, startDate, returnDate) {
   this.destCity = destCity;
   this.startDate = startDate;
   this.returnDate = returnDate;
-  this.promise = airportCodes.promise;
+  const self = this;
+  this.promise = airportCodes.promise.then(
+    function(response) {
+      self.origCode = getAirportCode(self.origCity);
+      if(!self.origCode) return Promise.reject(new Error(`BrowseQuotes: could not find code for origin city ${self.origCity}`));
+      self.destCode = getAirportCode(self.destCity);
+      if(!self.destCode) Promise.reject(new Error(`BrowseQuotes: could not find code for destination city ${self.destCode}`));
+      return Promise.resolve("success");
+    },
+    function(err) {
+      logger.error(`getCachedQuotes: promise to get airport codes failed. ${err.stack}`);
+      return Promise.reject(err);
+    }
+  );
 }
 
 function getAirportCode(city) {
   if(city.length === 3) {
-    // logger.debug(`getAirportCode. passed city ${city} is potentially an airport code`);
+    logger.debug(`getAirportCode. passed city ${city} is potentially an airport code`);
     const actualCity = airportCodes.getCity(city); 
     if(actualCity) return city; // this means that the passed city was actually a code. simply return that.
   }
-  // logger.debug(`trying to get code for city ${city}`);
+  logger.debug(`trying to get code for city ${city}`);
   return airportCodes.getCode(city);
 }
 
@@ -44,18 +57,6 @@ BrowseQuotes.prototype.quoteExists = function() {
 BrowseQuotes.prototype.getCachedQuotes = function() {
   const self = this;
   return this.promise.then(
-    function(response) {
-      self.origCode = getAirportCode(self.origCity);
-      if(!self.origCode) return Promise.reject(new Error(`BrowseQuotes: could not find code for original city ${self.origCity}`));
-      self.destCode = getAirportCode(self.destCity);
-      if(!self.destCode) Promise.reject(new Error(`BrowseQuotes: could not find code for destination city ${self.destCode}`));
-      return Promise.resolve("success");
-    },
-    function(err) {
-      logger.error(`getCachedQuotes: first promise failed. ${err.stack}`);
-      return Promise.reject(err);
-    }
-  ).then(
     function(result) {
       const file = getFileName.call(self);
       // logger.info(`getCachedQuotes: origCode is ${self.origCode}; destCode is ${self.destCode}. file is ${file}. About to do something around getting flights`);
@@ -108,7 +109,7 @@ function getQuotesFromSkyscanner() {
           if(!contents) return Promise.reject(new Error(`getQuotesFromSkyscanner: response body is undefined`));
           return new Promise(function(fulfil, reject) {
             // a hack to work around the fact that buttons-placement.js does not use Promise and we don't want to use promises just to see if a quote exists for a given trip.
-            fs.writeFileSync(getQuoteExistsFile.call(self), `quote from ${self.origCity} to ${self.destCity} on ${this.startDate} exists`);
+            fs.writeFileSync(getQuoteExistsFile.call(self), `quote from ${self.origCity} to ${self.destCity} on ${self.startDate} exists`);
             logger.debug(`getQuotesFromSkyscanner: created file ${getQuoteExistsFile.call(self)}`);
             fs.writeFile(getFileName.call(self), contents, 
               function(err, res) {
@@ -140,7 +141,7 @@ BrowseQuotes.prototype.getStoredQuotes = function() {
   const self = this;
   return this.promise.then(
     function(response) {
-      const file = getFileName.call(this);
+      const file = getFileName.call(self);
       return new Promise(
         function(fulfil, reject) {
           fs.readFile(file, (err, contents) => {
@@ -180,7 +181,7 @@ function updateContents(rawContents) {
   }, this);
   let contents = [];
   contents = contents.concat(roundtripList);
-  logger.debug(`roundtrip list: ${roundtripList.length} items; outbound: ${xclusiveOutboundList.length} items; inbound: ${xclusiveInboundList.length} items`);
+  // logger.debug(`roundtrip list: ${roundtripList.length} items; outbound: ${xclusiveOutboundList.length} items; inbound: ${xclusiveInboundList.length} items`);
   xclusiveOutboundList.forEach(item => {
     xclusiveInboundList.forEach(inbound => {
       const oblistItem = JSON.parse(JSON.stringify(item));
@@ -198,7 +199,7 @@ function updateContents(rawContents) {
       value = value.concat(JSON.stringify(c));
     });
   }
-  logger.debug(`updateContents: contents count: ${contents.length}; value: ${value}`);
+  // logger.debug(`updateContents: contents count: ${contents.length}; value: ${value}`);
   return contents;
 }
 
@@ -303,7 +304,7 @@ function getFileName() {
 
 function getQuoteExistsFile() {
   const file = `${baseDir}/flights/${this.origCity}-${this.destCity}-${this.startDate}-quote.txt`;
-  logger.debug(`getQuoteExistsFile: file is ${file}`);
+  // logger.debug(`getQuoteExistsFile: file is ${file}`);
   return file;
 }
 

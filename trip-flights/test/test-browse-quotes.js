@@ -16,15 +16,15 @@ describe("Browse Quotes tests", function() {
   it("testing cached quotes", function(done) {
     // delete file to force a skyscaner uri call
     if(fs.existsSync(cachedFile)) fs.unlinkSync(cachedFile);
-    this.timeout(5000); // mocha's timeout
     const startDate = moment().add(7, 'days').format("YYYY-MM-DD");
     const returnDate = moment().add(14, 'days').format("YYYY-MM-DD");
-    const promise = (new BrowseQuotes("san francisco", "austin", startDate, returnDate)).getCachedQuotes();
+    const browseQuotes = new BrowseQuotes("san francisco", "austin", startDate, returnDate);
+    const promise = browseQuotes.getCachedQuotes();
     promise.done(
       function(result) { 
         logger.debug(`Result from browse quotes: ${result}`); 
         expect(result).to.be.ok;
-        expect(fs.existsSync(cachedFile)).to.be.true;
+        expect(browseQuotes.quoteExists()).to.be.true;
         done();
       },
       function(err) {

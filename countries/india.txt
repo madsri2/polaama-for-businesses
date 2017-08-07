@@ -1,1 +1,1 @@
-{"cities": ["Chennai", "Mumbai", "Bengaluru", "Goa"]}
+{"cities": ["Chennai", "Mumbai", "Bengaluru", "Goa", "Delhi", "Rishikesh"]}

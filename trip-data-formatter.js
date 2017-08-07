@@ -8,11 +8,11 @@ const logger = require('./my-logger');
 const CalendarFormatter = require('./calendar-view/app/formatter');
 
 function TripDataFormatter(trip, fbid) {
-  if(!fbid) throw new Error(`TripDataFormatter: required parameter fbid not passed`);
   if(!trip) throw new Error(`TripDataFormatter: required parameter trip not passed`);
+  if(!fbid) this.fbid = trip.fbid;
+  else this.fbid = fbid;
   // TODO: This needs to change when we add login by facebook to myFirstHttpServer.
   this.trip = trip;
-  this.fbid = fbid;
 }
 
 TripDataFormatter.prototype.formatListResponse = function(headers, key) {
@@ -51,8 +51,9 @@ TripDataFormatter.prototype.formatComments = function() {
 // TODO: Comments section here is a duplicate of formatComments above. Fix it.
 TripDataFormatter.prototype.formatTripDetails = function(weatherDetails, activityDetails) {
   const comments = this.trip.parseComments();
-  const todoList = this.trip.getInfoFromTrip(TripData.todo);
+  // const todoList = this.trip.getInfoFromTrip(TripData.todo);
   const packList = this.trip.getPackList();
+  const todoList = this.trip.getTodoList();
   let activities = listAsHtml(comments.activities);
   activities += formatActivities.call(this, activityDetails);
   const html = fs.readFileSync("html-templates/trip-page.html", 'utf8');
@@ -84,12 +85,21 @@ TripDataFormatter.prototype.formatTodoList = function(headers) {
   }
   if(headers['user-agent'].startsWith("Mozilla")) {
     logger.info("formatTodoList: request call from browser. sending back html");
-    const html = fs.readFileSync("html-templates/todo-list.html", 'utf8');
-    return html.replace("${todoList}",listAsHtml(todoList))
-      .replace("${tripName}", this.trip.data.rawName);
+    let html = fs.readFileSync("html-templates/todo-list.html", 'utf8');
+    html = html.replace("${tripName}", this.trip.data.rawName);
+    if(todoList.todo.length > 0 ) html = html.replace("${todoList}",listAsHtml(todoList.todo)) 
+    else html = html.replace("${todoList}","");
+    let doneList = "";
+    if(todoList.done) doneList = `
+      <div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d" data-collapsed="false">
+        <h1>Done</h1>
+        <p>${listAsHtml(todoList.done)}</p>
+      </div>
+    `;
+    return html.replace("${doneList}",doneList);
   }
   logger.info("formatTodoList: request call from something other than browser. sending back json");
-  return todoList;
+  return todoList.todo;
 }
 
 TripDataFormatter.prototype.formatPackList = function(headers) {
@@ -379,8 +389,8 @@ function toLink(text) {
       return;
     }
     // match http or https
-    if(/^https?:\/\//.test(word)) {
-      words[i] = `<a href=${word}>${word}</a>`;
+    if(/^https?:\/\//.test(word.toLowerCase())) {
+      words[i] = `<a href=${word.toLowerCase()}>${word.toLowerCase()}</a>`;
     }
   });
   return words.join(' ');
@@ -393,7 +403,7 @@ function listAsHtml(list) {
   }
   list.forEach(function(item) {
     if(item) {
-      html += "<li>" + toLink(item) + "</li>";
+      html += "<li>" + toLink(capitalize1stChar(item)) + "</li>";
     }
   });
   html += "</ol>";

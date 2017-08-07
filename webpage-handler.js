@@ -144,7 +144,7 @@ This function serves as the entry point for all other functions. Callback will b
 WebpageHandler.prototype.handleWebpage = function(res, callback, args) {
   if(_.isNull(this.session)) {
     logger.error(`handleWebPage: No session exists ${(new Error()).stack}`);
-    return res.send("Invalid request.");
+    return res.send("Invalid request");
   }
   if(_.isNull(this.trip)) {
     return res.send(`You don't yet have a trip named ${this.tripName}. Create one by clicking on "New Trip" in the hamburger menu.`);
@@ -172,7 +172,7 @@ WebpageHandler.prototype.sendFriendsList = function(res) {
 function addTravelers(err, fields) {
   if(err) {
     logger.error(`Error from form parser: ${JSON.stringify(err)}`);
-    return "rror updating itinerary";
+    return "error updating itinerary";
   }
   logger.info("handleTravelersForNewTrip: The friends chosen are: " + JSON.stringify(fields));
   let noSessionForFriend = false;
@@ -302,7 +302,7 @@ WebpageHandler.prototype.handleTravelersForNewTrip = function(req, res) {
   }
   const form = new formidable.IncomingForm(); 
   const self = this;
-  if(_.isUndefined(localSession.tripNameInContext)) {
+  if(_.isUndefined(this.session.tripNameInContext)) {
     return res.send(`Could not add trip to friends' list because there is no trip in context for ${this.session.fbid}.`);
   }
   form.parse(req, function (err, fields, files) {
@@ -378,9 +378,9 @@ function formParseCallback(err, fields, files, res, existingTrip) {
     this.session.tripData().addPortOfEntry(portOfEntry);
   }
   else {
-    logger.info(`formParseCallback: This is an existing trip. Not adding port of entry`);
+    // logger.info(`formParseCallback: This is an existing trip. Not adding port of entry`);
   }
-  logger.debug(`formParseCallback: The cities chosen for trip ${this.session.tripNameInContext} are: ${JSON.stringify(cities)}. portOfEntry is ${portOfEntry}`);
+  // logger.debug(`formParseCallback: The cities chosen for trip ${this.session.tripNameInContext} are: ${JSON.stringify(cities)}. portOfEntry is ${portOfEntry}`);
   this.canProceed = true;
   return res.send(this.formatter.formatCityChoicePage());
 }
@@ -397,7 +397,7 @@ WebpageHandler.prototype.handleAddCityChoice = function(req, res, postHandler, e
   const self = this;
 
   form.parse(req, function(err, fields, files) {
-    logger.debug(`handleAddCityChoice cities: ${JSON.stringify(fields)}`);
+    // logger.debug(`handleAddCityChoice cities: ${JSON.stringify(fields)}`);
     callback(err, fields, files, res, existingTrip);
     if(self.canProceed) {
       postHandler.startPlanningTrip();

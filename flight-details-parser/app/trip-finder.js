@@ -37,6 +37,7 @@ TripFinder.prototype.getSession = function() {
   const fbid = fbidHandler.fbid(name);
   if(!fbid) throw new Error(`Could not get the fbid corresponding to name \"${name}\". Maybe the user never initiated a chat conversation with polaama?`);
   this.fbid = fbid;
+  this.ownerId = fbidHandler.encode(fbid);
   this.sessions = Sessions.get();
   const session = this.sessions.find(fbid);
   if(!session) throw new Error(`Could not find session for fbid ${fbid}. Maybe user never initiated a chat conversation with polaama?`);
@@ -136,6 +137,7 @@ function createNewTrip(destCity, departureDate, leavingFrom) {
   };
 	if(departureDate) tripDetails.startDate = departureDate;
 	if(leavingFrom) tripDetails.leavingFrom = leavingFrom;
+  tripDetails.ownerId = this.ownerId;
   myTrip.addTripDetailsAndPersist(tripDetails);
   myTrip.addPortOfEntry(destCity);
 
