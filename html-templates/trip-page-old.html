@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+</head>
+<body>
+
+<div data-role="page" id="pageone">
+  <div data-role="header">
+    <h1>${tripName} details</h1>
+  </div>
+
+  <div data-role="main" class="ui-content">
+    <div data-role="collapsibleset">
+      <div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d">
+        <h1>Todo list</h1>
+        <p>${todoList}</p>
+      </div>
+      <div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d">
+        <h1>Pack list</h1>
+        <div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d" data-collapsed="false">
+          <h1>To pack</h1>
+          <p>${toPackList}</p>
+        </div>
+        <div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d">
+          <h1>Done</h1>
+          <p>${donePackList}</p>
+        </div>
+      </div>
+      <div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d">
+        <h1>Flight Details</h1>
+        <p>${flightDetails}</p>
+      </div>
+      <div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d">
+        <h1>Stay Details</h1>
+        <p>${stayDetails}</p>
+      </div>
+      <div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d">
+        <h1>Weather Details</h1>
+        <p>${weatherDetails}</p>
+      </div>
+      <!--
+      <div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d">
+        <h1>Activities Details</h1>
+        <p>${activityDetails}</p>
+      </div>
+      -->
+      <div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d">
+        <h1>Rental car details</h1>
+        <p>${carDetails}</p>
+      </div>
+      <div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d">
+        <h1>Expense report details</h1>
+        <p>${expenseReportDetails}</p>
+      </div>
+      <div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d">
+        <h1>Other details</h1>
+        <p>${otherComments}</p>
+      </div>
+    </div>
+  </div>
+  
+  <div data-role="footer">
+    <h3>
+      2017 Polaama. All rights reserved.
+      <a href="https://polaama.com/privacy-policy" data-ajax="false" target="blank">Privacy</a>
+      <a href="https://polaama.com/terms-of-service" data-ajax="false" target="blank">Terms</a>
+    </h3>
+  </div>
+</div> 
+
+</body>
+</html>
+

@@ -151,9 +151,37 @@ function testFormatComments() {
   trip.testing_delete();
 }
 
+function testFormatTripDetails() {
+  const trip = new TripData("test-trip-todo", myFbid);
+  trip.addTripDetailsAndPersist({
+    ownerId: "ZDdz"
+  });
+  trip.storeTodoList(myFbid, "item 1");
+  trip.storeTodoList(myFbid, "item 2");
+  const formatter = new TripDataFormatter(trip);
+  logger.debug(formatter.formatTripDetails());
+  trip.testing_delete();
+}
+
+function testFormatTodo() {
+  const trip = new TripData("test-trip-todo", myFbid);
+  trip.addTripDetailsAndPersist({
+    ownerId: "ZDdz"
+  });
+  trip.storeTodoList(myFbid, "item 1");
+  trip.storeTodoList(myFbid, "item 2");
+  const formatter = new TripDataFormatter(trip);
+  logger.debug(formatter.formatTodoList({
+    "user-agent": "Mozilla"
+  }));
+  trip.testing_delete();
+}
+
+// testFormatTripDetails();
 // testFormatCities();
 
-testFormatComments();
+// testFormatComments();
+testFormatTodo();
 
 // testDisplayCalendar();
 // testFormatExpensePage();

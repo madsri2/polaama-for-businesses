@@ -36,16 +36,18 @@ TripDataFormatter.prototype.formatListResponse = function(headers, key) {
 TripDataFormatter.prototype.formatComments = function() {
   const comments = this.trip.parseComments();
   if(Object.keys(comments).length === 0) {
-    return "No comments available";
+    const html = fs.readFileSync(`${baseDir}/html-templates/no-data-available.html`, 'utf8');
+    return html.replace("${tripName}",this.trip.rawTripName)
+               .replace("${title}", "Comments");
   }
-  const html = fs.readFileSync("html-templates/comments.html", 'utf8');
+  const html = fs.readFileSync(`${baseDir}/html-templates/comments.html`, 'utf8');
   return html.replace("${tripName}",this.trip.rawTripName)
-    .replace("${activityList}",listAsHtml(comments.activities))
-    .replace("${stayList}",listAsHtml(comments.stay))
-    .replace("${flightList}",listAsHtml(comments.flight))
-    .replace("${rentalCarList}",listAsHtml(comments.car))
-    .replace("${expenseReportDetails}",listAsHtml(comments.expenses))
-    .replace("${otherComments}",listAsHtml(comments.others));
+    .replace("${activityList}",listAsHtml(comments.activities, "Activities"))
+    .replace("${stayList}",listAsHtml(comments.stay, "Stay"))
+    .replace("${flightList}",listAsHtml(comments.flight, "Flight"))
+    .replace("${rentalCarList}",listAsHtml(comments.car, "Car"))
+    .replace("${expenseReportDetails}",listAsHtml(comments.expenses, "Expenses"))
+    .replace("${otherComments}",listAsHtml(comments.others, "Other comments"));
 }
 
 // TODO: Comments section here is a duplicate of formatComments above. Fix it.
@@ -54,23 +56,23 @@ TripDataFormatter.prototype.formatTripDetails = function(weatherDetails, activit
   // const todoList = this.trip.getInfoFromTrip(TripData.todo);
   const packList = this.trip.getPackList();
   const todoList = this.trip.getTodoList();
-  let activities = listAsHtml(comments.activities);
+  let activities = listAsHtml(comments.activities, "Activities");
   activities += formatActivities.call(this, activityDetails);
-  const html = fs.readFileSync("html-templates/trip-page.html", 'utf8');
+  const html = fs.readFileSync(`${baseDir}/html-templates/trip-page.html`, 'utf8');
   // since this is the entire trip, obtain expense information that is present under 'expenses' key in the trip object
   comments.expenses = this.trip.getExpenseDetails();
   // TODO: Do this for weather, flight and other details..
   return html.replace("${tripName}",this.trip.rawTripName)
     .replace("${activityDetails}",activities)
     .replace("${weatherDetails}", _formatWeatherDetails.call(this, weatherDetails))
-    .replace("${stayDetails}",listAsHtml(comments.stay))
-    .replace("${flightDetails}",listAsHtml(comments.flight))
-    .replace("${carDetails}",listAsHtml(comments.car))
-    .replace("${expenseReportDetails}",listAsHtml(comments.expenses))
-    .replace("${otherComments}",listAsHtml(comments.others))
-    .replace("${todoList}",listAsHtml(todoList))
-    .replace("${toPackList}",listAsHtml(packList.toPack))
-    .replace("${donePackList}",listAsHtml(packList.done));
+    .replace("${stayDetails}",listAsHtml(comments.stay, "Stay"))
+    .replace("${flightDetails}",listAsHtml(comments.flight, "Flight"))
+    .replace("${carDetails}",listAsHtml(comments.car, "Car"))
+    .replace("${expenseReportDetails}",listAsHtml(comments.expenses, "Expenses"))
+    .replace("${otherComments}",listAsHtml(comments.others, "Other comments"))
+    .replace("${todoList}",listAsHtml(todoList.todo, "Todo"))
+    .replace("${toPackList}",listAsHtml(packList.toPack, "Pack list"))
+    .replace("${donePackList}",listAsHtml(packList.done, "Done pack list"));
 }
 
 TripDataFormatter.prototype.formatTodoList = function(headers) {
@@ -83,30 +85,33 @@ TripDataFormatter.prototype.formatTodoList = function(headers) {
     logger.info("formatTodoList: header or user-agent not defined. sending back json");
     return todoList;
   }
+  logger.debug(`formatTodoList: headers is ${JSON.stringify(headers)}`);
   if(headers['user-agent'].startsWith("Mozilla")) {
     logger.info("formatTodoList: request call from browser. sending back html");
-    let html = fs.readFileSync("html-templates/todo-list.html", 'utf8');
-    html = html.replace("${tripName}", this.trip.data.rawName);
-    if(todoList.todo.length > 0 ) html = html.replace("${todoList}",listAsHtml(todoList.todo)) 
+    let html = fs.readFileSync(`${baseDir}/html-templates/todo-list.html`, 'utf8');
+    html = html.replace("${tripName}", capitalize1stChar(this.trip.data.rawName));
+    if((!todoList.todo && !todoList.done) || (todoList.todo.length <= 0 && todoList.done.length <= 0)) {
+      const html = fs.readFileSync(`${baseDir}/html-templates/no-data-available.html`, 'utf8');
+      return html.replace("${tripName}",this.trip.rawTripName)
+                 .replace("${title}", "Comments");
+    }
+    if(todoList.todo.length && todoList.todo.length > 0 ) html = html.replace("${todoList}",listAsHtml(todoList.todo, "Todo"));
     else html = html.replace("${todoList}","");
-    let doneList = "";
-    if(todoList.done) doneList = `
-      <div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d" data-collapsed="false">
-        <h1>Done</h1>
-        <p>${listAsHtml(todoList.done)}</p>
-      </div>
-    `;
-    return html.replace("${doneList}",doneList);
+    if(todoList.done && todoList.done.length > 0) html = html.replace("${doneList}",listAsHtml(todoList.done, "Done"));
+    else html = html.replace("${doneList}","");
+    return html;
   }
   logger.info("formatTodoList: request call from something other than browser. sending back json");
-  return todoList.todo;
+  return todoList;
 }
 
 TripDataFormatter.prototype.formatPackList = function(headers) {
   const packList = this.trip.getPackList();
   const tripName = this.trip.data.name;
   if(_.isUndefined(packList)) {
-    return `Could not find packList for trip ${tripName}`;
+    const html = fs.readFileSync(`${baseDir}/html-templates/no-data-available.html`, 'utf8');
+    return html.replace("${tripName}",this.trip.rawTripName)
+             .replace("${title}", "Comments");
   }
   if(_.isUndefined(headers) || _.isUndefined(headers['user-agent'])) {
     logger.info("formatPackList: header or user-agent not defined. sending back json");
@@ -115,23 +120,27 @@ TripDataFormatter.prototype.formatPackList = function(headers) {
   if(headers['user-agent'].startsWith("Mozilla")) {
     logger.info("formatPackList: request call from browser. sending back html");
     const html = fs.readFileSync("html-templates/pack-list.html", 'utf8');
-    return html.replace("${toPackList}",listAsHtml(packList.toPack))
+    return html.replace("${toPackList}",listAsHtml(packList.toPack, "To pack"))
       .replace("${tripName}", this.trip.data.rawName)
-      .replace("${donePackList}",listAsHtml(packList.done));
+      .replace("${donePackList}",listAsHtml(packList.done, "Done"));
   }
   logger.info("formatPackList: request call from something other than browser. sending back json");
   return packList.toPack;
 }
 
 function _formatWeatherDetails(weatherDetails) {
+  if(!weatherDetails) return "";
   const keys = Object.keys(weatherDetails);
   if(keys.indexOf("nocity") > -1) {
     // no weather details available since the trip does not have any city information
     return weatherDetails.nocity;
   }
 
-  let wText = `<div data-role="collapsibleset">\n`;
-
+  let wText = `
+    <div data-role="collapsibleset">
+      <div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d">
+        <h1>Weather Details</h1>
+    `; 
   keys.forEach(city => {
       wText += `<div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d" data-collapsed="false">\n`;
       wText += `<h1>${capitalize1stChar(city)}</h1>\n`;
@@ -141,7 +150,8 @@ function _formatWeatherDetails(weatherDetails) {
       wText += `</div>\n`;
       });
 
-  wText += `</div>\n`;
+  wText += `</div>
+    </div>`;
   return wText;
 }
 
@@ -153,21 +163,27 @@ TripDataFormatter.prototype.formatWeatherDetails = function(weatherDetails, addl
 }
 
 function formatActivities(activityDetails) {
+  if(!activityDetails) return "";
   const keys = Object.keys(activityDetails);
   if(keys.indexOf("nocity") > -1) {
     // no activity details available since the trip does not have any city information
     return activityDetails.nocity;
   }
-  let aText = `<div data-role="collapsibleset">\n`;
+  let aText = `
+    <div data-role="collapsibleset">
+      <div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d">
+        <h1>Activities Details</h1>
+        `;
   keys.forEach(city => {
       aText += `<div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d">\n`;
-      aText += `<h1>${capitalize1stChar(city)}</h1>\n`;
-      activityDetails[city].forEach(note => {
+        aText += `<h1>${capitalize1stChar(city)}</h1>\n`;
+        activityDetails[city].forEach(note => {
           aText += `<p>${toLink(note)}</p>\n`;
-          });
+        });
       aText += `</div>\n`;
-      });
-  aText += `</div>\n`;
+  });
+  aText += `</div>
+    </div>`;
   return aText;
 }
 
@@ -350,7 +366,7 @@ TripDataFormatter.prototype.formatExpensePage = function(report) {
   return html.replace("${reportSummary}", summary)
              .replace("${spendSummary}", ssHtml)
              .replace("${note}", note)
-             .replace("${expenseReportDetails}", listAsHtml(comments));
+             .replace("${expenseReportDetails}", listAsHtml(comments, "Expenses"));
 }
 
 TripDataFormatter.prototype.displayCalendar = function(hometown) {
@@ -396,17 +412,19 @@ function toLink(text) {
   return words.join(' ');
 }
 
-function listAsHtml(list) {
-  let html = "<ol>";
-  if(_.isNull(list) || _.isUndefined(list) || _.isEmpty(list)) {
-    return "No data available!";
-  }
-  list.forEach(function(item) {
-    if(item) {
-      html += "<li>" + toLink(capitalize1stChar(item)) + "</li>";
-    }
-  });
-  html += "</ol>";
+function listAsHtml(list, title) {
+  if(_.isNull(list) || _.isUndefined(list) || _.isEmpty(list)) return "";
+  logger.debug(`listAsHtml: Handling list ${JSON.stringify(list)} with title ${title}`);
+  let html = `
+    <div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d">
+      <h1>${title}</h1>
+      <p> <ol>`;
+        list.forEach(function(item) {
+          if(item) html += "<li>" + toLink(capitalize1stChar(item)) + "</li>";
+        });
+  html += `
+      </ol> </p> 
+    </div>`;
   return html;
 }
 

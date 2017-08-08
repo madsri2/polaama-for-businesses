@@ -29,6 +29,9 @@ const Promise = require('promise');
 const validator = require('node-validator');
 const Encoder = require(`${baseDir}/encoder`);
 
+let recordMessage = true;
+let previousMessage = {};
+
 let TEST_MODE = false;
 // NOTE: WebhookPostHandler is a singleton, so all state will need to be maintained in this.session object. fbidHandler is also a singleton, so that will be part of the WebhookPostHandler object.
 function WebhookPostHandler(session, testing) {
@@ -331,7 +334,7 @@ WebhookPostHandler.prototype.startPlanningTrip = function() {
       function(response) {
         try {
           const createItin = new CreateItinerary(trip, self.session.hometown);
-          const tripNameInContext = self.session.tripNameInContext;
+          const tripNameInContext = (self.session.tripNameInContext) ? self.session.tripNameInContext : "unknown_trip";
           Promise.all(createItin.create()).done(
             function(values) {
               // nothing to do here if create succeeds. The itinerary will be persisted and can be obtained by reading the file, which is done in trip-data-formatter:displayCalendar when /calendar is called
@@ -357,16 +360,57 @@ WebhookPostHandler.prototype.startPlanningTrip = function() {
 }
 
 function emailOrEnterDetails() {
+  const messageData = {
+    recipient: {
+      id: this.session.fbid
+    },
+    message: {
+      attachment: {
+        "type": "template",
+        payload: {
+          template_type: "list",
+          elements: [
+          {
+            "title": "Great! Let's plan a trip together",
+            "image_url": "http://icons.iconarchive.com/icons/artdesigner/urban-stories/256/Map-icon.png"
+          },
+          {
+            "title": "Enter trip details",
+            "subtitle": "Let's plan together",
+            buttons: [{
+              "title": "Enter details",
+              "type": "postback", 
+              "payload": "new_trip_enter_details"
+            }]
+          },
+          {
+            "title": "Booked flight, hotel etc.?",
+            "subtitle": "Send us the details",
+            buttons: [{
+              "title": "Enter details",
+              "type": "postback", 
+              "payload": "new_trip_email_details"
+            }]
+          }
+          ]
+        }
+      }
+    }
+  };
+  callSendAPI(messageData);
+}
+
+/*
+function emailOrEnterDetails() {
   const quickReplies = [{
     content_type: "text",
     title: "Enter details",
     payload: "qr_enter_details"
   }, {
     content_type: "text",
-    title: "Email",
+    title: "Send details",
     payload: "qr_email"
   }];
-
   const messages = [];
   messages.push(getTextMessageData(this.session.fbid, "Great! Let's plan your trip together."));
   messages.push({
@@ -380,27 +424,83 @@ function emailOrEnterDetails() {
   });
   sendMultipleMessages(this.session.fbid, messages);
 }
+*/
 
 function planNewTrip(userChoice) {
-  if(!userChoice) {
-    // this will result in quick_replies that will be handled by handleQuickReplies
-    emailOrEnterDetails.call(this); 
-    return;
-  }
+  // this will result in quick_replies that will be handled by handleQuickReplies
+  if(!userChoice) return emailOrEnterDetails.call(this); 
   logger.info("User wants to plan a new trip");
-  if(userChoice.enter_details) {
+  if(userChoice.enter_details || userChoice === "new_trip_enter_details") {
+    const messageData = {
+      recipient: {
+        id: this.session.fbid
+      },
+      message: {
+        attachment: {
+          "type": "template",
+          payload: {
+            template_type: "list",
+            elements: [{
+                "title": "Provide details about trip",
+                "image_url": "http://icons.iconarchive.com/icons/andrea-aste/torineide/256/turin-map-detail-icon.png"
+              },
+              {
+                "title": "Destination (city or country), start date, duration",
+                "subtitle": "as a comma separated list"
+              },
+              {
+                "title": "Examples",
+                "subtitle": "India, 11/01, 20 ; New york, 8/1/17, 5"
+            }]
+          }
+        }
+      }
+    };
+    callSendAPI(messageData);
+    /*
     const messages = [
       "Can you provide details about your trip: destination city/country, start date, duration (in days) as a comma separated list?",
       "Example: India,11/01,20 or India,11/01/17,20"
     ];
     sendMultipleMessages(this.session.fbid, textMessages.call(this, messages));
+    */
     this.sessionState.set("awaitingNewTripDetails");
     this.sessionState.set("planningNewTrip");
     return;
   }
-  if(userChoice.email) sendMultipleMessages(this.session.fbid, textMessages.call(this, [
-    'Send your flight itinerary or boarding pass to "TRIPS@MAIL.POLAAMA.COM". As soon as we receive it, we will send you an "ack" message',
-    'If your trip is starting within 24 hours, we will send you the boarding pass']));
+  if(userChoice.email || userChoice === "new_trip_email_details") {
+    const messageData = {
+      recipient: {
+        id: this.session.fbid
+      },
+      message: {
+        attachment: {
+          "type": "template",
+          payload: {
+            template_type: "list",
+            elements: [{
+                "title": "It's a snap to send us details",
+                "image_url": "http://icons.iconarchive.com/icons/rade8/minium-2/256/Sidebar-Pictures-icon.png",
+              },
+              {
+                "title": "Email",
+                "subtitle": "receipt to trips@mail.polaama.com"
+              },
+              {
+                "title": "Upload receipt",
+                "subtitle": "as a photo or an attachment (if you are on a laptop)"
+            }]
+          }
+        }
+      }
+    };
+    return callSendAPI(messageData);
+    /*
+    sendMultipleMessages(this.session.fbid, textMessages.call(this, [
+      'Send your flight itinerary or boarding pass to "TRIPS@MAIL.POLAAMA.COM". As soon as we receive it, we will send you an "ack" message',
+      'If your trip is starting within 24 hours, we will send you the boarding pass']));
+    */
+  }
 }
 
 function receivedPostback(event) {
@@ -440,7 +540,8 @@ function receivedPostback(event) {
   if(payload === "view_more_commands") return supportedCommands.call(this, true /* more elements */);
 
 	// new trip cta
-  if(payload === "new_trip" || payload === "pmenu_new_trip") return planNewTrip.call(this);
+  if(payload === "new_trip" || payload === "pmenu_new_trip") return handlePlanningNewTrip.call(this);
+  if(payload === "new_trip_enter_details" || payload === "new_trip_email_details") return planNewTrip.call(this, payload);
 
   // existing trip
   if(payload.startsWith("trip_in_context")) {
@@ -519,7 +620,8 @@ function sendReturnFlightDetails() {
   if(!fs.existsSync(trip.returnFlightFile())) {
     logger.warn(`sendReturnFlightDetails: No flight details exists for trip ${trip.rawTripName}`);
     if(!fs.existsSync(trip.itineraryFile())) {
-      return this.sendTextMessage(this.session.fbid,`No flight itinerary present for your trip to ${trip.rawTripName}. If you have already booked a flight, send it to TRIPS@MAIL.POLAAMA.COM`);
+      return sendNotFoundMessage.call(this, "flight", trip.rawTripName);
+      // return this.sendTextMessage(this.session.fbid,`No flight itinerary present for your trip to ${trip.rawTripName}. If you have already booked a flight, send it to TRIPS@MAIL.POLAAMA.COM`);
     }
   }
   const fbid = this.session.fbid;
@@ -562,7 +664,8 @@ function sendFlightItinerary() {
   if(!fs.existsSync(trip.itineraryFile())) {
     logger.warn(`sendFlightItinerary: No flight details exists for trip ${trip.rawTripName}`);
     if(!fs.existsSync(trip.returnFlightFile())) {
-      return this.sendTextMessage(this.session.fbid,`No flight itinerary present for your trip to ${trip.rawTripName}. If you have already booked a flight, send it to TRIPS@MAIL.POLAAMA.COM`);
+      return sendNotFoundMessage.call(this, "flight", trip.rawTripName);
+      // return this.sendTextMessage(this.session.fbid,`No flight itinerary present for your trip to ${trip.rawTripName}. If you have already booked a flight, send it to TRIPS@MAIL.POLAAMA.COM`);
     }
   }
   const fbid = this.session.fbid;
@@ -706,7 +809,8 @@ function sendGeneralReceipt(title) {
 function sendCarReceipt() {
   const fbid = this.session.fbid;
   const trip = this.session.tripData();
-  if(!fs.existsSync(trip.rentalCarReceiptFile())) return sendTextMessage(fbid, `No car receipt found for your trip ${trip.rawTripName}`);
+  // if(!fs.existsSync(trip.rentalCarReceiptFile())) return sendTextMessage(fbid, `No car receipt found for your trip ${trip.rawTripName}`);
+  if(!fs.existsSync(trip.rentalCarReceiptFile())) return sendNotFoundMessage.call(this, "car", trip.rawTripName);
   const details = JSON.parse(fs.readFileSync(trip.rentalCarReceiptFile(), 'utf8'));
 	const messages = [];
   messages.push({
@@ -734,6 +838,39 @@ function sendCarReceipt() {
   sendMultipleMessages(this.session.fbid, messages);
 }
 
+function sendNotFoundMessage(prefix, trip) {
+  const messageData = {
+    recipient: {
+      id: this.session.fbid
+    },
+    message: {
+      attachment: {
+        "type": "template",
+        payload: {
+          template_type: "list",
+          elements: [
+          {
+            "title": `No ${prefix} details found for your ${trip} trip.`,
+            "subtitle": "Have a reservation? Send it to us:",
+            "image_url": "http://icons.iconarchive.com/icons/custom-icon-design/flatastic-1/128/alert-icon.png"
+          },
+          {
+            "title": "Email",
+            "subtitle": "receipt to trips@mail.polaama.com"
+          },
+          {
+            "title": "Upload",
+            "subtitle": "by clicking on the attachment icon below"
+          }
+          ]
+        }
+      }
+    }
+  };
+	callSendAPI(messageData);
+}
+
+/*
 function sendTourDetails() {
 	const TripReceiptManager = require('receipt-manager/app/trip-receipt-manager');
 	const messages = [];
@@ -752,6 +889,7 @@ function sendTourDetails() {
   messages.push(getTextMessageData(this.session.fbid, "It will be 80˚F and clear skies. The water will be calm and visibility is 100 feet, perfect for diving!"));
   sendMultipleMessages(this.session.fbid, messages);
 }
+*/
 
 function sendCityHotelReceipt(payload) {
   const content = /(.*)-.*-.*/.exec(payload);
@@ -800,7 +938,7 @@ function sendHotelItinerary(payload) {
   const trip = this.session.tripData();
 	const messages = [];
   const details = trip.getHotelReceiptDetails();
-  if(!details) return sendTextMessage(fbid, `No hotel receipts for your ${trip.data.rawName} trip! If you have made hotel reservations, send receipt to TRIPS@MAIL.POLAAMA.COM`);
+  if(!details) return sendNotFoundMessage.call(this, "hotel", trip.rawTripName); 
   const hotels = Object.keys(details);
   if(hotelKey && details[hotelKey]) return sendHotelReceiptMessage.call(this, fbid, details[hotelKey]);
   if(hotels.length > 1) {
@@ -1060,9 +1198,24 @@ function sendTripButtons(addNewTrip) {
 function handleQuickRepliesToPlanNewTrip(quick_reply) {
   const payload = quick_reply.payload;
   if(!payload) throw new Error(`handleQuickRepliesToPlanNewTrip: payload is undefined in passed quick_reply: ${JSON.stringify(quick_reply)}`);
-  // This quick reply came from the user typing "help" (see getHelpMessage)
-  if(payload === "qr_new_trip") {
+  // This quick reply came from the user typing "help" (see getHelpMessage) or
+  // this quick reply came in response to "Abort the current trip being planned?" question in determineResponseType
+  if(payload === "qr_new_trip" || payload === "qr_yes_plan_new_trip") {
     planNewTrip.call(this);
+    return true;
+  }
+
+  if(payload === "qr_no_continue_current_plan") {
+    if(!previousMessage) throw new Error(`unexpected error. previousMessage should be present, but it's not. ${new Error().stack}`);
+    logger.debug(`handleQuickRepliesToPlanNewTrip: previous message ${JSON.stringify(previousMessage)}`);
+    switch(previousMessage["func"]) {
+      case "sendMultipleMessages": 
+        sendMultipleMessages.call(this, this.session.fbid, previousMessage.message);
+        break;
+      case "callSendAPI": 
+        callSendAPI(previousMessage.message);
+        break;
+    }
     return true;
   }
 
@@ -1433,9 +1586,9 @@ function determineResponseType(event) {
   const messageText = event.message.text;
   const mesg = messageText.toLowerCase();
 
-  if(this.askBusiness) return askBusiness.call(this);
+  // if(this.askBusiness) return askBusiness.call(this);
   // if user moves on to any other question, reset the askBusiness workflow.
-  this.askBusiness = false;
+  // this.askBusiness = false;
   if(mesg === "expenses") return expense.call(this);
   if(mesg === "dr" || mesg === "tr") return handleDRandTR.call(this, mesg);
   if(["license", "driving license", "driver's license", "driver license"].includes(mesg) && this.session.tripNameInContext && ["iceland", "keflavik", "iceland_alt"].includes(this.session.tripNameInContext)) return handleLicense.call(this);
@@ -1453,9 +1606,7 @@ function determineResponseType(event) {
   if(mesg === "hello" || mesg === "hi" || mesg === "howdy" || mesg === "hiya" || mesg === "help") {
     if(mesg.startsWith("help ") || mesg === "help") {
       // clear all states 
-      // this.session.clearAllAwaitingStates();
       this.sessionState.clearAll();
-      // if(this.session.doesTripContextExist()) return sendAddOrGetOptions.call(this);
       if(this.session.doesTripContextExist()) return respondToHelp.call(this);
     }
     if(this.tripCount) {
@@ -1467,7 +1618,7 @@ function determineResponseType(event) {
     return sendWelcomeMessage.call(this, senderID);
   }
 
-  if(mesg === "new trip" || mesg === "create new trip") return planNewTrip.call(this);
+  if(mesg === "new trip" || mesg === "create new trip") return handlePlanningNewTrip.call(this);
 
   if(event.message.quick_reply && handleQuickRepliesToPlanNewTrip.call(this, event.message.quick_reply)) return;
 
@@ -1545,6 +1696,37 @@ function determineResponseType(event) {
     }
   }
   else return handleAdditionalCommands.call(this, event, mesg);
+}
+
+function handlePlanningNewTrip()
+{
+  if(this.sessionState.get("planningNewTrip")) {
+    const messageData = {
+      recipient: {
+        id: this.session.fbid
+      },
+      message: {
+        text: "Abort the current trip that is being planned?",
+        quick_replies:[
+          {
+            content_type: "text",
+            title: "Yes",
+            payload: "qr_yes_plan_new_trip",
+          },
+          {
+            content_type: "text",
+            title: "No",
+            payload: "qr_no_continue_current_plan",
+          },
+        ]
+      }
+    };
+    recordMessage = false;
+    callSendAPI(messageData);
+    recordMessage = true;
+    return;
+  }
+  return planNewTrip.call(this);
 }
 
 function handleAdditionalCommands(event, mesg) {
@@ -1657,7 +1839,7 @@ function handleAdditionalCommands(event, mesg) {
   if(mesg.startsWith("get car details") || mesg.startsWith("car")) return sendCarReceipt.call(this);
   if(mesg.startsWith("get receipt") || mesg === "receipts") return sendGeneralReceipt.call(this);
   if(mesg.startsWith("stay") || mesg.startsWith ("get stay") || mesg.startsWith("get hotel details") || mesg.startsWith("hotel")) return sendHotelItinerary.call(this);
-	if(mesg.startsWith("get tour details") || mesg.startsWith("tour details")) return sendTourDetails.call(this);
+	// if(mesg.startsWith("get tour details") || mesg.startsWith("tour details")) return sendTourDetails.call(this);
 
   const commands = new Commands(tripData, this.session.fbid);
   const canHandle = commands.canHandle(mesg);
@@ -2148,14 +2330,6 @@ function respondToHelp() {
           "top_element_style": "compact",
           elements: [
           {
-            "title": "Supported commands",
-            "subtitle": "commands that are currently available",
-            "buttons": [{
-              title: "Commands",
-              "type": "postback",
-              payload: "supported_commands"
-            }]
-          },{
             "title": "Add details",
             "subtitle": `to your ${this.session.rawTripNameInContext} trip`,
             "buttons": [{
@@ -2178,6 +2352,14 @@ function respondToHelp() {
               title: "New trip",
               type: "postback",
               payload: "new_trip"
+            }]
+          },{
+            "title": "Supported commands",
+            "subtitle": "commands that are currently available",
+            "buttons": [{
+              title: "Commands",
+              "type": "postback",
+              payload: "supported_commands"
             }]
           }]
         }
@@ -2473,7 +2655,11 @@ WebhookPostHandler.prototype.textMessages = textMessages;
 WebhookPostHandler.prototype.sendMultipleMessages = sendMultipleMessages;
 
 // send messages strictly one after another
-function sendMultipleMessages(recipientId, messages) {
+function sendMultipleMessages(recipientId, messages, alreadyRecorded) {
+  if(recordMessage && !alreadyRecorded) previousMessage = {
+    "func": "sendMultipleMessages",
+    "message": messages
+  };
   // as a precaution, don't send more than 3 messages at once.
   if(messages.length > 3) {
     logger.warn(`sendMultipleMessages: The current implementation does not allow sending more than 3 messages in sequence. Not sending any message`);
@@ -2494,7 +2680,7 @@ function sendMultipleMessages(recipientId, messages) {
   }, function (error, response, body) {
     if (response.statusCode == 200) {
       // recursively call, but remove the first element from the array
-      sendMultipleMessages(recipientId, messages.slice(1, messages.length));
+      sendMultipleMessages(recipientId, messages.slice(1, messages.length), true /* alreadyRecorded */);
       return;
     }
     if(error) {
@@ -2506,6 +2692,10 @@ function sendMultipleMessages(recipientId, messages) {
 }
 
 function callSendAPI(messageData) {
+  if(recordMessage) previousMessage = {
+    "func": "callSendAPI",
+    "message": messageData
+  };
   if(TEST_MODE) return logger.debug(`MESSAGE TO CHAT: ${JSON.stringify(messageData)}`);
   request({
     uri: 'https://graph.facebook.com/v2.6/me/messages',

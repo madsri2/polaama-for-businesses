@@ -102,7 +102,7 @@ IataCodeGetter.prototype.getCodePromise = function(city) {
         logger.error(`getCity: error: ${err.stack}`);
         return reject(err);
       }
-      logger.debug(`response from iatacode: ${JSON.stringify(response)}`);
+      // logger.debug(`response from iatacode: ${JSON.stringify(response)}`);
       return fulfil(response);
     });
   });
