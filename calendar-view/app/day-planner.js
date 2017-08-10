@@ -169,17 +169,15 @@ function addButtonsToMessage(message, currIndex, lastSet) {
       }
     }
     // TODO: Think of a better way
-    else if(title && new RegExp(["checkin", "checkout", "check-in", "check-out"].join("|")).test(Encoder.encode(title))) {
+    // Show hotel receipt only if the element has a hotel_name entry. This way, we show the hotel corresponding to this day rather than ask the customer to choose
+    else if(title && new RegExp(["checkin", "checkout", "check-in", "check-out"].join("|")).test(Encoder.encode(title)) && elements[index].hotel_name) {
       const hotelReceipt = [{
         title: "Hotel Receipt",
         "type": "postback",
-        payload: "hotel details"
+        payload: `hotel details ${elements[index].hotel_name}`
       }];
-      let payload = hotelReceipt[0].payload;
-      if(elements[index].hotel_name) {
-        hotelReceipt[0].payload = payload.concat(` ${elements[index].hotel_name}`);
-        delete elements[index].hotel_name;
-      }
+      // delete the hotel_name entry because this element will be sent to facebook, which does not understand "hotel_name"
+      delete elements[index].hotel_name;
       elements[index].buttons = hotelReceipt;
     }
   }
@@ -534,7 +532,7 @@ function weatherDetails(dayPlan) {
 
 function weatherString(weather) {
   let rain = "";
-  if(weather.chanceofrain !== '0') rain += `; Chance of rain: <b>${weather.chanceofrain}%</b>`;
+  if(weather.chanceofrain && weather.chanceofrain !== '0') rain += `; Chance of rain: <b>${weather.chanceofrain}%</b>`;
   let city = "";
   if(weather.city) city += `<b>${capitalize1stChar(weather.city)}</b>`;
   let img;
@@ -542,8 +540,12 @@ function weatherString(weather) {
   if(weather.cloud_cover === "partly cloudy") img = "partly-sunny-16";
   if(weather.cloud_cover === "clear") img = "clear-sunny-16";
   if(weather.cloud_cover === "cloudy" || weather.cloud_cover === "mostly cloudy") img = "cloudy-16";
+  if(weather.cloud_cover === "partly cloudy rainy") img = "partly-cloudy-rainy-16";
+  if(weather.cloud_cover === "thunderstorms") img = "thunderstorms-16";
+  const comment = weather.comment ? `${weather.comment}.`: "";
+  
   img = (img) ? `<img src="https://polaama.com/images/${img}"/>`: "";
-  return `${img} ${city} weather: ${capitalize1stChar(weather.cloud_cover)}; <span style="font-size:small">${weather.max_temp}&degF/${weather.min_temp}&degF</span>${rain}`;
+  return `${img} ${city} weather: ${capitalize1stChar(weather.cloud_cover)}; <span style="font-size:small">${weather.max_temp}&degF/${weather.min_temp}&degF</span>${rain}. ${comment}`;
 }
 
 function flightDetails(dayPlan) {

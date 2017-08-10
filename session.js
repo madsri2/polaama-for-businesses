@@ -311,7 +311,8 @@ Session.prototype.addTrip = function(tripName) {
   const encTripName = trip.tripName;
   // logger.debug(`addTrip: encTripName: ${encTripName}; dump of trip ${tripName}: ${JSON.stringify(trip)}`);
 	// TODO: this is data leak. fix it by calling TripData.addTripDetailsAndPersist after making sure that it does not cause any side effects.
-	if(this.hometown) trip.data.leavingFrom = TripData.encode(this.hometown);
+  // This is now being handled in departure-city-workflow
+	// if(this.hometown) trip.data.leavingFrom = TripData.encode(this.hometown);
   if(!this.trips[encTripName]) {
     // this is only possible in case of a new trip created in this session. 
     // logger.info(`Creating new trip for session ${this.fbid} for trip ${encTripName}`);
@@ -331,6 +332,20 @@ Session.prototype.addTrip = function(tripName) {
     // typically, when a trip is added to the session, that is also the trip in context that the user wants to discuss.
     this.setTripContextAndPersist(encTripName); 
     this.trips[encTripName].tripData.persistUpdatedTrip();
+  }
+  return this.trips[encTripName].tripData;
+}
+
+// TODO: Reconcile with above function. No need for both to exist
+Session.prototype.addExistingTrip = function(tripName) {
+  const trip = new TripData(tripName, this.fbid);
+  const encTripName = trip.tripName;
+  if(!this.trips[encTripName]) {
+    this.trips[encTripName] = { 
+      tripData: trip
+    };
+    // typically, when a trip is added to the session, that is also the trip in context that the user wants to discuss.
+    this.setTripContextAndPersist(encTripName); 
   }
   return this.trips[encTripName].tripData;
 }

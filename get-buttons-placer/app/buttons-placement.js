@@ -44,7 +44,7 @@ ButtonsPlacement.prototype.getPlacement = function() {
   };
   const itinButton = {
 	  type: "postback",
-	  title: "Onward Flight",
+	  title: "Flight",
 	  payload: "flight itinerary"
   };
   const returnItinButton = {
@@ -73,7 +73,7 @@ ButtonsPlacement.prototype.getPlacement = function() {
   const fs = require('fs');
 	if(fs.existsSync(this.trip.boardingPassFile())) buttons.push(bpButton);
 	if(fs.existsSync(this.trip.itineraryFile())) buttons.push(itinButton);
-	if(fs.existsSync(this.trip.returnFlightFile())) buttons.push(returnItinButton);
+	// if(fs.existsSync(this.trip.returnFlightFile())) buttons.push(returnItinButton);
   if(fs.existsSync(this.trip.hotelRentalReceiptFile())) buttons.push(hotelDetailsButton);
   if(fs.existsSync(this.trip.rentalCarReceiptFile())) buttons.push(carDetailsButton);
   const receipts = this.trip.receipts();

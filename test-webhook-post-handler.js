@@ -176,6 +176,30 @@ function testStartPlanningTrip() {
   handler.testing_determineResponseType(event);
 }
 
+function testRequestToBeAddedToTrip() {
+  const sessions = Sessions.get();
+  const myFbid = "1234";
+  const tripName = "ewr-sfo";
+  // set up
+  // first clean up previous test state
+  sessions.testing_delete(myFbid);
+  sessions.testing_delete("2");
+  const session = sessions.findOrCreate("2");
+  // create new trip
+  const handler = new WebhookPostHandler(session, true /* testing */);
+  handler.testing_createNewTrip({
+    destination: "san_francisco",
+    startDate: "09/11/2017",
+    leavingFrom: "ewr",
+    duration: 4
+  });
+  session.persistHometown("ewr");
+  const event = { message: { text: "invalid" }, sender: { id: "2"} };
+  event.message.quick_reply = { payload: "qr_request_to_be_added" };
+  // test
+  handler.testing_determineResponseType(event);
+}
+
 function testExtractingCityDetails() {
   const handler = setup();
   handler.session.tripData().data.leavingFrom = "san_francisco";
@@ -331,6 +355,8 @@ function testAddingDepartureCityNoHometownSet() {
   console.log(`testAddingDepartureCityNoHometownSet: response from determineResponseType is ${response}; hometown: ${handler.session.hometown}`);
 }
 
+testRequestToBeAddedToTrip();
+
 // testAddingDepartureCityNoHometownSet();
 
 // testAddingDepartureCityThatIsNotHometown();
@@ -348,7 +374,7 @@ function testAddingDepartureCityNoHometownSet() {
 
 // testExtractingCityDetails();
 
-testStartPlanningTrip();
+// testStartPlanningTrip();
 
 // testGatheringDetailsForNewTrip();
 

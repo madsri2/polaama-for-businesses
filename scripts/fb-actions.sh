@@ -44,6 +44,11 @@ function set_persistent_menu {
           "type":"postback",
           "title":"Existing trips", 
           "payload":"pmenu_existing_trips"
+        },
+        {
+          "type":"postback",
+          "title":"Help", 
+          "payload":"pmenu_help"
         }
       ]
     }]

@@ -491,6 +491,10 @@ app.get('/:id/:tripName/:date', function(req, res) {
 });
 
 /************ CHOICES ***************/
+// TODO: Fix me!
+app.get('/:id/:tripName/:location/-/breakfast-choices', function(req, res) {
+  return res.sendFile(`/home/ec2-user/html-templates/${req.params.location}-breakfast-choices.html`, 'utf8');
+});
 app.get('/:id/:tripName/:location/-/hotel-choices', function(req, res) {
   return res.sendFile(`/home/ec2-user/html-templates/${req.params.location}-hotel-choices.html`, 'utf8');
 });

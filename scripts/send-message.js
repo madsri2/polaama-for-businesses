@@ -10,8 +10,8 @@ const FbidHandler = require('fbid-handler/app/handler');
 // const fbid = "1630377990366886"; // raj
 // const fbid = "1311237785652279"; // divya
 // const fbid = "1120615267993271"; // madhu
-const fbid = "1428065237278275"; // Arpan
-// const fbid = "1718674778147181"; // Beth
+// const fbid = "1428065237278275"; // Arpan
+const fbid = "1718674778147181"; // Beth
 // const fbid = "1420839671315623"; // Aparna
 let name = new FbidHandler().getName(fbid);
 if(!name) name = ""; else name = name.substring(0, name.indexOf(" "));
@@ -155,27 +155,27 @@ function sendCheckinMessage() {
         "type": "template",
         payload: {
           "template_type": "airline_checkin",
-          "intro_message": "Hope you had a great time! Its time to head back home",
+          "intro_message": `Hi ${name}! Time to check in for your flight to Papua New Guinea`,
           "locale": "en_US",
-          "pnr_number": "VZECCB",
+          "pnr_number": "HNPOL6",
           "flight_info": [
             {
-              "flight_number": "EK205",
+              "flight_number": "DL998",
               "departure_airport": {
-                "airport_code": "MXP",
-                "city": "Milan",
+                "airport_code": "SEA",
+                "city": "Seattle",
               },
               "arrival_airport": {
-                "airport_code": "JFK",
-                "city": "New York",
+                "airport_code": "LAX",
+                "city": "Los Angeles",
               },
               "flight_schedule": {
-                "departure_time": "2017-07-22T16:10",
-                "arrival_time": "2017-07-22T19:00"
+                "departure_time": "2017-08-09T17:00",
+                "arrival_time": "2017-07-09T19:45"
               }
             }
           ],
-          "checkin_url": "https://mobile.emirates.com/english/CKIN/OLCI/flightInfo.xhtml"
+          "checkin_url": "https://www.delta.com/PCCOciWeb/findBy.action"
   	    }
       }
     }
@@ -290,11 +290,11 @@ function sendNewFeatureMessage() {
 }
 
 function sendBeforeFlightMessage() {
-	const trip = new TripData("salt_lake_city", fbid);
+	const trip = new TripData("port_moresby", fbid);
   const commands = new Commands(trip, fbid);
-  const message = commands.handle("26th");
+  const message = commands.handle("today");
   const messageList = [];
-  messageList.push(handler.getTextMessageData(fbid, `Hi ${name}! Your flight to Salt lake city leaves at 7.24 a.m. tomorrow. Here is your day's itinerary`));
+  messageList.push(handler.getTextMessageData(fbid, `Hi ${name}! Have a safe flight to PNG! Here is your day's itinerary`));
   messageList.push(message);
   handler.sendMultipleMessages(fbid, messageList);
 }
@@ -430,10 +430,10 @@ console.log(`Sending message to ${name}`);
 * Any other general comments about the bot?
 */
 
-sendAddedNewTripMessage();
+// sendAddedNewTripMessage();
 // sendGoodMorningMessage();
 // sendRentalCarDetails();
-// sendBeforeFlightMessage();
+sendBeforeFlightMessage();
 // sendExpenseAndFeedbackRequest();
 // sendRecommendationAlert();
 // sendDayPlan();

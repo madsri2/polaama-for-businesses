@@ -421,7 +421,9 @@ TripData.prototype.storeExpenseEntry = function(senderId, messageText) {
 }
 
 TripData.prototype.userInputItinFile = function() {
-  return `${this.tripBaseDir}/${this.data.name}-user-itinerary.txt`;
+  const prefix = `${this.tripBaseDir}/${this.data.name}-user-itinerary`;
+  if(fs.existsSync(`${prefix}.json`)) return `${prefix}.json`;
+  return `${prefix}.txt`;
 }
 
 /*
@@ -475,7 +477,7 @@ function getExpenseDetailsFromComments() {
   const comments = this.getInfoFromTrip("comments"); 
   let report = [];
   if(!Object.keys(comments).length) {
-    logger.warn(`No comments found for trip ${this.tripName}. Returning empty list`);
+    // logger.warn(`No comments found for trip ${this.tripName}. Returning empty list`);
     return report;
   }
   comments.forEach(item => {
@@ -624,17 +626,17 @@ TripData.prototype.parseComments = function() {
     if(trip.comments) {
       comments = moveLists(trip.comments, comments);
       // update comments file if any data was obtained from trip file. then, delete comments from trip file.
-      logger.debug(`parseComments: writing to file ${file}, ${comments.length} comments`);
+      // logger.debug(`parseComments: writing to file ${file}, ${comments.length} comments`);
       if(comments) fs.writeFileSync(file, JSON.stringify(comments));
       delete trip.comments;
       this.persistUpdatedTrip();
     }
   }
   if(!comments || comments.length === 0) {
-    logger.info(`Could not find comments for trip ${this.data.name} in trip object or file ${file}. Returning empty object`);
+    // logger.info(`Could not find comments for trip ${this.data.name} in trip object or file ${file}. Returning empty object`);
     return {};
   }
-  logger.debug(`parseComments: found ${comments.length} comments for trip ${this.data.name}. Categorizing them`);
+  // logger.debug(`parseComments: found ${comments.length} comments for trip ${this.data.name}. Categorizing them`);
   return categorizeComments(comments);
 }
 
@@ -756,8 +758,8 @@ TripData.prototype.getTodoList = function() {
     logger.info(`Could not find todoList for trip ${this.data.name}. Returning empty object`);
     return {};
   }
-  if(todoList.todo) logger.info(`There are ${todoList.todo.length} to pack items in todo list`);
-  if(todoList.done) logger.info(`There are ${todoList.done.length} done items in todo list`);
+  // if(todoList.todo) logger.info(`There are ${todoList.todo.length} to pack items in todo list`);
+  // if(todoList.done) logger.info(`There are ${todoList.done.length} done items in todo list`);
   return todoList;
 }
 
@@ -821,7 +823,7 @@ TripData.prototype.itemDetailsFile = function(dateStr, fileName) {
 
 TripData.prototype.mapImageFile = function(dateStr) {
   const date = new Date(dateStr);
-  logger.debug(`mapImageFile: ${date}`);
+  // logger.debug(`mapImageFile: ${date}`);
   return `${this.tripBaseDir}/${this.data.name}-${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-map.png`;
 }
 

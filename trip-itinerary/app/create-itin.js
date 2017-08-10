@@ -161,6 +161,7 @@ function setFirstDayDetails() {
   const depDateStr = formatDate(depDate);
   if(!this.itin[depDateStr]) throw new Error(`setFirstDayDetails: Expected itinerary to contain date ${depDateStr}, which should be the same as ${results.itinDay}, but that is not the case`);
   this.itin[depDateStr].startTime = getTime(depDate);
+  logger.debug(`setFirstDayDetails: trip dump: ${JSON.stringify(trip)}`);
   // for arrival time, we only care about the last leg of the flight.
   const lastLeg = this.trip.flightItin[this.trip.flightItin.length - 1];
   const arrivalDate = new Date(lastLeg.flight_schedule.arrival_time);

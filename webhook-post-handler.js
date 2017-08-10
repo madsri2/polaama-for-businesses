@@ -10,7 +10,7 @@ const FbidHandler = require('fbid-handler/app/handler');
 const SecretManager = require('secret-manager/app/manager');
 const ButtonsPlacement = require('get-buttons-placer/app/buttons-placement');
 const watch = require('watch');
-const fs = require('fs');
+const fs = require('fs-extra');
 const RequestProfiler = require('./request-profiler');
 
 const TripInfoProvider = require('./trip-info-provider');
@@ -297,13 +297,12 @@ WebhookPostHandler.prototype.setWeatherAndItineraryForNewTrip = function(tripNam
 
 // Start collecting useful information for trip and update the user.
 WebhookPostHandler.prototype.startPlanningTrip = function() {
-  sendTextMessage(this.session.fbid, `Gathering information for your ${this.session.tripNameInContext} trip`);
+  const trip = this.session.tripData();
+  sendTextMessage(this.session.fbid, `Gathering information for your ${trip.rawTripName} trip`);
   sendTypingAction.call(this);
 	// logger.debug(`startPlanningTrip: This sessions' guid is ${this.session.guid}`);
-  const trip = this.session.tripData();
   const tip = new TripInfoProvider(trip, trip.data.leavingFrom);
   const activities = Promise.denodeify(tip.getActivities.bind(tip));
-  // const flightDetails = Promise.denodeify(tip.getFlightDetails.bind(tip));
   const weatherDetails = Promise.denodeify(tip.getWeatherInformation.bind(tip));
   const dtdCallback = displayTripDetails.bind(this);
 
@@ -312,6 +311,14 @@ WebhookPostHandler.prototype.startPlanningTrip = function() {
   activities()
     .then(
       function(response) {
+        if(trip.data.tripStarted) {
+          // logger.warn(`startPlanningTrip: Trip ${trip.rawTripName} has already started. Not getting flight quote!`);
+          return Promise.resolve(true);
+        }
+        if(fs.existsSync(trip.itineraryFile()) && fs.existsSync(trip.returnFlightFile())) {
+          // logger.info(`startPlanningTrip: Trip ${trip.rawTripName} has flights reserved. Not getting flight quote!`);
+          return Promise.resolve(true);
+        }
         return tip.getFlightQuotes();
       },
       function(err) {
@@ -387,7 +394,7 @@ function emailOrEnterDetails() {
             "title": "Booked flight, hotel etc.?",
             "subtitle": "Send us the details",
             buttons: [{
-              "title": "Enter details",
+              "title": "Send details",
               "type": "postback", 
               "payload": "new_trip_email_details"
             }]
@@ -399,32 +406,6 @@ function emailOrEnterDetails() {
   };
   callSendAPI(messageData);
 }
-
-/*
-function emailOrEnterDetails() {
-  const quickReplies = [{
-    content_type: "text",
-    title: "Enter details",
-    payload: "qr_enter_details"
-  }, {
-    content_type: "text",
-    title: "Send details",
-    payload: "qr_email"
-  }];
-  const messages = [];
-  messages.push(getTextMessageData(this.session.fbid, "Great! Let's plan your trip together."));
-  messages.push({
-    recipient: {
-      id: this.session.fbid
-    },
-    message: {
-      text: `Enter your details or simply email your flight itinerary (or boarding pass) and I will automatically create your trip`,
-      quick_replies: quickReplies
-    }
-  });
-  sendMultipleMessages(this.session.fbid, messages);
-}
-*/
 
 function planNewTrip(userChoice) {
   // this will result in quick_replies that will be handled by handleQuickReplies
@@ -540,8 +521,11 @@ function receivedPostback(event) {
   if(payload === "view_more_commands") return supportedCommands.call(this, true /* more elements */);
 
 	// new trip cta
-  if(payload === "new_trip" || payload === "pmenu_new_trip") return handlePlanningNewTrip.call(this);
+  if(payload === "new_trip" || payload === "pmenu_new_trip" || payload === "postback_create_new_trip") return handlePlanningNewTrip.call(this);
+
   if(payload === "new_trip_enter_details" || payload === "new_trip_email_details") return planNewTrip.call(this, payload);
+
+  if(payload === "postback_request_to_be_added") return addSenderToTrip.call(this);
 
   // existing trip
   if(payload.startsWith("trip_in_context")) {
@@ -556,6 +540,13 @@ function receivedPostback(event) {
       sendAddOrGetOptions.call(this);
       return;
     }
+  }
+  if(payload === "pmenu_help") {
+    const messages = [];
+    let name = this.fbidHandler.getName(senderID);
+    if(!name) name = ""; else name = ` ${name.substring(0, name.indexOf(" "))}`;
+    messages.push(getHelpMessageData.call(this, senderID, `Hi${name}! How can I help you today?`));
+    return sendMultipleMessages(senderID, messages);
   }
 
   if(payload === "pmenu_existing_trips") return sendTripButtons.call(this);
@@ -1232,6 +1223,42 @@ function handleQuickRepliesToPlanNewTrip(quick_reply) {
   return false;
 }
 
+function partialMatch(nameParts, friend) {
+  let match = false;
+  nameParts.forEach(part => {
+    if(friend.includes(part)) match = true;
+  });
+  return match;
+}
+
+function addSenderToTrip() {
+  const file = `${baseDir}/trips/friends.json`;
+  const friends = JSON.parse(fs.readFileSync(file, 'utf8'));
+  const name = this.fbidHandler.getName(this.session.fbid);
+  if(!name) return sendTextMessage(this.session.fbid, "Could not add you to the trip at this point.");
+  Object.keys(friends).forEach(friend => {
+    // TODO: Matcing by first or last name is dangerous. Come up with a better approach
+    if(name === friend || partialMatch(name.split(" "), friend)) {
+      logger.debug(`addSenderToTrip: Found match ${friend} for name ${name}`);
+      // copy the trip details from owner's directory to friend's directory. Then return success
+      // get owner's trip base dir 
+      const tripBaseDir = `${baseDir}/trips/${friends[friend].owner}`;
+      const senderId = this.fbidHandler.encode(this.session.fbid);
+      const targetDir = `${baseDir}/trips/${senderId}`;
+      const tripName = friends[friend].trip;
+      if(!fs.existsSync(targetDir)) fs.mkdirSync(targetDir);
+      fs.readdirSync(tripBaseDir).forEach(file => {
+        if(file.includes(tripName)) {
+          logger.debug(`addSenderToTrip: Copying file ${tripBaseDir}/${file} to ${targetDir}/${file}`);
+          fs.copySync(`${tripBaseDir}/${file}`, `${targetDir}/${file}`);
+        }
+      });
+      this.session.addExistingTrip(tripName);
+      sendTripButtons.call(this);
+    }
+  });
+}
+
 function handleQuickReplies(quick_reply) {
   const payload = quick_reply.payload;
   if(!payload) throw new Error(`handleQuickReplies: payload is undefined in passed quick_reply: ${JSON.stringify(quick_reply)}`);
@@ -1246,7 +1273,7 @@ function handleQuickReplies(quick_reply) {
     return true;
   }
   if(payload === "qr_day_plan_") {
-    sendTextMessage(this.session.fbid, `Enter a day. Example: '3rd', '14', 'today', 'tomorrow', '9/3'`);
+    sendTextMessage(this.session.fbid, `Enter a day. Example: '9th', '14', 'tomorrow', '8/15'`);
     return true;
   }
 
@@ -1261,10 +1288,17 @@ function handleQuickReplies(quick_reply) {
     sendFlightItinerary.call(this);
     return true;
   }
+
   if(payload === "qr_return_flight") {
     sendReturnFlightDetails.call(this);
     return true;
   }
+
+  if(payload === "qr_request_to_be_added") {
+    addSenderToTrip.call(this);   
+    return true;
+  }
+
 
   logger.warn(`handleQuickReplies: Session ${this.session.fbid}: quick_reply not handled here ${JSON.stringify(quick_reply)}`);
   return false;
@@ -1611,8 +1645,9 @@ function determineResponseType(event) {
     }
     if(this.tripCount) {
       const messages = [];
-      messages.push(getTextMessageData(senderID, "Hi! Welcome back to Polaama. How can I help you today?"));
-      messages.push(getHelpMessageData.call(this, senderID, "Choose from the options below."));
+      let name = this.fbidHandler.getName(senderID);
+      if(!name) name = ""; else name = ` ${name.substring(0, name.indexOf(" "))}`;
+      messages.push(getHelpMessageData.call(this, senderID, `Hi${name}! Welcome back to Polaama. How can I help you today?`));
       return sendMultipleMessages(senderID, messages);
     }
     return sendWelcomeMessage.call(this, senderID);
@@ -1779,6 +1814,7 @@ function handleAdditionalCommands(event, mesg) {
   if(mesg === "add") return sendAddButtons.call(this);
   // same as user choosing "Get" after choosing trip from "Existing trip" persistent menu
   if(mesg === "get") return displayTripDetails.call(this); 
+  if(mesg === "gather data") return this.startPlanningTrip();
   // same as user clicking "existing trips" on persistent menu
   if(mesg === "existing trips" || mesg === "trips") return sendTripButtons.call(this); 
   if(mesg.startsWith("save ") || mesg.startsWith("comment ") || this.sessionState.get("awaitingComment")) {
@@ -2411,11 +2447,52 @@ function getHelpMessageData(senderID, message) {
     sendTextMessage(this.session.fbid, message);
     return respondToHelp.call(this);
   }
-  if(!message) message = "What would you like to do?";
+  if(!message) message = "Hi! What would you like to do?";
+  return {
+    recipient: {
+      id: this.session.fbid
+    },
+    message: {
+      attachment: {
+        "type": "template",
+        payload: {
+          template_type: "list",
+          elements: [{
+              "title": `${message}`,
+              "image_url": "http://icons.iconarchive.com/icons/andrea-aste/torineide/256/turin-map-detail-icon.png"
+            },
+            {
+              "title": "Create a new trip",
+              "subtitle": "Let's plan a trip together",
+              "buttons": [{
+                title: "Create",
+                type: "postback",
+                payload: "postback_create_new_trip"
+              }]
+            },
+            {
+              "title": "Request to be added to existing trip",
+              "subtitle": "created by a friend or family",
+              "buttons": [{
+                title: "Request",
+                type: "postback",
+                payload: "postback_request_to_be_added"
+              }]
+          }]
+        }
+      }
+    }
+  };
+  /*
   const quickReplies = [{
     content_type: "text",
     title: "New trip",
     payload: "qr_new_trip"
+  },
+  {
+    content_type: "text",
+    title: "Be added to existing trip",
+    payload: "qr_request_to_be_added"
   }];
   if(this.tripCount) quickReplies.push({
       content_type: "text",
@@ -2431,12 +2508,14 @@ function getHelpMessageData(senderID, message) {
       quick_replies: quickReplies
     }
   };
+  */
 }
 
 function sendWelcomeMessage(senderID) {
   const messages = [];
-  messages.push(getTextMessageData(senderID, "Hi there! Welcome to Polaama, your personal travel assistant!"));
-  messages.push(getHelpMessageData.call(this, senderID, "Create a new trip to see how we can simplify travel planning for you."));
+  let name = this.fbidHandler.getName(senderID);
+  if(!name) name = ""; else name = ` ${name.substring(0, name.indexOf(" "))}`;
+  messages.push(getHelpMessageData.call(this, senderID, `Hi${name}! Welcome to Polaama, your deeply personal travel assistant`));
   return sendMultipleMessages(senderID, messages);
 }
 

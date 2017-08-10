@@ -136,6 +136,13 @@ function _formatWeatherDetails(weatherDetails) {
     return weatherDetails.nocity;
   }
 
+  // if all the cities have "no weather information available", there's no point in sending any html back.
+  let noWeatherDetails = true;
+  keys.forEach(city => {
+    if(!weatherDetails[city][0].startsWith("No weather information")) noWeatherDetails = false;
+  });
+  if(noWeatherDetails) return "";
+
   let wText = `
     <div data-role="collapsibleset">
       <div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d">
@@ -169,6 +176,13 @@ function formatActivities(activityDetails) {
     // no activity details available since the trip does not have any city information
     return activityDetails.nocity;
   }
+  // if none of the cities have any activities, no point in sending html
+  let noActivities = true;
+  keys.forEach(city => {
+    if(!activityDetails[city][0].startsWith("No activity information")) noActivities = false;
+  });
+  if(noActivities) return "";
+
   let aText = `
     <div data-role="collapsibleset">
       <div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d">
@@ -414,9 +428,9 @@ function toLink(text) {
 
 function listAsHtml(list, title) {
   if(_.isNull(list) || _.isUndefined(list) || _.isEmpty(list)) return "";
-  logger.debug(`listAsHtml: Handling list ${JSON.stringify(list)} with title ${title}`);
+  // logger.debug(`listAsHtml: Handling list ${JSON.stringify(list)} with title ${title}`);
   let html = `
-    <div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d">
+    <div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d" data-collapsed="false">
       <h1>${title}</h1>
       <p> <ol>`;
         list.forEach(function(item) {
