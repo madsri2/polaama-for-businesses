@@ -7,6 +7,11 @@ const levenshtein = require('fast-levenshtein');
 function CommentsParser(families) {
   if(families) {
     this.families = families; // ids of families in the trip
+    this.numPeople = 0;
+    Object.keys(this.families).forEach(famId => {
+      this.numPeople += this.families[famId].length;
+    });
+    // logger.debug(`CommentsParser: There are ${this.numPeople} in this trip`);
   }
 }
 
@@ -37,8 +42,11 @@ CommentsParser.prototype.parse = function(comment) {
     details.spendSummary.family = famId;
     details.spendSummary.amount = amt;
     // The families object includes the person who paid as well.
-    const amtPerFam = +(amt / Object.keys(this.families).length).toFixed(3);
+    const amtPerPerson = +(amt / this.numPeople).toFixed(3);
+    // const amtPerFam = +(amt / Object.keys(this.families).length).toFixed(3);
     Object.keys(this.families).forEach(fam => {
+      const amtPerFam = amtPerPerson * this.families[fam].length;
+      // logger.debug(`parse: fam ${fam} owes ${amtPerFam}. Each person owes ${amtPerPerson}`);
       if(fam !== famId) {
         // the personOfInterest (words[0]) paid, so his owes amount will be negative
         details[famId].owes[fam] = 0 - amtPerFam;
@@ -56,7 +64,7 @@ CommentsParser.prototype.parse = function(comment) {
     // console.log(`${famId} owes ${famOwed} ${amt} dollars`);
     return details;
   }
-  throw new Error(`Second word in sentence needs to be "paid" or "owes", not ${words[1]}`);
+  throw new Error(`Second word in sentence "${comment}" needs to be "paid" or "owes", not ${words[1]}`);
 } 
 
 // if the comment looks like expense report detail, then validate. if not simply return true;
@@ -93,7 +101,7 @@ function findFamilyId(name) {
     for(let j = 0; j < members.length; j++) {
       const dist = levenshtein.get(members[j], name);
       if(dist < 2) { // assume that 2 letters can be missing or off from a word. The reason I chose 2 is because choosing 3 would assume that Aparna and Arpan are the same people!
-        logger.info(`findFamilyId: Assuming that user meant ${members[j]} when they typed ${name} since they differ by distance < 2. Returning family id ${id}`); 
+        // logger.info(`findFamilyId: Assuming that user meant ${members[j]} when they typed ${name} since they differ by distance < 2. Returning family id ${id}`); 
         return id;
       }
     }

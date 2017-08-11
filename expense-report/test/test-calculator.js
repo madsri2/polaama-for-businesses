@@ -104,4 +104,42 @@ describe("Expense Report calculator tests", function() {
     };
     expect(calculator.calculate(comments, families)).to.deep.equals(result);
   });
+
+  it("Test comments from iceland trip", function() {
+    const families = {
+      "fam-ma" : ["Madhu", "Aparna"],
+      "fam-aa" : ["Arpan", "Avani"],
+      "fam-n" :  ["Nabeel"]
+    };
+    const comments = [
+        "Madhu paid $5/- deposit for lambhus from 9/5 - 9/7",
+        "Arpan paid $20.00 for Airbnb at Akureyri",
+        "Madhu paid $5 for Blabjorg guesthouse",
+    ];
+    const result = {
+			"owesReport": {
+        "fam-n": [
+         {
+          "famOwed": "fam-ma",
+          "amtOwed": 2
+         },
+         {
+          "famOwed": "fam-aa",
+          "amtOwed": 4
+         }],
+        "fam-ma": [
+         {
+          "famOwed": "fam-aa",
+          "amtOwed": 4
+         }]
+      },
+      'spendSummary': {
+        'fam-ma': 10,
+        'fam-aa': 20
+      }
+    };
+    const calc = new Calculator();
+    expect(calc.calculate(comments, families)).to.deep.equals(result);
+    // console.log(JSON.stringify(calc.calculate(comments, families), null, ' '));
+  });
 });

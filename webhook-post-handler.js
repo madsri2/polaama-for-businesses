@@ -1623,7 +1623,7 @@ function determineResponseType(event) {
   // if(this.askBusiness) return askBusiness.call(this);
   // if user moves on to any other question, reset the askBusiness workflow.
   // this.askBusiness = false;
-  if(mesg === "expenses") return expense.call(this);
+  // if(mesg === "expenses") return expense.call(this);
   if(mesg === "dr" || mesg === "tr") return handleDRandTR.call(this, mesg);
   if(["license", "driving license", "driver's license", "driver license"].includes(mesg) && this.session.tripNameInContext && ["iceland", "keflavik", "iceland_alt"].includes(this.session.tripNameInContext)) return handleLicense.call(this);
 
@@ -1839,10 +1839,8 @@ function handleAdditionalCommands(event, mesg) {
     sendUrlButton.call(this, "Get Todo list", tripData.todoUrlPath());
     return;
   }
-  if(mesg.startsWith("get expense") || mesg.startsWith("expense")) {
-    sendUrlButton.call(this, "Get expense report", tripData.expenseReportUrlPath());
-    return;
-  }
+  if(mesg.startsWith("get expense") || mesg.startsWith("expense")) return sendUrlButton.call(this, "Get expense report", tripData.expenseReportUrlPath());
+
   if(mesg.startsWith("retrieve") || mesg.startsWith("comments") || mesg.startsWith("get comments")) {
     sendUrlButton.call(this, "Get Comments", tripData.commentUrlPath());
     return;

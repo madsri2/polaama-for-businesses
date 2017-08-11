@@ -100,12 +100,27 @@ function getItinDetails(file, key) {
 // ======== Retrieve from trip =======
 TripData.prototype.getInfoFromTrip = function(tripKey) {
   const trip = this.data;
-  if(_.isUndefined(trip) || _.isUndefined(trip[tripKey])) {
-    // logger.info(`Could not find ${tripKey} for trip ${this.data.name}. Returning empty object`);
-    return {};
+  if(!trip) return null;
+  let file;
+  switch(tripKey) {
+    case "comments": file = "comments.json"; break;
+    case "expenses": file = "expenses.json"; break;
   }
+  const fileName = getNewLocationFile.call(this, file);
+  if(fs.existsSync(fileName)) return JSON.parse(fs.readFileSync(fileName));
   // logger.info(`trip-data.js:getInfoFromTrip Key ${tripKey} has ${trip[tripKey].length} items; Destination is ${trip.country}`);
-  return trip[tripKey];
+  // for backwards compatibility, check trips file and move data if needed.
+  if(trip[tripKey]) {
+    let info = [];
+    info = moveLists(trip[tripKey], info);
+    if(info) {
+      fs.writeFileSync(fileName, JSON.stringify(info));
+      delete trip[tripKey];
+      this.persistUpdatedTrip();
+      return info;
+    }
+  }
+  return null;
 }
 
 TripData.prototype.getPackList = function() {
@@ -241,8 +256,7 @@ function getSharedBaseDir() {
     logger.error(`getSharedBaseDir: Expected field ownerId missing`);
     return null;
   }
-  this.sharedFilesBaseDir = `${baseDir}/trips/shared`;
-  this.tripSharedFilesBaseDir = `${this.sharedFilesBaseDir}/${this.data.ownerId}`;
+  this.tripSharedFilesBaseDir = `${baseDir}/trips/shared/${this.data.ownerId}`;
   if(!fs.existsSync(this.tripSharedFilesBaseDir)) fs.mkdirSync(this.tripSharedFilesBaseDir);
   this.tripSharedFilesBaseDir = `${this.tripSharedFilesBaseDir}/${this.data.name}`;
   if(!fs.existsSync(this.tripSharedFilesBaseDir)) fs.mkdirSync(this.tripSharedFilesBaseDir);
@@ -358,7 +372,6 @@ TripData.prototype.storeTodoList = function(senderId, messageText) {
   }
   logger.info(`successfully stored item ${items} in packList's toPack list`);
   return `Even bots need to eat! Be back in a bit.`;
-  // return storeList.call(this, senderId, messageText, reg, "todoList", "get todo");  
 }
 
 function packListFile() {
@@ -412,18 +425,33 @@ TripData.prototype.storeFreeFormText = function(senderId, messageText) {
     logger.error(`error writing to file ${file}: ${err.stack}`);
   }
   return `Even bots need to eat! Be back in a bit.`;
-  // return storeList.call(this, senderId, messageText, reg, "comments", "comments, get comments or retrieve");
+}
+
+function expensesFile() {
+  return `${getSharedBaseDir.call(this)}/expenses.json`;
 }
 
 TripData.prototype.storeExpenseEntry = function(senderId, messageText) {
   const regex = new RegExp("^expense(-report)?:?[ ]*","i"); // ignore case
-  return storeList.call(this, senderId, messageText, regex, "expenses", "get expense-report, get expenses or get expense details");
+  const items = messageText.replace(regex,"").split(',');
+  let expenses = this.getInfoFromTrip("expenses"); 
+  if(!expenses) expenses = [];
+  expenses = expenses.concat(items);
+  const file = expensesFile.call(this);
+  try {
+    fs.writeFileSync(file, JSON.stringify(expenses));
+    return `Saved! You can retrieve this by saying 'expenses' or 'get expenses'`;
+  }
+  catch(err) {
+    logger.error(`error writing to file ${file}: ${err.stack}`);
+  }
+  return `Even bots need to eat! Be back in a bit.`;
 }
 
 TripData.prototype.userInputItinFile = function() {
-  const prefix = `${this.tripBaseDir}/${this.data.name}-user-itinerary`;
-  if(fs.existsSync(`${prefix}.json`)) return `${prefix}.json`;
-  return `${prefix}.txt`;
+  let file = getNewLocationFile.call(this, `${this.data.name}-user-itinerary.json`);
+  if(fs.existsSync(file)) return file;
+  return getNewLocationFile.call(this, `${this.data.name}-user-itinerary.txt`);
 }
 
 /*
@@ -476,7 +504,7 @@ TripData.prototype.updateItinerary = function(incDate, itinDetail){
 function getExpenseDetailsFromComments() {
   const comments = this.getInfoFromTrip("comments"); 
   let report = [];
-  if(!Object.keys(comments).length) {
+  if(!comments || !Object.keys(comments).length) {
     // logger.warn(`No comments found for trip ${this.tripName}. Returning empty list`);
     return report;
   }
@@ -614,24 +642,7 @@ function commentsFile() {
 }
 
 TripData.prototype.parseComments = function() {
-  // const comments = this.getInfoFromTrip("comments"); 
-  const file = commentsFile.call(this);
-  let comments = (fs.existsSync(file)) ? JSON.parse(fs.readFileSync(file, 'utf8')) : undefined;
-  if(!comments) {
-    comments = [];
-    // retrieve latest data
-    this.retrieveTripData();
-    const trip = this.data;
-    // For backwards compatibility, look for comments in the trip file as well.
-    if(trip.comments) {
-      comments = moveLists(trip.comments, comments);
-      // update comments file if any data was obtained from trip file. then, delete comments from trip file.
-      // logger.debug(`parseComments: writing to file ${file}, ${comments.length} comments`);
-      if(comments) fs.writeFileSync(file, JSON.stringify(comments));
-      delete trip.comments;
-      this.persistUpdatedTrip();
-    }
-  }
+  const comments = this.getInfoFromTrip("comments"); 
   if(!comments || comments.length === 0) {
     // logger.info(`Could not find comments for trip ${this.data.name} in trip object or file ${file}. Returning empty object`);
     return {};
@@ -812,33 +823,53 @@ TripData.prototype.vegRestaurantsFile = function() {
   return `${this.tripBaseDir}/${this.data.name}-vegetarian-restaurants.json`;
 }
 
-TripData.prototype.dayItineraryFile = function(date) {
-  return `${this.tripBaseDir}/${this.data.name}-${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-itinerary.json`;
+function getNewLocationFile(fileName) {
+  if(!fileName) throw new Error("getNewLocationFile: required parameter filename is not defined");
+  const file = `${getSharedBaseDir.call(this)}/${fileName}`;
+  logger.debug(`getNewLocationFile: file is ${file}`);
+  if(fs.existsSync(file)) return file;
+  // for backwards compatibility, look at the old location and if the file exists, move it to the new location.
+  const oldLocation = `${this.tripBaseDir}/${fileName}`;
+  if(fs.existsSync(oldLocation)) {
+    logger.debug(`itemImageFile: renaming old file ${oldLocation} to new file ${file}`);
+    fs.renameSync(oldLocation, file);
+  }
+  // TODO: This might fail. Hopefully, it will be handled correctly upstream.
+  logger.debug(`getNewLocationFile: returning file ${file}`);
+  return file;
 }
 
-TripData.prototype.itemDetailsFile = function(dateStr, fileName) {
+TripData.prototype.dayItineraryFile = function(date) {
+  const fileName = `${this.data.name}-${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-itinerary.json`;
+  return getNewLocationFile.call(this, fileName);
+}
+
+TripData.prototype.itemDetailsFile = function(dateStr, fileSuffix) {
   const date = new Date(dateStr);
-  return `${this.tripBaseDir}/${this.data.name}-${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-${fileName}.html`;
+  const fileName = `{this.data.name}-${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-${fileSuffix}.html`;
+  return getNewLocationFile.call(this, fileName);
 }
 
 TripData.prototype.mapImageFile = function(dateStr) {
   const date = new Date(dateStr);
   // logger.debug(`mapImageFile: ${date}`);
-  return `${this.tripBaseDir}/${this.data.name}-${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-map.png`;
+  const fileName = `${this.data.name}-${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-map.png`;
+  return getNewLocationFile.call(this, fileName);
 }
 
 TripData.prototype.itemImageFile = function(dateStr, item) {
   const date = new Date(dateStr);
-  logger.debug(`itemImageFile: ${date}; item: ${item}`);
-  return `${this.tripBaseDir}/${this.data.name}-${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-${item}.png`;
+  // logger.debug(`itemImageFile: ${date}; item: ${item}`);
+  const fileName = `${this.data.name}-${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-${item}.png`;
+  return getNewLocationFile.call(this, fileName);
 }
 
 TripData.prototype.hotelChoiceFile = function(city) {
-  return `${this.tripBaseDir}/${city}-hotel-choices.json`;
+  return getNewLocationFile.call(this, `${city}-hotel-choices.json`);
 }
 
 TripData.prototype.lunchChoiceFile = function(city) {
-  return `${this.tripBaseDir}/${city}-lunch-choices.json`;
+  return getNewLocationFile.call(this, `${city}-lunch-choices.json`);
 }
 
 TripData.prototype.dayItinIndexFile = function(date) {

@@ -50,7 +50,7 @@ function updateOwesReport(fam, famOwed, amtOwed) {
     if(entry.famOwed === famOwed) {
       alreadyOwes = true;
       entry.amtOwed += amtOwed;
-      logger.debug(`fam ${fam} owes ${famOwed} ${entry.amtOwed} dollars. Amount from this comment is ${amtOwed}`);
+      // logger.debug(`fam ${fam} owes ${famOwed} ${entry.amtOwed} dollars. Amount from this comment is ${amtOwed}`);
       return;
     }
   });
@@ -59,7 +59,7 @@ function updateOwesReport(fam, famOwed, amtOwed) {
       'famOwed': famOwed,
       'amtOwed': amtOwed
     });
-    logger.debug(`First amount owed: fam ${fam} owes ${famOwed} ${amtOwed} dollars. Amount from this comment is ${amtOwed}`);
+    // logger.debug(`First amount owed: fam ${fam} owes ${famOwed} ${amtOwed} dollars. Amount from this comment is ${amtOwed}`);
   }
 }
 

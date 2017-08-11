@@ -19,7 +19,9 @@ TripDataFormatter.prototype.formatListResponse = function(headers, key) {
   const tripName = this.trip.data.name;
   const list = this.trip.getInfoFromTrip(key);
   if(!list) {
-    return `Could not find ${key} for trip ${tripName}`;
+    const html = fs.readFileSync(`${baseDir}/html-templates/no-data-available.html`, 'utf8');
+    return html.replace("${tripName}",this.trip.rawTripName)
+               .replace("${title}", "raw comments");
   }
   if(_.isUndefined(headers) || _.isUndefined(headers['user-agent'])) {
     logger.info("header or user-agent not defined. sending back json");
@@ -27,7 +29,9 @@ TripDataFormatter.prototype.formatListResponse = function(headers, key) {
   }
   if(headers['user-agent'].startsWith("Mozilla")) {
     logger.info("request call from browser. sending back html");
-    return listAsHtml(list);
+    const html = fs.readFileSync(`${baseDir}/html-templates/list.html`, 'utf8');
+    return html.replace("${tripName}", this.trip.rawTripName)
+               .replace("${listItems}", listAsHtml(list, "Raw comments"));
   }
   logger.info("request call from something other than browser. sending back json");
   return list;
@@ -53,7 +57,6 @@ TripDataFormatter.prototype.formatComments = function() {
 // TODO: Comments section here is a duplicate of formatComments above. Fix it.
 TripDataFormatter.prototype.formatTripDetails = function(weatherDetails, activityDetails) {
   const comments = this.trip.parseComments();
-  // const todoList = this.trip.getInfoFromTrip(TripData.todo);
   const packList = this.trip.getPackList();
   const todoList = this.trip.getTodoList();
   let activities = listAsHtml(comments.activities, "Activities");

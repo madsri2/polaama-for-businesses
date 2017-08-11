@@ -146,7 +146,19 @@ function testSetAndGetComments() {
   trip.testing_delete();
 }
 
-testSetAndGetComments();
+
+function testExpenseReport() {
+  const trip = new TripData("Israel", myFbid);
+  trip.addTripDetailsAndPersist({
+    ownerId: "ZDdz"
+  });
+  trip.storeExpenseEntry(myFbid, "Madhu paid $896 for Blabjorg guesthouse");
+  logger.debug(`testExpenseReport: expenses: ${JSON.stringify(trip.getExpenseDetails())}`);
+  trip.testing_delete();
+}
+
+// testSetAndGetComments();
+testExpenseReport();
 
 // testPackListUpdateForOlderTrips();
 // testPackListUpdate();
