@@ -38,7 +38,7 @@ function WebpageHandler(id, tripName) {
 }
 
 WebpageHandler.prototype.displayTrip = function(res) {
-  const tip = new TripInfoProvider(this.trip, this.session.hometown);
+  const tip = new TripInfoProvider(this.trip);
   const html = res.send(this.formatter.formatTripDetails(
     tip.getStoredWeatherDetails(), tip.getStoredActivityDetails()));
 }
@@ -64,27 +64,27 @@ WebpageHandler.prototype.displayComments = function(res) {
 }
 
 WebpageHandler.prototype.displayWeatherDetails = function(res) {
-  const tip = new TripInfoProvider(this.trip, this.session.hometown);
+  const tip = new TripInfoProvider(this.trip);
   return res.send(this.formatter.formatWeatherDetails(
         tip.getStoredWeatherDetails(),
         tip.getStoredAdditionalWeatherDetails()));
 }
 
 WebpageHandler.prototype.displayActivityDetails = function(res) {
-  const tip = new TripInfoProvider(this.trip, this.session.hometown);
+  const tip = new TripInfoProvider(this.trip);
   const activityDetails = tip.getStoredActivityDetails();
   return res.send(this.formatter.formatActivityDetails(activityDetails));
 }
 
 WebpageHandler.prototype.displayFlightDetails = function(res) {
-  const tip = new TripInfoProvider(this.trip, this.session.hometown);
+  const tip = new TripInfoProvider(this.trip);
   const flightDetails = tip.getStoredFlightDetails();
   return res.send(this.formatter.formatFlightDetails(flightDetails));
 }
 
 WebpageHandler.prototype.displayFlightQuotes = function(req, res) {
   const trip = this.trip.data;
-  const tip = new TripInfoProvider(this.trip, this.session.hometown);
+  const tip = new TripInfoProvider(this.trip);
   const promise = tip.getStoredFlightQuotes();
   const self = this;
   promise.done(

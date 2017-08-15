@@ -29,6 +29,11 @@ function AirportCodes() {
   this.cities = {};
   const self = this;
   this.cityNameChanges = JSON.parse(fs.readFileSync(`${baseDir}/countries/cities-name-changes.json`));
+  this.popularAirports = JSON.parse(fs.readFileSync(`${baseDir}/countries/cities.multiple_airports`));
+  Object.keys(this.popularAirports).forEach(key => {
+    this.popularAirports[key.toLowerCase()] = this.popularAirports[key];
+    delete this.popularAirports[key];
+  });
   this.promise = require('readline-promise').createInterface({
     input: require('fs').createReadStream(file)
   }).each(function(line) {
@@ -39,11 +44,12 @@ function AirportCodes() {
     }
     const city = Encoder.encode(contents[2].replace(/"/g,''));
     const iataCode = Encoder.encode(contents[4].replace(/"/g,''));
-    const airportName = contents[1];
     // if there are multiple airports in the same city, choose the one that is international. If there are multiple international airports in a city, we choose the last one in the list.
     if(self.codes[city]) {
-      // logger.debug(`AirportCodes: multiple airports in city ${city}. This airport's name is ${airportName}.`);
-      if(airportName.toLowerCase().includes("international")) {
+      // if we have an override code, use that.
+      const airportName = Encoder.encode(contents[1]);
+      if(self.popularAirports[city]) self.codes[city] = self.popularAirports[city].toUpperCase();
+      else if(airportName.includes("international")) {
         // logger.debug(`AirportCodes: choosing code ${iataCode} for city ${city} with code ${iataCode} and airport ${airportName}`);
         self.codes[city] = iataCode.toUpperCase();
       }

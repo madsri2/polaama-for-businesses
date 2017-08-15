@@ -38,37 +38,75 @@ describe("DestinationCitiesWorkflow tests", function() {
   
   const handler = setup();
 
-  it("city as destination", function() {
-    handler.session.tripData().destination = "san francisco";
+  it("city as destination", function(done) {
+    handler.session.tripData().data.destination = "sfo";
     const workflow = new Workflow(handler);
-    const result = workflow.handleNewTrip();
-    expect(result).to.be.true;
-    const trip = handler.session.tripData();
-    // logger.debug(`trip: ${JSON.stringify(trip)}`);
-    expect(trip.data.cityItin).to.not.be.null;
+    const resultPromise = workflow.handleNewTrip();
+    resultPromise.done(
+      function(response) {
+        expect(response).to.be.true;
+        const trip = handler.session.tripData();
+        expect(trip.data.portOfEntry).to.equal("san_francisco");
+        expect(trip.data.portOfEntryCode).to.equal("SFO");
+        expect(trip.data.cityItin).to.not.be.null;
+        done();
+      },
+      function(err) {
+        expect(false).to.be.true;
+        done(err);
+      }
+    );
   });
 
-  it("ask user to enter city", function() {
-    handler.session.tripData().destination = "Thailand";
+  it("ask user to enter city", function(done) {
+    handler.session.tripData().data.destination = "thailand";
     const workflow = new Workflow(handler);
-    let result = workflow.handleNewTrip();
-    expect(result).to.be.false;
-    const trip = handler.session.tripData();
-    expect(trip.data.cityItin).to.be.undefined;
-    expect(handler.sessionState.get("awaitingCitiesForNewTrip")).to.be.true;
-    result = workflow.handleNewTrip("bangkok(2), phuket(2)");
-    expect(handler.sessionState.get("awaitingCitiesForNewTrip")).to.be.false;
-    expect(trip.data.cityItin).to.not.be.null;
-    expect(trip.data.cityItin.cities).to.deep.equal(["bangkok","phuket"]);
-    expect(trip.data.cityItin.numOfDays).to.deep.equal(["2","2"]);
+    let resultPromise = workflow.handleNewTrip();
+    resultPromise.then(
+      function(response) {
+        expect(response).to.be.false;
+        const trip = handler.session.tripData();
+        expect(trip.data.cityItin).to.be.undefined;
+        expect(handler.sessionState.get("awaitingCitiesForNewTrip")).to.be.true;
+        return workflow.handleNewTrip("bangkok(2), phuket(2)");
+      },
+      function(err) {
+        return Promise.reject(err);
+      }
+    ).done(
+      function(response) {
+        expect(response).to.be.true;
+        const trip = handler.session.tripData();
+        expect(handler.sessionState.get("awaitingCitiesForNewTrip")).to.be.false;
+        expect(trip.data.portOfEntry).to.equal("bangkok");
+        expect(trip.data.portOfEntryCode).to.equal("BKK");
+        expect(trip.data.cityItin).to.not.be.null;
+        expect(trip.data.cityItin.cities).to.deep.equal(["bangkok","phuket"]);
+        expect(trip.data.cityItin.numOfDays).to.deep.equal(["2","2"]);
+        done();
+      },
+      function(err) {
+        expect(false).to.be.true;
+        done(err);
+      }
+    );
   });
 
-  it("country where cities exist", function() {
-    handler.session.tripData().destination = "India";
+  it("country where cities exist", function(done) {
+    handler.session.tripData().data.destination = "India";
     const workflow = new Workflow(handler);
-    const result = workflow.handleNewTrip();
-    expect(result).to.be.true;
-    const trip = handler.session.tripData();
-    expect(trip.data.cityItin).to.be.undefined;
+    const resultPromise = workflow.handleNewTrip();
+    resultPromise.done(
+      function(response) {
+        expect(response).to.be.true;
+        const trip = handler.session.tripData();
+        expect(trip.data.cityItin).to.be.undefined;
+        done();
+      },
+      function(err) {
+        expect(false).to.be.true;
+        done(err);
+      }
+    );
   });
 });

@@ -41,9 +41,12 @@ describe("DepartureCity workflow tests", function() {
     const promise = workflow.set();
     expect(typeof promise).to.equal("object");
     promise.done(function(response) {
-      expect(response).to.be.false;
       const trip = handler.session.tripData();
+      // logger.debug(`trip dump: ${JSON.stringify(trip)}`);
+      // expect that the workflow will asks the question of "Do you want to set san_francisco as your hometown" question
+      expect(response).to.be.false;
       expect(trip.data.leavingFrom).to.equal("san_francisco");
+      expect(trip.data.departureCityCode).to.equal("SFO");
       done();
     },
       function(err) {
@@ -53,7 +56,7 @@ describe("DepartureCity workflow tests", function() {
   });
 
   it("setting departure city as hometown", function() {
-    handler.session.tripData().persistDepartureCity("san francisco");
+    handler.session.tripData().persistDepartureCityAndCode("san francisco","SFO");
     handler.sessionState.set("awaitingUseAsHometown");
     const quick_reply = {
       payload:  "qr_use_as_hometown_yes"
@@ -74,17 +77,27 @@ describe("DepartureCity workflow tests", function() {
     expect(handler.sessionState.get("awaitingUseHometownAsDepartureCity")).to.be.true;
   });
 
-  it("using hometown as departure city", function() {
+  it("just using hometown as departure city", function(done) {
     handler.session.persistHometown('san francisco');
     handler.sessionState.set("awaitingUseHometownAsDepartureCity");
     const quick_reply = {
       payload:  "qr_use_hometown_as_dep_city_yes"
     };
     const workflow = new Workflow(handler, null, quick_reply);
-    const result = workflow.set();
-    expect(typeof result).to.equal("boolean");
-    expect(result).to.be.true;
-    expect(handler.session.tripData().data.leavingFrom).to.equal("san_francisco");
+    const promise = workflow.set();
+    expect(typeof promise).to.equal("object");
+    promise.done(function(response) {
+      expect(response).to.be.true;
+      const trip = handler.session.tripData();
+      // logger.debug(`trip dump after calling "set": ${JSON.stringify(trip)}; session dump: ${JSON.stringify(handler.session)}`);
+      expect(trip.data.leavingFrom).to.equal("san_francisco");
+      expect(trip.data.departureCityCode).to.equal("SFO");
+      done();
+    },
+      function(err) {
+        logger.error(`Error from promise: ${err.stack}`);
+        done(err);
+    });
   });
 
   it("not using hometown as departure city", function(done) {

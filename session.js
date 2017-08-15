@@ -133,6 +133,10 @@ function sync() {
   catch(err) { } // logger.warn(`sync: file ${file} cannot be accessed (it is possible that this session never existed): ${err.message}`); }
 }
 
+Session.prototype.timezone = function() {
+  return this.timezone;
+}
+
 Session.prototype.persistSession = function() {
   const data = {
     sessionId: this.sessionId,

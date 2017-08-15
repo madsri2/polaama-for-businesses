@@ -6,6 +6,7 @@
 <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 <script type="text/JavaScript" src="https://www.kayak.com/affiliate/widget-v2.js"></script>
+<!--
 <script type="text/JavaScript">
 KAYAK.embed({
   container: document.getElementById("#kayakSearchWidgetContainer"),
@@ -22,6 +23,7 @@ KAYAK.embed({
   isInternalLoad: false
 });
 </script>
+-->
 <!-- Need the css line below to wrap paragraphs in mobile so the entire line shows up -->
 <style> .ui-listview > li p { white-space: normal !important; }</style>
 </head>
@@ -35,26 +37,15 @@ KAYAK.embed({
   <div data-role="main" class="ui-content">
     <div data-role="collapsibleset">
       ${flightDetails}
-      <!--
-      <div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d">
-        <h1>Blah to Blee roundtrip</h1>
-        <p>Price per person: $100/-; </p>
-        <p>Onward Carrier: Alaska; Nonstop: Yes</p>
-        <p>Return Carrier: Frontier; Nonstop: No</p>
-        <p><a href=www.google.com>Book it</a></p>
-      </div>
-      <div data-role="collapsible" data-collapsed-icon="carat-r" data-expanded-icon="carat-d">
-        <h1>Blah to Blee roundtrip</h1>
-        <p>Price per person: $100/-; </p>
-        <p>Onward Carrier: Alaska; Nonstop: Yes</p>
-        <p>Return Carrier: Frontier; Nonstop: No</p>
-        <p><a href=www.google.com>Book it</a></p>
-      </div>
-      -->
     </div>
+
+    <div data-enhance="false">
+      <a href="http://partners.api.skyscanner.net/apiservices/referral/v1.0/US/USD/en-US/EWR/SFO/2017-09-10/2017-09-15?apiKey=prtl6749387986743898559646983194" data-ajax="false" target="blank">Book now</a>
+    </div>
+
   </div>
 
-  <div id="kayakSearchWidgetContainer"></div>
+  <!-- <div id="kayakSearchWidgetContainer"></div> -->
 
   <div data-role="footer">
     <h3>
@@ -64,16 +55,6 @@ KAYAK.embed({
     </h3>
   </div>
 </div> 
-
-<!--
-<ul data-role="listview">
-  <li><p>Cheapest flight on Kayak: one stop; $1154/-; 21 hours to Tel Aviv; 30 hours to Seattle on 2/17/17. [Book It]</p></li>
-  <li><p>Shorter flying time on Kayak: one stop; $1382/-; 15 hours to Tel Aviv; 18 hours to Seattle on 2/17/17. [Book It]</p></li>
-  <li><p>Miles + cash: On United; two stops; 100K miles + $300/- roundtrip; 22 hours to Tel Aviv; 32 hours to Seattle</p></li>
-  <li><p>Prices are predicted to go high [20% confidence]. Book quickly</p></li>
-  <li><p>Flying with a kid less than 2 years old: $250/- charge</p></li>
-</ul>
--->
 
 </body>
 </html>

@@ -157,8 +157,19 @@ function testExpenseReport() {
   trip.testing_delete();
 }
 
+function testTripStarted() {
+  const trip = new TripData("Israel", myFbid);
+  trip.addTripDetailsAndPersist({
+    startDate: "2017-08-11",
+    ownerId: "ZDdz"
+  });
+  logger.debug(`trip started: ${trip.tripStarted()}`);
+}
+
+testTripStarted();
+
 // testSetAndGetComments();
-testExpenseReport();
+// testExpenseReport();
 
 // testPackListUpdateForOlderTrips();
 // testPackListUpdate();

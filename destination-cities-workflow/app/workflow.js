@@ -3,6 +3,7 @@ const fs = require('fs');
 const validator = require('node-validator');
 const baseDir = "/home/ec2-user";
 const logger = require(`${baseDir}/my-logger`);
+const Promise = require('promise');
 
 let countriesList = getList();
 
@@ -18,9 +19,13 @@ function DestinationCitiesWorkflow(handler) {
   this.trip = handler.session.tripData();
   this.destination = this.trip.data.destination;
   this.session = handler.session;
+  this.airportCodes = handler.airportCodes;
 }
 
-// returns false to indicate that we need more details from user. If true, we are done with this workflow.
+// returns promise which:
+// resolves to false to indicate that we need more details from user. 
+// true, to indicate that we are done with this workflow.
+// rejects with false on error. Takes care of sending appropriate mesage back to user.
 DestinationCitiesWorkflow.prototype.handleNewTrip = function(messageText) {
   if(!this.trip.cityItinDefined()) {
     if(!this.sessionState.get("awaitingCitiesForNewTrip")) {
@@ -36,33 +41,49 @@ DestinationCitiesWorkflow.prototype.handleNewTrip = function(messageText) {
           ];
           this.handler.sendMultipleMessages(this.session.fbid, this.handler.textMessages(messages));
           this.sessionState.set("awaitingCitiesForNewTrip");
-          return false;
+          return Promise.resolve(false);
         }
         // determineCities returned true, indicating that we have city list information
         this.sessionState.clear("awaitingCitiesForNewTrip");
-        return true;
+        return Promise.resolve(true);
       }
-      // city. So, just set cityItin and add port of entry
-      this.trip.addCityItinerary([this.destination], [this.trip.data.duration]);
-      this.trip.addPortOfEntry(this.destination);
-      this.sessionState.clear("awaitingCitiesForNewTrip");
-      return true;
+      // city. So, set cityItin and add port of entry. Set the cityItin details here so that users can start planning trip.
+      const self = this;
+      return addPortOfEntryAndCode.call(this, this.destination).then(
+        function(response) {
+          if(response) {
+            self.trip.addCityItinerary([self.trip.data.portOfEntry], [self.trip.data.duration]);
+            return Promise.resolve(true);
+          }
+          logger.error(`handleNewTrip: Expected response to be true, but it is ${response}`);
+          return Promise.resolve(response);
+        },
+        function(err) {
+          logger.error(`handleNewTrip: promise was rejected with err ${err}`);
+          return Promise.reject(err);
+        }
+      );
     }
     // case where user has sent city details
     try {
       if(this.sessionState.get("awaitingCitiesForNewTrip")) {
         // logger.debug(`handleNewTrip: getting city details: ${messageText}`);
-        if(!messageText) throw new Error(`handleNewTrip: session state awaitingCitiesForNewTrip, but the passed parameter 'messageText' is null or undefined`);
+        if(!messageText) { 
+          logger.error(`handleNewTrip: session state awaitingCitiesForNewTrip, but the passed parameter 'messageText' is null or undefined`);
+          this.handler.sendTextMessage(this.session.fbid,"Even bots need to eat. Be back in a bit..");
+          return Promise.reject(false);
+        }
         return getCityDetails.call(this, messageText);
       }
     }
     catch(e) {
-      logger.error(`handleNewTrip: exception: ${e.stack}`);
-      return false;
+      logger.error(`handleNewTrip: Exception: ${e.stack}`);
+      this.handler.sendTextMessage(this.session.fbid,"Even bots need to eat. Be back in a bit..");
+      return Promise.reject(false);
     }
   }
   // trip.cityItin is defined. Nothing to do for us here.
-  return true;
+  return Promise.resolve(true);
 }
 
 DestinationCitiesWorkflow.prototype.handleExistingTrip = function() {
@@ -132,25 +153,48 @@ function extractCityDetails(details) {
   }
 }
 
+function addPortOfEntryAndCode(destination) {
+  const self = this;
+  return this.airportCodes.promise.then(
+      function(response) {
+        const code = self.airportCodes.getCode(destination);
+        if(code) {
+          logger.debug(`addPortOfEntryAndCode: adding city ${destination} and code ${code}`);
+          self.trip.addPortOfEntryAndCode(destination, code);
+          self.sessionState.clear("awaitingCitiesForNewTrip");
+          return Promise.resolve(true);
+        }
+        // see if the passed value was actually a code instead of a city
+        const city = self.airportCodes.getCity(destination);
+        if(city) {
+          logger.debug(`addPortOfEntryAndCode: adding city ${city} and code ${destination}`);
+          self.trip.addPortOfEntryAndCode(city, destination);
+          self.sessionState.clear("awaitingCitiesForNewTrip");
+          return Promise.resolve(true);
+        }
+        logger.error(`addPortOfEntryAndCode: Could not find code for city ${destination}`);
+        self.handler.sendTextMessage(self.session.fbid,"Please enter a valid destination city or airport code");
+        return Promise.reject(false);
+      },
+      function(err) {
+        logger.error(`addPortOfEntryAndCode: Error from airportCode's constructor! ${err.stack}`);
+        self.handler.sendTextMessage(self.session.fbid,"Even bots need to eat. Be back in a bit..");
+        return Promise.reject(false);
+      }
+  );
+}
+
 function getCityDetails(details) {
-  try {
     extractCityDetails.call(this, details);
-    // TODO: Validate city is valid by comparing against list of known cities
+    // TODO: Validate city is valid by comparing it against data in airports.dat
     this.trip.addCityItinerary(this.cities, this.numberOfDays);
-    
-    if(this.existingTrip) this.sessionState.clear("awaitingCitiesForExistingTrip");
-    else {
-      // assume first city is port of entry.
-      this.trip.addPortOfEntry(this.cities[0]);
-      this.sessionState.clear("awaitingCitiesForNewTrip");
+    if(this.existingTrip) {
+      this.sessionState.clear("awaitingCitiesForExistingTrip");
+      // done doing whatever we need. Ask handler to proceed
+      return Promise.resolve(true);
     }
-    // done doing whatever we need. Ask handler to proceed
-    return true;
-  }
-  catch(e) {
-    // rethrow so that calling function can short-circuit
-    throw e;
-  }
+    // return a promise. Assume first city is port of entry.
+    return addPortOfEntryAndCode.call(this, this.cities[0]);
 }
 
 function isDestinationACountry() {

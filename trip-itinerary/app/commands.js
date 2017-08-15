@@ -592,26 +592,10 @@ function toNum(month) {
 // user enters today. We find out the date in UTC. We use that to determine where the user will be. (Between 6/11 - 6/19 UTC, the user will be in Tel Aviv). We get moment for that timezone and determine the day.
 function getTimezone() {
   if(this.testing) return "US/Pacific";
-  const dateInUTC = moment().format("M/DD/YYYY");
-  /*
-  const userLocation = {
-    '6/10/2017' : "America/New_York",
-    '6/11/2017' : "Asia/Tel_Aviv",
-    '6/12/2017' : "Asia/Tel_Aviv",
-    '6/13/2017' : "Asia/Tel_Aviv",
-    '6/14/2017' : "Asia/Tel_Aviv",
-    '6/15/2017' : "Asia/Tel_Aviv",
-    '6/16/2017' : "Asia/Tel_Aviv",
-    '6/17/2017' : "Asia/Tel_Aviv",
-    '6/18/2017' : "Asia/Tel_Aviv",
-    '6/19/2017' : "Asia/Tel_Aviv",
-  };  
-  // const telAvivList = ["1443244455734100", "1420209771356315"]; // , "1234"];
-  // const londonList = ["1420839671315623", "1120615267993271"];
-  // if(telAvivList.includes(this.fbid)) return "Asia/Tel_Aviv";
-  // if(londonList.includes(this.fbid)) return "Europe/London";
-  */
-  return "US/Pacific";
+  if(this.trip.tripStarted()) return this.trip.timezone();
+  // return the timezone of the user's hometown
+  const session = Sessions.get().find(this.fbid);
+  return session.timezone();
 }
 
 module.exports = Commands;

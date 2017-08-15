@@ -214,6 +214,7 @@ TripData.prototype.addTripDetailsAndPersist = function(tripDetails) {
   this.data.name = this.tripName;
   this.data.rawName = this.rawTripName;
   if(!tripDetails.ownerId) throw new Error(`addTripDetailsAndPersist: Required field ownerId is missing in passed tripDetails parameter`);
+  // TODO: This needs to be removed and the place where this is set should use persistDepartureCityAndCode to set the right values.
   if(tripDetails.leavingFrom) this.data.leavingFrom = myEncode(tripDetails.leavingFrom);
   // destination might be different from trip name. Also, destination might be city or country. That determination is made and appropriate values are set in destination-cities-workflow/app/workflow.js
   if(tripDetails.destination) this.data.destination = tripDetails.destination;
@@ -227,7 +228,7 @@ TripData.prototype.addTripDetailsAndPersist = function(tripDetails) {
   }
   else this.data.startDate = "unknown";
 
-  if(tripDetails.tripStarted) this.data.tripStarted = tripDetails.tripStarted;
+  if(this.tripStarted()) this.data.tripStarted = true;
   this.addPortOfEntry(tripDetails.portOfEntry);
   // duration includes the start date, so subtract 1
   if(tripDetails.duration) {
@@ -263,9 +264,25 @@ function getSharedBaseDir() {
   return this.tripSharedFilesBaseDir;
 }
 
+TripData.prototype.timezone = function() {
+  return this.data.timezone;
+}
+
+TripData.prototype.tripStarted = function() {
+  if(!this.data.startDate || this.data.startDate === "unknown") {
+    logger.error(`tripStarted: startDate not present. Unable to find out if trip started or not`);
+    return null; // This might be construed as "trip not yet started" by the caller.
+  }
+  logger.debug(`start date: ${this.data.startDate}`);
+  // the trip has started if today comes after the trips start date (to the hour's granularity);
+  if(moment().isAfter(this.data.startDate, "hour")) return true;
+  return false;
+}
+
 // Set the correct departure city (leavingFrom) for this trip. Users might have passed an airport code or city. Figure out which and store it accordingly.
-TripData.prototype.persistDepartureCity = function(city) {
+TripData.prototype.persistDepartureCityAndCode = function(city, code) {
   this.data.leavingFrom = myEncode(city); 
+  this.data.departureCityCode = code.toUpperCase();
   this.persistUpdatedTrip();
 }
 
@@ -298,6 +315,12 @@ TripData.prototype.addPortOfEntry = function(portOfEntry) {
 	if(!this.data.cities) this.data.cities = [];
   this.data.cities.push(myEncode(portOfEntry));
 	// logger.debug(`addPortOfEntry: Added ${portOfEntry} as port of entry`);
+  this.persistUpdatedTrip();
+}
+
+TripData.prototype.addPortOfEntryAndCode = function(city, code) {
+  this.data.portOfEntry = myEncode(city);
+  this.data.portOfEntryCode = code.toUpperCase();
   this.persistUpdatedTrip();
 }
 
@@ -826,7 +849,7 @@ TripData.prototype.vegRestaurantsFile = function() {
 function getNewLocationFile(fileName) {
   if(!fileName) throw new Error("getNewLocationFile: required parameter filename is not defined");
   const file = `${getSharedBaseDir.call(this)}/${fileName}`;
-  logger.debug(`getNewLocationFile: file is ${file}`);
+  // logger.debug(`getNewLocationFile: file is ${file}`);
   if(fs.existsSync(file)) return file;
   // for backwards compatibility, look at the old location and if the file exists, move it to the new location.
   const oldLocation = `${this.tripBaseDir}/${fileName}`;
@@ -835,7 +858,7 @@ function getNewLocationFile(fileName) {
     fs.renameSync(oldLocation, file);
   }
   // TODO: This might fail. Hopefully, it will be handled correctly upstream.
-  logger.debug(`getNewLocationFile: returning file ${file}`);
+  // logger.debug(`getNewLocationFile: returning file ${file}`);
   return file;
 }
 

@@ -110,8 +110,24 @@ function testGetFlightQuoteDetailsTripStarted() {
   );
 }
 
+function testMinPrice() {
+  const trip = new TripData("test-min-price", "1234");
+  const tip = new TripInfoProvider(trip);
+  const promise = tip.getLowestNonstopPrice();
+  promise.done(
+    function(response) {
+      console.log(`min price is ${response}`);
+    },
+    function(err) {
+      console.log(`min price is undefined. error is ${err.stack}`);
+    }
+  );
+}
+
+testMinPrice();
+
 // testGetFlightQuoteDetails();
-testGetFlightQuoteDetailsTripStarted();
+// testGetFlightQuoteDetailsTripStarted();
 
 // testGetActivity();
 // testGetWeatherInformation();

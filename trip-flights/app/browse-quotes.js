@@ -33,7 +33,7 @@ function BrowseQuotes(origCity, destCity, startDate, returnDate) {
       return Promise.resolve("success");
     },
     function(err) {
-      logger.error(`getCachedQuotes: promise to get airport codes failed. ${err.stack}`);
+      logger.error(`BrowseQuotes: promise to get airport codes failed. ${err.stack}`);
       return Promise.reject(err);
     }
   );
@@ -61,7 +61,7 @@ BrowseQuotes.prototype.getCachedQuotes = function() {
       const file = getFileName.call(self);
       // logger.info(`getCachedQuotes: origCode is ${self.origCode}; destCode is ${self.destCode}. file is ${file}. About to do something around getting flights`);
       if(fs.existsSync(file)) {
-        const maxAgeInMinutes = 30;
+        const maxAgeInMinutes = 16;
         const ctime = (new Date(fs.statSync(file).ctime)).getTime();
         const diffInMinutes = (Date.now()-ctime)/(1000*60);
         if(diffInMinutes < maxAgeInMinutes) { // file's age is less than maxAge
@@ -142,6 +142,7 @@ BrowseQuotes.prototype.getStoredQuotes = function() {
   return this.promise.then(
     function(response) {
       const file = getFileName.call(self);
+      // logger.debug(`getStoredQuotes: looking at file ${file}`);
       return new Promise(
         function(fulfil, reject) {
           fs.readFile(file, (err, contents) => {

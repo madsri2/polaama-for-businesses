@@ -20,6 +20,7 @@ const CreateItinerary = require('trip-itinerary/app/create-itin');
 const Commands = require('trip-itinerary/app/commands');
 const DepartureCityWorkflow = require('departure-city-workflow/app/workflow');
 const DestinationCityWorkflow = require('destination-cities-workflow/app/workflow');
+const AirportCodes = require('trip-flights/app/airport-codes');
 
 const _ = require('lodash');
 const request = require('request');
@@ -31,11 +32,14 @@ const Encoder = require(`${baseDir}/encoder`);
 
 let recordMessage = true;
 let previousMessage = {};
+let pageAccessToken;
 
 let TEST_MODE = false;
 // NOTE: WebhookPostHandler is a singleton, so all state will need to be maintained in this.session object. fbidHandler is also a singleton, so that will be part of the WebhookPostHandler object.
 function WebhookPostHandler(session, testing) {
   if(testing) TEST_MODE = true; // Use sparingly. Currently, only used in callSendAPI
+  this.secretManager = new SecretManager();
+  pageAccessToken = this.secretManager.getPageAccessToken();
   this.sessionState = new SessionState();
   this.sessions = Sessions.get();
   this.fbidHandler = FbidHandler.get();
@@ -46,6 +50,8 @@ function WebhookPostHandler(session, testing) {
   }
   this.notifier = new Notifier(this.sessions);
   this.logOnce = {};
+  // Creating this here because the constructor reads a huge file. Creating this here would mean we can simply pass this around, instead of creating it every single time.
+  this.airportCodes = new AirportCodes();
   const self = this;
 	// A Cheap way to trigger data update on changes across processes: Create a monitor that will trigger when files in ~/sessions changes, and reload the session that changed. This way, we don't have to reload sessions all over the place and this will work even across processes (for eg. when we create a new trip as a result of an itinerary or boarding pass email, the main webserver's sessions will automatically be reloaded within a few minutes)
   watch.createMonitor(Sessions.path(), { ignoreDotFiles: true }, function(monitor) {
@@ -305,6 +311,8 @@ WebhookPostHandler.prototype.startPlanningTrip = function() {
   const activities = Promise.denodeify(tip.getActivities.bind(tip));
   const weatherDetails = Promise.denodeify(tip.getWeatherInformation.bind(tip));
   const dtdCallback = displayTripDetails.bind(this);
+  const refreshFlightQuotes = tip.refreshFlightQuotes.bind(tip);
+  const fifteenMinutesInMsec = 1000 * 60 * 15;
 
   // TODO: If this is a beach destinataion, use http://www.blueflag.global/beaches2 to determine the swimmability. Also use http://www.myweather2.com/swimming-and-water-temp-index.aspx to determine if water conditions are swimmable
   const self = this;
@@ -340,27 +348,34 @@ WebhookPostHandler.prototype.startPlanningTrip = function() {
     .done(
       function(response) {
         try {
+          logger.debug(`startPlanningTrip: session dump: ${JSON.stringify(self.session)}`);
           const createItin = new CreateItinerary(trip, self.session.hometown);
           const tripNameInContext = (self.session.tripNameInContext) ? self.session.tripNameInContext : "unknown_trip";
           Promise.all(createItin.create()).done(
             function(values) {
               // nothing to do here if create succeeds. The itinerary will be persisted and can be obtained by reading the file, which is done in trip-data-formatter:displayCalendar when /calendar is called
               logger.info(`Successfully created itinerary for trip ${tripNameInContext}`);
+              setInterval(refreshFlightQuotes, fifteenMinutesInMsec);
+              dtdCallback();
             },
             function(error) {
               logger.error(`Error creating itinerary for trip ${tripNameInContext}: ${error.stack}`);
+              setInterval(refreshFlightQuotes, fifteenMinutesInMsec);
+              dtdCallback();
             }
           );
         }
         catch(e) {
           logger.error(`Error creating itinerary for trip ${tripNameInContext}: ${e.stack}`);
           // proceed to display trip details because other items might be available.
+          setInterval(refreshFlightQuotes, fifteenMinutesInMsec);
+          dtdCallback();
         }
-        dtdCallback();
       },
       function(err) {
         logger.error(`error in gathering data for trip ${tripNameInContext}: ${err.stack}`);
         // even if one of the previous promises were rejected, call the dtdCallback since some of them might have succeeded.
+        setInterval(refreshFlightQuotes, fifteenMinutesInMsec);
         dtdCallback();
       }
     );
@@ -520,6 +535,8 @@ function receivedPostback(event) {
   if(payload === "supported_commands") return supportedCommands.call(this);
   if(payload === "view_more_commands") return supportedCommands.call(this, true /* more elements */);
 
+  if(payload === "show_flight_booking") return showFlightBookingOptions.call(this);
+
 	// new trip cta
   if(payload === "new_trip" || payload === "pmenu_new_trip" || payload === "postback_create_new_trip") return handlePlanningNewTrip.call(this);
 
@@ -641,13 +658,98 @@ function sendReturnFlightDetails() {
             content_type: "text",
             title: "Onward flight",
             payload: "qr_onward_flight",
-            // image_url: ""
           }
         ]
       }
     });
   }
   sendMultipleMessages(fbid, messageList);
+}
+
+function sendFlightBookingMessage(ssMinPrice) {
+   const trip = this.session.tripData();
+   const departureCode = trip.data.departureCityCode;
+   const arrivalCode = trip.data.portOfEntryCode;
+   const numPassengers = 1;
+   const startDate = trip.data.startDate;
+   const returnDate = trip.data.returnDate;
+   const sdMoment = new moment(startDate);
+   const startDay = sdMoment.date() < 10 ? `0${sdMoment.date()}` : sdMoment.date(); 
+   const startMonth = (sdMoment.month()+1) < 10 ? `0${sdMoment.month()+1}` : sdMoment.month()+1; 
+   const startYear = sdMoment.year();
+   const rdMoment = new moment(returnDate);
+   const returnDay = rdMoment.date() < 10 ? `0${rdMoment.date()}` : rdMoment.date();
+   const returnMonth = (rdMoment.month()+1) < 10 ? `0${rdMoment.month()+1}` : rdMoment.month()+1; 
+   const returnYear = rdMoment.year();
+   const expediaStartDate = `${startMonth}%2F${startDay}%2F${startYear}`;
+   const expediaReturnDate = `${returnMonth}%2F${returnDay}%2F${returnYear}`;
+   const skyscannerSubtitle = (ssMinPrice) ? `Prices starting from $${ssMinPrice}/- (non-stop)` : "";
+   // url: "https://www.expedia.com/Flights-Search?flight-type=on&starDate=09%2F09%2F2017&endDate=09%2F15%2F2017&_xpid=11905%7C1&mode=search&trip=roundtrip&leg1=from%3AEWRto%3ASFO%2Cdeparture%3A09%2F09%2F2017TANYT&leg2=from%3ASFOtoEWR%2Cdeparture%3A09%2F15%2F2017TANYT&passengers=children%3A0%2Cadults%3A1%2Cseniors%3A0%2Cinfantinlap%3AY"
+   const skyscannerApiKey = this.secretManager.getSkyscannerApiKey();
+   const message = {
+     recipient: {
+       id: this.session.fbid
+     },
+     message: {
+       attachment: {
+         "type": "template",
+         payload: {
+           template_type: "list",
+           elements: [
+             {
+               "title": `Flight Booking`,
+               "image_url": "http://icons.iconarchive.com/icons/andrea-aste/torineide/256/turin-map-detail-icon.png"
+             },
+             {
+               "title": "Skyscanner",
+               "subtitle": skyscannerSubtitle,
+               "image_url": "https://www.skyscanner.com/images/opengraph.png",
+               "buttons": [{
+                 title: "Book",
+                 type: "web_url",
+                 url: `http://partners.api.skyscanner.net/apiservices/referral/v1.0/US/USD/en-US/${departureCode}/${arrivalCode}/${startDate}/${returnDate}?apiKey=${skyscannerApiKey}`
+               }]
+             },
+             {
+               "title": "Kayak",
+               "image_url": "http://www.simplebooking.travel/wp-content/uploads/2016/07/kayak-logo.png",
+               "buttons": [{
+                 title: "Book",
+                 type: "web_url",
+                 url: `https://www.kayak.com/flights/${departureCode}-${arrivalCode}/${startDate}/${returnDate}`
+               }]
+             },
+             {
+               "title": "Expedia",
+               "image_url": "https://viewfinder.expedia.com/img//exp_us_basic_lrg_4c_rgb.jpg",
+               "buttons": [{
+                 title: "Book",
+                 type: "web_url",
+                 url: `https://www.expedia.com/Flights-Search?flight-type=on&starDate=09%2F09%2F2017&endDate=09%2F15%2F2017&_xpid=11905%7C1&mode=search&trip=roundtrip&leg1=from%3A${departureCode}to%3A${arrivalCode}%2Cdeparture%3A${expediaStartDate}TANYT&leg2=from%3A${arrivalCode}to${departureCode}%2Cdeparture%3A${expediaReturnDate}TANYT&passengers=children%3A0%2Cadults%3A1%2Cseniors%3A0%2Cinfantinlap%3AY`
+               }]
+             }
+           ]
+         }
+       }
+     }
+   };
+   return callSendAPI(message);
+}
+
+function showFlightBookingOptions() {
+  const trip = this.session.tripData();
+  const tip = new TripInfoProvider(trip);
+  const promise = tip.getLowestNonstopPrice();
+  const self = this;
+  promise.done(
+    function(ssMinPrice) {
+      sendFlightBookingMessage.call(self, ssMinPrice);
+    },
+    function(err) {
+      logger.error(`showFlightBookingOptions: error getting min price from browse quotes: ${err.stack}. Proceeding without min price`);
+      sendFlightBookingMessage.call(self);
+    }
+  );
 }
 
 function sendFlightItinerary() {
@@ -1232,20 +1334,16 @@ function partialMatch(nameParts, friend) {
 }
 
 function addSenderToTrip() {
-  const file = `${baseDir}/trips/friends.json`;
-  const friends = JSON.parse(fs.readFileSync(file, 'utf8'));
-  const name = this.fbidHandler.getName(this.session.fbid);
-  if(!name) return sendTextMessage(this.session.fbid, "Could not add you to the trip at this point.");
-  Object.keys(friends).forEach(friend => {
-    // TODO: Matcing by first or last name is dangerous. Come up with a better approach
-    if(name === friend || partialMatch(name.split(" "), friend)) {
-      logger.debug(`addSenderToTrip: Found match ${friend} for name ${name}`);
+  // even though we don't expect an exception at this point, add the try catch block so that we send a message back to the customer.
+  try {
+    const tripDetails = inFriendsTripList.call(this);
+    if(tripDetails) {
       // copy the trip details from owner's directory to friend's directory. Then return success
       // get owner's trip base dir 
-      const tripBaseDir = `${baseDir}/trips/${friends[friend].owner}`;
+      const tripBaseDir = `${baseDir}/trips/${tripDetails.owner}`;
       const senderId = this.fbidHandler.encode(this.session.fbid);
       const targetDir = `${baseDir}/trips/${senderId}`;
-      const tripName = friends[friend].trip;
+      const tripName = tripDetails.trip;
       if(!fs.existsSync(targetDir)) fs.mkdirSync(targetDir);
       fs.readdirSync(tripBaseDir).forEach(file => {
         if(file.includes(tripName)) {
@@ -1254,9 +1352,13 @@ function addSenderToTrip() {
         }
       });
       this.session.addExistingTrip(tripName);
-      sendTripButtons.call(this);
+      return sendTripButtons.call(this);
     }
-  });
+  }
+  catch(e) {
+    logger.error(`addSenderToTrip: Exception in adding sender: ${e.stack}`);
+  }
+  return sendTextMessage(this.session.fbid, "Could not add you to the trip at this point.");
 }
 
 function handleQuickReplies(quick_reply) {
@@ -1768,21 +1870,32 @@ function handleAdditionalCommands(event, mesg) {
   const senderID = this.session.fbid;
 
   if(this.sessionState.get('planningNewTrip')) {
+    const self = this;
     // 3) If we already asked for cities, handle that and start planning. Else, get cities for the trip.
     const destCityWorkflow = new DestinationCityWorkflow(this);
-    const result = destCityWorkflow.handleNewTrip(mesg);
-    if(result) {
-      // End of new trip workflow. The workflow will complete when user selects cities (handled by determineCities function) and webpage-handler.js calls the startPlanningTrip method
-      // TODO: Rather than let webpage-handler.js call startPlanning (and thus exposing this functionality there), consider calling startPlanningTrip from here.. The presence of tripData.data.cities can be a signal from webpage-handler.js's formParseCallback method that the cities were correctly chosen and added here.
-      this.sessionState.clear("planningNewTrip");
-      // invalidate this trip in the session so that it will be fetched from a datastore.
-      this.session.invalidateTripData();
-      // see if we have enough data to start planning a trip
-      if(this.session.tripData().cityItinDefined()) {
-        // logger.debug(`getCityDetailsAndStartPlanningTrip: cities available for trip ${tripData.rawTripName}. Start planning trip for customer ${this.session.fbid}`);
-        this.startPlanningTrip();
+    const promise = destCityWorkflow.handleNewTrip(mesg);
+    promise.done(
+      function(response) {
+        // logger.debug(`handleAdditionalCommands: destination city workflow promise claled. result is ${response}`);
+        if(response) {
+          // End of new trip workflow. The workflow will complete when user selects cities (handled by determineCities function) and webpage-handler.js calls the startPlanningTrip method
+          // TODO: Rather than let webpage-handler.js call startPlanning (and thus exposing this functionality there), consider calling startPlanningTrip from here.. The presence of tripData.data.cities can be a signal from webpage-handler.js's formParseCallback method that the cities were correctly chosen and added here.
+          self.sessionState.clear("planningNewTrip");
+          // invalidate this trip in the session so that it will be fetched from a datastore.
+          self.session.invalidateTripData();
+          // see if we have enough data to start planning a trip
+          if(self.session.tripData().cityItinDefined()) {
+            const tripData = self.session.tripData();
+            logger.debug(`handleAdditionalCommands: cities available for trip ${tripData.rawTripName}. Start planning trip for customer ${self.session.fbid}; session dump: ${JSON.stringify(self.session)}`);
+            self.startPlanningTrip();
+          }
+        }
+        // if the response was false, then the destination city workflow needed additional information from users. So, nothing to do but return;
+      },
+      function(err) {
+        logger.error(`Error calling destinationCityWorkflow.handleNewTrip: ${err}`);
       }
-    }
+    );
     // irrespective of the response from handleNewTrip, we are done handling this message from the user.
     return;
   }
@@ -1810,6 +1923,7 @@ function handleAdditionalCommands(event, mesg) {
   }
 
   const tripData = this.session.tripData();
+  if(mesg === "add to trip") return addSenderToTrip.call(this);
   // same as user choosing "Add" after choosing trip from "Existing trip" persistent menu
   if(mesg === "add") return sendAddButtons.call(this);
   // same as user choosing "Get" after choosing trip from "Existing trip" persistent menu
@@ -2380,10 +2494,10 @@ function respondToHelp() {
               payload: "get_postback"
             }]
           },{
-            "title": "Create a new trip",
+            "title": "Plan a new trip",
             "subtitle": "Let's plan a trip together",
             "buttons": [{
-              title: "New trip",
+              title: "Plan new trip",
               type: "postback",
               payload: "new_trip"
             }]
@@ -2446,7 +2560,7 @@ function getHelpMessageData(senderID, message) {
     return respondToHelp.call(this);
   }
   if(!message) message = "Hi! What would you like to do?";
-  return {
+  const messageData = {
     recipient: {
       id: this.session.fbid
     },
@@ -2455,58 +2569,51 @@ function getHelpMessageData(senderID, message) {
         "type": "template",
         payload: {
           template_type: "list",
-          elements: [{
+          elements: [
+            {
               "title": `${message}`,
               "image_url": "http://icons.iconarchive.com/icons/andrea-aste/torineide/256/turin-map-detail-icon.png"
             },
             {
-              "title": "Create a new trip",
-              "subtitle": "Let's plan a trip together",
+              "title": "Plan a new trip",
+              "subtitle": "Let's plan together",
               "buttons": [{
-                title: "Create",
+                title: "Plan new trip",
                 type: "postback",
                 payload: "postback_create_new_trip"
               }]
-            },
-            {
-              "title": "Request to be added to existing trip",
-              "subtitle": "created by a friend or family",
-              "buttons": [{
-                title: "Request",
-                type: "postback",
-                payload: "postback_request_to_be_added"
-              }]
-          }]
+            }
+          ]
         }
       }
     }
   };
-  /*
-  const quickReplies = [{
-    content_type: "text",
-    title: "New trip",
-    payload: "qr_new_trip"
-  },
-  {
-    content_type: "text",
-    title: "Be added to existing trip",
-    payload: "qr_request_to_be_added"
-  }];
-  if(this.tripCount) quickReplies.push({
-      content_type: "text",
-      title: "Existing trips",
-      payload: "qr_existing_trips"
+  if(inFriendsTripList.call(this)) messageData.message.attachment.payload.elements.push({
+    "title": "Request to be added to existing trip",
+    "subtitle": "created by a friend or family",
+    "buttons": [{
+      title: "Request",
+      type: "postback",
+      payload: "postback_request_to_be_added"
+    }]
   });
-  return {
-    recipient: {
-      id: senderID
-    },
-    message: {
-      text: `${message}`,
-      quick_replies: quickReplies
+  return messageData;
+}
+
+function inFriendsTripList() {
+  const file = `${baseDir}/trips/friends.json`;
+  const friends = JSON.parse(fs.readFileSync(file, 'utf8'));
+  const name = this.fbidHandler.getName(this.session.fbid);
+  if(!name) return null;
+  let tripDetails = null;
+  Object.keys(friends).forEach(friend => {
+    // TODO: Matcing by first or last name is dangerous. Come up with a better approach
+    if(name === friend || partialMatch(name.split(" "), friend)) {
+      // logger.debug(`inFriendsTripList: Found match ${friend} for name ${name}`);
+      tripDetails = friends[friend];
     }
-  };
-  */
+  });
+  return tripDetails;
 }
 
 function sendWelcomeMessage(senderID) {
@@ -2751,7 +2858,7 @@ function sendMultipleMessages(recipientId, messages, alreadyRecorded) {
   }
   request({
     uri: 'https://graph.facebook.com/v2.6/me/messages',
-    qs: { access_token: (new SecretManager()).getPageAccessToken() },
+    qs: { access_token: pageAccessToken },
     method: 'POST',
     json: messages[0]
   }, function (error, response, body) {
@@ -2776,7 +2883,7 @@ function callSendAPI(messageData) {
   if(TEST_MODE) return logger.debug(`MESSAGE TO CHAT: ${JSON.stringify(messageData)}`);
   request({
     uri: 'https://graph.facebook.com/v2.6/me/messages',
-    qs: { access_token: (new SecretManager()).getPageAccessToken() },
+    qs: { access_token: pageAccessToken },
     method: 'POST',
     json: messageData
   }, function (error, response, body) {

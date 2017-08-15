@@ -2,16 +2,16 @@
 
 const baseDir = "/home/ec2-user";
 const WebhookPostHandler = require(`${baseDir}/webhook-post-handler`);
-cONst TripData = require(`${baseDir}/trip-data`);
+const TripData = require(`${baseDir}/trip-data`);
 const Sessions = require(`${baseDir}/sessions`);
 const Commands = require(`trip-itinerary/app/commands`);
 const FbidHandler = require('fbid-handler/app/handler');
 
 // const fbid = "1630377990366886"; // raj
 // const fbid = "1311237785652279"; // divya
-const fbid = "1120615267993271"; // madhu
+// const fbid = "1120615267993271"; // madhu
 // const fbid = "1428065237278275"; // Arpan
-// const fbid = "1718674778147181"; // Beth
+const fbid = "1718674778147181"; // Beth
 // const fbid = "1420839671315623"; // Aparna
 let name = new FbidHandler().getName(fbid);
 if(!name) name = ""; else name = name.substring(0, name.indexOf(" "));
@@ -289,12 +289,12 @@ function sendNewFeatureMessage() {
   // handler.sendMultipleMessages(fbid, messageList);
 }
 
-function sendBeforeFlightMessage() {
+function sendDailyMessage() {
 	const trip = new TripData("port_moresby", fbid);
   const commands = new Commands(trip, fbid);
   const message = commands.handle("today");
   const messageList = [];
-  messageList.push(handler.getTextMessageData(fbid, `Hi ${name}! Have a safe flight to PNG! Here is your day's itinerary`));
+  messageList.push(handler.getTextMessageData(fbid,`Good morning ${name}! It's going to be mostly cloudy today with scattered thunderstorms late evening at Pagwi. Your day's itinerary`));
   messageList.push(message);
   handler.sendMultipleMessages(fbid, messageList);
 }
@@ -332,23 +332,8 @@ function sendGoodMorningMessage() {
         }]
       }
   ];
-  const message = {
-    recipient: {
-      id: fbid
-    },
-    message: {
-      attachment: {
-        "type": "template",
-        payload: {
-          template_type: "list",
-          "top_element_style": "compact",
-          elements: secondSet,
-        }
-      }
-    }
-  };
   const messageList = [];
-  messageList.push(handler.getTextMessageData(fbid,`Good evening ${name}! Your flight for Seattle departs at 8.46 p.m from gate C3, reaching Seattle at 9.54 p.m. Here are your flight and car details`));
+  messageList.push(handler.getTextMessageData(fbid,`Good evening ${name}! Good news! It's going to be mostly sunny today. Here is your day's itinerary for Port Moresby`));
   messageList.push(message);
   handler.sendMultipleMessages(fbid, messageList);
 }
@@ -433,7 +418,7 @@ console.log(`Sending message to ${name}`);
 // sendAddedNewTripMessage();
 // sendGoodMorningMessage();
 // sendRentalCarDetails();
-sendBeforeFlightMessage();
+sendDailyMessage();
 // sendExpenseAndFeedbackRequest();
 // sendRecommendationAlert();
 // sendDayPlan();

@@ -138,11 +138,13 @@ ButtonsPlacement.prototype.getPlacement = function() {
 	if(!fs.existsSync(this.trip.itineraryFile())) {
   const quotes = new BrowseQuotes(this.trip.data.leavingFrom, this.trip.getPortOfEntry(), this.trip.data.startDate, this.trip.data.returnDate);
     if(quotes.quoteExists()) buttons.push({
-      type: "web_url",
-    	url: url(this.urlPrefix, `${this.trip.flightQuoteUrlPath()}`),
+      // type: "web_url",
+    	// url: url(this.urlPrefix, `${this.trip.flightQuoteUrlPath()}`),
+      // webview_height_ratio: "full",
+      type: "postback",
+      payload: "show_flight_booking",
       title:"Flight",
-      webview_height_ratio: "full",
-      messenger_extensions: true
+      // messenger_extensions: true
     });
   }
   const wip = new WeatherInfoProvider(this.trip.data.country, this.trip.getPortOfEntry(), this.trip.data.startDate);

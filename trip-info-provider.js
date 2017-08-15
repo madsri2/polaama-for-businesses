@@ -13,7 +13,8 @@ const FlightInfoProvider = require('./flight-info-provider');
 /* Class to handle manipulation of the trips/israel-data.txt file. */
 function TripInfoProvider(tripData, departureCity) {
   this.trip = tripData;
-  this.departureCity = departureCity;
+  if(!departureCity) this.departureCity = this.trip.data.leavingFrom;
+  else this.departureCity = departureCity;
   try {
     this.tripInfoDetails = JSON.parse(fs.readFileSync(this.trip.tripDataFile(),'utf8'));
   }
@@ -84,7 +85,7 @@ function getWeatherForCity(city, index, callback) {
   if(!_.isUndefined(cityDetails.weather)) {
     // we already have weather details for this city. nothing to do.
     if(index == (cities.length-1)) {
-      logger.info(`getWeatherForCity: Details already available for final city ${city} in list. Invoking callback`);
+      // logger.info(`getWeatherForCity: Details already available for final city ${city} in list. Invoking callback`);
       return callback();
     }
     return;
@@ -124,7 +125,7 @@ TripInfoProvider.prototype.getWeatherInformation = function(callback) {
 
 function encodeForLonelyPlanet() {
   if(_.isUndefined(this.trip.data.country)) {
-    logger.warn("encodeForLonelyPlanet: No country specified in trip");
+    // logger.warn("encodeForLonelyPlanet: No country specified in trip");
     return undefined;
   }
   return this.trip.data.country.replace(/ /g,'-').replace(/_/g,'-').toLowerCase();
@@ -154,6 +155,20 @@ TripInfoProvider.prototype.getFlightDetails = function(callback) {
 }
 */
 
+TripInfoProvider.prototype.refreshFlightQuotes = function() {
+  logger.info(`refreshing flight quotes`);
+  const promise = this.getFlightQuotes();
+  promise.done(
+    function(response) {
+      logger.debug(`refreshFlightQuotes: successfully refreshed. response: ${response}`);
+    },
+    function(err) {
+      logger.error(`refreshFlightQuotes: Error refreshing quotes: ${err.stack}`); 
+    }
+  );
+}
+
+
 TripInfoProvider.prototype.getFlightQuotes = function() {
   const tripData = this.trip.data;
   try {
@@ -177,6 +192,27 @@ TripInfoProvider.prototype.getStoredFlightQuotes = function() {
   }
   const browseQuotes = new BrowseQuotes(this.departureCity, tripData.portOfEntry, tripData.startDate, tripData.returnDate);
   return browseQuotes.getStoredQuotes();
+}
+
+TripInfoProvider.prototype.getLowestNonstopPrice = function() {
+  const promise = this.getStoredFlightQuotes();
+  return promise.then(
+    function(contents) {
+      let minPrice;
+      for(let i = 0; i < contents.length; i++) {
+        const thisQuote = contents[i];
+        if(thisQuote.originDirect && thisQuote.returnDirect) {
+          // logger.debug(`getLowestNonstopPrice: adding price ${thisQuote.price}; min price is ${minPrice}`);
+          if(!minPrice || (thisQuote.price < minPrice)) minPrice = thisQuote.price;
+        }
+      }
+      return Promise.resolve(minPrice);
+    },
+    function(err) {
+      logger.error(`Error getting flight quotes: ${err.stack}`);
+      return Promise.reject(err);
+    }
+  );
 }
 
 TripInfoProvider.prototype.getStoredFlightDetails = function() {

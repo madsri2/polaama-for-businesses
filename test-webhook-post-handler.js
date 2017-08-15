@@ -163,15 +163,15 @@ function testStartPlanningTrip() {
   const handler = new WebhookPostHandler(session, true /* testing */);
   handler.testing_createNewTrip({
     destination: "san_francisco",
-    startDate: "09/11/2017",
-    leavingFrom: "ewr",
+    startDate: "09/10/2017",
     duration: 4
   });
   session.persistHometown("ewr");
   const sessionState = handler.sessionState;
   // setup state
   sessionState.set("planningNewTrip");
-  const event = { message: { text: "invalid" } };
+  sessionState.set("awaitingUseHometownAsDepartureCity");
+  const event = { message: { text: "", quick_reply : { payload: "qr_use_hometown_as_dep_city_yes" }}};
   // test
   handler.testing_determineResponseType(event);
 }
@@ -355,7 +355,9 @@ function testAddingDepartureCityNoHometownSet() {
   console.log(`testAddingDepartureCityNoHometownSet: response from determineResponseType is ${response}; hometown: ${handler.session.hometown}`);
 }
 
-testRequestToBeAddedToTrip();
+testStartPlanningTrip();
+
+// testRequestToBeAddedToTrip();
 
 // testAddingDepartureCityNoHometownSet();
 
@@ -374,7 +376,6 @@ testRequestToBeAddedToTrip();
 
 // testExtractingCityDetails();
 
-// testStartPlanningTrip();
 
 // testGatheringDetailsForNewTrip();
 

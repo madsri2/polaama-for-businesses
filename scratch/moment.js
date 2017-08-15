@@ -97,7 +97,17 @@ function compare() {
   }
 }
 
-compare();
+function getDayMonthYear() {
+  // const m = new moment(startDate);
+  const sdMoment = new moment("2017-09-12");
+  const startDate = sdMoment.date() < 10 ? `0${sdMoment.date()}` : sdMoment.date(); 
+  const month = sdMoment.month() < 10 ? `0${sdMoment.month()}` : sdMoment.month(); 
+  console.log(`getDayMonthYear: month ${month}; date ${startDate}; ${sdMoment.year()}`);
+}
+
+getDayMonthYear();
+
+// compare();
 // compareHours();
 // patternMatch();
 

@@ -195,7 +195,7 @@ function setRemainingItinerary() {
     // use this city for the number of days user is going to stay in this city
     while(numDays++ != cityNumDays) {
       if(formatDate(this.nextDay) === formatDate(new Date(this.tripData.returnDate))) {
-        logger.info(`setRemainingItinerary: Not setting itin for last day: ${this.tripData.returnDate}. will be set by setLastDayDetails method`);
+        // logger.info(`setRemainingItinerary: Not setting itin for last day: ${this.tripData.returnDate}. will be set by setLastDayDetails method`);
         return;
       }
       promises.push(createCommonItinForEachDay.call(this, city, departureCountry).promise);
