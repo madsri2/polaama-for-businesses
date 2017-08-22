@@ -9,11 +9,11 @@ const FbidHandler = require('fbid-handler/app/handler');
 
 // const fbid = "1630377990366886"; // raj
 // const fbid = "1311237785652279"; // divya
-// const fbid = "1120615267993271"; // madhu
+const fbid = "1120615267993271"; // madhu
 // const fbid = "1428065237278275"; // Arpan
-const fbid = "1718674778147181"; // Beth
+// const fbid = "1718674778147181"; // Beth
 // const fbid = "1420839671315623"; // Aparna
-let name = new FbidHandler().getName(fbid);
+let name = FbidHandler.get().getName(fbid);
 if(!name) name = ""; else name = name.substring(0, name.indexOf(" "));
 const session = Sessions.get().find(fbid);
 if(!session) throw new Error(`could not find session for fbid ${fbid}`);
@@ -294,7 +294,7 @@ function sendDailyMessage() {
   const commands = new Commands(trip, fbid);
   const message = commands.handle("today");
   const messageList = [];
-  messageList.push(handler.getTextMessageData(fbid,`Good morning ${name}! It's going to be mostly cloudy today with scattered thunderstorms late evening at Pagwi. Your day's itinerary`));
+  messageList.push(handler.getTextMessageData(fbid,`Good morning ${name}! It's going to be partly sunny today at Goroka and 80°F. Your day's itinerary`));
   messageList.push(message);
   handler.sendMultipleMessages(fbid, messageList);
 }

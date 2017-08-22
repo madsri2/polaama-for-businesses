@@ -254,7 +254,7 @@ TripData.prototype.addTripDetailsAndPersist = function(tripDetails) {
 function getSharedBaseDir() {
   if(this.tripSharedFilesBaseDir) return this.tripSharedFilesBaseDir;
   if(!this.data.ownerId) {
-    logger.error(`getSharedBaseDir: Expected field ownerId missing`);
+    logger.error(`getSharedBaseDir: Expected field ownerId missing: ${new Error().stack}`);
     return null;
   }
   this.tripSharedFilesBaseDir = `${baseDir}/trips/shared/${this.data.ownerId}`;
@@ -268,12 +268,22 @@ TripData.prototype.timezone = function() {
   return this.data.timezone;
 }
 
+TripData.prototype.addEvent = function(eventName) {
+  if(!this.data.events) this.data.events = [];
+  this.data.events.push(eventName);
+  this.persistUpdatedTrip();
+}
+
+TripData.prototype.getEvents = function() {
+  return this.data.events;
+}
+
 TripData.prototype.tripStarted = function() {
   if(!this.data.startDate || this.data.startDate === "unknown") {
     logger.error(`tripStarted: startDate not present. Unable to find out if trip started or not`);
     return null; // This might be construed as "trip not yet started" by the caller.
   }
-  logger.debug(`start date: ${this.data.startDate}`);
+  // logger.debug(`start date: ${this.data.startDate}`);
   // the trip has started if today comes after the trips start date (to the hour's granularity);
   if(moment().isAfter(this.data.startDate, "hour")) return true;
   return false;
@@ -697,6 +707,9 @@ function myEncode(name) {
 }
 
 function createPackList() {
+  // if the pack file already exists, then do nothing.
+  const file = packListFile.call(this);
+  if(fs.existsSync(file)) return;
   // if the weather is sunny, add corresponding items.
   switch(this.data.weather) {
     case "sunny": 
@@ -862,6 +875,11 @@ function getNewLocationFile(fileName) {
   return file;
 }
 
+TripData.prototype.eventItineraryFile = function(eventName) {
+  const encEName = Encoder.encode(eventName);
+  return `${baseDir}/trips/shared/${encEName}/${encEName}-event-itinerary.json`;
+}
+
 TripData.prototype.dayItineraryFile = function(date) {
   const fileName = `${this.data.name}-${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-itinerary.json`;
   return getNewLocationFile.call(this, fileName);
@@ -869,7 +887,7 @@ TripData.prototype.dayItineraryFile = function(date) {
 
 TripData.prototype.itemDetailsFile = function(dateStr, fileSuffix) {
   const date = new Date(dateStr);
-  const fileName = `{this.data.name}-${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-${fileSuffix}.html`;
+  const fileName = `${this.data.name}-${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-${fileSuffix}.html`;
   return getNewLocationFile.call(this, fileName);
 }
 
@@ -1001,8 +1019,9 @@ TripData.prototype.testing_delete = function() {
     fs.renameSync(`${this.tripBaseDir}/${file}`, `${targetDir}/${file}`);
   });
   // Take care of shared files
-  const sharedBaseDir = getSharedBaseDir.call(this);
-  logger.debug(`sharedBaseDir: ${sharedBaseDir}`);
+	// logger.debug(`getting shared base dir for trip ${this.rawTripName} with owner ${this.data.ownerId}`);
+  const sharedBaseDir = getSharedBaseDir.call(this, this.data.ownerId);
+  // logger.debug(`sharedBaseDir: ${sharedBaseDir}`);
   if(!sharedBaseDir) return;
   fs.readdirSync(sharedBaseDir).forEach(file => {
     if(file.includes("oldFiles")) return;

@@ -167,7 +167,7 @@ function addPortOfEntryAndCode(destination) {
         // see if the passed value was actually a code instead of a city
         const city = self.airportCodes.getCity(destination);
         if(city) {
-          logger.debug(`addPortOfEntryAndCode: adding city ${city} and code ${destination}`);
+          // logger.debug(`addPortOfEntryAndCode: adding city ${city} and code ${destination}`);
           self.trip.addPortOfEntryAndCode(city, destination);
           self.sessionState.clear("awaitingCitiesForNewTrip");
           return Promise.resolve(true);

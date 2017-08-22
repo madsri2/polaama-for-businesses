@@ -222,6 +222,14 @@ DayPlanner.prototype.getRecommendations = function(interest, index) {
     case "da_ms":
       file = "/home/ec2-user/trips/aeXf/seattle-da-ms.json";
       break;
+    case "phocuswright_dragons":
+      file = "/home/ec2-user/trips/shared/phocuswright/dragons.json";
+      makeFirstElementCompact = true;
+      break;
+    case "phocuswright_innovators":
+      file = "/home/ec2-user/trips/shared/phocuswright/innovators.json";
+      makeFirstElementCompact = true;
+      break;
   };
   const errMessage = {
     recipient: {
@@ -232,6 +240,7 @@ DayPlanner.prototype.getRecommendations = function(interest, index) {
       metadata: "DEVELOPER_DEFINED_METADATA"
     }
   };
+  if(!file && this.trip.data.events.includes(interest)) file = this.trip.eventItineraryFile(interest);
   logger.debug(`getRecommendations: Looking at file ${file}`);
   if(!file) {
     logger.error(`getRecommendations: cannot find any file that matches interest ${interest} for trip ${this.trip.data.rawName}`);
@@ -241,7 +250,7 @@ DayPlanner.prototype.getRecommendations = function(interest, index) {
     const activityList = JSON.parse(fs.readFileSync(file, 'utf8'));
     this.interest = interest;
     const message = createListTemplate.call(this, activityList, currIndex);
-    if(makeFirstElementCompact) message.message.attachment.payload.top_element_style = "compact";
+    if(makeFirstElementCompact && message.message.attachment.payload.elements.length > 1) message.message.attachment.payload.top_element_style = "compact";
     return message;
   }
   catch(err) {
@@ -256,10 +265,32 @@ DayPlanner.prototype.getRecommendations = function(interest, index) {
   }
 }
 
+DayPlanner.prototype.getEventItinerary = function(eventName) {
+  try {
+    // set the event name as interest.
+    this.interest = Encoder.encode(eventName);
+    const file = this.trip.eventItineraryFile(eventName);
+    const itin = JSON.parse(fs.readFileSync(file, 'utf8'));
+    return createListTemplate.call(this, itin, 0);
+  }
+  catch(err) {
+    logger.error(`getEventItinerary: error in getting event itinerary: ${err.stack}`);
+    return {
+      recipient: {
+        id: this.fbid
+      },
+      message: {
+        text: `Unable to get event itinerary for trip ${this.trip.rawTripName} at this time`,
+        metadata: "DEVELOPER_DEFINED_METADATA"
+      }
+    };
+  }
+}
+
+
 // Facebook supports sending only 4 items in an elementList. So, use payload (see below) to pass around the index for the next set of items. 
 DayPlanner.prototype.getPlanAsList = function(setNum) {
   let file = this.trip.dayItineraryFile(this.date);
-  if(this.trip.data.name === "iceland" && CreateItinerary.formatDate(this.date) === "9/5/2017") file = "/home/ec2-user/trips/aeXf/iceland-2017-9-5-fake-itinerary.json";
   // logger.debug(`getPlanAsList: using list template to display itin for date ${CreateItinerary.formatDate(this.date)} and file ${file}`);
   try {
     // read the itinerary file, which is a list of json objects. Push each json object (which contains utmost 4 elements) into an array. Then, based on the index (either passed or defaults to 0), return the corresponding element set.
@@ -275,6 +306,8 @@ DayPlanner.prototype.getPlanAsList = function(setNum) {
 function createListTemplate(list, setNum) {
     const elementSet = [];
     Object.keys(list).forEach(key => {
+      // ignore the keyword entry. it's used for keyword matches.
+      if(key === "keywords") return;
       elementSet.push(list[key]);
     });
     let currIndex = 0;
@@ -294,7 +327,10 @@ function createListTemplate(list, setNum) {
       }
     };
     // if there is only one element in elements, then use a "generic" template instead of "list" template. 
-    if(elements.length === 1) message.message.attachment.payload.template_type = "generic";
+    if(elements.length === 1) {
+      message.message.attachment.payload.template_type = "generic";
+      message.message.attachment.payload.image_aspect_ratio = "square";
+    }
     message.message.attachment.payload.elements = elements;
     // logger.debug(`getPlanAsList: currIndex: ${currIndex}; elementSet length: ${elementSet.length}; this.date: ${this.date}`);
     // the last parameter indicates whether this is the lastSet or not.
@@ -500,7 +536,7 @@ DayPlanner.parseRecommendationPostback = function(payload) {
   logger.debug(`parseRecommendationPostback: parsed ${payload}; contents are ${contents}`);
   if(!contents) return null;
   return {
-    interest: contents[1],
+    interest: Encoder.encode(contents[1]),
     idx: parseInt(contents[2]),
   };
 }

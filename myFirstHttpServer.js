@@ -108,6 +108,7 @@ app.get('/auth/facebook', passport.authenticate('facebook'));
 app.get('/auth/facebook/callback', function(req, res, next) {
     // Not using successRedirect here because ensureAuthentication handles that by setting req.session.redirectTo
     passport.authenticate('facebook', function(err, user, info) {
+      // logger.debug(`passport.authentication: info details: ${JSON.stringify(info)}`);
       if(err) { 
         logger.error(`facebook callback: passport.authenticate: error authenticating using facebook strategy. info object is ${JSON.stringify(info)}`);
         return next(err);

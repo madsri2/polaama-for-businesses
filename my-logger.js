@@ -72,7 +72,7 @@ function formatLogArguments (args) {
 function getStackInfo (stackIndex) {
   // get call stack, and analyze it
   // get all file, method, and line numbers
-	Error.stackTraceLimit = 5;
+	// Error.stackTraceLimit = 8;
   var stacklist = (new Error()).stack.split('\n').slice(3);
 
   // stack trace format:

@@ -85,12 +85,12 @@ TripDataFormatter.prototype.formatTodoList = function(headers) {
     return `Could not find todoList for trip ${tripName}`;
   }
   if(_.isUndefined(headers) || _.isUndefined(headers['user-agent'])) {
-    logger.info("formatTodoList: header or user-agent not defined. sending back json");
+    // logger.info("formatTodoList: header or user-agent not defined. sending back json");
     return todoList;
   }
-  logger.debug(`formatTodoList: headers is ${JSON.stringify(headers)}`);
+  // logger.debug(`formatTodoList: headers is ${JSON.stringify(headers)}`);
   if(headers['user-agent'].startsWith("Mozilla")) {
-    logger.info("formatTodoList: request call from browser. sending back html");
+    // logger.info("formatTodoList: request call from browser. sending back html");
     let html = fs.readFileSync(`${baseDir}/html-templates/todo-list.html`, 'utf8');
     html = html.replace("${tripName}", capitalize1stChar(this.trip.data.rawName));
     if((!todoList.todo && !todoList.done) || (todoList.todo.length <= 0 && todoList.done.length <= 0)) {
@@ -104,7 +104,7 @@ TripDataFormatter.prototype.formatTodoList = function(headers) {
     else html = html.replace("${doneList}","");
     return html;
   }
-  logger.info("formatTodoList: request call from something other than browser. sending back json");
+  // logger.info("formatTodoList: request call from something other than browser. sending back json");
   return todoList;
 }
 

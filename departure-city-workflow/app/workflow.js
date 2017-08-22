@@ -67,7 +67,7 @@ Workflow.prototype.set = function() {
     });
     return false;
   }
-  logger.debug(`hometown: ${this.session.hometown}; leavingFrom: ${trip.data.leavingFrom}`);
+  // logger.debug(`hometown: ${this.session.hometown}; leavingFrom: ${trip.data.leavingFrom}`);
   return setDepCityFromUser.call(this);
 }
 

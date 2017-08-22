@@ -12,6 +12,7 @@ const fs = require('fs');
 
 const moment = require('moment');
 const Promise = require('promise');
+const myFbid = "1234";
 
 function testGatheringDetailsForNewTrip() {
   const dtdCallback = function() { 
@@ -355,7 +356,147 @@ function testAddingDepartureCityNoHometownSet() {
   console.log(`testAddingDepartureCityNoHometownSet: response from determineResponseType is ${response}; hometown: ${handler.session.hometown}`);
 }
 
-testStartPlanningTrip();
+function setupForSfoEventPlanning(fbid) {
+	if(!fbid) fbid = myFbid;
+  const sessions = Sessions.get();
+  const tripName = "san_francisco";
+  // set up
+  // first clean up previous test state
+  sessions.testing_delete(fbid);
+  new TripData(tripName, fbid).testing_delete();
+  const session = sessions.findOrCreate(fbid);
+  // create new trip
+  const handler = new WebhookPostHandler(session, true /* testing */);
+  handler.testing_createNewTrip({
+    destination: "san_francisco",
+    startDate: "09/10/2017",
+    duration: 4,
+    leavingFrom: "ewr",
+    portOfEntry: "sfo"
+  });
+  return handler;
+}
+
+function testGettingEventItinerary() {
+  const handler = setupForSfoEventPlanning();
+  const postback = "pb_event_details phocuswright";
+  const event = { 
+    message: {
+      text: ""
+    },
+    sender: {
+      id: myFbid
+    }, 
+    recipient: {
+      id: myFbid
+    }, 
+    timestamp: "12345",
+    postback: { 
+      payload: postback 
+    } 
+  };
+  logger.debug(`testGettingEventItinerary: ****** About to test getting event itinerary ********`);
+  handler.testing_receivedPostback(event);
+}
+
+function testChoosingConference() {
+  const handler = setupForSfoEventPlanning();
+  handler.sessionState.set("awaitingTripReason");
+  handler.sessionState.set("planningNewTrip");
+  const postback = "pb_event";
+  const event = { 
+    message: {
+      text: ""
+    },
+    sender: {
+      id: myFbid
+    }, 
+    recipient: {
+      id: myFbid
+    }, 
+    timestamp: "12345",
+    postback: { 
+      payload: postback 
+    } 
+  };
+  handler.testing_receivedPostback(event);
+}
+
+function testConferenceViewMore() {
+  const handler = setupForSfoEventPlanning();
+  // start planning trip
+  handler.startPlanningTrip(true /* return promise */);
+  handler.sessionState.set("awaitingTripReason");
+  handler.sessionState.set("awaitingConferenceName");
+  handler.sessionState.set("planningNewTrip");
+  let event = { 
+    message: {
+      text: ""
+    },
+    sender: {
+      id: myFbid
+    }, 
+    recipient: {
+      id: myFbid
+    }, 
+    timestamp: "12345",
+    postback: { 
+      payload: "phocuswright"
+    } 
+  };
+  handler.testing_receivedPostback(event);
+  event.postback.payload = "phocuswright-1-recommendation_next_set";
+  handler.testing_receivedPostback(event);
+}
+
+function testSendingHelp() {
+  const handler = setupForSfoEventPlanning();
+  const event = { 
+    message: { text: "help" }, 
+    postback: {},
+    sender: {
+      id: myFbid
+    }, 
+    recipient: {
+      id: myFbid
+    }, 
+    timestamp: "12345"
+  };
+  handler.testing_determineResponseType(event);
+  event.postback.payload = "pb_event_supported_commands";
+  event.message.text = "";
+  handler.testing_receivedPostback(event);
+}
+
+// TODO: This does not work. Get it working if needed again.
+function testHandleMessagingEventGetFacebookData() {
+	// FbidHandler.testing_delete_file();
+	new FbidHandler.get("fbid-test.txt");
+	testHandleMessagingEvent();
+}
+
+function testHandleMessagingEvent() {
+	const arthaFbid = "1280537748676473";
+  const messagingEvent = {
+    sender: { id: arthaFbid },
+    recipient: { id: arthaFbid }, 
+    timestamp: "12345",
+    message: { text: "help" }
+  };
+  const handler = setupForSfoEventPlanning(arthaFbid);
+  handler.testing_handleMessagingEvent(messagingEvent);
+}
+
+// testHandleMessagingEventGetFacebookData();
+
+// testSendingHelp();
+
+// testConferenceViewMore();
+// testChoosingConference();
+
+// testGettingEventItinerary();
+
+// testStartPlanningTrip();
 
 // testRequestToBeAddedToTrip();
 

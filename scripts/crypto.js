@@ -7,14 +7,16 @@ const cmdLineArgs = require('command-line-args');
 const optionsDefn = [
   {name: 'encrypt', alias: 'e'}, // default type: String
   {name: 'decrypt', alias: 'd'},
-  {name: 'pat', type: Boolean}
+  {name: 'pat', type: Boolean},
+  {name: 'apat', type: Boolean},
 ];
 
 const options = cmdLineArgs(optionsDefn);
 const manager = new SecretManager();
 if(options.encrypt) return console.log(manager.encrypt(options.encrypt));
 if(options.decrypt) return console.log(manager.decrypt(options.decrypt));
-if(options.pat) { return console.log(manager.getPageAccessToken()); }
+if(options.pat) { return console.log(manager.getPolaamaBotPageAccessToken()); }
+if(options.apat) { return console.log(manager.getPolaamaPageAccessToken()); }
 
 console.log(`usage: node crypto.js [-e data | -d <data> | -pat]`);
 /*

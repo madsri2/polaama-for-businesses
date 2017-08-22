@@ -45,7 +45,7 @@ function getAirportCode(city) {
     const actualCity = airportCodes.getCity(city); 
     if(actualCity) return city; // this means that the passed city was actually a code. simply return that.
   }
-  logger.debug(`trying to get code for city ${city}`);
+  // logger.debug(`trying to get code for city ${city}`);
   return airportCodes.getCode(city);
 }
 
@@ -110,7 +110,7 @@ function getQuotesFromSkyscanner() {
           return new Promise(function(fulfil, reject) {
             // a hack to work around the fact that buttons-placement.js does not use Promise and we don't want to use promises just to see if a quote exists for a given trip.
             fs.writeFileSync(getQuoteExistsFile.call(self), `quote from ${self.origCity} to ${self.destCity} on ${self.startDate} exists`);
-            logger.debug(`getQuotesFromSkyscanner: created file ${getQuoteExistsFile.call(self)}`);
+            // logger.debug(`getQuotesFromSkyscanner: created file ${getQuoteExistsFile.call(self)}`);
             fs.writeFile(getFileName.call(self), contents, 
               function(err, res) {
                 if(err) reject(new Error(err));

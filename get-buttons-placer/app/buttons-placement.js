@@ -25,11 +25,6 @@ ButtonsPlacement.prototype.getPlacement = function() {
   	webview_height_ratio: "full",
   	messenger_extensions: true,
 	};
-  const seattleTripCalendar = {
-  	type: "postback",
-  	title: "Trip calendar",
-  	payload: "trip_calendar_seattle",
-  };
 	const weather = {
 		type:"web_url",
   	url: url(this.urlPrefix, `${this.trip.weatherUrlPath()}`),
@@ -68,12 +63,18 @@ ButtonsPlacement.prototype.getPlacement = function() {
 	  payload: "get receipt"
   };
   const buttons = [];
-  if(this.tripName === "seattle") buttons.push(seattleTripCalendar);
-  else buttons.push(tripCalendar);
+  buttons.push(tripCalendar);
+
+  const eventsButton = {
+    type: "postback",
+    title: "Conference details",
+    payload: "pb_event_details phocuswright"
+  };
+  if(this.trip.getEvents()) buttons.push(eventsButton);
+
   const fs = require('fs');
 	if(fs.existsSync(this.trip.boardingPassFile())) buttons.push(bpButton);
 	if(fs.existsSync(this.trip.itineraryFile())) buttons.push(itinButton);
-	// if(fs.existsSync(this.trip.returnFlightFile())) buttons.push(returnItinButton);
   if(fs.existsSync(this.trip.hotelRentalReceiptFile())) buttons.push(hotelDetailsButton);
   if(fs.existsSync(this.trip.rentalCarReceiptFile())) buttons.push(carDetailsButton);
   const receipts = this.trip.receipts();
@@ -96,6 +97,20 @@ ButtonsPlacement.prototype.getPlacement = function() {
     messenger_extensions: true,
   }, 
   */
+  // flight quote only if there is no flight details
+  if(!fs.existsSync(this.trip.itineraryFile())) {
+  const quotes = new BrowseQuotes(this.trip.data.leavingFrom, this.trip.getPortOfEntry(), this.trip.data.startDate, this.trip.data.returnDate);
+    if(quotes.quoteExists()) buttons.push({
+      // type: "web_url",
+      // url: url(this.urlPrefix, `${this.trip.flightQuoteUrlPath()}`),
+      // webview_height_ratio: "full",
+      type: "postback",
+      payload: "show_flight_booking",
+      title:"Flight",
+      // messenger_extensions: true
+    });
+  }
+
   const todoListButton = {
     type: "web_url",
     url: url(this.urlPrefix, `${this.tripName}/todo`),
@@ -134,19 +149,6 @@ ButtonsPlacement.prototype.getPlacement = function() {
     messenger_extensions: true
   };
   if(this.trip.getTravelers()) buttons.push(expenseButton);
-  // flight quote only if there is no flight details
-	if(!fs.existsSync(this.trip.itineraryFile())) {
-  const quotes = new BrowseQuotes(this.trip.data.leavingFrom, this.trip.getPortOfEntry(), this.trip.data.startDate, this.trip.data.returnDate);
-    if(quotes.quoteExists()) buttons.push({
-      // type: "web_url",
-    	// url: url(this.urlPrefix, `${this.trip.flightQuoteUrlPath()}`),
-      // webview_height_ratio: "full",
-      type: "postback",
-      payload: "show_flight_booking",
-      title:"Flight",
-      // messenger_extensions: true
-    });
-  }
   const wip = new WeatherInfoProvider(this.trip.data.country, this.trip.getPortOfEntry(), this.trip.data.startDate);
 	if(wip.weatherInfoExists()) buttons.push(weather);
   // only add this button if there is another button in the third panel. This is done in order to get the buttons to show vertically (which depends on the title length).

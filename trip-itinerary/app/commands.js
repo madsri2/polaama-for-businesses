@@ -9,6 +9,7 @@ const logger = require(`${baseDir}/my-logger`);
 const Encoder = require(`${baseDir}/encoder`);
 const FbidHandler = require("fbid-handler/app/handler");
 const fs = require('fs');
+const EventKeywordPlanner = require('calendar-view/app/event-keyword-handler');
 
 // TODO: fbid is not needed as trip object contains an fbid. Use that instead and remove the use of fbid everywhere.
 function Commands(trip, fbid, sendHtml) {
@@ -122,6 +123,10 @@ Commands.prototype.handleActivityPostback = function(payload) {
   return null;
 }
 
+Commands.prototype.getEventItinerary = function(eventName) {
+  return new DayPlanner("invalid", this.trip, this.fbid).getEventItinerary(eventName);
+}
+
 // There are two ways this method can be reached: user clicks "Running Trails" as part of "Get..." buttons list (for existing trips) or they click "View More" after seeing the first set of "running trails". Handle the first case through handleRecommendations.
 Commands.prototype.handleRecommendationPostback = function(payload) {
   this.command = payload;
@@ -138,7 +143,6 @@ Commands.prototype.handleRecommendationPostback = function(payload) {
     }
   };
   const dayPlanner = new DayPlanner("invalid", this.trip, this.fbid); 
-  // return dayPlanner.getRecommendations("running_trail", content.idx);
   return dayPlanner.getRecommendations(content.interest, content.idx);
 }
 
@@ -154,7 +158,62 @@ function handleRecommendations() {
   if(this.command === "ita ms") return dayPlanner.getRecommendations("ita_ms");
   if(this.command === "da ms") return dayPlanner.getRecommendations("da_ms");
   if(this.command === "monterosso activities") return dayPlanner.getRecommendations("monterosso_activities");
+  if(this.command === "phocuswright_dragons") return dayPlanner.getRecommendations("phocuswright_dragons");
   return null;
+}
+
+Commands.prototype.getCommandsForEvents = function() {
+  if(!this.commandsForEvents) {
+    this.commandsForEvents = {
+      "innovators": "To get details about all innovators",
+      "event details": "For full event schedule",
+      "dragons": "For details about dragons",
+      "name of person or startup": "For details about a person or a startup",
+    };
+  }
+  const message = {
+    recipient: {
+      id: this.fbid
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "list",
+          top_element_style: "compact",
+          elements: []
+        }
+      }
+    }
+  };
+  const elements = message.message.attachment.payload.elements;
+  Object.keys(this.commandsForEvents).forEach(key => {
+    elements.push({
+      "title": this.commandsForEvents[key],
+      "subtitle": `Type "${key}"`,
+    });
+  });
+  return message;
+}
+
+Commands.prototype.handleEventCommands = function(rawMesg) {
+  const mesg = rawMesg.toLowerCase();
+  const dayPlanner = new DayPlanner("invalid", this.trip, this.fbid);
+  const events = this.trip.data.events;
+  if(events.length > 1) return {
+    recipient: {
+      id: this.fbid
+    },
+    message: {
+      text: `Support for commands with multiple events coming soon..`,
+      metadata: "DEVELOPER_DEFINED_METADATA"
+    }
+  };
+  // TODO: Use this.commandsForEvents above!
+  if(mesg === "event details") return dayPlanner.getEventItinerary(events[0]);
+  if(mesg.startsWith("innovator")) return dayPlanner.getRecommendations(`${events[0]}_innovators`);
+  if(mesg.startsWith("dragons")) return dayPlanner.getRecommendations(`${events[0]}_dragons`);
+  return new EventKeywordPlanner(this.fbid).handleKeywords(events[0], rawMesg);
 }
 
 function handleActivityCommand() {
@@ -326,8 +385,8 @@ function setDateIfValid(passedCommand) {
     logger.debug(`setDateIfValid: Matched [YYYY-MM-DD]. contents: [${contents}] set date to be today (${this.date})`);
     return true;
   }
-  const err = new Error();
-  logger.error(`setDateIfValid: unknown format ${command} that did not match any of the known formats. ${err.stack}`);
+  // const err = new Error();
+  // logger.error(`setDateIfValid: unknown format ${command} that did not match any of the known formats. ${err.stack}`);
   return false;
 }
 

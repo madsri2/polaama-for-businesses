@@ -63,4 +63,5 @@ describe("DayPlanner tests", function() {
     logger.debug(`********** Testing ********`);
     testMealActivity("6/25/2017", ["lunch"]);
   });
+
 });

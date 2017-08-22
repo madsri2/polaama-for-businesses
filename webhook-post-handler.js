@@ -7,6 +7,7 @@ const Sessions = require('./sessions');
 const Session = require('./session');
 const SessionState = require('session-state/app/state');
 const FbidHandler = require('fbid-handler/app/handler');
+const PageHandler = require('fbid-handler/app/page-handler');
 const SecretManager = require('secret-manager/app/manager');
 const ButtonsPlacement = require('get-buttons-placer/app/buttons-placement');
 const watch = require('watch');
@@ -29,6 +30,7 @@ const formidable = require('formidable');
 const Promise = require('promise');
 const validator = require('node-validator');
 const Encoder = require(`${baseDir}/encoder`);
+const TripReasonWorkflow = require('trip-reason-workflow/app/workflow');
 
 let recordMessage = true;
 let previousMessage = {};
@@ -38,11 +40,12 @@ let TEST_MODE = false;
 // NOTE: WebhookPostHandler is a singleton, so all state will need to be maintained in this.session object. fbidHandler is also a singleton, so that will be part of the WebhookPostHandler object.
 function WebhookPostHandler(session, testing) {
   if(testing) TEST_MODE = true; // Use sparingly. Currently, only used in callSendAPI
+	this.pageId = PageHandler.defaultPageId;
   this.secretManager = new SecretManager();
-  pageAccessToken = this.secretManager.getPageAccessToken();
   this.sessionState = new SessionState();
   this.sessions = Sessions.get();
-  this.fbidHandler = FbidHandler.get();
+  if(testing) this.pageHandler = PageHandler.get("fbid-test.txt");
+	else this.pageHandler = PageHandler.get();
   if(session) {
     logger.info(`WebhookPostHandler: A session with id ${session.sessionId} was passed. Using that in the post hook handler`);
     this.passedSession = session;
@@ -65,56 +68,53 @@ function WebhookPostHandler(session, testing) {
 }
 
 // called to handle every message from the customer.
-function handleMessagingEvent(messagingEvent) {
+function handleMessagingEvent(messagingEvent, pageId) {
   const fbid = messagingEvent.sender.id;
   // find or create the session here so it can be used elsewhere. Only do this if a session was NOT passed in the constructor.
-  if(_.isUndefined(this.passedSession)) {
-    this.session = this.sessions.findOrCreate(fbid);
-  }
-  else {
-    this.session = this.passedSession;
-  }
+  if(_.isUndefined(this.passedSession)) this.session = this.sessions.findOrCreate(fbid);
+  else this.session = this.passedSession;
+  
   if(!this.logOnce[this.session.sessionId]) {
     logger.debug(`handleMessagingEvent: First message from user ${this.session.fbid} with session ${this.session.sessionId} since this process started`);
     this.logOnce[this.session.sessionId] = true;
   }
-  const promise = this.fbidHandler.add(fbid);
-  if(promise) {
-    promise.then(
-      function(status) {
-        if(status) {
-          logger.info(`handleMessagingEvent: added new fbid ${fbid} to fbidHandler`);
+  const promise = this.pageHandler.add(fbid, pageId);
+  const self = this;
+  promise.done(
+    function(status) {
+      if(status) {
+				self.fbidHandler = self.pageHandler.getFbidHandler(pageId);
+        // logger.debug(`handleMessagingEvent: added new fbid ${fbid} to page ${pageId}`);
+        try {
+          if (messagingEvent.optin) {
+            receivedAuthentication(messagingEvent);
+          } else if (messagingEvent.message) {
+            receivedMessage.call(self, messagingEvent);
+          } else if (messagingEvent.delivery) {
+            // console.log("Message delivered");
+            // receivedDeliveryConfirmation(messagingEvent);
+          } else if (messagingEvent.postback) {
+            receivedPostback.call(self, messagingEvent);
+          } else {
+            logger.error("Webhook received unknown messagingEvent: ", messagingEvent);
+            sendTextMessage(messagingEvent.sender.id,"Even bots need to eat! Be back in a bit");
+          }
         }
-        else {
-          logger.warn(`handleMessagingEvent: adding new fbid ${fbid} to fbidHandler. Expected status to be true but it was ${status}`);
+        catch(err) {
+          logger.error("an exception was thrown: " + err.stack);
+          sendTextMessage(messagingEvent.sender.id,"Even bots need to eat! Be back in a bit");
         }
-      },
-      function(err) {
-        logger.error(`handleMessagingEvent: error adding fbid ${fbid} to fbidHandler: ${err.stack}`);
       }
-    );
-  }
-  // else logger.debug(`handleMessagingEvent: fbid ${fbid} already exists in fbidHandler file.`);
-  // if promise was null, it means this fbid already exists in the fbidHandler file. So, nothing to do
-
-  try {
-    if (messagingEvent.optin) {
-      receivedAuthentication(messagingEvent);
-    } else if (messagingEvent.message) {
-      receivedMessage.call(this, messagingEvent);
-    } else if (messagingEvent.delivery) {
-      // console.log("Message delivered");
-      // receivedDeliveryConfirmation(messagingEvent);
-    } else if (messagingEvent.postback) {
-      receivedPostback.call(this, messagingEvent);
-    } else {
-      logger.error("Webhook received unknown messagingEvent: ", messagingEvent);
+      else {
+        logger.warn(`handleMessagingEvent: adding new fbid ${fbid} to fbidHandler. Expected status to be true but it was ${status}`);
+        sendTextMessage(messagingEvent.sender.id,"Even bots need to eat! Be back in a bit");
+      }
+    },
+    function(err) {
+      logger.error(`handleMessagingEvent: error adding fbid ${fbid} to fbidHandler: ${err.stack}`);
+      sendTextMessage(messagingEvent.sender.id,"Even bots need to eat! Be back in a bit");
     }
-  }
-  catch(err) {
-    logger.error("an exception was thrown: " + err.stack);
-		sendTextMessage(messagingEvent.sender.id,"Even bots need to eat! Be back in a bit");
-  }
+  );
 }
 
 /*
@@ -145,10 +145,11 @@ function receivedAuthentication(event) {
 }
 
 function handlePageEntry(pageEntry) {
-    const pageID = pageEntry.id;
+		this.pageId = pageEntry.id;
+    pageAccessToken = this.pageHandler.getPageAccessToken(this.pageId);
     const timeOfEvent = pageEntry.time;
     for (let i = 0, len = pageEntry.messaging.length; i < len; i++) {
-      handleMessagingEvent.call(this, pageEntry.messaging[i]);
+      handleMessagingEvent.call(this, pageEntry.messaging[i], pageEntry.id);
     }
 }
 
@@ -221,7 +222,33 @@ WebhookPostHandler.prototype.urlButtonMessage = function(title, urlPath) {
 }
 
 function sendUrlButton(title, urlPath) {
-  callSendAPI(this.urlButtonMessage(title, urlPath));
+  callSendAPI.call(this, this.urlButtonMessage(title, urlPath));
+}
+
+WebhookPostHandler.prototype.handleDisplayTripDetailsPromise = function() {
+  const self = this;
+  const threeHoursInMsec = 1000 * 60 * 60 * 3;
+  const trip = this.session.tripData();
+  const tip = new TripInfoProvider(trip, trip.data.leavingFrom);
+  const refreshFlightQuotes = tip.refreshFlightQuotes.bind(tip);
+  sendTypingAction.call(this);
+  if(!this.tripPlanningPromise) throw new Error(`handleDisplayTripDetailsPromise: tripPlanningPromise is undefined`);
+  const tripNameInContext = (this.session.tripNameInContext) ? this.session.tripNameInContext : "unknown_trip";
+  // set the promise value again so that it can be used in unit tests.
+  this.tripPlanningPromise = this.tripPlanningPromise.then(
+    function(values) {
+      // nothing to do here if create succeeds. The itinerary will be persisted and can be obtained by reading the file, which is done in trip-data-formatter:displayCalendar when /calendar is called
+      // logger.info(`Successfully created itinerary for trip ${tripNameInContext}`);
+      setInterval(refreshFlightQuotes, threeHoursInMsec);
+      displayTripDetails.call(self);  
+    },
+    function(err) {
+      logger.error(`error in gathering data for trip ${tripNameInContext}: ${err.stack}`);
+      // even if one of the previous promises were rejected, call the displayTripDetails since some of them might have succeeded.
+      setInterval(refreshFlightQuotes, threeHoursInMsec);
+      displayTripDetails.call(self);  
+    }
+  );
 }
 
 // Gather trip details (weather, flight, hotel, etc.) and send it in a web_url format.
@@ -259,7 +286,7 @@ function displayTripDetails() {
       buttons: buttons.thirdSet
     });
   }
-  callSendAPI(messageData);
+  callSendAPI.call(this, messageData);
 }
 
 WebhookPostHandler.prototype.setWeatherAndItineraryForNewTrip = function(tripName) {
@@ -302,21 +329,19 @@ WebhookPostHandler.prototype.setWeatherAndItineraryForNewTrip = function(tripNam
 }
 
 // Start collecting useful information for trip and update the user.
-WebhookPostHandler.prototype.startPlanningTrip = function() {
+WebhookPostHandler.prototype.startPlanningTrip = function(returnPromise) {
   const trip = this.session.tripData();
-  sendTextMessage(this.session.fbid, `Gathering information for your ${trip.rawTripName} trip`);
-  sendTypingAction.call(this);
+  // sendTextMessage(this.session.fbid, `Gathering information for your ${trip.rawTripName} trip..`);
 	// logger.debug(`startPlanningTrip: This sessions' guid is ${this.session.guid}`);
   const tip = new TripInfoProvider(trip, trip.data.leavingFrom);
   const activities = Promise.denodeify(tip.getActivities.bind(tip));
   const weatherDetails = Promise.denodeify(tip.getWeatherInformation.bind(tip));
-  const dtdCallback = displayTripDetails.bind(this);
-  const refreshFlightQuotes = tip.refreshFlightQuotes.bind(tip);
-  const fifteenMinutesInMsec = 1000 * 60 * 15;
 
   // TODO: If this is a beach destinataion, use http://www.blueflag.global/beaches2 to determine the swimmability. Also use http://www.myweather2.com/swimming-and-water-temp-index.aspx to determine if water conditions are swimmable
   const self = this;
-  activities()
+  const tripNameInContext = (this.session.tripNameInContext) ? this.session.tripNameInContext : "unknown_trip";
+  this.tripPlanningPromise = 
+    activities()
     .then(
       function(response) {
         if(trip.data.tripStarted) {
@@ -345,40 +370,25 @@ WebhookPostHandler.prototype.startPlanningTrip = function() {
         return weatherDetails();
       }
     )
-    .done(
+    .then(
       function(response) {
         try {
-          logger.debug(`startPlanningTrip: session dump: ${JSON.stringify(self.session)}`);
-          const createItin = new CreateItinerary(trip, self.session.hometown);
-          const tripNameInContext = (self.session.tripNameInContext) ? self.session.tripNameInContext : "unknown_trip";
-          Promise.all(createItin.create()).done(
-            function(values) {
-              // nothing to do here if create succeeds. The itinerary will be persisted and can be obtained by reading the file, which is done in trip-data-formatter:displayCalendar when /calendar is called
-              logger.info(`Successfully created itinerary for trip ${tripNameInContext}`);
-              setInterval(refreshFlightQuotes, fifteenMinutesInMsec);
-              dtdCallback();
-            },
-            function(error) {
-              logger.error(`Error creating itinerary for trip ${tripNameInContext}: ${error.stack}`);
-              setInterval(refreshFlightQuotes, fifteenMinutesInMsec);
-              dtdCallback();
-            }
-          );
+          // logger.debug(`startPlanningTrip: session dump: ${JSON.stringify(self.session)}`);
+          const createItin = new CreateItinerary(trip, trip.data.leavingFrom);
+          return createItin.create();
         }
         catch(e) {
           logger.error(`Error creating itinerary for trip ${tripNameInContext}: ${e.stack}`);
-          // proceed to display trip details because other items might be available.
-          setInterval(refreshFlightQuotes, fifteenMinutesInMsec);
-          dtdCallback();
+          return Promise.reject(e);
         }
       },
       function(err) {
-        logger.error(`error in gathering data for trip ${tripNameInContext}: ${err.stack}`);
-        // even if one of the previous promises were rejected, call the dtdCallback since some of them might have succeeded.
-        setInterval(refreshFlightQuotes, fifteenMinutesInMsec);
-        dtdCallback();
+        logger.error(`Error in gathering data for trip ${tripNameInContext}: ${err.stack}`);
+        return Promise.reject(err);
       }
     );
+    if(returnPromise) return;
+    this.handleDisplayTripDetailsPromise();
 }
 
 function emailOrEnterDetails() {
@@ -419,7 +429,7 @@ function emailOrEnterDetails() {
       }
     }
   };
-  callSendAPI(messageData);
+  callSendAPI.call(this, messageData);
 }
 
 function planNewTrip(userChoice) {
@@ -437,29 +447,18 @@ function planNewTrip(userChoice) {
           payload: {
             template_type: "list",
             elements: [{
-                "title": "Provide details about trip",
+                "title": "Gathering trip details",
                 "image_url": "http://icons.iconarchive.com/icons/andrea-aste/torineide/256/turin-map-detail-icon.png"
               },
               {
-                "title": "Destination (city or country), start date, duration",
-                "subtitle": "as a comma separated list"
-              },
-              {
-                "title": "Examples",
-                "subtitle": "India, 11/01, 20 ; New york, 8/1/17, 5"
+                "title": "Enter your destination, start date, duration",
+                "subtitle": "example: India,11/1,20; New york,8/1/17,5; ewr,10/5,30 "
             }]
           }
         }
       }
     };
-    callSendAPI(messageData);
-    /*
-    const messages = [
-      "Can you provide details about your trip: destination city/country, start date, duration (in days) as a comma separated list?",
-      "Example: India,11/01,20 or India,11/01/17,20"
-    ];
-    sendMultipleMessages(this.session.fbid, textMessages.call(this, messages));
-    */
+    callSendAPI.call(this, messageData);
     this.sessionState.set("awaitingNewTripDetails");
     this.sessionState.set("planningNewTrip");
     return;
@@ -479,23 +478,20 @@ function planNewTrip(userChoice) {
                 "image_url": "http://icons.iconarchive.com/icons/rade8/minium-2/256/Sidebar-Pictures-icon.png",
               },
               {
-                "title": "Email",
-                "subtitle": "receipt to trips@mail.polaama.com"
-              },
+                "title": "Email receipt/itinerary to",
+                "subtitle": "trips@mail.polaama.com"
+              }/*,
               {
                 "title": "Upload receipt",
                 "subtitle": "as a photo or an attachment (if you are on a laptop)"
-            }]
+              }
+              */
+            ]
           }
         }
       }
     };
-    return callSendAPI(messageData);
-    /*
-    sendMultipleMessages(this.session.fbid, textMessages.call(this, [
-      'Send your flight itinerary or boarding pass to "TRIPS@MAIL.POLAAMA.COM". As soon as we receive it, we will send you an "ack" message',
-      'If your trip is starting within 24 hours, we will send you the boarding pass']));
-    */
+    return callSendAPI.call(this, messageData);
   }
 }
 
@@ -511,10 +507,19 @@ function receivedPostback(event) {
 
   if(payload === "GET_STARTED_PAYLOAD") return sendWelcomeMessage.call(this, senderID); 
 
+  // give tripReasonWorkflow a chance to work.
+  if(this.sessionState.get("planningNewTrip")) {
+    // logger.debug(`receivedPostback: still planning new trip. workflow`);
+    const done = new TripReasonWorkflow(this).handle(payload);
+    if(done) this.sessionState.clear("planningNewTrip");
+    // one way or the other, there's nothing else left to do with this postback
+    return;
+  }
+
   // A pmenu, past_trips or a postback starting with "trip_in_context" is indicative of the beginning of a new state in the state machine. So, clear the session's "awaiting" states to indicate the beginning of a new state.
   this.sessionState.clearAll();
 
-  if(payload === "mark_done") return sendMultipleMessages(this.session.fbid,
+  if(payload === "mark_done") return sendMultipleMessages.call(this, this.session.fbid,
     textMessages.call(this, 
       [
         "Nice work being on top of your todo list. This item has been marked done.",
@@ -530,8 +535,10 @@ function receivedPostback(event) {
     return sendGeneralReceipt.call(this, title);
   }
 
-  if(payload === "add_postback") return sendAddButtons.call(this);
-  if(payload === "get_postback") return displayTripDetails.call(this);
+  if(payload === "pb_current_trip") return sendAddOrGetOptions.call(this);
+  if(payload === "pb_event_supported_commands") return callSendAPI.call(this, new Commands(this.session.tripData(), this.session.fbid).getCommandsForEvents());
+  // if(payload === "add_postback") return sendAddButtons.call(this);
+  // if(payload === "get_postback") return displayTripDetails.call(this);
   if(payload === "supported_commands") return supportedCommands.call(this);
   if(payload === "view_more_commands") return supportedCommands.call(this, true /* more elements */);
 
@@ -559,11 +566,9 @@ function receivedPostback(event) {
     }
   }
   if(payload === "pmenu_help") {
-    const messages = [];
     let name = this.fbidHandler.getName(senderID);
     if(!name) name = ""; else name = ` ${name.substring(0, name.indexOf(" "))}`;
-    messages.push(getHelpMessageData.call(this, senderID, `Hi${name}! How can I help you today?`));
-    return sendMultipleMessages(senderID, messages);
+    return getHelpMessageData.call(this, senderID, `Hi${name}! How can I help you today?`);
   }
 
   if(payload === "pmenu_existing_trips") return sendTripButtons.call(this);
@@ -585,7 +590,7 @@ function receivedPostback(event) {
   if(payload === "add_cities") return addCitiesToExistingTrip.call(this);
   if(payload === "add_expense") {
     this.session.expenseReportWorkflow = new ExpenseReportWorkflow(this.session);
-    callSendAPI(this.session.expenseReportWorkflow.startWork());
+    callSendAPI.call(this, this.session.expenseReportWorkflow.startWork());
     return;
   }
   if(payload === "add_travelers") return determineTravelCompanions.call(this);
@@ -604,13 +609,20 @@ function receivedPostback(event) {
   if(payload === "get receipt") return sendGeneralReceipt.call(this);
 
   const commands = new Commands(this.session.tripData(), this.session.fbid);
-  if(payload.includes("recommendation_next_set")) return callSendAPI(commands.handleRecommendationPostback(payload));
+
+  if(payload.startsWith("pb_event_details")) {
+    const contents = /^.* (.*)/.exec(payload);
+    logger.debug(`getting details for event ${contents[1]}`);
+    return callSendAPI.call(this, commands.getEventItinerary(contents[1]));
+  }
+
+  if(payload.includes("recommendation_next_set")) return callSendAPI.call(this, commands.handleRecommendationPostback(payload));
   let handled = commands.handlePostback(payload);
-  if(handled && (typeof handled === "object")) return callSendAPI(handled);
+  if(handled && (typeof handled === "object")) return callSendAPI.call(this, handled);
   handled = commands.handleActivityPostback(payload);
-  if(handled && (typeof handled === "object")) return callSendAPI(handled);
+  if(handled && (typeof handled === "object")) return callSendAPI.call(this, handled);
   handled = commands.handleRecommendationPostback(payload);
-  if(handled && (typeof handled === "object")) return callSendAPI(handled);
+  if(handled && (typeof handled === "object")) return callSendAPI.call(this, handled);
 
   // When an unknown postback is called, we'll send a message back to the sender to 
   // let them know it was successful
@@ -619,7 +631,7 @@ function receivedPostback(event) {
 
 function sendBoardingPass() {
     const boardingPass = (new Notifier(this.sessions)).getBoardingPass(this.session.tripData(), this.session.fbid);
-    callSendAPI(boardingPass);
+    callSendAPI.call(this, boardingPass);
     return;
 }
 
@@ -663,7 +675,7 @@ function sendReturnFlightDetails() {
       }
     });
   }
-  sendMultipleMessages(fbid, messageList);
+  sendMultipleMessages.call(this, fbid, messageList);
 }
 
 function sendFlightBookingMessage(ssMinPrice) {
@@ -733,7 +745,7 @@ function sendFlightBookingMessage(ssMinPrice) {
        }
      }
    };
-   return callSendAPI(message);
+   return callSendAPI.call(this, message);
 }
 
 function showFlightBookingOptions() {
@@ -793,7 +805,7 @@ function sendFlightItinerary() {
       }
     });
   }
-  sendMultipleMessages(fbid, messageList);
+  sendMultipleMessages.call(this, fbid, messageList);
 }
 
 function createElementsList(payloadPrefix, elArray, title) {
@@ -896,7 +908,7 @@ function sendGeneralReceipt(title) {
         }
       }
     });
-  return sendMultipleMessages(this.session.fbid, messages);
+  return sendMultipleMessages.call(this, this.session.fbid, messages);
 }
 
 function sendCarReceipt() {
@@ -928,7 +940,7 @@ function sendCarReceipt() {
       }
     }
   });
-  sendMultipleMessages(this.session.fbid, messages);
+  sendMultipleMessages.call(this, this.session.fbid, messages);
 }
 
 function sendNotFoundMessage(prefix, trip) {
@@ -960,7 +972,7 @@ function sendNotFoundMessage(prefix, trip) {
       }
     }
   };
-	callSendAPI(messageData);
+	callSendAPI.call(this, messageData);
 }
 
 /*
@@ -980,7 +992,7 @@ function sendTourDetails() {
 	});
   messages.push(getTextMessageData(this.session.fbid, "See you at our place at 9 AM"));
   messages.push(getTextMessageData(this.session.fbid, "It will be 80˚F and clear skies. The water will be calm and visibility is 100 feet, perfect for diving!"));
-  sendMultipleMessages(this.session.fbid, messages);
+  sendMultipleMessages.call(this, this.session.fbid, messages);
 }
 */
 
@@ -1018,7 +1030,7 @@ function sendHotelReceiptMessage(fbid, details) {
       }
     }
   });
-  sendMultipleMessages(this.session.fbid, messages);
+  sendMultipleMessages.call(this, this.session.fbid, messages);
 }
 
 function sendHotelItinerary(payload) {
@@ -1078,7 +1090,7 @@ function sendHotelItinerary(payload) {
         }
       }
     });
-    return sendMultipleMessages(this.session.fbid, messages);
+    return sendMultipleMessages.call(this, this.session.fbid, messages);
   }
   sendHotelReceiptMessage.call(this, fbid, details[hotels[0]]);
 }
@@ -1174,7 +1186,7 @@ function sendPastTrips() {
       }
     }
   };
-  callSendAPI(messageData);
+  callSendAPI.call(this, messageData);
   return;
 }
 
@@ -1200,7 +1212,7 @@ function sendTripButtons(addNewTrip) {
         ]
       }
     };
-    callSendAPI(messageData);
+    callSendAPI.call(this, messageData);
     return;
   }
 
@@ -1285,7 +1297,7 @@ function sendTripButtons(addNewTrip) {
       }
     }
   };
-  callSendAPI(messageData);
+  callSendAPI.call(this, messageData);
 }
 
 function handleQuickRepliesToPlanNewTrip(quick_reply) {
@@ -1306,7 +1318,7 @@ function handleQuickRepliesToPlanNewTrip(quick_reply) {
         sendMultipleMessages.call(this, this.session.fbid, previousMessage.message);
         break;
       case "callSendAPI": 
-        callSendAPI(previousMessage.message);
+        callSendAPI.call(this, previousMessage.message);
         break;
     }
     return true;
@@ -1347,7 +1359,7 @@ function addSenderToTrip() {
       if(!fs.existsSync(targetDir)) fs.mkdirSync(targetDir);
       fs.readdirSync(tripBaseDir).forEach(file => {
         if(file.includes(tripName)) {
-          logger.debug(`addSenderToTrip: Copying file ${tripBaseDir}/${file} to ${targetDir}/${file}`);
+          // logger.debug(`addSenderToTrip: Copying file ${tripBaseDir}/${file} to ${targetDir}/${file}`);
           fs.copySync(`${tripBaseDir}/${file}`, `${targetDir}/${file}`);
         }
       });
@@ -1441,8 +1453,12 @@ function createNewTrip(tripDetails) {
   this.tripCount = this.session.getCurrentAndFutureTrips().futureTrips.length;
   const tripData = this.session.tripData();
   tripData.addTripDetailsAndPersist(tripDetails);
-  // logger.info(`createNewTrip: This session's trip name in context is ${tripDetails.destination}`);
+  logger.info(`createNewTrip: This session's trip name in context is ${tripDetails.destination}`);
   this.sessionState.clear("awaitingNewTripDetails");
+  // reload the session here to get the latest data
+  this.sessions.reloadSession(this.session.sessionId);
+  this.session = this.sessions.find(this.session.fbid);
+  this.tripCount = 0; // force reload of tripCount in determineResponseType
 }
 
 function extractNewTripDetails(messageText) {
@@ -1555,7 +1571,7 @@ function addCitiesToExistingTrip() {
       `For your trip to ${tripData.data.country}, add cities and number of days in each city in the following format`,
       `seattle(3),portland(4),sfo(5)` 
     ];
-    sendMultipleMessages(this.session.fbid, textMessages.call(this, messages));
+    sendMultipleMessages.call(this, this.session.fbid, textMessages.call(this, messages));
     this.sessionState.set("awaitingCitiesForExistingTrip");
     logger.debug(`addCitiesToExistingTrip: Sent message asking for city. Session dump: ${this.sessionState.dump()}`);
     // After user enters the additional cities, determineResponseType will be called and the code block that checks for awaitingCitiesForExistingTrip will take action
@@ -1746,11 +1762,9 @@ function determineResponseType(event) {
       if(this.session.doesTripContextExist()) return respondToHelp.call(this);
     }
     if(this.tripCount) {
-      const messages = [];
       let name = this.fbidHandler.getName(senderID);
       if(!name) name = ""; else name = ` ${name.substring(0, name.indexOf(" "))}`;
-      messages.push(getHelpMessageData.call(this, senderID, `Hi${name}! Welcome back to Polaama. How can I help you today?`));
-      return sendMultipleMessages(senderID, messages);
+      return getHelpMessageData.call(this, senderID, `Hi${name}! Welcome back to Polaama. How can I help you today?`);
     }
     return sendWelcomeMessage.call(this, senderID);
   }
@@ -1760,7 +1774,7 @@ function determineResponseType(event) {
   if(event.message.quick_reply && handleQuickRepliesToPlanNewTrip.call(this, event.message.quick_reply)) return;
 
   // At this point, if no trip exists and it's not being planned, the user has entered something we don't understand. Simply send them the Welcome message.
-  if(!this.tripCount && !this.sessionState.get("planningNewTrip")) return callSendAPI(getHelpMessageData.call(this, senderID, "Hi, I am your new personal travel assistant. Would you like to create a new trip to get started?"));
+  if(!this.tripCount && !this.sessionState.get("planningNewTrip")) return getHelpMessageData.call(this, senderID, "Hi, I am your new personal travel assistant. Would you like to create a new trip to get started?");
 
   // if we don't know what trip is being discussed, ask the user for this, unless the user is adding details about a new trip.
   if(!this.session.doesTripContextExist() && !this.sessionState.get("planningNewTrip")) {
@@ -1796,19 +1810,18 @@ function determineResponseType(event) {
       	const err = extractNewTripDetails.call(this, messageText);
       	if(err) {
           const param = (err[0].parameter) ? `parameter ${err[0].parameter}`: "";
-        	sendTextMessage(this.session.fbid, `Input error: ${param}:${err[0].message}`);
-        	return;
+        	return sendTextMessage(this.session.fbid, `Input error: ${param}:${err[0].message}`);
       	}
 			}
 			catch(e) {
 				// Assume that the only exception being thrown now is UserConfirmation from extractNewTripDetails. Update if this changes in the future
 				logger.error(`determineResponse type: error thrown ${e}; ${e.stack}`);
 				this.sessionState.set("awaitingUserConfirmation");
-				sendYesNoButtons.call(this, e.message);
-				return;
+				return sendYesNoButtons.call(this, e.message);
 			}
     }
 
+    // logger.debug(`determineResponse: About to set departure city & destination city for trip in context: ${this.session.tripNameInContext}; sessions' tripData trip is ${this.session.tripData().rawTripName}`);
     // Step 2: Successfully parsed new trip details above. Now get the departure details.
     const depCityWorkflow = new DepartureCityWorkflow(this, messageText, event.message.quick_reply);
     const promiseOrBool = depCityWorkflow.set();
@@ -1859,7 +1872,7 @@ function handlePlanningNewTrip()
       }
     };
     recordMessage = false;
-    callSendAPI(messageData);
+    callSendAPI.call(this, messageData);
     recordMessage = true;
     return;
   }
@@ -1880,20 +1893,28 @@ function handleAdditionalCommands(event, mesg) {
         if(response) {
           // End of new trip workflow. The workflow will complete when user selects cities (handled by determineCities function) and webpage-handler.js calls the startPlanningTrip method
           // TODO: Rather than let webpage-handler.js call startPlanning (and thus exposing this functionality there), consider calling startPlanningTrip from here.. The presence of tripData.data.cities can be a signal from webpage-handler.js's formParseCallback method that the cities were correctly chosen and added here.
-          self.sessionState.clear("planningNewTrip");
           // invalidate this trip in the session so that it will be fetched from a datastore.
-          self.session.invalidateTripData();
           // see if we have enough data to start planning a trip
           if(self.session.tripData().cityItinDefined()) {
             const tripData = self.session.tripData();
-            logger.debug(`handleAdditionalCommands: cities available for trip ${tripData.rawTripName}. Start planning trip for customer ${self.session.fbid}; session dump: ${JSON.stringify(self.session)}`);
-            self.startPlanningTrip();
+            logger.debug(`handleAdditionalCommands: cities available for trip ${tripData.rawTripName}. Start planning trip for customer ${self.session.fbid}`);
+            // start planning the trip but do not display trip details. That will be done by TripReasonWorkflow below.
+            self.startPlanningTrip(true /* return promise */);
+          }
+          const tripReasonWorkflow = new TripReasonWorkflow(self);
+          const done = tripReasonWorkflow.handle(mesg);
+          if(done) {
+            // done planning the trip!
+            self.sessionState.clear("planningNewTrip");
+            self.session.invalidateTripData();
           }
         }
         // if the response was false, then the destination city workflow needed additional information from users. So, nothing to do but return;
       },
       function(err) {
+        // TODO: See if there is a way to isolate this failure and still plan a trip (rather than throw a 500 back to the user)
         logger.error(`Error calling destinationCityWorkflow.handleNewTrip: ${err}`);
+        this.sendTextMessage(senderID, "Even bots need to eat. Be back in a bit.");
       }
     );
     // irrespective of the response from handleNewTrip, we are done handling this message from the user.
@@ -1905,7 +1926,7 @@ function handleAdditionalCommands(event, mesg) {
   if(this.session.expenseReportWorkflow) {
     const workflow = this.session.expenseReportWorkflow;
     try {
-      callSendAPI(workflow.doWork(event.message));
+      callSendAPI.call(this, workflow.doWork(event.message));
       if(workflow.done) {
         this.session.expenseReportWorkflow = null;
       }
@@ -1976,7 +1997,7 @@ function handleAdditionalCommands(event, mesg) {
     return;
   }
   if(mesg.startsWith("get boarding pass") || mesg.startsWith("boarding pass")) return sendBoardingPass.call(this);
-  if(mesg.startsWith("get flight itinerary") || mesg.startsWith("flight")) {
+  if(mesg.startsWith("get flight itinerary") || mesg.startsWith("flight ") || mesg === "flight") {
     this.showReturnFlight = true;
     return sendFlightItinerary.call(this);
   }
@@ -1993,24 +2014,27 @@ function handleAdditionalCommands(event, mesg) {
   const canHandle = commands.canHandle(mesg);
   if(canHandle) {
     // case where user entered an invalid message.
-    if(typeof canHandle === "object") return callSendAPI(canHandle); 
+    if(typeof canHandle === "object") return callSendAPI.call(this, canHandle); 
     const itinAsList = commands.handle(mesg); 
-    if(typeof itinAsList === "object") return callSendAPI(itinAsList);
+    if(typeof itinAsList === "object") return callSendAPI.call(this, itinAsList);
     logger.warn(`determineResponseType: Could not get list template from Commands. Defaulting to sending url`);
     return sendUrlButton.call(this, `Itin for ${mesg}`, `${tripData.data.name}/${commands.getPath()}`);
   }
   if(commands.canHandleActivity(mesg)) {
     const result = commands.handleActivity(mesg);
-    if(result) return callSendAPI(result);
+    if(result) return callSendAPI.call(this, result);
   }
 
   if(commands.canHandleMealsCommand(mesg)) {
     const result = commands.handleMealsCommand(mesg);
-    if(result) return callSendAPI(result);
+    if(result) return callSendAPI.call(this, result);
   }
+  const result = commands.handleEventCommands(mesg);
+  if(result) return callSendAPI.call(this, result);
+
   logger.debug(`determineResponseType: Did not understand the context of message <${mesg}>. Dump of session states: ${this.sessionState.dump()}`);
   // We don't understand the text sent. Simply present the options we present on "getting started".
-  return callSendAPI(getHelpMessageData.call(this, senderID, "Hi, I did not understand what you said. I can help you with the following."));
+  return getHelpMessageData.call(this, senderID, "Hi, I did not understand what you said. I can help you with the following.");
   
   // ****** INTENTIONALLY UNREACHABLE CODE 
   intentionallyUnreachableCode.call(this, senderID);
@@ -2067,7 +2091,7 @@ function supportedCommands(moreElements) {
       type: "postback",
       payload: "view_more_commands"
     }];
-    return callSendAPI(message);
+    return callSendAPI.call(this, message);
   }
   message.message.attachment.payload.elements = [
     {
@@ -2097,7 +2121,7 @@ function supportedCommands(moreElements) {
     },
     */
   ];
-  return callSendAPI(message);
+  return callSendAPI.call(this, message);
 }
 
 function sendOtherActivities(messageText) {
@@ -2131,7 +2155,7 @@ function sendOtherActivities(messageText) {
       }
     }
   };
-  callSendAPI(messageData);
+  callSendAPI.call(this, messageData);
 }
 
 function sendActivityList(messageText) {
@@ -2189,7 +2213,7 @@ function sendActivityList(messageText) {
       }
     }
   };
-  callSendAPI(messageData);
+  callSendAPI.call(this, messageData);
 }
 
 /*
@@ -2234,7 +2258,7 @@ WebhookPostHandler.prototype.notifyUser = function(message) {
 }
 
 WebhookPostHandler.prototype.sendBoardingPass = function(message) {
-  callSendAPI(message);
+  callSendAPI.call(this, message);
 }
 
 WebhookPostHandler.prototype.pushTripDetailsJustBeforeTrip = function() {
@@ -2298,7 +2322,7 @@ function sendMessageFromHuman(originalSenderId, messageText) {
     }
   };
   logger.info("sendMesssageFromHuman: sending message from human to sender: " + JSON.stringify(messageData));
-  callSendAPI(messageData);
+  callSendAPI.call(this, messageData);
 }
 
 function interceptMessage(hContext, senderID, event) {
@@ -2326,7 +2350,7 @@ function interceptMessage(hContext, senderID, event) {
     }
   };
   logger.info("intercepting message and sending to human: " + JSON.stringify(messageData));
-  callSendAPI(messageData);
+  callSendAPI.call(this, messageData);
   sendTypingAction.call(this, senderID);
   return;
 }
@@ -2356,7 +2380,7 @@ function retrieveDeals(senderId, messageText) {
       }
     }
   };  
-  callSendAPI(messageData);
+  callSendAPI.call(this, messageData);
 }
 
 /*
@@ -2430,7 +2454,7 @@ function determineCities(existingTrip) {
       }
     }
   };
-  callSendAPI(messageData);
+  callSendAPI.call(this, messageData);
   return true;
 }
 
@@ -2462,7 +2486,7 @@ function determineTravelCompanions() {
       }
     }
   };
-  callSendAPI(messageData);
+  callSendAPI.call(this, messageData);
 }
 
 function respondToHelp() {
@@ -2476,44 +2500,48 @@ function respondToHelp() {
         payload: {
           template_type: "list",
           "top_element_style": "compact",
-          elements: [
-          {
-            "title": "Add details",
-            "subtitle": `to your ${this.session.rawTripNameInContext} trip`,
-            "buttons": [{
-              title: "Add",
-              type: "postback",
-              payload: "add_postback"
-            }]
-          },{
-            "title": "Get details",
-            "subtitle": `from your ${this.session.rawTripNameInContext} trip`,
-            "buttons": [{
-              title: "Get",
-              type: "postback",
-              payload: "get_postback"
-            }]
-          },{
-            "title": "Plan a new trip",
-            "subtitle": "Let's plan a trip together",
-            "buttons": [{
-              title: "Plan new trip",
-              type: "postback",
-              payload: "new_trip"
-            }]
-          },{
-            "title": "Supported commands",
-            "subtitle": "commands that are currently available",
-            "buttons": [{
-              title: "Commands",
-              "type": "postback",
-              payload: "supported_commands"
-            }]
-          }]
+          elements: []
         }
       }
     }
   };
+  const elements = message.message.attachment.payload.elements;
+  elements.push({
+    "title": `Details about your ${this.session.rawTripNameInContext} trip`,
+    "subtitle": "Add, Get or see plans for specific day",
+    "buttons": [{
+      title: `${this.session.rawTripNameInContext} trip`,
+      type: "postback",
+      payload: "pb_current_trip"
+    }]
+  });
+  if(this.session.tripData().data.events) elements.push({
+    "title": "Supported event commands",
+    "subtitle": `Get specific details from your conferences & events`,
+    "buttons": [{
+      title: "Event commands",
+      type: "postback",
+      payload: "pb_event_supported_commands"
+    }]
+  });
+  elements.push({
+      "title": "Supported commands",
+      "subtitle": "commands that are currently available",
+      "buttons": [{
+        title: "Commands",
+        "type": "postback",
+        payload: "supported_commands"
+      }]
+    },
+    {
+      "title": "Plan a new trip",
+      "subtitle": "Let's plan a trip together",
+      "buttons": [{
+        title: "Plan new trip",
+        type: "postback",
+        payload: "new_trip"
+    }]
+  });
   return this.sendAnyMessage(message);
 }
 
@@ -2545,12 +2573,10 @@ function sendAddOrGetOptions() {
       ]
     }
   };
-  callSendAPI(messageData);
+  callSendAPI.call(this, messageData);
 }
 
-/*
- * Typically, this should match the top level entries in Persistent Menu.
- */
+// Typically, this should match the top level entries in Persistent Menu.
 function getHelpMessageData(senderID, message) {
   // clear all awaiting states
   // this.session.clearAllAwaitingStates();
@@ -2597,7 +2623,7 @@ function getHelpMessageData(senderID, message) {
       payload: "postback_request_to_be_added"
     }]
   });
-  return messageData;
+  return callSendAPI.call(this, messageData);
 }
 
 function inFriendsTripList() {
@@ -2617,11 +2643,10 @@ function inFriendsTripList() {
 }
 
 function sendWelcomeMessage(senderID) {
-  const messages = [];
+	// logger.debug(`fbid handler: ${JSON.stringify(this.fbidHandler)}`);
   let name = this.fbidHandler.getName(senderID);
   if(!name) name = ""; else name = ` ${name.substring(0, name.indexOf(" "))}`;
-  messages.push(getHelpMessageData.call(this, senderID, `Hi${name}! Welcome to Polaama, your deeply personal travel assistant`));
-  return sendMultipleMessages(senderID, messages);
+  return getHelpMessageData.call(this, senderID, `Hi${name}! Welcome to Polaama, your deeply personal travel assistant`);
 }
 
 /*
@@ -2652,7 +2677,7 @@ function sendFlightQuickReplies() {
 			]
 		}
 	};
-	callSendAPI(messageData);
+	callSendAPI.call(this, messageData);
 }
 */
 
@@ -2678,7 +2703,7 @@ function sendYesNoButtons(message) {
 			]
 		}
 	};
-	callSendAPI(messageData);
+	callSendAPI.call(this, messageData);
 }
 
 function sendAddButtons() {
@@ -2730,7 +2755,7 @@ function sendAddButtons() {
       }
     }
   };
-  callSendAPI(messageData);
+  callSendAPI.call(this, messageData);
 }
 
 /*
@@ -2780,7 +2805,7 @@ function sendGenericMessage(recipientId) {
       }
     }
   };  
-  callSendAPI(messageData);
+  callSendAPI.call(this, messageData);
 }
 
 function sendTypingAction() {
@@ -2792,7 +2817,7 @@ function sendTypingAction() {
     sender_action:"typing_on"
   };
 
-  callSendAPI(messageData);
+  callSendAPI.call(this, messageData);
 }
 
 function getTextMessageData(senderID, text) {
@@ -2814,12 +2839,12 @@ WebhookPostHandler.prototype.getTextMessageData = getTextMessageData;
  *
  */
 function sendTextMessage(senderID, messageText) {
-  callSendAPI(getTextMessageData(senderID, messageText));
+  callSendAPI.call(this, getTextMessageData(senderID, messageText));
 }
 WebhookPostHandler.prototype.sendTextMessage = sendTextMessage;
 
 WebhookPostHandler.prototype.sendAnyMessage = function(message) {
-  callSendAPI(message);
+  callSendAPI.call(this, message);
 }
 
 WebhookPostHandler.prototype.sendMessage = function(senderID, messageText) {
@@ -2856,6 +2881,8 @@ function sendMultipleMessages(recipientId, messages, alreadyRecorded) {
     });
     return;
   }
+	const self = this;
+	if(!pageAccessToken) pageAccessToken = this.pageHandler.getPageAccessToken(this.pageId);
   request({
     uri: 'https://graph.facebook.com/v2.6/me/messages',
     qs: { access_token: pageAccessToken },
@@ -2864,7 +2891,7 @@ function sendMultipleMessages(recipientId, messages, alreadyRecorded) {
   }, function (error, response, body) {
     if (response.statusCode == 200) {
       // recursively call, but remove the first element from the array
-      sendMultipleMessages(recipientId, messages.slice(1, messages.length), true /* alreadyRecorded */);
+      sendMultipleMessages.call(self, recipientId, messages.slice(1, messages.length), true /* alreadyRecorded */);
       return;
     }
     if(error) {
@@ -2881,6 +2908,7 @@ function callSendAPI(messageData) {
     "message": messageData
   };
   if(TEST_MODE) return logger.debug(`MESSAGE TO CHAT: ${JSON.stringify(messageData)}`);
+	if(!pageAccessToken) pageAccessToken = this.pageHandler.getPageAccessToken(this.pageId);
   request({
     uri: 'https://graph.facebook.com/v2.6/me/messages',
     qs: { access_token: pageAccessToken },
@@ -2901,6 +2929,7 @@ function callSendAPI(messageData) {
 
 // ********************************* TESTING *************************************
 WebhookPostHandler.prototype.testing_determineResponseType = determineResponseType;
+WebhookPostHandler.prototype.testing_handleMessagingEvent = handleMessagingEvent;
 WebhookPostHandler.prototype.testing_createNewTrip = createNewTrip;
 WebhookPostHandler.prototype.testing_displayTripDetails = displayTripDetails;
 WebhookPostHandler.prototype.testing_receivedPostback = receivedPostback;
