@@ -12,6 +12,7 @@ const ItineraryFlightInfo = require('flight-details-parser/app/itinerary-flight-
 
 // TODO: This is leaking data model to other classes. Fix this by moving all functionality that require this variable into a function in this class.
 TripData.todo = "todoList";
+TripData.eventBaseDir = `${baseDir}/trips/shared/events`;
 
 function TripData(rawTripName, fbid, testFbidFile) {
   if(!rawTripName) throw new Error("TripData: Required parameter tripName is undefined");
@@ -270,12 +271,26 @@ TripData.prototype.timezone = function() {
 
 TripData.prototype.addEvent = function(eventName) {
   if(!this.data.events) this.data.events = [];
-  this.data.events.push(eventName);
+  const encodedEventName = Encoder.encode(eventName);
+  // make this function idempotent
+  if(!this.data.events.includes(encodedEventName)) this.data.events.push(encodedEventName);
   this.persistUpdatedTrip();
 }
 
 TripData.prototype.getEvents = function() {
   return this.data.events;
+}
+
+TripData.prototype.setConferenceInContext = function(event) {
+  const encEvent = Encoder.encode(event);
+  if(!this.data.events) throw new Error(`setConferenceInContext: trip ${this.trip.tripName} does not have any event. Call addEvent to add event before setting it as context`);
+  if(!this.data.events.includes(encEvent)) throw new Error(`setConferenceInContext: Attempted to add a conference ${event} that was not added to trip ${this.tripName}; events in this trip are ${this.data.events}. Call addEvents to add conference ${encEvent} to events before setting it`);
+  this.data.eventInContext = encEvent;
+  this.persistUpdatedTrip();
+}
+
+TripData.prototype.getConferenceInContext = function() {
+  return this.data.eventInContext;
 }
 
 TripData.prototype.tripStarted = function() {
@@ -875,9 +890,27 @@ function getNewLocationFile(fileName) {
   return file;
 }
 
+TripData.prototype.eventDetailsFile = function(eventName, file) {
+  // see if the event exists. if not, return;
+  if(!this.eventItineraryFile(eventName)) return null;
+  return `${TripData.eventBaseDir}/${Encoder.encode(eventName)}/${file}.json`;
+}
+
 TripData.prototype.eventItineraryFile = function(eventName) {
+  if(!eventName) {
+    const events = this.data.events;
+    if(!events || events.length === 0) {
+      logger.warn(`eventItineraryFile: no events present`);
+      return null;
+    }
+    if(events.length > 1) {
+      logger.warn(`eventItineraryFile: there are multiple events present: ${events}. Please pass the event name`);
+      return null;
+    }
+    eventName = events[0];
+  }
   const encEName = Encoder.encode(eventName);
-  return `${baseDir}/trips/shared/${encEName}/${encEName}-event-itinerary.json`;
+  return `${TripData.eventBaseDir}/${encEName}/${encEName}-event-itinerary.json`;
 }
 
 TripData.prototype.dayItineraryFile = function(date) {

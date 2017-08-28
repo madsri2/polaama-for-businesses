@@ -5,7 +5,6 @@ const baseDir = '/home/ec2-user';
 const logger = require('./my-logger');
 const Sessions = require('./sessions');
 const Session = require('./session');
-const SessionState = require('session-state/app/state');
 const FbidHandler = require('fbid-handler/app/handler');
 const PageHandler = require('fbid-handler/app/page-handler');
 const SecretManager = require('secret-manager/app/manager');
@@ -13,6 +12,7 @@ const ButtonsPlacement = require('get-buttons-placer/app/buttons-placement');
 const watch = require('watch');
 const fs = require('fs-extra');
 const RequestProfiler = require('./request-profiler');
+const TripData = require('./trip-data');
 
 const TripInfoProvider = require('./trip-info-provider');
 const CommentParser = require('./expense-report/app/comment-parser');
@@ -31,6 +31,7 @@ const Promise = require('promise');
 const validator = require('node-validator');
 const Encoder = require(`${baseDir}/encoder`);
 const TripReasonWorkflow = require('trip-reason-workflow/app/workflow');
+// const SessionState = require('session-state/app/state');
 
 let recordMessage = true;
 let previousMessage = {};
@@ -42,10 +43,11 @@ function WebhookPostHandler(session, testing) {
   if(testing) TEST_MODE = true; // Use sparingly. Currently, only used in callSendAPI
 	this.pageId = PageHandler.defaultPageId;
   this.secretManager = new SecretManager();
-  this.sessionState = new SessionState();
   this.sessions = Sessions.get();
+  // this.sessionState = new SessionState();
   if(testing) this.pageHandler = PageHandler.get("fbid-test.txt");
 	else this.pageHandler = PageHandler.get();
+  this.fbidHandler = this.pageHandler.getFbidHandler();
   if(session) {
     logger.info(`WebhookPostHandler: A session with id ${session.sessionId} was passed. Using that in the post hook handler`);
     this.passedSession = session;
@@ -73,7 +75,11 @@ function handleMessagingEvent(messagingEvent, pageId) {
   // find or create the session here so it can be used elsewhere. Only do this if a session was NOT passed in the constructor.
   if(_.isUndefined(this.passedSession)) this.session = this.sessions.findOrCreate(fbid);
   else this.session = this.passedSession;
-  
+  this.sessionState = this.sessions.getSessionState(this.session.sessionId);
+  if(!this.sessionState) {
+    logger.error(`cannot find session state for sessionId ${this.session.sessionId}. Cannot proceed without it. session dump: ${JSON.stringify(this.session)}`);
+    return sendTextMessage.call(this, fbid,"Even bots need to eat! Be back in a bit..");
+  }
   if(!this.logOnce[this.session.sessionId]) {
     logger.debug(`handleMessagingEvent: First message from user ${this.session.fbid} with session ${this.session.sessionId} since this process started`);
     this.logOnce[this.session.sessionId] = true;
@@ -97,22 +103,22 @@ function handleMessagingEvent(messagingEvent, pageId) {
             receivedPostback.call(self, messagingEvent);
           } else {
             logger.error("Webhook received unknown messagingEvent: ", messagingEvent);
-            sendTextMessage(messagingEvent.sender.id,"Even bots need to eat! Be back in a bit");
+            sendTextMessage.call(this, fbid,"Even bots need to eat! Be back in a bit");
           }
         }
         catch(err) {
           logger.error("an exception was thrown: " + err.stack);
-          sendTextMessage(messagingEvent.sender.id,"Even bots need to eat! Be back in a bit");
+          sendTextMessage.call(this, fbid,"Even bots need to eat! Be back in a bit");
         }
       }
       else {
         logger.warn(`handleMessagingEvent: adding new fbid ${fbid} to fbidHandler. Expected status to be true but it was ${status}`);
-        sendTextMessage(messagingEvent.sender.id,"Even bots need to eat! Be back in a bit");
+        sendTextMessage.call(this, messagingEvent.sender.id,"Even bots need to eat! Be back in a bit");
       }
     },
     function(err) {
       logger.error(`handleMessagingEvent: error adding fbid ${fbid} to fbidHandler: ${err.stack}`);
-      sendTextMessage(messagingEvent.sender.id,"Even bots need to eat! Be back in a bit");
+      sendTextMessage.call(this, messagingEvent.sender.id,"Even bots need to eat! Be back in a bit");
     }
   );
 }
@@ -141,7 +147,7 @@ function receivedAuthentication(event) {
 
   // When an authentication is received, we'll send a message back to the sender
   // to let them know it was successful.
-  sendTextMessage(senderID, "Authentication successful");
+  sendTextMessage.call(this, senderID, "Authentication successful");
 }
 
 function handlePageEntry(pageEntry) {
@@ -174,17 +180,17 @@ WebhookPostHandler.prototype.handle = function(req, res) {
 function enterCommentAsMessage() {
   // update this session that we are awaiting response for comments postback
   this.sessionState.set("awaitingComment");
-  sendTextMessage(this.session.fbid, "Enter your free-form text");
+  sendTextMessage.call(this, this.session.fbid, "Enter your free-form text");
 }
 
 function enterTodoItemAsMessage() {
   this.sessionState.set("awaitingTodoItem");
-  sendTextMessage(this.session.fbid, "Enter a todo item");
+  sendTextMessage.call(this, this.session.fbid, "Enter a todo item");
 }
 
 function enterPackItemAsMessage() {
   this.sessionState.set("awaitingPacklistItem");
-  sendTextMessage(this.session.fbid, "Enter a pack-list item");
+  sendTextMessage.call(this, this.session.fbid, "Enter a pack-list item");
 }
 
 function setTripInContext(payload) {
@@ -226,29 +232,28 @@ function sendUrlButton(title, urlPath) {
 }
 
 WebhookPostHandler.prototype.handleDisplayTripDetailsPromise = function() {
-  const self = this;
   const threeHoursInMsec = 1000 * 60 * 60 * 3;
   const trip = this.session.tripData();
   const tip = new TripInfoProvider(trip, trip.data.leavingFrom);
   const refreshFlightQuotes = tip.refreshFlightQuotes.bind(tip);
   sendTypingAction.call(this);
   if(!this.tripPlanningPromise) throw new Error(`handleDisplayTripDetailsPromise: tripPlanningPromise is undefined`);
-  const tripNameInContext = (this.session.tripNameInContext) ? this.session.tripNameInContext : "unknown_trip";
+  const tripNameInContext = (this.session.tripData()) ? this.session.tripNameInContext : "unknown_trip";
   // set the promise value again so that it can be used in unit tests.
-  this.tripPlanningPromise = this.tripPlanningPromise.then(
-    function(values) {
+  const self = this;
+  const fulfil = function(values) {
       // nothing to do here if create succeeds. The itinerary will be persisted and can be obtained by reading the file, which is done in trip-data-formatter:displayCalendar when /calendar is called
-      // logger.info(`Successfully created itinerary for trip ${tripNameInContext}`);
       setInterval(refreshFlightQuotes, threeHoursInMsec);
       displayTripDetails.call(self);  
-    },
-    function(err) {
+  };
+  const reject = function(err) {
       logger.error(`error in gathering data for trip ${tripNameInContext}: ${err.stack}`);
       // even if one of the previous promises were rejected, call the displayTripDetails since some of them might have succeeded.
       setInterval(refreshFlightQuotes, threeHoursInMsec);
       displayTripDetails.call(self);  
-    }
-  );
+  };
+  if(Array.isArray(this.tripPlanningPromise)) this.tripPlanningPromise = Promise.all(this.tripPlanningPromise).then(fulfil, reject);
+  else this.tripPlanningPromise = this.tripPlanningPromise.then(fulfil, reject);
 }
 
 // Gather trip details (weather, flight, hotel, etc.) and send it in a web_url format.
@@ -260,6 +265,7 @@ function displayTripDetails() {
     }
   };
   const tripData = this.session.tripData();
+  if(!tripData || tripData.tripName === "conferences") return sendTripButtons.call(this);
   const tripName = tripData.data.name;
   const buttons = new ButtonsPlacement(this.urlPrefix(), tripData).getPlacement();
   messageData.message = {
@@ -331,7 +337,7 @@ WebhookPostHandler.prototype.setWeatherAndItineraryForNewTrip = function(tripNam
 // Start collecting useful information for trip and update the user.
 WebhookPostHandler.prototype.startPlanningTrip = function(returnPromise) {
   const trip = this.session.tripData();
-  // sendTextMessage(this.session.fbid, `Gathering information for your ${trip.rawTripName} trip..`);
+  // sendTextMessage.call(this, this.session.fbid, `Gathering information for your ${trip.rawTripName} trip..`);
 	// logger.debug(`startPlanningTrip: This sessions' guid is ${this.session.guid}`);
   const tip = new TripInfoProvider(trip, trip.data.leavingFrom);
   const activities = Promise.denodeify(tip.getActivities.bind(tip));
@@ -339,7 +345,7 @@ WebhookPostHandler.prototype.startPlanningTrip = function(returnPromise) {
 
   // TODO: If this is a beach destinataion, use http://www.blueflag.global/beaches2 to determine the swimmability. Also use http://www.myweather2.com/swimming-and-water-temp-index.aspx to determine if water conditions are swimmable
   const self = this;
-  const tripNameInContext = (this.session.tripNameInContext) ? this.session.tripNameInContext : "unknown_trip";
+  const tripNameInContext = (this.session.tripData()) ? this.session.tripData() : "unknown_trip";
   this.tripPlanningPromise = 
     activities()
     .then(
@@ -352,6 +358,7 @@ WebhookPostHandler.prototype.startPlanningTrip = function(returnPromise) {
           // logger.info(`startPlanningTrip: Trip ${trip.rawTripName} has flights reserved. Not getting flight quote!`);
           return Promise.resolve(true);
         }
+        // logger.debug(`startPlanningTrip: About to get flight quotes`);
         return tip.getFlightQuotes();
       },
       function(err) {
@@ -387,7 +394,7 @@ WebhookPostHandler.prototype.startPlanningTrip = function(returnPromise) {
         return Promise.reject(err);
       }
     );
-    if(returnPromise) return;
+    if(returnPromise) return this.tripPlanningPromise;
     this.handleDisplayTripDetailsPromise();
 }
 
@@ -574,10 +581,24 @@ function receivedPostback(event) {
   if(payload === "pmenu_existing_trips") return sendTripButtons.call(this);
   // Do not set past trip as trip context because there is not much users can do.
   if(payload === "past_trips") return sendPastTrips.call(this);
+
+  // CONFERENCE RELATED POSTBACK NEEDS TO BE HANDLED BEFORE CHECKING TO SEE IF REAL TRIP IN CONTEXT EXISTS!
+  const commands = new Commands(this.session.tripData(), this.session.fbid);
+
+  if(payload.startsWith("pb_event_details")) {
+    const contents = payload.split(" ");
+    if(contents.length < 2) {
+      logger.error(`receivedPostback: postback "pb_event_details " not in expected format "pb_event_details <eventName> <optionalDay>"`);
+      return sendTextMessage.call(this, this.session.fbid,"Even bots need to eat! Be back in a bit..");
+    }
+    // logger.debug(`getting details for event. contents are ${contents}`);
+    return callSendAPI.call(this, commands.getEventItinerary(contents));
+  }
+  if(payload.includes("recommendation_next_set")) return callSendAPI.call(this, commands.handleRecommendationPostback(payload));
 	
 	// In order to add travelers to a trip, we need to know the trip in context.
-  if(!this.session.doesTripContextExist()) { 
-    logger.info("receivedPostback: no trip name in context. Asking user!");
+  if(!this.session.doesTripContextOtherThanConferencesExist()) { 
+    logger.info("receivedPostback: no real trip name in context. Asking user!");
     // store the current payload so it can be handled once we have the tripInContext.
     this.session.previousPayload = payload; 
     sendTripButtons.call(this, true /* add new trip */);
@@ -608,15 +629,6 @@ function receivedPostback(event) {
   if(payload === "car details") return sendCarReceipt.call(this);
   if(payload === "get receipt") return sendGeneralReceipt.call(this);
 
-  const commands = new Commands(this.session.tripData(), this.session.fbid);
-
-  if(payload.startsWith("pb_event_details")) {
-    const contents = /^.* (.*)/.exec(payload);
-    logger.debug(`getting details for event ${contents[1]}`);
-    return callSendAPI.call(this, commands.getEventItinerary(contents[1]));
-  }
-
-  if(payload.includes("recommendation_next_set")) return callSendAPI.call(this, commands.handleRecommendationPostback(payload));
   let handled = commands.handlePostback(payload);
   if(handled && (typeof handled === "object")) return callSendAPI.call(this, handled);
   handled = commands.handleActivityPostback(payload);
@@ -626,7 +638,7 @@ function receivedPostback(event) {
 
   // When an unknown postback is called, we'll send a message back to the sender to 
   // let them know it was successful
-  sendTextMessage(senderID, `Unhandled Postback ${payload} called `);
+  sendTextMessage.call(this, senderID, `Unhandled Postback ${payload} called `);
 }
 
 function sendBoardingPass() {
@@ -641,7 +653,7 @@ function sendReturnFlightDetails() {
     logger.warn(`sendReturnFlightDetails: No flight details exists for trip ${trip.rawTripName}`);
     if(!fs.existsSync(trip.itineraryFile())) {
       return sendNotFoundMessage.call(this, "flight", trip.rawTripName);
-      // return this.sendTextMessage(this.session.fbid,`No flight itinerary present for your trip to ${trip.rawTripName}. If you have already booked a flight, send it to TRIPS@MAIL.POLAAMA.COM`);
+      // return this.sendTextMessage.call(this, this.session.fbid,`No flight itinerary present for your trip to ${trip.rawTripName}. If you have already booked a flight, send it to TRIPS@MAIL.POLAAMA.COM`);
     }
   }
   const fbid = this.session.fbid;
@@ -770,7 +782,7 @@ function sendFlightItinerary() {
     logger.warn(`sendFlightItinerary: No flight details exists for trip ${trip.rawTripName}`);
     if(!fs.existsSync(trip.returnFlightFile())) {
       return sendNotFoundMessage.call(this, "flight", trip.rawTripName);
-      // return this.sendTextMessage(this.session.fbid,`No flight itinerary present for your trip to ${trip.rawTripName}. If you have already booked a flight, send it to TRIPS@MAIL.POLAAMA.COM`);
+      // return this.sendTextMessage.call(this, this.session.fbid,`No flight itinerary present for your trip to ${trip.rawTripName}. If you have already booked a flight, send it to TRIPS@MAIL.POLAAMA.COM`);
     }
   }
   const fbid = this.session.fbid;
@@ -848,7 +860,7 @@ function sendGeneralReceipt(title) {
   const trip = this.session.tripData();
   if(!title) {
     const receipts = trip.receipts();
-    if(!receipts) return sendTextMessage(fbid, `No receipts found for trip ${trip.rawTripName}`);
+    if(!receipts) return sendTextMessage.call(this, fbid, `No receipts found for trip ${trip.rawTripName}`);
     /*
     receipts.forEach(receipt => {
       const button = {
@@ -883,7 +895,7 @@ function sendGeneralReceipt(title) {
     return this.sendAnyMessage(message);
   }
   const receiptFile = trip.generalReceiptFile(title);
-  if(!receiptFile) return sendTextMessage(fbid, `No receipts found for trip ${trip.rawTripName}`);
+  if(!receiptFile) return sendTextMessage.call(this, fbid, `No receipts found for trip ${trip.rawTripName}`);
 	const messages = [];
   const details = JSON.parse(fs.readFileSync(receiptFile));
     messages.push({
@@ -914,7 +926,7 @@ function sendGeneralReceipt(title) {
 function sendCarReceipt() {
   const fbid = this.session.fbid;
   const trip = this.session.tripData();
-  // if(!fs.existsSync(trip.rentalCarReceiptFile())) return sendTextMessage(fbid, `No car receipt found for your trip ${trip.rawTripName}`);
+  // if(!fs.existsSync(trip.rentalCarReceiptFile())) return sendTextMessage.call(this, fbid, `No car receipt found for your trip ${trip.rawTripName}`);
   if(!fs.existsSync(trip.rentalCarReceiptFile())) return sendNotFoundMessage.call(this, "car", trip.rawTripName);
   const details = JSON.parse(fs.readFileSync(trip.rentalCarReceiptFile(), 'utf8'));
 	const messages = [];
@@ -1137,7 +1149,7 @@ function receivedMessage(event) {
           determineResponseType.call(this, event);
       }
     } else if (messageAttachments) {
-      sendTextMessage(senderID, "Message with attachment received");
+      sendTextMessage.call(this, senderID, "Message with attachment received");
     }
 }
 
@@ -1195,7 +1207,7 @@ function sendTripButtons(addNewTrip) {
 	this.session.invalidateTripData();
   const tripDetails = this.session.getCurrentAndFutureTrips();
   const tripNames = tripDetails.futureTrips;
-  logger.info(`sendTripButtons: trip length for fbid ${this.session.fbid} is ${tripNames.length}`);
+  // logger.info(`sendTripButtons: trip length for fbid ${this.session.fbid} is ${tripNames.length}`);
   if(tripNames.length == 0) {
     const messageData = {
       recipient: {
@@ -1227,7 +1239,7 @@ function sendTripButtons(addNewTrip) {
     
   // reset this sessions' context
   this.session.resetTripContext();
-  sendTextMessage(this.session.fbid, "Hi, which trip are we discussing?");
+  sendTextMessage.call(this, this.session.fbid, "Hi, which trip are we discussing?");
   const elements = [];
   const buttons = [];
   tripNames.forEach((t,i) => {
@@ -1237,7 +1249,7 @@ function sendTripButtons(addNewTrip) {
     }
     buttons[j].push({
       type: "postback",
-      title: `    ${Encoder.decode(t.rawName)}`,
+      title: `    ${Encoder.decode(t.rawName)}    `,
       payload: `trip_in_context ${t.name}`
     });
   });
@@ -1254,7 +1266,7 @@ function sendTripButtons(addNewTrip) {
     if(pastTrips) {
       buttons[lastIndex].push({
         type: "postback",
-        title: "Past Trips",
+        title: " Past Trips  ",
         payload: "past_trips"
       });
       pastTrips = false;
@@ -1306,6 +1318,7 @@ function handleQuickRepliesToPlanNewTrip(quick_reply) {
   // This quick reply came from the user typing "help" (see getHelpMessage) or
   // this quick reply came in response to "Abort the current trip being planned?" question in determineResponseType
   if(payload === "qr_new_trip" || payload === "qr_yes_plan_new_trip") {
+    if(payload === "qr_yes_plan_new_trip") this.sessionState.clearAll();
     planNewTrip.call(this);
     return true;
   }
@@ -1370,7 +1383,7 @@ function addSenderToTrip() {
   catch(e) {
     logger.error(`addSenderToTrip: Exception in adding sender: ${e.stack}`);
   }
-  return sendTextMessage(this.session.fbid, "Could not add you to the trip at this point.");
+  return sendTextMessage.call(this, this.session.fbid, "Could not add you to the trip at this point.");
 }
 
 function handleQuickReplies(quick_reply) {
@@ -1387,7 +1400,7 @@ function handleQuickReplies(quick_reply) {
     return true;
   }
   if(payload === "qr_day_plan_") {
-    sendTextMessage(this.session.fbid, `Enter a day. Example: '9th', '14', 'tomorrow', '8/15'`);
+    sendTextMessage.call(this, this.session.fbid, `Enter a day. Example: '9th', '14', 'tomorrow', '8/15'`);
     return true;
   }
 
@@ -1453,7 +1466,7 @@ function createNewTrip(tripDetails) {
   this.tripCount = this.session.getCurrentAndFutureTrips().futureTrips.length;
   const tripData = this.session.tripData();
   tripData.addTripDetailsAndPersist(tripDetails);
-  logger.info(`createNewTrip: This session's trip name in context is ${tripDetails.destination}`);
+  // logger.info(`createNewTrip: This session's trip name in context is ${tripDetails.destination}`);
   this.sessionState.clear("awaitingNewTripDetails");
   // reload the session here to get the latest data
   this.sessions.reloadSession(this.session.sessionId);
@@ -1547,7 +1560,7 @@ function getCityDetailsAndStartPlanningTrip(messageText, existingTrip) {
   }
   catch(e) {
     logger.error(`getCityDetailsAndStartPlanningTrip: exception calling getCityDetailsAndStartPlanningTrip: ${e.stack}`);
-    sendTextMessage(this.session.fbid, e.message);
+    sendTextMessage.call(this, this.session.fbid, e.message);
     return;
   }
   const tripData = this.session.tripData();
@@ -1558,7 +1571,7 @@ function getCityDetailsAndStartPlanningTrip(messageText, existingTrip) {
   }
   else {
     logger.error(`getCityDetailsAndStartPlanningTrip: Session ${this.session.sessionId}: Cannot determine cities for trip ${tripData.data.country} even after getting cities from customer. Possible BUG!`);
-    sendTextMessage(this.session.fbid,"Even bots need to eat! Be back in a bit..");
+    sendTextMessage.call(this, this.session.fbid,"Even bots need to eat! Be back in a bit..");
   }
 }
 
@@ -1582,7 +1595,7 @@ function askBusiness() {
   const fbid = this.session.fbid;
   if(!this.askBusiness) {
     this.askBusiness = true;
-    return sendTextMessage(fbid, "What question do you have for \"Extreme Iceland\"?");
+    return sendTextMessage.call(this, fbid, "What question do you have for \"Extreme Iceland\"?");
   }
   this.askBusiness = false;
   const message = {
@@ -1719,6 +1732,24 @@ function handleLicense() {
   return this.sendMultipleMessages(fbid, messageList);
 }
 
+function handleEventWithoutTrip(m) {
+  if(!m.includes("phocuswright") && !m.includes("the americas") && !m.includes("battleground") && !m.includes("arival")) return null;
+  let trip = this.session.getTrip("conferences");
+  if(!trip) {
+    // logger.debug(`adding trip conference to session ${this.session.sessionId}`);
+    this.session.addTrip("conferences");
+    trip = this.session.tripData();
+    trip.addEvent("phocuswright");
+    trip.addEvent("test-phocuswright");
+    trip.addEvent("test-arival");
+    trip.addEvent("arival");
+  }
+  // else this.session.setTripContextAndPersist(trip.tripName);
+  trip.setConferenceInContext(m);
+  const commands = new Commands(trip, this.session.fbid);
+  return commands.handleEventCommands(m);
+}
+
 /*
 New trip Workflow:
 
@@ -1738,20 +1769,21 @@ function determineResponseType(event) {
   const messageText = event.message.text;
   const mesg = messageText.toLowerCase();
 
-  // if(this.askBusiness) return askBusiness.call(this);
-  // if user moves on to any other question, reset the askBusiness workflow.
-  // this.askBusiness = false;
   // if(mesg === "expenses") return expense.call(this);
+
   if(mesg === "dr" || mesg === "tr") return handleDRandTR.call(this, mesg);
-  if(["license", "driving license", "driver's license", "driver license"].includes(mesg) && this.session.tripNameInContext && ["iceland", "keflavik", "iceland_alt"].includes(this.session.tripNameInContext)) return handleLicense.call(this);
+  if(["license", "driving license", "driver's license", "driver license"].includes(mesg) && this.session.tripData() && ["iceland", "keflavik", "iceland_alt"].includes(this.session.tripNameInContext)) return handleLicense.call(this);
 
   if(mesg === "commands" || (mesg.includes("help") && mesg.includes("commands"))) return supportedCommands.call(this);
 
   // indicates a recommendation request from user. Send this to the admin to take action.
   if(mesg.startsWith("reco ")) {
-    sendTextMessage(Session.adminId, `[ACTION REQD]: Recommendation request from ${this.session.fbid}: ${mesg}`);
-    return sendTextMessage(this.session.fbid, "Received your request. We are actively working on it and will get back to you soon with results.");
+    sendTextMessage.call(this, Session.adminId, `[ACTION REQD]: Recommendation request from ${this.session.fbid}: ${mesg}`);
+    return sendTextMessage.call(this, this.session.fbid, "Received your request. We are actively working on it and will get back to you soon with results.");
   }
+
+  const eventMesg = handleEventWithoutTrip.call(this, mesg);
+  if(eventMesg) return callSendAPI.call(this, eventMesg);
 
   // Before doing anything, if the user types help, send the help message!
   if(!this.tripCount) this.tripCount = this.session.getCurrentAndFutureTrips().futureTrips.length;
@@ -1759,7 +1791,7 @@ function determineResponseType(event) {
     if(mesg.startsWith("help ") || mesg === "help") {
       // clear all states 
       this.sessionState.clearAll();
-      if(this.session.doesTripContextExist()) return respondToHelp.call(this);
+      if(this.session.doesTripContextOtherThanConferencesExist()) return respondToHelp.call(this);
     }
     if(this.tripCount) {
       let name = this.fbidHandler.getName(senderID);
@@ -1773,14 +1805,18 @@ function determineResponseType(event) {
 
   if(event.message.quick_reply && handleQuickRepliesToPlanNewTrip.call(this, event.message.quick_reply)) return;
 
+  /*
   // At this point, if no trip exists and it's not being planned, the user has entered something we don't understand. Simply send them the Welcome message.
-  if(!this.tripCount && !this.sessionState.get("planningNewTrip")) return getHelpMessageData.call(this, senderID, "Hi, I am your new personal travel assistant. Would you like to create a new trip to get started?");
+  if(!this.tripCount && !this.sessionState.get("planningNewTrip")) {
+    logger.debug(`determineResponseType: short-circuiting. trip count is ${this.tripCount}`);
+    return getHelpMessageData.call(this, senderID, "Hi, I am your new personal travel assistant. Would you like to create a new trip to get started?");
+  }
+  */
 
   // if we don't know what trip is being discussed, ask the user for this, unless the user is adding details about a new trip.
   if(!this.session.doesTripContextExist() && !this.sessionState.get("planningNewTrip")) {
     logger.info("determineResponseType: no trip name in context. Asking user!");
-    sendTripButtons.call(this, true);
-    return;
+    return sendTripButtons.call(this, true);
   }
 
   // New trip workflow
@@ -1802,7 +1838,7 @@ function determineResponseType(event) {
 				}		
 				else {
 					logger.error(`determineResponseType: BUG! Session is in state awaitingUserConfirmation  but the mesg is not qr_yes or qr_no. It is ${userResponse}. This is unexpected`);
-					sendTextMessage(this.session.fbid,"Even bots need to eat! Be back in a bit..");
+					sendTextMessage.call(this, this.session.fbid,"Even bots need to eat! Be back in a bit..");
 					return;
 				}
 			}
@@ -1810,7 +1846,7 @@ function determineResponseType(event) {
       	const err = extractNewTripDetails.call(this, messageText);
       	if(err) {
           const param = (err[0].parameter) ? `parameter ${err[0].parameter}`: "";
-        	return sendTextMessage(this.session.fbid, `Input error: ${param}:${err[0].message}`);
+        	return sendTextMessage.call(this, this.session.fbid, `Input error: ${param}:${err[0].message}`);
       	}
 			}
 			catch(e) {
@@ -1821,21 +1857,21 @@ function determineResponseType(event) {
 			}
     }
 
-    // logger.debug(`determineResponse: About to set departure city & destination city for trip in context: ${this.session.tripNameInContext}; sessions' tripData trip is ${this.session.tripData().rawTripName}`);
     // Step 2: Successfully parsed new trip details above. Now get the departure details.
     const depCityWorkflow = new DepartureCityWorkflow(this, messageText, event.message.quick_reply);
     const promiseOrBool = depCityWorkflow.set();
     if(typeof promiseOrBool === "object") {
       const self = this;
       // promise. If we received a promise, then, no code can execute outside of the done function (because that will be executed immediately). This is the reason for the structure of the code.
-      promiseOrBool.done(function(response) {
+      // return promise here so that it can be used by unit tests.
+      return promiseOrBool.then(function(response) {
         // this indicates workflow completed work, so proceed to do other things.
         if(response === false) return;
         return handleAdditionalCommands.call(self, event, mesg);
       },
       function(err) {
         logger.error(`determineResponseType: error in departure city workflow: ${err.stack}`);
-        return;
+        return Promise.reject(err);
       });
     }
     // require additional information from user. So, short-circuit
@@ -1887,17 +1923,16 @@ function handleAdditionalCommands(event, mesg) {
     // 3) If we already asked for cities, handle that and start planning. Else, get cities for the trip.
     const destCityWorkflow = new DestinationCityWorkflow(this);
     const promise = destCityWorkflow.handleNewTrip(mesg);
-    promise.done(
+    return promise.then(
       function(response) {
-        // logger.debug(`handleAdditionalCommands: destination city workflow promise claled. result is ${response}`);
         if(response) {
           // End of new trip workflow. The workflow will complete when user selects cities (handled by determineCities function) and webpage-handler.js calls the startPlanningTrip method
           // TODO: Rather than let webpage-handler.js call startPlanning (and thus exposing this functionality there), consider calling startPlanningTrip from here.. The presence of tripData.data.cities can be a signal from webpage-handler.js's formParseCallback method that the cities were correctly chosen and added here.
-          // invalidate this trip in the session so that it will be fetched from a datastore.
+          // logger.debug(`handleAdditionalCommands: destination city workflow promise called. result is ${response}`);
           // see if we have enough data to start planning a trip
           if(self.session.tripData().cityItinDefined()) {
             const tripData = self.session.tripData();
-            logger.debug(`handleAdditionalCommands: cities available for trip ${tripData.rawTripName}. Start planning trip for customer ${self.session.fbid}`);
+            // logger.debug(`handleAdditionalCommands: cities available for trip ${tripData.rawTripName}. Start planning trip for customer ${self.session.fbid}`);
             // start planning the trip but do not display trip details. That will be done by TripReasonWorkflow below.
             self.startPlanningTrip(true /* return promise */);
           }
@@ -1908,17 +1943,18 @@ function handleAdditionalCommands(event, mesg) {
             self.sessionState.clear("planningNewTrip");
             self.session.invalidateTripData();
           }
+          return self.tripPlanningPromise;
         }
         // if the response was false, then the destination city workflow needed additional information from users. So, nothing to do but return;
       },
       function(err) {
         // TODO: See if there is a way to isolate this failure and still plan a trip (rather than throw a 500 back to the user)
         logger.error(`Error calling destinationCityWorkflow.handleNewTrip: ${err}`);
-        this.sendTextMessage(senderID, "Even bots need to eat. Be back in a bit.");
+        this.sendTextMessage.call(this, senderID, "Even bots need to eat. Be back in a bit.");
+        return Promise.reject(err);
       }
     );
-    // irrespective of the response from handleNewTrip, we are done handling this message from the user.
-    return;
+    // irrespective of the response from handleNewTrip, we are done handling this message from the user. we return the promise so that it can be used in testing.
   }
   // logger.debug(`determineResponseType: Handling message <${mesg}>. Dump of session states: ${this.sessionState.dump()}`);
   if(this.sessionState.get("awaitingCitiesForExistingTrip")) return getCityDetailsAndStartPlanningTrip.call(this, mesg, true /* existing trip */);
@@ -1933,7 +1969,7 @@ function handleAdditionalCommands(event, mesg) {
     }
     catch(e) {
       logger.error(`determineResponseType: Error from expense report workflow: ${e}`);
-      sendTextMessage(senderID,"Even bots need to eat. Out for lunch! Be back in a bit..");
+      sendTextMessage.call(this, senderID,"Even bots need to eat. Out for lunch! Be back in a bit..");
     }
     return;
   }
@@ -1954,19 +1990,19 @@ function handleAdditionalCommands(event, mesg) {
   if(mesg === "existing trips" || mesg === "trips") return sendTripButtons.call(this); 
   if(mesg.startsWith("save ") || mesg.startsWith("comment ") || this.sessionState.get("awaitingComment")) {
     const returnString = tripData.storeFreeFormText(senderID, mesg);
-    sendTextMessage(senderID, returnString);
+    sendTextMessage.call(this, senderID, returnString);
     this.sessionState.clear("awaitingComment");
     return;
   }
   if(mesg.startsWith("todo") || this.sessionState.get("awaitingTodoItem")) {
     const returnString = tripData.storeTodoList(senderID, mesg);
-    sendTextMessage(senderID, returnString);
+    sendTextMessage.call(this, senderID, returnString);
     this.sessionState.clear("awaitingTodoItem");
     return;
   }
   if(mesg.startsWith("pack ") || this.sessionState.get("awaitingPacklistItem")) {
     const returnString = tripData.storePackList(mesg);
-    sendTextMessage(senderID, returnString);
+    sendTextMessage.call(this, senderID, returnString);
     this.sessionState.get("awaitingPacklistItem");
     return;
   }
@@ -2237,7 +2273,7 @@ WebhookPostHandler.prototype.sendReminderNotification = function() {
       const startDate = moment.tz(trip.data.startDate, "Etc/UTC");
       const daysToTrip = startDate.diff(now, 'days');
       if(daysToTrip <= 45) {
-        sendTextMessage(sessions[id].fbid, `Reminder: You still have ${todoList.length} items to do for your trip to ${trip.data.name}`);
+        sendTextMessage.call(this, sessions[id].fbid, `Reminder: You still have ${todoList.length} items to do for your trip to ${trip.data.name}`);
         // TODO: Add a button for user to get the list of todo items.
       }
       else {
@@ -2250,11 +2286,11 @@ WebhookPostHandler.prototype.sendReminderNotification = function() {
 WebhookPostHandler.prototype.notifyAdmin = function(emailId) {
   const fbid = Session.adminId;
   logger.debug(`notifyAdmin: fbid is ${fbid}, email is ${emailId}`);
-  return sendTextMessage(fbid, `[ACTION REQD]: You got email from ${emailId}`);
+  return sendTextMessage.call(this, fbid, `[ACTION REQD]: You got email from ${emailId}`);
 }
 
 WebhookPostHandler.prototype.notifyUser = function(message) {
-	sendTextMessage(this.session.fbid, message);
+	sendTextMessage.call(this, this.session.fbid, message);
 }
 
 WebhookPostHandler.prototype.sendBoardingPass = function(message) {
@@ -2280,7 +2316,7 @@ function handleMessageSentByHuman(messageText, senderID) {
       return;
     }
     logger.info("handleMessageSentByHuman: response from human is not in the right format. senderId and/or sequence number is missing");
-    sendTextMessage(senderID,"wrong format. correct format is <original-sender-id>-<sequence number> message text");
+    sendTextMessage.call(this, senderID,"wrong format. correct format is <original-sender-id>-<sequence number> message text");
     return;
   }
   // send the message from human to the original user. If human indicated that a bot look at it, send the user's original message to the bot.
@@ -2414,7 +2450,7 @@ function sendResponseFromWitBot(senderID, messageText) {
   })
   .catch((err) => {
     logger.error('Oops! Got an error from Wit: ', err.stack || err);
-    sendTextMessage(senderID,"Even bots need to eat. Out for lunch! Be back in a bit..");
+    sendTextMessage.call(this, senderID,"Even bots need to eat. Out for lunch! Be back in a bit..");
   })
 }
 
@@ -2426,7 +2462,7 @@ function determineCities(existingTrip) {
     return false;
   }
   // logger.info(`Asking user to select from the following cities: ${JSON.stringify(country)} for country ${trip.rawTripName}.`);
-  sendTextMessage(this.session.fbid,`Which cities of ${country.name} are you traveling to?`);
+  sendTextMessage.call(this, this.session.fbid,`Which cities of ${country.name} are you traveling to?`);
   let uri = "cities";
   if(existingTrip) {
     uri = "add-cities";
@@ -2461,7 +2497,7 @@ function determineCities(existingTrip) {
 function determineTravelCompanions() {
   const trip = this.session.findTrip();
   if(!trip) throw new Error(`Expected trip context to be present for fbid ${this.session.fbid}. Possible BUG!`);
-  sendTextMessage(this.session.fbid, `Choose your travel companions`);
+  sendTextMessage.call(this, this.session.fbid, `Choose your travel companions`);
   const messageData = {
     recipient: {
       id: this.session.fbid
@@ -2515,6 +2551,26 @@ function respondToHelp() {
       payload: "pb_current_trip"
     }]
   });
+  elements.push(
+    {
+      "title": "Plan a new trip",
+      "subtitle": "Let's plan a trip together",
+      "buttons": [{
+        title: "Plan new trip",
+        type: "postback",
+        payload: "new_trip"
+      }]
+    },
+    {
+      "title": "Supported commands",
+      "subtitle": "commands that are currently available",
+      "buttons": [{
+        title: "Commands",
+        "type": "postback",
+        payload: "supported_commands"
+      }]
+    }
+  );
   if(this.session.tripData().data.events) elements.push({
     "title": "Supported event commands",
     "subtitle": `Get specific details from your conferences & events`,
@@ -2524,30 +2580,12 @@ function respondToHelp() {
       payload: "pb_event_supported_commands"
     }]
   });
-  elements.push({
-      "title": "Supported commands",
-      "subtitle": "commands that are currently available",
-      "buttons": [{
-        title: "Commands",
-        "type": "postback",
-        payload: "supported_commands"
-      }]
-    },
-    {
-      "title": "Plan a new trip",
-      "subtitle": "Let's plan a trip together",
-      "buttons": [{
-        title: "Plan new trip",
-        type: "postback",
-        payload: "new_trip"
-    }]
-  });
   return this.sendAnyMessage(message);
 }
 
 // only call this method if there is a trip name in context
 function sendAddOrGetOptions() {
-  if(!this.session.tripNameInContext) throw new Error(`sendAddOrGetOptions: I was called even though there is no trip in context in session ${this.session.sessionId}. Potential BUG!`);
+  if(!this.session.tripData()) throw new Error(`sendAddOrGetOptions: I was called even though there is no trip in context in session ${this.session.sessionId}. Potential BUG!`);
   const messageData = {
     recipient: {
       id: this.session.fbid
@@ -2581,8 +2619,8 @@ function getHelpMessageData(senderID, message) {
   // clear all awaiting states
   // this.session.clearAllAwaitingStates();
   this.sessionState.clearAll();
-  if(this.session.doesTripContextExist()) {
-    sendTextMessage(this.session.fbid, message);
+  if(this.session.doesTripContextOtherThanConferencesExist()) {
+    sendTextMessage.call(this, this.session.fbid, message);
     return respondToHelp.call(this);
   }
   if(!message) message = "Hi! What would you like to do?";
@@ -2648,38 +2686,6 @@ function sendWelcomeMessage(senderID) {
   if(!name) name = ""; else name = ` ${name.substring(0, name.indexOf(" "))}`;
   return getHelpMessageData.call(this, senderID, `Hi${name}! Welcome to Polaama, your deeply personal travel assistant`);
 }
-
-/*
-// used by workflow for planningNewTrip
-function sendFlightQuickReplies() {
-  const messageData = {
-    recipient: {
-      id: this.session.fbid
-    },
-    message: {
-      text: "Which flight segment do you want to see?",
-      quick_replies:[
-        {
-          content_type: "text",
-          title: "Onward",
-          payload: "qr_onward_flight",
-        },
-				{
-					content_type: "text",
-					title: "Return",
-					payload: "qr_return_flight",
-				},
-        {
-					content_type: "text",
-					title: "Both flights",
-					payload: "qr_both_flights",
-        }
-			]
-		}
-	};
-	callSendAPI.call(this, messageData);
-}
-*/
 
 // used by workflow for planningNewTrip
 function sendYesNoButtons(message) {
@@ -2934,8 +2940,8 @@ WebhookPostHandler.prototype.testing_createNewTrip = createNewTrip;
 WebhookPostHandler.prototype.testing_displayTripDetails = displayTripDetails;
 WebhookPostHandler.prototype.testing_receivedPostback = receivedPostback;
 
-WebhookPostHandler.prototype.testing_setState = function(sessionState) {
-  this.sessionState = sessionState;
+WebhookPostHandler.prototype.testing_setState = function(sessionId, sessionState) {
+  this.sessions.testing_setState(sessionId, sessionState);
 }
 
 // ********************************* TESTING *************************************

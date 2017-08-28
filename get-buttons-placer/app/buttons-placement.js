@@ -65,12 +65,16 @@ ButtonsPlacement.prototype.getPlacement = function() {
   const buttons = [];
   buttons.push(tripCalendar);
 
-  const eventsButton = {
-    type: "postback",
-    title: "Conference details",
-    payload: "pb_event_details phocuswright"
-  };
-  if(this.trip.getEvents()) buttons.push(eventsButton);
+  const events = this.trip.getEvents();
+  if(events) {
+    // logger.debug(`placement: adding event: ${events[0]}`);
+    const eventsButton = {
+      type: "postback",
+      title: "Conference details",
+      payload: `pb_event_details all_events`
+    };
+    buttons.push(eventsButton);
+  }
 
   const fs = require('fs');
 	if(fs.existsSync(this.trip.boardingPassFile())) buttons.push(bpButton);

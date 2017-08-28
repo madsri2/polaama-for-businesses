@@ -72,4 +72,31 @@ describe("TripReasonWorkflow workflow tests", function() {
       }
     );
   });
+
+  it("handle sending multiple conference names", function(done) {
+    handler.testing_createNewTrip({
+      destination: tripName,
+      startDate: "09/10/2017",
+      duration: 4,
+      portOfEntry: "sfo",
+      leavingFrom: "ewr"
+    });
+    handler.startPlanningTrip(true /* return promise */);
+    handler.sessionState.set("awaitingTripReason");
+    handler.sessionState.set("awaitingConferenceName");
+    const workflow = new TripReasonWorkflow(handler);
+    expect(workflow.handle("phocuswright,arival")).to.be.true;
+    expect(handler.sessionState.get("awaitingConferenceName")).to.be.false;
+    expect(handler.sessionState.get("awaitingTripReason")).to.be.false;
+    handler.tripPlanningPromise.done(
+      function(result) {
+        logger.debug(`result from promise is ${result}`);
+        done();
+      },
+      function(err) {
+        expect(false).to.be.true;
+        done(err);
+      }
+    );
+  });
 });

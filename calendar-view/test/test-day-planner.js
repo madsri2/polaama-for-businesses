@@ -22,6 +22,9 @@ describe("DayPlanner tests", function() {
 
   beforeEach(function() {
     trip = new TripData('test-mobile-view', fbid);
+    trip.addTripDetailsAndPersist({
+      ownerId: "ZDdz"
+    });
     // set up
     copyFile("2017-6-13");
   });
@@ -64,4 +67,33 @@ describe("DayPlanner tests", function() {
     testMealActivity("6/25/2017", ["lunch"]);
   });
 
+  it("test getting event plans for a given day", function() {
+    trip.addEvent("test-phocuswright");
+    const date = new Date("9/12/2017");
+    const dp = new DayPlanner(date, trip, fbid);
+    const message = dp.getPlanAsList(0);
+    expect(message).to.not.be.null;
+    logger.debug(`message is ${JSON.stringify(message)}`);
+  });
+
+  it("get event breakdown details", function() {
+    trip.addEvent("test-arival");
+    const date = new Date("10/12/2017");
+    const dp = new DayPlanner(date, trip, fbid);
+    const payload = "pb_event_details_breakdown test-arival details-oct-12";
+    const message = dp.getEventItinerary(payload.split(" "));
+    expect(message).to.not.be.null;
+    logger.debug(`message is ${JSON.stringify(message)}`);
+  });
+
+  it("get event details", function() {
+    trip.addEvent("test-arival");
+    const date = new Date("10/12/2017");
+    const dp = new DayPlanner("invalid", trip, fbid);
+    const payload = "pb_event_details_breakdown test-arival details-oct-12";
+    const message = dp.getEventItinerary(payload.split(" "));
+    expect(message).to.not.be.null;
+    logger.debug(`message is ${JSON.stringify(message)}`);
+    
+  });
 });

@@ -159,7 +159,7 @@ function addPortOfEntryAndCode(destination) {
       function(response) {
         const code = self.airportCodes.getCode(destination);
         if(code) {
-          logger.debug(`addPortOfEntryAndCode: adding city ${destination} and code ${code}`);
+          // logger.debug(`addPortOfEntryAndCode: adding city ${destination} and code ${code}`);
           self.trip.addPortOfEntryAndCode(destination, code);
           self.sessionState.clear("awaitingCitiesForNewTrip");
           return Promise.resolve(true);

@@ -85,6 +85,40 @@ function setup() {
   return handler;
 }
 
+function receivedPostbackEvent(payload) {
+  let event = { 
+    message: {
+      text: ""
+    },
+    sender: {
+      id: myFbid
+    }, 
+    recipient: {
+      id: myFbid
+    }, 
+    timestamp: "12345",
+    postback: { 
+      payload: payload
+    } 
+  };
+  return event;
+}
+
+function determineResponseTypeEvent(mesg) {
+  const event = { 
+    message: { text: mesg }, 
+    postback: {},
+    sender: {
+      id: myFbid
+    }, 
+    recipient: {
+      id: myFbid
+    }, 
+    timestamp: "12345"
+  };
+  return event;
+}
+
 function setupTelAvivTrip() {
   // set up
   const myFbid = "1234";
@@ -152,29 +186,44 @@ function setupTelAvivTrip() {
   return handler;
 }
 
+let globalHandler;
 function testStartPlanningTrip() {
   const sessions = Sessions.get();
   const myFbid = "1234";
-  const tripName = "ewr-sfo";
+  const tripName = "san_francisco";
   // set up
   // first clean up previous test state
   sessions.testing_delete(myFbid);
+  new TripData(tripName, myFbid).testing_delete();
   const session = sessions.findOrCreate(myFbid);
   // create new trip
+  session.persistHometown("ewr");
   const handler = new WebhookPostHandler(session, true /* testing */);
   handler.testing_createNewTrip({
-    destination: "san_francisco",
+    destination: tripName,
     startDate: "09/10/2017",
     duration: 4
   });
-  session.persistHometown("ewr");
   const sessionState = handler.sessionState;
   // setup state
   sessionState.set("planningNewTrip");
   sessionState.set("awaitingUseHometownAsDepartureCity");
-  const event = { message: { text: "", quick_reply : { payload: "qr_use_hometown_as_dep_city_yes" }}};
+  let event = { message: { text: "", quick_reply : { payload: "qr_use_hometown_as_dep_city_yes" }}};
   // test
-  handler.testing_determineResponseType(event);
+  const fulfil = function(result) {
+    logger.debug(`done: result is ${JSON.stringify(result)}`);
+    handler.handleDisplayTripDetailsPromise();
+    return Promise.resolve(true);
+  };
+  const reject = function(err) {
+    logger.warn(`promise returned error: ${err.stack}`);
+    return Promise.reject(true);
+  };
+  globalHandler = handler;
+  const promises = handler.testing_determineResponseType(event);
+  if(!promises) logger.error(`determineResponseType returned undefined promise`);
+  else if(Array.isArray(promises)) return Promise.all(promises).then(fulfil, reject);
+  else return promises.then(fulfil, reject);
 }
 
 function testRequestToBeAddedToTrip() {
@@ -356,7 +405,7 @@ function testAddingDepartureCityNoHometownSet() {
   console.log(`testAddingDepartureCityNoHometownSet: response from determineResponseType is ${response}; hometown: ${handler.session.hometown}`);
 }
 
-function setupForSfoEventPlanning(fbid) {
+function createHandler(fbid) {
 	if(!fbid) fbid = myFbid;
   const sessions = Sessions.get();
   const tripName = "san_francisco";
@@ -366,20 +415,25 @@ function setupForSfoEventPlanning(fbid) {
   new TripData(tripName, fbid).testing_delete();
   const session = sessions.findOrCreate(fbid);
   // create new trip
-  const handler = new WebhookPostHandler(session, true /* testing */);
+  return new WebhookPostHandler(session, true /* testing */);
+}
+
+function setupForSfoEventPlanning(fbid) {
+  const handler = createHandler(fbid);
   handler.testing_createNewTrip({
     destination: "san_francisco",
     startDate: "09/10/2017",
     duration: 4,
     leavingFrom: "ewr",
-    portOfEntry: "sfo"
+    portOfEntry: "sfo",
+    ownerId: "ZDdz"
   });
   return handler;
 }
 
 function testGettingEventItinerary() {
   const handler = setupForSfoEventPlanning();
-  const postback = "pb_event_details phocuswright";
+  const postback = "pb_event_details_day arival oct_11";
   const event = { 
     message: {
       text: ""
@@ -403,77 +457,59 @@ function testChoosingConference() {
   const handler = setupForSfoEventPlanning();
   handler.sessionState.set("awaitingTripReason");
   handler.sessionState.set("planningNewTrip");
-  const postback = "pb_event";
-  const event = { 
-    message: {
-      text: ""
-    },
-    sender: {
-      id: myFbid
-    }, 
-    recipient: {
-      id: myFbid
-    }, 
-    timestamp: "12345",
-    postback: { 
-      payload: postback 
-    } 
-  };
+  const event = receivedPostbackEvent("pb_event");
   handler.testing_receivedPostback(event);
+  handler.session.tripData().addEvent("phocuswright");
+  handler.testing_determineResponseType(determineResponseTypeEvent("phocus"));
+  const promises = handler.tripPlanningPromise;
+  if(!promises) return logger.debug("tripPlanningPromise is null");
+  const fulfil = function(result) {
+      logger.debug(`done: result is ${JSON.stringify(result)}`);
+  };
+  const reject = function(err) {
+      logger.warn(`promise returned error: ${err.stack}`);
+  };
+  if(Array.isArray(promises)) Promise.all(promises).done(fulfil, reject);
+  else promises.done(fulfil, reject);
 }
 
 function testConferenceViewMore() {
+  const handler = setupForSfoEventPlanning();
+  handler.session.tripData().addEvent("phocuswright");
+  const event = receivedPostbackEvent("phocuswright-1-recommendation_next_set");
+  handler.testing_receivedPostback(event);
+}
+
+function testSpecifyingValidConference() {
   const handler = setupForSfoEventPlanning();
   // start planning trip
   handler.startPlanningTrip(true /* return promise */);
   handler.sessionState.set("awaitingTripReason");
   handler.sessionState.set("awaitingConferenceName");
   handler.sessionState.set("planningNewTrip");
-  let event = { 
-    message: {
-      text: ""
-    },
-    sender: {
-      id: myFbid
-    }, 
-    recipient: {
-      id: myFbid
-    }, 
-    timestamp: "12345",
-    postback: { 
-      payload: "phocuswright"
-    } 
-  };
+  const event = receivedPostbackEvent("phocuswright");
   handler.testing_receivedPostback(event);
   event.postback.payload = "phocuswright-1-recommendation_next_set";
   handler.testing_receivedPostback(event);
 }
 
+
 function testSendingHelp() {
   const handler = setupForSfoEventPlanning();
-  const event = { 
-    message: { text: "help" }, 
-    postback: {},
-    sender: {
-      id: myFbid
-    }, 
-    recipient: {
-      id: myFbid
-    }, 
-    timestamp: "12345"
-  };
-  handler.testing_determineResponseType(event);
+  handler.testing_determineResponseType(determineResponseTypeEvent("help"));
   event.postback.payload = "pb_event_supported_commands";
   event.message.text = "";
   handler.testing_receivedPostback(event);
 }
 
 // TODO: This does not work. Get it working if needed again.
+/*
 function testHandleMessagingEventGetFacebookData() {
 	// FbidHandler.testing_delete_file();
 	new FbidHandler.get("fbid-test.txt");
 	testHandleMessagingEvent();
 }
+*/
 
 function testHandleMessagingEvent() {
 	const arthaFbid = "1280537748676473";
@@ -481,16 +517,106 @@ function testHandleMessagingEvent() {
     sender: { id: arthaFbid },
     recipient: { id: arthaFbid }, 
     timestamp: "12345",
-    message: { text: "help" }
+    message: { text: "get" }
   };
-  const handler = setupForSfoEventPlanning(arthaFbid);
+  // const handler = setupForSfoEventPlanning(arthaFbid);
+  const handler = createHandler();
   handler.testing_handleMessagingEvent(messagingEvent);
+  handler.testing_createNewTrip({
+    destination: "san_francisco",
+    startDate: "09/10/2017",
+    duration: 4,
+    leavingFrom: "ewr",
+    portOfEntry: "sfo",
+    ownerId: "ZDdz"
+  });
 }
+
+function testSendingConferenceMessage() {
+  const handler = setupForSfoEventPlanning();
+  handler.session.tripData().addEvent("test-phocuswright");
+  const event = determineResponseTypeEvent("event details");
+  handler.testing_determineResponseType(event);
+}
+
+function testEventNoTrip() {
+  const sessions = Sessions.get();
+  const session = sessions.findOrCreate(myFbid);
+  // create new trip
+  const handler = new WebhookPostHandler(session, true /* testing */);
+  const event = determineResponseTypeEvent("arival");
+  handler.testing_determineResponseType(event);
+}
+
+function testAddingComments() {
+  const handler = setupForSfoEventPlanning();
+  const event = { 
+    sender: {
+      id: myFbid
+    }, 
+    recipient: {
+      id: myFbid
+    }, 
+    timestamp: "12345",
+    postback: { 
+      payload: "add_comments" 
+    } 
+  };
+  logger.debug(`testDayPlanCommand: ****** About to send receivedPostback ********`); 
+  handler.testing_receivedPostback(event);
+  event.postback.payload = "add_expense";
+  handler.testing_receivedPostback(event);
+  event.postback.payload = "car details";
+  handler.testing_receivedPostback(event);
+}
+
+function testEventAfterAnotherTripInContext() {
+  const handler = setupForSfoEventPlanning();
+  handler.sessionState.clearAll();
+  handler.testing_determineResponseType(determineResponseTypeEvent("get"));
+  logger.debug(`session context: ${globalHandler.session.tripNameInContext}`);
+  handler.testing_determineResponseType(determineResponseTypeEvent("test-phocuswright"));
+  handler.testing_determineResponseType(determineResponseTypeEvent("Mike"));
+}
+
+function testOverlappingSessions() {
+	const arthaFbid = "1280537748676473";
+  const messagingEvent = {
+    sender: { id: arthaFbid },
+    recipient: { id: arthaFbid }, 
+    timestamp: "12345",
+    message: { text: "get" }
+  };
+  // const handler = setupForSfoEventPlanning(arthaFbid);
+  const handler = createHandler();
+  handler.testing_handleMessagingEvent(messagingEvent);
+  handler.testing_createNewTrip({
+    destination: "san_francisco",
+    startDate: "09/10/2017",
+    duration: 4,
+    leavingFrom: "ewr",
+    portOfEntry: "sfo",
+    ownerId: "ZDdz"
+  });
+}
+
+testHandleMessagingEvent();
+
+// testEventAfterAnotherTripInContext();
+
+// testAddingComments();
+
+// testEventAfterAnotherTripInContext();
+
+// testEventNoTrip();
+
+// testSendingConferenceMessage();
 
 // testHandleMessagingEventGetFacebookData();
 
 // testSendingHelp();
 
+// testSpecifyingValidConference();
 // testConferenceViewMore();
 // testChoosingConference();
 
@@ -516,7 +642,6 @@ function testHandleMessagingEvent() {
 // testAddingCityToExistingTrip();
 
 // testExtractingCityDetails();
-
 
 // testGatheringDetailsForNewTrip();
 

@@ -96,7 +96,7 @@ function getWeatherForCity(city, index, callback) {
     parseWeatherResponse.call(self, c, weatherDetails);
     if(index == (cities.length - 1)) {
       // TODO: There is no guarantee that weather info for other cities have been fetched yet.. Handle this situation 
-      logger.info(`Gathered weather details for final city ${c}. Invoking callback`);
+      // logger.info(`Gathered weather details for final city ${c}. Invoking callback`);
       return callback();
     }
   });
@@ -238,16 +238,21 @@ function getActivityForCity(city, index, callback) {
   const cities = _.uniq(this.trip.data.cities);
   const dataFile = this.trip.tripDataFile();
   if(cityDetails.activities) {
-    // logger.debug(`getActivityForCity: Activities available for city ${city}. Doing nothing more for this city`);
+    logger.debug(`getActivityForCity: Activities available for city ${city}. Doing nothing more for this city. There are ${cities.length} cities`);
     // handle case where we have gathered data for all cities. TODO: Do we need this check in both places (here and in the callback function below)?
-    if(citiesWithActivities(details.cities) === cities.length) {
-      // logger.info("getActivityForCity: obtained activities for all cities. invoking callback");
+    const numCitiesWithActivities = citiesWithActivities(details.cities);
+    if(numCitiesWithActivities === cities.length) {
+      logger.info("getActivityForCity: obtained activities for all cities. invoking callback");
       return callback();
+    }
+    else if(numCitiesWithActivities > cities.length) {
+      throw new Error(`getActivityForCity: There are ${numCitiesWithActivities} cities with activities but trip.data.cities only has ${cities.length} cities. trip dump: ${JSON.stringify(this.trip)}; tripInfoDetails: ${JSON.stringify(this.tripInfoDetails)}`);
     }
     return;
   }
   // logger.debug(`getActivityForCity: About to call ActivityInfoProvider to get activities for city ${city} in country ${this.trip.data.country} with startDate: ${this.trip.data.startDate}`);
   const aip = new ActivityInfoProvider(this.trip.data.country, city, this.trip.data.startDate);
+  const self = this;
   aip.getActivities(function(activityDetails) {
     if(activityDetails) cityDetails.activities = activityDetails;
     // handle case where we have gathered data for all cities.
@@ -261,6 +266,9 @@ function getActivityForCity(city, index, callback) {
         logger.error(`Cannot write tripData details to file ${dataFile}. Error is ${e.stack}`);
       }
       return callback();
+    }
+    else if(numCitiesWithActivities > cities.length) {
+      throw new Error(`getActivityForCity: There are ${numCitiesWithActivities} cities with activities but trip.data.cities only has ${cities.length} cities. trip dump: ${JSON.stringify(self.trip)}; tripInfoDetails: ${JSON.stringify(self.tripInfoDetails)}`);
     }
   });
 }

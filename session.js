@@ -133,8 +133,9 @@ function sync() {
   catch(err) { } // logger.warn(`sync: file ${file} cannot be accessed (it is possible that this session never existed): ${err.message}`); }
 }
 
-Session.prototype.timezone = function() {
-  return this.timezone;
+Session.prototype.getTimezone = function() {
+  if(!this.timezone) return "US/Pacific";
+  return this.timzone;
 }
 
 Session.prototype.persistSession = function() {
@@ -172,6 +173,11 @@ Session.prototype.resetTripContext = function() {
   this.tripNameInContext = null;
   this.rawTripNameInContext = null;
   this.persistSession();
+}
+
+Session.prototype.doesTripContextOtherThanConferencesExist = function() {
+  if(this.tripNameInContext === "conferences") return false;
+  return this.doesTripContextExist();
 }
 
 Session.prototype.doesTripContextExist = function() {
@@ -250,6 +256,10 @@ Session.prototype.getCurrentAndFutureTrips = function() {
   // Filter past trips
   let daysToEndOfTrip = -1;
   this.allTrips().forEach(trip => {
+    if(trip.tripName.toLowerCase() === "conferences") {
+      logger.debug(`getCurrentAndFutureTrips: ignoring trip "conferences" from the list`);
+      return;
+    }
     // if trip.data is not present and if the trip file is not present, then throw an error.
     if(!trip.tripFilePresent && !trip.data) { 
       logger.info(`session dump: ${JSON.stringify(this)}; trip: ${JSON.stringify(trip)}`);
@@ -371,9 +381,10 @@ Session.prototype.addNewTrip = function(tripName, trip) {
 
 Session.prototype.findTrip = function() {
   if(!this.tripNameInContext) {
-    logger.error(`findTrip: No tripNameInContext session ${this.sessionId} and fbid ${this.fbid}`);
+    logger.warn(`findTrip: No tripNameInContext session ${this.sessionId} and fbid ${this.fbid}`);
     return null;
   }
+  // logger.debug(`findTrip: Getting trip with context ${this.tripNameInContext}`);
   return this.getTrip(this.tripNameInContext);
 }
 
@@ -410,12 +421,6 @@ Session.prototype.getTrip = function(tripName) {
   };
   return trip.tripData;
 }
-
-// TODO: Fix ME. this always return PST/PDT now. Obtain the timezone from the hometown.
-Session.prototype.getTimezone = function() {
-  return "America/Los_Angeles"; // Using the timezone understood by moment-timezone
-}
-
 
 /********************* TESTING APIs ****************/
 

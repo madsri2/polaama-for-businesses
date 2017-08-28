@@ -51,3 +51,11 @@ makeRequest(uri).done(
     console.log(`error is ${err}`);
   }
 );
+
+// curl 'http://partners.api.skyscanner.net/apiservices/reference/v1.0/locales?apiKey=prtl6749387986743898559646983194' > ~/skyscanner/locales.json
+// curl 'http://partners.api.skyscanner.net/apiservices/reference/v1.0/countries/en-US?apiKey=prtl6749387986743898559646983194' > ~/skyscanner/market.json
+// GET "https://gateway.skyscanner.net/hotels/v1/prices/search/entity/{entity_id}
+  ?market={market}&locale={locale}&checkin_date={checkin_date}&checkout_date={checkout_date}
+  &currency={currency}&adults={adults}&rooms={rooms}&images={images}&image_resolution={resolution}
+  &image_type={type}&boost_official_partners={boost}&sort={sort_method}&limit={limit}&offset={offset}
+  &partners_per_hotel={num_partners}&enhanced={enhanced}"

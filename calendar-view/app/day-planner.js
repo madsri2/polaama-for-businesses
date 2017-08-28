@@ -120,7 +120,7 @@ function addViewMoreButton(message, currIndex, lastSet) {
     payload: payload
   }];
   const elements = message.message.attachment.payload.elements;
-  logger.debug(`addViewMoreButton: lastSet: ${lastSet}; elements length: ${elements.length};`);
+  // logger.debug(`addViewMoreButton: lastSet: ${lastSet}; elements length: ${elements.length};`);
   // unless this is the last set of activity elements for this day, send along a "view more" button
   if(!lastSet && (elements.length > 1)) message.message.attachment.payload.buttons = viewMoreButton;
   return message;
@@ -222,28 +222,24 @@ DayPlanner.prototype.getRecommendations = function(interest, index) {
     case "da_ms":
       file = "/home/ec2-user/trips/aeXf/seattle-da-ms.json";
       break;
-    case "phocuswright_dragons":
-      file = "/home/ec2-user/trips/shared/phocuswright/dragons.json";
-      makeFirstElementCompact = true;
-      break;
-    case "phocuswright_innovators":
-      file = "/home/ec2-user/trips/shared/phocuswright/innovators.json";
-      makeFirstElementCompact = true;
-      break;
   };
   const errMessage = {
     recipient: {
       id: this.fbid
     },
     message: {
-      text: `Unable to get recommendations for this interest for trip ${this.trip.data.rawName}`,
+      text: `Unable to get details for keyword "${interest}" for trip ${this.trip.data.rawName}`,
       metadata: "DEVELOPER_DEFINED_METADATA"
     }
   };
-  if(!file && this.trip.data.events.includes(interest)) file = this.trip.eventItineraryFile(interest);
-  logger.debug(`getRecommendations: Looking at file ${file}`);
   if(!file) {
-    logger.error(`getRecommendations: cannot find any file that matches interest ${interest} for trip ${this.trip.data.rawName}`);
+    // see if interest is an event name ('phocuswright', 'arival' etc.)
+    const message = handleEventRelatedInterest.call(this, interest, currIndex);
+    if(message) return message;
+  }
+  logger.debug(`getRecommendations: Looking at file ${file}`);
+  if(!file || !fs.existsSync(file)) {
+    logger.error(`getRecommendations: cannot find any file ${file} that matches interest ${interest} for trip ${this.trip.data.rawName}`);
     return errMessage;
   }
   try {
@@ -254,39 +250,139 @@ DayPlanner.prototype.getRecommendations = function(interest, index) {
     return message;
   }
   catch(err) {
-    let text;
-    if(err.code === 'ENOENT') text = `No recommendations yet for this interest for trip ${this.trip.data.rawName}.`;
-    else {
-      logger.error(`getRecommendations: Error: ${err.stack}`);
-      text = `Unable to get recommendations for this interest for trip ${this.trip.data.rawName}.`;
-    }
-    errMessage.message.text = text;
+    logger.error(`getRecommendations: Error: ${err.stack}`);
+    errMessage.message.text = `Unable to get details around keyword "${interest}" for trip ${this.trip.data.rawName}`;
     return errMessage;
   }
 }
 
-DayPlanner.prototype.getEventItinerary = function(eventName) {
-  try {
-    // set the event name as interest.
-    this.interest = Encoder.encode(eventName);
+function handleEventRelatedInterest(interest, index) {
+  // nothing to do if the interest does not contain a ':' or is not an event name
+  const events = this.trip.getEvents();
+  logger.debug(`handleEventRelatedInterest: Looking at interest ${interest} with index ${index}`);
+  if(!interest.includes(':') && (!events || !events.includes(interest))) return;
+  // if this is the event name, simply call getEventItinerary(), which does the right thing. This might be a case that is never used.
+  // logger.debug(`handleEventRelatedInterest: interest includes ":"`);
+  if(events.includes(interest)) return this.getEventItinerary([interest]);
+  let contents = /^(.*):(.*)/.exec(interest);  
+  // only the following regex formats are valid: "phocuswright:oct_11", "arival:theater" 
+  if(!contents || contents.length < 3) return null;
+  // logger.debug(`handleEventRelatedInterest: content details: ${contents}`);
+  const eventName = contents[1];
+  // expect to match "Oct 11", "sep 1" etc.
+  const key = Encoder.decode(contents[2]);
+  if(/^[A-Za-z]{3} \d+$/.exec(key)) {
     const file = this.trip.eventItineraryFile(eventName);
     const itin = JSON.parse(fs.readFileSync(file, 'utf8'));
-    return createListTemplate.call(this, itin, 0);
+    this.interest = `${eventName}:${contents[2]}`;
+    // logger.debug(`handleEventRelatedInterest: calling createList template with eventName ${eventName}, itin key: ${key} and index: ${index}`);
+    return createListTemplate.call(this, itin[key], index);
   }
-  catch(err) {
-    logger.error(`getEventItinerary: error in getting event itinerary: ${err.stack}`);
-    return {
+  // logger.debug(`handleEventRelatedInterest: handling event details.`);
+  const file = this.trip.eventDetailsFile(contents[1], contents[2]);
+  // check if the file exists so that we can return null
+  if(!fs.existsSync(file)) return null;
+  return handleEventDetails.call(this, contents[1], contents[2], index);
+}
+
+function handleEventDetails(eventName, detailsFile, idx) {
+  const errMessage = {
+    recipient: {
+      id: this.fbid
+    },
+    message: {
+      text: `Unable to get event details for trip ${this.trip.rawTripName} at this time`,
+      metadata: "DEVELOPER_DEFINED_METADATA"
+    }
+  };
+  const file = this.trip.eventDetailsFile(eventName, detailsFile);
+  // logger.debug(`looking at file ${file}; eventName: ${eventName}; detailsFile: ${detailsFile}`);
+  if(!fs.existsSync(file)) return errMessage;
+  this.interest = `${Encoder.encode(eventName)}:${detailsFile}`;
+  const json = JSON.parse(fs.readFileSync(file, 'utf8'));
+  return createListTemplate.call(this, json, idx);
+}
+
+DayPlanner.prototype.getEventItinerary = function(contents) {
+  const errMessage = {
+    recipient: {
+      id: this.fbid
+    },
+    message: {
+      text: `Unable to get event itinerary for trip ${this.trip.rawTripName} at this time`,
+      metadata: "DEVELOPER_DEFINED_METADATA"
+    }
+  };
+  try {
+    if(!contents) {
+      logger.error(`getEventItinerary: passed array does not exist or is invalid: ${(contents) ? contents : "array is null"}`);
+      return errMessage;
+    }
+    // logger.debug(`getEventItinerary: content details are ${contents}. length is ${contents.length}`);
+    // set the event name as interest.
+    const eventName = (contents.length === 1) ? contents[0] : contents[1];
+    this.interest = Encoder.encode(eventName);
+    if(contents[0] === "pb_event_details_breakdown") return handleEventDetails.call(this, eventName, contents[2], 0);
+    const file = this.trip.eventItineraryFile(eventName);
+    // contents[2] might exist because it was set as part of pb_event_details_day postback below.
+    const itin = JSON.parse(fs.readFileSync(file, 'utf8'));
+    if(contents[2]) {
+      const key = Encoder.decode(contents[2]);
+      // logger.debug(`getEventItinerary: event day key is: ${key}`);
+      this.interest = `${eventName}:${contents[2]}`;
+      return createListTemplate.call(this, itin[key], 0);
+      // logger.debug(`getEventItineraryNew: sending message ${JSON.stringify(message)}`);
+    }
+    const messageData = {
       recipient: {
         id: this.fbid
       },
       message: {
-        text: `Unable to get event itinerary for trip ${this.trip.rawTripName} at this time`,
-        metadata: "DEVELOPER_DEFINED_METADATA"
+        attachment: {
+          type: "template",
+          payload: {
+            template_type: "generic",
+          }
+        }
       }
     };
+    const elements = [{
+      title: "Conference Dates",
+      buttons: []
+    }];
+    Object.keys(itin).forEach((day) => {
+      elements[0].buttons.push({
+        type: "postback",
+        title: `${day}`,
+        payload: `pb_event_details_day ${eventName} ${Encoder.encode(day)}`
+      });
+    });
+    messageData.message.attachment.payload.elements = elements;
+    // set this as the trip's conferenceInContext
+    this.trip.setConferenceInContext(eventName);
+    // logger.debug(`getEventItineraryNew: returning message ${JSON.stringify(messageData)}`);
+    return messageData;
+  }
+  catch(err) {
+    logger.error(`getEventItinerary: error in getting event itinerary: ${err.stack}`);
+    return errMessage; 
   }
 }
 
+// see if there is a plan in the events file for the given day. if there is, use that.
+function getEventPlanForDay(setNum) {
+  logger.debug(`getEventPlanForDay: Checking to see if there is an event plan for day ${this.date}`);
+  const file = this.trip.eventItineraryFile();
+  if(!file) {
+    logger.info(`getEventPlanForDay: no event file from trip`);
+    return null;
+  }
+  const key = new moment(this.date).format("MMM D");
+  const dayAsList = JSON.parse(fs.readFileSync(file, 'utf8'));
+  // logger.debug(`keys: ${Object.keys(dayAsList)}; key is ${key}`);
+  if(dayAsList[key]) return createListTemplate.call(this, dayAsList[key], setNum);
+  return null;
+}
 
 // Facebook supports sending only 4 items in an elementList. So, use payload (see below) to pass around the index for the next set of items. 
 DayPlanner.prototype.getPlanAsList = function(setNum) {
@@ -294,6 +390,7 @@ DayPlanner.prototype.getPlanAsList = function(setNum) {
   // logger.debug(`getPlanAsList: using list template to display itin for date ${CreateItinerary.formatDate(this.date)} and file ${file}`);
   try {
     // read the itinerary file, which is a list of json objects. Push each json object (which contains utmost 4 elements) into an array. Then, based on the index (either passed or defaults to 0), return the corresponding element set.
+    if(!fs.existsSync(file)) return getEventPlanForDay.call(this, setNum);
     const dayAsList = JSON.parse(fs.readFileSync(file, 'utf8'));
     return createListTemplate.call(this, dayAsList, setNum);
   }
@@ -312,6 +409,7 @@ function createListTemplate(list, setNum) {
     });
     let currIndex = 0;
     if(setNum) currIndex = setNum;
+    // logger.debug(`createListTemplate: elementSet: ${JSON.stringify(elementSet)}; number of elements: ${elementSet.length}`);
     const elements = elementSet[currIndex];
     let message = {
       recipient: {
@@ -339,6 +437,7 @@ function createListTemplate(list, setNum) {
     // logger.debug(`createListTemplate: message is ${JSON.stringify(message)}`);
     // the first item in the list is almost always a map, so we don't set the style to compact. Subsequent items are just normal.
     if(currIndex > 0 && message.message.attachment.payload.template_type != "generic") message.message.attachment.payload.top_element_style = "compact";
+    if(setNum === 0 && elements.length > 1 && !elements[0].image_url) message.message.attachment.payload.top_element_style = "compact";
     return message;
 }
 

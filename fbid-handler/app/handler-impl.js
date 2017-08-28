@@ -76,6 +76,7 @@ FbidHandlerImpl.prototype.decode = function(encodedId) {
 
 // given an fbid, return corresponding id
 FbidHandlerImpl.prototype.encode = function(fbid) {
+  // logger.debug(`encode: fbid details: ${JSON.stringify(this.fbidDetails)}`);
   if(this.fbidDetails[fbid]) return this.fbidDetails[fbid].id;
   return null;
 }

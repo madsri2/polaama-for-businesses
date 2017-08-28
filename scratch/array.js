@@ -16,4 +16,15 @@ function testIncludes() {
   else console.log("false");
 }
 
-testIncludes();
+function testPush() {
+  let arr = [];
+  arr.push(1,2);
+  const a1 = [3,4];
+  // Array.prototype.push.apply(arr, a1);
+  arr = arr.concat(4);
+  console.log(`arr: ${arr}; length is ${arr.length}`);
+}
+
+testPush();
+
+// testIncludes();

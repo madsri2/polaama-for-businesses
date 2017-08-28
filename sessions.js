@@ -4,6 +4,7 @@ const logger = require('./my-logger');
 const Session = require('./session');
 const fs = require('fs');
 const TripData = require('./trip-data');
+const SessionState = require('session-state/app/state');
 
 const MY_RECIPIENT_ID = "1120615267993271";
 
@@ -13,6 +14,7 @@ let sessions;
 // For PRIVATE USE ONLY. Use Sessions.get instead
 function Sessions() {
   this.sessions = {};
+  this.sessionStates = {}; // this is a separate key because session objects in the sessions object above can be destroyed and recreated. We want the sessionState to be maintained through the life of an application (not persisted though).
 }
 
 Sessions.get = function() {
@@ -34,6 +36,8 @@ Sessions.prototype.findOrCreate = function(fbid) {
     // persist new session for later use
     this.sessions[sessionId].persistSession();
   }
+  // a session state is created only once per session. Here! It's used by webhook-post-handler to manage the state of each session.
+  if(!this.sessionStates[sessionId]) this.sessionStates[sessionId] = new SessionState();
   return this.sessions[sessionId];
 };
 
@@ -101,6 +105,12 @@ function findSessionId(fbid) {
   return sessionId;
 };
 
+Sessions.prototype.getSessionState = function(sessionId) {
+  if(!sessionId) throw new Error(`getSessionState: expected parameter sessionId is missing`);
+  // logger.debug(`getSessionState: called. returning ${JSON.stringify(this.sessionStates[sessionId])}`);
+  return this.sessionStates[sessionId];
+}
+
 /********************* TESTING APIs ****************/
 
 Sessions.prototype.testing_delete = function(fbid) {
@@ -108,6 +118,11 @@ Sessions.prototype.testing_delete = function(fbid) {
   if(!session) return;
   session.testing_delete();
   delete this.sessions[session.sessionId];
+}
+
+Sessions.prototype.testing_setState = function(sessionId, sessionState) {
+  if(!sessionId) throw new Error(`testing_setState: Expected parameter sessionId is missing`);
+  this.sessionStates[sessionId] = sessionState;
 }
 
 /********************* TESTING APIs ****************/

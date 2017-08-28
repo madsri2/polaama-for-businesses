@@ -19,6 +19,9 @@ let trip;
 
 function createNewTrip() {
   trip = new TripData('test-mobile-view', fbid);
+  trip.addTripDetailsAndPersist({
+    ownerId: "ZDdz"
+  });
 }
 
 function cleanup() {
@@ -28,6 +31,7 @@ function cleanup() {
 describe("Commands tests: Basic tests", function() {
   let promises;
   let createItin;
+
   before(function() {
     // set up
     const cityItin = {
@@ -131,8 +135,8 @@ describe("Commands tests: Basic tests", function() {
         // actual test
         const origStartDate = trip.data.startDate;
         const origReturnDate = trip.data.returnDate;
-        trip.data.startDate = "2017-8-10";
-        trip.data.returnDate = "2017-8-16";
+        trip.data.startDate = "2017-9-10";
+        trip.data.returnDate = "2017-9-16";
         const commands = new Commands(trip, fbid);
         commands.testing = true;
         let result = commands.handle("9th");
@@ -427,6 +431,7 @@ describe("Commands tests: Basic tests", function() {
     }
     );
   });
+
 });
 
 describe("Commands tests: Activity tests: ", function() {
@@ -866,5 +871,77 @@ describe("Commands tests: Hotel choices", function() {
     expect(message.message.attachment.payload.template_type).to.equal("generic");
     expect(message.message.attachment.payload.elements.length).to.equal(3);
     expect(message.message.attachment.payload.elements[0].title).to.equal("Hotel1 Name");
+  });
+
+});
+
+describe("Event tests", function() {
+  beforeEach(function() {
+    createNewTrip();
+  });
+
+  afterEach(function() {
+    cleanup();
+  });
+
+  it("test next set for event details", function() {
+    trip.addEvent("test-arival");
+    const commands = new Commands(trip, fbid);
+    let message = commands.handleRecommendationPostback("test-arival:theater-1-recommendation_next_set");
+    expect(message).to.not.be.null;
+    expect(message.message.attachment.payload.elements.length).to.equal(4);
+    message = commands.handleRecommendationPostback("test-arival:workshops-2-recommendation_next_set");
+    expect(message).to.not.be.null;
+    expect(message.message.attachment.payload.elements.length).to.equal(3);
+    // logger.debug(`message: ${JSON.stringify(message)}`);
+  });
+
+  it("get event details", function() {
+    trip.addEvent("test-phocuswright");
+    const commands = new Commands(trip, fbid);
+    let message = commands.handleEventCommands("test-phocuswright");
+    expect(message).to.not.be.null;
+    logger.debug(JSON.stringify(message));
+    expect(message.message.attachment.payload.elements.length).to.equal(1);
+    message = commands.getEventItinerary(["pb_event_details_day","test-phocuswright","sep_12"]);
+    expect(message).to.not.be.null;
+    logger.debug(JSON.stringify(message));
+    expect(message.message.attachment.payload.elements.length).to.equal(4);
+    message = commands.handleRecommendationPostback("test-phocuswright:sep_12-1-recommendation_next_set");
+    expect(message).to.not.be.null;
+    logger.debug(JSON.stringify(message));
+    expect(message.message.attachment.payload.elements.length).to.equal(4);
+  });
+
+  it("multiple events", function() {
+    trip.addEvent("test-arival");
+    trip.addEvent("phocuswright");
+    const commands = new Commands(trip, fbid);
+    let message = commands.handleEventCommands("conf details");
+    expect(message).to.not.be.null;
+    logger.debug(JSON.stringify(message));
+    expect(message.message.attachment.payload.elements.length).to.equal(1);
+    expect(message.message.attachment.payload.elements[0].buttons.length).to.equal(2);
+    message = commands.handleEventCommands("battleground");
+    expect(message).to.not.be.null;
+    logger.debug(JSON.stringify(message));
+    expect(message.message.attachment.payload.elements.length).to.equal(1);
+    message = commands.getEventItinerary(["pb_event_details","phocuswright"]);
+    expect(message).to.not.be.null;
+    logger.debug(JSON.stringify(message));
+    expect(message.message.attachment.payload.elements.length).to.equal(1);
+  });
+
+  it("event keywords", function() {
+    trip.addEvent("test-arival");
+    trip.addEvent("phocuswright");
+    const commands = new Commands(trip, fbid);
+    let message = commands.handleEventCommands("battleground");
+    expect(message).to.not.be.null;
+    expect(message.message.attachment.payload.elements.length).to.equal(1);
+    message = commands.handleEventCommands("mike");
+    expect(message).to.not.be.null;
+    logger.debug(JSON.stringify(message));
+    expect(message.message.attachment.payload.elements.length).to.equal(1);
   });
 });

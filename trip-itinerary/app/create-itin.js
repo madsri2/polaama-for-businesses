@@ -53,17 +53,17 @@ CreateItinerary.prototype.create = function() {
   // nextDay represents the day for which the itinerary needs to be set. Starts with startDate.
   if(!this.tripData.startDate) throw new Error(`CreateItinerary: startDate not defined in tripData. Nothing to do!`);
   this.nextDay = new Date(this.tripData.startDate);
-  const promiseList = [];
-  promiseList.push(setFirstDayDetails.call(this));
-  promiseList.push(setRemainingItinerary.call(this));
+  let promiseList = [];
+  promiseList = promiseList.concat(setFirstDayDetails.call(this));
+  promiseList = promiseList.concat(setRemainingItinerary.call(this));
   const lastDayPromises = setLastDayDetails.call(this);
-  if(lastDayPromises && lastDayPromises.length > 0) promiseList.push(lastDayPromises);
+  if(lastDayPromises && lastDayPromises.length > 0) promiseList = promiseList.concat(lastDayPromises);
   persist.call(this); // persist to store any information that was synchronously written.
   return promiseList;
 }
 
 function setLastDayDetails() {
-  const promiseList = [];
+  let promiseList = [];
   if(!this.tripData.returnDate) throw new Error(`setLastDayDetails: Do not know return date for trip ${this.tripData.rawName}`);
   const lastDay = new Date(this.tripData.returnDate);
   const lastDayStr = formatDate(lastDay);
@@ -89,7 +89,7 @@ function setLastDayDetails() {
   }
   this.itin[lastDayStr].city = city;
   // logger.debug(`The city for the last day is ${city} and last Day is ${lastDayStr}`);
-  promiseList.push(setWeatherDetails.call(this, lastDay, this.country.getCountry(city), city));
+  promiseList = promiseList.concat(setWeatherDetails.call(this, lastDay, this.country.getCountry(city), city));
   // nothing more to do if there is no return flight itin
   if(!this.trip.returnFlightItin)  return promiseList;
   // for departure time, we only care about the first leg of the flight
@@ -105,7 +105,7 @@ function setLastDayDetails() {
     const arrivalCity = lastLeg.arrival_airport.city;
     this.itin[arrivalDateStr] = {};
     this.itin[arrivalDateStr].city = arrivalCity;
-    promiseList.push(setWeatherDetails.call(this, arrivalDate, this.country.getCountry(arrivalCity), arrivalCity));
+    promiseList = promiseList.concat(setWeatherDetails.call(this, arrivalDate, this.country.getCountry(arrivalCity), arrivalCity));
   }
   this.itin[arrivalDateStr].arrivalTime = getTime(arrivalDate);
   // logger.debug(`setLastDayDetails: returnFlightItin present. departure date is ${depDate}; arrival date is ${arrivalDate}`);
@@ -179,7 +179,7 @@ function setFirstDayDetails() {
 
 // For each day, set the weather, activities and stay information. If there is no activity/stay information, keep it blank. Initially, simply use the information available for a city in activities.
 function setRemainingItinerary() {
-  const promises = []; // array of promises that will execute weather setting.
+  let promises = []; // array of promises that will execute weather setting.
   if(!this.tripData.cityItin) {
     logger.warn(`setRemainingItinerary: cityItin not defined in tripData. Nothing to do!`);
     return promises;
@@ -198,7 +198,7 @@ function setRemainingItinerary() {
         // logger.info(`setRemainingItinerary: Not setting itin for last day: ${this.tripData.returnDate}. will be set by setLastDayDetails method`);
         return;
       }
-      promises.push(createCommonItinForEachDay.call(this, city, departureCountry).promise);
+      promises = promises.concat(createCommonItinForEachDay.call(this, city, departureCountry).promise);
     }
   });
   return promises;
@@ -220,7 +220,7 @@ function setWeatherDetails(itinDate, country, cityList) {
           // logger.error(`callGetWeather: WeatherInfoProvider.getStoredWeather returned null for weather details`);
           // return reject(new Error(`Could not get weather for city ${city}`));
           // we don't want to reject here because if the caller uses Promise.all, the first reject will short-circuit other requests. So, simply use fulfil and move on.
-          return fulfil('did not get weather for city ${city}');
+          return fulfil(`did not get weather for city ${city}`);
         }
         const weather = {};
         weather.min_temp = weatherDetails.min_temp;

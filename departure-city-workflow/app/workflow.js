@@ -28,6 +28,7 @@ Workflow.prototype.set = function() {
   				this.handler.sendTextMessage(this.session.fbid,"Even bots need to eat! Be back in a bit..");
           return false;
         }
+        // logger.debug(`set: About to check payload with value: ${payload}`);
         if(payload === "qr_use_hometown_as_dep_city_no") {
           this.sessionState.clear("awaitingUseHometownAsDepartureCity");
           this.sessionState.set("awaitingDepartureCityDetails");
@@ -35,13 +36,13 @@ Workflow.prototype.set = function() {
           return false;
         }
         if(payload === "qr_use_hometown_as_dep_city_yes") {
-          // use the hometown as departure city. This is one of the terminal states for this workflow
+          // use hometown as departure city. This is one of the terminal states for this workflow
           this.sessionState.clear("awaitingUseHometownAsDepartureCity");
           const self = this;
           const promise = setDepartureCityAndCode.call(this, this.session.hometown);
           return promise.then(
             function(result) {
-              logger.info(`set: Successfully set city & code: ${self.session.hometown}`);
+              // logger.info(`set: Successfully set city & code: ${self.session.hometown}`);
               return true;
             },
             function(err) {
@@ -119,14 +120,15 @@ function setDepCityFromUser() {
         return false;
     });
   }
-  // only thing remaining is to see if the hometown needs to be set.
-  return setHometown.call(this);
+  // only thing remaining is to see if the hometown needs to be set. That is only if we have not asked before, which means we would not have cleared the "awaitingDepartureCityDetails" flag.
+  if(this.sessionState.get("awaitingDepartureCityDetails")) return setHometown.call(this);
+  return true;
 }
 
 function setHometown() {
   // nothing to do if hometown already exists
   if(this.session.hometown) {
-    logger.debug(`setHometown: Hometown already exists. Nothing else left to do`);
+    // logger.debug(`setHometown: Hometown already exists. Nothing else left to do`);
     return true;
   }
 

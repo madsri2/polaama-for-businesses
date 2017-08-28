@@ -52,7 +52,26 @@ function hotelPayloadRegex() {
   console.log(`hotelPayloadRegex: hotel is <${hotel}>`);
 }
 
-hotelPayloadRegex();
+function eventRegex() {
+  let payload = "pb arival";
+  console.log(payload.split(" "));
+}
+
+function eventKey() {
+  let payload = "oct 11";
+  const contents = /^[A-Za-z][A-Za-z][A-Za-z] \d\d$/.exec(payload);
+  console.log(contents);
+}
+
+function eventDetails() {
+  let contents = /^(.*):(.*)/.exec("arival:demo");  
+  console.log(contents);
+}
+
+eventDetails();
+// eventKey();
+// eventRegex();
+// hotelPayloadRegex();
 // colorRegex();
 // recoRegex();
 // dateCommand();

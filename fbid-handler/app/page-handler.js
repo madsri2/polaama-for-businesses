@@ -17,6 +17,7 @@ const pages = [PageHandler.defaultPageId, "1852118738377984"];
 
 /**** STOP: Don't use this class directly. Use FbidHandler instead. This class is only meant to be used by webhook-post-handler to add an fbid ******/
 PageHandler.get = function(testFbidFile) {
+  // logger.debug(`get called with file ${testFbidFile}: ${new Error().stack}`);
   if(!globalPageHandler) globalPageHandler = new PageHandler(testFbidFile); 
   if(globalPageHandler.reload) {
     logger.debug(`get: The reload flag is set. Reloading fbid handler from persistent store`);

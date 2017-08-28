@@ -10,6 +10,7 @@ const Encoder = require(`${baseDir}/encoder`);
 const FbidHandler = require("fbid-handler/app/handler");
 const fs = require('fs');
 const EventKeywordPlanner = require('calendar-view/app/event-keyword-handler');
+const Sessions = require(`${baseDir}/sessions`);
 
 // TODO: fbid is not needed as trip object contains an fbid. Use that instead and remove the use of fbid everywhere.
 function Commands(trip, fbid, sendHtml) {
@@ -123,8 +124,9 @@ Commands.prototype.handleActivityPostback = function(payload) {
   return null;
 }
 
-Commands.prototype.getEventItinerary = function(eventName) {
-  return new DayPlanner("invalid", this.trip, this.fbid).getEventItinerary(eventName);
+Commands.prototype.getEventItinerary = function(contents) {
+  if(contents[1] === "all_events") return this.handleEventCommands("conf details");
+  return new DayPlanner("invalid", this.trip, this.fbid).getEventItinerary(contents);
 }
 
 // There are two ways this method can be reached: user clicks "Running Trails" as part of "Get..." buttons list (for existing trips) or they click "View More" after seeing the first set of "running trails". Handle the first case through handleRecommendations.
@@ -158,7 +160,6 @@ function handleRecommendations() {
   if(this.command === "ita ms") return dayPlanner.getRecommendations("ita_ms");
   if(this.command === "da ms") return dayPlanner.getRecommendations("da_ms");
   if(this.command === "monterosso activities") return dayPlanner.getRecommendations("monterosso_activities");
-  if(this.command === "phocuswright_dragons") return dayPlanner.getRecommendations("phocuswright_dragons");
   return null;
 }
 
@@ -199,21 +200,52 @@ Commands.prototype.getCommandsForEvents = function() {
 Commands.prototype.handleEventCommands = function(rawMesg) {
   const mesg = rawMesg.toLowerCase();
   const dayPlanner = new DayPlanner("invalid", this.trip, this.fbid);
-  const events = this.trip.data.events;
-  if(events.length > 1) return {
-    recipient: {
-      id: this.fbid
-    },
-    message: {
-      text: `Support for commands with multiple events coming soon..`,
-      metadata: "DEVELOPER_DEFINED_METADATA"
-    }
-  };
+  let events = this.trip.getEvents();
+  if(!events) { 
+    logger.error(`handleEventCommands: No events found for trip ${this.trip.tripName}`);
+    return null;
+  }
   // TODO: Use this.commandsForEvents above!
-  if(mesg === "event details") return dayPlanner.getEventItinerary(events[0]);
-  if(mesg.startsWith("innovator")) return dayPlanner.getRecommendations(`${events[0]}_innovators`);
-  if(mesg.startsWith("dragons")) return dayPlanner.getRecommendations(`${events[0]}_dragons`);
-  return new EventKeywordPlanner(this.fbid).handleKeywords(events[0], rawMesg);
+  // if(mesg === "event details" || mesg === "conf" || mesg === "conference details" || mesg === "conference" || mesg === "conf details") return dayPlanner.getEventItinerary([events[0]]);
+  if(mesg === "event details" || mesg === "conf" || mesg === "conference details" || mesg === "conference" || mesg === "conf details") {
+    if(events.length === 1) return dayPlanner.getEventItinerary([events[0]]);
+    const buttons = [];
+    events.forEach(event => {
+      buttons.push({
+        type: "postback",
+        title: `${event}`,
+        payload: `pb_event_details ${event}`
+      });
+    });
+    return {
+      recipient: {
+        id: this.fbid
+      },
+      message: {
+        attachment: {
+          type: "template",
+          payload: {
+            template_type: "generic",
+            elements: [{
+              title: "Conferences",
+              buttons: buttons
+            }]
+          }
+        }
+      }
+    };
+  }
+  if(events.includes(Encoder.encode(mesg))) return dayPlanner.getEventItinerary([mesg]);
+  if(mesg === "battleground" && events.includes("phocuswright")) return dayPlanner.getEventItinerary(["phocuswright"]);
+  if(mesg.startsWith("innovator")) return dayPlanner.getRecommendations(`phocuswright:innovators`);
+  if(mesg.startsWith("dragons")) return dayPlanner.getRecommendations(`phocuswright:dragons`);
+  const eventInContext = this.trip.getConferenceInContext();
+  if(!eventInContext) {
+    logger.error(`handleEventCommands: Need to check events keyword planner, but eventInContext was not set. It needs to be set before we can call EventKeywordPlanner. trip is ${this.trip.tripName}. Events are: ${this.trip.getEvents()}`);
+    return null;
+  }
+  // logger.debug(`handleEventCommands: checking event keyword planner for event ${eventInContext}`);
+  return new EventKeywordPlanner(this.fbid).handleKeywords(eventInContext, rawMesg);
 }
 
 function handleActivityCommand() {
@@ -650,11 +682,12 @@ function toNum(month) {
 
 // user enters today. We find out the date in UTC. We use that to determine where the user will be. (Between 6/11 - 6/19 UTC, the user will be in Tel Aviv). We get moment for that timezone and determine the day.
 function getTimezone() {
-  if(this.testing) return "US/Pacific";
+  // if(this.testing) return "US/Pacific";
   if(this.trip.tripStarted()) return this.trip.timezone();
   // return the timezone of the user's hometown
   const session = Sessions.get().find(this.fbid);
-  return session.timezone();
+  const tz = session.getTimezone();
+  return tz;
 }
 
 module.exports = Commands;

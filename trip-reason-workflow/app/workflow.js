@@ -30,7 +30,7 @@ TripReasonWorkflow.prototype.handle = function(message) {
       return true;
     }
     if(message === "pb_event") {
-      this.handler.sendTextMessage(this.session.fbid, `Enter the name of the conference/event you are planning to attend?`);
+      this.handler.sendTextMessage(this.session.fbid, `Enter the name of the conference/event you are planning to attend? (use comma for multiple conferences)`);
       this.sessionState.set("awaitingConferenceName");
       return false;
     }
@@ -38,6 +38,7 @@ TripReasonWorkflow.prototype.handle = function(message) {
       // done with everything.
       this.sessionState.clear("awaitingTripReason");
       this.sessionState.clear("awaitingConferenceName");
+      // TODO: In this case, add a way to let admin know that someone wants a new conference details added.
       if(!handlePhocuswrightConference.call(this, Encoder.encode(message))) this.handler.sendTextMessage(this.session.fbid, `We will gather details about event ${message} and update your itinerary accordingly`);
       this.handler.handleDisplayTripDetailsPromise();
       return true;
@@ -49,7 +50,19 @@ TripReasonWorkflow.prototype.handle = function(message) {
 }
 
 function handlePhocuswrightConference(mesg) {
-  if(!mesg.includes("phocuswright") && !mesg.includes("the americas") && !mesg.includes("battleground")) return false;
+  // see if there are multiple.
+  if(mesg.includes(",")) {
+    let result = false;
+    mesg.split(',').forEach(m => {
+      if(!m.includes("phocuswright") && !m.includes("the americas") && !m.includes("battleground") && !m.includes("arival")) { result = false; return; }
+      result = true;
+      this.trip.addEvent(m);
+    }, this);
+    if(!result) return false;
+    this.handler.sendTextMessage(this.session.fbid, `Gathering details for your ${this.trip.rawTripName} trip, including details about your events...`);
+    return true;
+  }
+  if(!mesg.includes("phocuswright") && !mesg.includes("the americas") && !mesg.includes("battleground") && !mesg.includes("arival")) return false;
   this.handler.sendTextMessage(this.session.fbid, `Gathering details for your ${this.trip.rawTripName} trip, including details about your event ${mesg}...`);
   this.trip.addEvent(mesg);
   return true;
