@@ -3,6 +3,7 @@
 const Workflow = require('departure-city-workflow/app/workflow');
 const baseDir = "/home/ec2-user";
 const logger = require(`${baseDir}/my-logger`);
+logger.setTestConfig(); // indicate that we are logging for a test
 const TripData = require(`${baseDir}/trip-data`);
 const Sessions = require(`${baseDir}/sessions`);
 const WebhookPostHandler = require(`${baseDir}/webhook-post-handler`);

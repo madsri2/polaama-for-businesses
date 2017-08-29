@@ -120,6 +120,13 @@ Sessions.prototype.testing_delete = function(fbid) {
   delete this.sessions[session.sessionId];
 }
 
+Sessions.prototype.testing_getState = function(session) {
+  const sessionId = session.sessionId;
+  if(!this.sessions[sessionId]) this.sessions[sessionId] = session;
+  if(!this.sessionStates[sessionId]) this.sessionStates[sessionId] = new SessionState();
+  return this.sessionStates[sessionId];
+}
+
 Sessions.prototype.testing_setState = function(sessionId, sessionState) {
   if(!sessionId) throw new Error(`testing_setState: Expected parameter sessionId is missing`);
   this.sessionStates[sessionId] = sessionState;

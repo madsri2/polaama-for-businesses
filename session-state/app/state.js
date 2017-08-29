@@ -13,7 +13,7 @@ SessionState.prototype.get = function(state) {
 }
 
 SessionState.prototype.clear = function(state) {
-  this[state] = false;
+  if(this.get(state) !== undefined) this[state] = false;
 }
 
 SessionState.prototype.clearAll = function() {

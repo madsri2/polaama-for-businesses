@@ -31,7 +31,6 @@ const Promise = require('promise');
 const validator = require('node-validator');
 const Encoder = require(`${baseDir}/encoder`);
 const TripReasonWorkflow = require('trip-reason-workflow/app/workflow');
-// const SessionState = require('session-state/app/state');
 
 let recordMessage = true;
 let previousMessage = {};
@@ -44,7 +43,6 @@ function WebhookPostHandler(session, testing) {
 	this.pageId = PageHandler.defaultPageId;
   this.secretManager = new SecretManager();
   this.sessions = Sessions.get();
-  // this.sessionState = new SessionState();
   if(testing) this.pageHandler = PageHandler.get("fbid-test.txt");
 	else this.pageHandler = PageHandler.get();
   this.fbidHandler = this.pageHandler.getFbidHandler();
@@ -52,6 +50,7 @@ function WebhookPostHandler(session, testing) {
     logger.info(`WebhookPostHandler: A session with id ${session.sessionId} was passed. Using that in the post hook handler`);
     this.passedSession = session;
     this.session = session;
+    this.sessionState = this.sessions.testing_getState(session);
   }
   this.notifier = new Notifier(this.sessions);
   this.logOnce = {};
@@ -653,7 +652,7 @@ function sendReturnFlightDetails() {
     logger.warn(`sendReturnFlightDetails: No flight details exists for trip ${trip.rawTripName}`);
     if(!fs.existsSync(trip.itineraryFile())) {
       return sendNotFoundMessage.call(this, "flight", trip.rawTripName);
-      // return this.sendTextMessage.call(this, this.session.fbid,`No flight itinerary present for your trip to ${trip.rawTripName}. If you have already booked a flight, send it to TRIPS@MAIL.POLAAMA.COM`);
+      // return this.sendTextMessage(this.session.fbid,`No flight itinerary present for your trip to ${trip.rawTripName}. If you have already booked a flight, send it to TRIPS@MAIL.POLAAMA.COM`);
     }
   }
   const fbid = this.session.fbid;
@@ -782,7 +781,7 @@ function sendFlightItinerary() {
     logger.warn(`sendFlightItinerary: No flight details exists for trip ${trip.rawTripName}`);
     if(!fs.existsSync(trip.returnFlightFile())) {
       return sendNotFoundMessage.call(this, "flight", trip.rawTripName);
-      // return this.sendTextMessage.call(this, this.session.fbid,`No flight itinerary present for your trip to ${trip.rawTripName}. If you have already booked a flight, send it to TRIPS@MAIL.POLAAMA.COM`);
+      // return this.sendTextMessage(this.session.fbid,`No flight itinerary present for your trip to ${trip.rawTripName}. If you have already booked a flight, send it to TRIPS@MAIL.POLAAMA.COM`);
     }
   }
   const fbid = this.session.fbid;
@@ -1518,7 +1517,7 @@ function extractNewTripDetails(messageText) {
   if(error) {
 		if(error.length === 1 && error[0].message.startsWith("Provided")) {
 			logger.warn(`extractNewDetails: Validation error thrown ${JSON.stringify(error)}`);
-			// store the tripDetail so we can use this depending on how the user responds to this question.
+			// store the tripDetail so we can use this depending on how a user responds to this question.
 			this.session.previouslyEnteredTripDetails = tripDetails;
 			throw new UserConfirmation('Provided date is in the past. Has your trip already started?');
 		}
@@ -1733,6 +1732,8 @@ function handleLicense() {
 }
 
 function handleEventWithoutTrip(m) {
+  // only do this if this is was NOT sent as part of a new trip.
+  if(this.sessionState.get("planningNewTrip")) return null;
   if(!m.includes("phocuswright") && !m.includes("the americas") && !m.includes("battleground") && !m.includes("arival")) return null;
   let trip = this.session.getTrip("conferences");
   if(!trip) {
@@ -1950,7 +1951,7 @@ function handleAdditionalCommands(event, mesg) {
       function(err) {
         // TODO: See if there is a way to isolate this failure and still plan a trip (rather than throw a 500 back to the user)
         logger.error(`Error calling destinationCityWorkflow.handleNewTrip: ${err}`);
-        this.sendTextMessage.call(this, senderID, "Even bots need to eat. Be back in a bit.");
+        self.sendTextMessage(senderID, "Even bots need to eat. Be back in a bit.");
         return Promise.reject(err);
       }
     );

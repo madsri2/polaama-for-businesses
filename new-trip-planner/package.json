@@ -1,0 +1,18 @@
+{
+  "name": "new-trip-planner",
+  "version": "1.0.0",
+  "description": "class to plan new trips",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --reporter spec"
+  },
+  "author": "Madhu Parthasarathy",
+  "license": "GPL-2.0",
+  "dependencies": {
+    "chai": "^4.1.1",
+    "mocha": "^3.5.0",
+    "moment": "^2.18.1",
+    "moment-timezone": "^0.5.13",
+    "node-validator": "^0.1.27"
+  }
+}

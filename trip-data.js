@@ -209,7 +209,18 @@ TripData.prototype.activitiesUrlPath = function() {
   return `${this.data.name}/comments/activities`;
 }
 
+TripData.prototype.getDestination = function() {
+  return this.data.destination;
+}
+
 // ======= Store data =======
+TripData.prototype.resetTripDetails = function(tripDetails) {
+  if(tripDetails.destination) this.data.destination = tripDetails.destination;
+  if(tripDetails.startDate) this.data.startDate = tripDetails.startDate;
+  if(tripDetails.duration) this.data.duration = tripDetails.duration;
+  this.persistUpdatedTrip();
+}
+
 TripData.prototype.addTripDetailsAndPersist = function(tripDetails) {
   this.data = {}; 
   this.data.name = this.tripName;

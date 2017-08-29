@@ -109,4 +109,37 @@ describe("DestinationCitiesWorkflow tests", function() {
       }
     );
   });
+
+  it("invalid destination", function(done) {
+    handler.session.tripData().data.destination = "vegas";
+    const workflow = new Workflow(handler);
+    const resultPromise = workflow.handleNewTrip();
+    resultPromise.then(
+      function(response) {
+        expect(response).to.be.false;
+        expect(handler.sessionState.get("awaitingValidDestination")).to.be.true;
+        // logger.debug(`session state: ${JSON.stringify(handler.sessionState)}`);
+        return workflow.handleNewTrip("Las Vegas");
+      },
+      function(err) {
+        expect(false).to.be.true;
+        done(err);
+      }
+    ).done(
+      function(result) {
+        expect(result).to.be.true;
+        const trip = handler.session.tripData();
+        expect(trip.getPortOfEntry()).to.equal("las_vegas");
+        expect(trip.data.cityItin.cities.length).to.equal(1);
+        expect(trip.data.cityItin.cities[0]).to.equal("las_vegas");
+        // logger.debug(`trip dump: ${JSON.stringify(trip)}`);
+        done();
+      },
+      function(err) {
+        logger.error(`destination: ${err.stack}`);
+        expect(false).to.be.true;
+        done(err);
+      }
+    );
+  });
 });
