@@ -266,7 +266,7 @@ TripData.prototype.addTripDetailsAndPersist = function(tripDetails) {
 function getSharedBaseDir() {
   if(this.tripSharedFilesBaseDir) return this.tripSharedFilesBaseDir;
   if(!this.data.ownerId) {
-    logger.error(`getSharedBaseDir: Expected field ownerId missing: ${new Error().stack}`);
+    logger.error(`getSharedBaseDir: Expected field ownerId missing for trip ${this.tripName}. returning null value for shared directory.`);
     return null;
   }
   this.tripSharedFilesBaseDir = `${baseDir}/trips/shared/${this.data.ownerId}`;
@@ -404,7 +404,9 @@ TripData.prototype.cityItinDefined = function() {
 }
 
 function todoFile() {
-  return `${getSharedBaseDir.call(this)}/todo_list.json`;
+  const sharedBaseDir = getSharedBaseDir.call(this);
+  if(!sharedBaseDir) return null;
+  return `${sharedBaseDir}/todo_list.json`;
 }
 
 TripData.prototype.storeTodoList = function(senderId, messageText) {
@@ -785,7 +787,9 @@ TripData.prototype.markTodoItemDone = function(doneItem) {
     if(todoList.todo[idx].toLowerCase() === doneItemLc)  {
       todoList.done.push(doneItem);
       todoList.todo.splice(idx, 1);
-      this.persistUpdatedTrip();
+      // persist this to the right file
+      const file = todoFile.call(this);
+      fs.writeFileSync(file, JSON.stringify(todoList));
       return;
     }
   }
@@ -804,6 +808,7 @@ function moveLists(items, target) {
 
 TripData.prototype.getTodoList = function() {
   const file = todoFile.call(this);
+  if(!file) return {};
   let todoList = (fs.existsSync(file)) ? JSON.parse(fs.readFileSync(file, 'utf8')) : undefined;
   if(!todoList) {
     todoList = {};
@@ -824,7 +829,7 @@ TripData.prototype.getTodoList = function() {
       delete trip.todoDoneList;
     }
     // update pack-list file if any data was obtained from the trip file. then, delete trip file.
-    fs.writeFileSync(todoFile.call(this), JSON.stringify(todoList));
+    fs.writeFileSync(file, JSON.stringify(todoList));
     this.persistUpdatedTrip();
   }
   if(!todoList || (!todoList.todo && !todoList.done) || (todoList.todo.length === 0 && todoList.done.length === 0)) {

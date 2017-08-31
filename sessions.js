@@ -128,7 +128,8 @@ Sessions.prototype.testing_getState = function(session) {
 }
 
 Sessions.prototype.testing_setState = function(sessionId, sessionState) {
-  if(!sessionId) throw new Error(`testing_setState: Expected parameter sessionId is missing`);
+  if(!sessionId) throw new Error(`testing_setState: Expected parameter sessionId not present`);
+  if(!sessionState) throw new Error(`testing_setState: Expected parameter sessionState not present`);
   this.sessionStates[sessionId] = sessionState;
 }
 

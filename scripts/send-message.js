@@ -6,10 +6,13 @@ const TripData = require(`${baseDir}/trip-data`);
 const Sessions = require(`${baseDir}/sessions`);
 const Commands = require(`trip-itinerary/app/commands`);
 const FbidHandler = require('fbid-handler/app/handler');
+const logger = require(`${baseDir}/my-logger`);
+logger.setTestConfig(); // log in the test file to avoid polluting prod.
 
 // const fbid = "1630377990366886"; // raj
 // const fbid = "1311237785652279"; // divya
-const fbid = "1120615267993271"; // madhu
+// const fbid = "1120615267993271"; // madhu
+const fbid = "1420839671315623"; // Aparna
 // const fbid = "1428065237278275"; // Arpan
 // const fbid = "1718674778147181"; // Beth
 // const fbid = "1420839671315623"; // Aparna
@@ -399,32 +402,42 @@ function sendExpenseAndFeedbackRequest() {
   handler.sendMultipleMessages(fbid, messageList);
 }
 
-const readline = require('readline-sync');
-const proceed = readline.question(`Send message to ${name}? [Y/N] `);
-if(proceed !== 'Y' && proceed !== 'y') {
-  console.log(`Doing nothing`);
-  return process.exit(0);
+function sendTodoReminders() {
+  const myHandler = new WebhookPostHandler(session);
+  myHandler.sendReminderNotification();
 }
-console.log(`Sending message to ${name}`);
-// Surveys: Goal: See if user liked it, would they pay, features.
-/*
-* What feature in the bot did you use the most?
-* What feature(s) did you wish the bot had?
-* How did the Bot help for your Milan trip? (N/A if it did not).
-* Is there any trip planning feature would you pay for? If so, what? (say N/A if there is no such feature)
-* Any other general comments about the bot?
-*/
 
-// sendAddedNewTripMessage();
-// sendGoodMorningMessage();
-// sendRentalCarDetails();
-sendDailyMessage();
-// sendExpenseAndFeedbackRequest();
-// sendRecommendationAlert();
-// sendDayPlan();
-// sendCheckinMessage();
-// sendSingleActivity();
-// sendNewFeatureMessage();
-// sendFeatureMessage();
-// flightStatusAndWaitTimes();
-// sendPackList();
+function sendMessage() {
+  const readline = require('readline-sync');
+  const proceed = readline.question(`Send message to ${name}? [Y/N] `);
+  if(proceed !== 'Y' && proceed !== 'y') {
+    console.log(`Doing nothing`);
+    return process.exit(0);
+  }
+  console.log(`Sending message to ${name}`);
+  // Surveys: Goal: See if user liked it, would they pay, features.
+  /*
+  * What feature in the bot did you use the most?
+  * What feature(s) did you wish the bot had?
+  * How did the Bot help for your Milan trip? (N/A if it did not).
+  * Is there any trip planning feature would you pay for? If so, what? (say N/A if there is no such feature)
+  * Any other general comments about the bot?
+  */
+  
+  sendDailyMessage();
+  // sendAddedNewTripMessage();
+  // sendGoodMorningMessage();
+  // sendRentalCarDetails();
+  // sendExpenseAndFeedbackRequest();
+  // sendRecommendationAlert();
+  // sendDayPlan();
+  // sendCheckinMessage();
+  // sendSingleActivity();
+  // sendNewFeatureMessage();
+  // sendFeatureMessage();
+  // flightStatusAndWaitTimes();
+  // sendPackList();
+}
+
+// sendMessage();
+sendTodoReminders();

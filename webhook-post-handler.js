@@ -22,6 +22,7 @@ const Commands = require('trip-itinerary/app/commands');
 const DepartureCityWorkflow = require('departure-city-workflow/app/workflow');
 const DestinationCityWorkflow = require('destination-cities-workflow/app/workflow');
 const AirportCodes = require('trip-flights/app/airport-codes');
+const Validator = require('new-trip-planner/app/validate-details');
 
 const _ = require('lodash');
 const request = require('request');
@@ -80,12 +81,12 @@ function handleMessagingEvent(messagingEvent, pageId) {
     return sendTextMessage.call(this, fbid,"Even bots need to eat! Be back in a bit..");
   }
   if(!this.logOnce[this.session.sessionId]) {
-    logger.debug(`handleMessagingEvent: First message from user ${this.session.fbid} with session ${this.session.sessionId} since this process started`);
+    logger.debug(`handleMessagingEvent: First message from user ${this.session.fbid} with session ${this.session.sessionId} since this process started.`);
     this.logOnce[this.session.sessionId] = true;
   }
   const promise = this.pageHandler.add(fbid, pageId);
   const self = this;
-  promise.done(
+  return promise.then(
     function(status) {
       if(status) {
 				self.fbidHandler = self.pageHandler.getFbidHandler(pageId);
@@ -114,10 +115,12 @@ function handleMessagingEvent(messagingEvent, pageId) {
         logger.warn(`handleMessagingEvent: adding new fbid ${fbid} to fbidHandler. Expected status to be true but it was ${status}`);
         sendTextMessage.call(this, messagingEvent.sender.id,"Even bots need to eat! Be back in a bit");
       }
+      return Promise.resolve(true);
     },
     function(err) {
       logger.error(`handleMessagingEvent: error adding fbid ${fbid} to fbidHandler: ${err.stack}`);
       sendTextMessage.call(this, messagingEvent.sender.id,"Even bots need to eat! Be back in a bit");
+      return Promise.resolve(false);
     }
   );
 }
@@ -501,6 +504,14 @@ function planNewTrip(userChoice) {
   }
 }
 
+function markTodoItemAsDone(payload) {
+  const context = /pb_mark_done (.*)/.exec(payload);
+  if(!context) throw new Error(`Payload is not in expected format "pb_mark_done [Todo Item]". It is ${payload}`);
+  const doneItem = context[1];
+  this.session.tripData().markTodoItemDone(doneItem);
+  return sendTextMessage.call(this, this.session.fbid, "Marked item done");
+}
+
 function receivedPostback(event) {
   const senderID = event.sender.id;
   const recipientID = event.recipient.id;
@@ -509,7 +520,7 @@ function receivedPostback(event) {
   // button for Structured Messages. 
   let payload = event.postback.payload;
 
-  // logger.info("Received postback for user %d, page %d, session %d at timestamp: %d. Payload: %s", senderID, recipientID, this.session.fbid, timeOfPostback, payload);
+  logger.info("Received postback for user %d, page %d, session %d at timestamp: %d. Payload: %s", senderID, recipientID, this.session.fbid, timeOfPostback, payload);
 
   if(payload === "GET_STARTED_PAYLOAD") return sendWelcomeMessage.call(this, senderID); 
 
@@ -524,7 +535,7 @@ function receivedPostback(event) {
 
   // A pmenu, past_trips or a postback starting with "trip_in_context" is indicative of the beginning of a new state in the state machine. So, clear the session's "awaiting" states to indicate the beginning of a new state.
   this.sessionState.clearAll();
-
+  if(payload.startsWith("pb_mark_done ")) return markTodoItemAsDone.call(this, payload);
   if(payload === "mark_done") return sendMultipleMessages.call(this, this.session.fbid,
     textMessages.call(this, 
       [
@@ -1430,35 +1441,6 @@ function handleQuickReplies(quick_reply) {
   return false;
 }
 
-function validateStartDate(value, onError) {
-  const now = moment().tz("Etc/UTC");
-  
-  const check = validator.isObject()
-    .withRequired('startDate', validator.isDate());
-
-  var errCount = 0;
-  var error = {};
-  validator.run(check, { startDate: value}, function(ec, e) {
-      errCount = ec;
-      error = e;
-  });
-  if(errCount > 0) {
-    return onError(error[0].message, error.parameter, error.value);
-  }
-  const startDate = moment.tz(new Date(value), "Etc/UTC");
-  // logger.debug(`Time now is ${now}; Passed value is ${new Date(value).toISOString()}. Difference is ${now.diff(startDate, 'days')}`);
-  if(now.diff(startDate,'days') >= 0) {
-    return onError("Provided start date is in the past", "", value);
-  }
-  return null;
-}
-
-// An object that is expected to be thrown by extractNewDetails below
-function UserConfirmation(message) {
-	this.message = message;
-	this.name = "UserConfirmation";
-}
-
 function createNewTrip(tripDetails) {
   tripDetails.ownerId = this.fbidHandler.encode(this.session.fbid);
   this.session.addTrip(tripDetails.destination);
@@ -1473,6 +1455,12 @@ function createNewTrip(tripDetails) {
   this.tripCount = 0; // force reload of tripCount in determineResponseType
 }
 
+// An object that is expected to be thrown by extractNewDetails below
+function UserConfirmation(message) {
+	this.message = message;
+	this.name = "UserConfirmation";
+}
+
 function extractNewTripDetails(messageText) {
 	// short-circuit parsing the input and validation if the data already existed.
 	if(this.session.previouslyEnteredTripDetails && this.session.previouslyEnteredTripDetails.tripStarted) {
@@ -1480,40 +1468,9 @@ function extractNewTripDetails(messageText) {
 		createNewTrip.call(this, this.session.previouslyEnteredTripDetails);
 		return;
 	}
-  const td = messageText.split(',');
-  if(td.length != 3) {
-    logger.error(`extractNewTripDetails: Expected 3 items in tripDetails, but only found ${td.length}: [${td}]. Message text: ${messageText}`);
-    const error = [];
-    error.push({
-      message: "invalid separator. Please enter a comma separated list of destination country, start date and duration (in days)"
-    });
-    return error;
-  }
-  if(td[1].match(/^ *\d+\/\d+$/)) { // if date is of the form "1/1", "10/10" or " 1/10", append year
-    td[1] = td[1].concat(`/${new Date().getFullYear()}`);
-  }
-  const tripDetails = {
-    destination: td[0].trim(),
-    startDate:  td[1].trim(),
-    duration: parseInt(td[2].trim()) 
-  };
-  const customValidator = {
-      validate: validateStartDate
-  };
-	// logger.debug(`Validating trip data: ${JSON.stringify(tripDetails)}`);
-  // validate tripData
-  const check = validator.isObject()
-    .withRequired('duration', validator.isInteger({min: 1, max: 200}))
-    .withRequired('startDate', customValidator)
-    .withRequired('destination', validator.isString({regex: /^[A-Z a-z]+$/}));
-  
-  var error = null;
-  validator.run(check, tripDetails, function(ec, e) {
-    if(ec > 0) {
-      error = e;
-    }
-    return;
-  });
+  const response = new Validator(messageText).validate();
+  const error = response.error;
+  const tripDetails = response.tripDetails;
   if(error) {
 		if(error.length === 1 && error[0].message.startsWith("Provided")) {
 			logger.warn(`extractNewDetails: Validation error thrown ${JSON.stringify(error)}`);
@@ -1772,7 +1729,7 @@ function determineResponseType(event) {
 
   // if(mesg === "expenses") return expense.call(this);
 
-  if(mesg === "dr" || mesg === "tr") return handleDRandTR.call(this, mesg);
+  // if(mesg === "dr" || mesg === "tr") return handleDRandTR.call(this, mesg);
   if(["license", "driving license", "driver's license", "driver license"].includes(mesg) && this.session.tripData() && ["iceland", "keflavik", "iceland_alt"].includes(this.session.tripNameInContext)) return handleLicense.call(this);
 
   if(mesg === "commands" || (mesg.includes("help") && mesg.includes("commands"))) return supportedCommands.call(this);
@@ -1815,6 +1772,7 @@ function determineResponseType(event) {
   */
 
   // if we don't know what trip is being discussed, ask the user for this, unless the user is adding details about a new trip.
+  // logger.debug(`determineResponseType: state: ${JSON.stringify(this.sessionState)}`);
   if(!this.session.doesTripContextExist() && !this.sessionState.get("planningNewTrip")) {
     logger.info("determineResponseType: no trip name in context. Asking user!");
     return sendTripButtons.call(this, true);
@@ -2261,24 +2219,60 @@ WebhookPostHandler.prototype.sendReminderNotification = function() {
   const sessions = this.sessions.allSessions();
   Object.keys(sessions).forEach(id => {
     sessions[id].allTrips().forEach(trip => {
-      const todoList = trip.getTodoList();
-      logger.info(`sendReminderNotification: Trip ${trip.data.name} from session ${id} has ${todoList.length} todo items.`);
-      if(!todoList.length) return;
-      const now = moment().tz("Etc/UTC");
-      const tripEnd = moment.tz(trip.data.returnDate, "Etc/UTC");
-      if(now.diff(tripEnd,'days') >= 0) {
-        logger.debug(`Trip ${trip.data.name} started on ${trip.data.startDate} and has a duration of ${trip.data.duration} days. No longer sending reminder because the trip is over (difference is ${now.diff(tripEnd,'days')} days).`);
-        return;
+      try {
+        let todoList = trip.getTodoList();
+        if(!todoList || !todoList.todo || todoList.todo.length === 0) return;
+        todoList = todoList.todo;
+        logger.info(`sendReminderNotification: Trip ${trip.data.name} from session ${id} has ${todoList.length} todo items.`);
+        const now = moment().tz("Etc/UTC");
+        const tripEnd = moment.tz(trip.data.returnDate, "Etc/UTC");
+        if(now.diff(tripEnd,'days') >= 0) {
+          logger.debug(`Trip ${trip.data.name} started on ${trip.data.startDate} and has a duration of ${trip.data.duration} days. Not sending reminder because the trip is over (difference is ${now.diff(tripEnd,'days')} days).`);
+          return;
+        }
+        // only send reminder if we are within 45 days of the trip.
+        const startDate = moment.tz(trip.data.startDate, "Etc/UTC");
+        const daysToTrip = startDate.diff(now, 'days');
+        const daysBeforeTripStarts = 10;
+        if(daysToTrip <= daysBeforeTripStarts) {
+          if(todoList.length > 3) return sendTextMessage.call(this, sessions[id].fbid, `Reminder: You still have ${todoList.length} items to do for your trip to ${trip.data.name}`);
+          const elements = [];
+          elements.push({
+            title: `Reminder for trip ${trip.rawTripName}`,
+            subtitle: `You still have ${todoList.length} items to complete. Your trip starts in ${daysToTrip} days.`,
+          });
+          todoList.forEach(item => {
+            elements.push({
+              title: item,
+              buttons:[{
+                title: "Mark done",
+                type: "postback",
+                payload: `pb_mark_done ${item}`
+              }]
+            });
+          });
+          const messageData = {
+            recipient: {
+              id: this.session.fbid
+            },
+            message: {
+              attachment: {
+                type: "template",
+                payload: {
+                  template_type: "list",
+                  elements: elements,
+                  top_element_style: "compact",
+                }
+              }
+            }
+          };
+          this.sendAnyMessage(messageData);
+          // TODO: Add a button for user to get the list of todo items.
+        }
+        else logger.debug(`Not sending reminder because there are ${daysToTrip} days to the trip ${trip.data.name}`);
       }
-      // only send reminder if we are within 45 days of the trip.
-      const startDate = moment.tz(trip.data.startDate, "Etc/UTC");
-      const daysToTrip = startDate.diff(now, 'days');
-      if(daysToTrip <= 45) {
-        sendTextMessage.call(this, sessions[id].fbid, `Reminder: You still have ${todoList.length} items to do for your trip to ${trip.data.name}`);
-        // TODO: Add a button for user to get the list of todo items.
-      }
-      else {
-        logger.info(`Not sending reminder because there are ${daysToTrip} days to the trip ${trip.data.name}`);
+      catch(e) {
+        logger.error(`Error sending reminders for session with fbid ${sessions[id].fbid} for trip ${trip.tripName}: ${e.stack}`);
       }
     });
   });
@@ -2941,8 +2935,10 @@ WebhookPostHandler.prototype.testing_createNewTrip = createNewTrip;
 WebhookPostHandler.prototype.testing_displayTripDetails = displayTripDetails;
 WebhookPostHandler.prototype.testing_receivedPostback = receivedPostback;
 
-WebhookPostHandler.prototype.testing_setState = function(sessionId, sessionState) {
-  this.sessions.testing_setState(sessionId, sessionState);
+WebhookPostHandler.prototype.testing_setState = function(sessionState) {
+  if(!this.session) throw new Error(`testing_setState: session not defined in handler`);
+  if(!sessionState) throw new Error(`testing_setState: required parameter sessionState not present`);
+  this.sessions.testing_setState(this.session.sessionId, sessionState);
 }
 
 // ********************************* TESTING *************************************

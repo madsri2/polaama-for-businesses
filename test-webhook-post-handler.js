@@ -12,7 +12,7 @@ const fs = require('fs');
 
 const moment = require('moment');
 const Promise = require('promise');
-const myFbid = "1234";
+let myFbid = "1234";
 
 function testGatheringDetailsForNewTrip() {
   const dtdCallback = function() { 
@@ -600,7 +600,40 @@ function testOverlappingSessions() {
   });
 }
 
-testHandleMessagingEvent();
+function testEnterNewPlanDetails() {
+  // set up
+  const myFbid = "1234";
+  const sessions = Sessions.get();
+  // first clean up previous test state
+  sessions.testing_delete(myFbid);
+  const session = sessions.findOrCreate(myFbid);
+  // create new trip
+  const handler = new WebhookPostHandler(session, true /* testing */);
+  const state = new SessionState();
+  state.set("planningNewTrip");
+  state.set("awaitingNewTripDetails");
+  handler.testing_setState(state);
+  handler.testing_handleMessagingEvent(determineResponseTypeEvent("san deigo,12/1,5"));
+  const trip = handler.session.tripData();
+  logger.debug(`testEnterNewPlanDetails: trip details: ${JSON.stringify(trip)}`);
+}
+
+function testMarkDone() {
+  // set up
+  myFbid = "1120615267993271";
+  const sessions = Sessions.get();
+  // first clean up previous test state
+  const session = sessions.find(myFbid);
+  const handler = new WebhookPostHandler(session, true /* testing */);
+  handler.testing_receivedPostback(receivedPostbackEvent("pb_mark_done Hello World"));
+  myFbid = "1234";
+}
+
+testMarkDone();
+
+// testEnterNewPlanDetails();
+
+// testHandleMessagingEvent();
 
 // testEventAfterAnotherTripInContext();
 

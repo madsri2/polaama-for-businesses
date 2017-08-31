@@ -68,7 +68,14 @@ function eventDetails() {
   console.log(contents);
 }
 
-eventDetails();
+function markItemTodo() {
+  const payload = "pb_mark_done Hello world";
+  const contents = /pb_mark_done (.*)/.exec(payload);
+  console.log(contents[1]);
+}
+
+markItemTodo();
+// eventDetails();
 // eventKey();
 // eventRegex();
 // hotelPayloadRegex();
