@@ -629,7 +629,26 @@ function testMarkDone() {
   myFbid = "1234";
 }
 
-testMarkDone();
+function testSpearFishing() {
+  const session = Sessions.get().find(myFbid);
+  let handler = new WebhookPostHandler(session, true /* testing */);
+  handler.testing_determineResponseType(determineResponseTypeEvent("spear fishing"));
+  const state = new SessionState();
+  state.set("awaitingPSBQuestion");
+  handler.testing_setState(state);
+  handler.testing_receivedPostback(receivedPostbackEvent("message_psb"));
+  handler.testing_determineResponseType(determineResponseTypeEvent("abalone"));
+  state.set("awaitingPSBQuestion");
+  handler = new WebhookPostHandler(session, true /* testing */);
+  handler.testing_setState(state);
+  handler.testing_determineResponseType(determineResponseTypeEvent("something other"));
+  handler.testing_determineResponseType(determineResponseTypeEvent("existing trips"));
+
+}
+
+testSpearFishing();
+
+// testMarkDone();
 
 // testEnterNewPlanDetails();
 

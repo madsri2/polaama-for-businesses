@@ -1,0 +1,16 @@
+{
+  "name": "travel-sfo-handler",
+  "version": "1.0.0",
+  "description": "handle Travel SFO page",
+  "main": "app/handler.js",
+  "scripts": {
+    "test": "mocha --reporter spec"
+  },
+  "author": "Madhu Parthasarathy",
+  "license": "GPL-2.0",
+  "dependencies": {
+    "bayes": "0.0.7",
+    "chai": "^4.1.2",
+    "mocha": "^3.5.3"
+  }
+}

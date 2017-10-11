@@ -24,6 +24,8 @@ function testFindOrCreateAndContextUpdates() {
 }
 
 function testAddTrip() {
+  const origS2 = ss.find("2");
+  if(origS2) origS2.testing_delete();
   const s2 = ss.findOrCreate("2");
   s2.addTrip("a");
   console.log(`Value: ${JSON.stringify(s2.tripData())}`);
@@ -31,6 +33,8 @@ function testAddTrip() {
 // testAddTrip();
 
 function testPersistAndRetrieve() {
+  const origS2 = ss.find("2");
+  if(origS2) origS2.testing_delete();
   const s2 = ss.findOrCreate("2");
   s2.addTrip("a");
 
@@ -47,7 +51,18 @@ function testPersistAndRetrieve() {
     console.log(`s2: ${JSON.stringify(s2)}`);
     console.log(`s3: ${JSON.stringify(s3)}`);
   }
+  s2.testing_delete();
 }  
+
+function testDuplicateTripName() {
+  const origS2 = ss.find("2");
+  if(origS2) origS2.testing_delete();
+  const s2 = ss.findOrCreate("2");
+  s2.addTrip("a");
+  s2.addTrip("a");
+  console.log(`${JSON.stringify(s2)}`);
+  s2.testing_delete();
+}
 
 function addNewTrip(id, name, destination, startDate, duration) {
   const s = ss.findOrCreate(id);
@@ -86,7 +101,8 @@ function testSessions() {
   console.log(ss.findOrCreate("2"));
 }
 
-testPersistAndRetrieve();
+testDuplicateTripName();
+// testPersistAndRetrieve();
 // testSessions();
 // testGetFutureTrips();
 // testGetPastTrips();

@@ -263,7 +263,7 @@ function handleEventRelatedInterest(interest, index) {
   if(!interest.includes(':') && (!events || !events.includes(interest))) return;
   // if this is the event name, simply call getEventItinerary(), which does the right thing. This might be a case that is never used.
   // logger.debug(`handleEventRelatedInterest: interest includes ":"`);
-  if(events.includes(interest)) return this.getEventItinerary([interest]);
+  if(events && events.includes(interest)) return this.getEventItinerary([interest]);
   let contents = /^(.*):(.*)/.exec(interest);  
   // only the following regex formats are valid: "phocuswright:oct_11", "arival:theater" 
   if(!contents || contents.length < 3) return null;
@@ -296,7 +296,7 @@ function handleEventDetails(eventName, detailsFile, idx) {
     }
   };
   const file = this.trip.eventDetailsFile(eventName, detailsFile);
-  // logger.debug(`looking at file ${file}; eventName: ${eventName}; detailsFile: ${detailsFile}`);
+  logger.debug(`looking at file ${file}; eventName: ${eventName}; detailsFile: ${detailsFile}`);
   if(!fs.existsSync(file)) return errMessage;
   this.interest = `${Encoder.encode(eventName)}:${detailsFile}`;
   const json = JSON.parse(fs.readFileSync(file, 'utf8'));
@@ -318,7 +318,7 @@ DayPlanner.prototype.getEventItinerary = function(contents) {
       logger.error(`getEventItinerary: passed array does not exist or is invalid: ${(contents) ? contents : "array is null"}`);
       return errMessage;
     }
-    // logger.debug(`getEventItinerary: content details are ${contents}. length is ${contents.length}`);
+    logger.debug(`getEventItinerary: content details are ${contents}. length is ${contents.length}`);
     // set the event name as interest.
     const eventName = (contents.length === 1) ? contents[0] : contents[1];
     this.interest = Encoder.encode(eventName);
@@ -677,6 +677,9 @@ function weatherString(weather) {
   if(weather.cloud_cover === "cloudy" || weather.cloud_cover === "mostly cloudy") img = "cloudy-16";
   if(weather.cloud_cover === "partly cloudy rainy") img = "partly-cloudy-rainy-16";
   if(weather.cloud_cover === "thunderstorms") img = "thunderstorms-16";
+  if(weather.cloud_cover === "showers") img = "showers-24";
+  if(weather.cloud_cover === "am showers") img = "showers-24";
+  if(weather.cloud_cover === "pm showers") img = "showers-24";
   const comment = weather.comment ? `${weather.comment}.`: "";
   
   img = (img) ? `<img src="https://polaama.com/images/${img}"/>`: "";

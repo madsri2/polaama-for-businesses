@@ -23,6 +23,12 @@ module.exports.setTestConfig = function() {
   if(fs.existsSync(log.fileName)) fs.renameSync(log.fileName, "/tmp/test-error.log.orig");
 }
 
+module.exports.setConfigFile = function(configFile, deleteFile) {
+  const log = new Log(configFile);
+  logger = log.init();
+  if(fs.existsSync(log.fileName) && deleteFile) fs.renameSync(log.fileName, `/tmp/${configFile}.orig`);
+}
+
 // A custom logger interface that wraps winston, making it easy to instrument
 // code and still possible to replace winston in the future.
 

@@ -9,6 +9,7 @@ const optionsDefn = [
   {name: 'decrypt', alias: 'd'},
   {name: 'pat', type: Boolean},
   {name: 'apat', type: Boolean},
+  {name: 'travel_sfo', type: Boolean},
 ];
 
 const options = cmdLineArgs(optionsDefn);
@@ -17,6 +18,7 @@ if(options.encrypt) return console.log(manager.encrypt(options.encrypt));
 if(options.decrypt) return console.log(manager.decrypt(options.decrypt));
 if(options.pat) { return console.log(manager.getPolaamaBotPageAccessToken()); }
 if(options.apat) { return console.log(manager.getPolaamaPageAccessToken()); }
+if(options.travel_sfo) { return console.log(manager.getTravelSfoPageAccessToken()); }
 
 console.log(`usage: node crypto.js [-e data | -d <data> | -pat]`);
 /*

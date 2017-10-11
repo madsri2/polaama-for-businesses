@@ -173,5 +173,6 @@ describe("FbidHandler Tests: ", function() {
     expect(handler.decode("nKWM")).to.not.be.null;
     expect(handler.encode("1309200042526761")).to.not.be.null;
   });
+
 });
 

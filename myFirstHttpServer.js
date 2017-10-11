@@ -95,7 +95,6 @@ app.use(bodyParser.json({ verify: verifyRequestSignature }));
 // Routes
 app.use(RequestProfiler.profile());
 
-
 // Routes for authentication
 // Redirect the user to Facebook for authentication.  When complete,
 // Facebook will redirect the user back to the application at /auth/facebook/callback
@@ -114,7 +113,7 @@ app.get('/auth/facebook/callback', function(req, res, next) {
         return next(err);
       }
       if(!user) {
-        logger.nfo(`facebook callback: passport.authenticate: user object not present. redirecting to "/login"`);
+        logger.info(`facebook callback: passport.authenticate: user object not present. redirecting to "/login"`);
         return res.redirect('/login');
       }
       req.login(user, function(err) {
@@ -207,6 +206,12 @@ app.get('/index', function(req, res) {
 
 app.get('/', ensureAuthenticated, function(req, res) {
   return res.redirect('https://madhupolaama.wixsite.com/polaama');
+});
+app.get('/business', ensureAuthenticated, function(req, res) {
+  return res.redirect('https://madhupolaama.wixsite.com/polaama/businesses');
+});
+app.get('/businesses', ensureAuthenticated, function(req, res) {
+  return res.redirect('https://madhupolaama.wixsite.com/polaama/businesses');
 });
 /*
 app.get('/', ensureAuthenticated, function(req, res) {
@@ -489,6 +494,10 @@ app.get('/:id/:tripName/:date', function(req, res) {
   // TODO: This is ridiculous. fix me!
   if(req.params.date === "boarding-pass-image") return handler.getBoardingPass(req, res);
   return handler.handleWebpage(res, handler.dayPlan, [req.params.date]);
+});
+
+app.get('/my-map', function(req, res) {
+  return res.sendFile(`/home/ec2-user/html-templates/map.html`, 'utf8');
 });
 
 /************ CHOICES ***************/

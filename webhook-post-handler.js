@@ -2,7 +2,7 @@
 const Notifier = require('notifications/app/notifier');
 
 const baseDir = '/home/ec2-user';
-const logger = require('./my-logger');
+const logger = require(`${baseDir}/my-logger`);
 const Sessions = require('./sessions');
 const Session = require('./session');
 const FbidHandler = require('fbid-handler/app/handler');
@@ -32,6 +32,7 @@ const Promise = require('promise');
 const validator = require('node-validator');
 const Encoder = require(`${baseDir}/encoder`);
 const TripReasonWorkflow = require('trip-reason-workflow/app/workflow');
+const TravelSfoPageHandler = require('travel-sfo-handler');
 
 let recordMessage = true;
 let previousMessage = {};
@@ -39,9 +40,11 @@ let pageAccessToken;
 
 let TEST_MODE = false;
 // NOTE: WebhookPostHandler is a singleton, so all state will need to be maintained in this.session object. fbidHandler is also a singleton, so that will be part of the WebhookPostHandler object.
-function WebhookPostHandler(session, testing) {
+function WebhookPostHandler(session, testing, pageId) {
   if(testing) TEST_MODE = true; // Use sparingly. Currently, only used in callSendAPI
+  this.travelSfoPageHandler = new TravelSfoPageHandler();
 	this.pageId = PageHandler.defaultPageId;
+  if(pageId) this.pageId = pageId;
   this.secretManager = new SecretManager();
   this.sessions = Sessions.get();
   if(testing) this.pageHandler = PageHandler.get("fbid-test.txt");
@@ -51,6 +54,7 @@ function WebhookPostHandler(session, testing) {
     logger.info(`WebhookPostHandler: A session with id ${session.sessionId} was passed. Using that in the post hook handler`);
     this.passedSession = session;
     this.session = session;
+    logger.info(`WebhookPostHandler: Setting session state`);
     this.sessionState = this.sessions.testing_getState(session);
   }
   this.notifier = new Notifier(this.sessions);
@@ -339,7 +343,7 @@ WebhookPostHandler.prototype.setWeatherAndItineraryForNewTrip = function(tripNam
 // Start collecting useful information for trip and update the user.
 WebhookPostHandler.prototype.startPlanningTrip = function(returnPromise) {
   const trip = this.session.tripData();
-  // sendTextMessage.call(this, this.session.fbid, `Gathering information for your ${trip.rawTripName} trip..`);
+  sendTextMessage.call(this, this.session.fbid, `Gathering information for your ${trip.rawTripName} trip..`);
 	// logger.debug(`startPlanningTrip: This sessions' guid is ${this.session.guid}`);
   const tip = new TripInfoProvider(trip, trip.data.leavingFrom);
   const activities = Promise.denodeify(tip.getActivities.bind(tip));
@@ -347,7 +351,7 @@ WebhookPostHandler.prototype.startPlanningTrip = function(returnPromise) {
 
   // TODO: If this is a beach destinataion, use http://www.blueflag.global/beaches2 to determine the swimmability. Also use http://www.myweather2.com/swimming-and-water-temp-index.aspx to determine if water conditions are swimmable
   const self = this;
-  const tripNameInContext = (this.session.tripData()) ? this.session.tripData() : "unknown_trip";
+  const tripNameInContext = (this.session.tripData()) ? this.session.tripData().rawTripName : "unknown_trip";
   this.tripPlanningPromise = 
     activities()
     .then(
@@ -468,6 +472,8 @@ function planNewTrip(userChoice) {
       }
     };
     callSendAPI.call(this, messageData);
+    // reset existing trip context. The user is ready to plan a new trip.
+    this.session.resetTripContext();
     this.sessionState.set("awaitingNewTripDetails");
     this.sessionState.set("planningNewTrip");
     return;
@@ -512,6 +518,12 @@ function markTodoItemAsDone(payload) {
   return sendTextMessage.call(this, this.session.fbid, "Marked item done");
 }
 
+function handleGettingStarted(senderID) {
+  const message = this.travelSfoPageHandler.greeting(this.pageId, senderID);
+  if(message) return callSendAPI.call(this, message);
+  return sendWelcomeMessage.call(this, senderID); 
+}
+
 function receivedPostback(event) {
   const senderID = event.sender.id;
   const recipientID = event.recipient.id;
@@ -522,7 +534,10 @@ function receivedPostback(event) {
 
   logger.info("Received postback for user %d, page %d, session %d at timestamp: %d. Payload: %s", senderID, recipientID, this.session.fbid, timeOfPostback, payload);
 
-  if(payload === "GET_STARTED_PAYLOAD") return sendWelcomeMessage.call(this, senderID); 
+  if(payload === "GET_STARTED_PAYLOAD") return handleGettingStarted.call(this, senderID);
+
+  const handleMesg = this.travelSfoPageHandler.handlePostback(payload, this.pageId, senderID);
+  if(handleMesg) return callSendAPI.call(this, handleMesg);
 
   // give tripReasonWorkflow a chance to work.
   if(this.sessionState.get("planningNewTrip")) {
@@ -1159,6 +1174,25 @@ function receivedMessage(event) {
           determineResponseType.call(this, event);
       }
     } else if (messageAttachments) {
+      const response = this.travelSfoPageHandler.handleSendingAttractionsNearMe(message, this.pageId, senderID);
+      if(response) return callSendAPI.call(this, response);
+      const stickerId = message.sticker_id;
+      if(stickerId && stickerId === 369239263222822) {
+        const handleMesg = this.travelSfoPageHandler.handleLikeButton(this.pageId, senderID);
+        // const handleMesg = this.travelSfoPageHandler.handleLikeButton(this.pageId, senderID);
+        // const handleMesg = this.travelSfoPageHandler.handleLikeButtonGeneric(this.pageId, senderID);
+        if(handleMesg) {
+          if(Array.isArray(handleMesg)) {
+            callSendAPI.call(this, handleMesg[0]);
+            const self = this;
+            setTimeout(function() {
+              callSendAPI.call(self, handleMesg[1]);
+            }, 2000);
+            return;
+          }
+          return callSendAPI.call(this, handleMesg);
+        }
+      }
       sendTextMessage.call(this, senderID, "Message with attachment received");
     }
 }
@@ -1447,7 +1481,7 @@ function createNewTrip(tripDetails) {
   this.tripCount = this.session.getCurrentAndFutureTrips().futureTrips.length;
   const tripData = this.session.tripData();
   tripData.addTripDetailsAndPersist(tripDetails);
-  // logger.info(`createNewTrip: This session's trip name in context is ${tripDetails.destination}`);
+  // logger.info(`createNewTrip: This session's trip name in context is ${tripData.rawTripName}. Destiantion is ${tripDetails.destination}`);
   this.sessionState.clear("awaitingNewTripDetails");
   // reload the session here to get the latest data
   this.sessions.reloadSession(this.session.sessionId);
@@ -1727,10 +1761,11 @@ function determineResponseType(event) {
   const messageText = event.message.text;
   const mesg = messageText.toLowerCase();
 
-  // if(mesg === "expenses") return expense.call(this);
-
-  // if(mesg === "dr" || mesg === "tr") return handleDRandTR.call(this, mesg);
-  if(["license", "driving license", "driver's license", "driver license"].includes(mesg) && this.session.tripData() && ["iceland", "keflavik", "iceland_alt"].includes(this.session.tripNameInContext)) return handleLicense.call(this);
+  const handleMesg = this.travelSfoPageHandler.handleText(mesg, this.pageId, senderID, event);
+  if(handleMesg) {
+    if(Array.isArray(handleMesg)) return this.sendMultipleMessages(senderID, handleMesg);
+    return callSendAPI.call(this, handleMesg);
+  }
 
   if(mesg === "commands" || (mesg.includes("help") && mesg.includes("commands"))) return supportedCommands.call(this);
 
@@ -1891,7 +1926,7 @@ function handleAdditionalCommands(event, mesg) {
           // see if we have enough data to start planning a trip
           if(self.session.tripData().cityItinDefined()) {
             const tripData = self.session.tripData();
-            // logger.debug(`handleAdditionalCommands: cities available for trip ${tripData.rawTripName}. Start planning trip for customer ${self.session.fbid}`);
+            logger.debug(`handleAdditionalCommands: cities available for trip ${tripData.rawTripName}. Start planning trip for customer ${self.session.fbid}`);
             // start planning the trip but do not display trip details. That will be done by TripReasonWorkflow below.
             self.startPlanningTrip(true /* return promise */);
           }

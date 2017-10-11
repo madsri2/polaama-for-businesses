@@ -2,6 +2,7 @@
 
 # PAGE_ACCESS_TOKEN=`node /home/ec2-user/scripts/crypto.js --pat | grep -v Logger`;
 PAGE_ACCESS_TOKEN=`node /home/ec2-user/scripts/crypto.js --apat | grep -v Logger`;
+SFO_PAGE_ACCESS_TOKEN=`node /home/ec2-user/scripts/crypto.js --travel_sfo | grep -v Logger`;
 
 # Whitelist domain
 function whitelist_domain {
@@ -56,6 +57,44 @@ function set_persistent_menu {
   }' "https://graph.facebook.com/v2.6/me/messenger_profile?access_token=$PAGE_ACCESS_TOKEN"    
 }
 
+function set_persistent_menu_sfo_travel {
+  curl -X POST -H "Content-Type: application/json" -d '{
+    "persistent_menu": [{
+      "locale": "default",
+      "call_to_actions":[
+        {
+          "type":"postback",
+          "title":"Talk to customer service", 
+          "payload":"pmenu_travel_sfo_human"
+        }
+      ]
+    }]
+  }' "https://graph.facebook.com/v2.6/me/messenger_profile?access_token=$SFO_PAGE_ACCESS_TOKEN"    
+}
+
+function set_get_started_menu_sfo {
+  curl -X POST -H "Content-Type: application/json" -d '{
+    "get_started": {
+      "payload": "GET_STARTED_PAYLOAD"
+    }
+  }' "https://graph.facebook.com/v2.6/me/messenger_profile?access_token=$SFO_PAGE_ACCESS_TOKEN"    
+}
+
+function set_greeting_sfo {
+  curl -X POST -H "Content-Type: application/json" -d '{
+    "greeting": [{
+      "locale": "default",
+      "text": "Hello {{user_first_name}}! Welcome to Travel SFO. How can I help you today?",
+    }]
+  }' "https://graph.facebook.com/v2.6/me/messenger_profile?access_token=$SFO_PAGE_ACCESS_TOKEN"    
+}
+
+function delete_greeting_sfo {
+  curl -X DELETE -H "Content-Type: application/json" -d '{
+    "fields": [ "greeting" ]
+  }' "https://graph.facebook.com/v2.6/me/messenger_profile?access_token=$SFO_PAGE_ACCESS_TOKEN"    
+}
+
 function set_get_started_menu {
   curl -X POST -H "Content-Type: application/json" -d '{
     "get_started": {
@@ -83,6 +122,22 @@ case $key in
     ;;
   -p|--pmenu)
     set_persistent_menu
+    shift # past argument
+    ;;
+  -p_sfo)
+    set_persistent_menu_sfo_travel
+    shift # past argument
+    ;;
+  -g_sfo)
+    set_get_started_menu_sfo
+    shift # past argument
+    ;;
+  -gr_sfo)
+    set_greeting_sfo
+    shift # past argument
+    ;;
+  -d_gr_sfo)
+    delete_greeting_sfo
     shift # past argument
     ;;
   -g|--get-started)

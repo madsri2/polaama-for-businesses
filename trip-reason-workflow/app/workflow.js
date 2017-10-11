@@ -23,7 +23,7 @@ TripReasonWorkflow.prototype.handle = function(message) {
   if(this.sessionState.get("awaitingTripReason")) {
     if(message === "pb_leisure") {
       // this.handler.sendTextMessage(this.session.fbid, `Gathering details for your trip. To get recommendations for an activity or restaurant,  use the "reco" command: "reco walking tours"...`);
-      this.handler.sendTextMessage(this.session.fbid, `Gathering details for your trip...`);
+      this.handler.sendTextMessage(this.session.fbid, `Gathering details for trip ${this.trip.rawTripName}`);
       this.handler.handleDisplayTripDetailsPromise();
       this.sessionState.clear("awaitingTripReason");
       // nothing more to do here.

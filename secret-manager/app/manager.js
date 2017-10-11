@@ -20,7 +20,7 @@ SecretManager.prototype.encrypt = function(data) {
   const cipher = crypto.createCipher('AES256', this.key);
   let encrypted = cipher.update(data, 'utf8', 'base64');
   encrypted += cipher.final('base64');
-  logger.debug(`encrypt: result is ${encrypted}`);
+  // logger.debug(`encrypt: result is ${encrypted}`);
   return encrypted;
 }
 
@@ -33,14 +33,22 @@ SecretManager.prototype.decrypt = function(cipher) {
 
 // Polaama Prototype page token
 // const encryptedPat = "GDppF8QSELN0ycFlaDahtM34V1EDoZX8JRtoem2wSXpkl0pWmNhYZGbYnV0HfjdGQcKs9plL8+ityQl/DXN8WcN/rod11yN7/8tmWcyJK5NpF/YwPeF4pFuVzfroPxuzU4ckUDDbtKE6MPyiySsx9L0+GLswJsV92+HCSY0uvlc6v0hiirqg/KO9ebTv+Na+Q0fs8s0aziYAvo5f3pgIPxyhrUQW3ENzKZ/aEbLL8a5wXiXR6qq9b28lW1eu8E6S";
+// Token for the "Polamaa Bot" page
 SecretManager.prototype.getPolaamaBotPageAccessToken = function() {
   // Polaama bot app page token
   const encryptedPat = "LXMsEKkeoWXqSBoi64Gt+Ou/NcjoFR7aiLUjuSRdTTYuVUKOGoElSU/nqCE8pl1wnIa9MZ8vd4vCIvosJmFiBkYLLZmawSURPWbEFH2apqmTokt+4Lj1DQZ7nVjcLMhM6EyJildZX4qcFqZvozuV2obi889/eUjb4l70E3KsftARrfwMxoS4g/BQaE1iTJnd3l+FGu0hMgHHNFMZKxUC6ml6pY79rxs53UtN5tcaAW3qt/JPqP1bApTiLF0ytpe+";
   return this.decrypt(encryptedPat);
 }
 
+// Token for the "travelpolaama" or "Polaama" page
 SecretManager.prototype.getPolaamaPageAccessToken = function() {
   const encryptedPat = "QFk4Wvg3ZFUtO0AN91PaPsScnRXBAqI/d7VypQVoy5zvJNuN0e94q5/Qy4xhXxmPzijKbg6tzt+l17KlAoy1cmKxicPrnnLHwQWHl1bb+HKYmjejLbVwjOPumSOMR4D5SPTVRHEZP3WN7cHXj3r0mdpZYBMASiKwSCLtVZ/CnbqMviY1Kfcuonl0ocZEgldb+hsFFsNwJjisPCmVYFYn5GGq2A8Fi/8pXX/fijVZsPg=";
+  return this.decrypt(encryptedPat);
+}
+
+// Token for the "Travel SFO" page: https://www.facebook.com/polaama.sfo/
+SecretManager.prototype.getTravelSfoPageAccessToken = function() {
+  const encryptedPat = "bPfnd6Rn5+kdj3R2KjoL2mdSI6tYyMLpW2C1fz6226Z0y4cfz+NhApXY2r1ejuVPHRn6MwAyqA8uspHJGlMel6lTNHWcIPe31j9T1riK8ICG8texCrISau4x1NUGfvKaKaophCDyBZxwkq0kPIEh1o7DMpC8j8g0vUs6ooMHQoaNmDmDsQESCOaODGDMF8DAldXR5GAu7OfHb3hBILMbwFs2/rTgM3HkfVm9KGbdB3932OkC36NUYQdybTWNmDIv";
   return this.decrypt(encryptedPat);
 }
 

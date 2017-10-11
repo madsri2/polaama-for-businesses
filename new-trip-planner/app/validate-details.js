@@ -54,7 +54,7 @@ Validator.prototype.validate = function() {
   const customValidator = {
       validate: validateStartDate
   };
-  logger.debug(`Validating trip data: ${JSON.stringify(response.tripDetails)}`);
+  // logger.debug(`Validating trip data: ${JSON.stringify(response.tripDetails)}`);
   // validate tripData
   const check = validator.isObject()
     .withRequired('duration', validator.isInteger({min: 1, max: 365}))

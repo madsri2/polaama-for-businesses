@@ -12,10 +12,13 @@ logger.setTestConfig(); // log in the test file to avoid polluting prod.
 // const fbid = "1630377990366886"; // raj
 // const fbid = "1311237785652279"; // divya
 // const fbid = "1120615267993271"; // madhu
-const fbid = "1420839671315623"; // Aparna
+// const fbid = "1420839671315623"; // Aparna
 // const fbid = "1428065237278275"; // Arpan
 // const fbid = "1718674778147181"; // Beth
 // const fbid = "1420839671315623"; // Aparna
+// *** Travel SFO Page
+// const fbid = "1449869371716306"; // Dhu
+const fbid = "1652003184850840";
 let name = FbidHandler.get().getName(fbid);
 if(!name) name = ""; else name = name.substring(0, name.indexOf(" "));
 const session = Sessions.get().find(fbid);
@@ -439,5 +442,14 @@ function sendMessage() {
   // sendPackList();
 }
 
+const TravelSfoHandler = require('travel-sfo-handler');
+function sendToTravelSfoPage() {
+  const myHandler = new WebhookPostHandler(session, false, TravelSfoHandler.pageId);
+  const message = new TravelSfoHandler().sendReviewRequest(fbid);
+  console.log(`message is ${JSON.stringify(message)}`);
+  myHandler.sendAnyMessage(message);
+}
+
+sendToTravelSfoPage();
 // sendMessage();
-sendTodoReminders();
+// sendTodoReminders();

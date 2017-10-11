@@ -175,6 +175,11 @@ Session.prototype.resetTripContext = function() {
   this.persistSession();
 }
 
+Session.prototype.setConferenceAsTripContext = function() {
+  this.tripNameInContext = "conferences";
+  this.rawTripNameInContext = "conferences";
+}
+
 Session.prototype.doesTripContextOtherThanConferencesExist = function() {
   if(this.tripNameInContext === "conferences") return false;
   return this.doesTripContextExist();
@@ -236,7 +241,8 @@ Session.prototype.allTrips = function() {
 Session.prototype.getPastTrips = function() {
   let trips = [];
   this.allTrips().forEach(trip => {
-    // logger.debug(`getPastTrips: Now looking at trip ${trip.tripName}`);
+    if(trip.tripName.toLowerCase() === "conferences") return;
+    // logger.debug(`getPastTrips: Now looking at trip ${trip.tripName} with date ${trip.data.startDate}`);
     const start = moment(new Date(trip.data.startDate).toISOString());
     const daysToTrip = start.diff(moment(),'days');
     if(!trip.data.startDate || daysToTrip <= 0) {
@@ -320,13 +326,23 @@ Session.prototype.setTripContextAndPersist = function(tripName) {
   this.persistSession();
 }
 
-Session.prototype.addTrip = function(tripName) {
+function getTripName(tripName) {
+  const encTripName = Encoder.encode(tripName);
+  // change the tripName if it is already present. eg. if "sfo" is present, choose trip name to be sfo-1
+  if(this.trips[encTripName]) {
+    const newTripName = `${tripName}-1`;
+    logger.info(`getTripName: trip ${encTripName} is already present in session trips. Using ${newTripName} as the trip name.`);
+    return newTripName;
+  }
+  return tripName;
+}
+
+Session.prototype.addTrip = function(origTripName) {
+  const tripName = getTripName.call(this, origTripName);
   const trip = new TripData(tripName, this.fbid);
   const encTripName = trip.tripName;
   // logger.debug(`addTrip: encTripName: ${encTripName}; dump of trip ${tripName}: ${JSON.stringify(trip)}`);
 	// TODO: this is data leak. fix it by calling TripData.addTripDetailsAndPersist after making sure that it does not cause any side effects.
-  // This is now being handled in departure-city-workflow
-	// if(this.hometown) trip.data.leavingFrom = TripData.encode(this.hometown);
   if(!this.trips[encTripName]) {
     // this is only possible in case of a new trip created in this session. 
     // logger.info(`Creating new trip for session ${this.fbid} for trip ${encTripName}`);
@@ -347,6 +363,7 @@ Session.prototype.addTrip = function(tripName) {
     this.setTripContextAndPersist(encTripName); 
     this.trips[encTripName].tripData.persistUpdatedTrip();
   }
+  else throw new Error(`addTrip: Expected ${encTripName} to be absent in this.trips, but it is present. dump of this.trips[encTripName]: ${JSON.stringify(this.trips[encTripName])}`);
   return this.trips[encTripName].tripData;
 }
 
@@ -426,6 +443,7 @@ Session.prototype.getTrip = function(tripName) {
 
 Session.prototype.testing_delete = function() {
   const newfile = `${Session.sessionBaseDir}/oldFiles/${filename.call(this)}`;
+  logger.debug(`renaming ${file.call(this)} to ${newfile}`);
   fs.renameSync(file.call(this), newfile);
 }
 

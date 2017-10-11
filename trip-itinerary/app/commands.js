@@ -14,8 +14,8 @@ const Sessions = require(`${baseDir}/sessions`);
 
 // TODO: fbid is not needed as trip object contains an fbid. Use that instead and remove the use of fbid everywhere.
 function Commands(trip, fbid, sendHtml) {
-  if(!fbid) throw new Error(`Commands: required parameter fbid not passed`);
   if(!trip) throw new Error(`Commands: required parameter trip not passed`);
+  if(!fbid) throw new Error(`Commands: required parameter fbid not passed`);
   this.fbid = fbid;
   this.trip = trip;
   this.sendHtml = sendHtml;
@@ -236,9 +236,6 @@ Commands.prototype.handleEventCommands = function(rawMesg) {
     };
   }
   if(events.includes(Encoder.encode(mesg))) return dayPlanner.getEventItinerary([mesg]);
-  if(mesg === "battleground" && events.includes("phocuswright")) return dayPlanner.getEventItinerary(["phocuswright"]);
-  if(mesg.startsWith("innovator")) return dayPlanner.getRecommendations(`phocuswright:innovators`);
-  if(mesg.startsWith("dragons")) return dayPlanner.getRecommendations(`phocuswright:dragons`);
   const eventInContext = this.trip.getConferenceInContext();
   if(!eventInContext) {
     logger.error(`handleEventCommands: Need to check events keyword planner, but eventInContext was not set. It needs to be set before we can call EventKeywordPlanner. trip is ${this.trip.tripName}. Events are: ${this.trip.getEvents()}`);
