@@ -52,6 +52,12 @@ SecretManager.prototype.getTravelSfoPageAccessToken = function() {
   return this.decrypt(encryptedPat);
 }
 
+// Token for the "My Sea Spray" page: 
+SecretManager.prototype.getMySeaSprayPageAccessToken = function() {
+  const encryptedPat = "0Xr4FwXXiWn7Kh2hf5JHv5r2Wi6QiA4uGtTnaus50XNJtD+EmMNQ1N9KxvfRo3RiQAXFak160EOJzjJi5iPZvq860xT9LA34qeamKzkPPXn+5u2+hft8gO+OMit/Et8wbf9ZcFrRiOcKM3LY2rhhbmzs3Olt5/b/7Nr/fdGr3tA/ubPCp0TWViymoVa7kraC23vyer7wY8SLP5eFwvl2YhMayF8AkeTEOLhWLpM1pVM=";
+  return this.decrypt(encryptedPat);
+}
+
 SecretManager.prototype.getFBAppId = function() {
   const encryptedAppId = "0NEhMR1SJFm66aHxhkktNFsHg+ADlBjustDMPhZVx0BTexm/kH0aXjldQva8T/9P";
   return this.decrypt(encryptedAppId);

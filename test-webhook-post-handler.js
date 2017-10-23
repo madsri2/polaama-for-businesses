@@ -643,10 +643,24 @@ function testSpearFishing() {
   handler.testing_setState(state);
   handler.testing_determineResponseType(determineResponseTypeEvent("something other"));
   handler.testing_determineResponseType(determineResponseTypeEvent("existing trips"));
-
 }
 
-testSpearFishing();
+const seaSprayPageId = require('sea-spray-handler').pageId;
+function testSeaSpray() {
+  const session = Sessions.get().find(myFbid);
+  let handler = new WebhookPostHandler(session, true /* testing */, seaSprayPageId);
+  handler.testing_determineResponseType(determineResponseTypeEvent("Hi"));
+}
+
+function testSeaSprayPostback() {
+  const session = Sessions.get().find(myFbid);
+  let handler = new WebhookPostHandler(session, true /* testing */, seaSprayPageId);
+  handler.testing_receivedPostback(receivedPostbackEvent("sea_spray_contact"));
+}
+
+testSeaSprayPostback();
+
+// testSpearFishing();
 
 // testMarkDone();
 

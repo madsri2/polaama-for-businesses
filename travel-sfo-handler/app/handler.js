@@ -69,32 +69,7 @@ TravelSfoHandler.prototype.handleText = function(rawMesg, pageId, fbid, event) {
 
   let message = { recipient: { id: fbid } };
   if(mesg.includes("citypass") && mesg.includes("transport")) return sendCityPassTransportationDetails.call(this, fbid);
-  if(mesg.includes("customer service")) return FBTemplateCreator.list({
-    fbid: fbid,
-    elements: [
-      {
-        "title": "Customer service details",
-        "image_url": "http://tinyurl.com/y9gh2xdm"
-      },
-      {
-        title: "Our phone number is 1-800-434-7894",
-        subtitle: "International: 00+1-858-300-8692",
-        buttons: [{
-          type: "phone_number",
-          title: "Call us",
-          payload: "+18004347894"
-        }]
-      },
-      {
-        "title": "Hours (in PST)",
-        "subtitle": "Mon-Fri: 6.00 a.m-11 p.m., Sat: 7.00 a.m.-10.00 p.m., Sunday: 8.00 a.m.-9.00 p.m"
-      },
-      {
-        "title": "Email",
-        "subtitle": "customerservice@arestravelinc.com"
-      }
-    ]
-  });
+  if(mesg.includes("customer service")) return customerServiceDetails.call(this, fbid);
   if(mesg.includes("cancel") && (mesg.includes("activity") || mesg.includes("attraction") || mesg.includes("tour"))) {
     return FBTemplateCreator.generic({
       fbid: fbid,
@@ -263,6 +238,49 @@ function sendCityPassTransportationDetails(fbid) {
         title: "Route map/Schedule",
         type: "web_url",
         url: "http://www.sfmta.com/cms/home/sfmta.php",
+        webview_height_ratio: "full"
+      }]
+    }]
+  });
+}
+
+TravelSfoHandler.prototype.handleSendingAttractionsNearMeVegas = function(message, pageId, fbid) {
+  if(pageId != TravelSfoHandler.pageId) return null;
+  if(!message || !message.attachments[0]) return null;
+  const type = message.attachments[0].type;
+  if(!type || type !== "location") return null;
+  if(!this.awaitingLocation[fbid]) return null;
+  this.awaitingLocation[fbid] = false;
+  return FBTemplateCreator.list({
+    fbid: fbid,
+    elements: [{
+      title: "High Roller",
+      subtitle: "From $35. Experience the Strip from the top of a 550-foot tall, 520-foot diameter giant Ferris wheel",
+      image_url: "http://tinyurl.com/y9sa39um",
+      buttons:[{
+        title: "Book",
+        type: "web_url",
+        url: "https://jackcolton.com/wp-content/uploads/2014/10/High-Roller-3.jpg",
+        webview_height_ratio: "full"
+      }]
+    },{
+      title: "Madame Tussauds Vegas",
+      subtitle: "From $25. Visit one of the best things to do in Las Vegas and snap pictures with your favorite celebrities, heroes and more.",
+      image_url: "http://tinyurl.com/ybf8mvm2",
+      buttons:[{
+        title: "Book",
+        type: "web_url",
+        url: "http://tickets.sftravel.com/attraction/single/797/1408",
+        webview_height_ratio: "full"
+      }]
+    },{
+      title: "Eiffel tower experience",
+      subtitle: "From $20. San Francisco's only waterfront aquarium",
+      image_url: "https://www.lasvegaspass.com/images_lib/1553971789_VegasEiffelTowerExperience_2_resized.jpg",
+      buttons:[{
+        title: "Book",
+        type: "web_url",
+        url: "https://www.vegas.com/attractions/on-the-strip/paris-las-vegas-eiffel-tower/",
         webview_height_ratio: "full"
       }]
     }]
@@ -449,6 +467,8 @@ function sendEcoTourDetails(fbid) {
 
 function sendCruiseDetails(fbid) {
   this.waitingToBookCruise[fbid] = true;
+  // at any given point, we can either be booking a cruise or a hotel, but not both. This is so when user clicks the "like" button, we know what to show them.
+  this.waitingToBookHotel[fbid] = false;
   return FBTemplateCreator.list({
     fbid: fbid,
     elements: [{
@@ -648,8 +668,73 @@ TravelSfoHandler.prototype.handleLikeButton = function(pageId, fbid) {
   return messageList;
 }
 
-TravelSfoHandler.prototype.handlePostback = function(payload, pageId, adminFbid) {
+function customerServiceDetails(fbid) {
+  return FBTemplateCreator.list({
+    fbid: fbid,
+    elements: [
+      {
+        "title": "Customer service details",
+        "image_url": "http://tinyurl.com/y9gh2xdm"
+      },
+      {
+        title: "Our phone number is 1-800-434-7894",
+        subtitle: "International: 00+1-858-300-8692",
+        buttons: [{
+          type: "phone_number",
+          title: "Call us",
+          payload: "+18004347894"
+        }]
+      },
+      {
+        "title": "Hours (in PST)",
+        "subtitle": "Mon-Fri: 6.00 a.m-11 p.m., Sat: 7.00 a.m.-10.00 p.m., Sunday: 8.00 a.m.-9.00 p.m"
+      },
+      {
+        "title": "Email",
+        "subtitle": "customerservice@arestravelinc.com"
+      }
+    ]
+  });
+}
+
+function callUsDetails(fbid) {
+  return FBTemplateCreator.generic({
+    fbid: fbid,
+    elements: [
+      {
+        title: "Our phone number is 1-800-434-7894",
+        subtitle: "International: 00+1-858-300-8692",
+        buttons: [{
+          type: "phone_number",
+          title: "Call us",
+          payload: "+18004347894"
+        }]
+      },
+    ]
+  });
+}
+
+function cancelRam(fbid) {
+  return FBTemplateCreator.generic({
+    fbid: fbid,
+    elements: [{
+      title: `Good news! There is no cancellation charge for your hotel Ram reservation`,
+      subtitle: "Call us to cancel this hotel. Please have your AON number ready",
+      buttons: [{
+        type: "phone_number",
+        title: "Call us",
+        payload: "+18006375196"
+      }]
+    }]
+  });
+}
+
+TravelSfoHandler.prototype.handlePostback = function(payload, pageId, passedFbid) {
   if(pageId != TravelSfoHandler.pageId) return null;
+  if(payload === "pmenu_travel_sfo_existing_reservation") return cancelRam.call(this, passedFbid);
+  if(payload === "pmenu_travel_sfo_customer_service") return customerServiceDetails.call(this, passedFbid);
+  if(payload === "pmenu_travel_sfo_call_us") return callUsDetails.call(this, passedFbid);
+  const adminFbid = passedFbid;
   const contents = /respond_to_customer_(\d*)/.exec(payload);
   if(!contents || (contents.length != 2)) throw new Error(`payload is not in expected format respond_to_customer_<fbid>. Value is ${payload}`);
   const fbid = contents[1];
@@ -662,6 +747,7 @@ TravelSfoHandler.prototype.handlePostback = function(payload, pageId, adminFbid)
       text: `Enter your response for customer ${fbid}`
     });
   }
+  return null;
 }
 
 module.exports = TravelSfoHandler;

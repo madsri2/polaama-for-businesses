@@ -1,0 +1,14 @@
+{
+  "name": "common-classifier",
+  "version": "1.0.0",
+  "description": "Common classifiers for all businesses",
+  "main": "app/handler.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha --reporter spec"
+  },
+  "author": "Madhu Parthasarathy",
+  "license": "GPL-2.0"
+}

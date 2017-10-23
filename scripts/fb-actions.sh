@@ -3,6 +3,7 @@
 # PAGE_ACCESS_TOKEN=`node /home/ec2-user/scripts/crypto.js --pat | grep -v Logger`;
 PAGE_ACCESS_TOKEN=`node /home/ec2-user/scripts/crypto.js --apat | grep -v Logger`;
 SFO_PAGE_ACCESS_TOKEN=`node /home/ec2-user/scripts/crypto.js --travel_sfo | grep -v Logger`;
+SEA_SPRAY_PAGE_ACCESS_TOKEN=`node /home/ec2-user/scripts/crypto.js --sea_spray | grep -v Logger`;
 
 # Whitelist domain
 function whitelist_domain {
@@ -64,8 +65,18 @@ function set_persistent_menu_sfo_travel {
       "call_to_actions":[
         {
           "type":"postback",
-          "title":"Talk to customer service", 
-          "payload":"pmenu_travel_sfo_human"
+          "title":"Cancel existing reservation",
+          "payload":"pmenu_travel_sfo_existing_reservation"
+        },
+        {
+          "type":"postback",
+          "title":"Call us",
+          "payload":"pmenu_travel_sfo_call_us"
+        },
+        {
+          "type":"postback",
+          "title":"Customer service details",
+          "payload":"pmenu_travel_sfo_customer_service"
         }
       ]
     }]
@@ -94,6 +105,44 @@ function delete_greeting_sfo {
     "fields": [ "greeting" ]
   }' "https://graph.facebook.com/v2.6/me/messenger_profile?access_token=$SFO_PAGE_ACCESS_TOKEN"    
 }
+
+function set_persistent_menu_sea_spray_travel {
+  curl -X POST -H "Content-Type: application/json" -d '{
+    "persistent_menu": [{
+      "locale": "default",
+      "call_to_actions":[
+        {
+          "type":"postback",
+          "title":"Contact us",
+          "payload":"sea_spray_contact"
+        },
+        {
+          "type":"postback",
+          "title":"Book tours",
+          "payload":"sea_spray_book_tour"
+        }
+      ]
+    }]
+  }' "https://graph.facebook.com/v2.6/me/messenger_profile?access_token=$SEA_SPRAY_PAGE_ACCESS_TOKEN"    
+}
+
+function set_get_started_menu_sea_spray {
+  curl -X POST -H "Content-Type: application/json" -d '{
+    "get_started": {
+      "payload": "GET_STARTED_PAYLOAD"
+    }
+  }' "https://graph.facebook.com/v2.6/me/messenger_profile?access_token=$SEA_SPRAY_PAGE_ACCESS_TOKEN"    
+}
+
+function set_greeting_sea_spray {
+  curl -X POST -H "Content-Type: application/json" -d '{
+    "greeting": [{
+      "locale": "default",
+      "text": "Hello {{user_first_name}}! Welcome to SEA SPRAY Cruises, St. Lucia. How can I help you today?",
+    }]
+  }' "https://graph.facebook.com/v2.6/me/messenger_profile?access_token=$SEA_SPRAY_PAGE_ACCESS_TOKEN"    
+}
+
 
 function set_get_started_menu {
   curl -X POST -H "Content-Type: application/json" -d '{
@@ -138,6 +187,14 @@ case $key in
     ;;
   -d_gr_sfo)
     delete_greeting_sfo
+    shift # past argument
+    ;;
+  -p_sea_spray)
+    set_persistent_menu_sea_spray_travel
+    shift # past argument
+    ;;
+  -g_sea_spray)
+    set_get_started_menu_sea_spray
     shift # past argument
     ;;
   -g|--get-started)

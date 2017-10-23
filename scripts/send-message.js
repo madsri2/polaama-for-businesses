@@ -17,8 +17,8 @@ logger.setTestConfig(); // log in the test file to avoid polluting prod.
 // const fbid = "1718674778147181"; // Beth
 // const fbid = "1420839671315623"; // Aparna
 // *** Travel SFO Page
-// const fbid = "1449869371716306"; // Dhu
-const fbid = "1652003184850840";
+const fbid = "1449869371716306"; // Dhu
+// const fbid = "1652003184850840"; // madhu
 let name = FbidHandler.get().getName(fbid);
 if(!name) name = ""; else name = name.substring(0, name.indexOf(" "));
 const session = Sessions.get().find(fbid);

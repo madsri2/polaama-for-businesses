@@ -33,6 +33,7 @@ const validator = require('node-validator');
 const Encoder = require(`${baseDir}/encoder`);
 const TripReasonWorkflow = require('trip-reason-workflow/app/workflow');
 const TravelSfoPageHandler = require('travel-sfo-handler');
+const SeaSprayHandler = require('sea-spray-handler');
 
 let recordMessage = true;
 let previousMessage = {};
@@ -43,6 +44,7 @@ let TEST_MODE = false;
 function WebhookPostHandler(session, testing, pageId) {
   if(testing) TEST_MODE = true; // Use sparingly. Currently, only used in callSendAPI
   this.travelSfoPageHandler = new TravelSfoPageHandler();
+  this.seaSprayHandler = new SeaSprayHandler();
 	this.pageId = PageHandler.defaultPageId;
   if(pageId) this.pageId = pageId;
   this.secretManager = new SecretManager();
@@ -519,8 +521,12 @@ function markTodoItemAsDone(payload) {
 }
 
 function handleGettingStarted(senderID) {
-  const message = this.travelSfoPageHandler.greeting(this.pageId, senderID);
+  let message = this.travelSfoPageHandler.greeting(this.pageId, senderID);
   if(message) return callSendAPI.call(this, message);
+
+  message = this.seaSprayHandler.greeting(this.pageId, senderID);
+  if(message) return callSendAPI.call(this, message);
+
   return sendWelcomeMessage.call(this, senderID); 
 }
 
@@ -538,6 +544,8 @@ function receivedPostback(event) {
 
   const handleMesg = this.travelSfoPageHandler.handlePostback(payload, this.pageId, senderID);
   if(handleMesg) return callSendAPI.call(this, handleMesg);
+  const seaSprayHandlerMesg = this.seaSprayHandler.handlePostback(payload, this.pageId, senderID);
+  if(seaSprayHandlerMesg) return callSendAPI.call(this, seaSprayHandlerMesg);
 
   // give tripReasonWorkflow a chance to work.
   if(this.sessionState.get("planningNewTrip")) {
@@ -1175,6 +1183,7 @@ function receivedMessage(event) {
       }
     } else if (messageAttachments) {
       const response = this.travelSfoPageHandler.handleSendingAttractionsNearMe(message, this.pageId, senderID);
+      // const response = this.travelSfoPageHandler.handleSendingAttractionsNearMeVegas(message, this.pageId, senderID);
       if(response) return callSendAPI.call(this, response);
       const stickerId = message.sticker_id;
       if(stickerId && stickerId === 369239263222822) {
@@ -1765,6 +1774,12 @@ function determineResponseType(event) {
   if(handleMesg) {
     if(Array.isArray(handleMesg)) return this.sendMultipleMessages(senderID, handleMesg);
     return callSendAPI.call(this, handleMesg);
+  }
+
+  const seaSprayHandler = this.seaSprayHandler.handleText(mesg, this.pageId, senderID, event);
+  if(seaSprayHandler) {
+    if(Array.isArray(seaSprayHandler)) return this.sendMultipleMessages(senderID, seaSprayHandler);
+    return callSendAPI.call(this, seaSprayHandler);
   }
 
   if(mesg === "commands" || (mesg.includes("help") && mesg.includes("commands"))) return supportedCommands.call(this);

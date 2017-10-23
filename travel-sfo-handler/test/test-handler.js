@@ -31,7 +31,7 @@ describe("travel-sfo-handler tests", function() {
 
   it("awaiting admin response", function() {
     const handler = new TravelSfoHandler();
-    const mesgList = handler.handleText("random message", TravelSfoHandler.pageId, myFbid);
+    const mesgList = handler.handleText("random message to human", TravelSfoHandler.pageId, myFbid);
     // logger.debug(JSON.stringify(mesgList));
     expect(mesgList.length).to.equal(2);
     const message = mesgList[1];
@@ -42,7 +42,7 @@ describe("travel-sfo-handler tests", function() {
   it("postback", function() {
     const handler = new TravelSfoHandler();
     const customerFbid = 432;
-    const question = "random message";
+    const question = "random message to human";
     handler.handleText(question, TravelSfoHandler.pageId, customerFbid);
     expect(handler.sentMessageToAdmin[customerFbid]).to.be.true;
     const message = handler.handlePostback(`respond_to_customer_${customerFbid}`, TravelSfoHandler.pageId, myFbid);
@@ -53,6 +53,33 @@ describe("travel-sfo-handler tests", function() {
     const mesgList = handler.handleText("response to message", TravelSfoHandler.pageId, myFbid);
     expect(mesgList[0].message.attachment.payload.elements[1].subtitle).to.include(question);
     logger.debug(JSON.stringify(mesgList));
+  });
+
+  it("pmenu customer service", function() {
+    const handler = new TravelSfoHandler();
+    const customerFbid = 432;
+    const message = handler.handlePostback("pmenu_travel_sfo_customer_service", TravelSfoHandler.pageId, myFbid);
+    logger.debug(JSON.stringify(message));
+    expect(message.recipient.id).to.equal(myFbid);
+    expect(message.message.text).to.not.be.null; 
+  });
+
+  it("pmenu call us", function() {
+    const handler = new TravelSfoHandler();
+    const customerFbid = 432;
+    const message = handler.handlePostback("pmenu_travel_sfo_call_us", TravelSfoHandler.pageId, myFbid);
+    logger.debug(JSON.stringify(message));
+    expect(message.recipient.id).to.equal(myFbid);
+    expect(message.message.text).to.not.be.null; 
+  });
+
+  it("pmenu cancel hotel", function() {
+    const handler = new TravelSfoHandler();
+    const customerFbid = 432;
+    const message = handler.handlePostback("pmenu_travel_sfo_existing_reservation", TravelSfoHandler.pageId, myFbid);
+    logger.debug(JSON.stringify(message));
+    expect(message.recipient.id).to.equal(myFbid);
+    expect(message.message.text).to.not.be.null; 
   });
 
   it("eco tour", function() {

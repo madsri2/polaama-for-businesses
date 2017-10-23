@@ -37,6 +37,7 @@ function trainCruise() {
   this.classifier.learn("i am looking for cruises in sfo", "cruise");
   this.classifier.learn("cruise options", "cruise");
   this.classifier.learn("what cruise options exist", "cruise");
+  this.classifier.learn("i want to reserve a cruise", "cruise");
 }
 
 function trainHotel() {
@@ -44,6 +45,8 @@ function trainHotel() {
   this.classifier.learn("hotel options", "hotels");
   this.classifier.learn("what hotel options exist", "hotels");
   this.classifier.learn("i want to reserve hotels in sfo", "hotels");
+  this.classifier.learn("i want to book a hotel in sfo", "hotels");
+  this.classifier.learn("i want to book a hotel", "hotels");
 }
 
 function trainCruiseQuestions() {
