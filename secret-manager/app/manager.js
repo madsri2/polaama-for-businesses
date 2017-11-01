@@ -52,6 +52,12 @@ SecretManager.prototype.getTravelSfoPageAccessToken = function() {
   return this.decrypt(encryptedPat);
 }
 
+// Token for the "My Hackshaw" page: 
+SecretManager.prototype.getMyHackshawPageAccessToken = function() {
+  const encryptedPat = "0svPwwhUqbKBc9chMVVpLTpcxoBayk4JpidUvzIh5yWrsl8wRVPMf2TucTCTZnYqBhsOACO3yBx0M+XHolz9nbyQl3xLLvR8tyhw4e6cS9WjThhe8U+FrZm50exN/dLCj9pBQc9zP5di+CodxEmS4mm+/KoeduAaRKPeaxf5juNQs/Bz4JAoEuPxCpcZ3RTNhbECxEeB+YJ8zF+zX3t0wCJvVJUwmXe5dZA/hlUaRXWRlQlEkHv8TjjTPv593A9P";
+  return this.decrypt(encryptedPat);
+}
+
 // Token for the "My Sea Spray" page: 
 SecretManager.prototype.getMySeaSprayPageAccessToken = function() {
   const encryptedPat = "0Xr4FwXXiWn7Kh2hf5JHv5r2Wi6QiA4uGtTnaus50XNJtD+EmMNQ1N9KxvfRo3RiQAXFak160EOJzjJi5iPZvq860xT9LA34qeamKzkPPXn+5u2+hft8gO+OMit/Et8wbf9ZcFrRiOcKM3LY2rhhbmzs3Olt5/b/7Nr/fdGr3tA/ubPCp0TWViymoVa7kraC23vyer7wY8SLP5eFwvl2YhMayF8AkeTEOLhWLpM1pVM=";

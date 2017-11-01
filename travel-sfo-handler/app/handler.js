@@ -31,6 +31,7 @@ TravelSfoHandler.prototype.greeting = function(pageId, fbid) {
     }]
   });
 }
+
 TravelSfoHandler.prototype.handleText = function(rawMesg, pageId, fbid, event) {
   const mesg = rawMesg.toLowerCase();
   if(pageId != TravelSfoHandler.pageId) return null;
@@ -747,7 +748,15 @@ TravelSfoHandler.prototype.handlePostback = function(payload, pageId, passedFbid
       text: `Enter your response for customer ${fbid}`
     });
   }
-  return null;
+  logger.error(`Do not know how to handle postback payload ${payload} from fbid ${fbid} for "travel sfo" bot`);
+  // we need to respond one way or another here. TODO: See if there is a bettter way to handle this.
+  return FBTemplateCreator.generic({
+    fbid: fbid,
+    elements: [{
+      title: "We have notified our team, who will get back to you shortly",
+      image_url: "http://tinyurl.com/y8v9ral5",
+    }],
+  });
 }
 
 module.exports = TravelSfoHandler;

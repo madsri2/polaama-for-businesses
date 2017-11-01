@@ -34,6 +34,7 @@ const Encoder = require(`${baseDir}/encoder`);
 const TripReasonWorkflow = require('trip-reason-workflow/app/workflow');
 const TravelSfoPageHandler = require('travel-sfo-handler');
 const SeaSprayHandler = require('sea-spray-handler');
+const HackshawHandler = require('hackshaw-handler');
 
 let recordMessage = true;
 let previousMessage = {};
@@ -45,6 +46,7 @@ function WebhookPostHandler(session, testing, pageId) {
   if(testing) TEST_MODE = true; // Use sparingly. Currently, only used in callSendAPI
   this.travelSfoPageHandler = new TravelSfoPageHandler();
   this.seaSprayHandler = new SeaSprayHandler();
+  this.hackshawHandler = new HackshawHandler();
 	this.pageId = PageHandler.defaultPageId;
   if(pageId) this.pageId = pageId;
   this.secretManager = new SecretManager();
@@ -520,14 +522,46 @@ function markTodoItemAsDone(payload) {
   return sendTextMessage.call(this, this.session.fbid, "Marked item done");
 }
 
+function greetingForAnotherPage(fbid) {
+  let response;
+  switch(this.pageId) {
+    case PageHandler.travelSfoPageId: 
+      response = this.travelSfoPageHandler.greeting(this.pageId, fbid);
+      break;
+    case PageHandler.mySeaSprayPageId:
+      response = this.seaSprayHandler.greeting(this.pageId, fbid);
+      break;
+    case PageHandler.myHackshawPageId:
+      response = this.hackshawHandler.greeting(this.pageId, fbid);
+      break;
+  }
+  if(!response) return false;
+  callSendAPI.call(this, response);
+  return true;
+}
+
 function handleGettingStarted(senderID) {
-  let message = this.travelSfoPageHandler.greeting(this.pageId, senderID);
-  if(message) return callSendAPI.call(this, message);
-
-  message = this.seaSprayHandler.greeting(this.pageId, senderID);
-  if(message) return callSendAPI.call(this, message);
-
+  if(greetingForAnotherPage.call(this, senderID)) return;
   return sendWelcomeMessage.call(this, senderID); 
+}
+
+function postbackForAnotherPage(payload, fbid) {
+  let response;
+  switch(this.pageId) {
+    case PageHandler.travelSfoPageId: 
+      response = this.travelSfoPageHandler.handlePostback(payload, this.pageId, fbid);
+      break;
+    case PageHandler.mySeaSprayPageId:
+      response = this.seaSprayHandler.handlePostback(payload, this.pageId, fbid);
+      break;
+    case PageHandler.myHackshawPageId:
+      response = this.hackshawHandler.handlePostback(payload, this.pageId, fbid);
+      break;
+  }
+  if(!response) return false;
+  if(Array.isArray(response)) this.sendMultipleMessages(fbid, response);
+  else callSendAPI.call(this, response);
+  return true;
 }
 
 function receivedPostback(event) {
@@ -542,10 +576,7 @@ function receivedPostback(event) {
 
   if(payload === "GET_STARTED_PAYLOAD") return handleGettingStarted.call(this, senderID);
 
-  const handleMesg = this.travelSfoPageHandler.handlePostback(payload, this.pageId, senderID);
-  if(handleMesg) return callSendAPI.call(this, handleMesg);
-  const seaSprayHandlerMesg = this.seaSprayHandler.handlePostback(payload, this.pageId, senderID);
-  if(seaSprayHandlerMesg) return callSendAPI.call(this, seaSprayHandlerMesg);
+  if(postbackForAnotherPage.call(this, payload, senderID)) return;
 
   // give tripReasonWorkflow a chance to work.
   if(this.sessionState.get("planningNewTrip")) {
@@ -1751,6 +1782,26 @@ function handleEventWithoutTrip(m) {
   return commands.handleEventCommands(m);
 }
 
+function messageForAnotherPage(message, fbid) {
+  let response;
+  switch(this.pageId) {
+    case PageHandler.travelSfoPageId: 
+      response = this.travelSfoPageHandler.handleText(message, this.pageId, fbid);
+      break;
+    case PageHandler.mySeaSprayPageId:
+      response = this.seaSprayHandler.handleText(message, this.pageId, fbid);
+      break;
+    case PageHandler.myHackshawPageId:
+      response = this.hackshawHandler.handleText(message, this.pageId, fbid);
+      break;
+  }
+  if(!response) return false;
+  if(Array.isArray(response)) this.sendMultipleMessages(fbid, response);
+  else callSendAPI.call(this, response);
+  return true;
+}
+
+
 /*
 New trip Workflow:
 
@@ -1770,17 +1821,7 @@ function determineResponseType(event) {
   const messageText = event.message.text;
   const mesg = messageText.toLowerCase();
 
-  const handleMesg = this.travelSfoPageHandler.handleText(mesg, this.pageId, senderID, event);
-  if(handleMesg) {
-    if(Array.isArray(handleMesg)) return this.sendMultipleMessages(senderID, handleMesg);
-    return callSendAPI.call(this, handleMesg);
-  }
-
-  const seaSprayHandler = this.seaSprayHandler.handleText(mesg, this.pageId, senderID, event);
-  if(seaSprayHandler) {
-    if(Array.isArray(seaSprayHandler)) return this.sendMultipleMessages(senderID, seaSprayHandler);
-    return callSendAPI.call(this, seaSprayHandler);
-  }
+  if(messageForAnotherPage.call(this, mesg, senderID)) return;
 
   if(mesg === "commands" || (mesg.includes("help") && mesg.includes("commands"))) return supportedCommands.call(this);
 

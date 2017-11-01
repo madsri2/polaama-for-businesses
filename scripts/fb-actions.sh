@@ -4,6 +4,7 @@
 PAGE_ACCESS_TOKEN=`node /home/ec2-user/scripts/crypto.js --apat | grep -v Logger`;
 SFO_PAGE_ACCESS_TOKEN=`node /home/ec2-user/scripts/crypto.js --travel_sfo | grep -v Logger`;
 SEA_SPRAY_PAGE_ACCESS_TOKEN=`node /home/ec2-user/scripts/crypto.js --sea_spray | grep -v Logger`;
+HACKSHAW_PAGE_ACCESS_TOKEN=`node /home/ec2-user/scripts/crypto.js --hackshaw | grep -v Logger`;
 
 # Whitelist domain
 function whitelist_domain {
@@ -106,6 +107,49 @@ function delete_greeting_sfo {
   }' "https://graph.facebook.com/v2.6/me/messenger_profile?access_token=$SFO_PAGE_ACCESS_TOKEN"    
 }
 
+
+function set_get_started_menu_hackshaw {
+  curl -X POST -H "Content-Type: application/json" -d '{
+    "get_started": {
+      "payload": "GET_STARTED_PAYLOAD"
+    }
+  }' "https://graph.facebook.com/v2.6/me/messenger_profile?access_token=$HACKSHAW_PAGE_ACCESS_TOKEN" 
+}
+
+function set_greeting_hackshaw {
+  curl -X POST -H "Content-Type: application/json" -d '{
+    "greeting": [{
+      "locale": "default",
+      "text": "Hello {{user_first_name}}! Welcome to Hackshaw''s Boats, St. Lucia. How can I help you today?",
+    }]
+  }' "https://graph.facebook.com/v2.6/me/messenger_profile?access_token=$HACKSHAW_PAGE_ACCESS_TOKEN" 
+}
+
+function set_persistent_menu_hackshaw {
+  curl -X POST -H "Content-Type: application/json" -d '{
+    "persistent_menu": [{
+      "locale": "default",
+      "call_to_actions":[
+        {
+          "type":"postback",
+          "title":"Available tours",
+          "payload":"hackshaw_book_tour"
+        },
+        {
+          "type": "postback",
+          "title": "Common questions",
+          "payload": "hackshaw_common_questions"
+        },
+        {
+          "type":"postback",
+          "title":"Contact us",
+          "payload":"hackshaw_contact"
+        }
+      ]
+    }]
+  }' "https://graph.facebook.com/v2.6/me/messenger_profile?access_token=$SEA_SPRAY_PAGE_ACCESS_TOKEN"    
+}
+
 function set_persistent_menu_sea_spray_travel {
   curl -X POST -H "Content-Type: application/json" -d '{
     "persistent_menu": [{
@@ -113,13 +157,18 @@ function set_persistent_menu_sea_spray_travel {
       "call_to_actions":[
         {
           "type":"postback",
-          "title":"Contact us",
-          "payload":"sea_spray_contact"
+          "title":"Available tours",
+          "payload":"sea_spray_book_tour"
+        },
+        {
+          "type": "postback",
+          "title": "Common questions",
+          "payload": "sea_spray_common_questions"
         },
         {
           "type":"postback",
-          "title":"Book tours",
-          "payload":"sea_spray_book_tour"
+          "title":"Contact us",
+          "payload":"sea_spray_contact"
         }
       ]
     }]
@@ -197,6 +246,14 @@ case $key in
     set_get_started_menu_sea_spray
     shift # past argument
     ;;
+  -p_hackshaw)
+      set_persistent_menu_hackshaw
+      shift # past argument
+      ;;
+  -g_hackshaw)
+      set_get_started_menu_hackshaw
+      shift # past argument
+      ;;
   -g|--get-started)
     set_get_started_menu
     shift # past argument

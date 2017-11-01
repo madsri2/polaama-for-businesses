@@ -649,7 +649,7 @@ const seaSprayPageId = require('sea-spray-handler').pageId;
 function testSeaSpray() {
   const session = Sessions.get().find(myFbid);
   let handler = new WebhookPostHandler(session, true /* testing */, seaSprayPageId);
-  handler.testing_determineResponseType(determineResponseTypeEvent("Hi"));
+  handler.testing_determineResponseType(determineResponseTypeEvent("bad weather policy"));
 }
 
 function testSeaSprayPostback() {
@@ -658,7 +658,31 @@ function testSeaSprayPostback() {
   handler.testing_receivedPostback(receivedPostbackEvent("sea_spray_contact"));
 }
 
-testSeaSprayPostback();
+function testSeaSprayGettingStarted() {
+  const session = Sessions.get().find(myFbid);
+  let handler = new WebhookPostHandler(session, true /* testing */, seaSprayPageId);
+  handler.testing_receivedPostback(receivedPostbackEvent("GET_STARTED_PAYLOAD"));
+}
+
+const PageHandler = require('fbid-handler/app/page-handler');
+function testHackshaw() {
+  const session = Sessions.get().find(myFbid);
+  let handler = new WebhookPostHandler(session, true /* testing */, PageHandler.myHackshawPageId);
+  handler.testing_determineResponseType(determineResponseTypeEvent("hi"));
+}
+
+function testHackshawGettingStarted() {
+  const session = Sessions.get().find(myFbid);
+  let handler = new WebhookPostHandler(session, true /* testing */, PageHandler.myHackshawPageId);
+  handler.testing_receivedPostback(receivedPostbackEvent("GET_STARTED_PAYLOAD"));
+}
+
+// testHackshaw();
+testHackshawGettingStarted();
+
+// testSeaSprayGettingStarted();
+// testSeaSprayPostback();
+// testSeaSpray();
 
 // testSpearFishing();
 

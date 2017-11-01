@@ -1,17 +1,15 @@
 {
-  "name": "common-classifier",
+  "name": "hackshaw-handler",
   "version": "1.0.0",
-  "description": "Common classifiers for all businesses",
+  "description": "Hackshaw Boats page handler",
   "main": "app/handler.js",
-  "directories": {
-    "test": "test"
-  },
   "scripts": {
     "test": "mocha --reporter spec"
   },
   "author": "Madhu Parthasarathy",
   "license": "GPL-2.0",
   "dependencies": {
-    "bayes": "0.0.7"
+    "chai": "^4.1.2",
+    "mocha": "^4.0.1"
   }
 }

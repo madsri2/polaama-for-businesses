@@ -1,94 +1,82 @@
 'use strict';
 
-const bayes = require('bayes');
 const baseDir = '/home/ec2-user';
 const logger = require(`${baseDir}/my-logger`);
 const CommonClassifier = require('common-classifier');
+let passengerCountTemplate;
 
 function NBClassifier() {
-  this.classifier = bayes();
-  this.commonClassifier = new CommonClassifier(this.classifier);
-  this.commonClassifier.trainGreeting();
+  this.commonClassifier = new CommonClassifier();
+  this.classifier = this.commonClassifier.commonTraining();
+  passengerCountTemplate = this.commonClassifier.passengerCountTemplate;
+  trainAdditionalLocationMessages.call(this);
   trainToutBagayOperatingDays.call(this);
   trainSunsetCruiseOperatingDays.call(this);
   trainPirateOperatingDays.call(this);
-  trainBadWeatherQuestion.call(this);
+  trainPassengerCount.call(this);
 }
 
 NBClassifier.prototype.classify = function(description) {
-  const category = this.classifier.categorize(description.toLowerCase());
-  logger.debug(`NBClassifier.classify: categorized description "${description}" into category "${category}"`);
-  return category;
+  return this.commonClassifier.classify(description);
 }
 
 function trainSunsetCruiseOperatingDays() {
-  this.classifier.learn("what days does the sunset cruise tour operate", "sunset cruise days");
-  this.classifier.learn("do you only operate sunset cruise tours on specific days", "sunset cruise days");
-  this.classifier.learn("when do you operate sunset cruise tours", "sunset cruise days");
-  this.classifier.learn("sunset cruise tour operating days", "sunset cruise days");
-  this.classifier.learn("sunset cruise operating days", "sunset cruise days");
-  this.classifier.learn("how many days do you operate the sunset cruise tour", "sunset cruise days");
-  this.classifier.learn("how many days do you operate sunset cruise", "sunset cruise days");
-  this.classifier.learn("do you operate sunset cruise on all days", "sunset cruise days");
-  this.classifier.learn("Are you open on all days for the sunset cruise", "sunset cruise days");
-  this.classifier.learn("You open on all days for sunset cruise", "sunset cruise days");
+  let trainingSet = this.commonClassifier.operatingTimesTemplate("sunset");
+  trainingSet.forEach(line => {
+    this.classifier.learn(line.toLowerCase(), "sunset cruise days", ["sunset"]);
+  });
 }
 
 function trainToutBagayOperatingDays() {
-  this.classifier.learn("what days does the tout bagay tour operate", "tout bagay days");
-  this.classifier.learn("do you only operate tout bagay on specific days", "tout bagay days");
-  this.classifier.learn("when do you operate tout bagay tours", "tout bagay days");
-  this.classifier.learn("tout bagay tour operating days", "tout bagay days");
-  this.classifier.learn("how many days do you operate the tout bagay tour", "tout bagay days");
-  this.classifier.learn("how many days do you operate tout bagay", "tout bagay days");
-  this.classifier.learn("do you operate tout bagay on all days", "tout bagay days");
-  this.classifier.learn("Are you open for tout bagay on all days", "tout bagay days");
-  this.classifier.learn("Do you run tout bagay on all days", "tout bagay days");
-  this.classifier.learn("Do you run tout bagay tour on all days", "tout bagay days");
-  this.classifier.learn("Do you run tout bagay tours on all days", "tout bagay days");
+  let trainingSet = this.commonClassifier.operatingTimesTemplate("tout bagay");
+  trainingSet.forEach(line => {
+    this.classifier.learn(line.toLowerCase(), "tout bagay days", ["tout", "bagay"]);
+  });
 }
 
+// TODO: Consider stemming to avoid training with tour, tours etc.
+// https://stackoverflow.com/questions/3473612/ways-to-improve-the-accuracy-of-a-naive-bayes-classifier
 function trainPirateOperatingDays() {
-  this.classifier.learn("what days does the pirate's day adventures operate", "pirate days");
-  this.classifier.learn("what days does the pirate's day operate", "pirate days");
-  this.classifier.learn("what days does the pirate's tour operate", "pirate days");
-  this.classifier.learn("pirate's day tour operating hours", "pirate days");
-  this.classifier.learn("pirate's day adventure operating hours", "pirate days");
-  this.classifier.learn("pirate's day adventure tour operating hours", "pirate days");
-  this.classifier.learn("do you only operate pirate tours on specific days", "pirate days");
-  this.classifier.learn("when do you operate pirate tours", "pirate days");
-  this.classifier.learn("when do you operate pirate day tours", "pirate days");
-  this.classifier.learn("pirate operating days", "pirate days");
-  this.classifier.learn("how many days do you operate the pirate tours", "pirate days");
-  this.classifier.learn("how many days do you operate pirate day's tours", "pirate days");
-  this.classifier.learn("do you operate pirate day's tours on all days", "pirate days");
-  this.classifier.learn("Are you open for pirate day tours on all days", "pirate days");
-  this.classifier.learn("Do you run pirate tours on all days", "pirate days");
-  this.classifier.learn("Do you run pirate day's tour on all days", "pirate days");
-  this.classifier.learn("Do you run pirates tours on all days", "pirate days");
+  let trainingSet = this.commonClassifier.operatingTimesTemplate("pirate's day adventure").
+    concat(this.commonClassifier.operatingTimesTemplate("pirates' day")).
+    concat(this.commonClassifier.operatingTimesTemplate("pirates")).
+    concat(this.commonClassifier.operatingTimesTemplate("pirate"));
+  trainingSet.forEach(line => {
+    this.classifier.learn(line.toLowerCase(), "pirate days", ["pirate", "pirates"]);
+  });
 }
 
-function trainBadWeatherQuestion() {
-  const trainingDay = [
-    "what happens if the weather is bad",
-    "bad weather situation",
-    "what do you do if the weather is bad",
-    "what do you do during bad weather",
-    "bad weather plan",
-    "refunds during bad weather",
-    "do you offer refunds during bad weather",
-    "cancellation during bad weather",
-    "cancellation due to bad weather",
-    "refunds due to bad weather",
-    "bad weather refunds",
-    "what if the weather is bad",
-    "what if it rains during the cruise",
-    "what if the winds are strong",
-    "weather cruise cancellation",
-    "bad weather refund",
+function trainPassengerCount() {
+  let trainingSet = passengerCountTemplate("sunset cruise").
+    concat(passengerCountTemplate("sunset")).
+    concat(passengerCountTemplate("pirate's day")).
+    concat(passengerCountTemplate("pirate's day adventure")).
+    concat(passengerCountTemplate("tout bagay")).
+    concat([
+      "maximum people on a cruise",
+      "maximum passengers in a boat",
+      "maximum passengers per tour",
+      "maximum passengers per cruise",
+    ]);
+  trainingSet.forEach(line => {
+    this.classifier.learn(line, "passenger count");
+  });
+}
+
+function trainAdditionalLocationMessages() {
+  const trainingData = [
+    "where is sea spray located",
+    "where's sea spray located",
+    "where is sea spray cruises located",
+    "where is sea spray cruise located",
+    "where is sea spray tour located",
+    "where is sea spray tours located",
+    "what's the location of sea spray",
+    "what is the location of sea spray",
+    "sea spray location"
   ];
-  trainingDay.forEach(line => {
-    this.classifier.learn(line, "bad weather");
+  trainingData.forEach(line => {
+    this.classifier.learn(line, "location");
   });
 }
 

@@ -11,6 +11,7 @@ const optionsDefn = [
   {name: 'apat', type: Boolean},
   {name: 'travel_sfo', type: Boolean},
   {name: 'sea_spray', type: Boolean},
+  {name: 'hackshaw', type: Boolean},
 ];
 
 const options = cmdLineArgs(optionsDefn);
@@ -21,6 +22,7 @@ if(options.pat) { return console.log(manager.getPolaamaBotPageAccessToken()); }
 if(options.apat) { return console.log(manager.getPolaamaPageAccessToken()); }
 if(options.travel_sfo) { return console.log(manager.getTravelSfoPageAccessToken()); }
 if(options.sea_spray) { return console.log(manager.getMySeaSprayPageAccessToken()); }
+if(options.hackshaw) { return console.log(manager.getMyHackshawPageAccessToken()); }
 
 console.log(`usage: node crypto.js [-e data | -d <data> | -pat]`);
 /*

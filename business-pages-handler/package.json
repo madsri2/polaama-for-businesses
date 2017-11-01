@@ -1,0 +1,11 @@
+{
+  "name": "business-pages-handler",
+  "version": "1.0.0",
+  "description": "Common classes for business pages",
+  "main": "app/admin-message-sender.js",
+  "scripts": {
+    "test": "mocha --reporter spec"
+  },
+  "author": "Madhu Parthasarathy",
+  "license": "GPL-2.0"
+}

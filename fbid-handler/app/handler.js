@@ -5,8 +5,8 @@ const logger = require(`${baseDir}/my-logger`);
 const PageHandler = require('fbid-handler/app/page-handler');
 const FbidHandlerImpl = require('fbid-handler/app/handler-impl');
 
-FbidHandler.get = function(file) {
-  const pageHandler = PageHandler.get(file);
+FbidHandler.get = function(testFile) {
+  const pageHandler = PageHandler.get(testFile);
   return new FbidHandler(pageHandler.getFbidHandler(), pageHandler);
 }
 

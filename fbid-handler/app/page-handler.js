@@ -13,7 +13,18 @@ const Promise = require('promise');
 PageHandler.defaultPageId = "322170138147525";
 let globalPageHandler;
 
-const pages = [PageHandler.defaultPageId, "1852118738377984", "118953662103163", "1510665378999204"];
+PageHandler.myHackshawPageId = "139273906799315";
+PageHandler.mySeaSprayPageId = "1510665378999204";
+PageHandler.polaamaBotPageId = "1852118738377984";
+PageHandler.travelSfoPageId = "118953662103163";
+// If you add a page here, be sure to update getPageAccessToken function below as well.
+const pages = [
+  PageHandler.defaultPageId, 
+  PageHandler.polaamaBotPageId,
+  PageHandler.travelSfoPageId,
+  PageHandler.mySeaSprayPageId, 
+  PageHandler.myHackshawPageId
+];
 
 /**** STOP: Don't use this class directly. Use FbidHandler instead. This class is only meant to be used by webhook-post-handler to add an fbid ******/
 PageHandler.get = function(testFbidFile) {
@@ -83,6 +94,9 @@ PageHandler.prototype.getPageAccessToken = function(pageId) {
       break;
     case pages[3]:
       pageAccessToken = this.secretManager.getMySeaSprayPageAccessToken();
+      break;
+    case pages[4]:
+      pageAccessToken = this.secretManager.getMyHackshawPageAccessToken();
       break;
   }
   return pageAccessToken;
