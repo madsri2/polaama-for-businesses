@@ -39,6 +39,28 @@ FBTemplateCreator.generic = function(obj) {
   return message;
 }
 
+FBTemplateCreator.buttons = function(obj) {
+  if(!obj.fbid) throw new Error(`required argument 'fbid' missing`);
+  if(!obj.buttons) throw new Error(`required argument 'buttons' missing`);
+  if(!obj.text) throw new Error(`required argument 'text' missing`);
+  const message = {
+    recipient: {
+      id: obj.fbid
+    },
+    message: {
+      attachment: {
+        "type": "template",
+        payload: {
+          template_type: "button",
+          text: obj.text,
+          buttons: obj.buttons,
+        }
+      }
+    }
+  };
+  return message;
+}
+
 FBTemplateCreator.quickReply = function(obj) {
   if(!obj.fbid) throw new Error(`required argument 'fbid' missing`);
   const message = {

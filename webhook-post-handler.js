@@ -536,7 +536,8 @@ function greetingForAnotherPage(fbid) {
       break;
   }
   if(!response) return false;
-  callSendAPI.call(this, response);
+  if(Array.isArray(response)) this.sendMultipleMessages(fbid, response);
+  else callSendAPI.call(this, response);
   return true;
 }
 

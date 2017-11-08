@@ -147,7 +147,7 @@ function set_persistent_menu_hackshaw {
         }
       ]
     }]
-  }' "https://graph.facebook.com/v2.6/me/messenger_profile?access_token=$SEA_SPRAY_PAGE_ACCESS_TOKEN"    
+  }' "https://graph.facebook.com/v2.6/me/messenger_profile?access_token=$HACKSHAW_PAGE_ACCESS_TOKEN"    
 }
 
 function set_persistent_menu_sea_spray_travel {
@@ -252,6 +252,10 @@ case $key in
       ;;
   -g_hackshaw)
       set_get_started_menu_hackshaw
+      shift # past argument
+      ;;
+  -gr_hackshaw)
+      set_greeting_hackshaw
       shift # past argument
       ;;
   -g|--get-started)

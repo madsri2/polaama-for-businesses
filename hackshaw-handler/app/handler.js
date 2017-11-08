@@ -18,8 +18,8 @@ HackshawHandler.prototype.greeting = function(pageId, fbid) {
   messageList.push(FBTemplateCreator.generic({
     fbid: fbid,
     elements: [{
-      title: "Welcome to Hackshaw boat tours. How can I help you today",
-      subtitle: "I can answer questions about our awesome cruise at St.Lucia",
+      title: "Welcome to Hackshaw boats. How can I help you today?",
+      subtitle: "I am a chat bot who can answer questions about our awesome tours at St.Lucia",
       image_url: "http://tinyurl.com/y9kco9pc"
     }]
   }));
@@ -364,6 +364,24 @@ function bookTours(fbid) {
       }]
     }]
   });
+}
+
+function origCommonQuestionsButtons(fbid) {
+  const messageList = [];
+  messageList.push(FBTemplateCreator.buttons({
+    fbid: fbid,
+    text: "Here's a list of some commonly asked questions",
+    buttons: [{
+      title: "What tours do you operate?",
+      type: "postback",
+      payload: "hackshaw_book_tour",
+    },{
+        title: "Dolphin & Whale tour Operating days",
+        type: "postback",
+        payload: "hackshaw_dolphin_whale_operating_days"
+    }]
+  }));
+  return messageList;
 }
 
 function commonQuestionsButtons(fbid) {

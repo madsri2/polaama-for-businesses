@@ -59,7 +59,7 @@ AdminMessageSender.prototype.sendMessageToAdmin = function(fbid, mesg) {
   const messageList = [];
   let message = { recipient: { id: fbid } };
   message.message = {
-    text: "I did not understand the question, so I have asked one of our crew members to help me with this question. We will get back to you asap",
+    text: "I did not understand the question, so I have asked one of our crew members to help. We will get back to you asap",
     metadata: "DEVELOPER_DEFINED_METADATA"
   };
   messageList.push(message);

@@ -12,8 +12,13 @@ describe("hackshaw-handler tests", function() {
 
   it("hi", function() {
     const response = handler.testing_handleText("Hi", HackshawHandler.pageId, myFbid);
-    // logger.debug(JSON.stringify(response.message));
     expect(response.category).to.equal("greeting");
+  });
+
+  it("greeting", function() {
+    const message = handler.greeting(PageHandler.myHackshawPageId, myFbid);
+    logger.debug(JSON.stringify(message));
+    expect(message).to.not.be.undefined;
   });
 
   it("book tour", function() {
