@@ -1783,11 +1783,11 @@ function handleEventWithoutTrip(m) {
   return commands.handleEventCommands(m);
 }
 
-function messageForAnotherPage(message, fbid) {
+function messageForAnotherPage(message, fbid, event) {
   let response;
   switch(this.pageId) {
     case PageHandler.travelSfoPageId: 
-      response = this.travelSfoPageHandler.handleText(message, this.pageId, fbid);
+      response = this.travelSfoPageHandler.handleText(message, this.pageId, fbid, event);
       break;
     case PageHandler.mySeaSprayPageId:
       response = this.seaSprayHandler.handleText(message, this.pageId, fbid);
@@ -1796,6 +1796,17 @@ function messageForAnotherPage(message, fbid) {
       response = this.hackshawHandler.handleText(message, this.pageId, fbid);
       break;
   }
+  if(!response) return false;
+  if(Array.isArray(response)) this.sendMultipleMessages(fbid, response);
+  else callSendAPI.call(this, response);
+  return true;
+}
+
+function marketResearchPrototype(mesg, fbid) {
+  // const response = this.travelSfoPageHandler.royalCoachResponse(mesg, fbid);
+  // const response = this.travelSfoPageHandler.sanJoseBrewBike(mesg, fbid);
+  const response = this.travelSfoPageHandler.mountainQueenExpeditions(mesg, fbid);
+  logger.debug(`marketResearchPrototype: response: ${response}`);
   if(!response) return false;
   if(Array.isArray(response)) this.sendMultipleMessages(fbid, response);
   else callSendAPI.call(this, response);
@@ -1822,7 +1833,9 @@ function determineResponseType(event) {
   const messageText = event.message.text;
   const mesg = messageText.toLowerCase();
 
-  if(messageForAnotherPage.call(this, mesg, senderID)) return;
+  if(messageForAnotherPage.call(this, mesg, senderID, event)) return;
+
+  // if(marketResearchPrototype.call(this, mesg, senderID)) return;
 
   if(mesg === "commands" || (mesg.includes("help") && mesg.includes("commands"))) return supportedCommands.call(this);
 

@@ -17,6 +17,7 @@ CommonClassifier.prototype.commonTraining = function() {
   // trainPassengerCount.call(this);
   trainCustomerService.call(this);
   trainLocation.call(this);
+  operatingSeason.call(this);
   return this.classifier;
 }
 
@@ -277,6 +278,21 @@ function trainBadWeatherQuestion() {
   ];
   trainingData.forEach(line => {
     this.classifier.learn(line, "bad weather");
+  });
+}
+
+function operatingSeason() {
+  const trainingData = [
+    "do you operate year round",
+    "what seasons do you operate",
+    "are you open all months in the year",
+    "are you closed for any season",
+    "which seasons in a year are you open",
+    "you closed for any season",
+    "operating seasons"
+  ];
+  trainingData.forEach(line => {
+    this.classifier.learn(line, "operating season");
   });
 }
 

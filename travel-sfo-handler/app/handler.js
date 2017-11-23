@@ -32,10 +32,115 @@ TravelSfoHandler.prototype.greeting = function(pageId, fbid) {
   });
 }
 
+TravelSfoHandler.prototype.mountainQueenExpeditions = function(rawMesg, fbid) {
+  if(rawMesg.startsWith("welcome")) return FBTemplateCreator.generic({
+      fbid: fbid,
+      elements: [{
+        title: "Welcome to Mountain Queen Expeditions. How can I help you today?",
+        subtitle: "I am a bot that can answer any questions about our tours, price, hours etc.",
+        image_url: "https://polaama.com/images/mq-image"
+      }]
+  });
+  if(rawMesg.startsWith("is there a minimum number of customers required per event")) return FBTemplateCreator.generic({
+    fbid: fbid,
+    elements: [{
+      title: "Yes. For backpacking, we require a minimum of 4 customers.",
+      subtitle: "For hiking, we require a minimum of 2 customers."
+    }]
+  });
+  if(rawMesg.startsWith("is transportation included")) return FBTemplateCreator.generic({
+    fbid: fbid,
+    elements: [{
+      title: "Unless mentioned, transportation is NOT included for any of our trips.",
+      subtitle: "If needed, we can arrange transportation at an additional cost."
+    }]
+  });
+  return null;
+}
+
+TravelSfoHandler.prototype.sanJoseBrewBike = function(rawMesg, fbid) {
+  if(rawMesg.startsWith("welcome")) return FBTemplateCreator.generic({
+      fbid: fbid,
+      elements: [{
+        title: "Welcome to San Jose Brew bike. How can I help you today?",
+        subtitle: "I am a bot that can answer any questions about our tours, price, hours etc.",
+        image_url: "http://tinyurl.com/y7ry6nlz",
+      }]
+  });
+  if(rawMesg.startsWith("can i drink on the bus")) return FBTemplateCreator.generic({
+    fbid: fbid,
+    elements: [{
+        title: "Unfortunately, No",
+        subtitle: "The City of San Jose does not allow alcohol aboard the Brew Bike at this time.",
+    }]
+  });
+  if(rawMesg.startsWith("what is the age requirement")) return FBTemplateCreator.generic({
+    fbid: fbid,
+    elements: [{
+        title: "You must be atleast 21 years old to ride on the brewpub tour.",
+        subtitle: "Private tours may be booked (atleast 16 years old) for city (non-brewery) tours.",
+        buttons: [{
+          type: "phone_number",
+          title: "Call us",
+          payload: "+16692342927"
+        }]
+    }]
+  });
+  return null;
+}
+
+TravelSfoHandler.prototype.royalCoachResponse = function(rawMesg, fbid) {
+  if(rawMesg.startsWith("welcome")) return FBTemplateCreator.generic({
+      fbid: fbid,
+      elements: [{
+        title: "Welcome to Royal Coach Tours. How can I help you today?",
+        subtitle: "I am a bot that can answer any questions about our tours, price, hours etc.",
+        image_url: "http://tinyurl.com/yc6xne4c",
+      }]
+  });
+  if(rawMesg.startsWith("bus meeting point at sfo airport")) return FBTemplateCreator.generic({
+    fbid: fbid,
+    elements: [{
+      title: "We will pick you up at courtyard 4",
+      subtitle: "click for map",
+      default_action: {
+        url: "https://goo.gl/maps/dgcik7uFNe92",
+        type: "web_url",
+        webview_height_ratio: "full"
+      },
+      buttons: [{
+        title: "Get a quote",
+        webview_height_ratio: "full",
+        url: "http://www.royal-coach.com/quote.php",
+        type: "web_url",
+      }]
+    }]
+  });
+  if(rawMesg.startsWith("operating hours")) return FBTemplateCreator.list({
+    fbid: fbid,
+    compact_top_element_style: true,
+    elements: [{
+      title: "Our main office is open (M-F) 8.00 am - 5.00 pm",
+      image_url: "http://tinyurl.com/yc6xne4c",
+      subtitle: "Phone: 408-279-4801"
+    },
+    {
+      title: "Dispatchers are available (M-F) 5.00 am - 7.30 pm",
+      subtitle: "Phone: 408-477-2020",
+    },
+    {
+      title: "Oncall manager is available nights (M-F) 7.30 pm - 5.00 am and 24/7 on weekends",
+      subtitle: "Phone: 408-640-6248",
+    }]
+  });
+  return null;
+}
+
 TravelSfoHandler.prototype.handleText = function(rawMesg, pageId, fbid, event) {
   const mesg = rawMesg.toLowerCase();
   if(pageId != TravelSfoHandler.pageId) return null;
   if(!fbid) throw new Error(`handleText: required parameter fbid missing`);
+  
   if(event && event.message.quick_reply) {
     const payload = event.message.quick_reply.payload;
     if(!payload.startsWith("qr_travel_sfo_review_")) return null;
@@ -551,7 +656,7 @@ function sendMessageToAdmin(fbid, mesg) {
   const messageList = [];
   let message = { recipient: { id: fbid } };
   message.message = {
-    text: "We have received your question. We will get back to you shortly",
+    title: "We have notified our team, who will get back to you shortly",
     metadata: "DEVELOPER_DEFINED_METADATA"
   };
   messageList.push(message);
@@ -582,12 +687,12 @@ function sendMessageToAdmin(fbid, mesg) {
 }
 
 TravelSfoHandler.prototype.handleLikeButton = function(pageId, fbid) {
-  if(this.waitingToBookHotel[fbid]) return this.handleLikeButtonGeneric(pageId, fbid);
-  if(this.waitingToBookCruise[fbid]) return this.handleLikeButton(pageId, fbid);
+  if(this.waitingToBookCruise[fbid]) return this.handleLikeButtonShowWaterRecommendations(pageId, fbid);
+  if(this.waitingToBookHotel[fbid]) return this.handleLikeButtonShowRecommendations(pageId, fbid);
   return "Glad you liked us!";
 }
 
-TravelSfoHandler.prototype.handleLikeButtonGeneric = function(pageId, fbid) {
+TravelSfoHandler.prototype.handleLikeButtonShowWaterRecommendations = function(pageId, fbid) {
   if(pageId != TravelSfoHandler.pageId) return null;
   if(!this.waitingToBookCruise[fbid]) return null;
   this.waitingToBookCruise[fbid] = false;
@@ -623,7 +728,7 @@ TravelSfoHandler.prototype.handleLikeButtonGeneric = function(pageId, fbid) {
   return messageList;
 }
 
-TravelSfoHandler.prototype.handleLikeButton = function(pageId, fbid) {
+TravelSfoHandler.prototype.handleLikeButtonShowRecommendations = function(pageId, fbid) {
   if(pageId != TravelSfoHandler.pageId) return null;
   if(!this.waitingToBookHotel[fbid]) return null;
   this.waitingToBookHotel[fbid] = false;

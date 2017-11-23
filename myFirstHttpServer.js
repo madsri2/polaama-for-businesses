@@ -204,15 +204,19 @@ app.get('/index', function(req, res) {
   return res.send(fs.readFileSync("html-templates/home.html", 'utf8'));
 });
 
-app.get('/', ensureAuthenticated, function(req, res) {
-  return res.redirect('https://madhupolaama.wixsite.com/polaama');
+app.get('/', function(req, res) {
+  return res.redirect('https://polaama.wixsite.com/polaama');
 });
-app.get('/business', ensureAuthenticated, function(req, res) {
-  return res.redirect('https://madhupolaama.wixsite.com/polaama/businesses');
+app.get('/business', function(req, res) {
+  return res.redirect('https://polaama.wixsite.com/polaama/businesses');
 });
-app.get('/businesses', ensureAuthenticated, function(req, res) {
-  return res.redirect('https://madhupolaama.wixsite.com/polaama/businesses');
+app.get('/businesses', function(req, res) {
+  return res.redirect('https://polaama.wixsite.com/polaama/businesses');
 });
+app.get('/survey', function(req, res) {
+  return res.redirect('https://madhu85.typeform.com/to/piaMJ8');
+});
+
 /*
 app.get('/', ensureAuthenticated, function(req, res) {
   // this code is executed after ensureAuthenticated is called (by virtue of next() being called in ensureAuthenticated()). Redirect to "/index" if we were successfully ensured.

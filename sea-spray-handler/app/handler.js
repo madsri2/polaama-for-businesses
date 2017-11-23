@@ -56,6 +56,7 @@ SeaSprayHandler.prototype.handleText = function(mesg, pageId, fbid) {
   if(category === "customer service") return customerServiceDetails(fbid);
   if(category === "unclassified") return this.adminMessageSender.sendMessageToAdmin(fbid, mesg);
   if(category === "location") return location(fbid);
+  if(category === "operating season") return operatingSeason(fbid);
 }
 
 SeaSprayHandler.prototype.handlePostback = function(payload, pageId, fbid) {
@@ -81,6 +82,21 @@ SeaSprayHandler.prototype.handlePostback = function(payload, pageId, fbid) {
     elements: [{
       title: "We have notified our team, who will get back to you shortly",
       image_url: "http://tinyurl.com/y8v9ral5",
+    }],
+  });
+}
+
+function operatingSeason(fbid) {
+  return FBTemplateCreator.generic({
+    fbid: fbid,
+    elements: [{
+      title: "We operate year round.",
+      subtitle: "St. Lucia is beautiful year round. So, visit us anytime!",
+      buttons: [{
+        title: "Tour options",
+        type: "postback",
+        payload: "sea_spray_book_tour"
+      }]
     }],
   });
 }

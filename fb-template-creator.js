@@ -93,7 +93,7 @@ FBTemplateCreator.list = function(obj) {
     }
   };
   if(obj.buttons) message.message.attachment.payload.buttons = obj.buttons;
-  if(!obj.elements[0].image_url) message.message.attachment.payload.top_element_style = "compact";
+  if(!obj.elements[0].image_url || obj.compact_top_element_style) message.message.attachment.payload.top_element_style = "compact";
   return message;
 }
 

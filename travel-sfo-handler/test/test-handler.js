@@ -5,6 +5,16 @@ const baseDir = '/home/ec2-user';
 const logger = require(`${baseDir}/my-logger`);
 logger.setTestConfig(); // indicate that we are logging for a test
 
+describe("prototype tests", function() {
+  const myFbid = "1234";
+  
+  it("hi", function() {
+    const handler = new TravelSfoHandler();
+    const message = handler.handleText("operating hours", TravelSfoHandler.pageId, myFbid);
+    logger.debug(JSON.stringify(message));
+  });
+});
+
 describe("travel-sfo-handler tests", function() {
   const myFbid = "1234";
   

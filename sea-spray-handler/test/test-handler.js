@@ -102,6 +102,14 @@ describe("sea-spray-handler tests", function() {
     let response = handler.testing_handleText("where are you located", SeaSprayHandler.pageId, myFbid);
     // logger.debug(JSON.stringify(message));
     expect(response.category).to.equal("location");
+    response = handler.testing_handleText("are you located in the island", SeaSprayHandler.pageId, myFbid);
+    expect(response.category).to.equal("location");
+  });
+
+  it("operating season", function() {
+    let response = handler.testing_handleText("do you operate year round", SeaSprayHandler.pageId, myFbid);
+    expect(response.category).to.equal("operating season");
+    
   });
 });
 
