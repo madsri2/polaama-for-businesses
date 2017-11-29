@@ -18,8 +18,22 @@ CommonClassifier.prototype.commonTraining = function() {
   trainCustomerService.call(this);
   trainLocation.call(this);
   operatingSeason.call(this);
+  privateCustomizedCharters.call(this);
+  kidsAllowed.call(this);
+  infantCharges.call(this);
   return this.classifier;
 }
+
+/*
+
+Do you offer Private & Customized Charters?
+Yes, we are flexible and can customize tours to suit your requests
+Are Kids allowed on all the tours/excursions?
+Yes
+Is there a charge for infants (children under 2)?
+No, all children under 2 are free
+
+*/
 
 CommonClassifier.prototype.classify = function(description) {
   const text = description.toLowerCase();
@@ -278,6 +292,100 @@ function trainBadWeatherQuestion() {
   ];
   trainingData.forEach(line => {
     this.classifier.learn(line, "bad weather");
+  });
+}
+
+function privateCustomizedCharters() {
+  const trainingData = [
+    "private tours",
+    "do you offer private or customized tours",
+    "private tour offering",
+    "can you customize tours",
+    "what sort of customized tours can you offer",
+    "private charters",
+    "private charter",
+    "do you offer private charters",
+    "do you offer customized charter",
+    "can i customize charter",
+    "what kind of customizations do you offer for your charter",
+    "can i customize the tours",
+    "can i customize tours",
+    "do you offer private tours",
+    "do you offer private tour",
+    "are your tours customizable",
+    "are your charters customizable",
+    "custom charter",
+    "custom charters",
+    "custom tour",
+    "custom tours",
+  ];
+  trainingData.forEach(line => {
+    this.classifier.learn(line, "customized tour");
+  });
+}
+
+function kidsAllowed() {
+  const trainingData = [
+    "are kids allowed on all tours",
+    "are kids allowed on all tour",
+    "are kids allowed on all charters",
+    "are kids allowed on all charter",
+    "do you allow kids on all tours",
+    "do you allow kids on all charter",
+    "is there any tour that does not allow kids",
+    "is there any charter that does not allow kids",
+    "are kids allowed on charter cruises",
+    "are kids of all ages allowed on charters",
+    "are kids of all ages allowed on charter",
+    "are kids of all ages allowed on tours",
+    "are kids of all ages allowed on tour",
+    "do you allow kids of all ages on all tours",
+    "do you allow kids of all ages on your charters",
+    "do you allow kids of all ages on your boats",
+  ];
+  for(let i = 1; i < 10; i++) {
+    trainingData.push(`can i bring my ${i} year old on the trip`);
+  }
+  trainingData.forEach(line => {
+    this.classifier.learn(line, "kids allowed");
+  });
+}
+
+function infantCharges() {
+  const trainingData = [
+    "is there a charge for babies",
+    "is there a charge for infants",
+    "what is the charge for babies",
+    "what is the charge for infants",
+    "charge for babies",
+    "charge for infants",
+    "what is the price for infants",
+    "what is the price for babies",
+    "how much do you charge for infants",
+    "how much do you charge for babies",
+    "what is the cost for infants",
+    "what is the cost for babies ",
+    "cost for children",
+    "cost for infants",
+    "cost for babies",
+  ];
+  ["2", "two"].forEach(c => {
+    trainingData.push(`is there a charge for children under ${c}`);
+    trainingData.push(`what is the charge for children under ${c}`);
+    trainingData.push(`charge for children under ${c}`);
+    trainingData.push(`what is the price for children under ${c}`);
+    trainingData.push(`how much do you charge for children under ${c}`);
+    trainingData.push(`what is the cost for children under ${c}`);
+    trainingData.push(`cost for children under ${c}`);
+    trainingData.push(`i have a ${c} year old. should i pay for her`);
+    trainingData.push(`i have a ${c} year old. should i pay for him`);
+    trainingData.push(`should i pay for a ${c} year old`);
+    trainingData.push(`should ${c} year olds pay for a tour`);
+    trainingData.push(`should ${c} year olds pay for the cruise`);
+    trainingData.push(`should ${c} year olds pay`);
+  });
+  trainingData.forEach(line => {
+    this.classifier.learn(line, "infant charges");
   });
 }
 

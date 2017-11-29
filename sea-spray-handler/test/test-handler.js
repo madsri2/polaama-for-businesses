@@ -8,7 +8,7 @@ logger.setTestConfig(); // indicate that we are logging for a test
 const handler = new SeaSprayHandler();
 const myFbid = "1234";
 
-describe("sea-spray-handler tests", function() {
+describe("sea spray tests", function() {
 
   it("hi", function() {
     const response = handler.testing_handleText("Hi", SeaSprayHandler.pageId, myFbid);
@@ -109,7 +109,36 @@ describe("sea-spray-handler tests", function() {
   it("operating season", function() {
     let response = handler.testing_handleText("do you operate year round", SeaSprayHandler.pageId, myFbid);
     expect(response.category).to.equal("operating season");
-    
+  });
+
+  it("customized tour", function() {
+    let response = handler.testing_handleText("Can we customize tours based on our needs", SeaSprayHandler.pageId, myFbid);
+    expect(response.category).to.equal("customized tour");
+  });
+
+  it("kids allowed", function() {
+    let response = handler.testing_handleText("Can we bring kids of any age on the trip?", SeaSprayHandler.pageId, myFbid);
+    expect(response.category).to.equal("kids allowed");
+    // logger.debug(JSON.stringify(response));
+    expect(response.message.message.attachment.payload.template_type).to.equal('generic');
+    response = handler.testing_handleText("Can we bring kids of all ages on the trip?", SeaSprayHandler.pageId, myFbid);
+    expect(response.category).to.equal("kids allowed");
+    expect(response.message.message.attachment.payload.template_type).to.equal('generic');
+    response = handler.testing_handleText("Can I bring my 10 year old on the boat", SeaSprayHandler.pageId, myFbid);
+    expect(response.category).to.equal("kids allowed");
+    expect(response.message.message.attachment.payload.template_type).to.equal('generic');
+    response = handler.testing_handleText("Are kids of all ages allowed?", SeaSprayHandler.pageId, myFbid);
+    expect(response.category).to.equal("kids allowed");
+    expect(response.message.message.attachment.payload.template_type).to.equal('generic');
+  });
+
+  it("infant charges", function() {
+    let response = handler.testing_handleText("I have a 2 year old. How much should I pay", SeaSprayHandler.pageId, myFbid);
+    expect(response.category).to.equal("infant charges");
+    response = handler.testing_handleText("Do 2 year olds pay", SeaSprayHandler.pageId, myFbid);
+    expect(response.category).to.equal("infant charges");
+    response = handler.testing_handleText("Do two year olds pay", SeaSprayHandler.pageId, myFbid);
+    expect(response.category).to.equal("infant charges");
   });
 });
 

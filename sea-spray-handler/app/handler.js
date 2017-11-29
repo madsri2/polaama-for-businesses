@@ -57,6 +57,9 @@ SeaSprayHandler.prototype.handleText = function(mesg, pageId, fbid) {
   if(category === "unclassified") return this.adminMessageSender.sendMessageToAdmin(fbid, mesg);
   if(category === "location") return location(fbid);
   if(category === "operating season") return operatingSeason(fbid);
+  if(category === "kids allowed") return kidsAllowed(fbid);
+  if(category === "customized tour") return customizedTours(fbid);
+  if(category === "infant charges") return infantCharges(fbid);
 }
 
 SeaSprayHandler.prototype.handlePostback = function(payload, pageId, fbid) {
@@ -86,6 +89,50 @@ SeaSprayHandler.prototype.handlePostback = function(payload, pageId, fbid) {
   });
 }
 
+function customizedTours(fbid) {
+  return FBTemplateCreator.generic({
+    fbid: fbid,
+    elements: [{
+      title: "We are flexible and can customize tours to suit your requests",
+      subtitle: "Do let us know beforehand so we can plan accordingly",
+      buttons: [{
+        title: "Contact details",
+        type: "postback",
+        payload: "sea_spray_contact"
+      }]
+    }],
+  });
+}
+
+function kidsAllowed(fbid) {
+  return FBTemplateCreator.generic({
+    fbid: fbid,
+    elements: [{
+      title: "Yes, kids of all ages can enjoy our tours",
+      subtitle: "Children under 2 travel for free",
+      buttons: [{
+        title: "Tour options",
+        type: "postback",
+        payload: "sea_spray_book_tour"
+      }]
+    }],
+  });
+}
+
+function infantCharges(fbid) {
+  return FBTemplateCreator.generic({
+    fbid: fbid,
+    elements: [{
+      title: "There is no charge for children under 2",
+      subtitle: "They participate for free",
+      buttons: [{
+        title: "Tour options",
+        type: "postback",
+        payload: "sea_spray_book_tour"
+      }]
+    }],
+  });
+}
 function operatingSeason(fbid) {
   return FBTemplateCreator.generic({
     fbid: fbid,

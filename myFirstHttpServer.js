@@ -192,11 +192,11 @@ server.listen(port, function() {
   const twoDaysInMsec = 1000*60*60*24*2;
   const tenSeconds = 1000*10; 
   // set a timer that will send reminder notifications about todo list every 2 days
-  const intervalId = setInterval(sendTodoReminders, twoDaysInMsec);
+  // const intervalId = setInterval(sendTodoReminders, twoDaysInMsec);
 
   // set a timer that will send boarding pass and other details the day before a trip
-  const oneDayInMsec = 1000*60*60*24*1;
-  setInterval(pushTripDetailsJustBeforeTrip, oneDayInMsec);
+  // const oneDayInMsec = 1000*60*60*24*1;
+  // setInterval(pushTripDetailsJustBeforeTrip, oneDayInMsec);
 }); 
 
 app.get('/index', function(req, res) {
