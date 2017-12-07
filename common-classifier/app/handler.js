@@ -21,6 +21,8 @@ CommonClassifier.prototype.commonTraining = function() {
   privateCustomizedCharters.call(this);
   kidsAllowed.call(this);
   infantCharges.call(this);
+  availableTours.call(this);
+  trainFarewell.call(this);
   return this.classifier;
 }
 
@@ -94,13 +96,44 @@ CommonClassifier.prototype.operatingTimesTemplate = function(replaceString) {
 function trainGreeting() {
   this.classifier.learn("hello", "greeting");
   this.classifier.learn("hi there", "greeting");
+  this.classifier.learn("hiya there", "greeting");
+  this.classifier.learn("hiya. how are you?", "greeting");
   this.classifier.learn("hi how are you", "greeting");
   this.classifier.learn("hi how do you do", "greeting");
   this.classifier.learn("hi", "greeting");
   this.classifier.learn("hiya", "greeting");
   this.classifier.learn("hola", "greeting");
+  this.classifier.learn("hola there", "greeting");
+  this.classifier.learn("hola. how are you", "greeting");
   this.classifier.learn("yo", "greeting");
   this.classifier.learn("good morning", "greeting");
+  this.classifier.learn("howdy", "greeting");
+  this.classifier.learn("howdy. how are you", "greeting");
+  this.classifier.learn("how are you doing", "greeting");
+  this.classifier.learn("how you doing", "greeting");
+}
+
+function trainFarewell() {
+  const trainingData = [
+    "bye",
+    "ciao",
+    "goodbye",
+    "farewell",
+    "later",
+    "thanks. bye",
+    "see you later",
+    "see ya later",
+    "cya",
+    "talk to you later",
+    "ttyl",
+    "see you",
+    "alright. later",
+    "alrite. see ya later",
+    "cya later"
+  ];
+  trainingData.forEach(line => {
+    this.classifier.learn(line, "farewell");
+  });
 }
 
 const passengerCountTemplateList = [
@@ -297,11 +330,11 @@ function trainBadWeatherQuestion() {
 
 function privateCustomizedCharters() {
   const trainingData = [
+    "what sort of customized tours can you offer",
     "private tours",
     "do you offer private or customized tours",
     "private tour offering",
     "can you customize tours",
-    "what sort of customized tours can you offer",
     "private charters",
     "private charter",
     "do you offer private charters",
@@ -310,8 +343,7 @@ function privateCustomizedCharters() {
     "what kind of customizations do you offer for your charter",
     "can i customize the tours",
     "can i customize tours",
-    "do you offer private tours",
-    "do you offer private tour",
+    "do you offer any private tour",
     "are your tours customizable",
     "are your charters customizable",
     "custom charter",
@@ -348,6 +380,22 @@ function kidsAllowed() {
   }
   trainingData.forEach(line => {
     this.classifier.learn(line, "kids allowed");
+  });
+}
+
+function availableTours() {
+  const trainingData = [
+    "available tours",
+    "what tours are available",
+    "tours available",
+    "tours",
+    "what tours do you operate",
+    "what cruises do you operate",
+    "operating tours",
+    "supported tours",
+  ];
+  trainingData.forEach(line => {
+    this.classifier.learn(line, "operating tours");
   });
 }
 

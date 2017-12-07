@@ -689,7 +689,7 @@ function sendMessageToAdmin(fbid, mesg) {
 TravelSfoHandler.prototype.handleLikeButton = function(pageId, fbid) {
   if(this.waitingToBookCruise[fbid]) return this.handleLikeButtonShowWaterRecommendations(pageId, fbid);
   if(this.waitingToBookHotel[fbid]) return this.handleLikeButtonShowRecommendations(pageId, fbid);
-  return "Glad you liked us!";
+  return null;
 }
 
 TravelSfoHandler.prototype.handleLikeButtonShowWaterRecommendations = function(pageId, fbid) {

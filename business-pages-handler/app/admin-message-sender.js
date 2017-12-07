@@ -17,6 +17,7 @@ function capitalizeFirstLetter(string) {
 
 AdminMessageSender.prototype.handleResponseFromAdmin = function(adminFbid, mesg, pageDetails) {
   const keys = Object.keys(this.awaitingResponseFromAdmin);
+  // logger.debug(`handleResponseFromAdmin: keys is ${JSON.stringify(keys)}`);
   if(keys.length === 0) return null;
   // if(keys.length > 1) throw new Error("More than 1 customer waiting for response. This is currently unhandled");
   // Just respond to the first customer if we have more than 1 customer waiting. TODO: Fix me!
@@ -55,11 +56,12 @@ function getName(fbid) {
   return name;
 }
 
-AdminMessageSender.prototype.sendMessageToAdmin = function(fbid, mesg) {
+AdminMessageSender.prototype.sendMessageToAdmin = function(fbid, mesg, talkToHuman) {
   const messageList = [];
   let message = { recipient: { id: fbid } };
+  const prefix = (talkToHuman) ? "I did not understand the question, so " : "";
   message.message = {
-    text: "I did not understand the question, so I have asked one of our crew members to help. We will get back to you asap",
+    text: `${prefix}I have asked one of our crew members to help. We will get back to you asap`,
     metadata: "DEVELOPER_DEFINED_METADATA"
   };
   messageList.push(message);
@@ -105,6 +107,5 @@ AdminMessageSender.prototype.handleWaitingForAdminResponse = function(adminFbid,
     });
   }
 }
-
 
 module.exports = AdminMessageSender;

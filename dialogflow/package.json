@@ -1,0 +1,15 @@
+{
+  "name": "dialogflow",
+  "version": "1.0.0",
+  "description": "dialogflow polaama integration",
+  "main": "app/main.js",
+  "scripts": {
+    "test": "mocha --reporter spec"
+  },
+  "author": "Madhu Parthasarathy",
+  "license": "GPL-2.0",
+  "dependencies": {
+    "apiai": "^4.0.3",
+    "promise": "^8.0.1"
+  }
+}

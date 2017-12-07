@@ -64,6 +64,11 @@ SecretManager.prototype.getMySeaSprayPageAccessToken = function() {
   return this.decrypt(encryptedPat);
 }
 
+SecretManager.prototype.getDialogflowClientToken = function() {
+  const encrypted = "+MtG+GuCowhJ76swEQQXLdQxc4urxlK6/4DiH5P+TQ3eKs8DgiZfs1osVhfHbuIx";
+  return this.decrypt(encrypted);
+}
+
 SecretManager.prototype.getFBAppId = function() {
   const encryptedAppId = "0NEhMR1SJFm66aHxhkktNFsHg+ADlBjustDMPhZVx0BTexm/kH0aXjldQva8T/9P";
   return this.decrypt(encryptedAppId);

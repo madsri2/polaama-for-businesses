@@ -546,6 +546,10 @@ function handleGettingStarted(senderID) {
   return sendWelcomeMessage.call(this, senderID); 
 }
 
+function handleLikeButton(fbid) {
+  
+}
+
 function postbackForAnotherPage(payload, fbid) {
   let response;
   switch(this.pageId) {
@@ -1220,8 +1224,6 @@ function receivedMessage(event) {
       const stickerId = message.sticker_id;
       if(stickerId && stickerId === 369239263222822) {
         const handleMesg = this.travelSfoPageHandler.handleLikeButton(this.pageId, senderID);
-        // const handleMesg = this.travelSfoPageHandler.handleLikeButton(this.pageId, senderID);
-        // const handleMesg = this.travelSfoPageHandler.handleLikeButtonGeneric(this.pageId, senderID);
         if(handleMesg) {
           if(Array.isArray(handleMesg)) {
             callSendAPI.call(this, handleMesg[0]);
@@ -1233,6 +1235,7 @@ function receivedMessage(event) {
           }
           return callSendAPI.call(this, handleMesg);
         }
+        return sendTextMessage.call(this, senderID, "Glad you like us!");
       }
       sendTextMessage.call(this, senderID, "Message with attachment received");
     }
@@ -1785,13 +1788,14 @@ function handleEventWithoutTrip(m) {
 
 function messageForAnotherPage(message, fbid, event) {
   let response;
+  if(this.pageId !== PageHandler.travelSfoPageId && this.pageId !== PageHandler.mySeaSprayPageId && this.pageId !== PageHandler.myHackshawPageId) return false;
   switch(this.pageId) {
     case PageHandler.travelSfoPageId: 
       response = this.travelSfoPageHandler.handleText(message, this.pageId, fbid, event);
       break;
     case PageHandler.mySeaSprayPageId:
-      response = this.seaSprayHandler.handleText(message, this.pageId, fbid);
-      break;
+      return this.seaSprayHandler.handleText(message, this.pageId, fbid);
+      // break;
     case PageHandler.myHackshawPageId:
       response = this.hackshawHandler.handleText(message, this.pageId, fbid);
       break;
@@ -1833,7 +1837,23 @@ function determineResponseType(event) {
   const messageText = event.message.text;
   const mesg = messageText.toLowerCase();
 
-  if(messageForAnotherPage.call(this, mesg, senderID, event)) return;
+  const self = this;
+  const mesgPromise = messageForAnotherPage.call(this, mesg, senderID, event);
+  if(mesgPromise) {
+    if(typeof mesgPromise === "object") {
+        mesgPromise.done(
+          function(result) {
+            const response = result.message;
+            if(Array.isArray(response)) self.sendMultipleMessages(senderID, response);
+            else callSendAPI.call(self, response);
+          },
+          function(err) {
+            sendTextMessage.call(self, senderID, "Even bots need to eat. Be back in a bit!");
+          }
+        );
+    }
+    return;
+  }
 
   // if(marketResearchPrototype.call(this, mesg, senderID)) return;
 

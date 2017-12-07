@@ -104,15 +104,18 @@ function receivedPostbackEvent(payload) {
   return event;
 }
 
-function determineResponseTypeEvent(mesg) {
+function determineResponseTypeEvent(mesg, fbid) {
+  let fbidToUse;
+  if(fbid) fbidToUse = fbid;
+  else fbidToUse = myFbid;
   const event = { 
     message: { text: mesg }, 
     postback: {},
     sender: {
-      id: myFbid
+      id: fbidToUse
     }, 
     recipient: {
-      id: myFbid
+      id: fbidToUse
     }, 
     timestamp: "12345"
   };
@@ -645,22 +648,26 @@ function testSpearFishing() {
   handler.testing_determineResponseType(determineResponseTypeEvent("existing trips"));
 }
 
-const seaSprayPageId = require('sea-spray-handler').pageId;
 function testSeaSpray() {
   const session = Sessions.get().find(myFbid);
-  let handler = new WebhookPostHandler(session, true /* testing */, seaSprayPageId);
-  handler.testing_determineResponseType(determineResponseTypeEvent("bad weather policy"));
+  let handler = new WebhookPostHandler(session, true /* testing */, PageHandler.mySeaSprayPageId);
+  handler.testing_determineResponseType(determineResponseTypeEvent("talk to human"));
+  /*
+  handler.testing_receivedPostback(receivedPostbackEvent(`respond_to_customer_${myFbid}`));
+  // mimic admin sending a response back and see if we receive that response.
+  handler.testing_determineResponseType(determineResponseTypeEvent("response", "1629856073725012"));
+  */
 }
 
 function testSeaSprayPostback() {
   const session = Sessions.get().find(myFbid);
-  let handler = new WebhookPostHandler(session, true /* testing */, seaSprayPageId);
+  let handler = new WebhookPostHandler(session, true /* testing */, PageHandler.mySeaSprayPageId);
   handler.testing_receivedPostback(receivedPostbackEvent("sea_spray_contact"));
 }
 
 function testSeaSprayGettingStarted() {
   const session = Sessions.get().find(myFbid);
-  let handler = new WebhookPostHandler(session, true /* testing */, seaSprayPageId);
+  let handler = new WebhookPostHandler(session, true /* testing */, PageHandler.mySeaSprayPageId);
   handler.testing_receivedPostback(receivedPostbackEvent("GET_STARTED_PAYLOAD"));
 }
 
@@ -678,11 +685,11 @@ function testHackshawGettingStarted() {
 }
 
 // testHackshaw();
-testHackshawGettingStarted();
+// testHackshawGettingStarted();
 
 // testSeaSprayGettingStarted();
 // testSeaSprayPostback();
-// testSeaSpray();
+testSeaSpray();
 
 // testSpearFishing();
 
