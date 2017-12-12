@@ -651,12 +651,7 @@ function testSpearFishing() {
 function testSeaSpray() {
   const session = Sessions.get().find(myFbid);
   let handler = new WebhookPostHandler(session, true /* testing */, PageHandler.mySeaSprayPageId);
-  handler.testing_determineResponseType(determineResponseTypeEvent("talk to human"));
-  /*
-  handler.testing_receivedPostback(receivedPostbackEvent(`respond_to_customer_${myFbid}`));
-  // mimic admin sending a response back and see if we receive that response.
-  handler.testing_determineResponseType(determineResponseTypeEvent("response", "1629856073725012"));
-  */
+  handler.testing_determineResponseType(determineResponseTypeEvent("hi"));
 }
 
 function testSeaSprayPostback() {
@@ -688,8 +683,8 @@ function testHackshawGettingStarted() {
 // testHackshawGettingStarted();
 
 // testSeaSprayGettingStarted();
-// testSeaSprayPostback();
-testSeaSpray();
+testSeaSprayPostback();
+// testSeaSpray();
 
 // testSpearFishing();
 

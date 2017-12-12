@@ -7,5 +7,9 @@
     "test": "mocha --reporter spec"
   },
   "author": "Madhu Parthasarathy",
-  "license": "GPL-2.0"
+  "license": "GPL-2.0",
+  "dependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^4.0.1"
+  }
 }

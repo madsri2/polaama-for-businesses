@@ -8,14 +8,13 @@ const AdminMessageSender = require('business-pages-handler');
 const PageHandler = require('fbid-handler/app/page-handler');
 const Promise = require('promise');
 
-
 const year = moment().year();
 const month = moment().month() + 1;
 
-function SeaSprayHandler() {
+function SeaSprayHandler(testing) {
   this.classifier = new NBClassifier();
-  this.adminMessageSender = new AdminMessageSender("1629856073725012");
-  this.state = {};
+  this.adminMessageSender = new AdminMessageSender("1629856073725012", testing);
+  // this.state = {};
 }
 
 function farewell(pageId, fbid) {
@@ -51,17 +50,28 @@ SeaSprayHandler.prototype.handleText = function(mesg, pageId, fbid) {
       payload: "sea_spray_contact"
     }]
   };
-  const responseFromAdmin = this.adminMessageSender.handleResponseFromAdmin(fbid, mesg, pageDetails);
-  if(responseFromAdmin) return Promise.resolve({
-    message: responseFromAdmin
-  });
-
-  const categoryPromise = this.classifier.categorize(mesg);
   const self = this;
-  return categoryPromise.then(
+  return this.adminMessageSender.handleResponseFromAdmin(fbid, mesg, pageDetails).then(
+    (response) => {
+      if(response) return Promise.resolve({
+        _done: true,
+        message: response
+      });
+      // const categoryPromise = this.classifier.categorize(mesg);
+      return self.classifier.categorize(mesg);
+    },
+    (err) => {
+      return Promise.reject(err);
+    }
+  ).then(
     function(result) {
+      // short-circuit if we already have a result from the previous promise.
+      if(result._done) {
+        delete result._done;
+        return Promise.resolve(result);
+      }
       // logger.debug(`handleText: category is ${category}`);
-      let response;
+      let response = null;
       const category = result.category;
       if(category === "passenger-count") response = passengerCount(fbid);
       if(category === "location") response = location(fbid);
@@ -79,33 +89,11 @@ SeaSprayHandler.prototype.handleText = function(mesg, pageId, fbid) {
       if(category === "bad-weather") response = badWeatherPolicy(fbid);
       if(category === "advance-booking") response = advanceBooking(fbid);
       if(category === "operating-tours") response = bookTours.call(self, fbid);
-      if(category === "talk-to-human") response = self.adminMessageSender.sendMessageToAdmin(fbid, mesg, true /* talk to human */);
-      if(category === "input.unknown") response = self.adminMessageSender.sendMessageToAdmin(fbid, mesg);
-      if(category === "operating-days") {
-        const tourName = result.tourName;
-        switch(tourName) {
-          case "Tout Bagay Cruise": response = toutBagayDays(fbid); break;
-          case "Sunset cruise": response = sunsetCruiseDays(fbid); break;
-          case "Pirate Day's Cruise": response = piratesDay(fbid); break;
-          default: 
-            if(!self.state[fbid]) self.state[fbid] = {};
-            self.state[fbid].awaitingTourNameForOperatingDays = true;
-            response = chooseTours(fbid);
-        }
-      }
-      if(category === "food-options") {
-        const tourName = result.tourName;
-        switch(tourName) {
-          case "Tout Bagay Cruise": response = toutBagayFood(fbid); break;
-          case "Sunset cruise": response = sunsetCruiseFood(fbid); break;
-          case "Pirate Day's Cruise": response = piratesDayFood(fbid); break;
-          case "Private charter": response = privateCharterFood(fbid); break;
-          default: 
-            if(!self.state[fbid]) self.state[fbid] = {};
-            self.state[fbid].awaitingTourNameForFoodOption = true;
-            response = chooseTours(fbid);
-        }
-      }
+      if(category === "operating-hours") response = operatingHours.call(self, fbid);
+      if(category === "talk-to-human") return self.adminMessageSender.sendMessageToAdmin(fbid, mesg, true /* talk to human */);
+      if(category === "input.unknown") return self.adminMessageSender.sendMessageToAdmin(fbid, mesg);
+      // if response is null until now, handle categories that have information based on tour type: "operating-days", "food-options", "cruise-details", "cost-of-tour"
+      if(!response) response = selectResponseForTour.call(self, result.tourName, category, fbid);
       // if it's a category we don't understand and if there is a fulfilment, use it. This is to handle cases where the Intent and a default response exists in Dialogflow (Examples: Appreciation
       if(!response) {
         logger.info(`handleText: Unknown category: ${category}. Figuring out what to do...`);
@@ -118,7 +106,7 @@ SeaSprayHandler.prototype.handleText = function(mesg, pageId, fbid) {
         }
         else {
           logger.info("handleText: We don't know what to send. Send the message to human and have them take over");
-          response = self.adminMessageSender.sendMessageToAdmin(fbid, mesg);
+          return self.adminMessageSender.sendMessageToAdmin(fbid, mesg);
         }
       }
 
@@ -127,87 +115,168 @@ SeaSprayHandler.prototype.handleText = function(mesg, pageId, fbid) {
         message: response
       });
     },
+    (err) => {
+      return Promise.reject(err);
+  }).then(
+    (response) => {
+      return Promise.resolve(response);
+    },
     function(error) {
       logger.error(`handleText: Error in categoryPromise: ${error}`);
       return Promise.reject("Even bots need to eat. Back in a bit");
     }
   );
-  /*
-  const category = this.classifier.classify(mesg);
-  if(category === "customer service") return customerService(fbid);
-  if(category === "greeting") return this.greeting(pageId, fbid);
-  if(category === "tout bagay days") return toutBagayDays(fbid);
-  if(category === "sunset cruise days") return sunsetCruiseDays(fbid);
-  if(category === "pirate days") return piratesDay(fbid);
-  if(category === "bad weather") return badWeatherPolicy(fbid);
-  if(category === "book tour") return bookTours(fbid);
-  if(category === "large group discounts") return largeGroupDiscounts(fbid);
-  if(category === "hotel transfers") return hotelTransfer(fbid);
-  if(category === "advance booking") return advanceBooking(fbid);
-  if(category === "passenger count") return passengerCount(fbid);
-  if(category === "customer service") return customerServiceDetails(fbid);
-  if(category === "unclassified") return this.adminMessageSender.sendMessageToAdmin(fbid, mesg);
-  if(category === "location") return location(fbid);
-  if(category === "operating season") return operatingSeason(fbid);
-  if(category === "kids allowed") return kidsAllowed(fbid);
-  if(category === "customized tour") return customizedTours(fbid);
-  if(category === "infant charges") return infantCharges(fbid);
-  if(category === "operating tours") return bookTours.call(this, fbid);
-  if(category === "farewell") return farewell.call(this, pageId, fbid);
-  */
 }
 
 SeaSprayHandler.prototype.handlePostback = function(payload, pageId, fbid) {
-  if(pageId != PageHandler.mySeaSprayPageId) return null;
-  const awaitingAdminResponse = this.adminMessageSender.handleWaitingForAdminResponse(fbid, payload);
-  if(awaitingAdminResponse) return awaitingAdminResponse;
-
-  if(payload === "sea_spray_contact") return customerService(fbid);
-  if(payload === "sea_spray_book_tour") return bookTours.call(this, fbid);
-  if(payload === "sea_spray_tout_bagay_operating_days") return toutBagayDays.call(this, fbid);
-  if(payload === "sea_spray_pirate_days_operating_days") return piratesDay.call(this, fbid);
-  if(payload === "sea_spray_sunset_cruise_operating_days") return sunsetCruiseDays.call(this, fbid);
-  if(payload === "sea_spray_bad_weather") return badWeatherPolicy(fbid);
-  if(payload === "sea_spray_advance_booking") return advanceBooking(fbid);
-  if(payload === "sea_spray_group_discount") return largeGroupDiscounts(fbid);
-  if(payload === "sea_spray_hotel_transfer") return hotelTransfer(fbid);
-  if(payload === "sea_spray_common_questions") return commonQuestionsButtons.call(this, fbid);
-  if(payload.startsWith("select_tour") && this.state[fbid] && this.state[fbid].awaitingTourNameForOperatingDays) {
-    this.state[fbid].awaitingTourNameForOperatingDays = false;
-    switch(payload) {
-      case "select_tour_tout_bagay": return toutBagayDays(fbid); 
-      case "select_tour_sunset_cruise": return sunsetCruiseDays(fbid); 
-      case "select_tour_pirate_day": return piratesDay(fbid); 
+  if(pageId != PageHandler.mySeaSprayPageId) return Promise.resolve(null);
+  const self = this;
+  return this.adminMessageSender.handleWaitingForAdminResponse(fbid, payload).then(
+    (value) => {
+      if(value) return Promise.resolve(value);
+      let response;
+      if(payload === "sea_spray_contact") response = customerService(fbid);
+      if(payload === "sea_spray_book_tour") response = bookTours.call(self, fbid);
+      if(payload === "sea_spray_tout_bagay_operating_days") response = toutBagayDays.call(self, fbid);
+      if(payload === "sea_spray_pirate_days_operating_days") response = piratesDay.call(self, fbid);
+      if(payload === "sea_spray_sunset_cruise_operating_days") response = sunsetCruiseDays.call(self, fbid);
+      if(payload === "sea_spray_bad_weather") response = badWeatherPolicy(fbid);
+      if(payload === "sea_spray_advance_booking") response = advanceBooking(fbid);
+      if(payload === "sea_spray_group_discount") response = largeGroupDiscounts(fbid);
+      if(payload === "sea_spray_hotel_transfer") response = hotelTransfer(fbid);
+      if(payload === "sea_spray_common_questions") response = commonQuestionsButtons.call(self, fbid);
+      // handle case where user chose a particular tour for a previously determined category
+      if(payload.startsWith("select_tour")) response = selectResponseForTour.call(self, payload, null, fbid);
+      // we need to respond one way or another here. TODO: See if there is better way to handle this.
+      if(!response) {
+        logger.error(`Dont know how to handle payload ${payload} of fbid ${fbid} for "sea spray" bot. Asking help from admin`);
+        response = FBTemplateCreator.generic({
+          fbid: fbid,
+          elements: [{
+            title: "We have notified our team, who will get back to you shortly",
+            image_url: "http://tinyurl.com/y8v9ral5",
+          }],
+        });
+      }
+      // logger.debug(`response is ${JSON.stringify(response)}`);
+      return Promise.resolve(response);
+    },
+    (err) => {
+      logger.error(`handleText: Error in categoryPromise: ${err}`);
+      return Promise.reject("Even bots need to eat. Back in a bit");
     }
-  }
-  if(payload.startsWith("select_tour") && this.state[fbid] && this.state[fbid].awaitingTourNameForFoodOption) {
-    this.state[fbid].awaitingTourNameForFoodOption = false;
-    switch(payload) {
-      case "select_tour_tout_bagay": return toutBagayFood(fbid); 
-      case "select_tour_sunset_cruise": return sunsetCruiseFood(fbid); 
-      case "select_tour_pirate_day": return piratesDayFood(fbid); 
-      case "select_tour_private_charter": return privateCharterFood(fbid);
-    }
-  }
-
-  logger.error(`Do not know how to handle payload ${payload} from fbid ${fbid} for "sea spray" bot`);
-  // we need to respond one way or another here. TODO: See if there is a bettter way to handle this.
-  return FBTemplateCreator.generic({
-    fbid: fbid,
-    elements: [{
-      title: "We have notified our team, who will get back to you shortly",
-      image_url: "http://tinyurl.com/y8v9ral5",
-    }],
-  });
+  );
 }
 
-function talkToHuman(fbid) {
-  return FBTemplateCreator.generic({
-    fbid: fbid,
-    elements: [{
-      title: "",
-    }]
-  });
+// convenience function that handles selecting the right functions given a tour and the category. This is used in cases where a particular categories' response depends on the tour selected. This also handles the case where no tour is selected (setting state, calling chooseTour) and handling case where state might be set.
+function selectResponseForTourOld(tour, category, fbid) {
+  // if no tour was provided, ask for that information and set state accordingly.
+  if(!tour) {
+    if(!this.state[fbid]) this.state[fbid] = {};
+    switch(category) {
+      case "food-options": this.state[fbid].awaitingTourNameForFoodOption = true; break; 
+      case "operating-days": this.state[fbid].awaitingTourNameForOperatingDays = true; break;
+      case "cruise-details": this.state[fbid].awaitingTourNameForDetails = true; break;
+      case "cost-of-tour": this.state[fbid].awaitingTourNameForCost = true; break;
+    }
+    return chooseTours(fbid);
+  }
+  const functions = {
+    'select_tour_tout_bagay': {
+      'food-options': toutBagayFood,
+      'operating-days': toutBagayDays,
+      'cruise-details': toutBagayDetails,
+      'cost-of-tour': toutBagayCost
+    },
+    'select_tour_sunset_cruise': {
+      'food-options': sunsetCruiseFood,
+      'operating-days': sunsetCruiseDays,
+      'cruise-details': sunsetCruiseDetails,
+      'cost-of-tour': sunsetCruiseCost
+    },
+    'select_tour_pirate_day': {
+      'food-options': piratesDayFood,
+      'operating-days': piratesDay,
+      'cruise-details': piratesDayDetails,
+      'cost-of-tour': piratesDayCost
+    },
+    'select_tour_private_charter': {
+      'food-options': privateCharterFood,
+      'operating-days': privateCharterOperatingDays,
+      'cruise-details': privateCharterDetails,
+      'cost-of-tour': privateCharterCost,
+    }
+  };
+  functions["Pirate Day's Cruise"] = functions.select_tour_pirate_day;
+  functions["Sunset cruise"] = functions.select_tour_sunset_cruise;
+  functions["Tout Bagay Cruise"] = functions.select_tour_tout_bagay;
+  functions["Private charter"] = functions.select_tour_private_charter;
+  if(category) return functions[tour][category](fbid);
+  if(!this.state[fbid]) throw new Error(`No state value present and passed parameter cateogory is undefined. Potential BUG! in calling function`);
+  // if state was set, handle that. Needed for call made from handlePostback()
+  if(this.state[fbid].awaitingTourNameForFoodOption) {
+    this.state[fbid].awaitingTourNameForFoodOption = false;
+    return functions[tour]["food-options"](fbid);
+  }
+  if(this.state[fbid].awaitingTourNameForOperatingDays) {
+    this.state[fbid].awaitingTourNameForOperatingDays = false; 
+    return functions[tour]["operating-days"](fbid);
+  }
+  if(this.state[fbid].awaitingTourNameForDetails) {
+    this.state[fbid].awaitingTourNameForDetails = false; 
+    return functions[tour]["cruise-details"](fbid);
+  }
+  if(this.state[fbid].awaitingTourNameForCost) {
+    this.state[fbid].awaitingTourNameForCost = false;
+    return functions[tour]["cost-of-tour"](fbid);
+  }
+  throw new Error(`Unknown state set. state dump: ${JSON.stringify(this.state[fbid])}.`);
+}
+
+function selectResponseForTour(tour, category, fbid) {
+  // if no tour was provided, ask for that information and set state accordingly.
+  if(!tour) return chooseTours(fbid, category);
+  if(tour.includes(":")) {
+    // this is passed from handlePostback. Assert invariants before proceeding.
+    if(category) throw new Error(`selectResponseForTour: Potential BUG: tour contains a ":" (${tour}), but category is also present (${category}). Confused!`);
+    const list = tour.split(":");
+    if(!list || list.length !== 3) throw new Error(`selectResponseForTour: invalid tour name passed. Expected it to be a real tour name passed by dialog flow or of the form <tourName>:<category>. But the value is <${tour}>`);
+    tour = list[1]; // list[0] is "select_tour"
+    category = list[2];
+  }
+  const functions = {
+    'tout_bagay': {
+      'food-options': toutBagayFood,
+      'operating-days': toutBagayDays,
+      'cruise-details': toutBagayDetails,
+      'cost-of-tour': toutBagayCost
+    },
+    'sunset_cruise': {
+      'food-options': sunsetCruiseFood,
+      'operating-days': sunsetCruiseDays,
+      'cruise-details': sunsetCruiseDetails,
+      'cost-of-tour': sunsetCruiseCost
+    },
+    'pirate_day': {
+      'food-options': piratesDayFood,
+      'operating-days': piratesDay,
+      'cruise-details': piratesDayDetails,
+      'cost-of-tour': piratesDayCost
+    },
+    'private_charter': {
+      'food-options': privateCharterFood,
+      'operating-days': privateCharterOperatingDays,
+      'cruise-details': privateCharterDetails,
+      'cost-of-tour': privateCharterCost,
+    }
+  };
+  functions["Pirate Day's Cruise"] = functions.pirate_day;
+  functions["Sunset cruise"] = functions.sunset_cruise;
+  functions["Tout Bagay Cruise"] = functions.tout_bagay;
+  functions["Private charter"] = functions.private_charter;
+  // logger.debug(`selectResponseForTour: tour ${tour} & category ${category}`);
+  if(tour && category && functions[tour][category]) return functions[tour][category](fbid);
+  throw new Error(`selectResponseForTour: Potential BUG: Cannot find the right function to call for tour ${tour} & category ${category}`);
 }
 
 function sunsetCruiseFood(fbid) {
@@ -217,12 +286,7 @@ function sunsetCruiseFood(fbid) {
       title: "We serve finger food and drinks in the Sunset cruise",
       subtitle: "Beer is available for purchase",
       image_url: "http://tinyurl.com/y8cfqjla",
-      buttons: [{
-        title: "Book Sunset cruise",
-        type: "web_url",
-        webview_height_ratio: "full",
-        url: `https://fareharbor.com/embeds/book/seaspraycruises/items/35419/calendar/${year}/${month}/?full-items=yes`
-      }]
+      buttons: bookSunsetCruiseButton()
     }]
   });
 }
@@ -234,12 +298,7 @@ function piratesDayFood(fbid) {
       title: "We serve buffet lunch and drinks on the Pirate's cruise",
       subtitle: "Beer is available for purchase",
       image_url: "http://tinyurl.com/ybxwcufb",
-      buttons: [{
-        title: "Book Pirates' Day",
-        type: "web_url",
-        webview_height_ratio: "full",
-        url: `https://fareharbor.com/embeds/book/seaspraycruises/items/35420/calendar/${year}/${month}/?full-items=yes`
-      }]
+      buttons: bookPiratesDayButton()
     }]
   });
 }
@@ -251,12 +310,7 @@ function privateCharterFood(fbid) {
       title: "Buffet lunch can be requested on Private charters",
       subtitle: "We serve drinks and beer at no extra charge",
       image_url: "https://seaspraycruises.com/wp-content/uploads/2016/12/fishing02-560x460.jpg",
-      buttons: [{
-        title: "Book Private cruise",
-        type: "web_url",
-        webview_height_ratio: "full",
-        url: `https://fareharbor.com/embeds/book/seaspraycruises/items/35425/calendar/${year}/${month}/?flow=4916`
-      }]
+      buttons: bookPrivateCharterButton()
     }]
   });
 }
@@ -268,12 +322,7 @@ function toutBagayFood(fbid) {
       title: "We serve buffet lunch and drinks at the Tout Bagay cruise",
       subtitle: "Beer is available at no extra charge!",
       image_url: "http://tinyurl.com/y8486a92",
-      buttons: [{
-        title: "Book Tout Bagay",
-        type: "web_url",
-        webview_height_ratio: "full",
-        url: `https://fareharbor.com/embeds/book/seaspraycruises/items/35423/calendar/${year}/${month}/?full-items=yes`
-      }]
+      buttons: bookToutBagayButton()
     }]
   });
 }
@@ -435,7 +484,7 @@ function toutBagayDays(fbid) {
     });
 }
 
-function chooseTours(fbid) {
+function chooseTours(fbid, category) {
   const list = [];
   list.push(FBTemplateCreator.text({
     fbid: fbid,
@@ -450,7 +499,8 @@ function chooseTours(fbid) {
       buttons: [{
         title: "Tout Bagay",
         type: "postback",
-        payload: "select_tour_tout_bagay"
+        // payload: "select_tour_tout_bagay"
+        payload: `select_tour:tout_bagay:${category}`
       }]
     }, {
       title: "Pirate Day's Adventure Cruise",
@@ -459,7 +509,8 @@ function chooseTours(fbid) {
       buttons: [{
         title: "Pirate's Day",
         type: "postback",
-        payload: "select_tour_pirate_day"
+        // payload: "select_tour_pirate_day"
+        payload: `select_tour:pirate_day:${category}`
       }]
     }, {
       title: "Sunset Cruise",
@@ -468,7 +519,8 @@ function chooseTours(fbid) {
       buttons: [{
         title: "Sunset Cruise",
         type: "postback",
-        payload: "select_tour_sunset_cruise"
+        // payload: "select_tour_sunset_cruise"
+        payload: `select_tour:sunset_cruise:${category}`
       }]
     }, {
       title: "Private charter",
@@ -477,48 +529,65 @@ function chooseTours(fbid) {
       buttons: [{
         title: "Private charter",
         type: "postback",
-        payload: "select_tour_private_charter"
+        // payload: "select_tour_private_charter"
+        payload: `select_tour:private_charter:${category}`
       }]
     }]
   }));
   return list;
 }
 
+function operatingHours(fbid) {
+  return FBTemplateCreator.list({
+    fbid: fbid,
+    compact_top_element_style: true,
+    elements: [{
+      title: "Our office is open Monday-Saturday 9 a.m - 5 p.m.",
+      subtitle: "At the Rodney Bay marina. Click for google maps",
+      image_url: "http://tinyurl.com/y8486a92",
+      default_action: {
+        type: "web_url",
+        webview_height_ratio: "full",
+        url: "https://goo.gl/maps/oR9zuaicnX92"
+      },
+    }, {
+      title: "Email: info@seaspraycruises.com",
+      subtitle: "Email us if you have any questions",
+    }, {
+      title: "Our phone numbers: +1-758-458-0123, +1-758-452-8644",
+      subtitle: "US residents: +1-321-220-9423",
+      buttons: [{
+          type: "phone_number",
+          title: "Call us",
+          payload: "+13212209423"
+      }]
+    }],
+    buttons:[{
+      title: "Available tours",
+      type: "postback",
+      payload: "sea_spray_book_tour"
+    }]
+  });
+}
+
 function bookTours(fbid) {
-  const year = moment().year();
-  const month = moment().month() + 1;
   return FBTemplateCreator.generic({
     fbid: fbid,
     elements: [{
       title: "Tout Bagay Cruise",
       subtitle: "Our MOST popular tour. A guided historical tour along the west coast",
       image_url: "http://tinyurl.com/y8486a92",
-      buttons: [{
-        title: "Book cruise",
-        type: "web_url",
-        webview_height_ratio: "full",
-        url: `https://fareharbor.com/embeds/book/seaspraycruises/items/35423/calendar/${year}/${month}/?full-items=yes`
-      }]
+      buttons: bookToutBagayButton(fbid)
     }, {
       title: "Pirate Day's Adventure Cruise",
       subtitle: "Join Captain John-T and his buccaneers crew as they set sail for Soufriere, along the west coast",
       image_url: "http://tinyurl.com/ybxwcufb",
-      buttons: [{
-        title: "Book cruise",
-        type: "web_url",
-        webview_height_ratio: "full",
-        url: `https://fareharbor.com/embeds/book/seaspraycruises/items/35420/calendar/${year}/${month}/?full-items=yes`
-      }]
+      buttons: bookPiratesDayButton()
     }, {
       title: "Sunset Cruise",
       subtitle: "Come, seek the green flash",
       image_url: "http://tinyurl.com/y8cfqjla",
-      buttons: [{
-        title: "Book cruise",
-        type: "web_url",
-        webview_height_ratio: "full",
-        url: `https://fareharbor.com/embeds/book/seaspraycruises/items/35419/calendar/${year}/${month}/?full-items=yes`
-      }]
+      buttons: bookSunsetCruiseButton()
     }, {
       title: "All tours",
       subtitle: "Click to see all tours. We offer a variety of tours for everyone",
@@ -704,6 +773,207 @@ function location(fbid) {
           payload: "sea_spray_book_tour"
       }]
     }]
+  });
+}
+
+function bookToutBagayButton(fbid) {
+  return [{
+    title: "Book Tout Bagay",
+    type: "web_url",
+    webview_height_ratio: "full",
+    url: `https://fareharbor.com/embeds/book/seaspraycruises/items/35423/calendar/${year}/${month}/?full-items=yes`
+  }];
+}
+
+function toutBagayDetails(fbid) {
+  return FBTemplateCreator.list({
+    fbid: fbid,
+    compact_top_element_style: true,
+    elements: [{
+      title: "Tout Bagay cruise operates from 8.30 a.m. - 5.00 p.m.",
+      subtitle: "Monday, Wednesday and Friday",
+      image_url: "http://tinyurl.com/y8486a92",
+    }, {
+      title: "Cost: Adults US $110; Children (2 to 12) US $55. 10% VAT tax applies",
+      subtitle: "Add US $55 for ziplining or horse riding (optional)",
+    }, {
+      title: "Mud Baths, Soufriere Waterfall, Sulphur Springs, Morne Coubaril Estate", 
+      subtitle: "Marigot, West Coast Beach for swimming or snorkelling",
+    }, {
+      title: "Local Creole buffet lunch served at Morne Coubaril Estate",
+      subtitle: "Beer, rum punch, rum mixes, fruit-punch, sodas, water"
+    }],
+    buttons: bookToutBagayButton()
+  });
+}
+
+function bookPrivateCharterButton() {
+  return [{
+    title: "Book Private cruise",
+    type: "web_url",
+    webview_height_ratio: "full",
+    url: `https://fareharbor.com/embeds/book/seaspraycruises/items/35425/calendar/${year}/${month}/?flow=4916`
+  }];
+}
+
+function privateCharterOperatingDays(fbid) {
+  return FBTemplateCreator.generic({
+    fbid: fbid,
+    elements: [{
+      title: "Private charters can be customized according to your needs",
+      subtitle: "Contact us so we can create an amazing experience for you!",
+      image_url: "https://seaspraycruises.com/wp-content/uploads/2016/12/fishing02-560x460.jpg",
+      buttons: [{
+        title: "Contact details",
+        type: "postback",
+        payload: "sea_spray_contact"
+      }]
+    }]
+  });
+}
+
+function privateCharterDetails(fbid) {
+  return FBTemplateCreator.list({
+    fbid: fbid,
+    compact_top_element_style: true,
+    elements: [{
+      title: "Have a special reason to celebrate? Or just looking to explore the island privately?",
+      subtitle: "We can plan an engaging & exciting trip just for you",
+      image_url: "https://seaspraycruises.com/wp-content/uploads/2016/12/fishing02-560x460.jpg",
+    },
+    {
+      title: "Our options include Speedboat Bar hop, Piton hike & Sail",
+      subtitle: "Full day private west coast sail, Private sunset cruise etc.",
+      buttons: [{
+        title: "See all options",
+        type: "web_url",
+        url: "https://seaspraycruises.com/st-lucia-private-tours/",
+        webview_height_ratio: "full",
+      }]
+    },
+    {
+      title: "Dont find what you are looking for",
+      subtitle: "Just contact us and we will arrange it for you!",
+    }],
+    buttons: [{
+      title: "Contact details",
+      type: "postback",
+      payload: "sea_spray_contact"
+    }]
+  });
+}
+
+function privateCharterCost(fbid) {
+  return FBTemplateCreator.generic({
+    fbid: fbid,
+    elements: [{
+      title: "Individual and group pricings varies on our customizable private tours",
+      subtitle: "Contact us with details and we will send you a quote",
+      image_url: "https://seaspraycruises.com/wp-content/uploads/2016/12/fishing02-560x460.jpg",
+      buttons: [{
+        title: "Contact details",
+        type: "postback",
+        payload: "sea_spray_contact"
+      }]
+    }]
+  });
+}
+
+function toutBagayCost(fbid) {
+  return FBTemplateCreator.generic({
+    fbid: fbid,
+    elements: [{
+      title: "Cost: Adults US $110; Children (2 to 12) US $55. 10% VAT tax applies",
+      subtitle: "Add US $55 for ziplining or horse riding (optional)",
+      image_url: "http://tinyurl.com/y8486a92",
+      buttons: bookToutBagayButton()
+    }]
+  });
+}
+
+function bookPiratesDayButton() {
+  return [{
+    title: "Book Pirate's day cruise",
+    type: "web_url",
+    webview_height_ratio: "full",
+    url: `https://fareharbor.com/embeds/book/seaspraycruises/items/35420/calendar/${year}/${month}/?full-items=yes`
+  }];
+}
+
+function piratesDayCost(fbid) {
+  return FBTemplateCreator.generic({
+    fbid: fbid,
+    elements: [{
+      title: "Cost: Adults US $110; Children (2 to 12) US $50",
+      subtitle: "A 10% VAT tax applies. Children under 2 travel for free",
+      image_url: "http://tinyurl.com/ybxwcufb",
+      buttons: bookPiratesDayButton()
+    }]
+  });
+}
+
+function piratesDayDetails(fbid) {
+  return FBTemplateCreator.list({
+    fbid: fbid,
+    compact_top_element_style: true,
+    elements: [{
+      title: "Pirate's Day cruise operates from 8.30 a.m. - 4.00 p.m.",
+      subtitle: "Suitable for the whole family",
+      image_url: "http://tinyurl.com/ybxwcufb",
+    }, {
+      title: "Cost: Adults US $110; Children (2 to 12) US $50",
+      subtitle: "A 10% VAT tax applies. Children under 2 travel for free",
+    }, {
+      title: "Diamond Waterfall & Botanical Gardens, Drive-in Volcano, Marigot Bay",
+      subtitle: "Face painting, games and cannon-firing. Pirate kits available.",
+    }, {
+      title: "Local Buffet Lunch for Adults, Hot Dogs and chips for Kids",
+      subtitle: "Rum punch, fruit-punch, sodas, water. Beer available for sale"
+    }],
+    buttons: bookPiratesDayButton()
+  });
+}
+
+function bookSunsetCruiseButton() {
+  return [{
+    title: "Book Sunset cruise",
+    type: "web_url",
+    webview_height_ratio: "full",
+    url: `https://fareharbor.com/embeds/book/seaspraycruises/items/35419/calendar/${year}/${month}/?full-items=yes`
+  }];
+}
+
+function sunsetCruiseCost(fbid) {
+  return FBTemplateCreator.generic({
+    fbid: fbid,
+    elements: [{
+      title: "Adults: US $60; Children (2 to 12): US $30",
+      subtitle: "A 10% VAT tax applies. Children under 2 travel for free",
+      image_url: "http://tinyurl.com/y8cfqjla",
+      buttons: bookSunsetCruiseButton()
+    }]
+  });
+}
+
+function sunsetCruiseDetails(fbid) {
+  return FBTemplateCreator.list({
+    fbid: fbid,
+    compact_top_element_style: true,
+    elements: [{
+      title: "Sunset cruise operates from 5.00 - 7.00 p.m.",
+      image_url: "http://tinyurl.com/y8cfqjla",
+    }, {
+      title: "Cost: Adults US $60; Children (2 to 12) US $30",
+      subtitle: "A 10% VAT tax applies. Children under 2 travel for free",
+    }, {
+      title: "You will see Various sites of interest on the western coast line",
+      subtitle: "such as Pigeon Island and other attractions",
+      image_url: "https://slunatrust.org/assets/content/site/slnt-site-DUMMY-1.png",
+    }, {
+      title: "We serve drinks (like Champagne, Rum punch/mixes) and Hors d’oeuvres",
+      subtitle: "Other drinks: Fruit-punch, sodas, water. Beer is available for sale"
+    }],
+    buttons: bookSunsetCruiseButton()
   });
 }
 

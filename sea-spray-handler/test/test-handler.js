@@ -6,23 +6,25 @@ const baseDir = '/home/ec2-user';
 const logger = require(`${baseDir}/my-logger`);
 logger.setTestConfig(); // indicate that we are logging for a test
 
-const handler = new SeaSprayHandler();
+const handler = new SeaSprayHandler(true /* testing */);
 const myFbid = "1234";
 function handlePromise(promise, expectedCategory, done, customVerification, last) {
     promise.done(
       function(response) {
         try {
-          logger.debug(`verifying  category: ${expectedCategory}`);
-          expect(response.category).to.equal(expectedCategory);
+          // logger.debug(`verifying  category: ${expectedCategory}`);
           // logger.debug(JSON.stringify(response));
+          expect(response.category).to.equal(expectedCategory);
           expect(response.message).is.not.undefined;
           // logger.debug(JSON.stringify(response.message));
           if(customVerification && typeof customVerification === "function") customVerification(response);
           if(customVerification && typeof customVerification === "boolean") done();
           if(last) done();
-          logger.debug(`session state: ${handler.adminMessageSender.sentMessageToAdmin[myFbid]}`);
+          // logger.debug(`session state: ${handler.adminMessageSender.sentMessageToAdmin[myFbid]}`);
         }
         catch(e) {
+          logger.error(`handlePromise: Error ${e.stack}`);
+          // TODO: Even if we call done(e) here, this test will pass as long as the "done()" above gets called. Fix it.
           done(e);
         }
       },
@@ -32,7 +34,25 @@ function handlePromise(promise, expectedCategory, done, customVerification, last
     );
 }
 
+function verifyState(promise, expectedValue, done) {
+  promise.done(
+    (value) => {
+      try { 
+        if(!expectedValue) expect(value).to.be.undefined;
+        if(typeof expectedValue === "boolean") expect(value).to.be.true;
+        if(typeof expectedValue === "object") expect(value).not.be.undefined;
+      }
+      catch(e) {
+        done(e);
+      }
+    },
+    (err) => {
+      done(err);
+  });
+}
+
 describe("sea spray categories", function() {
+
   it("greeting", function(done) {
     let response = handler.handleText("Hi", PageHandler.mySeaSprayPageId, myFbid);
     const verify = function(response) {
@@ -69,28 +89,41 @@ describe("sea spray categories", function() {
     handlePromise(response, "farewell", done, true);
   });
 
+  it("operating hours", function(done) {
+    let response = handler.handleText("Are you open now?", PageHandler.mySeaSprayPageId, myFbid);
+    const verify = function(response) {
+      const message = response.message;
+      expect(message.message.attachment.payload.template_type).to.equal("list");
+      expect(message.message.attachment.payload.elements[0].title).to.contain("Our office is open");
+      expect(message.message.attachment.payload.elements[2].title).to.contain("Our phone numbers");
+    };
+    handlePromise(response, "operating-hours", done, verify, true);
+  });
+
   it("operating days no tour", function(done) {
     let promise = handler.handleText("what time does the tour operate?", PageHandler.mySeaSprayPageId, myFbid);
     promise.then(
       function(result) {
-        expect(handler.state[myFbid].awaitingTourNameForOperatingDays).to.be.true;
         expect(result.category).to.equal("operating-days");
         const mesgList = result.message;
         expect(mesgList.length).to.equal(2);
         // logger.debug(JSON.stringify(mesgList));
         expect(mesgList[0].message.text).is.not.undefined;
-        let message = handler.handlePostback("select_tour_sunset_cruise", PageHandler.mySeaSprayPageId, myFbid);
-        expect(message.message.attachment.payload.template_type).to.equal("list");
-        expect(message.message.attachment.payload.elements[0].title).to.contain("Sunset Cruise");
-        expect(handler.state[myFbid].awaitingTourNameForOperatingDays).to.be.false;
-        return handler.handleText("when do tours operate?", PageHandler.mySeaSprayPageId, myFbid);
+        return handler.handlePostback("select_tour:sunset_cruise:operating-days", PageHandler.mySeaSprayPageId, myFbid);
       },
       function(err) {
-        done(err);
+        return Promise.reject(err);
       }
-    ).done(
+    ).then(
+      (message) => {
+        expect(message.message.attachment.payload.template_type).to.equal("list");
+        expect(message.message.attachment.payload.elements[0].title).to.contain("Sunset Cruise");
+        return handler.handleText("when do tours operate?", PageHandler.mySeaSprayPageId, myFbid);
+      },
+      (err) => {
+        return Promise.reject(err);
+    }).done(
       function(result) {
-        expect(handler.state[myFbid].awaitingTourNameForOperatingDays).to.be.true;
         expect(result.category).to.equal("operating-days");
         const mesgList = result.message;
         expect(mesgList.length).to.equal(2);
@@ -107,22 +140,32 @@ describe("sea spray categories", function() {
       const message = response.message;
       expect(message.message.attachment.payload.elements[0].title).to.contain("Sunset Cruise");
     };
-    let response = handler.handleText("sunset cruise operating hours", PageHandler.mySeaSprayPageId, myFbid);
+    let response = handler.handleText("sunset cruise operating days", PageHandler.mySeaSprayPageId, myFbid);
     handlePromise(response, "operating-days", done, verifier);
     response = handler.handleText("does sunset cruise run year-round", PageHandler.mySeaSprayPageId, myFbid);
     handlePromise(response, "operating-days", done, verifier);
-    response = handler.handleText("When are you open for sunset cruise", PageHandler.mySeaSprayPageId, myFbid);
+    response = handler.handleText("When do you operate sunset cruise", PageHandler.mySeaSprayPageId, myFbid);
     handlePromise(response, "operating-days", done, verifier, true);
   });
 
-  it("tout bagay days", function(done) {
+  it("private charter operating days", function(done) {
+    const verifier = function verifier(response) {
+      const message = response.message;
+      expect(message.message.attachment.payload.elements[0].title).to.contain("Private charters can be customized");
+      expect(message.message.attachment.payload.elements[0].buttons[0].title).to.contain("Contact details");
+    };
+    let response = handler.handleText("When do you operate Private charters?", PageHandler.mySeaSprayPageId, myFbid);
+    handlePromise(response, "operating-days", done, verifier, true);
+  });
+
+  it("tout bagay operating days", function(done) {
     const verifier = function verifier(response) {
       const message = response.message;
       expect(message.message.attachment.payload.elements[0].title).to.contain("Tout Bagay Cruise");
     };
     let response = handler.handleText("tout bagay cruise operating season", PageHandler.mySeaSprayPageId, myFbid);
     handlePromise(response, "operating-days", done, verifier);
-    response = handler.handleText("tout bagay cruise operating hours", PageHandler.mySeaSprayPageId, myFbid);
+    response = handler.handleText("tout bagay cruise operating days", PageHandler.mySeaSprayPageId, myFbid);
     handlePromise(response, "operating-days", done, verifier);
     response = handler.handleText("does tout bagay cruise run year-round", PageHandler.mySeaSprayPageId, myFbid);
     handlePromise(response, "operating-days", done, verifier);
@@ -130,7 +173,7 @@ describe("sea spray categories", function() {
     handlePromise(response, "operating-days", done, verifier, true);
   });
 
-  it("pirate days operating hours", function(done) {
+  it("pirate days operating days", function(done) {
     const verifier = function verifier(response) {
       const message = response.message;
       expect(message.message.attachment.payload.elements[0].title).to.contain("Pirate Day's Adventure");
@@ -197,6 +240,7 @@ describe("sea spray categories", function() {
   it("input.unknown", function(done) {
     let response = handler.handleText("un understable message", PageHandler.mySeaSprayPageId, myFbid);
     handlePromise(response, "input.unknown", done);
+
     response = handler.handleText("something no one understands", PageHandler.mySeaSprayPageId, myFbid);
     handlePromise(response, "input.unknown", done);
     response = handler.handleText("blah blee", PageHandler.mySeaSprayPageId, myFbid);
@@ -262,26 +306,13 @@ describe("sea spray categories", function() {
   });
 
   it("test appreciation", function(done) {
-    let promise = handler.handleText("Nice job..", PageHandler.mySeaSprayPageId, myFbid);
+    const message = "Nice job..";
+    let promise = handler.handleText(message, PageHandler.mySeaSprayPageId, myFbid);
+    // ensure that this is not a message that was sent to human being
     const verifier = function(response) {
-        expect(handler.adminMessageSender.sentMessageToAdmin[myFbid]).to.be.undefined;
+        verifyState(handler.adminMessageSender.stateManager.get(["messageSentToAdmin", myFbid, message]), undefined, done);
     }
     handlePromise(promise, "appreciation", done, verifier, true);
-    /*
-    promise.done(
-      function(response) {
-        expect(response.message).to.not.be.undefined;
-        expect(response.message.message.text).to.not.be.undefined;
-        // logger.debug(`message: ${JSON.stringify(response.message)}`);
-        // ensure that this is not a message that was sent to human being
-        expect(handler.adminMessageSender.sentMessageToAdmin[myFbid]).to.be.undefined;
-        done();
-      },
-      function(err) {
-        done(err);
-      }
-    );
-    */
   });
 
   it("test talk to human", function(done) {
@@ -292,10 +323,13 @@ describe("sea spray categories", function() {
   it("test food options", function(done) {
     let response = handler.handleText("what food options do you have for pirate's day cruise?", PageHandler.mySeaSprayPageId, myFbid);
     let verify = function(response) {
-      expect(response.message.message.attachment.payload.elements[0].title).to.contain("buffet lunch and drinks");
+      expect(response.message.message.attachment.payload.elements[0].title).to.contain("buffet lunch and drinks on the Pirate's cruise");
     }
     handlePromise(response, "food-options", done, verify);
     response = handler.handleText("what food options do you have for tout bagay cruise?", PageHandler.mySeaSprayPageId, myFbid);
+    verify = function(response) {
+      expect(response.message.message.attachment.payload.elements[0].title).to.contain("buffet lunch and drinks at the Tout Bagay cruise");
+    }
     handlePromise(response, "food-options", done, verify);
     response = handler.handleText("what food options do you have for private charter?", PageHandler.mySeaSprayPageId, myFbid);
     verify = function(response) {
@@ -309,70 +343,194 @@ describe("sea spray categories", function() {
     handlePromise(response, "food-options", done, verify, true);
   });
 
+  it("test details", function(done) {
+    let response = handler.handleText("tout bagay details", PageHandler.mySeaSprayPageId, myFbid);
+    let verify = function(response) {
+      expect(response.message.message.attachment.payload.template_type).to.equal("list");
+      expect(response.message.message.attachment.payload.elements[0].title).to.contain("Tout Bagay cruise operates from 8.30 a.m. - 5.00 p.m.");
+      expect(response.message.message.attachment.payload.elements[3].title).to.contain("Local Creole buffet lunch served at Morne Coubaril Estate");
+    }
+    handlePromise(response, "cruise-details", done, verify);
+    response = handler.handleText("What does the pirate's day cruise entail?", PageHandler.mySeaSprayPageId, myFbid);
+    verify = function(response) {
+      expect(response.message.message.attachment.payload.template_type).to.equal("list");
+      expect(response.message.message.attachment.payload.elements[0].title).to.contain("Pirate's Day cruise operates from");
+      expect(response.message.message.attachment.payload.elements[3].title).to.contain("Local Buffet Lunch for Adults,");
+    }
+    handlePromise(response, "cruise-details", done, verify);
+    response = handler.handleText("details of private tours?", PageHandler.mySeaSprayPageId, myFbid);
+    verify = function(response) {
+      // logger.debug(`response is ${JSON.stringify(response)}`);
+      expect(response.message.message.attachment.payload.template_type).to.equal("list");
+      expect(response.message.message.attachment.payload.elements[0].title).to.contain("Have a special reason to celebrate? Or just looking to explore the island privately?");
+      expect(response.message.message.attachment.payload.elements[2].subtitle).to.contain("Just contact us and we will arrange it for you!");
+    }
+    handlePromise(response, "cruise-details", done, verify);
+    response = handler.handleText("What does the sunset cruise include?", PageHandler.mySeaSprayPageId, myFbid);
+    verify = function(response) {
+      expect(response.message.message.attachment.payload.template_type).to.equal("list");
+      expect(response.message.message.attachment.payload.elements[0].title).to.contain("Sunset cruise operates from 5.00 - 7.00 p.m.");
+      expect(response.message.message.attachment.payload.elements[3].title).to.contain("We serve drinks (like Champagne, Rum punch/mixes) and Hors d’oeuvres");
+    }
+    handlePromise(response, "cruise-details", done, verify, true);
+  });
+
+  it("test details no tour name present", function(done) {
+    let promise = handler.handleText("Can you provide details of your tours?", PageHandler.mySeaSprayPageId, myFbid);
+    promise.then(
+      function(result) {
+        expect(result.category).to.equal("cruise-details");
+        const mesgList = result.message;
+        expect(mesgList.length).to.equal(2);
+        expect(mesgList[0].message.text).is.not.undefined;
+        return handler.handlePostback("select_tour:sunset_cruise:cruise-details", PageHandler.mySeaSprayPageId, myFbid);
+      },
+      function(err) {
+        return Promise.reject(err);
+      }
+    ).done(
+      (message) => {
+        expect(message.message.attachment.payload.template_type).to.equal("list");
+        expect(message.message.attachment.payload.elements[0].title).to.contain("Sunset cruise operates from 5.00 - 7.00 p.m.");
+        expect(message.message.attachment.payload.elements[3].title).to.contain("We serve drinks (like Champagne, Rum punch/mixes) and Hors d’oeuvres");
+        done();
+      },
+      (err) => {
+        done(err);
+    });
+  });
+
+  it("test cost", function(done) {
+    let response = handler.handleText("tout bagay cost", PageHandler.mySeaSprayPageId, myFbid);
+    let verify = function(response) {
+      expect(response.message.message.attachment.payload.template_type).to.equal("generic");
+      expect(response.message.message.attachment.payload.elements[0].title).to.contain("Cost: Adults US $110; Children (2 to 12) US $55");
+    }
+    handlePromise(response, "cost-of-tour", done, verify);
+    response = handler.handleText("What's the cost of the sunset cruise?", PageHandler.mySeaSprayPageId, myFbid);
+    verify = function(response) {
+      expect(response.message.message.attachment.payload.template_type).to.equal("generic");
+      expect(response.message.message.attachment.payload.elements[0].title).to.contain("Adults: US $60; Children (2 to 12): US $30");
+    }
+    handlePromise(response, "cost-of-tour", done, verify);
+    response = handler.handleText("Price of Pirate's day cruise", PageHandler.mySeaSprayPageId, myFbid);
+    verify = function(response) {
+      expect(response.message.message.attachment.payload.template_type).to.equal("generic");
+      expect(response.message.message.attachment.payload.elements[0].title).to.contain("Cost: Adults US $110; Children (2 to 12) US $50");
+    }
+    handlePromise(response, "cost-of-tour", done, verify, true);
+  });
+
+  it("test cost no tour name present", function(done) {
+    let promise = handler.handleText("cost of tour", PageHandler.mySeaSprayPageId, myFbid);
+    promise.then(
+      function(result) {
+        expect(result.category).to.equal("cost-of-tour");
+        const mesgList = result.message;
+        expect(mesgList.length).to.equal(2);
+        expect(mesgList[0].message.text).is.not.undefined;
+        return handler.handlePostback("select_tour:tout_bagay:cost-of-tour", PageHandler.mySeaSprayPageId, myFbid);
+      },
+      function(err) {
+        return Promise.reject(err);
+      }
+    ).done(
+      (message) => {
+        expect(message.message.attachment.payload.template_type).to.equal("generic");
+        expect(message.message.attachment.payload.elements[0].title).to.contain("Cost: Adults US $110; Children (2 to 12) US $55. 10% VAT tax applies");
+        done();
+      },
+      (err) => {
+        done(err);
+    });
+  });
 });
 
+
 describe("sea spray postback", function() {
-  it("test tour selection", function() {
-    handler.state[myFbid] = {};
-    handler.state[myFbid].awaitingTourNameForOperatingDays = true;
-    let message = handler.handlePostback("select_tour_pirate_day", PageHandler.mySeaSprayPageId, myFbid);
-    expect(message.message.attachment.payload.template_type).to.equal("list");
-    expect(message.message.attachment.payload.elements[0].title).to.contain("Pirate Day's");
-    expect(handler.state[myFbid].awaitingTourNameForOperatingDays).to.be.false;
-    handler.state[myFbid].awaitingTourNameForOperatingDays = true;
-    message = handler.handlePostback("select_tour_sunset_cruise", PageHandler.mySeaSprayPageId, myFbid);
-    expect(message.message.attachment.payload.template_type).to.equal("list");
-    expect(message.message.attachment.payload.elements[0].title).to.contain("Sunset");
-    expect(handler.state[myFbid].awaitingTourNameForOperatingDays).to.be.false;
-    handler.state[myFbid].awaitingTourNameForOperatingDays = true;
-    message = handler.handlePostback("select_tour_tout_bagay", PageHandler.mySeaSprayPageId, myFbid);
-    expect(message.message.attachment.payload.template_type).to.equal("list");
-    expect(message.message.attachment.payload.elements[0].title).to.contain("Tout Bagay");
-    expect(handler.state[myFbid].awaitingTourNameForOperatingDays).to.be.false;
+
+  function verifyPostbackMessage(promise, tourName, verifier, done, last) {
+    promise.then(
+      (message) => {
+        expect(message.message.attachment.payload.template_type).to.equal("list");
+        expect(message.message.attachment.payload.elements[0].title).to.contain(tourName);
+        if(verifier) verifier(message);
+        logger.debug(`verifyPostbackMessage: true is ${last}`);
+        if(last) done();
+      },
+      (err) => {
+        done(err);
+    });
+  }
+
+  it("book all tours", function(done) {
+    const promise = handler.handlePostback("sea_spray_book_tour", PageHandler.mySeaSprayPageId, myFbid);
+    promise.done(
+      (message) => {
+        expect(message.message.attachment.payload.elements.length).to.equal(4);
+        expect(message.message.attachment.payload.template_type).to.equal("generic");
+        // logger.debug(JSON.stringify(message));
+        done();
+      },
+      (err) => {
+        done(err);
+    });
   });
 
-  it("book all tours", function() {
-    const message = handler.handlePostback("sea_spray_book_tour", PageHandler.mySeaSprayPageId, myFbid);
-    expect(message.message.attachment.payload.elements.length).to.equal(4);
-    expect(message.message.attachment.payload.template_type).to.equal("generic");
-    // logger.debug(JSON.stringify(message));
-  });
-
-  it("customer service postback", function() {
-    const message = handler.handlePostback("sea_spray_contact", PageHandler.mySeaSprayPageId, myFbid);
-    expect(message.message.attachment.payload.elements.length).to.equal(4);
-    expect(message.message.attachment.payload.template_type).to.equal("list");
-    expect(message.message.attachment.payload.elements[0].title).to.contain("Sea Spray cruises");
-    // logger.debug(JSON.stringify(message));
+  it("customer service postback", function(done) {
+    const promise = handler.handlePostback("sea_spray_contact", PageHandler.mySeaSprayPageId, myFbid);
+    promise.done(
+      (message) => {
+      expect(message.message.attachment.payload.elements.length).to.equal(4);
+      expect(message.message.attachment.payload.template_type).to.equal("list");
+      expect(message.message.attachment.payload.elements[0].title).to.contain("Sea Spray cruises");
+      // logger.debug(JSON.stringify(message));
+      done();
+    },
+    (err) => {
+      done(err);
+    });
   });
 
   it("admin", function(done) {
-    const customerFbid = 432;
+    const customerFbid = "432";
+    const adminFbid = myFbid;
     const question = "random message to someone";
+    const responseToQuestion = "response to message";
     const promise = handler.handleText(question, PageHandler.mySeaSprayPageId, customerFbid);
     promise.then(
-      function(result) {
-        expect(handler.adminMessageSender.sentMessageToAdmin[customerFbid]).to.be.true;
+      (result) => {
         expect(result.category).to.equal("input.unknown");
-        const message = handler.handlePostback(`respond_to_customer_${customerFbid}`, PageHandler.mySeaSprayPageId, myFbid);
+        verifyState(handler.adminMessageSender.stateManager.get(["messageSentToAdmin", customerFbid, question]), true, done);
         // logger.debug(JSON.stringify(message));
-        expect(message.recipient.id).to.equal(myFbid);
-        expect(message.message.text).to.not.be.null; 
-        return handler.handleText("response to message", PageHandler.mySeaSprayPageId, myFbid);
+        return handler.handlePostback(`respond_to_customer_${customerFbid}-_${question}`, PageHandler.mySeaSprayPageId, adminFbid);
       },
-      function(err) {
-        done(err);
-      }
-    ).done(
-      function(response) {
+      (err) => {
+        return Promise.reject(err);
+    }).then(
+      (message) => {
+        verifyState(handler.adminMessageSender.stateManager.get(["awaitingResponseFromAdmin", adminFbid]), {}, done);
+        expect(message.recipient.id).to.equal(adminFbid);
+        expect(message.message.text).to.include(`Enter your response for customer ${customerFbid}. Question is `); 
+        return handler.handleText(responseToQuestion, PageHandler.mySeaSprayPageId, adminFbid);
+      },
+      (err) => {
+        return Promise.reject(err);
+    }).done(
+      (response) => {
+        // logger.debug(`response is ${JSON.stringify(response)}`);
         const mesgList = response.message;
+        expect(mesgList[0].recipient.id).to.equal(customerFbid);
         expect(mesgList[0].message.attachment.payload.elements[1].subtitle).to.include(question);
+        expect(mesgList[0].message.attachment.payload.elements[1].title.toLowerCase()).to.include(responseToQuestion.toLowerCase());
+        expect(mesgList[1].recipient.id).to.equal(adminFbid);
+        verifyState(handler.adminMessageSender.stateManager.get(["messageSentToAdmin", customerFbid, question]), undefined, done);
+        verifyState(handler.adminMessageSender.stateManager.get(["awaitingResponseFromAdmin",adminFbid]), undefined, done);
         done();
       },
-      function(err) {
-        done(err);
-      }
-    );
+      (err) => {
+        return done(err);
+    });
   });
 });
 

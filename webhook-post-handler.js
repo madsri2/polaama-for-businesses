@@ -45,7 +45,7 @@ let TEST_MODE = false;
 function WebhookPostHandler(session, testing, pageId) {
   if(testing) TEST_MODE = true; // Use sparingly. Currently, only used in callSendAPI
   this.travelSfoPageHandler = new TravelSfoPageHandler();
-  this.seaSprayHandler = new SeaSprayHandler();
+  this.seaSprayHandler = new SeaSprayHandler(TEST_MODE);
   this.hackshawHandler = new HackshawHandler();
 	this.pageId = PageHandler.defaultPageId;
   if(pageId) this.pageId = pageId;
@@ -557,8 +557,8 @@ function postbackForAnotherPage(payload, fbid) {
       response = this.travelSfoPageHandler.handlePostback(payload, this.pageId, fbid);
       break;
     case PageHandler.mySeaSprayPageId:
-      response = this.seaSprayHandler.handlePostback(payload, this.pageId, fbid);
-      break;
+      return this.seaSprayHandler.handlePostback(payload, this.pageId, fbid);
+      // break;
     case PageHandler.myHackshawPageId:
       response = this.hackshawHandler.handlePostback(payload, this.pageId, fbid);
       break;
@@ -581,7 +581,23 @@ function receivedPostback(event) {
 
   if(payload === "GET_STARTED_PAYLOAD") return handleGettingStarted.call(this, senderID);
 
-  if(postbackForAnotherPage.call(this, payload, senderID)) return;
+  // if(postbackForAnotherPage.call(this, payload, senderID)) return;
+  const self = this;
+  const promise = postbackForAnotherPage.call(this, payload, senderID);
+  if(promise) {
+    if(typeof promise === "object") {
+      promise.done(
+        function(response) {
+          if(Array.isArray(response)) self.sendMultipleMessages(senderID, response);
+          else callSendAPI.call(self, response);
+        },
+        function(err) {
+          sendTextMessage.call(self, senderID, "Even bots need to eat. Be back in a bit!");
+        }
+      );
+    }
+    return;
+  }
 
   // give tripReasonWorkflow a chance to work.
   if(this.sessionState.get("planningNewTrip")) {
@@ -1852,6 +1868,7 @@ function determineResponseType(event) {
           }
         );
     }
+    // if messageForAnotherPage returned something, it indicates that we are done. So simply return.
     return;
   }
 

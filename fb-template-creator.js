@@ -3,6 +3,8 @@
 function FBTemplateCreator() {
 }
 
+// TODO: Add messaging_type here: https://developers.facebook.com/docs/messenger-platform/send-messages#messaging_types
+
 FBTemplateCreator.text = function(obj) {
   if(!obj.fbid) throw new Error(`required argument 'fbid' missing`);
   if(!obj.text) throw new Error(`required argument 'text' missing`);

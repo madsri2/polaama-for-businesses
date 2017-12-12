@@ -1,8 +1,8 @@
 {
-  "name": "sea-spray-handler",
+  "name": "state-manager",
   "version": "1.0.0",
-  "description": "Handler for My Sea Spray fb page",
-  "main": "app/handler.js",
+  "description": "A simple persistent state manager to be used by any class",
+  "main": "app/manager.js",
   "scripts": {
     "test": "mocha --reporter spec"
   },
@@ -10,8 +10,8 @@
   "license": "GPL-2.0",
   "dependencies": {
     "chai": "^4.1.2",
+    "fs": "0.0.1-security",
     "mocha": "^4.0.1",
-    "moment": "^2.19.1",
     "promise": "^8.0.1"
   }
 }
