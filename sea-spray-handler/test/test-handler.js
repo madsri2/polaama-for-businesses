@@ -311,6 +311,7 @@ describe("sea spray categories", function() {
     // ensure that this is not a message that was sent to human being
     const verifier = function(response) {
         verifyState(handler.adminMessageSender.stateManager.get(["messageSentToAdmin", myFbid, message]), undefined, done);
+        expect(response.message.message.text).to.include("Thanks! We appreciate your business!");
     }
     handlePromise(promise, "appreciation", done, verifier, true);
   });
@@ -443,6 +444,41 @@ describe("sea spray categories", function() {
       (err) => {
         done(err);
     });
+  });
+
+  it("tour start time", function(done) {
+    let response = handler.handleText("tout bagay start time", PageHandler.mySeaSprayPageId, myFbid);
+    let verify = function(response) {
+      expect(response.message.message.attachment.payload.template_type).to.equal("list");
+      expect(response.message.message.attachment.payload.elements[0].title).to.contain("Tout Bagay cruise operates from 8.30 a.m. - 5.00 p.m.");
+      expect(response.message.message.attachment.payload.elements[3].title).to.contain("Local Creole buffet lunch served at Morne Coubaril Estate");
+    }
+    handlePromise(response, "tour-start-time", done, verify);
+    response = handler.handleText("When does the Pirate's day cruise start?", PageHandler.mySeaSprayPageId, myFbid);
+    verify = function(response) {
+      expect(response.message.message.attachment.payload.template_type).to.equal("list");
+      expect(response.message.message.attachment.payload.elements[0].title).to.contain("Pirate's Day cruise operates from");
+      expect(response.message.message.attachment.payload.elements[3].title).to.contain("Local Buffet Lunch for Adults,");
+    }
+    handlePromise(response, "tour-start-time", done, verify, true);
+  });
+
+  it("things to do and see", function(done) {
+    let response = handler.handleText("what can we see in private tours?", PageHandler.mySeaSprayPageId, myFbid);
+    let verify = function(response) {
+      // logger.debug(`response is ${JSON.stringify(response)}`);
+      expect(response.message.message.attachment.payload.template_type).to.equal("list");
+      expect(response.message.message.attachment.payload.elements[0].title).to.contain("Have a special reason to celebrate? Or just looking to explore the island privately?");
+      expect(response.message.message.attachment.payload.elements[2].subtitle).to.contain("Just contact us and we will arrange it for you!");
+    }
+    handlePromise(response, "things-to-do-and-see", done, verify);
+    response = handler.handleText("What can we see in the sunset cruise?", PageHandler.mySeaSprayPageId, myFbid);
+    verify = function(response) {
+      expect(response.message.message.attachment.payload.template_type).to.equal("list");
+      expect(response.message.message.attachment.payload.elements[0].title).to.contain("Sunset cruise operates from 5.00 - 7.00 p.m.");
+      expect(response.message.message.attachment.payload.elements[3].title).to.contain("We serve drinks (like Champagne, Rum punch/mixes) and Hors d’oeuvres");
+    }
+    handlePromise(response, "things-to-do-and-see", done, verify, true);
   });
 });
 

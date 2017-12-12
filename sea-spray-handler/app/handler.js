@@ -57,7 +57,6 @@ SeaSprayHandler.prototype.handleText = function(mesg, pageId, fbid) {
         _done: true,
         message: response
       });
-      // const categoryPromise = this.classifier.categorize(mesg);
       return self.classifier.categorize(mesg);
     },
     (err) => {
@@ -234,8 +233,47 @@ function selectResponseForTourOld(tour, category, fbid) {
 }
 
 function selectResponseForTour(tour, category, fbid) {
+  const functions = {
+    'tout_bagay': {
+      'food-options': toutBagayFood,
+      'operating-days': toutBagayDays,
+      'cruise-details': toutBagayDetails,
+      'cost-of-tour': toutBagayCost,
+      'tour-start-time': toutBagayDetails,
+      'things-to-do-and-see': toutBagayDetails,
+    },
+    'sunset_cruise': {
+      'food-options': sunsetCruiseFood,
+      'operating-days': sunsetCruiseDays,
+      'cruise-details': sunsetCruiseDetails,
+      'cost-of-tour': sunsetCruiseCost,
+      'tour-start-time': sunsetCruiseDetails,
+      'things-to-do-and-see': sunsetCruiseDetails,
+    },
+    'pirate_day': {
+      'food-options': piratesDayFood,
+      'operating-days': piratesDay,
+      'cruise-details': piratesDayDetails,
+      'cost-of-tour': piratesDayCost,
+      'tour-start-time': piratesDayDetails,
+      'things-to-do-and-see': piratesDayDetails,
+    },
+    'private_charter': {
+      'food-options': privateCharterFood,
+      'operating-days': privateCharterOperatingDays,
+      'cruise-details': privateCharterDetails,
+      'cost-of-tour': privateCharterCost,
+      'tour-start-time': privateCharterDetails,
+      'things-to-do-and-see': privateCharterDetails,
+    }
+  };
   // if no tour was provided, ask for that information and set state accordingly.
-  if(!tour) return chooseTours(fbid, category);
+  if(!tour) {
+    // this might be because of two reasons. Either the user did not enter the right entity for a given category or we don't yet support that category. If it's the latter, return null.
+    const categoryKeys = Object.keys(functions.tout_bagay); // We assume that Tout Bagay will always be a super-set for the categories
+    if(categoryKeys.includes(category)) return chooseTours(fbid, category);
+    return null;
+  }
   if(tour.includes(":")) {
     // this is passed from handlePostback. Assert invariants before proceeding.
     if(category) throw new Error(`selectResponseForTour: Potential BUG: tour contains a ":" (${tour}), but category is also present (${category}). Confused!`);
@@ -244,32 +282,6 @@ function selectResponseForTour(tour, category, fbid) {
     tour = list[1]; // list[0] is "select_tour"
     category = list[2];
   }
-  const functions = {
-    'tout_bagay': {
-      'food-options': toutBagayFood,
-      'operating-days': toutBagayDays,
-      'cruise-details': toutBagayDetails,
-      'cost-of-tour': toutBagayCost
-    },
-    'sunset_cruise': {
-      'food-options': sunsetCruiseFood,
-      'operating-days': sunsetCruiseDays,
-      'cruise-details': sunsetCruiseDetails,
-      'cost-of-tour': sunsetCruiseCost
-    },
-    'pirate_day': {
-      'food-options': piratesDayFood,
-      'operating-days': piratesDay,
-      'cruise-details': piratesDayDetails,
-      'cost-of-tour': piratesDayCost
-    },
-    'private_charter': {
-      'food-options': privateCharterFood,
-      'operating-days': privateCharterOperatingDays,
-      'cruise-details': privateCharterDetails,
-      'cost-of-tour': privateCharterCost,
-    }
-  };
   functions["Pirate Day's Cruise"] = functions.pirate_day;
   functions["Sunset cruise"] = functions.sunset_cruise;
   functions["Tout Bagay Cruise"] = functions.tout_bagay;
@@ -799,6 +811,11 @@ function toutBagayDetails(fbid) {
     }, {
       title: "Mud Baths, Soufriere Waterfall, Sulphur Springs, Morne Coubaril Estate", 
       subtitle: "Marigot, West Coast Beach for swimming or snorkelling",
+      default_action: {
+        type: "web_url",
+        webview_height_ratio: "full",
+        url: "https://seaspraycruises.com/tours/tout-bagay/"
+      },
     }, {
       title: "Local Creole buffet lunch served at Morne Coubaril Estate",
       subtitle: "Beer, rum punch, rum mixes, fruit-punch, sodas, water"
@@ -849,11 +866,14 @@ function privateCharterDetails(fbid) {
         type: "web_url",
         url: "https://seaspraycruises.com/st-lucia-private-tours/",
         webview_height_ratio: "full",
-      }]
+      }],
     },
     {
       title: "Dont find what you are looking for",
       subtitle: "Just contact us and we will arrange it for you!",
+    }, {
+      title: "Private charters start times vary",
+      subtitle: "We will provide all the details when you book a charter",
     }],
     buttons: [{
       title: "Contact details",
@@ -926,6 +946,11 @@ function piratesDayDetails(fbid) {
     }, {
       title: "Diamond Waterfall & Botanical Gardens, Drive-in Volcano, Marigot Bay",
       subtitle: "Face painting, games and cannon-firing. Pirate kits available.",
+      default_action: {
+        type: "web_url",
+        webview_height_ratio: "full",
+        url: "https://seaspraycruises.com/tours/pirates-day/",
+      },
     }, {
       title: "Local Buffet Lunch for Adults, Hot Dogs and chips for Kids",
       subtitle: "Rum punch, fruit-punch, sodas, water. Beer available for sale"
@@ -969,6 +994,11 @@ function sunsetCruiseDetails(fbid) {
       title: "You will see Various sites of interest on the western coast line",
       subtitle: "such as Pigeon Island and other attractions",
       image_url: "https://slunatrust.org/assets/content/site/slnt-site-DUMMY-1.png",
+      default_action: {
+        type: "web_url",
+        webview_height_ratio: "full",
+        url: "https://seaspraycruises.com/tours/sunset-cruise/"
+      },
     }, {
       title: "We serve drinks (like Champagne, Rum punch/mixes) and Hors d’oeuvres",
       subtitle: "Other drinks: Fruit-punch, sodas, water. Beer is available for sale"
