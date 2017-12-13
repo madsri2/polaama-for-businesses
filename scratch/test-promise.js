@@ -1,23 +1,25 @@
 'use strict';
-
-const CreateItinerary = require('../app/create-itin.js');
-const TripData = require('../../trip-data');
+const fs = require('fs');
 const Promise = require('promise');
-const logger = require('../../my-logger');
+const sleep = require('sleep');
 
-    const tripData = new TripData('departure-city-test');
-    tripData.data.departureCountry = "usa";
-    tripData.data.country = "india";
-    tripData.data.startDate = "2017-01-11";
-    tripData.data.departureCity = "seattle";
-    tripData.data.name = "departure-city-test";
-    const createItin = new CreateItinerary(tripData);
-    const promise = createItin.create();
-    promise().done(
-      function(result) {
-        console.log("test-promise: I was called! ${result}");
-      },
-      function(err) {
-        logger.error(`Error calling create: ${err}`);
-        throw err;
-    });
+const f1P = Promise.denodeify(f1);
+const f2P = Promise.denodeify(f2);
+
+f1P().then(f2P()).done(
+  function(res) {
+    console.log(`content length after promise is fulfilled is ${res.length}`);
+  }, function(err) {
+    console.log(`error: ${err.stack}`);
+  });
+
+function f1(callback) {
+  console.log("f1 called");
+  fs.readFile("/home/ec2-user/flights/SEAtoLISon2017-02-03.txt", 'utf8', callback);  
+}
+
+
+function f2(callback) {
+  console.log("f2 called");
+  fs.readFile("/home/ec2-user/flights/SEAtoLISon2017-02-03.txt", 'utf8', callback);  
+}
