@@ -189,14 +189,6 @@ http.createServer(regularApp).listen(8080, function() {
 const server = https.createServer(options, app);  
 server.listen(port, function() {
   logger.info("Listening on port " + port);
-  const twoDaysInMsec = 1000*60*60*24*2;
-  const tenSeconds = 1000*10; 
-  // set a timer that will send reminder notifications about todo list every 2 days
-  // const intervalId = setInterval(sendTodoReminders, twoDaysInMsec);
-
-  // set a timer that will send boarding pass and other details the day before a trip
-  // const oneDayInMsec = 1000*60*60*24*1;
-  // setInterval(pushTripDetailsJustBeforeTrip, oneDayInMsec);
 }); 
 
 app.get('/index', function(req, res) {
@@ -393,28 +385,6 @@ app.get('/:id/:tripName/:date/images/:item', function(req, res) {
   return handler.getItemImage(res, req.params.date, req.params.item);
 });
 
-/*
-app.get('/:id/:tripName/itin-detail/:file', function(req, res) {
-  return res.sendFile(`/home/ec2-user/html-templates/${req.params.file}.html`, null, 
-  function(err) {
-    if(err) {
-      logger.error(`error sending file ${req.params.file}: ${err.stack}`);
-      return res.status(404).send("Even Bots need to eat lunch. Be back in a bit!");
-    }
-  });
-});
-
-app.get('/:id/:tripName/:date/-/map', function(req, res) {
-  const fileName = `${req.params.tripName}-${req.params.date}-map.png`;
-  return res.sendFile(`/home/ec2-user/html-templates/${fileName}`);
-});
-
-app.get('/:id/:tripName/-/test-day', function(req, res) {
-  const handler = new WebpageHandler(req.params.id, req.params.tripName);
-  return handler.handleWebpage(res, handler.myDayPlan);
-});
-*/
-
 app.get('/:id/:tripName/flight-quotes', function(req, res) {
   logger.debug(`flight-quotes: called`);
   const handler = new WebpageHandler(req.params.id, req.params.tripName);
@@ -574,12 +544,4 @@ app.get('/privacy-policy', function(req, res) {
 app.get('/terms-of-service', function(req, res) {
   return res.send(fs.readFileSync('/home/ec2-user/html-templates/terms-of-service.html', 'utf8'));
 });
-
-function sendTodoReminders() {
-  postHandler.sendReminderNotification();
-}
-
-function pushTripDetailsJustBeforeTrip() {
-  postHandler.pushTripDetailsJustBeforeTrip();
-}
 

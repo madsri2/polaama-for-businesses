@@ -1,1 +1,0 @@
-{"iatacode":"KTM","country":"Nepal"}

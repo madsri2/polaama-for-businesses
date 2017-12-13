@@ -1,1 +1,0 @@
-{"details": ["detail 1"], "activities": ["activity 1", "activity 2"]}

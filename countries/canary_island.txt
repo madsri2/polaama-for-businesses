@@ -1,1 +1,0 @@
-{"cities": ["El Hierro", "Fuerteventura", "Gran Canaria", "La Gomera", "Lanzarote", "Chinijo Archipelago", "La Palma", "Tenerife"], "notes": ["most beaches are naturist"]}

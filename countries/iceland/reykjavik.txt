@@ -1,1 +1,0 @@
-{"iatacode":"KEF","country":"Iceland"}

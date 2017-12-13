@@ -1,1 +1,0 @@
-{"cities": ["Sydney", "Melbourne", "Cairns", "Perth", "Brisbane"]}

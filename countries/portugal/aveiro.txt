@@ -1,1 +1,0 @@
-{tags: [history,beach], notes: ["Venice of portugal", "scenic canals", "charming bridges", "colorful gondolas"], "things to do": ["São Gonçalinho Chapel","Aveiro Cathedral", "Convento de Jesus"]}
