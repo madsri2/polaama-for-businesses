@@ -415,7 +415,7 @@ function customerService(fbid) {
       }]
     }, {
       title: "Hours (UTC-04:00 timezone)",
-      subtitle: "Mon-Sat: 9 a.m. - 5 p.m."
+      subtitle: "Mon-Sat: 8 a.m. - 5 p.m."
     }, {
       title: "Email",
       subtitle: "info@seaspraycruises.com"
@@ -554,7 +554,7 @@ function operatingHours(fbid) {
     fbid: fbid,
     compact_top_element_style: true,
     elements: [{
-      title: "Our office is open Monday-Saturday 9 a.m - 5 p.m.",
+      title: "Our office is open Monday-Saturday 8 a.m - 5 p.m.",
       subtitle: "At the Rodney Bay marina. Click for google maps",
       image_url: "http://tinyurl.com/y8486a92",
       default_action: {
