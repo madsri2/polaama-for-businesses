@@ -14,7 +14,6 @@ const fs = require('fs-extra');
 const RequestProfiler = require('./request-profiler');
 const TripData = require('./trip-data');
 
-const TripInfoProvider = require('./trip-info-provider');
 const CommentParser = require('./expense-report/app/comment-parser');
 const ExpenseReportWorkflow = require('./expense-report/app/workflow');
 const CreateItinerary = require('trip-itinerary/app/create-itin');
