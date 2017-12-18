@@ -55,6 +55,31 @@ Manager.prototype.set = function(key, value) {
   );
 }
 
+Manager.prototype.keyStartingWith = function(prefix) {
+  const self = this;
+  return this.promise.then(
+    function() {
+      if(self.reload) return reloadState.call(self);
+      return Promise.resolve();
+    },
+    function(err) {
+      return Promise.reject(err);
+    }
+  ).then(
+    function() {
+      const keys = Object.keys(self.state);
+      let k = null;
+      keys.forEach(key => {
+        if(key.startsWith(prefix)) k = key;
+      });
+      return Promise.resolve(k);
+    },
+    function(err) {
+      return Promise.reject(err);
+    }
+  );
+}
+
 Manager.prototype.get = function(key) {
   const self = this;
   return this.promise.then(
@@ -93,6 +118,10 @@ Manager.prototype.clear = function(key) {
       return Promise.reject(err);
     }
   );
+}
+
+Manager.prototype.parseKey = function(key) {
+  return key.split("-_");
 }
 
 function getActualKey(list) {

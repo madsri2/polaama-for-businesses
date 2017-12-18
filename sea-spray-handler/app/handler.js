@@ -11,10 +11,13 @@ const Promise = require('promise');
 const year = moment().year();
 const month = moment().month() + 1;
 
+SeaSprayHandler.myId = "1629856073725012";
+const dhuId = "1432849853450144";
+const coreyId = "1536539953068228";
+
 function SeaSprayHandler(testing) {
   this.classifier = new NBClassifier();
-  this.adminMessageSender = new AdminMessageSender("1629856073725012", testing);
-  // this.state = {};
+  this.adminMessageSender = new AdminMessageSender([SeaSprayHandler.myId, coreyId], testing);
 }
 
 function farewell(pageId, fbid) {
@@ -89,7 +92,10 @@ SeaSprayHandler.prototype.handleText = function(mesg, pageId, fbid) {
       if(category === "advance-booking") response = advanceBooking(fbid);
       if(category === "operating-tours") response = bookTours.call(self, fbid);
       if(category === "operating-hours") response = operatingHours.call(self, fbid);
-      if(category === "talk-to-human") return self.adminMessageSender.sendMessageToAdmin(fbid, mesg, true /* talk to human */);
+      if(category === "tour-recommendation") response = tourRecommendation.call(self, fbid);
+      if(category === "entity-name") response = selectResponseForTour.call(self, result.tourName, category, fbid);
+      if(category === "frustration") return self.adminMessageSender.sendMessageToAdmin(fbid, mesg, "frustration");
+      if(category === "talk-to-human") return self.adminMessageSender.sendMessageToAdmin(fbid, mesg, "talk-to-human");
       if(category === "input.unknown") return self.adminMessageSender.sendMessageToAdmin(fbid, mesg);
       // if response is null until now, handle categories that have information based on tour type: "operating-days", "food-options", "cruise-details", "cost-of-tour"
       if(!response) response = selectResponseForTour.call(self, result.tourName, category, fbid);
@@ -168,70 +174,6 @@ SeaSprayHandler.prototype.handlePostback = function(payload, pageId, fbid) {
 }
 
 // convenience function that handles selecting the right functions given a tour and the category. This is used in cases where a particular categories' response depends on the tour selected. This also handles the case where no tour is selected (setting state, calling chooseTour) and handling case where state might be set.
-function selectResponseForTourOld(tour, category, fbid) {
-  // if no tour was provided, ask for that information and set state accordingly.
-  if(!tour) {
-    if(!this.state[fbid]) this.state[fbid] = {};
-    switch(category) {
-      case "food-options": this.state[fbid].awaitingTourNameForFoodOption = true; break; 
-      case "operating-days": this.state[fbid].awaitingTourNameForOperatingDays = true; break;
-      case "cruise-details": this.state[fbid].awaitingTourNameForDetails = true; break;
-      case "cost-of-tour": this.state[fbid].awaitingTourNameForCost = true; break;
-    }
-    return chooseTours(fbid);
-  }
-  const functions = {
-    'select_tour_tout_bagay': {
-      'food-options': toutBagayFood,
-      'operating-days': toutBagayDays,
-      'cruise-details': toutBagayDetails,
-      'cost-of-tour': toutBagayCost
-    },
-    'select_tour_sunset_cruise': {
-      'food-options': sunsetCruiseFood,
-      'operating-days': sunsetCruiseDays,
-      'cruise-details': sunsetCruiseDetails,
-      'cost-of-tour': sunsetCruiseCost
-    },
-    'select_tour_pirate_day': {
-      'food-options': piratesDayFood,
-      'operating-days': piratesDay,
-      'cruise-details': piratesDayDetails,
-      'cost-of-tour': piratesDayCost
-    },
-    'select_tour_private_charter': {
-      'food-options': privateCharterFood,
-      'operating-days': privateCharterOperatingDays,
-      'cruise-details': privateCharterDetails,
-      'cost-of-tour': privateCharterCost,
-    }
-  };
-  functions["Pirate Day's Cruise"] = functions.select_tour_pirate_day;
-  functions["Sunset cruise"] = functions.select_tour_sunset_cruise;
-  functions["Tout Bagay Cruise"] = functions.select_tour_tout_bagay;
-  functions["Private charter"] = functions.select_tour_private_charter;
-  if(category) return functions[tour][category](fbid);
-  if(!this.state[fbid]) throw new Error(`No state value present and passed parameter cateogory is undefined. Potential BUG! in calling function`);
-  // if state was set, handle that. Needed for call made from handlePostback()
-  if(this.state[fbid].awaitingTourNameForFoodOption) {
-    this.state[fbid].awaitingTourNameForFoodOption = false;
-    return functions[tour]["food-options"](fbid);
-  }
-  if(this.state[fbid].awaitingTourNameForOperatingDays) {
-    this.state[fbid].awaitingTourNameForOperatingDays = false; 
-    return functions[tour]["operating-days"](fbid);
-  }
-  if(this.state[fbid].awaitingTourNameForDetails) {
-    this.state[fbid].awaitingTourNameForDetails = false; 
-    return functions[tour]["cruise-details"](fbid);
-  }
-  if(this.state[fbid].awaitingTourNameForCost) {
-    this.state[fbid].awaitingTourNameForCost = false;
-    return functions[tour]["cost-of-tour"](fbid);
-  }
-  throw new Error(`Unknown state set. state dump: ${JSON.stringify(this.state[fbid])}.`);
-}
-
 function selectResponseForTour(tour, category, fbid) {
   const functions = {
     'tout_bagay': {
@@ -241,6 +183,7 @@ function selectResponseForTour(tour, category, fbid) {
       'cost-of-tour': toutBagayCost,
       'tour-start-time': toutBagayDetails,
       'things-to-do-and-see': toutBagayDetails,
+      'entity-name': toutBagayDetails,
     },
     'sunset_cruise': {
       'food-options': sunsetCruiseFood,
@@ -249,6 +192,7 @@ function selectResponseForTour(tour, category, fbid) {
       'cost-of-tour': sunsetCruiseCost,
       'tour-start-time': sunsetCruiseDetails,
       'things-to-do-and-see': sunsetCruiseDetails,
+      'entity-name': sunsetCruiseDetails,
     },
     'pirate_day': {
       'food-options': piratesDayFood,
@@ -257,6 +201,7 @@ function selectResponseForTour(tour, category, fbid) {
       'cost-of-tour': piratesDayCost,
       'tour-start-time': piratesDayDetails,
       'things-to-do-and-see': piratesDayDetails,
+      'entity-name': piratesDayDetails,
     },
     'private_charter': {
       'food-options': privateCharterFood,
@@ -265,6 +210,7 @@ function selectResponseForTour(tour, category, fbid) {
       'cost-of-tour': privateCharterCost,
       'tour-start-time': privateCharterDetails,
       'things-to-do-and-see': privateCharterDetails,
+      'entity-name': privateCharterDetails,
     }
   };
   // if no tour was provided, ask for that information and set state accordingly.
@@ -288,7 +234,11 @@ function selectResponseForTour(tour, category, fbid) {
   functions["Private charter"] = functions.private_charter;
   // logger.debug(`selectResponseForTour: tour ${tour} & category ${category}`);
   if(tour && category && functions[tour][category]) return functions[tour][category](fbid);
-  throw new Error(`selectResponseForTour: Potential BUG: Cannot find the right function to call for tour ${tour} & category ${category}`);
+  logger.error(`selectResponseForTour: Potential BUG: Cannot find the right function to call for tour ${tour} & category <${category}>`);
+  return FBTemplateCreator.text({
+    fbid: fbid,
+    text: "I did not understand your question. Can you ask it a different way?"
+  });
 }
 
 function sunsetCruiseFood(fbid) {
@@ -358,7 +308,7 @@ function kidsAllowed(fbid) {
   return FBTemplateCreator.generic({
     fbid: fbid,
     elements: [{
-      title: "Yes, kids of all ages can enjoy our tours",
+      title: "Kids of all ages can enjoy our tours",
       subtitle: "Children under 2 travel for free",
       buttons: [{
         title: "Tour options",
@@ -511,7 +461,6 @@ function chooseTours(fbid, category) {
       buttons: [{
         title: "Tout Bagay",
         type: "postback",
-        // payload: "select_tour_tout_bagay"
         payload: `select_tour:tout_bagay:${category}`
       }]
     }, {
@@ -521,7 +470,6 @@ function chooseTours(fbid, category) {
       buttons: [{
         title: "Pirate's Day",
         type: "postback",
-        // payload: "select_tour_pirate_day"
         payload: `select_tour:pirate_day:${category}`
       }]
     }, {
@@ -578,6 +526,22 @@ function operatingHours(fbid) {
       title: "Available tours",
       type: "postback",
       payload: "sea_spray_book_tour"
+    }]
+  });
+}
+
+function tourRecommendation(fbid) {
+  return FBTemplateCreator.generic({
+    fbid: fbid,
+    elements: [{
+      title: "We recommend Tout Bagay, our most popular cruise",
+      subtitle: "This is a guided historical tour along the west coast",
+      image_url: "http://tinyurl.com/y8486a92",
+      buttons: [{
+        payload: "select_tour:tout_bagay:things-to-do-and-see",
+        type: "postback",
+        title: "Tout Bagay Details"
+      }]
     }]
   });
 }

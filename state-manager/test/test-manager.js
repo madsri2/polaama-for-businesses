@@ -69,4 +69,40 @@ describe("basic tests", function() {
         done(err);
     });
   });
+
+  it("test prefix", function(done) {
+    const key = ["prefix","1234","hello world. how are you?"];
+    const promise = stateManager.set(key, "value");
+    promise.then(
+      () => {
+        return stateManager.keyStartingWith("prefix");
+      },
+      (err) => {
+        done(err);
+    }).done((found) => {
+        expect(found).to.not.be.null;
+        done();
+      },
+      (err) => {
+        done(err);
+    });
+  });
+
+  it("test parsing", function(done) {
+    const key = ["awaitingResponseFromAdmin","1234"];
+    const promise = stateManager.set(key, "value");
+    promise.then(
+      () => {
+        return stateManager.keyStartingWith("awaitingResponseFromAdmin");
+      },
+      (err) => {
+        done(err);
+    }).done((key) => {
+      expect(stateManager.parseKey(key)[1]).to.equal("1234");
+      done();
+    },
+    (err) => {
+      done(err);
+    });
+  });
 });

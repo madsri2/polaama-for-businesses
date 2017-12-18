@@ -224,6 +224,11 @@ describe("sea spray categories", function() {
     handlePromise(response, "talk-to-human", done, true);
   });
 
+  it("frustration", function(done) {
+    let response = handler.handleText("You are not helping me!", PageHandler.mySeaSprayPageId, myFbid);
+    handlePromise(response, "frustration", done, true);
+  });
+
   it("customer service", function(done) {
     let response = handler.handleText("contact details", PageHandler.mySeaSprayPageId, myFbid);
     handlePromise(response, "customer-service", done);
@@ -480,6 +485,33 @@ describe("sea spray categories", function() {
     }
     handlePromise(response, "things-to-do-and-see", done, verify, true);
   });
+
+  it("test tour recommendation", function(done) {
+    let response = handler.handleText("what tours would you recommend?", PageHandler.mySeaSprayPageId, myFbid);
+    let verify = function(response) {
+      expect(response.message.message.attachment.payload.template_type).to.equal("generic");
+      expect(response.message.message.attachment.payload.elements[0].title).to.contain("We recommend Tout Bagay, our most popular cruise");
+    }
+    handlePromise(response, "tour-recommendation", done, verify, true);
+  });
+
+  it("entity name", function(done) {
+    let response = handler.handleText("tout bagay", PageHandler.mySeaSprayPageId, myFbid);
+    let verify = function(response) {
+      // logger.debug(`response is ${JSON.stringify(response)}`);
+      expect(response.message.message.attachment.payload.template_type).to.equal("list");
+      expect(response.message.message.attachment.payload.elements[0].title).to.contain("Tout Bagay cruise operates from 8.30 a.m. - 5.00 p.m.");
+      expect(response.message.message.attachment.payload.elements[2].subtitle).to.contain("Marigot, West Coast Beach for swimming or snorkelling");
+    }
+    handlePromise(response, "entity-name", done, verify);
+    response = handler.handleText("sunset cruise?", PageHandler.mySeaSprayPageId, myFbid);
+    verify = function(response) {
+      expect(response.message.message.attachment.payload.template_type).to.equal("list");
+      expect(response.message.message.attachment.payload.elements[0].title).to.contain("Sunset cruise operates from 5.00 - 7.00 p.m.");
+      expect(response.message.message.attachment.payload.elements[3].title).to.contain("We serve drinks (like Champagne, Rum punch/mixes) and Hors d’oeuvres");
+    }
+    handlePromise(response, "entity-name", done, verify, true);
+  });
 });
 
 
@@ -525,6 +557,57 @@ describe("sea spray postback", function() {
     },
     (err) => {
       done(err);
+    });
+  });
+
+  it("multiple admins", function(done) {
+    const customerFbid = "432";
+    const adminFbid = myFbid;
+    const anotherAdmin = "789";
+    const question = "random message to someone";
+    const responseToQuestion = "response to message";
+    const promise = handler.handleText(question, PageHandler.mySeaSprayPageId, customerFbid);
+    promise.then(
+      (result) => {
+        expect(result.category).to.equal("input.unknown");
+        verifyState(handler.adminMessageSender.stateManager.get(["messageSentToAdmin", customerFbid, question]), true, done);
+        // logger.debug(JSON.stringify(message));
+        return handler.handlePostback(`respond_to_customer_${customerFbid}-_${question}`, PageHandler.mySeaSprayPageId, adminFbid);
+      },
+      (err) => {
+        return Promise.reject(err);
+    }).then(
+      (message) => {
+        verifyState(handler.adminMessageSender.stateManager.get(["awaitingResponseFromAdmin", adminFbid]), {}, done);
+        expect(message.recipient.id).to.equal(adminFbid);
+        expect(message.message.text).to.include(`Enter your response for customer ${customerFbid}. Question is `); 
+        return handler.handlePostback(`respond_to_customer_${customerFbid}-_${question}`, PageHandler.mySeaSprayPageId, anotherAdmin);
+      },
+      (err) => {
+        return Promise.reject(err);
+    }).then(
+      (message) => {
+        verifyState(handler.adminMessageSender.stateManager.get(["awaitingResponseFromAdmin", adminFbid]), {}, done);
+        expect(message.recipient.id).to.equal(anotherAdmin);
+        expect(message.message.text).to.include("Another admin");
+        return handler.handleText(responseToQuestion, PageHandler.mySeaSprayPageId, adminFbid);
+      },
+      (err) => {
+        return Promise.reject(err);
+    }).done(
+      (response) => {
+        // logger.debug(`response is ${JSON.stringify(response)}`);
+        const mesgList = response.message;
+        expect(mesgList[0].recipient.id).to.equal(customerFbid);
+        expect(mesgList[0].message.attachment.payload.elements[1].subtitle).to.include(question);
+        expect(mesgList[0].message.attachment.payload.elements[1].title.toLowerCase()).to.include(responseToQuestion.toLowerCase());
+        expect(mesgList[1].recipient.id).to.equal(adminFbid);
+        verifyState(handler.adminMessageSender.stateManager.get(["messageSentToAdmin", customerFbid, question]), undefined, done);
+        verifyState(handler.adminMessageSender.stateManager.get(["awaitingResponseFromAdmin",adminFbid]), undefined, done);
+        done();
+      },
+      (err) => {
+        return done(err);
     });
   });
 

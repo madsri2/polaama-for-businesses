@@ -683,8 +683,8 @@ function testHackshawGettingStarted() {
 // testHackshawGettingStarted();
 
 // testSeaSprayGettingStarted();
-testSeaSprayPostback();
-// testSeaSpray();
+// testSeaSprayPostback();
+testSeaSpray();
 
 // testSpearFishing();
 

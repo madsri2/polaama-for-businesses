@@ -46,6 +46,7 @@ function WebhookPostHandler(session, testing, pageId) {
   if(testing) TEST_MODE = true; // Use sparingly. Currently, only used in callSendAPI
   this.travelSfoPageHandler = new TravelSfoPageHandler();
   this.seaSprayHandler = new SeaSprayHandler(TEST_MODE);
+  this.newCustomerForSeaSpray = {};
   this.hackshawHandler = new HackshawHandler();
 	this.pageId = PageHandler.defaultPageId;
   if(pageId) this.pageId = pageId;
@@ -1833,6 +1834,13 @@ function marketResearchPrototype(mesg, fbid) {
   return true;
 }
 
+function notifyAdminOfNewMessage(mesg, senderId) {
+  if(this.newCustomerForSeaSpray[senderId]) return;
+  this.newCustomerForSeaSpray[senderId] = true;
+  let name = FbidHandler.get().getName(senderId);
+  if(!name) name = senderId;
+  sendTextMessage.call(this, SeaSprayHandler.myId, `[ALERT] Received new message from user '${name}'. Message is "${mesg}"`);
+}
 
 /*
 New trip Workflow:
@@ -1862,6 +1870,8 @@ function determineResponseType(event) {
             const response = result.message;
             if(Array.isArray(response)) self.sendMultipleMessages(senderID, response);
             else callSendAPI.call(self, response);
+            // if this is the first message from this sender, send a note to "me"
+            notifyAdminOfNewMessage.call(self, mesg, senderID);
           },
           function(err) {
             sendTextMessage.call(self, senderID, "Even bots need to eat. Be back in a bit!");

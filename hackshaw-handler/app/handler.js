@@ -9,7 +9,7 @@ const PageHandler = require('fbid-handler/app/page-handler');
 
 function HackshawHandler() {
   this.classifier = new NBClassifier();
-  this.adminMessageSender = new AdminMessageSender("1672189572825326");
+  this.adminMessageSender = new AdminMessageSender(["1672189572825326"]);
 }
 
 HackshawHandler.prototype.greeting = function(pageId, fbid) {
