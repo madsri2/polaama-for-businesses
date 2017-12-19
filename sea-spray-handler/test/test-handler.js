@@ -316,7 +316,7 @@ describe("sea spray categories", function() {
     // ensure that this is not a message that was sent to human being
     const verifier = function(response) {
         verifyState(handler.adminMessageSender.stateManager.get(["messageSentToAdmin", myFbid, message]), undefined, done);
-        expect(response.message.message.text).to.include("Thanks! We appreciate your business!");
+        expect(response.message.message.text).to.include("Thanks! We are happy to answer any other questions you might have.");
     }
     handlePromise(promise, "appreciation", done, verifier, true);
   });
@@ -580,7 +580,7 @@ describe("sea spray postback", function() {
       (message) => {
         verifyState(handler.adminMessageSender.stateManager.get(["awaitingResponseFromAdmin", adminFbid]), {}, done);
         expect(message.recipient.id).to.equal(adminFbid);
-        expect(message.message.text).to.include(`Enter your response for customer ${customerFbid}. Question is `); 
+        expect(message.message.text).to.include(`Enter your response for customer '${customerFbid}'. Question is `); 
         return handler.handlePostback(`respond_to_customer_${customerFbid}-_${question}`, PageHandler.mySeaSprayPageId, anotherAdmin);
       },
       (err) => {
@@ -594,7 +594,7 @@ describe("sea spray postback", function() {
       },
       (err) => {
         return Promise.reject(err);
-    }).done(
+    }).then(
       (response) => {
         // logger.debug(`response is ${JSON.stringify(response)}`);
         const mesgList = response.message;
@@ -604,6 +604,21 @@ describe("sea spray postback", function() {
         expect(mesgList[1].recipient.id).to.equal(adminFbid);
         verifyState(handler.adminMessageSender.stateManager.get(["messageSentToAdmin", customerFbid, question]), undefined, done);
         verifyState(handler.adminMessageSender.stateManager.get(["awaitingResponseFromAdmin",adminFbid]), undefined, done);
+      },
+      (err) => {
+        return Promise.reject(err);
+    }).then(
+      () => {
+        // test case where admin tries to "respond" to the message again but is told that there is already a response!
+        return handler.handlePostback(`respond_to_customer_${customerFbid}-_${question}`, PageHandler.mySeaSprayPageId, adminFbid);
+      },
+      (err) => {
+        return Promise.reject(err);
+    }).done(
+      (message) => {
+        expect(message).to.not.be.undefined;
+        expect(message.recipient.id).to.equal(adminFbid);
+        expect(message.message.text).to.include("Looks like you or some other admin already responded to customer");
         done();
       },
       (err) => {
@@ -630,7 +645,7 @@ describe("sea spray postback", function() {
       (message) => {
         verifyState(handler.adminMessageSender.stateManager.get(["awaitingResponseFromAdmin", adminFbid]), {}, done);
         expect(message.recipient.id).to.equal(adminFbid);
-        expect(message.message.text).to.include(`Enter your response for customer ${customerFbid}. Question is `); 
+        expect(message.message.text).to.include(`Enter your response for customer '${customerFbid}'. Question is `); 
         return handler.handleText(responseToQuestion, PageHandler.mySeaSprayPageId, adminFbid);
       },
       (err) => {

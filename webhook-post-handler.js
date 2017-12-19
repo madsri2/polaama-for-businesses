@@ -532,6 +532,9 @@ function greetingForAnotherPage(fbid) {
     case PageHandler.mySeaSprayPageId:
       response = this.seaSprayHandler.greeting(this.pageId, fbid);
       break;
+    case PageHandler.seaSprayPageId:
+      response = this.seaSprayHandler.greeting(this.pageId, fbid);
+      break;
     case PageHandler.myHackshawPageId:
       response = this.hackshawHandler.greeting(this.pageId, fbid);
       break;
@@ -560,6 +563,8 @@ function postbackForAnotherPage(payload, fbid) {
     case PageHandler.mySeaSprayPageId:
       return this.seaSprayHandler.handlePostback(payload, this.pageId, fbid);
       // break;
+    case PageHandler.seaSprayPageId:
+      return this.seaSprayHandler.handlePostback(payload, this.pageId, fbid);
     case PageHandler.myHackshawPageId:
       response = this.hackshawHandler.handlePostback(payload, this.pageId, fbid);
       break;
@@ -1805,14 +1810,21 @@ function handleEventWithoutTrip(m) {
 
 function messageForAnotherPage(message, fbid, event) {
   let response;
-  if(this.pageId !== PageHandler.travelSfoPageId && this.pageId !== PageHandler.mySeaSprayPageId && this.pageId !== PageHandler.myHackshawPageId) return false;
   switch(this.pageId) {
     case PageHandler.travelSfoPageId: 
       response = this.travelSfoPageHandler.handleText(message, this.pageId, fbid, event);
       break;
     case PageHandler.mySeaSprayPageId:
+      // if this customer is not interested in talking to a bot, respect that!
+      if(this.seaSprayHandler.dontRespond[`${this.pageId}-${fbid}`]) {
+        let name = FbidHandler.get().getName(fbid);
+        if(!name) name = fbid;
+        logger.warn(`messageForAnotherPage: Customer '${name}' is not interested in chatting with page '${PageHandler.pages[this.pageId]}'. So, we will not be responding with anything!`);
+        return true;
+      }
       return this.seaSprayHandler.handleText(message, this.pageId, fbid);
-      // break;
+    case PageHandler.seaSprayPageId:
+      return this.seaSprayHandler.handleText(message, this.pageId, fbid);
     case PageHandler.myHackshawPageId:
       response = this.hackshawHandler.handleText(message, this.pageId, fbid);
       break;
@@ -1839,7 +1851,10 @@ function notifyAdminOfNewMessage(mesg, senderId) {
   this.newCustomerForSeaSpray[senderId] = true;
   let name = FbidHandler.get().getName(senderId);
   if(!name) name = senderId;
-  sendTextMessage.call(this, SeaSprayHandler.myId, `[ALERT] Received new message from user '${name}'. Message is "${mesg}"`);
+  let recipientId;
+  if(this.pageId === PageHandler.mySeaSprayPageId) recipientId = SeaSprayHandler.mySeaSprayPageMyId;
+  if(this.pageId === PageHandler.seaSprayPageId) recipientId = SeaSprayHandler.seaSprayPageMyId;
+  sendTextMessage.call(this, recipientId, `[ALERT] Received new message from user '${name}'. Message is "${mesg}"`);
 }
 
 /*

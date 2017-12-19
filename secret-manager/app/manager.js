@@ -58,6 +58,11 @@ SecretManager.prototype.getMyHackshawPageAccessToken = function() {
   return this.decrypt(encryptedPat);
 }
 
+SecretManager.prototype.getSeaSprayPageAccessToken = function() {
+  const encryptedPat = "Pgal1FPBd+OWrpf51LdEuQFklF+RFiuZObkL2Y6vYi/a7W82dUWBaTIPVfn0KJ0yqMTAlOvCjdU1G2MJJnfnrAMLRXOhSOlY2zFKlVJHB8BJZsbYVZp/0pNgYZ+1P7d1muj4Tl7uSTjT464RUJp57dB0q8v0fP13sI3Z+31Euki/sLmr9FhaQvTpPBKs/+Qs0xlAMTYF+0fqyXymMekUlrWgZtbljdwIz/K1MlYMuI4h8TgE7m9/MNrHkeBsBYx/";
+  return this.decrypt(encryptedPat);
+}
+
 // Token for the "My Sea Spray" page: 
 SecretManager.prototype.getMySeaSprayPageAccessToken = function() {
   const encryptedPat = "0Xr4FwXXiWn7Kh2hf5JHv5r2Wi6QiA4uGtTnaus50XNJtD+EmMNQ1N9KxvfRo3RiQAXFak160EOJzjJi5iPZvq860xT9LA34qeamKzkPPXn+5u2+hft8gO+OMit/Et8wbf9ZcFrRiOcKM3LY2rhhbmzs3Olt5/b/7Nr/fdGr3tA/ubPCp0TWViymoVa7kraC23vyer7wY8SLP5eFwvl2YhMayF8AkeTEOLhWLpM1pVM=";

@@ -17,6 +17,10 @@ function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+AdminMessageSender.prototype.setAdminIds = function(adminIds) {
+  this.adminIds = adminIds;
+}
+
 AdminMessageSender.prototype.handleResponseFromAdmin = function(adminFbid, mesg, pageDetails) {
   const self = this;
   return this.stateManager.get(["awaitingResponseFromAdmin", adminFbid]).then(
@@ -139,16 +143,27 @@ AdminMessageSender.prototype.handleWaitingForAdminResponse = function(adminFbid,
   // first check that we have actually recorded the fact that we have sent a message to admin. Then, record the fact that we are going to ask the admin to respond and then ask the admin to respond.
   return this.stateManager.get(["messageSentToAdmin",fbid, originalMessage]).then(
     (value) => { // see if we recorded the fact that we sent message to admin. If not, throw error.
-      if(!value) return Promise.reject(new Error(`expected sentMessageToAdmin for fbid ${fbid} to be true. But its not. Dump of sentMessageToAdmin: ${JSON.stringify(self.sentMessageToAdmin)}`));
+      // if(!value) return Promise.reject(new Error(`expected sentMessageToAdmin for fbid ${fbid} to be true. But its not. Dump of sentMessageToAdmin: ${JSON.stringify(self.sentMessageToAdmin)}`));
+      if(!value) {
+        resultDone = true;
+        const adminName = getName(adminFbid);
+        const customerName = getName(fbid);
+        logger.warn(`Admin '${adminName}' wants to respond to a question from customer '${customerName}' for question "${originalMessage}". But state manager does not contain a corresponding "messageSentToAdmin" state. The most likely scenario is that someone else already responded to this message.`);
+        return Promise.resolve(FBTemplateCreator.text({
+          fbid: adminFbid,
+          text: `Looks like you or some other admin already responded to customer '${customerName}' for question '${originalMessage}'`
+        }));
+      }
       // if we are already waiting for admin to respond to any fbid and it's not the same admin passed in here, send a note to this admin indicating someone else will be responding. 
       return self.stateManager.keyStartingWith("awaitingResponseFromAdmin");
     },
     (err) => {
       return Promise.reject(err);
   }).then(
-    (key) => {
+    (value) => {
+      if(resultDone) return Promise.resolve(value); // simply pass the value along. Nothing more to do for us.
+      const key = value;
       if(key && !key.includes(adminFbid)) {
-        resultDone = true;
         const adminName = getName(self.stateManager.parseKey(key)[1]);
         return Promise.resolve(FBTemplateCreator.text({
           fbid: adminFbid, 
@@ -165,10 +180,12 @@ AdminMessageSender.prototype.handleWaitingForAdminResponse = function(adminFbid,
       return Promise.reject(err);
   }).then( // actually ask the admin to respond
     (value) => {
-      if(value) return Promise.resolve(value);
+      // a value being present indicates that the Promise has been resolved above. So, nothing left for us to do but pass the value along.
+      if(value) return Promise.resolve(value); 
+      const name = getName(fbid);
       return Promise.resolve(FBTemplateCreator.text({
         fbid: adminFbid, 
-        text: `Enter your response for customer ${fbid}. Question is \"${originalMessage}\"`
+        text: `Enter your response for customer '${name}'. Question is \"${originalMessage}\"`
       }));
     },
     (err) => {

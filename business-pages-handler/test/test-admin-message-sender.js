@@ -117,11 +117,13 @@ describe("basic tests", function() {
         const pageDetails = {
           title: "Response from Sea Spray",
           image_url: "http://tinyurl.com/y8v9ral5",
+          /*
           buttons: [{
             title: "Contact details",
             type: "postback",
             payload: "sea_spray_contact"
           }]
+          */
         };
         return adminSender.handleResponseFromAdmin(adminFbid, mesg, pageDetails);
       },

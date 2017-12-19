@@ -679,12 +679,29 @@ function testHackshawGettingStarted() {
   handler.testing_receivedPostback(receivedPostbackEvent("GET_STARTED_PAYLOAD"));
 }
 
+/*
+function testMySeaSprayTalkToHuman() {
+  const session = Sessions.get().find(myFbid);
+  let handler = new WebhookPostHandler(session, true, PageHandler.mySeaSprayPageId);
+  const promise = new Promise(
+    function() {
+      handler.testing_determineResponseType(determineResponseTypeEvent("talk to a human"));
+      return 
+    },
+    function() {
+    }
+  );
+  handler.testing_determineResponseType(determineResponseTypeEvent("done talk to human"));
+}
+*/
+
 // testHackshaw();
 // testHackshawGettingStarted();
 
 // testSeaSprayGettingStarted();
 // testSeaSprayPostback();
-testSeaSpray();
+// testSeaSpray();
+testMySeaSprayTalkToHuman();
 
 // testSpearFishing();
 

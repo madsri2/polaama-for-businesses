@@ -11,17 +11,31 @@ const Promise = require('promise');
 const year = moment().year();
 const month = moment().month() + 1;
 
-SeaSprayHandler.myId = "1629856073725012";
+SeaSprayHandler.mySeaSprayPageMyId = "1629856073725012";
 const dhuId = "1432849853450144";
 const coreyId = "1536539953068228";
+const mySeaSprayAdmins = [SeaSprayHandler.mySeaSprayPageMyId]; 
+
+SeaSprayHandler.seaSprayPageMyId = "1335132323276529";
+const seaSprayAdmins = [SeaSprayHandler.seaSprayPageMyId];
 
 function SeaSprayHandler(testing) {
   this.classifier = new NBClassifier();
-  this.adminMessageSender = new AdminMessageSender([SeaSprayHandler.myId, coreyId], testing);
+  this.testing = testing;
+  this.adminMessageSender = new AdminMessageSender(mySeaSprayAdmins, this.testing);
+  // keep track of fbids that only want to talk to a human operator.
+  this.dontRespond = {};
+}
+
+function supportedPages(pageId) {
+  if(pageId != PageHandler.mySeaSprayPageId && pageId !== PageHandler.seaSprayPageId) return false;
+  if(pageId === PageHandler.mySeaSprayPageId) this.adminMessageSender.setAdminIds(mySeaSprayAdmins);
+  if(pageId === PageHandler.seaSprayPageId) this.adminMessageSender.setAdminIds(seaSprayAdmins);
+  return true;
 }
 
 function farewell(pageId, fbid) {
-  if(pageId != PageHandler.mySeaSprayPageId) return null;
+  if(!supportedPages.call(this, pageId)) return null;
   return FBTemplateCreator.text({
     fbid: fbid,
     text: "See you later! Remember, we are always available to answer your questions!",
@@ -29,7 +43,7 @@ function farewell(pageId, fbid) {
 }
 
 SeaSprayHandler.prototype.greeting = function(pageId, fbid) {
-  if(pageId != PageHandler.mySeaSprayPageId) return null;
+  if(!supportedPages.call(this, pageId)) return null;
   let messageList = [];
   messageList.push(FBTemplateCreator.generic({
     fbid: fbid,
@@ -44,6 +58,8 @@ SeaSprayHandler.prototype.greeting = function(pageId, fbid) {
 }
 
 SeaSprayHandler.prototype.handleText = function(mesg, pageId, fbid) {
+  supportedPages.call(this, pageId);
+
   const pageDetails = {
     title: "Response from Sea Spray",
     image_url: "http://tinyurl.com/y8v9ral5",
@@ -94,9 +110,12 @@ SeaSprayHandler.prototype.handleText = function(mesg, pageId, fbid) {
       if(category === "operating-hours") response = operatingHours.call(self, fbid);
       if(category === "tour-recommendation") response = tourRecommendation.call(self, fbid);
       if(category === "entity-name") response = selectResponseForTour.call(self, result.tourName, category, fbid);
+      if(category === "frustration" || category === "talk-to-human" || category === "input.unknown") return sendMessageToAdmin.call(self, pageId, fbid, mesg, category);
+      /*
       if(category === "frustration") return self.adminMessageSender.sendMessageToAdmin(fbid, mesg, "frustration");
       if(category === "talk-to-human") return self.adminMessageSender.sendMessageToAdmin(fbid, mesg, "talk-to-human");
       if(category === "input.unknown") return self.adminMessageSender.sendMessageToAdmin(fbid, mesg);
+      */
       // if response is null until now, handle categories that have information based on tour type: "operating-days", "food-options", "cruise-details", "cost-of-tour"
       if(!response) response = selectResponseForTour.call(self, result.tourName, category, fbid);
       // if it's a category we don't understand and if there is a fulfilment, use it. This is to handle cases where the Intent and a default response exists in Dialogflow (Examples: Appreciation
@@ -111,7 +130,8 @@ SeaSprayHandler.prototype.handleText = function(mesg, pageId, fbid) {
         }
         else {
           logger.info("handleText: We don't know what to send. Send the message to human and have them take over");
-          return self.adminMessageSender.sendMessageToAdmin(fbid, mesg);
+          // return self.adminMessageSender.sendMessageToAdmin(fbid, mesg);
+          return sendMessageToAdmin.call(self, pageId, fbid, mesg);
         }
       }
 
@@ -133,8 +153,13 @@ SeaSprayHandler.prototype.handleText = function(mesg, pageId, fbid) {
   );
 }
 
+function sendMessageToAdmin(pageId, fbid, mesg, category) {
+  this.dontRespond[`${pageId}-${fbid}`] = true;
+  return this.adminMessageSender.sendMessageToAdmin(fbid, mesg, category);
+}
+
 SeaSprayHandler.prototype.handlePostback = function(payload, pageId, fbid) {
-  if(pageId != PageHandler.mySeaSprayPageId) return Promise.resolve(null);
+  if(!supportedPages.call(this, pageId)) return Promise.resolve(null);
   const self = this;
   return this.adminMessageSender.handleWaitingForAdminResponse(fbid, payload).then(
     (value) => {
