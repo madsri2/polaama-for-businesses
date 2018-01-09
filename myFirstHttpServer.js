@@ -216,6 +216,9 @@ app.get('/businesses', function(req, res) {
 app.get('/survey', function(req, res) {
   return res.redirect('https://madhu85.typeform.com/to/piaMJ8');
 });
+app.get('/end-user-survey',function(req, res) {
+  return res.redirect('https://madhu85.typeform.com/to/tIf9xh');
+});
 
 /*
 app.get('/', ensureAuthenticated, function(req, res) {

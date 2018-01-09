@@ -5,8 +5,9 @@ const PageHandler = require('fbid-handler/app/page-handler');
 const baseDir = '/home/ec2-user';
 const logger = require(`${baseDir}/my-logger`);
 logger.setTestConfig(); // indicate that we are logging for a test
+const fs = require('fs');
 
-const handler = new SeaSprayHandler(true /* testing */);
+let handler = new SeaSprayHandler(true /* testing */);
 const myFbid = "1234";
 function handlePromise(promise, expectedCategory, done, customVerification, last) {
     promise.done(
@@ -51,7 +52,16 @@ function verifyState(promise, expectedValue, done) {
   });
 }
 
+function commonBeforeEach() {
+    const empty = {};
+    fs.writeFileSync("/home/ec2-user/state-manager/state.dat/temporary-dont-respond.txt",JSON.stringify(empty));
+    handler = new SeaSprayHandler(true /* testing */);
+}
+
 describe("sea spray categories", function() {
+  beforeEach(function() {
+    commonBeforeEach();
+  });
 
   it("greeting", function(done) {
     let response = handler.handleText("Hi", PageHandler.mySeaSprayPageId, myFbid);
@@ -512,10 +522,35 @@ describe("sea spray categories", function() {
     }
     handlePromise(response, "entity-name", done, verify, true);
   });
+
+  // NOTE: FOR THIS TO WORK, GO TO dialogflow/app/main.js and uncomment the "reject(..)" line.
+  it("test dialogflow failing", function(done) {
+    let promise = handler.handleText("Hi", PageHandler.mySeaSprayPageId, myFbid);
+    promise.done(
+      function(response) {
+        logger.debug(JSON.stringify(response.message));
+        done();
+      },
+      function(err) {
+        logger.error("Error!!");
+        done(err);
+      }
+    );
+    /*
+    const verify = function(response) {
+      expect(response.message.length).to.equal(3);
+      expect(response.message[0].message.attachment.payload.template_type).to.equal("generic");
+    }
+    handlePromise(response, "greeting", done, verify);
+    */
+  });
 });
 
 
 describe("sea spray postback", function() {
+  beforeEach(function() {
+    commonBeforeEach();
+  });
 
   function verifyPostbackMessage(promise, tourName, verifier, done, last) {
     promise.then(
@@ -600,7 +635,9 @@ describe("sea spray postback", function() {
         const mesgList = response.message;
         expect(mesgList[0].recipient.id).to.equal(customerFbid);
         expect(mesgList[0].message.attachment.payload.elements[1].subtitle).to.include(question);
-        expect(mesgList[0].message.attachment.payload.elements[1].title.toLowerCase()).to.include(responseToQuestion.toLowerCase());
+        expect(mesgList[0].message.attachment.payload.elements[1].title).to.include("Your question");
+        expect(mesgList[0].message.attachment.payload.elements[2].title).to.include("Our response");
+        expect(mesgList[0].message.attachment.payload.elements[2].subtitle.toLowerCase()).to.include(responseToQuestion.toLowerCase());
         expect(mesgList[1].recipient.id).to.equal(adminFbid);
         verifyState(handler.adminMessageSender.stateManager.get(["messageSentToAdmin", customerFbid, question]), undefined, done);
         verifyState(handler.adminMessageSender.stateManager.get(["awaitingResponseFromAdmin",adminFbid]), undefined, done);
@@ -626,7 +663,7 @@ describe("sea spray postback", function() {
     });
   });
 
-  it("admin", function(done) {
+  it("single admin", function(done) {
     const customerFbid = "432";
     const adminFbid = myFbid;
     const question = "random message to someone";
@@ -650,16 +687,38 @@ describe("sea spray postback", function() {
       },
       (err) => {
         return Promise.reject(err);
-    }).done(
+    }).then(
       (response) => {
         // logger.debug(`response is ${JSON.stringify(response)}`);
         const mesgList = response.message;
         expect(mesgList[0].recipient.id).to.equal(customerFbid);
         expect(mesgList[0].message.attachment.payload.elements[1].subtitle).to.include(question);
-        expect(mesgList[0].message.attachment.payload.elements[1].title.toLowerCase()).to.include(responseToQuestion.toLowerCase());
+        expect(mesgList[0].message.attachment.payload.elements[1].title).to.include("Your question");
+        expect(mesgList[0].message.attachment.payload.elements[2].title).to.include("Our response");
+        expect(mesgList[0].message.attachment.payload.elements[2].subtitle.toLowerCase()).to.include(responseToQuestion.toLowerCase());
         expect(mesgList[1].recipient.id).to.equal(adminFbid);
         verifyState(handler.adminMessageSender.stateManager.get(["messageSentToAdmin", customerFbid, question]), undefined, done);
         verifyState(handler.adminMessageSender.stateManager.get(["awaitingResponseFromAdmin",adminFbid]), undefined, done);
+        return handler.handleText("follow up question", PageHandler.mySeaSprayPageId, customerFbid);
+      },
+      (err) => {
+        return Promise.reject(err);
+    }).done(
+      (response) => {
+        // logger.debug(`response is ${JSON.stringify(response)}`);
+        const mesgList = response.message;
+        // verify state
+        verifyState(handler.adminMessageSender.stateManager.get(["messageSentToAdmin", customerFbid, question]), undefined, done);
+        verifyState(handler.adminMessageSender.stateManager.get(["messageSentToAdmin", customerFbid, "follow up question"]), true, done);
+        /*
+        // first message
+        expect(mesgList[0].recipient.id).to.equal(customerFbid);
+        expect(mesgList[0].message.text).to.equal("I have asked one of our crew members to help. We will get back to you asap.");
+        // second message
+        */
+        // first message
+        expect(mesgList[0].message.attachment.payload.elements[1].title).to.include("Question");
+        expect(mesgList[0].message.attachment.payload.elements[1].subtitle).to.include("follow up question");
         done();
       },
       (err) => {

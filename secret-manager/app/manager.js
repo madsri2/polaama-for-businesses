@@ -74,6 +74,11 @@ SecretManager.prototype.getDialogflowClientToken = function() {
   return this.decrypt(encrypted);
 }
 
+SecretManager.prototype.getHackshawDialogflowClientToken = function() {
+  const encrypted = "ThCF8lAuWOxjA8GJD/wivBcIdfrEG5MJRQA55Hwzkg0Cx2Xv+u360PseJ66vJfbK";
+  return this.decrypt(encrypted);
+}
+
 SecretManager.prototype.getFBAppId = function() {
   const encryptedAppId = "0NEhMR1SJFm66aHxhkktNFsHg+ADlBjustDMPhZVx0BTexm/kH0aXjldQva8T/9P";
   return this.decrypt(encryptedAppId);

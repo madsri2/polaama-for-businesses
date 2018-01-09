@@ -3,13 +3,11 @@
 const baseDir = '/home/ec2-user';
 const logger = require(`${baseDir}/my-logger`);
 const CommonClassifier = require('common-classifier');
-const DialogFlowProxy = require('dialogflow');
 let passengerCountTemplate;
 
 function NBClassifier() {
   this.commonClassifier = new CommonClassifier();
   this.classifier = this.commonClassifier.commonTraining();
-  this.dialogFlow = new DialogFlowProxy();
   passengerCountTemplate = this.commonClassifier.passengerCountTemplate;
   trainAdditionalLocationMessages.call(this);
   trainToutBagayOperatingDays.call(this);
@@ -20,10 +18,6 @@ function NBClassifier() {
 
 NBClassifier.prototype.classify = function(description) {
   return this.commonClassifier.classify(description);
-}
-
-NBClassifier.prototype.categorize = function(description) {
-  return this.dialogFlow.classify(description);
 }
 
 function trainSunsetCruiseOperatingDays() {

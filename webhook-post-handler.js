@@ -1259,7 +1259,8 @@ function receivedMessage(event) {
         }
         return sendTextMessage.call(this, senderID, "Glad you like us!");
       }
-      sendTextMessage.call(this, senderID, "Message with attachment received");
+      // sendTextMessage.call(this, senderID, "Message with attachment received");
+      return sendTextMessage.call(this, senderID, "Thanks!");
     }
 }
 
@@ -1815,6 +1816,7 @@ function messageForAnotherPage(message, fbid, event) {
       response = this.travelSfoPageHandler.handleText(message, this.pageId, fbid, event);
       break;
     case PageHandler.mySeaSprayPageId:
+      /*
       // if this customer is not interested in talking to a bot, respect that!
       if(this.seaSprayHandler.dontRespond[`${this.pageId}-${fbid}`]) {
         let name = FbidHandler.get().getName(fbid);
@@ -1822,6 +1824,7 @@ function messageForAnotherPage(message, fbid, event) {
         logger.warn(`messageForAnotherPage: Customer '${name}' is not interested in chatting with page '${PageHandler.pages[this.pageId]}'. So, we will not be responding with anything!`);
         return true;
       }
+      */
       return this.seaSprayHandler.handleText(message, this.pageId, fbid);
     case PageHandler.seaSprayPageId:
       return this.seaSprayHandler.handleText(message, this.pageId, fbid);

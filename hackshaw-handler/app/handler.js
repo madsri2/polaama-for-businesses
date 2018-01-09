@@ -2,18 +2,25 @@
 const baseDir = '/home/ec2-user';
 const logger = require(`${baseDir}/my-logger`);
 const FBTemplateCreator = require(`${baseDir}/fb-template-creator`);
-const NBClassifier = require('hackshaw-handler/app/nb-classifier');
+const DialogflowHackshawAgent = require('dialogflow/app/hackshaw-agent');
 const moment = require('moment');
 const AdminMessageSender = require('business-pages-handler');
 const PageHandler = require('fbid-handler/app/page-handler');
+const BaseHandler = require('business-pages-handler/app/base-handler');
 
-function HackshawHandler() {
-  this.classifier = new NBClassifier();
+function HackshawHandler(testing) {
+  this.classifier = new DialogflowHackshawAgent();
   this.adminMessageSender = new AdminMessageSender(["1672189572825326"]);
+  this.testing = testing;
+  this.baseHandler = new BaseHandler(this.classifier, this.adminMessageSender, getResponseForCategory, this.testing);
 }
 
 HackshawHandler.prototype.greeting = function(pageId, fbid) {
-  if(pageId != PageHandler.myHackshawPageId) return null;
+  return greeting(pageId, fbid);
+}
+
+function greeting(pageId, fbid) {
+  if(pageId && pageId != PageHandler.myHackshawPageId) return null;
   let messageList = [];
   messageList.push(FBTemplateCreator.generic({
     fbid: fbid,
@@ -23,24 +30,13 @@ HackshawHandler.prototype.greeting = function(pageId, fbid) {
       image_url: "http://tinyurl.com/y9kco9pc"
     }]
   }));
-  messageList = messageList.concat(commonQuestionsButtons.call(this, fbid));
+  messageList = messageList.concat(commonQuestionsButtons(fbid));
   return messageList;
 }
 
-HackshawHandler.prototype.handleText = function(mesg, pageId, fbid) {
-  const pageDetails = {
-    title: "Response from Hackshaw",
-    image_url: "http://tinyurl.com/y9kco9pc",
-    buttons: [{
-      title: "Contact details",
-      type: "postback",
-      payload: "hackshaw_contact"
-    }]
-  };
-  const responseFromAdmin = this.adminMessageSender.handleResponseFromAdmin(fbid, mesg, pageDetails);
-  if(responseFromAdmin) return responseFromAdmin;
 
-  const category = this.classifier.classify(mesg);
+function getResponseForCategory(fbid, category) {
+  if(category === "greeting") return greeting(null, fbid);
   if(category === "dolphin whales days") return dolphinAndWhalesDays(fbid);
   if(category === "group sports fishing days") return groupSportsFishingDays(fbid);
   if(category === "bottom fishing days") return bottomFishingDays(fbid);
@@ -48,7 +44,6 @@ HackshawHandler.prototype.handleText = function(mesg, pageId, fbid) {
   if(category === "private charter days") return privateCharterDays(fbid);
 
   if(category === "customer service") return customerService(fbid);
-  if(category === "greeting") return this.greeting(pageId, fbid);
   if(category === "bad weather") return badWeatherPolicy(fbid);
   if(category === "book tour") return bookTours(fbid);
   if(category === "large group discounts") return largeGroupDiscounts(fbid);
@@ -62,8 +57,19 @@ HackshawHandler.prototype.handleText = function(mesg, pageId, fbid) {
   if(category === "fish catch") return fishCatch(fbid);
   if(category === "dolphin whale types") return dolphinWhaleTypes(fbid);
   if(category === "dolphin whale success rate") return dolphinWhaleSuccessRate(fbid);
+}
 
-  if(category === "unclassified") return this.adminMessageSender.sendMessageToAdmin(fbid, mesg);
+HackshawHandler.prototype.handleText = function(mesg, pageId, fbid) {
+  const pageDetails = {
+    title: "Response from Hackshaw",
+    image_url: "http://tinyurl.com/y9kco9pc",
+    buttons: [{
+      title: "Contact details",
+      type: "postback",
+      payload: "hackshaw_contact"
+    }]
+  };
+  return this.baseHandler.handleText(mesg, pageId, fbid, pageDetails);
 }
 
 HackshawHandler.prototype.handlePostback = function(payload, pageId, fbid) {
@@ -81,7 +87,7 @@ HackshawHandler.prototype.handlePostback = function(payload, pageId, fbid) {
   if(payload === "hackshaw_advance_booking") return advanceBooking(fbid);
   if(payload === "hackshaw_group_discount") return largeGroupDiscounts(fbid);
   if(payload === "hackshaw_hotel_transfer") return hotelTransfer(fbid);
-  if(payload === "hackshaw_common_questions") return commonQuestionsButtons.call(this, fbid);
+  if(payload === "hackshaw_common_questions") return commonQuestionsButtons(fbid);
   if(payload === "hackshaw_fleets") return hackshawFleets.call(this, fbid);
   if(payload === "hackshaw_fishing_trips") return fishingTrips.call(this, fbid);
 
@@ -366,29 +372,11 @@ function bookTours(fbid) {
   });
 }
 
-function origCommonQuestionsButtons(fbid) {
-  const messageList = [];
-  messageList.push(FBTemplateCreator.buttons({
-    fbid: fbid,
-    text: "Here's a list of some commonly asked questions",
-    buttons: [{
-      title: "What tours do you operate?",
-      type: "postback",
-      payload: "hackshaw_book_tour",
-    },{
-        title: "Dolphin & Whale tour Operating days",
-        type: "postback",
-        payload: "hackshaw_dolphin_whale_operating_days"
-    }]
-  }));
-  return messageList;
-}
-
 function commonQuestionsButtons(fbid) {
   const messageList = [];
   messageList.push(FBTemplateCreator.text({
     fbid: fbid,
-    text: "Here's a list of some commonly asked questions"
+    text: "Here is a list of some commonly asked questions"
   }));
   messageList.push(FBTemplateCreator.generic({
     fbid: fbid,

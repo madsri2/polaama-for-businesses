@@ -2,74 +2,27 @@
 const baseDir = '/home/ec2-user';
 const logger = require(`${baseDir}/my-logger`);
 const FBTemplateCreator = require(`${baseDir}/fb-template-creator`);
-const Classifier = require('sea-spray-handler/app/dialogflow-classifier');
 const moment = require('moment');
 const AdminMessageSender = require('business-pages-handler');
 const PageHandler = require('fbid-handler/app/page-handler');
 const Promise = require('promise');
-const fs = require('fs');
 
 const year = moment().year();
 const month = moment().month() + 1;
 
-SeaSprayHandler.mySeaSprayPageMyId = "1629856073725012";
-const dhuId = "1432849853450144";
-const coreyId = "1536539953068228";
-const mySeaSprayAdmins = [SeaSprayHandler.mySeaSprayPageMyId]; 
-
-SeaSprayHandler.seaSprayPageMyId = "1335132323276529";
-const seaSprayAdmins = [SeaSprayHandler.seaSprayPageMyId];
-
-function SeaSprayHandler(testing) {
-  this.classifier = new Classifier();
+function BaseHandler(classifier, adminMessageSender, getResponseForCategory, testing) {
+  if(!classifier) throw new Error("Expected parameter classifier missing");
+  if(!adminMessageSender) throw new Error("Expected parameter adminMessageSender missing");
+  if(!getResponseForCategory) throw new Error("Expected parameter getResponseForCategory missing");
+  this.classifier = classifier;
+  this.adminMessageSender = adminMessageSender;
+  this.getResponseForCategory = getResponseForCategory;
   this.testing = testing;
-  this.adminMessageSender = new AdminMessageSender(mySeaSprayAdmins, this.testing);
   // keep track of fbids that only want to talk to a human operator.
-  this.dontRespond = JSON.parse(fs.readFileSync("/home/ec2-user/state-manager/state.dat/temporary-dont-respond.txt"));
+  this.dontRespond = {};
 }
 
-function supportedPages(pageId) {
-  if(pageId != PageHandler.mySeaSprayPageId && pageId !== PageHandler.seaSprayPageId) return false;
-  if(pageId === PageHandler.mySeaSprayPageId) this.adminMessageSender.setAdminIds(mySeaSprayAdmins);
-  if(pageId === PageHandler.seaSprayPageId) this.adminMessageSender.setAdminIds(seaSprayAdmins);
-  return true;
-}
-
-function farewell(pageId, fbid) {
-  if(!supportedPages.call(this, pageId)) return null;
-  return FBTemplateCreator.text({
-    fbid: fbid,
-    text: "See you later! Remember, we are always available to answer your questions!",
-  });
-}
-
-SeaSprayHandler.prototype.greeting = function(pageId, fbid) {
-  if(!supportedPages.call(this, pageId)) return null;
-  let messageList = [];
-  messageList.push(FBTemplateCreator.generic({
-    fbid: fbid,
-    elements: [{
-      title: "Welcome to Sea Spray cruises. How can I help you today?",
-      subtitle: "I am a chat bot who can answer questions about our awesome cruises at St.Lucia",
-      image_url: "http://tinyurl.com/y8v9ral5"
-    }]
-  }));
-  messageList = messageList.concat(commonQuestionsButtons(fbid));
-  return messageList;
-}
-
-SeaSprayHandler.prototype.handleText = function(mesg, pageId, fbid) {
-  supportedPages.call(this, pageId);
-
-  const pageDetails = {
-    title: "Message from Sea Spray",
-    image_url: "http://tinyurl.com/y8v9ral5",
-    buttons: [{
-      title: "Contact details",
-      type: "postback",
-      payload: "sea_spray_contact"
-    }]
-  };
+BaseHandler.prototype.handleText = function(mesg, pageId, fbid, pageDetails) {
   const self = this;
   return this.adminMessageSender.handleResponseFromAdmin(fbid, mesg, pageDetails).then(
     (response) => {
@@ -99,35 +52,15 @@ SeaSprayHandler.prototype.handleText = function(mesg, pageId, fbid) {
     function(result) {
       // short-circuit if we already have a result from the previous promise.
       if(result._done) {
+        // TODO: Why are we deleting this key? Is it critical to get rid of? Madhu: 1/8/18
         delete result._done;
         // logger.debug(`short-circuiting since we have result from previous promise`);
         return Promise.resolve(result);
       }
-      let response = null;
       const category = result.category;
       // logger.debug(`handleText: category is ${category}`);
-      if(category === "passenger-count") response = passengerCount(fbid);
-      if(category === "location") response = location(fbid);
-      if(category === "hotel-transfers") response = hotelTransfer(fbid);
-      if(category === "available-tours") response = bookTours.call(self, fbid);
-      if(category === "customer-service") response = customerService(fbid);
-      if(category === "large-group-discounts") response = largeGroupDiscounts(fbid);
-      if(category === "operating-season") response = operatingSeason(fbid);
-      if(category === "kids-allowed") response = kidsAllowed(fbid);
-      if(category === "infant-charges") response = infantCharges(fbid);
-      if(category === "greeting") response = self.greeting(pageId, fbid);
-      if(category === "farewell") response = farewell.call(self, pageId, fbid)
-      if(category === "customized-tour") response = customizedTours(fbid);
-      if(category === "book-tour") response = bookTours(fbid);
-      if(category === "bad-weather") response = badWeatherPolicy(fbid);
-      if(category === "advance-booking") response = advanceBooking(fbid);
-      if(category === "operating-tours") response = bookTours.call(self, fbid);
-      if(category === "operating-hours") response = operatingHours.call(self, fbid);
-      if(category === "tour-recommendation") response = tourRecommendation.call(self, fbid);
-      if(category === "entity-name") response = selectResponseForTour(result.tourName, category, fbid);
       if(category === "frustration" || category === "talk-to-human" || category === "input.unknown") return sendMessageToAdmin.call(self, pageId, fbid, mesg, category);
-      // if response is still null, handle categories that have information based on tour type: "operating-days", "food-options", "cruise-details", "cost-of-tour"
-      if(!response) response = selectResponseForTour(result.tourName, category, fbid);
+      let response = self.getResponseForCategory(fbid, result.category);
       // if it's a category we don't understand and if there is a fulfilment, use it. This is to handle cases where the Intent and a default response exists in Dialogflow (Examples: Appreciation
       if(!response) {
         logger.info(`handleText: Unknown category: ${category}. Figuring out what to do...`);
@@ -164,19 +97,17 @@ SeaSprayHandler.prototype.handleText = function(mesg, pageId, fbid) {
 }
 
 function alwaysSendMessageToHuman(mesg, pageId, fbid) {
-  logger.debug(`dump of dontRespond: ${JSON.stringify(this.dontRespond)}`);
   if(!this.dontRespond[`${pageId}-${fbid}`]) return null;
-  logger.debug(`alwaysSendMessageToHuman: For fbid ${fbid}, we will always be asking the human operator to respond`);
-  return this.adminMessageSender.sendMessageToAdmin(fbid, mesg, "send-no-message");
+  // logger.debug(`alwaysSendMessageToHuman: For fbid ${fbid}, we will always be asking the human operator to respond`);
+  return this.adminMessageSender.sendMessageToAdmin(fbid, mesg, "talk-to-human");
 }
 
 function sendMessageToAdmin(pageId, fbid, mesg, category) {
   this.dontRespond[`${pageId}-${fbid}`] = true;
-  fs.writeFileSync("/home/ec2-user/state-manager/state.dat/temporary-dont-respond.txt",JSON.stringify(this.dontRespond));
   return this.adminMessageSender.sendMessageToAdmin(fbid, mesg, category);
 }
 
-SeaSprayHandler.prototype.handlePostback = function(payload, pageId, fbid) {
+BaseHandler.prototype.handlePostback = function(payload, pageId, fbid) {
   if(!supportedPages.call(this, pageId)) return Promise.resolve(null);
   const self = this;
   return this.adminMessageSender.handleWaitingForAdminResponse(fbid, payload).then(
@@ -192,9 +123,9 @@ SeaSprayHandler.prototype.handlePostback = function(payload, pageId, fbid) {
       if(payload === "sea_spray_advance_booking") response = advanceBooking(fbid);
       if(payload === "sea_spray_group_discount") response = largeGroupDiscounts(fbid);
       if(payload === "sea_spray_hotel_transfer") response = hotelTransfer(fbid);
-      if(payload === "sea_spray_common_questions") response = commonQuestionsButtons(fbid);
+      if(payload === "sea_spray_common_questions") response = commonQuestionsButtons.call(self, fbid);
       // handle case where user chose a particular tour for a previously determined category
-      if(payload.startsWith("select_tour")) response = selectResponseForTour(payload, null, fbid);
+      if(payload.startsWith("select_tour")) response = selectResponseForTour.call(self, payload, null, fbid);
       // we need to respond one way or another here. TODO: See if there is better way to handle this.
       if(!response) {
         logger.error(`Dont know how to handle payload ${payload} of fbid ${fbid} for "sea spray" bot. Asking help from admin`);
@@ -1014,4 +945,4 @@ function sunsetCruiseDetails(fbid) {
   });
 }
 
-module.exports = SeaSprayHandler;
+module.exports = BaseHandler;

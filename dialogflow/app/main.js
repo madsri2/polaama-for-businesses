@@ -5,8 +5,9 @@ const baseDir = '/home/ec2-user';
 const logger = require(`${baseDir}/my-logger`);
 const DialogFlow = require('apiai');
 
-function DialogFlowProxy() {
-  this.clientToken = new SecretManager().getDialogflowClientToken();
+function DialogFlowProxy(clientToken) {
+  if(clientToken) this.clientToken = clientToken;
+  else this.clientToken = new SecretManager().getDialogflowClientToken();
 }
 
 /*
@@ -18,6 +19,11 @@ DialogFlowProxy.prototype.classify = function(message) {
     sessionId: "session-1234"
   });
   return new Promise(function(fulfil, reject) {
+    /*
+      reject("Testing");
+      request.end();
+      return;
+    */
     request.on('response', function(response) {
       // logger.debug(JSON.stringify(response.result, null, 2));
       const result = {

@@ -304,7 +304,7 @@ function trainBookingTour() {
 }
 
 function trainBadWeatherQuestion() {
-  logger.debug(`trainBadWeatherQuestion: ${this.constructor.name}`);
+  // logger.debug(`trainBadWeatherQuestion: ${this.constructor.name}`);
   const trainingData = [
     "what happens if the weather is bad",
     "bad weather situation",

@@ -9,7 +9,7 @@ const Promise = require('promise');
 function AdminMessageSender(adminIds, testing) {
   let fileName = "business-admin-handler.txt";
   if(testing) fileName = "testing-business-admin-handler.txt";
-  this.stateManager = new Manager(fileName);
+  this.stateManager = new Manager(fileName, testing);
   this.adminIds = adminIds;
 }
 
@@ -38,9 +38,15 @@ AdminMessageSender.prototype.handleResponseFromAdmin = function(adminFbid, mesg,
             image_url: pageDetails.image_url
           },
           {
-            title: capitalizeFirstLetter(mesg),
-            subtitle: `Original question: ${question}`,
-            buttons: pageDetails.buttons
+            title: "Your question",
+            subtitle: `${question}`,
+            // title: capitalizeFirstLetter(mesg),
+            // subtitle: `Original question: ${question}`,
+            // buttons: pageDetails.buttons
+          },
+          {
+            title: "Our response",
+            subtitle: capitalizeFirstLetter(mesg),
           }
         ]
       }));
@@ -80,18 +86,20 @@ function getName(fbid) {
 }
 
 AdminMessageSender.prototype.sendMessageToAdmin = function(fbid, mesg, categoryValue) {
-  const messageList = [];
   let message = { recipient: { id: fbid } };
   let prefix = "";
   if(categoryValue) {
     if(categoryValue === "frustration") prefix = "Sorry that I was unable to help you. ";
-    if(categoryValue !== "talk-to-human") prefix = "I did not understand the question, so "; 
+    else if(categoryValue !== "talk-to-human") prefix = "I did not understand the question, so "; 
   }
   message.message = {
-    text: `${prefix}I have asked one of our crew members to help. We will get back to you asap`,
+    text: `${prefix}I have asked one of our crew members to help. We will get back to you asap.`,
     metadata: "DEVELOPER_DEFINED_METADATA"
   };
-  messageList.push(message);
+  if(categoryValue === "handle-error") message.message.text = "We have received your message and will get back to you asap.";
+  const messageList = [];
+  // don't send message back to the original sender if we are asked NOT to.
+  if(categoryValue !== "send-no-message") messageList.push(message);
   let messageToAdmin = {
     elements: [
       {
@@ -99,8 +107,8 @@ AdminMessageSender.prototype.sendMessageToAdmin = function(fbid, mesg, categoryV
         subtitle: `Question from customer ${getName(fbid)}`
       },
       {
-        title: mesg,
-        subtitle: "is the question"
+        title: "Question",
+        subtitle: mesg
       }
     ],
     buttons:[{
@@ -114,9 +122,7 @@ AdminMessageSender.prototype.sendMessageToAdmin = function(fbid, mesg, categoryV
     messageToAdmin.fbid = adminId;
     messageList.push(FBTemplateCreator.list(messageToAdmin));
   });
-  /* 
-    Keep state that you are awaiting a message for a particular user. As soon as message is received by user and they respond, if the state is set, then send this message to the original user and clear the state. 
-  */
+  //  Keep state that you are awaiting a message for a particular user. As soon as message is received by user and they respond, if the state is set, then send this message to the original user and clear the state. 
   const self = this;
   return this.stateManager.set(["messageSentToAdmin", fbid, mesg]).then(
     () => {
