@@ -7,7 +7,8 @@ const moment = require('moment');
 const AdminMessageSender = require('business-pages-handler');
 const PageHandler = require('fbid-handler/app/page-handler');
 const Promise = require('promise');
-const fs = require('fs');
+const StateManager = require('state-manager');
+const FbidHandler = require('fbid-handler/app/handler');
 
 const year = moment().year();
 const month = moment().month() + 1;
@@ -24,8 +25,8 @@ function SeaSprayHandler(testing) {
   this.classifier = new Classifier();
   this.testing = testing;
   this.adminMessageSender = new AdminMessageSender(mySeaSprayAdmins, this.testing);
-  // keep track of fbids that only want to talk to a human operator.
-  this.dontRespond = JSON.parse(fs.readFileSync("/home/ec2-user/state-manager/state.dat/temporary-dont-respond.txt"));
+  // List of users who only want to talk to a human operator.
+  this.dontRespondState = new StateManager("seaspray-dont-respond.txt", testing);
 }
 
 function supportedPages(pageId) {
@@ -78,20 +79,18 @@ SeaSprayHandler.prototype.handleText = function(mesg, pageId, fbid) {
         message: response
       });
       // if this customer had expressed interest in chatting with a human in the past, treat all subsequent messages the same way
-      const promise = alwaysSendMessageToHuman.call(self, mesg, pageId, fbid);
-      if(promise) return promise.then(
-        (sendMessageToHumanResponse) => {
-          return Promise.resolve({
-            _done: true,
-            message: sendMessageToHumanResponse.message
-          });
-        },
-        (err) => {
-          return Promise.reject(err);
+      return alwaysSendMessageToHuman.call(self, mesg, pageId, fbid);
+    },
+    (err) => {
+      return Promise.reject(err);
+  }).then(
+    (response) => {
+      // perform actual classification if message should be handled by bot and not human
+      if(!response) return self.classifier.classify(mesg);
+      return Promise.resolve({
+        _done: true,
+        message: response.message
       });
-
-      // actual classification
-      return self.classifier.classify(mesg);
     },
     (err) => {
       return Promise.reject(err);
@@ -164,16 +163,35 @@ SeaSprayHandler.prototype.handleText = function(mesg, pageId, fbid) {
 }
 
 function alwaysSendMessageToHuman(mesg, pageId, fbid) {
-  logger.debug(`dump of dontRespond: ${JSON.stringify(this.dontRespond)}`);
-  if(!this.dontRespond[`${pageId}-${fbid}`]) return null;
-  logger.debug(`alwaysSendMessageToHuman: For fbid ${fbid}, we will always be asking the human operator to respond`);
-  return this.adminMessageSender.sendMessageToAdmin(fbid, mesg, "send-no-message");
+  const self = this;
+  // if the message is longer than 255 characters, Dialog flow throws an error. For now, have human operators handle responses > 255 characters
+  let name = FbidHandler.get().getName(fbid);
+  if(!name) name = fbid;
+  if(mesg.length >= 255) {
+    logger.warn(`alwaysSendMessageToHuman: Message from person "${name}" with fbid ${fbid} who is chatting with SeaSpray page is > 255 characters. Since dialogflow only accepts shorter messages, asking human operator to take over this conversation`);
+    return sendMessageToAdmin.call(self, pageId, fbid, mesg, "talk-to-human");
+  }
+  return this.dontRespondState.get([pageId, fbid]).then(
+    (value) => {
+      // if there is no state recorded before, bot needs to handle this message from user
+      if(!value) return Promise.resolve(null);
+      logger.debug(`For person "${name}" with fbid ${fbid} who is chatting with SeaSpray page, we will always ask the human operator to respond`);
+      return self.adminMessageSender.sendMessageToAdmin(fbid, mesg, "dont-respond-to-user");
+    },
+    (err) => {
+      return Promise.reject(err);
+  });
 }
 
 function sendMessageToAdmin(pageId, fbid, mesg, category) {
-  this.dontRespond[`${pageId}-${fbid}`] = true;
-  fs.writeFileSync("/home/ec2-user/state-manager/state.dat/temporary-dont-respond.txt",JSON.stringify(this.dontRespond));
-  return this.adminMessageSender.sendMessageToAdmin(fbid, mesg, category);
+  const self = this;
+  return this.dontRespondState.set([pageId, fbid]).then(
+    () => {
+      return self.adminMessageSender.sendMessageToAdmin(fbid, mesg, category);
+    },
+    (err) => {
+      return Promise.reject(err);
+  });
 }
 
 SeaSprayHandler.prototype.handlePostback = function(payload, pageId, fbid) {

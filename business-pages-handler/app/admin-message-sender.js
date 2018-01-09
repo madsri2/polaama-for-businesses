@@ -7,9 +7,7 @@ const Manager = require('state-manager');
 const Promise = require('promise');
 
 function AdminMessageSender(adminIds, testing) {
-  let fileName = "business-admin-handler.txt";
-  if(testing) fileName = "testing-business-admin-handler.txt";
-  this.stateManager = new Manager(fileName, testing);
+  this.stateManager = new Manager("business-admin-handler.txt", testing);
   this.adminIds = adminIds;
 }
 
@@ -99,7 +97,7 @@ AdminMessageSender.prototype.sendMessageToAdmin = function(fbid, mesg, categoryV
   if(categoryValue === "handle-error") message.message.text = "We have received your message and will get back to you asap.";
   const messageList = [];
   // don't send message back to the original sender if we are asked NOT to.
-  if(categoryValue !== "send-no-message") messageList.push(message);
+  if(categoryValue !== "dont-respond-to-user") messageList.push(message);
   let messageToAdmin = {
     elements: [
       {

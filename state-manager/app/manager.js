@@ -9,8 +9,9 @@ const stateDir = `/home/ec2-user/state-manager/state.dat`;
   A simple state manager that persists state. It's completely non-blocking, using promises! For now, we are persisting it locally. Also, the data structure is a simple key - value store. We offer APIs for users of this class to create complex keys from many values.
 */
 
-function Manager(name, reset) {
+function Manager(name, testing) {
   if(!name) return new Error("required parameter 'name' is missing");  
+  if(testing) name = "testing-".concat(name);
   this.state = {};
   const self = this;
   this.promise = new Promise(function(fulfil, reject) {
@@ -18,11 +19,12 @@ function Manager(name, reset) {
       if(err && err.code !== 'EEXIST') return reject(err);
       self.fileName = `${stateDir}/${name}`;
       fs.readFile(self.fileName, 'utf8', function(err, data) {
+        let createFile = false;
         if(err) {
-          if(err.code === "ENOENT") reset = true;
+          if(err.code === "ENOENT") createFile = true;
           else return reject(err);
         }
-        if(reset) {
+        if(testing || createFile) {
           // logger.debug(`file ${self.fileName} not present`);
           // create an empty file to establish state
           fs.writeFile(self.fileName, JSON.stringify(self.state), 'utf8', function(err) {

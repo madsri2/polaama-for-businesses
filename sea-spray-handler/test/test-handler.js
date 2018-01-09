@@ -5,7 +5,6 @@ const PageHandler = require('fbid-handler/app/page-handler');
 const baseDir = '/home/ec2-user';
 const logger = require(`${baseDir}/my-logger`);
 logger.setTestConfig(); // indicate that we are logging for a test
-const fs = require('fs');
 
 let handler = new SeaSprayHandler(true /* testing */);
 const myFbid = "1234";
@@ -53,8 +52,6 @@ function verifyState(promise, expectedValue, done) {
 }
 
 function commonBeforeEach() {
-    const empty = {};
-    fs.writeFileSync("/home/ec2-user/state-manager/state.dat/temporary-dont-respond.txt",JSON.stringify(empty));
     handler = new SeaSprayHandler(true /* testing */);
 }
 
@@ -227,6 +224,39 @@ describe("sea spray categories", function() {
     handlePromise(response, "passenger-count", done);
     response = handler.handleText("maximum passengers in pirate's day", PageHandler.mySeaSprayPageId, myFbid);
     handlePromise(response, "passenger-count", done, true);
+  });
+
+  it("really long message greater than 255 characters", function(done) {
+    const customerFbid = 432;
+    let message = "a";
+    for(let i = 0; i < 255; i++) {
+      message = "a".concat(message);
+    }
+    let promise = handler.handleText(message, PageHandler.mySeaSprayPageId, customerFbid);
+    promise.then(
+      (response) => {
+        expect(response.message).is.not.undefined;
+        verifyState(handler.adminMessageSender.stateManager.get(["messageSentToAdmin", customerFbid, message]), true, done);
+        const mesgList = response.message;
+        // logger.debug(`mesgList: ${JSON.stringify(mesgList)}`);
+        expect(mesgList[0].message.text).to.equal("I have asked one of our crew members to help. We will get back to you asap.");
+        return handler.handleText("second message", PageHandler.mySeaSprayPageId, customerFbid);
+      }, 
+      (err) => {
+        done(err);
+    }).done(
+      // verify that the second message sent by the same user is also sent to admin and the user does not see any message from the bot.
+      (response) => {
+        expect(response.message).is.not.undefined;
+        verifyState(handler.adminMessageSender.stateManager.get(["messageSentToAdmin", customerFbid, "second message"]), true, done);
+        const mesgList = response.message;
+        expect(mesgList[0].message.attachment.payload.elements[1].title).to.include("Question");
+        expect(mesgList[0].message.attachment.payload.elements[1].subtitle).to.include("second message");
+        done();
+      }, 
+      (err) => {
+        done(err);
+    });
   });
 
   it("human", function(done) {
@@ -524,7 +554,7 @@ describe("sea spray categories", function() {
   });
 
   // NOTE: FOR THIS TO WORK, GO TO dialogflow/app/main.js and uncomment the "reject(..)" line.
-  it("test dialogflow failing", function(done) {
+  it.skip("manual test: dialogflow failing", function(done) {
     let promise = handler.handleText("Hi", PageHandler.mySeaSprayPageId, myFbid);
     promise.done(
       function(response) {
@@ -536,13 +566,6 @@ describe("sea spray categories", function() {
         done(err);
       }
     );
-    /*
-    const verify = function(response) {
-      expect(response.message.length).to.equal(3);
-      expect(response.message[0].message.attachment.payload.template_type).to.equal("generic");
-    }
-    handlePromise(response, "greeting", done, verify);
-    */
   });
 });
 
@@ -710,12 +733,6 @@ describe("sea spray postback", function() {
         // verify state
         verifyState(handler.adminMessageSender.stateManager.get(["messageSentToAdmin", customerFbid, question]), undefined, done);
         verifyState(handler.adminMessageSender.stateManager.get(["messageSentToAdmin", customerFbid, "follow up question"]), true, done);
-        /*
-        // first message
-        expect(mesgList[0].recipient.id).to.equal(customerFbid);
-        expect(mesgList[0].message.text).to.equal("I have asked one of our crew members to help. We will get back to you asap.");
-        // second message
-        */
         // first message
         expect(mesgList[0].message.attachment.payload.elements[1].title).to.include("Question");
         expect(mesgList[0].message.attachment.payload.elements[1].subtitle).to.include("follow up question");
