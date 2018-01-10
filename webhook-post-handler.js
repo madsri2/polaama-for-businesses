@@ -1816,15 +1816,6 @@ function messageForAnotherPage(message, fbid, event) {
       response = this.travelSfoPageHandler.handleText(message, this.pageId, fbid, event);
       break;
     case PageHandler.mySeaSprayPageId:
-      /*
-      // if this customer is not interested in talking to a bot, respect that!
-      if(this.seaSprayHandler.dontRespond[`${this.pageId}-${fbid}`]) {
-        let name = FbidHandler.get().getName(fbid);
-        if(!name) name = fbid;
-        logger.warn(`messageForAnotherPage: Customer '${name}' is not interested in chatting with page '${PageHandler.pages[this.pageId]}'. So, we will not be responding with anything!`);
-        return true;
-      }
-      */
       return this.seaSprayHandler.handleText(message, this.pageId, fbid);
     case PageHandler.seaSprayPageId:
       return this.seaSprayHandler.handleText(message, this.pageId, fbid);

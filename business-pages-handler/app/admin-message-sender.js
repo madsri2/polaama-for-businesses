@@ -5,9 +5,12 @@ const FBTemplateCreator = require(`${baseDir}/fb-template-creator`);
 const FbidHandler = require('fbid-handler/app/handler');
 const Manager = require('state-manager');
 const Promise = require('promise');
+const Encoder = require(`${baseDir}/encoder`);
 
-function AdminMessageSender(adminIds, testing) {
-  this.stateManager = new Manager("business-admin-handler.txt", testing);
+function AdminMessageSender(businessName, adminIds, testing) {
+  if(!businessName) throw new Error(`Required parameter 'businessName' missing`);
+  if(!adminIds) throw new Error(`Required parameter 'adminIds' missing`);
+  this.stateManager = new Manager(`${Encoder.encode(businessName)}-business-admin-handler.txt`, testing);
   this.adminIds = adminIds;
 }
 
@@ -38,9 +41,6 @@ AdminMessageSender.prototype.handleResponseFromAdmin = function(adminFbid, mesg,
           {
             title: "Your question",
             subtitle: `${question}`,
-            // title: capitalizeFirstLetter(mesg),
-            // subtitle: `Original question: ${question}`,
-            // buttons: pageDetails.buttons
           },
           {
             title: "Our response",

@@ -4,13 +4,14 @@ const logger = require(`${baseDir}/my-logger`);
 const FBTemplateCreator = require(`${baseDir}/fb-template-creator`);
 const DialogflowHackshawAgent = require('dialogflow/app/hackshaw-agent');
 const moment = require('moment');
-const AdminMessageSender = require('business-pages-handler');
 const PageHandler = require('fbid-handler/app/page-handler');
 const BaseHandler = require('business-pages-handler/app/base-handler');
 
+const year = moment().year();
+const month = moment().month() + 1;
+
 function HackshawHandler(testing) {
   this.classifier = new DialogflowHackshawAgent();
-  this.adminMessageSender = new AdminMessageSender(["1672189572825326"]);
   this.testing = testing;
   this.baseHandler = new BaseHandler(this.classifier, this.adminMessageSender, getResponseForCategory, this.testing);
 }

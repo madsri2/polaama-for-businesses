@@ -4,48 +4,53 @@ const logger = require(`${baseDir}/my-logger`);
 const FBTemplateCreator = require(`${baseDir}/fb-template-creator`);
 const Classifier = require('sea-spray-handler/app/dialogflow-classifier');
 const moment = require('moment');
-const AdminMessageSender = require('business-pages-handler');
 const PageHandler = require('fbid-handler/app/page-handler');
 const Promise = require('promise');
-const StateManager = require('state-manager');
-const FbidHandler = require('fbid-handler/app/handler');
 
 const year = moment().year();
 const month = moment().month() + 1;
 
-SeaSprayHandler.mySeaSprayPageMyId = "1629856073725012";
-const dhuId = "1432849853450144";
-const coreyId = "1536539953068228";
-const mySeaSprayAdmins = [SeaSprayHandler.mySeaSprayPageMyId]; 
-
 SeaSprayHandler.seaSprayPageMyId = "1335132323276529";
 const seaSprayAdmins = [SeaSprayHandler.seaSprayPageMyId];
 
+/* 
+  A business-logic class that holds all business logic associated with the "Sea Spray" business. This is a prototype for all future businesses, which should implement the methods implemented by this class and return business specific information.
+  This class will be passed to ~/business-pages-handler/app/base-handler.js, which will then call the methods implemented here as needed. 
+  NOTE: ALL BUSINESS SPECIFIC CLASSES WILL HAVE TO IMPLEMENT THE instance METHODS IMPLEMENTED BY THIS CLASS.
+*/
+
 function SeaSprayHandler(testing) {
   this.classifier = new Classifier();
+  this.name = "Sea Spray";
+  this.adminIds = [SeaSprayHandler.seaSprayPageMyId];
+  this.businessPageId = PageHandler.seaSprayPageId;
   this.testing = testing;
-  this.adminMessageSender = new AdminMessageSender(mySeaSprayAdmins, this.testing);
-  // List of users who only want to talk to a human operator.
-  this.dontRespondState = new StateManager("seaspray-dont-respond.txt", testing);
 }
 
-function supportedPages(pageId) {
-  if(pageId != PageHandler.mySeaSprayPageId && pageId !== PageHandler.seaSprayPageId) return false;
-  if(pageId === PageHandler.mySeaSprayPageId) this.adminMessageSender.setAdminIds(mySeaSprayAdmins);
-  if(pageId === PageHandler.seaSprayPageId) this.adminMessageSender.setAdminIds(seaSprayAdmins);
-  return true;
+SeaSprayHandler.prototype.handleBusinessSpecificCategories = function(fbid, category, tourName) {
+  if(category === "passenger-count") return passengerCount(fbid);
+  if(category === "location") return location(fbid);
+  if(category === "hotel-transfers") return hotelTransfer(fbid);
+  if(category === "available-tours") return bookTours(fbid);
+  if(category === "customer-service") return customerService(fbid);
+  if(category === "large-group-discounts") return largeGroupDiscounts(fbid);
+  if(category === "operating-season") return operatingSeason(fbid);
+  if(category === "kids-allowed") return kidsAllowed(fbid);
+  if(category === "infant-charges") return infantCharges(fbid);
+  if(category === "farewell") return farewell(fbid)
+  if(category === "customized-tour") return customizedTours(fbid);
+  if(category === "book-tour") return bookTours(fbid);
+  if(category === "bad-weather") return badWeatherPolicy(fbid);
+  if(category === "advance-booking") return advanceBooking(fbid);
+  if(category === "operating-tours") return bookTours(fbid);
+  if(category === "operating-hours") return operatingHours(fbid);
+  if(category === "tour-recommendation") return tourRecommendation(fbid);
+  if(category === "entity-name") return selectResponseForTour(tourName, category, fbid);
+  // if response is still null, handle categories that have information based on tour type: "operating-days", "food-options", "cruise-details", "cost-of-tour"
+  return selectResponseForTour(tourName, category, fbid);
 }
 
-function farewell(pageId, fbid) {
-  if(!supportedPages.call(this, pageId)) return null;
-  return FBTemplateCreator.text({
-    fbid: fbid,
-    text: "See you later! Remember, we are always available to answer your questions!",
-  });
-}
-
-SeaSprayHandler.prototype.greeting = function(pageId, fbid) {
-  if(!supportedPages.call(this, pageId)) return null;
+SeaSprayHandler.prototype.greeting = function(fbid) {
   let messageList = [];
   messageList.push(FBTemplateCreator.generic({
     fbid: fbid,
@@ -59,10 +64,8 @@ SeaSprayHandler.prototype.greeting = function(pageId, fbid) {
   return messageList;
 }
 
-SeaSprayHandler.prototype.handleText = function(mesg, pageId, fbid) {
-  supportedPages.call(this, pageId);
-
-  const pageDetails = {
+SeaSprayHandler.prototype.pageDetails = function() {
+  return {
     title: "Message from Sea Spray",
     image_url: "http://tinyurl.com/y8v9ral5",
     buttons: [{
@@ -71,167 +74,27 @@ SeaSprayHandler.prototype.handleText = function(mesg, pageId, fbid) {
       payload: "sea_spray_contact"
     }]
   };
-  const self = this;
-  return this.adminMessageSender.handleResponseFromAdmin(fbid, mesg, pageDetails).then(
-    (response) => {
-      if(response) return Promise.resolve({
-        _done: true,
-        message: response
-      });
-      // if this customer had expressed interest in chatting with a human in the past, treat all subsequent messages the same way
-      return alwaysSendMessageToHuman.call(self, mesg, pageId, fbid);
-    },
-    (err) => {
-      return Promise.reject(err);
-  }).then(
-    (response) => {
-      // perform actual classification if message should be handled by bot and not human
-      if(!response) return self.classifier.classify(mesg);
-      return Promise.resolve({
-        _done: true,
-        message: response.message
-      });
-    },
-    (err) => {
-      return Promise.reject(err);
-  }).then(
-    function(result) {
-      // short-circuit if we already have a result from the previous promise.
-      if(result._done) {
-        delete result._done;
-        // logger.debug(`short-circuiting since we have result from previous promise`);
-        return Promise.resolve(result);
-      }
-      let response = null;
-      const category = result.category;
-      // logger.debug(`handleText: category is ${category}`);
-      if(category === "passenger-count") response = passengerCount(fbid);
-      if(category === "location") response = location(fbid);
-      if(category === "hotel-transfers") response = hotelTransfer(fbid);
-      if(category === "available-tours") response = bookTours.call(self, fbid);
-      if(category === "customer-service") response = customerService(fbid);
-      if(category === "large-group-discounts") response = largeGroupDiscounts(fbid);
-      if(category === "operating-season") response = operatingSeason(fbid);
-      if(category === "kids-allowed") response = kidsAllowed(fbid);
-      if(category === "infant-charges") response = infantCharges(fbid);
-      if(category === "greeting") response = self.greeting(pageId, fbid);
-      if(category === "farewell") response = farewell.call(self, pageId, fbid)
-      if(category === "customized-tour") response = customizedTours(fbid);
-      if(category === "book-tour") response = bookTours(fbid);
-      if(category === "bad-weather") response = badWeatherPolicy(fbid);
-      if(category === "advance-booking") response = advanceBooking(fbid);
-      if(category === "operating-tours") response = bookTours.call(self, fbid);
-      if(category === "operating-hours") response = operatingHours.call(self, fbid);
-      if(category === "tour-recommendation") response = tourRecommendation.call(self, fbid);
-      if(category === "entity-name") response = selectResponseForTour(result.tourName, category, fbid);
-      if(category === "frustration" || category === "talk-to-human" || category === "input.unknown") return sendMessageToAdmin.call(self, pageId, fbid, mesg, category);
-      // if response is still null, handle categories that have information based on tour type: "operating-days", "food-options", "cruise-details", "cost-of-tour"
-      if(!response) response = selectResponseForTour(result.tourName, category, fbid);
-      // if it's a category we don't understand and if there is a fulfilment, use it. This is to handle cases where the Intent and a default response exists in Dialogflow (Examples: Appreciation
-      if(!response) {
-        logger.info(`handleText: Unknown category: ${category}. Figuring out what to do...`);
-        if(result.defaultResponse) {
-          logger.info(`handleText: default response <${result.defaultResponse}> present. Returning that.`);
-          response = FBTemplateCreator.text({
-            fbid: fbid,
-            text: result.defaultResponse
-          });
-        }
-        else {
-          logger.info("handleText: We don't know what to send. Send the message to human and have them take over");
-          return sendMessageToAdmin.call(self, pageId, fbid, mesg);
-        }
-      }
-
-      return Promise.resolve({
-        'category': category,
-        message: response
-      });
-    },
-    (err) => {
-      return Promise.reject(err);
-  }).then(
-    (response) => {
-      return Promise.resolve(response);
-    },
-    function(error) {
-      logger.error(`handleText: Error in categoryPromise: ${error}`);
-      logger.error(`handleText: Sending message ${mesg} to admin so they can take over`);
-      return self.adminMessageSender.sendMessageToAdmin(fbid, mesg, "handle-error");
-    }
-  );
 }
 
-function alwaysSendMessageToHuman(mesg, pageId, fbid) {
-  const self = this;
-  // if the message is longer than 255 characters, Dialog flow throws an error. For now, have human operators handle responses > 255 characters
-  let name = FbidHandler.get().getName(fbid);
-  if(!name) name = fbid;
-  if(mesg.length >= 255) {
-    logger.warn(`alwaysSendMessageToHuman: Message from person "${name}" with fbid ${fbid} who is chatting with SeaSpray page is > 255 characters. Since dialogflow only accepts shorter messages, asking human operator to take over this conversation`);
-    return sendMessageToAdmin.call(self, pageId, fbid, mesg, "talk-to-human");
-  }
-  return this.dontRespondState.get([pageId, fbid]).then(
-    (value) => {
-      // if there is no state recorded before, bot needs to handle this message from user
-      if(!value) return Promise.resolve(null);
-      logger.debug(`For person "${name}" with fbid ${fbid} who is chatting with SeaSpray page, we will always ask the human operator to respond`);
-      return self.adminMessageSender.sendMessageToAdmin(fbid, mesg, "dont-respond-to-user");
-    },
-    (err) => {
-      return Promise.reject(err);
+SeaSprayHandler.prototype.handleBusinessSpecificPayload = function(payload, fbid) {
+  if(payload === "sea_spray_contact") return customerService(fbid);
+  if(payload === "sea_spray_book_tour") return bookTours(fbid);
+  if(payload === "sea_spray_tout_bagay_operating_days") return toutBagayDays(fbid);
+  if(payload === "sea_spray_pirate_days_operating_days") return piratesDay(fbid);
+  if(payload === "sea_spray_sunset_cruise_operating_days") return sunsetCruiseDays(fbid);
+  if(payload === "sea_spray_bad_weather") return badWeatherPolicy(fbid);
+  if(payload === "sea_spray_advance_booking") return advanceBooking(fbid);
+  if(payload === "sea_spray_group_discount") return largeGroupDiscounts(fbid);
+  if(payload === "sea_spray_hotel_transfer") return hotelTransfer(fbid);
+  if(payload === "sea_spray_common_questions") return commonQuestionsButtons(fbid);
+  if(payload.startsWith("select_tour")) return selectResponseForTour(payload, null, fbid);
+}
+
+function farewell(fbid) {
+  return FBTemplateCreator.text({
+    fbid: fbid,
+    text: "See you later! Remember, we are always available to answer your questions!",
   });
-}
-
-function sendMessageToAdmin(pageId, fbid, mesg, category) {
-  const self = this;
-  return this.dontRespondState.set([pageId, fbid]).then(
-    () => {
-      return self.adminMessageSender.sendMessageToAdmin(fbid, mesg, category);
-    },
-    (err) => {
-      return Promise.reject(err);
-  });
-}
-
-SeaSprayHandler.prototype.handlePostback = function(payload, pageId, fbid) {
-  if(!supportedPages.call(this, pageId)) return Promise.resolve(null);
-  const self = this;
-  return this.adminMessageSender.handleWaitingForAdminResponse(fbid, payload).then(
-    (value) => {
-      if(value) return Promise.resolve(value);
-      let response;
-      if(payload === "sea_spray_contact") response = customerService(fbid);
-      if(payload === "sea_spray_book_tour") response = bookTours.call(self, fbid);
-      if(payload === "sea_spray_tout_bagay_operating_days") response = toutBagayDays.call(self, fbid);
-      if(payload === "sea_spray_pirate_days_operating_days") response = piratesDay.call(self, fbid);
-      if(payload === "sea_spray_sunset_cruise_operating_days") response = sunsetCruiseDays.call(self, fbid);
-      if(payload === "sea_spray_bad_weather") response = badWeatherPolicy(fbid);
-      if(payload === "sea_spray_advance_booking") response = advanceBooking(fbid);
-      if(payload === "sea_spray_group_discount") response = largeGroupDiscounts(fbid);
-      if(payload === "sea_spray_hotel_transfer") response = hotelTransfer(fbid);
-      if(payload === "sea_spray_common_questions") response = commonQuestionsButtons(fbid);
-      // handle case where user chose a particular tour for a previously determined category
-      if(payload.startsWith("select_tour")) response = selectResponseForTour(payload, null, fbid);
-      // we need to respond one way or another here. TODO: See if there is better way to handle this.
-      if(!response) {
-        logger.error(`Dont know how to handle payload ${payload} of fbid ${fbid} for "sea spray" bot. Asking help from admin`);
-        response = FBTemplateCreator.generic({
-          fbid: fbid,
-          elements: [{
-            title: "We have notified our team, who will get back to you shortly",
-            image_url: "http://tinyurl.com/y8v9ral5",
-          }],
-        });
-      }
-      // logger.debug(`response is ${JSON.stringify(response)}`);
-      return Promise.resolve(response);
-    },
-    (err) => {
-      logger.error(`handleText: Error in categoryPromise: ${err}`);
-      return Promise.reject("Even bots need to eat. Back in a bit");
-    }
-  );
 }
 
 // convenience function that handles selecting the right functions given a tour and the category. This is used in cases where a particular categories' response depends on the tour selected. This also handles the case where no tour is selected (setting state, calling chooseTour) and handling case where state might be set.
@@ -483,8 +346,6 @@ function piratesDay(fbid) {
 }
 
 function toutBagayDays(fbid) {
-    const year = moment().year();
-    const month = moment().month() + 1;
     return FBTemplateCreator.list({
       fbid: fbid,
       elements: [{
