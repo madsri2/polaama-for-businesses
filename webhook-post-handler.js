@@ -32,9 +32,10 @@ const Promise = require('promise');
 const validator = require('node-validator');
 const Encoder = require(`${baseDir}/encoder`);
 const TripReasonWorkflow = require('trip-reason-workflow/app/workflow');
+const BaseHandler = require('business-pages-handler/app/base-handler');
 const TravelSfoPageHandler = require('travel-sfo-handler');
 const SeaSprayHandler = require('sea-spray-handler');
-const HackshawHandler = require('hackshaw-handler');
+// const HackshawHandler = require('hackshaw-handler');
 
 let recordMessage = true;
 let previousMessage = {};
@@ -45,9 +46,10 @@ let TEST_MODE = false;
 function WebhookPostHandler(session, testing, pageId) {
   if(testing) TEST_MODE = true; // Use sparingly. Currently, only used in callSendAPI
   this.travelSfoPageHandler = new TravelSfoPageHandler();
-  this.seaSprayHandler = new SeaSprayHandler(TEST_MODE);
+  // this.seaSprayHandler = new SeaSprayHandler(TEST_MODE);
+  this.seaSprayHandler = new BaseHandler(new SeaSprayHandler(TEST_MODE));
   this.newCustomerForSeaSpray = {};
-  this.hackshawHandler = new HackshawHandler();
+  // this.hackshawHandler = new HackshawHandler();
 	this.pageId = PageHandler.defaultPageId;
   if(pageId) this.pageId = pageId;
   this.secretManager = new SecretManager();
