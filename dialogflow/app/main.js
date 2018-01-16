@@ -20,7 +20,7 @@ DialogFlowProxy.prototype.classify = function(message) {
   });
   return new Promise(function(fulfil, reject) {
     /*
-      reject("Testing");
+      reject("Testing failure of dialogflow");
       request.end();
       return;
     */

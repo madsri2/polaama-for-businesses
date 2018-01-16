@@ -2,12 +2,10 @@
 const baseDir = '/home/ec2-user';
 const logger = require(`${baseDir}/my-logger`);
 const PageHandler = require('fbid-handler/app/page-handler');
-const Handler = require('sea-spray-handler/app/handler');
+const Handler = require('sea-spray-handler');
 
-SeaSprayPrototypeHandler.mySeaSprayPageMyId = "1629856073725012";
 const dhuId = "1432849853450144";
 const coreyId = "1536539953068228";
-const mySeaSprayAdmins = [SeaSprayPrototypeHandler.mySeaSprayPageMyId]; 
 
 /* 
   A prototype of the actual SeaSpray business. This is used as a way to create a clone of the actual business' facebook page so a business owner can see features in action without the risk of impacting their customers.
@@ -18,7 +16,7 @@ function SeaSprayPrototypeHandler(testing) {
   this.classifier = this.actualPageHandler.classifier;
   this.testing = testing;
   this.name = "Sea Spray Prototype";
-  this.adminIds = [SeaSprayPrototypeHandler.mySeaSprayPageMyId];
+  this.adminIds = [this.madhusPageScopedFbid()];
   this.businessPageId = PageHandler.mySeaSprayPageId;
 }
 
@@ -36,6 +34,11 @@ SeaSprayPrototypeHandler.prototype.pageDetails = function() {
 
 SeaSprayPrototypeHandler.prototype.handleBusinessSpecificPayload = function(payload, fbid) {
   return this.actualPageHandler.handleBusinessSpecificPayload(payload, fbid);
+}
+
+// My page scoped fbid. Currently used in webhook-post-handler's notifyAdminOfNewMessage
+SeaSprayPrototypeHandler.prototype.madhusPageScopedFbid = function() {
+  return "1629856073725012";
 }
 
 module.exports = SeaSprayPrototypeHandler;

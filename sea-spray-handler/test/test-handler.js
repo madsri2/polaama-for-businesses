@@ -12,7 +12,7 @@ const myFbid = "1234";
 let handler;
 let pageId;
 function commonBeforeEach() {
-  handler = new BaseHandler(new SeaSprayHandler(true /* testing */));
+  handler = new BaseHandler(new SeaSprayPrototypeHandler(true /* testing */));
   pageId = handler.businessPageId;
 }
 
@@ -291,7 +291,7 @@ describe("sea spray categories", function() {
     let response = handler.handleText("un understable message", pageId, myFbid);
     handlePromise(response, "input.unknown", done);
 
-    response = handler.handleText("something no one understands", pageId, myFbid);
+    response = handler.handleText("I lost my camera", pageId, myFbid);
     handlePromise(response, "input.unknown", done);
     response = handler.handleText("blah blee", pageId, myFbid);
     handlePromise(response, "input.unknown", done, true);
@@ -745,6 +745,22 @@ describe("sea spray postback", function() {
       },
       (err) => {
         return done(err);
+    });
+  });
+
+  it("postback failure", function(done) {
+    const customerFbid = "436";
+    const promise = handler.handlePostback("select_tour some invalid message", pageId, customerFbid);
+    promise.done(
+      (response) => {
+        expect(response.message).is.not.undefined;
+        verifyState(handler.adminMessageSender.stateManager.get(["messageSentToAdmin", customerFbid, "postback payload: select_tour some invalid message"]), true, done);
+        const mesgList = response.message;
+        expect(mesgList[0].message.text).to.equal("We have received your message and will get back to you asap.");
+        done();
+      },
+      (err) => {
+        done(err);
     });
   });
 });

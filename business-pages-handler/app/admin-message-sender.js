@@ -88,7 +88,7 @@ AdminMessageSender.prototype.sendMessageToAdmin = function(fbid, mesg, categoryV
   let prefix = "";
   if(categoryValue) {
     if(categoryValue === "frustration") prefix = "Sorry that I was unable to help you. ";
-    else if(categoryValue !== "talk-to-human") prefix = "I did not understand the question, so "; 
+    // else if(categoryValue !== "talk-to-human") prefix = "I did not understand the question, so "; 
   }
   message.message = {
     text: `${prefix}I have asked one of our crew members to help. We will get back to you asap.`,

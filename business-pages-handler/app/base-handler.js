@@ -29,7 +29,12 @@ function BaseHandler(businessHandler) {
 
 BaseHandler.prototype.greeting = function(pageId, fbid) {
   if(!supportedPages.call(this, pageId)) return null;
-  return this.businessHandler.greeting(fbid);
+  try { 
+    return this.businessHandler.greeting(fbid);
+  }
+  catch(err) {
+    return handleUnknownError.call(this, err, "greeting message", fbid);
+  }
 }
 
 BaseHandler.prototype.handleText = function(mesg, pageId, fbid) {
@@ -61,21 +66,23 @@ BaseHandler.prototype.handleText = function(mesg, pageId, fbid) {
       return Promise.reject(err);
   }).then(
     function(result) {
-      // short-circuit if we already have a result from the previous promise.
-      if(result._done) {
-        // TODO: Why are we deleting this key? Is it critical to get rid of? Madhu: 1/8/18
-        delete result._done;
-        // logger.debug(`short-circuiting since we have result from previous promise`);
-        return Promise.resolve(result);
-      }
-      const category = result.category;
-      // logger.debug(`handleText: category is ${category}`);
-      if(category === "frustration" || category === "talk-to-human" || category === "input.unknown") return sendMessageToAdmin.call(self, pageId, fbid, mesg, category);
-      let response;
-      if(category === "greeting") response = self.greeting(pageId, fbid);
-      else response = self.businessHandler.handleBusinessSpecificCategories(fbid, result.category, result.tourName);
-      // if it's a category we don't understand and if there is a fulfilment, use it. This is to handle cases where the Intent and a default response exists in Dialogflow (Examples: Appreciation
-      if(!response) {
+      try {
+        // short-circuit if we already have a result from the previous promise.
+        if(result._done) {
+          // TODO: Why are we deleting this key? Is it critical to get rid of? Madhu: 1/8/18
+          delete result._done;
+          // logger.debug(`short-circuiting since we have result from previous promise`);
+          return Promise.resolve(result);
+        }
+        const category = result.category;
+        // logger.debug(`handleText: category is ${category}`);
+        if(category === "frustration" || category === "talk-to-human" || category === "input.unknown") return sendMessageToAdmin.call(self, pageId, fbid, mesg, category);
+        let response;
+        if(category === "greeting") return resolvedPromise(category, self.greeting(pageId, fbid));
+        if(category === "farewell") return resolvedPromise(category, farewell(fbid));
+        response = self.businessHandler.handleBusinessSpecificCategories(fbid, result.category, result.tourName);
+        if(response) return resolvedPromise(category, response);
+        // if it's a category we don't understand and if there is a fulfilment, use it. This is to handle cases where the Intent and a default response exists in Dialogflow (Examples: Appreciation
         logger.info(`handleText: Unknown category: ${category}. Figuring out what to do...`);
         if(result.defaultResponse) {
           logger.info(`handleText: default response <${result.defaultResponse}> present. Returning that.`);
@@ -88,11 +95,11 @@ BaseHandler.prototype.handleText = function(mesg, pageId, fbid) {
           logger.info("handleText: We don't know what to send. Send the message to human and have them take over");
           return sendMessageToAdmin.call(self, pageId, fbid, mesg);
         }
+        return resolvedPromise(category, response);
       }
-      return Promise.resolve({
-        'category': category,
-        message: response
-      });
+      catch(err) {
+        return handleUnknownError.call(self, err, mesg, fbid);
+      }
     },
     (err) => {
       return Promise.reject(err);
@@ -101,39 +108,56 @@ BaseHandler.prototype.handleText = function(mesg, pageId, fbid) {
       return Promise.resolve(response);
     },
     function(error) {
-      logger.error(`handleText: Error in categoryPromise: ${error}`);
-      logger.error(`handleText: Sending message ${mesg} to admin so they can take over`);
-      return self.adminMessageSender.sendMessageToAdmin(fbid, mesg, "handle-error");
+      return handleUnknownError.call(self, error, mesg, fbid);
     }
   );
 }
+
+function resolvedPromise(category, response) {
+  return Promise.resolve({
+    'category': category,
+    'message': response
+  });
+}
+
+function farewell(fbid) {
+  return FBTemplateCreator.text({
+    fbid: fbid,
+    text: "See you later! Remember, we are always available to answer your questions!",
+  });
+}
+
 
 BaseHandler.prototype.handlePostback = function(payload, pageId, fbid) {
   if(!supportedPages.call(this, pageId)) return Promise.resolve(null);
   const self = this;
   return this.adminMessageSender.handleWaitingForAdminResponse(fbid, payload).then(
     (value) => {
-      if(value) return Promise.resolve(value);
-      let response = self.businessHandler.handleBusinessSpecificPayload(payload, fbid);
-      // we need to respond one way or another here. TODO: See if there is better way to handle this.
-      if(!response) {
-        logger.error(`Dont know how to handle payload ${payload} of fbid ${fbid} for ${self.businessHandler.name} bot. Asking help from admin`);
-        response = FBTemplateCreator.generic({
-          fbid: fbid,
-          elements: [{
-            title: "We have notified our team, who will get back to you shortly",
-            image_url: "http://tinyurl.com/y8v9ral5",
-          }],
-        });
+      try {
+        if(value) return Promise.resolve(value);
+        let response = self.businessHandler.handleBusinessSpecificPayload(payload, fbid);
+        // we need to respond one way or another here. TODO: See if there is better way to handle this.
+        if(!response) {
+          logger.error(`Dont know how to handle payload '${payload}' of fbid ${fbid} for ${self.businessHandler.name} bot. Asking help from admin`);
+          return self.adminMessageSender.sendMessageToAdmin(fbid, mesg, "input.unknown");
+        }
+        // logger.debug(`response is ${JSON.stringify(response)}`);
+        return Promise.resolve(response);
       }
-      // logger.debug(`response is ${JSON.stringify(response)}`);
-      return Promise.resolve(response);
+      catch(err) {
+        return handleUnknownError.call(self, err, `postback payload: ${payload}`, fbid);
+      }
     },
     (err) => {
-      logger.error(`handleText: Error in categoryPromise: ${err}`);
-      return Promise.reject("Even bots need to eat. Back in a bit");
+      return handleUnknownError.call(self, err, `postback payload: ${payload}`, fbid);
     }
   );
+}
+
+function handleUnknownError(err, mesg, fbid) {
+  logger.error(`handleText: Error in categoryPromise: ${err}`);
+  logger.info(`handleText: Sending message '${mesg}' to admin so they can take over`);
+  return this.adminMessageSender.sendMessageToAdmin(fbid, mesg, "handle-error");
 }
 
 function supportedPages(pageId) {

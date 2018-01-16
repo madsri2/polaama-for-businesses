@@ -35,6 +35,7 @@ const TripReasonWorkflow = require('trip-reason-workflow/app/workflow');
 const BaseHandler = require('business-pages-handler/app/base-handler');
 const TravelSfoPageHandler = require('travel-sfo-handler');
 const SeaSprayHandler = require('sea-spray-handler');
+const SeaSprayPrototypeHandler = require('sea-spray-handler/app/prototype-handler');
 // const HackshawHandler = require('hackshaw-handler');
 
 let recordMessage = true;
@@ -46,8 +47,8 @@ let TEST_MODE = false;
 function WebhookPostHandler(session, testing, pageId) {
   if(testing) TEST_MODE = true; // Use sparingly. Currently, only used in callSendAPI
   this.travelSfoPageHandler = new TravelSfoPageHandler();
-  // this.seaSprayHandler = new SeaSprayHandler(TEST_MODE);
   this.seaSprayHandler = new BaseHandler(new SeaSprayHandler(TEST_MODE));
+  this.seaSprayPrototypeHandler = new BaseHandler(new SeaSprayPrototypeHandler(TEST_MODE));
   this.newCustomerForSeaSpray = {};
   // this.hackshawHandler = new HackshawHandler();
 	this.pageId = PageHandler.defaultPageId;
@@ -532,7 +533,7 @@ function greetingForAnotherPage(fbid) {
       response = this.travelSfoPageHandler.greeting(this.pageId, fbid);
       break;
     case PageHandler.mySeaSprayPageId:
-      response = this.seaSprayHandler.greeting(this.pageId, fbid);
+      response = this.seaSprayPrototypeHandler.greeting(this.pageId, fbid);
       break;
     case PageHandler.seaSprayPageId:
       response = this.seaSprayHandler.greeting(this.pageId, fbid);
@@ -563,8 +564,7 @@ function postbackForAnotherPage(payload, fbid) {
       response = this.travelSfoPageHandler.handlePostback(payload, this.pageId, fbid);
       break;
     case PageHandler.mySeaSprayPageId:
-      return this.seaSprayHandler.handlePostback(payload, this.pageId, fbid);
-      // break;
+      return this.seaSprayPrototypeHandler.handlePostback(payload, this.pageId, fbid);
     case PageHandler.seaSprayPageId:
       return this.seaSprayHandler.handlePostback(payload, this.pageId, fbid);
     case PageHandler.myHackshawPageId:
@@ -1818,7 +1818,7 @@ function messageForAnotherPage(message, fbid, event) {
       response = this.travelSfoPageHandler.handleText(message, this.pageId, fbid, event);
       break;
     case PageHandler.mySeaSprayPageId:
-      return this.seaSprayHandler.handleText(message, this.pageId, fbid);
+      return this.seaSprayPrototypeHandler.handleText(message, this.pageId, fbid);
     case PageHandler.seaSprayPageId:
       return this.seaSprayHandler.handleText(message, this.pageId, fbid);
     case PageHandler.myHackshawPageId:
@@ -1848,8 +1848,8 @@ function notifyAdminOfNewMessage(mesg, senderId) {
   let name = FbidHandler.get().getName(senderId);
   if(!name) name = senderId;
   let recipientId;
-  if(this.pageId === PageHandler.mySeaSprayPageId) recipientId = SeaSprayHandler.mySeaSprayPageMyId;
-  if(this.pageId === PageHandler.seaSprayPageId) recipientId = SeaSprayHandler.seaSprayPageMyId;
+  if(this.pageId === PageHandler.mySeaSprayPageId) recipientId = this.seaSprayPrototypeHandler.businessHandler.madhusPageScopedFbid();
+  if(this.pageId === PageHandler.seaSprayPageId) recipientId = this.seaSprayHandler.businessHandler.madhusPageScopedFbid();
   sendTextMessage.call(this, recipientId, `[ALERT] Received new message from user '${name}'. Message is "${mesg}"`);
 }
 

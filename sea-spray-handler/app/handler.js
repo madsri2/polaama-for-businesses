@@ -10,9 +10,6 @@ const Promise = require('promise');
 const year = moment().year();
 const month = moment().month() + 1;
 
-SeaSprayHandler.seaSprayPageMyId = "1335132323276529";
-const seaSprayAdmins = [SeaSprayHandler.seaSprayPageMyId];
-
 /* 
   A business-logic class that holds all business logic associated with the "Sea Spray" business. This is a prototype for all future businesses, which should implement the methods implemented by this class and return business specific information.
   This class will be passed to ~/business-pages-handler/app/base-handler.js, which will then call the methods implemented here as needed. 
@@ -22,7 +19,7 @@ const seaSprayAdmins = [SeaSprayHandler.seaSprayPageMyId];
 function SeaSprayHandler(testing) {
   this.classifier = new Classifier();
   this.name = "Sea Spray";
-  this.adminIds = [SeaSprayHandler.seaSprayPageMyId];
+  this.adminIds = [this.madhusPageScopedFbid()];
   this.businessPageId = PageHandler.seaSprayPageId;
   this.testing = testing;
 }
@@ -37,7 +34,6 @@ SeaSprayHandler.prototype.handleBusinessSpecificCategories = function(fbid, cate
   if(category === "operating-season") return operatingSeason(fbid);
   if(category === "kids-allowed") return kidsAllowed(fbid);
   if(category === "infant-charges") return infantCharges(fbid);
-  if(category === "farewell") return farewell(fbid)
   if(category === "customized-tour") return customizedTours(fbid);
   if(category === "book-tour") return bookTours(fbid);
   if(category === "bad-weather") return badWeatherPolicy(fbid);
@@ -88,13 +84,12 @@ SeaSprayHandler.prototype.handleBusinessSpecificPayload = function(payload, fbid
   if(payload === "sea_spray_hotel_transfer") return hotelTransfer(fbid);
   if(payload === "sea_spray_common_questions") return commonQuestionsButtons(fbid);
   if(payload.startsWith("select_tour")) return selectResponseForTour(payload, null, fbid);
+  // no business logic to handle this payload.
+  return null;
 }
 
-function farewell(fbid) {
-  return FBTemplateCreator.text({
-    fbid: fbid,
-    text: "See you later! Remember, we are always available to answer your questions!",
-  });
+SeaSprayHandler.prototype.madhusPageScopedFbid = function() {
+  return "1629856073725012";
 }
 
 // convenience function that handles selecting the right functions given a tour and the category. This is used in cases where a particular categories' response depends on the tour selected. This also handles the case where no tour is selected (setting state, calling chooseTour) and handling case where state might be set.
@@ -158,11 +153,8 @@ function selectResponseForTour(tour, category, fbid) {
   functions["Private charter"] = functions.private_charter;
   // logger.debug(`selectResponseForTour: tour ${tour} & category ${category}`);
   if(tour && category && functions[tour][category]) return functions[tour][category](fbid);
-  logger.error(`selectResponseForTour: Potential BUG: Cannot find the right function to call for tour ${tour} & category <${category}>`);
-  return FBTemplateCreator.text({
-    fbid: fbid,
-    text: "I did not understand your question. Can you ask it a different way?"
-  });
+  // The base-handler class will correctly handle this error and send an appropriate message to the customer. 
+  throw new Error(`selectResponseForTour: Potential BUG: Cannot find the right function to call for tour ${tour} & category <${category}>`);
 }
 
 function sunsetCruiseFood(fbid) {
@@ -257,6 +249,7 @@ function infantCharges(fbid) {
     }],
   });
 }
+
 function operatingSeason(fbid) {
   return FBTemplateCreator.generic({
     fbid: fbid,

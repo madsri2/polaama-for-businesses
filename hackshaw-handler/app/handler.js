@@ -5,23 +5,68 @@ const FBTemplateCreator = require(`${baseDir}/fb-template-creator`);
 const DialogflowHackshawAgent = require('dialogflow/app/hackshaw-agent');
 const moment = require('moment');
 const PageHandler = require('fbid-handler/app/page-handler');
-const BaseHandler = require('business-pages-handler/app/base-handler');
 
 const year = moment().year();
 const month = moment().month() + 1;
 
 function HackshawHandler(testing) {
   this.classifier = new DialogflowHackshawAgent();
+  this.name = "Hackshaw boats";
+  this.adminIds = [this.madhusPageScopedFbid()];
+  this.businessPageId = null; // to be filled when the bot goes live for the hackshaw page
   this.testing = testing;
-  this.baseHandler = new BaseHandler(this.classifier, this.adminMessageSender, getResponseForCategory, this.testing);
 }
 
-HackshawHandler.prototype.greeting = function(pageId, fbid) {
-  return greeting(pageId, fbid);
+HackshawHandler.prototype.handleBusinessSpecificCategories = function(fbid, category, tourName) {
+  if(category === "customer-service") return customerService(fbid);
+  if(category === "bad-weather") return badWeatherPolicy(fbid);
+  if(category === "book-tour") return bookTours(fbid);
+  if(category === "large-group-discounts") return largeGroupDiscounts(fbid);
+  if(category === "hotel-transfers") return hotelTransfer(fbid);
+  if(category === "advance-booking") return advanceBooking(fbid);
+  if(category === "location") return location(fbid);
+  if(category === "fish-catch") return fishCatch(fbid);
+  if(category === "dolphin-whale-types") return dolphinWhaleTypes(fbid);
+  if(category === "dolphin-whale-success-rate") return dolphinWhaleSuccessRate(fbid);
+  if(category === "kids-allowed") return kidsAllowed(fbid);
+  return tourSpecificResponses(fbid, category, tourName);
 }
 
-function greeting(pageId, fbid) {
-  if(pageId && pageId != PageHandler.myHackshawPageId) return null;
+function tourSpecificResponses(fbid, category, tour) {
+  const functions = {
+    "private_charter": {
+      "operating-days": privateCharterDays,
+      "passenger-count": privateCharterPassengerCount,
+    },
+    "dolphin_whale_watching": {
+      "operating-days": dolphinAndWhalesDays,
+      "passenger-count": whaleWatchPassengerCount,
+    },
+    "group_sports_fishing": {
+      "operating-days": groupSportsFishingDays,
+      "passenger-count": groupSportsPassengerCount,
+    },
+    "bottom_fishing": {
+      "operating-days": bottomFishingDays,
+      "passenger-count": bottomFishingPassengerCount,
+    },
+    "dash_and_splash": {
+      "operating-days": dashSplashDays,
+      "passenger-count": dashSplashPassengerCount,
+    }
+  };
+  functions["Private charter"] = functions.private_charter;
+  functions["Dolphin and Whale watching"] = functions.dolphin_whale_watching;
+  functions["Group sports fishing"] = functions.group_sports_fishing;
+  functions["Bottom fishing"] = functions.bottom_fishing;
+  functions["Dash and splash"] = functions.dash_and_splash;
+
+  if(tour && category && functions[tour][category]) return functions[tour][category](fbid);
+  // The base-handler class will correctly handle this error and send an appropriate message to the customer. 
+  throw new Error(`tourSpecificResponse: Potential BUG: Cannot find the right function to call for tour '${tour}' & category <${category}>`);
+}
+
+HackshawHandler.prototype.greeting = function(fbid) {
   let messageList = [];
   messageList.push(FBTemplateCreator.generic({
     fbid: fbid,
@@ -35,33 +80,8 @@ function greeting(pageId, fbid) {
   return messageList;
 }
 
-
-function getResponseForCategory(fbid, category) {
-  if(category === "greeting") return greeting(null, fbid);
-  if(category === "dolphin whales days") return dolphinAndWhalesDays(fbid);
-  if(category === "group sports fishing days") return groupSportsFishingDays(fbid);
-  if(category === "bottom fishing days") return bottomFishingDays(fbid);
-  if(category === "dash splash days") return dashSplashDays(fbid);
-  if(category === "private charter days") return privateCharterDays(fbid);
-
-  if(category === "customer service") return customerService(fbid);
-  if(category === "bad weather") return badWeatherPolicy(fbid);
-  if(category === "book tour") return bookTours(fbid);
-  if(category === "large group discounts") return largeGroupDiscounts(fbid);
-  if(category === "hotel transfers") return hotelTransfer(fbid);
-  if(category === "advance booking") return advanceBooking(fbid);
-  if(category === "location") return location(fbid);
-  if(category === "whale watch passengers") return whaleWatchPassengerCount(fbid);
-  if(category === "group sport passengers") return groupSportsPassengerCount(fbid);
-  if(category === "dash splash passengers") return dashSplashPassengerCount(fbid);
-  if(category === "private charter passengers") return privateCharterPassengerCount(fbid);
-  if(category === "fish catch") return fishCatch(fbid);
-  if(category === "dolphin whale types") return dolphinWhaleTypes(fbid);
-  if(category === "dolphin whale success rate") return dolphinWhaleSuccessRate(fbid);
-}
-
-HackshawHandler.prototype.handleText = function(mesg, pageId, fbid) {
-  const pageDetails = {
+HackshawHandler.prototype.pageDetails = function() {
+  return {
     title: "Response from Hackshaw",
     image_url: "http://tinyurl.com/y9kco9pc",
     buttons: [{
@@ -70,14 +90,14 @@ HackshawHandler.prototype.handleText = function(mesg, pageId, fbid) {
       payload: "hackshaw_contact"
     }]
   };
-  return this.baseHandler.handleText(mesg, pageId, fbid, pageDetails);
 }
 
-HackshawHandler.prototype.handlePostback = function(payload, pageId, fbid) {
-  if(pageId != PageHandler.myHackshawPageId) return null;
-  const awaitingAdminResponse = this.adminMessageSender.handleWaitingForAdminResponse(fbid, payload);
-  if(awaitingAdminResponse) return awaitingAdminResponse;
+// TODO: Will be filled when we are building a bot to support the hackshaw facebook page
+HackshawHandler.prototype.madhusPageScopedFbid = function() {
+  return null;
+}
 
+HackshawHandler.prototype.handleBusinessSpecificPayload = function(payload, fbid) {
   if(payload === "hackshaw_contact") return customerService(fbid);
   if(payload === "hackshaw_book_tour") return bookTours(fbid);
   if(payload === "hackshaw_dolphin_whale_operating_days") return dolphinAndWhalesDays(fbid);
@@ -91,48 +111,31 @@ HackshawHandler.prototype.handlePostback = function(payload, pageId, fbid) {
   if(payload === "hackshaw_common_questions") return commonQuestionsButtons(fbid);
   if(payload === "hackshaw_fleets") return hackshawFleets.call(this, fbid);
   if(payload === "hackshaw_fishing_trips") return fishingTrips.call(this, fbid);
-
-  logger.error(`Do not know how to handle payload ${payload} from fbid ${fbid} for "sea spray" bot`);
-  // we need to respond one way or another here. TODO: See if there is a bettter way to handle this.
-  return FBTemplateCreator.generic({
-    fbid: fbid,
-    elements: [{
-      title: "We have notified our team, who will get back to you shortly",
-      image_url: "http://tinyurl.com/y8v9ral5",
-    }],
-  });
-}
-
-HackshawHandler.prototype.testing_handleText = function(mesg, pageId, fbid) {
-  const category = this.classifier.classify(mesg);
-  const message = this.handleText(mesg, pageId, fbid);
-  return {
-    message: message,
-    category: category
-  };
+  // no business logic to handle this payload.
+  return null;
 }
 
 function dolphinAndWhalesDays(fbid) {
-    return FBTemplateCreator.list({
-      fbid: fbid,
-      elements: [{
-        title: "Dolphins and Whale watching",
-        subtitle: "Enjoy watching dolphins and whales frolicking in our beautiful waters",
-        image_url: "http://tinyurl.com/y8vzzsbt",
-      }, {
-        title: "Operates every Tuesday and Thursday",
-        subtitle: "Email us. We sometimes add extra days",
-      },{
-        title: "Hotel pickup times vary",
-        subtitle: "When booking, tell us your stay details"
-      }],
-      buttons: [{
-        title: "Book Trip",
-        type: "web_url",
-        webview_height_ratio: "full",
-        url: `http://www.hackshaws.com/dolphin-and-whale-watching`
-      }]
-    });
+  return FBTemplateCreator.list({
+    fbid: fbid,
+    elements: [{
+      title: "Dolphins and Whale watching",
+      subtitle: "Enjoy watching dolphins and whales frolicking in our beautiful waters",
+      image_url: "http://tinyurl.com/y8vzzsbt",
+    }, {
+      title: "Operates every Tuesday and Thursday",
+      subtitle: "Email us. We sometimes add extra days",
+    },{
+      title: "Hotel pickup times vary",
+      subtitle: "When booking, tell us your stay details"
+    }],
+    buttons: [{
+      title: "Book Trip",
+      type: "web_url",
+      webview_height_ratio: "full",
+      url: `http://www.hackshaws.com/dolphin-and-whale-watching`
+    }]
+  });
 }
 
 function bottomFishingDays(fbid) {
@@ -157,6 +160,22 @@ function bottomFishingDays(fbid) {
         url: `http://www.hackshaws.com/bottom-fishing-bonanza-st-lucia`
       }]
     });
+}
+
+function bottomFishingPassengerCount(fbid) {
+  return FBTemplateCreator.generic({
+    fbid: fbid,
+    elements: [{
+      title: "The actual number varies depending on the size of boat used",
+      image_url: "http://tinyurl.com/yd2z6s48",
+      buttons: [{
+        title: "Book trip",
+        type: "web_url",
+        webview_height_ratio: "full",
+        url: `http://www.hackshaws.com/bottom-fishing-bonanza-st-lucia`
+      }]
+    }],
+  });
 }
 
 function groupSportsFishingDays(fbid) {
@@ -650,6 +669,22 @@ function dolphinWhaleSuccessRate(fbid) {
     }]
   });
 }
+
+function kidsAllowed(fbid) {
+  return FBTemplateCreator.generic({
+    fbid: fbid,
+    elements: [{
+      title: "Kids of all ages can enjoy our tours",
+      subtitle: "Children under 2 travel for free",
+      buttons: [{
+        title: "Book tours",
+        type: "postback",
+        payload: "hackshaw_book_tour"
+      }]
+    }],
+  });
+}
+
 
 /*
 - What Days does your Dolphin and Whale watch Safari opperate?

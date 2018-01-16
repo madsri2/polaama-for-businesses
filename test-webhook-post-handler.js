@@ -679,7 +679,7 @@ function testHackshawGettingStarted(pageId) {
   handler.testing_receivedPostback(receivedPostbackEvent("GET_STARTED_PAYLOAD"));
 }
 
-const pageId = PageHandler.seaSprayPageId;
+const pageId = PageHandler.mySeaSprayPageId;
 // testSeaSpray(pageId);
 // testSeaSprayPostback(pageId);
 testSeaSprayGettingStarted(pageId);

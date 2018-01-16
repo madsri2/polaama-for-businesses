@@ -8,34 +8,7 @@ function CommonClassifier() {
 }
 
 CommonClassifier.prototype.commonTraining = function() {
-  trainGreeting.call(this);
-  trainBadWeatherQuestion.call(this);
-  trainBookingTour.call(this);
-  trainDiscounts.call(this);
-  trainHotelTransfers.call(this);
-  trainAdvanceBooking.call(this);
-  // trainPassengerCount.call(this);
-  trainCustomerService.call(this);
-  trainLocation.call(this);
-  operatingSeason.call(this);
-  privateCustomizedCharters.call(this);
-  kidsAllowed.call(this);
-  infantCharges.call(this);
-  availableTours.call(this);
-  trainFarewell.call(this);
-  return this.classifier;
 }
-
-/*
-
-Do you offer Private & Customized Charters?
-Yes, we are flexible and can customize tours to suit your requests
-Are Kids allowed on all the tours/excursions?
-Yes
-Is there a charge for infants (children under 2)?
-No, all children under 2 are free
-
-*/
 
 CommonClassifier.prototype.classify = function(description) {
   const text = description.toLowerCase();
@@ -81,7 +54,10 @@ const operatingTimesTemplateList = [
   "you open on all days for %s tours",
   "when is the %s tour",
   "when is the %s cruise",
-  "when is the %s trip"
+  "when is the %s trip",
+  "When does the %s tour operate?",
+  "Do you operate the %s tour year-round?",
+  "do you operate %s tour everyday?",
 ];
 
 CommonClassifier.prototype.operatingTimesTemplate = function(replaceString) {
@@ -92,8 +68,7 @@ CommonClassifier.prototype.operatingTimesTemplate = function(replaceString) {
   return filled;
 }
 
-
-function trainGreeting() {
+CommonClassifier.prototype.trainGreeting = function() {
   this.classifier.learn("hello", "greeting");
   this.classifier.learn("hi there", "greeting");
   this.classifier.learn("hiya there", "greeting");
@@ -113,7 +88,7 @@ function trainGreeting() {
   this.classifier.learn("how you doing", "greeting");
 }
 
-function trainFarewell() {
+CommonClassifier.prototype.trainFarewell = function() {
   const trainingData = [
     "bye",
     "ciao",
@@ -171,27 +146,7 @@ CommonClassifier.prototype.passengerCountTemplate = function(replaceString) {
   return filled;
 }
 
-/*
-function trainPassengerCount() {
-  const trainingData = [
-    "how many people are on the boat for the tours",
-    "most passengers in a boat",
-    "how many passengers are in a boat",
-    "how many passengers per boat",
-    "most passengers per boat",
-    "maximum people in a boat",
-    "maximum people on a cruise",
-    "maximum passengers in a boat",
-    "maximum passengers per tour",
-    "maximum passengers per cruise",
-  ];
-  trainingData.forEach(line => {
-    this.classifier.learn(line, "passenger count");
-  });
-}
-*/
-
-function trainCustomerService() {
+CommonClassifier.prototype.trainCustomerService = function() {
   const trainingData = [
     "customer service details",
     "i want to contact customer service",
@@ -209,7 +164,7 @@ function trainCustomerService() {
   });
 }
 
-function trainLocation() {
+CommonClassifier.prototype.trainLocation = function() {
   const trainingData = [
     "where are you located",
     "where you located",
@@ -219,12 +174,10 @@ function trainLocation() {
     "where in st. lucia are you located",
     "what's your location in st.lucia",
   ];
-  trainingData.forEach(line => {
-    this.classifier.learn(line, "location");
-  });
+  return trainingData;
 }
 
-function trainDiscounts() {
+CommonClassifier.prototype.trainDiscounts = function() {
   const trainingData = [
     "discounts for large groups",
     "large group discounts",
@@ -245,7 +198,7 @@ function trainDiscounts() {
   });
 }
 
-function trainHotelTransfers() {
+CommonClassifier.prototype.trainHotelTransfers = function() {
   const trainingData = [
     "do you offer transfer to all hotels",
     "do you pick up from all hotels",
@@ -261,7 +214,7 @@ function trainHotelTransfers() {
   });
 }
 
-function trainAdvanceBooking() {
+CommonClassifier.prototype.trainAdvanceBooking = function() {
   const trainingData = [
     "how far in advance to we have to book tours",
     "is advance booking required",
@@ -284,7 +237,7 @@ function trainAdvanceBooking() {
   });
 }
 
-function trainBookingTour() {
+CommonClassifier.prototype.trainBookingTour = function() {
   const trainingData = [
     "book tour",
     "book tours",
@@ -303,7 +256,7 @@ function trainBookingTour() {
   });
 }
 
-function trainBadWeatherQuestion() {
+CommonClassifier.prototype.trainBadWeatherQuestion = function() {
   // logger.debug(`trainBadWeatherQuestion: ${this.constructor.name}`);
   const trainingData = [
     "what happens if the weather is bad",
@@ -328,7 +281,7 @@ function trainBadWeatherQuestion() {
   });
 }
 
-function privateCustomizedCharters() {
+CommonClassifier.prototype.privateCustomizedCharters = function() {
   const trainingData = [
     "what sort of customized tours can you offer",
     "private tours",
@@ -356,7 +309,7 @@ function privateCustomizedCharters() {
   });
 }
 
-function kidsAllowed() {
+CommonClassifier.prototype.kidsAllowed = function() {
   const trainingData = [
     "are kids allowed on all tours",
     "are kids allowed on all tour",
@@ -383,7 +336,7 @@ function kidsAllowed() {
   });
 }
 
-function availableTours() {
+CommonClassifier.prototype.availableTours = function() {
   const trainingData = [
     "available tours",
     "what tours are available",
@@ -399,7 +352,7 @@ function availableTours() {
   });
 }
 
-function infantCharges() {
+CommonClassifier.prototype.infantCharges = function() {
   const trainingData = [
     "is there a charge for babies",
     "is there a charge for infants",
@@ -437,7 +390,7 @@ function infantCharges() {
   });
 }
 
-function operatingSeason() {
+CommonClassifier.prototype.operatingSeason = function() {
   const trainingData = [
     "do you operate year round",
     "what seasons do you operate",
