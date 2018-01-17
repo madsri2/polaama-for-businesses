@@ -20,7 +20,8 @@ function BaseHandler(businessHandler) {
   this.adminIds = businessHandler.adminIds;
   if(!this.adminIds) throw new Error("Required property adminIds missing from businessHandler object");
   this.businessPageId = businessHandler.businessPageId;
-  if(!this.businessPageId) throw new Error("Required property businessPageId missing from businessHandler object");
+  // TODO: Temporarily commenting it until the hackshaw page's id can be added. Doing this so the code for hackshawHandler can still be done
+  // if(!this.businessPageId) throw new Error("Required property businessPageId missing from businessHandler object");
   this.testing = businessHandler.testing;
   this.adminMessageSender = new AdminMessageSender(this.businessHandler.name, this.adminIds, this.testing);
   // List of users who only want to talk to a human operator.

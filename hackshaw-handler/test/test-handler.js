@@ -58,7 +58,7 @@ function testQuestionsWithFBTemplateResponse(expectedResponse, category, pageId,
   };
 }
 
-describe("hackshaw-handler tests", function(done) {
+describe("hackshaw-handler tests", function() {
   const myFbid = "1234";
 
   beforeEach(() => {
@@ -285,7 +285,10 @@ describe("hackshaw-handler tests", function(done) {
   it.skip("cruise details including cost",() => {});
 
   it.skip("Tour starting time", () => {});
+});
 
+describe("test postback", function() {
+  it.skip("postback tests", () => {});
 });
 
 

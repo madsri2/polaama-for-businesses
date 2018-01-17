@@ -36,7 +36,8 @@ const BaseHandler = require('business-pages-handler/app/base-handler');
 const TravelSfoPageHandler = require('travel-sfo-handler');
 const SeaSprayHandler = require('sea-spray-handler');
 const SeaSprayPrototypeHandler = require('sea-spray-handler/app/prototype-handler');
-// const HackshawHandler = require('hackshaw-handler');
+const HackshawHandler = require('hackshaw-handler');
+const HackshawPrototypeHandler = require('hackshaw-handler/app/prototype-handler');
 
 let recordMessage = true;
 let previousMessage = {};
@@ -49,10 +50,14 @@ function WebhookPostHandler(session, testing, pageId) {
   this.travelSfoPageHandler = new TravelSfoPageHandler();
   this.seaSprayHandler = new BaseHandler(new SeaSprayHandler(TEST_MODE));
   this.seaSprayPrototypeHandler = new BaseHandler(new SeaSprayPrototypeHandler(TEST_MODE));
+  this.hackshawHandler = new BaseHandler(new HackshawHandler(TEST_MODE));
+  this.hackshawPrototypeHandler = new BaseHandler(new HackshawPrototypeHandler(TEST_MODE));
   this.newCustomerForSeaSpray = {};
-  // this.hackshawHandler = new HackshawHandler();
 	this.pageId = PageHandler.defaultPageId;
-  if(pageId) this.pageId = pageId;
+  if(pageId) {
+    this.pageId = pageId;
+    if(testing) setBusinessPageHandler.call(this);
+  }
   this.secretManager = new SecretManager();
   this.sessions = Sessions.get();
   if(testing) this.pageHandler = PageHandler.get("fbid-test.txt");
@@ -82,7 +87,12 @@ function WebhookPostHandler(session, testing, pageId) {
 }
 
 // called to handle every message from the customer.
+// TODO: there is already a this.pageId. Use that and remove the second parameter 'pageId' here.
 function handleMessagingEvent(messagingEvent, pageId) {
+  if(!this.businessPageHandler) {
+    logger.error(`handleMessagingEvent: Error. Unable to get business page handler for pageId '${this.pageId}'`);
+    return sendTextMessage.call(this, pageEntry.messaging[i].sender.id, "We are working on something awesome! Check back in a few weeks.");
+  }
   const fbid = messagingEvent.sender.id;
   // find or create the session here so it can be used elsewhere. Only do this if a session was NOT passed in the constructor.
   if(_.isUndefined(this.passedSession)) this.session = this.sessions.findOrCreate(fbid);
@@ -90,14 +100,14 @@ function handleMessagingEvent(messagingEvent, pageId) {
   this.sessionState = this.sessions.getSessionState(this.session.sessionId);
   if(!this.sessionState) {
     logger.error(`cannot find session state for sessionId ${this.session.sessionId}. Cannot proceed without it. session dump: ${JSON.stringify(this.session)}`);
-    return sendTextMessage.call(this, fbid,"Even bots need to eat! Be back in a bit..");
+    return sendTextMessage.call(this, fbid,"We will be back shortly.");
   }
   if(!this.logOnce[this.session.sessionId]) {
     logger.debug(`handleMessagingEvent: First message from user ${this.session.fbid} with session ${this.session.sessionId} since this process started.`);
     this.logOnce[this.session.sessionId] = true;
   }
-  const promise = this.pageHandler.add(fbid, pageId);
   const self = this;
+  const promise = this.pageHandler.add(fbid, pageId);
   return promise.then(
     function(status) {
       if(status) {
@@ -115,23 +125,23 @@ function handleMessagingEvent(messagingEvent, pageId) {
             receivedPostback.call(self, messagingEvent);
           } else {
             logger.error("Webhook received unknown messagingEvent: ", messagingEvent);
-            sendTextMessage.call(this, fbid,"Even bots need to eat! Be back in a bit");
+            sendTextMessage.call(self, fbid,"We will be back shortly.");
           }
         }
         catch(err) {
           logger.error("an exception was thrown: " + err.stack);
-          sendTextMessage.call(this, fbid,"Even bots need to eat! Be back in a bit");
+          sendTextMessage.call(self, fbid,"We will be back shortly.");
         }
       }
       else {
         logger.warn(`handleMessagingEvent: adding new fbid ${fbid} to fbidHandler. Expected status to be true but it was ${status}`);
-        sendTextMessage.call(this, messagingEvent.sender.id,"Even bots need to eat! Be back in a bit");
+        sendTextMessage.call(self, fbid,"We will be back shortly.");
       }
       return Promise.resolve(true);
     },
     function(err) {
       logger.error(`handleMessagingEvent: error adding fbid ${fbid} to fbidHandler: ${err.stack}`);
-      sendTextMessage.call(this, messagingEvent.sender.id,"Even bots need to eat! Be back in a bit");
+      sendTextMessage.call(self, fbid,"We will be back shortly.");
       return Promise.resolve(false);
     }
   );
@@ -164,8 +174,26 @@ function receivedAuthentication(event) {
   sendTextMessage.call(this, senderID, "Authentication successful");
 }
 
+function setBusinessPageHandler() {
+  switch(this.pageId) {
+     case this.seaSprayPrototypeHandler.businessHandler.businessPageId:
+      this.businessPageHandler = this.seaSprayPrototypeHandler;
+      break;
+     case this.seaSprayHandler.businessHandler.businessPageId:
+       this.businessPageHandler = this.seaSprayHandler;
+       break;
+     case this.hackshawPrototypeHandler.businessHandler.businessPageId:
+       this.businessPageHandler = this.hackshawPrototypeHandler;
+       break;
+     case this.hackshawHandler.businessHandler.businessPageId:
+       this.businessPageHandler = this.hackshawHandler;
+       break;
+   }
+}
+
 function handlePageEntry(pageEntry) {
 		this.pageId = pageEntry.id;
+    setBusinessPageHandler.call(this);
     pageAccessToken = this.pageHandler.getPageAccessToken(this.pageId);
     const timeOfEvent = pageEntry.time;
     for (let i = 0, len = pageEntry.messaging.length; i < len; i++) {
@@ -186,7 +214,7 @@ WebhookPostHandler.prototype.handle = function(req, res) {
   }
   // Assume all went well.
   //
-  // You must send back a 200, within 20 seconds, to let us know you've 
+  // You must send back a 200, within 20 seconds, to let facebook know you've 
   // successfully received the callback. Otherwise, the request will time out.
   res.sendStatus(200);
 }
@@ -527,21 +555,7 @@ function markTodoItemAsDone(payload) {
 }
 
 function greetingForAnotherPage(fbid) {
-  let response;
-  switch(this.pageId) {
-    case PageHandler.travelSfoPageId: 
-      response = this.travelSfoPageHandler.greeting(this.pageId, fbid);
-      break;
-    case PageHandler.mySeaSprayPageId:
-      response = this.seaSprayPrototypeHandler.greeting(this.pageId, fbid);
-      break;
-    case PageHandler.seaSprayPageId:
-      response = this.seaSprayHandler.greeting(this.pageId, fbid);
-      break;
-    case PageHandler.myHackshawPageId:
-      response = this.hackshawHandler.greeting(this.pageId, fbid);
-      break;
-  }
+  const response = this.businessPageHandler.greeting(this.pageId, fbid);
   if(!response) return false;
   if(Array.isArray(response)) this.sendMultipleMessages(fbid, response);
   else callSendAPI.call(this, response);
@@ -558,23 +572,7 @@ function handleLikeButton(fbid) {
 }
 
 function postbackForAnotherPage(payload, fbid) {
-  let response;
-  switch(this.pageId) {
-    case PageHandler.travelSfoPageId: 
-      response = this.travelSfoPageHandler.handlePostback(payload, this.pageId, fbid);
-      break;
-    case PageHandler.mySeaSprayPageId:
-      return this.seaSprayPrototypeHandler.handlePostback(payload, this.pageId, fbid);
-    case PageHandler.seaSprayPageId:
-      return this.seaSprayHandler.handlePostback(payload, this.pageId, fbid);
-    case PageHandler.myHackshawPageId:
-      response = this.hackshawHandler.handlePostback(payload, this.pageId, fbid);
-      break;
-  }
-  if(!response) return false;
-  if(Array.isArray(response)) this.sendMultipleMessages(fbid, response);
-  else callSendAPI.call(this, response);
-  return true;
+  return this.businessPageHandler.handlePostback(payload, this.pageId, fbid);
 }
 
 function receivedPostback(event) {
@@ -1243,7 +1241,6 @@ function receivedMessage(event) {
       }
     } else if (messageAttachments) {
       const response = this.travelSfoPageHandler.handleSendingAttractionsNearMe(message, this.pageId, senderID);
-      // const response = this.travelSfoPageHandler.handleSendingAttractionsNearMeVegas(message, this.pageId, senderID);
       if(response) return callSendAPI.call(this, response);
       const stickerId = message.sticker_id;
       if(stickerId && stickerId === 369239263222822) {
@@ -1812,23 +1809,7 @@ function handleEventWithoutTrip(m) {
 }
 
 function messageForAnotherPage(message, fbid, event) {
-  let response;
-  switch(this.pageId) {
-    case PageHandler.travelSfoPageId: 
-      response = this.travelSfoPageHandler.handleText(message, this.pageId, fbid, event);
-      break;
-    case PageHandler.mySeaSprayPageId:
-      return this.seaSprayPrototypeHandler.handleText(message, this.pageId, fbid);
-    case PageHandler.seaSprayPageId:
-      return this.seaSprayHandler.handleText(message, this.pageId, fbid);
-    case PageHandler.myHackshawPageId:
-      response = this.hackshawHandler.handleText(message, this.pageId, fbid);
-      break;
-  }
-  if(!response) return false;
-  if(Array.isArray(response)) this.sendMultipleMessages(fbid, response);
-  else callSendAPI.call(this, response);
-  return true;
+  return this.businessPageHandler.handleText(message, this.pageId, fbid);
 }
 
 function marketResearchPrototype(mesg, fbid) {
@@ -1847,9 +1828,8 @@ function notifyAdminOfNewMessage(mesg, senderId) {
   this.newCustomerForSeaSpray[senderId] = true;
   let name = FbidHandler.get().getName(senderId);
   if(!name) name = senderId;
-  let recipientId;
-  if(this.pageId === PageHandler.mySeaSprayPageId) recipientId = this.seaSprayPrototypeHandler.businessHandler.madhusPageScopedFbid();
-  if(this.pageId === PageHandler.seaSprayPageId) recipientId = this.seaSprayHandler.businessHandler.madhusPageScopedFbid();
+  let recipientId = this.businessPageHandler.businessHandler.madhusPageScopedFbid();
+  if(!recipientId) return logger.error(`Cannot get madhus page scoped fbid for business page '${this.pageId}' (name: <{this.businessPageHandler.businessHandler.name}>). Not notifying Madhu of new message '${mesg}' from sender '${name}'`);
   sendTextMessage.call(this, recipientId, `[ALERT] Received new message from user '${name}'. Message is "${mesg}"`);
 }
 
@@ -1879,13 +1859,16 @@ function determineResponseType(event) {
         mesgPromise.done(
           function(result) {
             const response = result.message;
+            // logger.debug(`response: ${JSON.stringify(response)}`);
             if(Array.isArray(response)) self.sendMultipleMessages(senderID, response);
             else callSendAPI.call(self, response);
             // if this is the first message from this sender, send a note to "me"
             notifyAdminOfNewMessage.call(self, mesg, senderID);
           },
           function(err) {
-            sendTextMessage.call(self, senderID, "Even bots need to eat. Be back in a bit!");
+            // sendTextMessage.call(self, senderID, "Even bots need to eat. Be back in a bit!");
+            logger.error(`Error sending a response for message '${mesg}' from fbid ${senderID}: ${err}`);
+            sendTextMessage.call(self, senderID, "We will get back to you shortly.");
           }
         );
     }

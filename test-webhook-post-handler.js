@@ -9,6 +9,7 @@ logger.setTestConfig(); // indicate that we are logging for a test
 const FbidHandler = require('fbid-handler/app/handler');
 const SessionState = require('session-state/app/state');
 const fs = require('fs');
+const PageHandler = require('fbid-handler/app/page-handler');
 
 const moment = require('moment');
 const Promise = require('promise');
@@ -666,7 +667,6 @@ function testSeaSprayGettingStarted(pageId) {
   handler.testing_receivedPostback(receivedPostbackEvent("GET_STARTED_PAYLOAD"));
 }
 
-const PageHandler = require('fbid-handler/app/page-handler');
 function testHackshaw(pageId) {
   const session = Sessions.get().find(myFbid);
   let handler = new WebhookPostHandler(session, true /* testing */, pageId);
@@ -679,10 +679,20 @@ function testHackshawGettingStarted(pageId) {
   handler.testing_receivedPostback(receivedPostbackEvent("GET_STARTED_PAYLOAD"));
 }
 
+function testHackshawPostback(pageId) {
+  const session = Sessions.get().find(myFbid);
+  let handler = new WebhookPostHandler(session, true /* testing */, pageId);
+  handler.testing_receivedPostback(receivedPostbackEvent("hackshaw_contact"));
+}
+
 const pageId = PageHandler.mySeaSprayPageId;
 // testSeaSpray(pageId);
 // testSeaSprayPostback(pageId);
-testSeaSprayGettingStarted(pageId);
+// testSeaSprayGettingStarted(pageId);
+
+testHackshawGettingStarted(PageHandler.myHackshawPageId);
+// testHackshaw(PageHandler.myHackshawPageId);
+// testHackshawPostback(PageHandler.myHackshawPageId);
 
 /*
 function testMySeaSprayTalkToHuman() {
