@@ -9,6 +9,7 @@ logger.setTestConfig(); // indicate that we are logging for a test
 const FbidHandler = require('fbid-handler/app/handler');
 const SessionState = require('session-state/app/state');
 const fs = require('fs');
+const PageHandler = require('fbid-handler/app/page-handler');
 
 const moment = require('moment');
 const Promise = require('promise');
@@ -648,46 +649,72 @@ function testSpearFishing() {
   handler.testing_determineResponseType(determineResponseTypeEvent("existing trips"));
 }
 
-function testSeaSpray() {
+function testSeaSpray(pageId) {
   const session = Sessions.get().find(myFbid);
-  let handler = new WebhookPostHandler(session, true /* testing */, PageHandler.mySeaSprayPageId);
+  let handler = new WebhookPostHandler(session, true /* testing */, pageId);
   handler.testing_determineResponseType(determineResponseTypeEvent("hi"));
 }
 
-function testSeaSprayPostback() {
+function testSeaSprayPostback(pageId) {
   const session = Sessions.get().find(myFbid);
-  let handler = new WebhookPostHandler(session, true /* testing */, PageHandler.mySeaSprayPageId);
+  let handler = new WebhookPostHandler(session, true /* testing */, pageId);
   handler.testing_receivedPostback(receivedPostbackEvent("sea_spray_contact"));
 }
 
-function testSeaSprayGettingStarted() {
+function testSeaSprayGettingStarted(pageId) {
   const session = Sessions.get().find(myFbid);
-  let handler = new WebhookPostHandler(session, true /* testing */, PageHandler.mySeaSprayPageId);
+  let handler = new WebhookPostHandler(session, true /* testing */, pageId);
   handler.testing_receivedPostback(receivedPostbackEvent("GET_STARTED_PAYLOAD"));
 }
 
-const PageHandler = require('fbid-handler/app/page-handler');
-function testHackshaw() {
+function testHackshaw(pageId) {
   const session = Sessions.get().find(myFbid);
-  let handler = new WebhookPostHandler(session, true /* testing */, PageHandler.myHackshawPageId);
+  let handler = new WebhookPostHandler(session, true /* testing */, pageId);
   handler.testing_determineResponseType(determineResponseTypeEvent("hi"));
 }
 
-function testHackshawGettingStarted() {
+function testHackshawGettingStarted(pageId) {
   const session = Sessions.get().find(myFbid);
-  let handler = new WebhookPostHandler(session, true /* testing */, PageHandler.myHackshawPageId);
+  let handler = new WebhookPostHandler(session, true /* testing */, pageId);
   handler.testing_receivedPostback(receivedPostbackEvent("GET_STARTED_PAYLOAD"));
 }
+
+function testHackshawPostback(pageId) {
+  const session = Sessions.get().find(myFbid);
+  let handler = new WebhookPostHandler(session, true /* testing */, pageId);
+  handler.testing_receivedPostback(receivedPostbackEvent("hackshaw_contact"));
+}
+
+const pageId = PageHandler.mySeaSprayPageId;
+// testSeaSpray(pageId);
+// testSeaSprayPostback(pageId);
+// testSeaSprayGettingStarted(pageId);
+
+testHackshawGettingStarted(PageHandler.myHackshawPageId);
+// testHackshaw(PageHandler.myHackshawPageId);
+// testHackshawPostback(PageHandler.myHackshawPageId);
+
+/*
+function testMySeaSprayTalkToHuman() {
+  const session = Sessions.get().find(myFbid);
+  let handler = new WebhookPostHandler(session, true, PageHandler.mySeaSprayPageId);
+  const promise = new Promise(
+    function() {
+      handler.testing_determineResponseType(determineResponseTypeEvent("talk to a human"));
+      return 
+    },
+    function() {
+    }
+  );
+  handler.testing_determineResponseType(determineResponseTypeEvent("done talk to human"));
+}
+*/
+// testMySeaSprayTalkToHuman();
 
 // testHackshaw();
 // testHackshawGettingStarted();
 
-// testSeaSprayGettingStarted();
-testSeaSprayPostback();
-// testSeaSpray();
-
 // testSpearFishing();
-
 // testMarkDone();
 
 // testEnterNewPlanDetails();

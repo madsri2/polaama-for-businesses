@@ -17,13 +17,23 @@ PageHandler.myHackshawPageId = "139273906799315";
 PageHandler.mySeaSprayPageId = "1510665378999204";
 PageHandler.polaamaBotPageId = "1852118738377984";
 PageHandler.travelSfoPageId = "118953662103163";
+PageHandler.seaSprayPageId = "322305131144478";
+
+PageHandler.pages = {
+  "139273906799315": "My Hackshaw",
+  "1510665378999204": "My Sea Spray",
+  "1852118738377984": "Polaama Bot",
+  "118953662103163": "Travel SFO",
+  "322305131144478": "Sea Spray cruises. St. Lucia",
+};
 // If you add a page here, be sure to update getPageAccessToken function below as well.
 const pages = [
   PageHandler.defaultPageId, 
   PageHandler.polaamaBotPageId,
   PageHandler.travelSfoPageId,
   PageHandler.mySeaSprayPageId, 
-  PageHandler.myHackshawPageId
+  PageHandler.myHackshawPageId,
+  PageHandler.seaSprayPageId, 
 ];
 
 /**** STOP: Don't use this class directly. Use FbidHandler instead. This class is only meant to be used by webhook-post-handler to add an fbid ******/
@@ -97,6 +107,9 @@ PageHandler.prototype.getPageAccessToken = function(pageId) {
       break;
     case pages[4]:
       pageAccessToken = this.secretManager.getMyHackshawPageAccessToken();
+      break;
+    case pages[5]:
+      pageAccessToken = this.secretManager.getSeaSprayPageAccessToken();
       break;
   }
   return pageAccessToken;

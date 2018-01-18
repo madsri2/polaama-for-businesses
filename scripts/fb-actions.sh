@@ -3,8 +3,9 @@
 # PAGE_ACCESS_TOKEN=`node /home/ec2-user/scripts/crypto.js --pat | grep -v Logger`;
 PAGE_ACCESS_TOKEN=`node /home/ec2-user/scripts/crypto.js --apat | grep -v Logger`;
 SFO_PAGE_ACCESS_TOKEN=`node /home/ec2-user/scripts/crypto.js --travel_sfo | grep -v Logger`;
+# MY_SEA_SPRAY_PAGE_ACCESS_TOKEN=`node /home/ec2-user/scripts/crypto.js --my_sea_spray | grep -v Logger`;
 SEA_SPRAY_PAGE_ACCESS_TOKEN=`node /home/ec2-user/scripts/crypto.js --sea_spray | grep -v Logger`;
-HACKSHAW_PAGE_ACCESS_TOKEN=`node /home/ec2-user/scripts/crypto.js --hackshaw | grep -v Logger`;
+MY_HACKSHAW_PAGE_ACCESS_TOKEN=`node /home/ec2-user/scripts/crypto.js --my_hackshaw | grep -v Logger`;
 
 # Whitelist domain
 function whitelist_domain {
@@ -113,7 +114,7 @@ function set_get_started_menu_hackshaw {
     "get_started": {
       "payload": "GET_STARTED_PAYLOAD"
     }
-  }' "https://graph.facebook.com/v2.6/me/messenger_profile?access_token=$HACKSHAW_PAGE_ACCESS_TOKEN" 
+  }' "https://graph.facebook.com/v2.6/me/messenger_profile?access_token=$MY_HACKSHAW_PAGE_ACCESS_TOKEN" 
 }
 
 function set_greeting_hackshaw {
@@ -122,7 +123,7 @@ function set_greeting_hackshaw {
       "locale": "default",
       "text": "Hello {{user_first_name}}! Welcome to Hackshaw''s Boats, St. Lucia. How can I help you today?",
     }]
-  }' "https://graph.facebook.com/v2.6/me/messenger_profile?access_token=$HACKSHAW_PAGE_ACCESS_TOKEN" 
+  }' "https://graph.facebook.com/v2.6/me/messenger_profile?access_token=$MY_HACKSHAW_PAGE_ACCESS_TOKEN" 
 }
 
 function set_persistent_menu_hackshaw {
@@ -147,7 +148,7 @@ function set_persistent_menu_hackshaw {
         }
       ]
     }]
-  }' "https://graph.facebook.com/v2.6/me/messenger_profile?access_token=$HACKSHAW_PAGE_ACCESS_TOKEN"    
+  }' "https://graph.facebook.com/v2.6/me/messenger_profile?access_token=$MY_HACKSHAW_PAGE_ACCESS_TOKEN"    
 }
 
 function set_persistent_menu_sea_spray_travel {

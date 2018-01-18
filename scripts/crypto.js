@@ -21,8 +21,9 @@ if(options.decrypt) return console.log(manager.decrypt(options.decrypt));
 if(options.pat) { return console.log(manager.getPolaamaBotPageAccessToken()); }
 if(options.apat) { return console.log(manager.getPolaamaPageAccessToken()); }
 if(options.travel_sfo) { return console.log(manager.getTravelSfoPageAccessToken()); }
-if(options.sea_spray) { return console.log(manager.getMySeaSprayPageAccessToken()); }
-if(options.hackshaw) { return console.log(manager.getMyHackshawPageAccessToken()); }
+if(options.my_sea_spray) { return console.log(manager.getMySeaSprayPageAccessToken()); }
+if(options.sea_spray) { return console.log(manager.getSeaSprayPageAccessToken()); }
+if(options.my_hackshaw) { return console.log(manager.getMyHackshawPageAccessToken()); }
 
 console.log(`usage: node crypto.js [-e data | -d <data> | -pat]`);
 /*

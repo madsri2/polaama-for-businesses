@@ -5,22 +5,25 @@ const FBTemplateCreator = require(`${baseDir}/fb-template-creator`);
 const FbidHandler = require('fbid-handler/app/handler');
 const Manager = require('state-manager');
 const Promise = require('promise');
+const Encoder = require(`${baseDir}/encoder`);
 
-function AdminMessageSender(adminId, testing) {
-  let fileName = "business-admin-handler.txt";
-  if(testing) fileName = "testing-business-admin-handler.txt";
-  this.stateManager = new Manager(fileName);
-  this.adminId = adminId;
+function AdminMessageSender(businessName, adminIds, testing) {
+  if(!businessName) throw new Error(`Required parameter 'businessName' missing`);
+  if(!adminIds) throw new Error(`Required parameter 'adminIds' missing`);
+  this.stateManager = new Manager(`${Encoder.encode(businessName)}-business-admin-handler.txt`, testing);
+  this.adminIds = adminIds;
 }
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-// AdminMessageSender.prototype.handleResponseFromAdmin = function(mesg, pageDetails) {
+AdminMessageSender.prototype.setAdminIds = function(adminIds) {
+  this.adminIds = adminIds;
+}
+
 AdminMessageSender.prototype.handleResponseFromAdmin = function(adminFbid, mesg, pageDetails) {
   const self = this;
-  // const adminFbid = this.adminId;
   return this.stateManager.get(["awaitingResponseFromAdmin", adminFbid]).then(
     (response) => {
       // if we don't find a value it means that this text was not sent by admin in response to a question. In other words, this message is not meant to be handled here.
@@ -36,9 +39,12 @@ AdminMessageSender.prototype.handleResponseFromAdmin = function(adminFbid, mesg,
             image_url: pageDetails.image_url
           },
           {
-            title: capitalizeFirstLetter(mesg),
-            subtitle: `Original question: ${question}`,
-            buttons: pageDetails.buttons
+            title: "Your question",
+            subtitle: `${question}`,
+          },
+          {
+            title: "Our response",
+            subtitle: capitalizeFirstLetter(mesg),
           }
         ]
       }));
@@ -77,25 +83,30 @@ function getName(fbid) {
   return name;
 }
 
-AdminMessageSender.prototype.sendMessageToAdmin = function(fbid, mesg, talkToHuman) {
-  const messageList = [];
+AdminMessageSender.prototype.sendMessageToAdmin = function(fbid, mesg, categoryValue) {
   let message = { recipient: { id: fbid } };
-  const prefix = (talkToHuman) ? "" : "I did not understand the question, so ";
+  let prefix = "";
+  if(categoryValue) {
+    if(categoryValue === "frustration") prefix = "Sorry that I was unable to help you. ";
+    // else if(categoryValue !== "talk-to-human") prefix = "I did not understand the question, so "; 
+  }
   message.message = {
-    text: `${prefix}I have asked one of our crew members to help. We will get back to you asap`,
+    text: `${prefix}I have asked one of our crew members to help. We will get back to you asap.`,
     metadata: "DEVELOPER_DEFINED_METADATA"
   };
-  messageList.push(message);
-  messageList.push(FBTemplateCreator.list({
-    fbid: this.adminId,
+  if(categoryValue === "handle-error") message.message.text = "We have received your message and will get back to you asap.";
+  const messageList = [];
+  // don't send message back to the original sender if we are asked NOT to.
+  if(categoryValue !== "dont-respond-to-user") messageList.push(message);
+  let messageToAdmin = {
     elements: [
       {
         title: "ACTION REQD",
         subtitle: `Question from customer ${getName(fbid)}`
       },
       {
-        title: mesg,
-        subtitle: "is the question"
+        title: "Question",
+        subtitle: mesg
       }
     ],
     buttons:[{
@@ -103,18 +114,20 @@ AdminMessageSender.prototype.sendMessageToAdmin = function(fbid, mesg, talkToHum
       type: "postback",
       payload: `respond_to_customer_${fbid}-_${mesg}`
     }]
-  }));
-  /* 
-    Keep state that you are awaiting a message for a particular user. As soon as message is received by user and they respond, if the state is set, then send this message to the original user and clear the state. 
-  */
+  };
+  // send the message to all admins in the list.
+  this.adminIds.forEach(adminId => {
+    messageToAdmin.fbid = adminId;
+    messageList.push(FBTemplateCreator.list(messageToAdmin));
+  });
+  //  Keep state that you are awaiting a message for a particular user. As soon as message is received by user and they respond, if the state is set, then send this message to the original user and clear the state. 
   const self = this;
   return this.stateManager.set(["messageSentToAdmin", fbid, mesg]).then(
     () => {
       const response = {
         message: messageList,
-        category: (talkToHuman) ? "talk-to-human" : "input.unknown"
+        category: (categoryValue) ? categoryValue : "input.unknown"
       };
-      // return Promise.resolve(messageList);
       return Promise.resolve(response);
     },
     (err) => {
@@ -130,11 +143,38 @@ AdminMessageSender.prototype.handleWaitingForAdminResponse = function(adminFbid,
   const fbid = contents[1];
   const originalMessage = contents[2];
   const self = this;
+  let resultDone = false;
   // first check that we have actually recorded the fact that we have sent a message to admin. Then, record the fact that we are going to ask the admin to respond and then ask the admin to respond.
   return this.stateManager.get(["messageSentToAdmin",fbid, originalMessage]).then(
     (value) => { // see if we recorded the fact that we sent message to admin. If not, throw error.
-      if(!value) return Promise.reject(new Error(`expected sentMessageToAdmin for fbid ${fbid} to be true. But its not. Dump of sentMessageToAdmin: ${JSON.stringify(self.sentMessageToAdmin)}`));
-      // if we are already waiting for admin to respond to any fbid, then simply return an error message to the admin indicating we are still waiting for them to respond to the original message.
+      // if(!value) return Promise.reject(new Error(`expected sentMessageToAdmin for fbid ${fbid} to be true. But its not. Dump of sentMessageToAdmin: ${JSON.stringify(self.sentMessageToAdmin)}`));
+      if(!value) {
+        resultDone = true;
+        const adminName = getName(adminFbid);
+        const customerName = getName(fbid);
+        logger.warn(`Admin '${adminName}' wants to respond to a question from customer '${customerName}' for question "${originalMessage}". But state manager does not contain a corresponding "messageSentToAdmin" state. The most likely scenario is that someone else already responded to this message.`);
+        return Promise.resolve(FBTemplateCreator.text({
+          fbid: adminFbid,
+          text: `Looks like you or some other admin already responded to customer '${customerName}' for question '${originalMessage}'`
+        }));
+      }
+      // if we are already waiting for admin to respond to any fbid and it's not the same admin passed in here, send a note to this admin indicating someone else will be responding. 
+      return self.stateManager.keyStartingWith("awaitingResponseFromAdmin");
+    },
+    (err) => {
+      return Promise.reject(err);
+  }).then(
+    (value) => {
+      if(resultDone) return Promise.resolve(value); // simply pass the value along. Nothing more to do for us.
+      const key = value;
+      if(key && !key.includes(adminFbid)) {
+        const adminName = getName(self.stateManager.parseKey(key)[1]);
+        return Promise.resolve(FBTemplateCreator.text({
+          fbid: adminFbid, 
+          text: `Another admin "${adminName}" is already responding to this customer`
+        }));
+      }
+      // the key is not present or it's the same admin who has indicated again that they will be responding.
       return self.stateManager.set(["awaitingResponseFromAdmin", adminFbid], { 
         fbid: fbid, 
         question: originalMessage
@@ -143,25 +183,18 @@ AdminMessageSender.prototype.handleWaitingForAdminResponse = function(adminFbid,
     (err) => {
       return Promise.reject(err);
   }).then( // actually ask the admin to respond
-    () => {
+    (value) => {
+      // a value being present indicates that the Promise has been resolved above. So, nothing left for us to do but pass the value along.
+      if(value) return Promise.resolve(value); 
+      const name = getName(fbid);
       return Promise.resolve(FBTemplateCreator.text({
         fbid: adminFbid, 
-        text: `Enter your response for customer ${fbid}. Question is \"${originalMessage}\"`
+        text: `Enter your response for customer '${name}'. Question is \"${originalMessage}\"`
       }));
     },
     (err) => {
       return Promise.reject(err);
   });
-  /*
-  // Ask admin to send response
-  if(!this.awaitingResponseFromAdmin[fbid]) {
-    this.awaitingResponseFromAdmin[fbid] = true; 
-    return FBTemplateCreator.text({
-      fbid: adminFbid, 
-      text: `Enter your response for customer ${fbid}`
-    });
-  }
-  */
 }
 
 AdminMessageSender.prototype.testing_clearState = function() {

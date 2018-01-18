@@ -11,7 +11,10 @@ if(o.a !== undefined) o.a = true;
 // console.log(`o.a is ${o.a}`);
   let message = {
     recipient: {
-      id: 123
+      id: 234,
+      id: 123,
     }
   };
-  console.log(JSON.stringify(message));
+// console.log(JSON.stringify(message.recipient));
+console.log(Object.keys(message.recipient));
+console.log(message.recipient.id);

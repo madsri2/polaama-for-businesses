@@ -3,27 +3,23 @@
 const baseDir = '/home/ec2-user';
 const logger = require(`${baseDir}/my-logger`);
 const CommonClassifier = require('common-classifier');
-const DialogFlowProxy = require('dialogflow');
 let passengerCountTemplate;
 
 function NBClassifier() {
   this.commonClassifier = new CommonClassifier();
   this.classifier = this.commonClassifier.commonTraining();
-  this.dialogFlow = new DialogFlowProxy();
   passengerCountTemplate = this.commonClassifier.passengerCountTemplate;
+  /*
   trainAdditionalLocationMessages.call(this);
   trainToutBagayOperatingDays.call(this);
   trainSunsetCruiseOperatingDays.call(this);
   trainPirateOperatingDays.call(this);
   trainPassengerCount.call(this);
+  */
 }
 
 NBClassifier.prototype.classify = function(description) {
   return this.commonClassifier.classify(description);
-}
-
-NBClassifier.prototype.categorize = function(description) {
-  return this.dialogFlow.classify(description);
 }
 
 function trainSunsetCruiseOperatingDays() {
@@ -52,7 +48,7 @@ function trainPirateOperatingDays() {
   });
 }
 
-function trainPassengerCount() {
+NBClassifier.prototype.trainPassengerCount = function() {
   let trainingSet = passengerCountTemplate("sunset cruise").
     concat(passengerCountTemplate("sunset")).
     concat(passengerCountTemplate("pirate's day")).
@@ -65,14 +61,14 @@ function trainPassengerCount() {
       "maximum passengers per cruise",
     ]);
   trainingSet.forEach(line => {
-    this.classifier.learn(line, "passenger count");
+    console.log(line);
   });
 }
 
 function trainAdditionalLocationMessages() {
   const trainingData = [
     "where is sea spray located",
-    "where's sea spray located",
+    "where'r sea spray located",
     "where is sea spray cruises located",
     "where is sea spray cruise located",
     "where is sea spray tour located",

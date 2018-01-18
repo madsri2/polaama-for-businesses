@@ -2,31 +2,51 @@
 const baseDir = '/home/ec2-user';
 const logger = require(`${baseDir}/my-logger`);
 const FBTemplateCreator = require(`${baseDir}/fb-template-creator`);
-const NBClassifier = require('sea-spray-handler/app/nb-classifier');
+const Classifier = require('sea-spray-handler/app/dialogflow-classifier');
 const moment = require('moment');
-const AdminMessageSender = require('business-pages-handler');
 const PageHandler = require('fbid-handler/app/page-handler');
 const Promise = require('promise');
 
 const year = moment().year();
 const month = moment().month() + 1;
 
+/* 
+  A business-logic class that holds all business logic associated with the "Sea Spray" business. This is a prototype for all future businesses, which should implement the methods implemented by this class and return business specific information.
+  This class will be passed to ~/business-pages-handler/app/base-handler.js, which will then call the methods implemented here as needed. 
+  NOTE: ALL BUSINESS SPECIFIC CLASSES WILL HAVE TO IMPLEMENT THE instance METHODS IMPLEMENTED BY THIS CLASS.
+*/
+
 function SeaSprayHandler(testing) {
-  this.classifier = new NBClassifier();
-  this.adminMessageSender = new AdminMessageSender("1629856073725012", testing);
-  // this.state = {};
+  this.classifier = new Classifier();
+  this.name = "Sea Spray";
+  this.adminIds = [this.madhusPageScopedFbid()];
+  this.businessPageId = PageHandler.seaSprayPageId;
+  this.testing = testing;
 }
 
-function farewell(pageId, fbid) {
-  if(pageId != PageHandler.mySeaSprayPageId) return null;
-  return FBTemplateCreator.text({
-    fbid: fbid,
-    text: "See you later! Remember, we are always available to answer your questions!",
-  });
+SeaSprayHandler.prototype.handleBusinessSpecificCategories = function(fbid, category, tourName) {
+  if(category === "passenger-count") return passengerCount(fbid);
+  if(category === "location") return location(fbid);
+  if(category === "hotel-transfers") return hotelTransfer(fbid);
+  if(category === "available-tours") return bookTours(fbid);
+  if(category === "customer-service") return customerService(fbid);
+  if(category === "large-group-discounts") return largeGroupDiscounts(fbid);
+  if(category === "operating-season") return operatingSeason(fbid);
+  if(category === "kids-allowed") return kidsAllowed(fbid);
+  if(category === "infant-charges") return infantCharges(fbid);
+  if(category === "customized-tour") return customizedTours(fbid);
+  if(category === "book-tour") return bookTours(fbid);
+  if(category === "bad-weather") return badWeatherPolicy(fbid);
+  if(category === "advance-booking") return advanceBooking(fbid);
+  if(category === "operating-tours") return bookTours(fbid);
+  if(category === "operating-hours") return operatingHours(fbid);
+  if(category === "tour-recommendation") return tourRecommendation(fbid);
+  if(category === "entity-name") return selectResponseForTour(tourName, category, fbid);
+  // if response is still null, handle categories that have information based on tour type: "operating-days", "food-options", "cruise-details", "cost-of-tour"
+  return selectResponseForTour(tourName, category, fbid);
 }
 
-SeaSprayHandler.prototype.greeting = function(pageId, fbid) {
-  if(pageId != PageHandler.mySeaSprayPageId) return null;
+SeaSprayHandler.prototype.greeting = function(fbid) {
   let messageList = [];
   messageList.push(FBTemplateCreator.generic({
     fbid: fbid,
@@ -36,13 +56,13 @@ SeaSprayHandler.prototype.greeting = function(pageId, fbid) {
       image_url: "http://tinyurl.com/y8v9ral5"
     }]
   }));
-  messageList = messageList.concat(commonQuestionsButtons.call(this, fbid));
+  messageList = messageList.concat(commonQuestionsButtons(fbid));
   return messageList;
 }
 
-SeaSprayHandler.prototype.handleText = function(mesg, pageId, fbid) {
-  const pageDetails = {
-    title: "Response from Sea Spray",
+SeaSprayHandler.prototype.pageDetails = function() {
+  return {
+    title: "Message from Sea Spray",
     image_url: "http://tinyurl.com/y8v9ral5",
     buttons: [{
       title: "Contact details",
@@ -50,188 +70,29 @@ SeaSprayHandler.prototype.handleText = function(mesg, pageId, fbid) {
       payload: "sea_spray_contact"
     }]
   };
-  const self = this;
-  return this.adminMessageSender.handleResponseFromAdmin(fbid, mesg, pageDetails).then(
-    (response) => {
-      if(response) return Promise.resolve({
-        _done: true,
-        message: response
-      });
-      return self.classifier.categorize(mesg);
-    },
-    (err) => {
-      return Promise.reject(err);
-    }
-  ).then(
-    function(result) {
-      // short-circuit if we already have a result from the previous promise.
-      if(result._done) {
-        delete result._done;
-        return Promise.resolve(result);
-      }
-      // logger.debug(`handleText: category is ${category}`);
-      let response = null;
-      const category = result.category;
-      if(category === "passenger-count") response = passengerCount(fbid);
-      if(category === "location") response = location(fbid);
-      if(category === "hotel-transfers") response = hotelTransfer(fbid);
-      if(category === "available-tours") response = bookTours.call(self, fbid);
-      if(category === "customer-service") response = customerService(fbid);
-      if(category === "large-group-discounts") response = largeGroupDiscounts(fbid);
-      if(category === "operating-season") response = operatingSeason(fbid);
-      if(category === "kids-allowed") response = kidsAllowed(fbid);
-      if(category === "infant-charges") response = infantCharges(fbid);
-      if(category === "greeting") response = self.greeting(pageId, fbid);
-      if(category === "farewell") response = farewell.call(self, pageId, fbid)
-      if(category === "customized-tour") response = customizedTours(fbid);
-      if(category === "book-tour") response = bookTours(fbid);
-      if(category === "bad-weather") response = badWeatherPolicy(fbid);
-      if(category === "advance-booking") response = advanceBooking(fbid);
-      if(category === "operating-tours") response = bookTours.call(self, fbid);
-      if(category === "operating-hours") response = operatingHours.call(self, fbid);
-      if(category === "talk-to-human") return self.adminMessageSender.sendMessageToAdmin(fbid, mesg, true /* talk to human */);
-      if(category === "input.unknown") return self.adminMessageSender.sendMessageToAdmin(fbid, mesg);
-      // if response is null until now, handle categories that have information based on tour type: "operating-days", "food-options", "cruise-details", "cost-of-tour"
-      if(!response) response = selectResponseForTour.call(self, result.tourName, category, fbid);
-      // if it's a category we don't understand and if there is a fulfilment, use it. This is to handle cases where the Intent and a default response exists in Dialogflow (Examples: Appreciation
-      if(!response) {
-        logger.info(`handleText: Unknown category: ${category}. Figuring out what to do...`);
-        if(result.defaultResponse) {
-          logger.info(`handleText: default response <${result.defaultResponse}> present. Returning that.`);
-          response = FBTemplateCreator.text({
-            fbid: fbid,
-            text: result.defaultResponse
-          });
-        }
-        else {
-          logger.info("handleText: We don't know what to send. Send the message to human and have them take over");
-          return self.adminMessageSender.sendMessageToAdmin(fbid, mesg);
-        }
-      }
-
-      return Promise.resolve({
-        'category': category,
-        message: response
-      });
-    },
-    (err) => {
-      return Promise.reject(err);
-  }).then(
-    (response) => {
-      return Promise.resolve(response);
-    },
-    function(error) {
-      logger.error(`handleText: Error in categoryPromise: ${error}`);
-      return Promise.reject("Even bots need to eat. Back in a bit");
-    }
-  );
 }
 
-SeaSprayHandler.prototype.handlePostback = function(payload, pageId, fbid) {
-  if(pageId != PageHandler.mySeaSprayPageId) return Promise.resolve(null);
-  const self = this;
-  return this.adminMessageSender.handleWaitingForAdminResponse(fbid, payload).then(
-    (value) => {
-      if(value) return Promise.resolve(value);
-      let response;
-      if(payload === "sea_spray_contact") response = customerService(fbid);
-      if(payload === "sea_spray_book_tour") response = bookTours.call(self, fbid);
-      if(payload === "sea_spray_tout_bagay_operating_days") response = toutBagayDays.call(self, fbid);
-      if(payload === "sea_spray_pirate_days_operating_days") response = piratesDay.call(self, fbid);
-      if(payload === "sea_spray_sunset_cruise_operating_days") response = sunsetCruiseDays.call(self, fbid);
-      if(payload === "sea_spray_bad_weather") response = badWeatherPolicy(fbid);
-      if(payload === "sea_spray_advance_booking") response = advanceBooking(fbid);
-      if(payload === "sea_spray_group_discount") response = largeGroupDiscounts(fbid);
-      if(payload === "sea_spray_hotel_transfer") response = hotelTransfer(fbid);
-      if(payload === "sea_spray_common_questions") response = commonQuestionsButtons.call(self, fbid);
-      // handle case where user chose a particular tour for a previously determined category
-      if(payload.startsWith("select_tour")) response = selectResponseForTour.call(self, payload, null, fbid);
-      // we need to respond one way or another here. TODO: See if there is better way to handle this.
-      if(!response) {
-        logger.error(`Dont know how to handle payload ${payload} of fbid ${fbid} for "sea spray" bot. Asking help from admin`);
-        response = FBTemplateCreator.generic({
-          fbid: fbid,
-          elements: [{
-            title: "We have notified our team, who will get back to you shortly",
-            image_url: "http://tinyurl.com/y8v9ral5",
-          }],
-        });
-      }
-      // logger.debug(`response is ${JSON.stringify(response)}`);
-      return Promise.resolve(response);
-    },
-    (err) => {
-      logger.error(`handleText: Error in categoryPromise: ${err}`);
-      return Promise.reject("Even bots need to eat. Back in a bit");
-    }
-  );
+SeaSprayHandler.prototype.handleBusinessSpecificPayload = function(payload, fbid) {
+  if(payload === "sea_spray_contact") return customerService(fbid);
+  if(payload === "sea_spray_book_tour") return bookTours(fbid);
+  if(payload === "sea_spray_tout_bagay_operating_days") return toutBagayDays(fbid);
+  if(payload === "sea_spray_pirate_days_operating_days") return piratesDay(fbid);
+  if(payload === "sea_spray_sunset_cruise_operating_days") return sunsetCruiseDays(fbid);
+  if(payload === "sea_spray_bad_weather") return badWeatherPolicy(fbid);
+  if(payload === "sea_spray_advance_booking") return advanceBooking(fbid);
+  if(payload === "sea_spray_group_discount") return largeGroupDiscounts(fbid);
+  if(payload === "sea_spray_hotel_transfer") return hotelTransfer(fbid);
+  if(payload === "sea_spray_common_questions") return commonQuestionsButtons(fbid);
+  if(payload.startsWith("select_tour")) return selectResponseForTour(payload, null, fbid);
+  // no business logic to handle this payload.
+  return null;
+}
+
+SeaSprayHandler.prototype.madhusPageScopedFbid = function() {
+  return "1335132323276529";
 }
 
 // convenience function that handles selecting the right functions given a tour and the category. This is used in cases where a particular categories' response depends on the tour selected. This also handles the case where no tour is selected (setting state, calling chooseTour) and handling case where state might be set.
-function selectResponseForTourOld(tour, category, fbid) {
-  // if no tour was provided, ask for that information and set state accordingly.
-  if(!tour) {
-    if(!this.state[fbid]) this.state[fbid] = {};
-    switch(category) {
-      case "food-options": this.state[fbid].awaitingTourNameForFoodOption = true; break; 
-      case "operating-days": this.state[fbid].awaitingTourNameForOperatingDays = true; break;
-      case "cruise-details": this.state[fbid].awaitingTourNameForDetails = true; break;
-      case "cost-of-tour": this.state[fbid].awaitingTourNameForCost = true; break;
-    }
-    return chooseTours(fbid);
-  }
-  const functions = {
-    'select_tour_tout_bagay': {
-      'food-options': toutBagayFood,
-      'operating-days': toutBagayDays,
-      'cruise-details': toutBagayDetails,
-      'cost-of-tour': toutBagayCost
-    },
-    'select_tour_sunset_cruise': {
-      'food-options': sunsetCruiseFood,
-      'operating-days': sunsetCruiseDays,
-      'cruise-details': sunsetCruiseDetails,
-      'cost-of-tour': sunsetCruiseCost
-    },
-    'select_tour_pirate_day': {
-      'food-options': piratesDayFood,
-      'operating-days': piratesDay,
-      'cruise-details': piratesDayDetails,
-      'cost-of-tour': piratesDayCost
-    },
-    'select_tour_private_charter': {
-      'food-options': privateCharterFood,
-      'operating-days': privateCharterOperatingDays,
-      'cruise-details': privateCharterDetails,
-      'cost-of-tour': privateCharterCost,
-    }
-  };
-  functions["Pirate Day's Cruise"] = functions.select_tour_pirate_day;
-  functions["Sunset cruise"] = functions.select_tour_sunset_cruise;
-  functions["Tout Bagay Cruise"] = functions.select_tour_tout_bagay;
-  functions["Private charter"] = functions.select_tour_private_charter;
-  if(category) return functions[tour][category](fbid);
-  if(!this.state[fbid]) throw new Error(`No state value present and passed parameter cateogory is undefined. Potential BUG! in calling function`);
-  // if state was set, handle that. Needed for call made from handlePostback()
-  if(this.state[fbid].awaitingTourNameForFoodOption) {
-    this.state[fbid].awaitingTourNameForFoodOption = false;
-    return functions[tour]["food-options"](fbid);
-  }
-  if(this.state[fbid].awaitingTourNameForOperatingDays) {
-    this.state[fbid].awaitingTourNameForOperatingDays = false; 
-    return functions[tour]["operating-days"](fbid);
-  }
-  if(this.state[fbid].awaitingTourNameForDetails) {
-    this.state[fbid].awaitingTourNameForDetails = false; 
-    return functions[tour]["cruise-details"](fbid);
-  }
-  if(this.state[fbid].awaitingTourNameForCost) {
-    this.state[fbid].awaitingTourNameForCost = false;
-    return functions[tour]["cost-of-tour"](fbid);
-  }
-  throw new Error(`Unknown state set. state dump: ${JSON.stringify(this.state[fbid])}.`);
-}
-
 function selectResponseForTour(tour, category, fbid) {
   const functions = {
     'tout_bagay': {
@@ -241,6 +102,7 @@ function selectResponseForTour(tour, category, fbid) {
       'cost-of-tour': toutBagayCost,
       'tour-start-time': toutBagayDetails,
       'things-to-do-and-see': toutBagayDetails,
+      'entity-name': toutBagayDetails,
     },
     'sunset_cruise': {
       'food-options': sunsetCruiseFood,
@@ -249,6 +111,7 @@ function selectResponseForTour(tour, category, fbid) {
       'cost-of-tour': sunsetCruiseCost,
       'tour-start-time': sunsetCruiseDetails,
       'things-to-do-and-see': sunsetCruiseDetails,
+      'entity-name': sunsetCruiseDetails,
     },
     'pirate_day': {
       'food-options': piratesDayFood,
@@ -257,6 +120,7 @@ function selectResponseForTour(tour, category, fbid) {
       'cost-of-tour': piratesDayCost,
       'tour-start-time': piratesDayDetails,
       'things-to-do-and-see': piratesDayDetails,
+      'entity-name': piratesDayDetails,
     },
     'private_charter': {
       'food-options': privateCharterFood,
@@ -265,10 +129,16 @@ function selectResponseForTour(tour, category, fbid) {
       'cost-of-tour': privateCharterCost,
       'tour-start-time': privateCharterDetails,
       'things-to-do-and-see': privateCharterDetails,
+      'entity-name': privateCharterDetails,
     }
   };
-  // if no tour was provided, ask for that information and set state accordingly.
-  if(!tour) {
+  functions["Pirate Day's Cruise"] = functions.pirate_day;
+  functions["Sunset cruise"] = functions.sunset_cruise;
+  functions["Tout Bagay Cruise"] = functions.tout_bagay;
+  functions["Private charter"] = functions.private_charter;
+
+  // if no tour was provided, ask for that information.
+  if(!tour || tour.length === 0) {
     // this might be because of two reasons. Either the user did not enter the right entity for a given category or we don't yet support that category. If it's the latter, return null.
     const categoryKeys = Object.keys(functions.tout_bagay); // We assume that Tout Bagay will always be a super-set for the categories
     if(categoryKeys.includes(category)) return chooseTours(fbid, category);
@@ -282,13 +152,10 @@ function selectResponseForTour(tour, category, fbid) {
     tour = list[1]; // list[0] is "select_tour"
     category = list[2];
   }
-  functions["Pirate Day's Cruise"] = functions.pirate_day;
-  functions["Sunset cruise"] = functions.sunset_cruise;
-  functions["Tout Bagay Cruise"] = functions.tout_bagay;
-  functions["Private charter"] = functions.private_charter;
   // logger.debug(`selectResponseForTour: tour ${tour} & category ${category}`);
   if(tour && category && functions[tour][category]) return functions[tour][category](fbid);
-  throw new Error(`selectResponseForTour: Potential BUG: Cannot find the right function to call for tour ${tour} & category ${category}`);
+  // The base-handler class will correctly handle this error and send an appropriate message to the customer. 
+  throw new Error(`selectResponseForTour: Potential BUG: Cannot find the right function to call for tour ${tour} & category <${category}>`);
 }
 
 function sunsetCruiseFood(fbid) {
@@ -358,7 +225,7 @@ function kidsAllowed(fbid) {
   return FBTemplateCreator.generic({
     fbid: fbid,
     elements: [{
-      title: "Yes, kids of all ages can enjoy our tours",
+      title: "Kids of all ages can enjoy our tours",
       subtitle: "Children under 2 travel for free",
       buttons: [{
         title: "Tour options",
@@ -383,6 +250,7 @@ function infantCharges(fbid) {
     }],
   });
 }
+
 function operatingSeason(fbid) {
   return FBTemplateCreator.generic({
     fbid: fbid,
@@ -472,8 +340,6 @@ function piratesDay(fbid) {
 }
 
 function toutBagayDays(fbid) {
-    const year = moment().year();
-    const month = moment().month() + 1;
     return FBTemplateCreator.list({
       fbid: fbid,
       elements: [{
@@ -511,7 +377,6 @@ function chooseTours(fbid, category) {
       buttons: [{
         title: "Tout Bagay",
         type: "postback",
-        // payload: "select_tour_tout_bagay"
         payload: `select_tour:tout_bagay:${category}`
       }]
     }, {
@@ -521,7 +386,6 @@ function chooseTours(fbid, category) {
       buttons: [{
         title: "Pirate's Day",
         type: "postback",
-        // payload: "select_tour_pirate_day"
         payload: `select_tour:pirate_day:${category}`
       }]
     }, {
@@ -578,6 +442,22 @@ function operatingHours(fbid) {
       title: "Available tours",
       type: "postback",
       payload: "sea_spray_book_tour"
+    }]
+  });
+}
+
+function tourRecommendation(fbid) {
+  return FBTemplateCreator.generic({
+    fbid: fbid,
+    elements: [{
+      title: "We recommend Tout Bagay, our most popular cruise",
+      subtitle: "This is a guided historical tour along the west coast",
+      image_url: "http://tinyurl.com/y8486a92",
+      buttons: [{
+        payload: "select_tour:tout_bagay:things-to-do-and-see",
+        type: "postback",
+        title: "Tout Bagay Details"
+      }]
     }]
   });
 }
@@ -1005,15 +885,6 @@ function sunsetCruiseDetails(fbid) {
     }],
     buttons: bookSunsetCruiseButton()
   });
-}
-
-SeaSprayHandler.prototype.testing_handleText = function(mesg, pageId, fbid) {
-  const category = this.classifier.classify(mesg);
-  const message = this.handleText(mesg, pageId, fbid);
-  return {
-    message: message,
-    category: category
-  };
 }
 
 module.exports = SeaSprayHandler;

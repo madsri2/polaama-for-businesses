@@ -18,9 +18,12 @@ const formidable = require('formidable');
 const Promise = require('promise');
 const validator = require('node-validator');
 const Encoder = require(`${baseDir}/encoder`);
+const BaseHandler = require('business-pages-handler/app/base-handler');
 const TravelSfoPageHandler = require('travel-sfo-handler');
 const SeaSprayHandler = require('sea-spray-handler');
+const SeaSprayPrototypeHandler = require('sea-spray-handler/app/prototype-handler');
 const HackshawHandler = require('hackshaw-handler');
+const HackshawPrototypeHandler = require('hackshaw-handler/app/prototype-handler');
 
 let recordMessage = true;
 let previousMessage = {};
@@ -31,10 +34,16 @@ let TEST_MODE = false;
 function WebhookPostHandler(session, testing, pageId) {
   if(testing) TEST_MODE = true; // Use sparingly. Currently, only used in callSendAPI
   this.travelSfoPageHandler = new TravelSfoPageHandler();
-  this.seaSprayHandler = new SeaSprayHandler(TEST_MODE);
-  this.hackshawHandler = new HackshawHandler();
+  this.seaSprayHandler = new BaseHandler(new SeaSprayHandler(TEST_MODE));
+  this.seaSprayPrototypeHandler = new BaseHandler(new SeaSprayPrototypeHandler(TEST_MODE));
+  this.hackshawHandler = new BaseHandler(new HackshawHandler(TEST_MODE));
+  this.hackshawPrototypeHandler = new BaseHandler(new HackshawPrototypeHandler(TEST_MODE));
+  this.newCustomerForSeaSpray = {};
 	this.pageId = PageHandler.defaultPageId;
-  if(pageId) this.pageId = pageId;
+  if(pageId) {
+    this.pageId = pageId;
+    if(testing) setBusinessPageHandler.call(this);
+  }
   this.secretManager = new SecretManager();
   this.sessions = Sessions.get();
   if(testing) this.pageHandler = PageHandler.get("fbid-test.txt");
@@ -62,7 +71,12 @@ function WebhookPostHandler(session, testing, pageId) {
 }
 
 // called to handle every message from the customer.
+// TODO: there is already a this.pageId. Use that and remove the second parameter 'pageId' here.
 function handleMessagingEvent(messagingEvent, pageId) {
+  if(!this.businessPageHandler) {
+    logger.error(`handleMessagingEvent: Error. Unable to get business page handler for pageId '${this.pageId}'`);
+    return sendTextMessage.call(this, pageEntry.messaging[i].sender.id, "We are working on something awesome! Check back in a few weeks.");
+  }
   const fbid = messagingEvent.sender.id;
   // find or create the session here so it can be used elsewhere. Only do this if a session was NOT passed in the constructor.
   if(_.isUndefined(this.passedSession)) this.session = this.sessions.findOrCreate(fbid);
@@ -70,14 +84,14 @@ function handleMessagingEvent(messagingEvent, pageId) {
   this.sessionState = this.sessions.getSessionState(this.session.sessionId);
   if(!this.sessionState) {
     logger.error(`cannot find session state for sessionId ${this.session.sessionId}. Cannot proceed without it. session dump: ${JSON.stringify(this.session)}`);
-    return sendTextMessage.call(this, fbid,"Even bots need to eat! Be back in a bit..");
+    return sendTextMessage.call(this, fbid,"We will be back shortly.");
   }
   if(!this.logOnce[this.session.sessionId]) {
     logger.debug(`handleMessagingEvent: First message from user ${this.session.fbid} with session ${this.session.sessionId} since this process started.`);
     this.logOnce[this.session.sessionId] = true;
   }
-  const promise = this.pageHandler.add(fbid, pageId);
   const self = this;
+  const promise = this.pageHandler.add(fbid, pageId);
   return promise.then(
     function(status) {
       if(status) {
@@ -95,23 +109,23 @@ function handleMessagingEvent(messagingEvent, pageId) {
             receivedPostback.call(self, messagingEvent);
           } else {
             logger.error("Webhook received unknown messagingEvent: ", messagingEvent);
-            sendTextMessage.call(this, fbid,"Even bots need to eat! Be back in a bit");
+            sendTextMessage.call(self, fbid,"We will be back shortly.");
           }
         }
         catch(err) {
           logger.error("an exception was thrown: " + err.stack);
-          sendTextMessage.call(this, fbid,"Even bots need to eat! Be back in a bit");
+          sendTextMessage.call(self, fbid,"We will be back shortly.");
         }
       }
       else {
         logger.warn(`handleMessagingEvent: adding new fbid ${fbid} to fbidHandler. Expected status to be true but it was ${status}`);
-        sendTextMessage.call(this, messagingEvent.sender.id,"Even bots need to eat! Be back in a bit");
+        sendTextMessage.call(self, fbid,"We will be back shortly.");
       }
       return Promise.resolve(true);
     },
     function(err) {
       logger.error(`handleMessagingEvent: error adding fbid ${fbid} to fbidHandler: ${err.stack}`);
-      sendTextMessage.call(this, messagingEvent.sender.id,"Even bots need to eat! Be back in a bit");
+      sendTextMessage.call(self, fbid,"We will be back shortly.");
       return Promise.resolve(false);
     }
   );
@@ -144,8 +158,26 @@ function receivedAuthentication(event) {
   sendTextMessage.call(this, senderID, "Authentication successful");
 }
 
+function setBusinessPageHandler() {
+  switch(this.pageId) {
+     case this.seaSprayPrototypeHandler.businessHandler.businessPageId:
+      this.businessPageHandler = this.seaSprayPrototypeHandler;
+      break;
+     case this.seaSprayHandler.businessHandler.businessPageId:
+       this.businessPageHandler = this.seaSprayHandler;
+       break;
+     case this.hackshawPrototypeHandler.businessHandler.businessPageId:
+       this.businessPageHandler = this.hackshawPrototypeHandler;
+       break;
+     case this.hackshawHandler.businessHandler.businessPageId:
+       this.businessPageHandler = this.hackshawHandler;
+       break;
+   }
+}
+
 function handlePageEntry(pageEntry) {
 		this.pageId = pageEntry.id;
+    setBusinessPageHandler.call(this);
     pageAccessToken = this.pageHandler.getPageAccessToken(this.pageId);
     const timeOfEvent = pageEntry.time;
     for (let i = 0, len = pageEntry.messaging.length; i < len; i++) {
@@ -166,24 +198,13 @@ WebhookPostHandler.prototype.handle = function(req, res) {
   }
   // Assume all went well.
   //
-  // You must send back a 200, within 20 seconds, to let us know you've 
+  // You must send back a 200, within 20 seconds, to let facebook know you've 
   // successfully received the callback. Otherwise, the request will time out.
   res.sendStatus(200);
 }
 
 function greetingForAnotherPage(fbid) {
-  let response;
-  switch(this.pageId) {
-    case PageHandler.travelSfoPageId: 
-      response = this.travelSfoPageHandler.greeting(this.pageId, fbid);
-      break;
-    case PageHandler.mySeaSprayPageId:
-      response = this.seaSprayHandler.greeting(this.pageId, fbid);
-      break;
-    case PageHandler.myHackshawPageId:
-      response = this.hackshawHandler.greeting(this.pageId, fbid);
-      break;
-  }
+  const response = this.businessPageHandler.greeting(this.pageId, fbid);
   if(!response) return false;
   if(Array.isArray(response)) this.sendMultipleMessages(fbid, response);
   else callSendAPI.call(this, response);
@@ -196,22 +217,7 @@ function handleGettingStarted(senderID) {
 }
 
 function postbackForAnotherPage(payload, fbid) {
-  let response;
-  switch(this.pageId) {
-    case PageHandler.travelSfoPageId: 
-      response = this.travelSfoPageHandler.handlePostback(payload, this.pageId, fbid);
-      break;
-    case PageHandler.mySeaSprayPageId:
-      return this.seaSprayHandler.handlePostback(payload, this.pageId, fbid);
-      // break;
-    case PageHandler.myHackshawPageId:
-      response = this.hackshawHandler.handlePostback(payload, this.pageId, fbid);
-      break;
-  }
-  if(!response) return false;
-  if(Array.isArray(response)) this.sendMultipleMessages(fbid, response);
-  else callSendAPI.call(this, response);
-  return true;
+  return this.businessPageHandler.handlePostback(payload, this.pageId, fbid);
 }
 
 function receivedPostback(event) {
@@ -244,472 +250,6 @@ function receivedPostback(event) {
     return;
   }
   else return sendTextMessage.call(self, senderID, "Busy at work. We will be back soon with an awesome chatbot for you! Prepare to be amazed!");
-}
-
-function sendBoardingPass() {
-    const boardingPass = (new Notifier(this.sessions)).getBoardingPass(this.session.tripData(), this.session.fbid);
-    callSendAPI.call(this, boardingPass);
-    return;
-}
-
-function sendReturnFlightDetails() {
-  const trip = this.session.tripData();
-  if(!fs.existsSync(trip.returnFlightFile())) {
-    logger.warn(`sendReturnFlightDetails: No flight details exists for trip ${trip.rawTripName}`);
-    if(!fs.existsSync(trip.itineraryFile())) {
-      return sendNotFoundMessage.call(this, "flight", trip.rawTripName);
-      // return this.sendTextMessage(this.session.fbid,`No flight itinerary present for your trip to ${trip.rawTripName}. If you have already booked a flight, send it to TRIPS@MAIL.POLAAMA.COM`);
-    }
-  }
-  const fbid = this.session.fbid;
-  const messageList = [];
-  messageList.push({
-    recipient: {
-      id: fbid
-    },
-    message: {
-      attachment: {
-        type: "template",
-        payload: JSON.parse(fs.readFileSync(trip.returnFlightFile(), 'utf8'))
-      }
-    }
-  });
-  this.showReturnFlight = false;
-  if(this.showOnwardFlight) {
-    messageList.push({
-      recipient: {
-        id: fbid
-      },
-      message: {
-        text: "See onward flight",
-        quick_replies:[
-          {
-            content_type: "text",
-            title: "Onward flight",
-            payload: "qr_onward_flight",
-          }
-        ]
-      }
-    });
-  }
-  sendMultipleMessages.call(this, fbid, messageList);
-}
-
-function sendFlightBookingMessage(ssMinPrice) {
-   const trip = this.session.tripData();
-   const departureCode = trip.data.departureCityCode;
-   const arrivalCode = trip.data.portOfEntryCode;
-   const numPassengers = 1;
-   const startDate = trip.data.startDate;
-   const returnDate = trip.data.returnDate;
-   const sdMoment = new moment(startDate);
-   const startDay = sdMoment.date() < 10 ? `0${sdMoment.date()}` : sdMoment.date(); 
-   const startMonth = (sdMoment.month()+1) < 10 ? `0${sdMoment.month()+1}` : sdMoment.month()+1; 
-   const startYear = sdMoment.year();
-   const rdMoment = new moment(returnDate);
-   const returnDay = rdMoment.date() < 10 ? `0${rdMoment.date()}` : rdMoment.date();
-   const returnMonth = (rdMoment.month()+1) < 10 ? `0${rdMoment.month()+1}` : rdMoment.month()+1; 
-   const returnYear = rdMoment.year();
-   const expediaStartDate = `${startMonth}%2F${startDay}%2F${startYear}`;
-   const expediaReturnDate = `${returnMonth}%2F${returnDay}%2F${returnYear}`;
-   const skyscannerSubtitle = (ssMinPrice) ? `Prices starting from $${ssMinPrice}/- (non-stop)` : "";
-   // url: "https://www.expedia.com/Flights-Search?flight-type=on&starDate=09%2F09%2F2017&endDate=09%2F15%2F2017&_xpid=11905%7C1&mode=search&trip=roundtrip&leg1=from%3AEWRto%3ASFO%2Cdeparture%3A09%2F09%2F2017TANYT&leg2=from%3ASFOtoEWR%2Cdeparture%3A09%2F15%2F2017TANYT&passengers=children%3A0%2Cadults%3A1%2Cseniors%3A0%2Cinfantinlap%3AY"
-   const skyscannerApiKey = this.secretManager.getSkyscannerApiKey();
-   const message = {
-     recipient: {
-       id: this.session.fbid
-     },
-     message: {
-       attachment: {
-         "type": "template",
-         payload: {
-           template_type: "list",
-           elements: [
-             {
-               "title": `Flight Booking`,
-               "image_url": "http://icons.iconarchive.com/icons/andrea-aste/torineide/256/turin-map-detail-icon.png"
-             },
-             {
-               "title": "Skyscanner",
-               "subtitle": skyscannerSubtitle,
-               "image_url": "https://www.skyscanner.com/images/opengraph.png",
-               "buttons": [{
-                 title: "Book",
-                 type: "web_url",
-                 url: `http://partners.api.skyscanner.net/apiservices/referral/v1.0/US/USD/en-US/${departureCode}/${arrivalCode}/${startDate}/${returnDate}?apiKey=${skyscannerApiKey}`
-               }]
-             },
-             {
-               "title": "Kayak",
-               "image_url": "http://www.simplebooking.travel/wp-content/uploads/2016/07/kayak-logo.png",
-               "buttons": [{
-                 title: "Book",
-                 type: "web_url",
-                 url: `https://www.kayak.com/flights/${departureCode}-${arrivalCode}/${startDate}/${returnDate}`
-               }]
-             },
-             {
-               "title": "Expedia",
-               "image_url": "https://viewfinder.expedia.com/img//exp_us_basic_lrg_4c_rgb.jpg",
-               "buttons": [{
-                 title: "Book",
-                 type: "web_url",
-                 url: `https://www.expedia.com/Flights-Search?flight-type=on&starDate=09%2F09%2F2017&endDate=09%2F15%2F2017&_xpid=11905%7C1&mode=search&trip=roundtrip&leg1=from%3A${departureCode}to%3A${arrivalCode}%2Cdeparture%3A${expediaStartDate}TANYT&leg2=from%3A${arrivalCode}to${departureCode}%2Cdeparture%3A${expediaReturnDate}TANYT&passengers=children%3A0%2Cadults%3A1%2Cseniors%3A0%2Cinfantinlap%3AY`
-               }]
-             }
-           ]
-         }
-       }
-     }
-   };
-   return callSendAPI.call(this, message);
-}
-
-function showFlightBookingOptions() {
-  const trip = this.session.tripData();
-  const tip = new TripInfoProvider(trip);
-  const promise = tip.getLowestNonstopPrice();
-  const self = this;
-  promise.done(
-    function(ssMinPrice) {
-      sendFlightBookingMessage.call(self, ssMinPrice);
-    },
-    function(err) {
-      logger.error(`showFlightBookingOptions: error getting min price from browse quotes: ${err.stack}. Proceeding without min price`);
-      sendFlightBookingMessage.call(self);
-    }
-  );
-}
-
-function sendFlightItinerary() {
-  const trip = this.session.tripData();
-  if(!fs.existsSync(trip.itineraryFile())) {
-    logger.warn(`sendFlightItinerary: No flight details exists for trip ${trip.rawTripName}`);
-    if(!fs.existsSync(trip.returnFlightFile())) {
-      return sendNotFoundMessage.call(this, "flight", trip.rawTripName);
-      // return this.sendTextMessage(this.session.fbid,`No flight itinerary present for your trip to ${trip.rawTripName}. If you have already booked a flight, send it to TRIPS@MAIL.POLAAMA.COM`);
-    }
-  }
-  const fbid = this.session.fbid;
-  const messageList = [];
-  messageList.push({
-    recipient: {
-      id: fbid
-    },
-    message: {
-      attachment: {
-        type: "template",
-        payload: JSON.parse(fs.readFileSync(trip.itineraryFile(), 'utf8'))
-      }
-    }
-  });
-  this.showOnwardFlight = false;
-  if(this.showReturnFlight) {
-    messageList.push({
-      recipient: {
-        id: fbid
-      },
-      message: {
-        text: "See return flight",
-        quick_replies:[
-          {
-            content_type: "text",
-            title: "Return flight",
-            payload: "qr_return_flight",
-            // image_url: ""
-          }
-        ]
-      }
-    });
-  }
-  sendMultipleMessages.call(this, fbid, messageList);
-}
-
-function createElementsList(payloadPrefix, elArray, title) {
-  const elements = [];
-  const buttons = [];
-  elArray.forEach((receipt,i) => {
-    const j = parseInt(i/3);
-    if(!buttons[j]) {
-      buttons[j] = [];
-    }
-    buttons[j].push({
-      type: "postback",
-      title: `${Encoder.decode(receipt)}`,
-      payload: `${payloadPrefix} ${receipt}`
-    });
-  });
-  let lastIndex = buttons.length - 1;
-  let numDashes = 3 - buttons[lastIndex].length;
-  // if numDashes is 0, the number of trips is an exact multiple of 3. Add another entry in buttons array
-  while(numDashes-- > 0) {
-    // fill the remaining slots with "-"
-    buttons[lastIndex].push({
-      type: "postback",
-      title: "-",
-      payload: "dash"
-    });
-  }
-  buttons.forEach(list => {
-    elements.push({
-      title: title,
-      buttons: list
-    });
-  });
-  logger.debug(`createElementsList: elements dump: ${JSON.stringify(elements)}`);
-  return elements;
-}
-
-function sendGeneralReceipt(title) {
-  const fbid = this.session.fbid;
-  const trip = this.session.tripData();
-  if(!title) {
-    const receipts = trip.receipts();
-    if(!receipts) return sendTextMessage.call(this, fbid, `No receipts found for trip ${trip.rawTripName}`);
-    /*
-    receipts.forEach(receipt => {
-      const button = {
-        "type": "postback"
-      };
-      button.payload = `get_receipt ${receipt}`;
-      button.title = Encoder.decode(receipt);
-      logger.debug(`sendGeneralReceipt: decode details: ${receipt}; ${buttons.title}`);
-      buttons.push(button);
-    });
-    */
-    const elements = createElementsList("get_receipt", receipts, "Receipts");
-    const message = {
-      recipient: {
-        id: fbid
-      },
-      message: {
-        attachment: {
-          type: "template",
-          payload: {
-            /* 
-              template_type: "button",
-              text: "Which receipt would you like to see?",
-              "buttons": buttons
-            */
-            template_type: "generic",
-            "elements": elements
-          }
-        }
-      }
-    };
-    return this.sendAnyMessage(message);
-  }
-  const receiptFile = trip.generalReceiptFile(title);
-  if(!receiptFile) return sendTextMessage.call(this, fbid, `No receipts found for trip ${trip.rawTripName}`);
-	const messages = [];
-  const details = JSON.parse(fs.readFileSync(receiptFile));
-    messages.push({
-      recipient: {
-        id: fbid
-      },
-      message: {
-        attachment: {
-          type: "template",
-          payload: details.receipt
-        }
-      }
-    });
-    messages.push({
-      recipient: {
-        id: fbid
-      },
-      message: {
-        attachment: {
-          type: "template",
-          payload: details.receipt_ext
-        }
-      }
-    });
-  return sendMultipleMessages.call(this, this.session.fbid, messages);
-}
-
-function sendCarReceipt() {
-  const fbid = this.session.fbid;
-  const trip = this.session.tripData();
-  // if(!fs.existsSync(trip.rentalCarReceiptFile())) return sendTextMessage.call(this, fbid, `No car receipt found for your trip ${trip.rawTripName}`);
-  if(!fs.existsSync(trip.rentalCarReceiptFile())) return sendNotFoundMessage.call(this, "car", trip.rawTripName);
-  const details = JSON.parse(fs.readFileSync(trip.rentalCarReceiptFile(), 'utf8'));
-	const messages = [];
-  messages.push({
-    recipient: {
-      id: fbid
-    },
-    message: {
-      attachment: {
-        type: "template",
-        payload: details.receipt
-      }
-    }
-  });
-  messages.push({
-    recipient: {
-      id: fbid
-    },
-    message: {
-      attachment: {
-        type: "template",
-        payload: details.receipt_ext
-      }
-    }
-  });
-  sendMultipleMessages.call(this, this.session.fbid, messages);
-}
-
-function sendNotFoundMessage(prefix, trip) {
-  const messageData = {
-    recipient: {
-      id: this.session.fbid
-    },
-    message: {
-      attachment: {
-        "type": "template",
-        payload: {
-          template_type: "list",
-          elements: [
-          {
-            "title": `No ${prefix} details found for your ${trip} trip.`,
-            "subtitle": "Have a reservation? Send it to us:",
-            "image_url": "http://icons.iconarchive.com/icons/custom-icon-design/flatastic-1/128/alert-icon.png"
-          },
-          {
-            "title": "Email",
-            "subtitle": "receipt to trips@mail.polaama.com"
-          },
-          {
-            "title": "Upload",
-            "subtitle": "by clicking on the attachment icon below"
-          }
-          ]
-        }
-      }
-    }
-  };
-	callSendAPI.call(this, messageData);
-}
-
-/*
-function sendTourDetails() {
-	const TripReceiptManager = require('receipt-manager/app/trip-receipt-manager');
-	const messages = [];
-	messages.push({
-		recipient: {
-			id: this.session.fbid
-		},
-		message: {
-			attachment: {
-				type: "template",
-				payload: new TripReceiptManager().handle()
-			}
-		}
-	});
-  messages.push(getTextMessageData(this.session.fbid, "See you at our place at 9 AM"));
-  messages.push(getTextMessageData(this.session.fbid, "It will be 80˚F and clear skies. The water will be calm and visibility is 100 feet, perfect for diving!"));
-  sendMultipleMessages.call(this, this.session.fbid, messages);
-}
-*/
-
-function sendCityHotelReceipt(payload) {
-  const content = /(.*)-.*-.*/.exec(payload);
-  if(!content) throw new Error(`cannot find city in hotel receipt postback: ${payload}`);
-  const city = content[1];
-  const trip = this.session.tripData();
-  const details = trip.getHotelReceiptDetails();
-  // logger.debug(`sendCityHotelReceipt: getting details for hotel [${content}]; ${city}: ${JSON.stringify(details[city])}`);
-  sendHotelReceiptMessage.call(this, this.session.fbid, details[city]);
-}
-
-function sendHotelReceiptMessage(fbid, details) {
-	const messages = [];
-  messages.push({
-    recipient: {
-      id: fbid
-    },
-    message: {
-      attachment: {
-        type: "template",
-        payload: details.receipt
-      }
-    }
-  });
-  messages.push({
-    recipient: {
-      id: fbid
-    },
-    message: {
-      attachment: {
-        type: "template",
-        payload: details.receipt_ext
-      }
-    }
-  });
-  sendMultipleMessages.call(this, this.session.fbid, messages);
-}
-
-function sendHotelItinerary(payload) {
-  let hotelKey;
-  if(payload) {
-    const contents = /hotel details (.*)/.exec(payload);
-    if(contents) hotelKey = contents[1];
-  }
-  const fbid = this.session.fbid;
-  const trip = this.session.tripData();
-	const messages = [];
-  const details = trip.getHotelReceiptDetails();
-  if(!details) return sendNotFoundMessage.call(this, "hotel", trip.rawTripName); 
-  const hotels = Object.keys(details);
-  if(hotelKey && details[hotelKey]) return sendHotelReceiptMessage.call(this, fbid, details[hotelKey]);
-  if(hotels.length > 1) {
-    logger.debug(`cities with hotels: ${hotels}`);
-    messages.push({
-      recipient: {
-        id: fbid
-      },
-      message: {
-        text: "Which hotel's receipt would you like to see?",
-        metadata: "hotel_receipt_list"
-      }
-    });
-    const buttons = [];
-    hotels.forEach((list,idx) => {
-      const j = parseInt(idx/3);
-      if(!buttons[j]) {
-        buttons[j] = [];
-      }
-      buttons[j].push({
-        "type": "postback",
-        "title": `${Encoder.decode(list)}`,
-        "payload": `${list}-hotel-receipt`
-      });
-    });
-    const elements = [];
-    buttons.forEach(buttonList => {
-      elements.push({
-        title: "Hotels",
-        buttons: buttonList
-      });
-    });
-    messages.push({
-      recipient: {
-        id: this.session.fbid
-      },
-      message: {
-        attachment: {
-          type: "template",
-          payload: {
-            template_type: "generic",
-            elements: elements
-          }
-        }
-      }
-    });
-    return sendMultipleMessages.call(this, this.session.fbid, messages);
-  }
-  sendHotelReceiptMessage.call(this, fbid, details[hotels[0]]);
 }
 
 /*
@@ -755,7 +295,6 @@ function receivedMessage(event) {
       }
     } else if (messageAttachments) {
       const response = this.travelSfoPageHandler.handleSendingAttractionsNearMe(message, this.pageId, senderID);
-      // const response = this.travelSfoPageHandler.handleSendingAttractionsNearMeVegas(message, this.pageId, senderID);
       if(response) return callSendAPI.call(this, response);
       const stickerId = message.sticker_id;
       if(stickerId && stickerId === 369239263222822) {
@@ -773,7 +312,8 @@ function receivedMessage(event) {
         }
         return sendTextMessage.call(this, senderID, "Glad you like us!");
       }
-      sendTextMessage.call(this, senderID, "Message with attachment received");
+      // sendTextMessage.call(this, senderID, "Message with attachment received");
+      return sendTextMessage.call(this, senderID, "Thanks!");
     }
 }
 
@@ -791,37 +331,6 @@ function sendUrl(urlPath) {
 }
 WebhookPostHandler.prototype.sendUrl = sendUrl;
 
-function messageForAnotherPage(message, fbid, event) {
-  let response;
-  if(this.pageId !== PageHandler.travelSfoPageId && this.pageId !== PageHandler.mySeaSprayPageId && this.pageId !== PageHandler.myHackshawPageId) return false;
-  switch(this.pageId) {
-    case PageHandler.travelSfoPageId: 
-      response = this.travelSfoPageHandler.handleText(message, this.pageId, fbid, event);
-      break;
-    case PageHandler.mySeaSprayPageId:
-      return this.seaSprayHandler.handleText(message, this.pageId, fbid);
-      // break;
-    case PageHandler.myHackshawPageId:
-      response = this.hackshawHandler.handleText(message, this.pageId, fbid);
-      break;
-  }
-  if(!response) return false;
-  if(Array.isArray(response)) this.sendMultipleMessages(fbid, response);
-  else callSendAPI.call(this, response);
-  return true;
-}
-
-function marketResearchPrototype(mesg, fbid) {
-  // const response = this.travelSfoPageHandler.royalCoachResponse(mesg, fbid);
-  // const response = this.travelSfoPageHandler.sanJoseBrewBike(mesg, fbid);
-  const response = this.travelSfoPageHandler.mountainQueenExpeditions(mesg, fbid);
-  logger.debug(`marketResearchPrototype: response: ${response}`);
-  if(!response) return false;
-  if(Array.isArray(response)) this.sendMultipleMessages(fbid, response);
-  else callSendAPI.call(this, response);
-  return true;
-}
-
 /*
   Handle message for another page like "My Sea Spray Cruise"
 */
@@ -837,11 +346,16 @@ function determineResponseType(event) {
         mesgPromise.done(
           function(result) {
             const response = result.message;
+            // logger.debug(`response: ${JSON.stringify(response)}`);
             if(Array.isArray(response)) self.sendMultipleMessages(senderID, response);
             else callSendAPI.call(self, response);
+            // if this is the first message from this sender, send a note to "me"
+            notifyAdminOfNewMessage.call(self, mesg, senderID);
           },
           function(err) {
-            sendTextMessage.call(self, senderID, "Even bots need to eat. Be back in a bit!");
+            // sendTextMessage.call(self, senderID, "Even bots need to eat. Be back in a bit!");
+            logger.error(`Error sending a response for message '${mesg}' from fbid ${senderID}: ${err}`);
+            sendTextMessage.call(self, senderID, "We will get back to you shortly.");
           }
         );
     }
@@ -849,6 +363,20 @@ function determineResponseType(event) {
     return;
   }
   else return sendTextMessage.call(self, senderID, "Busy at work. We will be back soon with an awesome chatbot for you! Prepare to be amazed!");
+}
+
+function messageForAnotherPage(message, fbid, event) {
+  return this.businessPageHandler.handleText(message, this.pageId, fbid);
+}
+
+function notifyAdminOfNewMessage(mesg, senderId) {
+  if(this.newCustomerForSeaSpray[senderId]) return;
+  this.newCustomerForSeaSpray[senderId] = true;
+  let name = FbidHandler.get().getName(senderId);
+  if(!name) name = senderId;
+  let recipientId = this.businessPageHandler.businessHandler.madhusPageScopedFbid();
+  if(!recipientId) return logger.error(`Cannot get madhus page scoped fbid for business page '${this.pageId}' (name: <{this.businessPageHandler.businessHandler.name}>). Not notifying Madhu of new message '${mesg}' from sender '${name}'`);
+  sendTextMessage.call(this, recipientId, `[ALERT] Received new message from user '${name}'. Message is "${mesg}"`);
 }
 
 WebhookPostHandler.prototype.notifyAdmin = function(emailId) {
@@ -958,7 +486,7 @@ function sendMultipleMessages(recipientId, messages, alreadyRecorded) {
       logger.error(`sendMultipleMessages: Error sending message: ${error}`);
       return;
     }
-    logger.error(`Unable to send message <${JSON.stringify(messages[0])}> to recipient ${recipientId}. status code is ${response.statusCode}. Message from FB is <${response.body.error.message}>; Error type: ${response.body.error.type}`);
+    logger.error(`Unable to send message <${JSON.stringify(messages[0])}>. status code is ${response.statusCode}. Message from FB is <${response.body.error.message}>; Error type: ${response.body.error.type}. stack trace: ${new Error().stack}`);
   });  
 }
 
@@ -979,10 +507,10 @@ function callSendAPI(messageData) {
      // TODO: If there was an error in sending an intercept message to a human, then send a push notification to the original sender that we are having some technical difficulty and will respond to them shortly.
     if(response.statusCode != 200) {
       logger.error(`Unable to send message ${JSON.stringify(messageData)}. status code is ${response.statusCode}.`);
-      logger.error(`Error is ${JSON.stringify(response.body["error"])}`);
       if(response.body && response.body.error) logger.error(`Continuation of above message: Message from FB is <${response.body.error.message}>; Error type: ${response.body.error.type}`);
       else if(response.body) logger.error(`Continuation of above message: response.body.error is undefined. response.body dump: ${JSON.stringify(response.body)}`);
       else logger.error(`Continuation of above message: response.body is undefined. response dump: ${JSON.stringify(response)}`);
+      logger.error(`stack trace: ${new Error().stack}`);
     }
   });  
 }
