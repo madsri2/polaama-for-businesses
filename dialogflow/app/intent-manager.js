@@ -16,6 +16,7 @@ function IntentManager(agent, accessToken) {
 IntentManager.prototype.createIntent = function(intentName) {
   const uri = "https://api.dialogflow.com/v1/intents?v=20150910";
   const body = {
+    auto: true,
     name: intentName,
     userSays: [],
     responses: [{
@@ -29,6 +30,7 @@ IntentManager.prototype.updateIntent = function(intentName, intentDetails) {
   const intentId = intentDetails.id;
   const uri = `https://api.dialogflow.com/v1/intents/${intentId}?v=20150910`;
   const body = {
+    auto: true,
     name: intentName,
     userSays: [],
     responses: [{

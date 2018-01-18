@@ -156,7 +156,7 @@ BaseHandler.prototype.handlePostback = function(payload, pageId, fbid) {
 }
 
 function handleUnknownError(err, mesg, fbid) {
-  logger.error(`handleText: Error in categoryPromise: ${err}`);
+  logger.error(`handleText: Error in categoryPromise: ${err}; ${err.stack}`);
   logger.info(`handleText: Sending message '${mesg}' to admin so they can take over`);
   return this.adminMessageSender.sendMessageToAdmin(fbid, mesg, "handle-error");
 }

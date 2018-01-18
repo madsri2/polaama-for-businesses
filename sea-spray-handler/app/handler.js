@@ -89,7 +89,7 @@ SeaSprayHandler.prototype.handleBusinessSpecificPayload = function(payload, fbid
 }
 
 SeaSprayHandler.prototype.madhusPageScopedFbid = function() {
-  return "1629856073725012";
+  return "1335132323276529";
 }
 
 // convenience function that handles selecting the right functions given a tour and the category. This is used in cases where a particular categories' response depends on the tour selected. This also handles the case where no tour is selected (setting state, calling chooseTour) and handling case where state might be set.
@@ -132,8 +132,13 @@ function selectResponseForTour(tour, category, fbid) {
       'entity-name': privateCharterDetails,
     }
   };
-  // if no tour was provided, ask for that information and set state accordingly.
-  if(!tour) {
+  functions["Pirate Day's Cruise"] = functions.pirate_day;
+  functions["Sunset cruise"] = functions.sunset_cruise;
+  functions["Tout Bagay Cruise"] = functions.tout_bagay;
+  functions["Private charter"] = functions.private_charter;
+
+  // if no tour was provided, ask for that information.
+  if(!tour || tour.length === 0) {
     // this might be because of two reasons. Either the user did not enter the right entity for a given category or we don't yet support that category. If it's the latter, return null.
     const categoryKeys = Object.keys(functions.tout_bagay); // We assume that Tout Bagay will always be a super-set for the categories
     if(categoryKeys.includes(category)) return chooseTours(fbid, category);
@@ -147,10 +152,6 @@ function selectResponseForTour(tour, category, fbid) {
     tour = list[1]; // list[0] is "select_tour"
     category = list[2];
   }
-  functions["Pirate Day's Cruise"] = functions.pirate_day;
-  functions["Sunset cruise"] = functions.sunset_cruise;
-  functions["Tout Bagay Cruise"] = functions.tout_bagay;
-  functions["Private charter"] = functions.private_charter;
   // logger.debug(`selectResponseForTour: tour ${tour} & category ${category}`);
   if(tour && category && functions[tour][category]) return functions[tour][category](fbid);
   // The base-handler class will correctly handle this error and send an appropriate message to the customer. 

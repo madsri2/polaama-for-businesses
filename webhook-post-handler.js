@@ -3045,7 +3045,7 @@ function sendMultipleMessages(recipientId, messages, alreadyRecorded) {
       logger.error(`sendMultipleMessages: Error sending message: ${error}`);
       return;
     }
-    logger.error(`Unable to send message <${JSON.stringify(messages[0])}> to recipient ${recipientId}. status code is ${response.statusCode}. Message from FB is <${response.body.error.message}>; Error type: ${response.body.error.type}`);
+    logger.error(`Unable to send message <${JSON.stringify(messages[0])}>. status code is ${response.statusCode}. Message from FB is <${response.body.error.message}>; Error type: ${response.body.error.type}. stack trace: ${new Error().stack}`);
   });  
 }
 
@@ -3066,10 +3066,10 @@ function callSendAPI(messageData) {
      // TODO: If there was an error in sending an intercept message to a human, then send a push notification to the original sender that we are having some technical difficulty and will respond to them shortly.
     if(response.statusCode != 200) {
       logger.error(`Unable to send message ${JSON.stringify(messageData)}. status code is ${response.statusCode}.`);
-      logger.error(`Error is ${JSON.stringify(response.body["error"])}`);
       if(response.body && response.body.error) logger.error(`Continuation of above message: Message from FB is <${response.body.error.message}>; Error type: ${response.body.error.type}`);
       else if(response.body) logger.error(`Continuation of above message: response.body.error is undefined. response.body dump: ${JSON.stringify(response.body)}`);
       else logger.error(`Continuation of above message: response.body is undefined. response dump: ${JSON.stringify(response)}`);
+      logger.error(`stack trace: ${new Error().stack}`);
     }
   });  
 }
